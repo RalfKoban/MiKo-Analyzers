@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var part in parts)
             {
-                if (part[0].IsUpperCase() is false && part[0].IsNumber() is false)
+                if (part[0].IsUpperCaseOrNumber() is false)
                 {
                     return false;
                 }

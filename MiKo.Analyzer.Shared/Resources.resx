@@ -1986,6 +1986,39 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
   <data name="MiKo_1523_Title" xml:space="preserve">
     <value>Do not name methods 'Helper'</value>
   </data>
+  <data name="MiKo_1524_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Sub_' prefix from method name</value>
+  </data>
+  <data name="MiKo_1524_Description" xml:space="preserve">
+    <value>Avoid naming methods with the 'Sub_' prefix. This prefix does not add useful information because any method can call any other method. Use clear and descriptive method names instead.</value>
+  </data>
+  <data name="MiKo_1524_MessageFormat" xml:space="preserve">
+    <value>Remove 'Sub_' prefix from method name</value>
+  </data>
+  <data name="MiKo_1524_Title" xml:space="preserve">
+    <value>Do not prefix methods with 'Sub_'</value>
+  </data>
+  <data name="MiKo_1525_Description" xml:space="preserve">
+    <value>Avoid naming properties that do not return a boolean value with the prefixes 'Is', 'Can', 'Has', or 'Contains'. These prefixes strongly suggest that the property returns 'true' or 'false', so using them on non-boolean properties is confusing and misleading. Choose a name that does not lead readers to expect a boolean result when the property returns something else.</value>
+  </data>
+  <data name="MiKo_1525_MessageFormat" xml:space="preserve">
+    <value>Do not prefix non-boolean property with boolean-style prefix '{1}'</value>
+  </data>
+  <data name="MiKo_1525_Title" xml:space="preserve">
+    <value>Do not prefix non-boolean properties with boolean indicators</value>
+  </data>
+  <data name="MiKo_1526_CodeFixTitle" xml:space="preserve">
+    <value>Append 'Callback' to property name</value>
+  </data>
+  <data name="MiKo_1526_Description" xml:space="preserve">
+    <value>Properties that hold a delegate type act as callbacks. Their names should reflect that role by ending with the 'Callback' suffix.</value>
+  </data>
+  <data name="MiKo_1526_MessageFormat" xml:space="preserve">
+    <value>Append 'Callback' to property name</value>
+  </data>
+  <data name="MiKo_1526_Title" xml:space="preserve">
+    <value>Suffix delegate properties with 'Callback'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
@@ -6322,5 +6355,17 @@ This style avoids dangling operators, aligns with common C# style guides and too
   </data>
   <data name="MiKo_6071_Title" xml:space="preserve">
     <value>Surround local using statements with blank lines</value>
+  </data>
+  <data name="MiKo_6072_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6072_Description" xml:space="preserve">
+    <value>Surround calls to the base class with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
+  </data>
+  <data name="MiKo_6072_MessageFormat" xml:space="preserve">
+    <value>Surround call to base class with a blank line</value>
+  </data>
+  <data name="MiKo_6072_Title" xml:space="preserve">
+    <value>Surround base class calls with blank lines</value>
   </data>
 </root>

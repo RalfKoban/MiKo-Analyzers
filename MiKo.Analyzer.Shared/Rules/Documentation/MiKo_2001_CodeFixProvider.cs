@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -18,18 +17,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private const string SpecialTerm = "Occurs that ";
-
-        private static readonly string[] SpecialTerms = { SpecialTerm };
-
-        private static readonly Pair[] SpecialTermReplacementMap = { new Pair(SpecialTerm, "Occurs when ") };
-
-        private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_))
-                                                                       .Append(new Pair("Invoked if ", "when "))
-                                                                       .Append(new Pair("Invoked when ", "when "))
-                                                                       .OrderDescendingByLengthAndText(_ => _.Key);
+        private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_)).OrderDescendingByLengthAndText(_ => _.Key);
 
         private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+
+        private static readonly Pair[] CleanUpMap =
+                                                    {
+                                                        new Pair("Occurs fire ", "Occurs "),
+                                                        new Pair("Occurs fired ", "Occurs "),
+                                                        new Pair("Occurs fires ", "Occurs "),
+                                                        new Pair("Occurs firing ", "Occurs "),
+                                                        new Pair("Occurs raise ", "Occurs "),
+                                                        new Pair("Occurs raised ", "Occurs "),
+                                                        new Pair("Occurs raises ", "Occurs "),
+                                                        new Pair("Occurs raising ", "Occurs "),
+                                                        new Pair("Occurs trigger ", "Occurs "),
+                                                        new Pair("Occurs triggered ", "Occurs "),
+                                                        new Pair("Occurs triggers ", "Occurs "),
+                                                        new Pair("Occurs triggering ", "Occurs "),
+
+                                                        new Pair("Occurs invoked ", "Occurs "),
+
+                                                        // special cases
+                                                        new Pair("Occurs occur ", "Occurs "),
+                                                        new Pair("Occurs occurs ", "Occurs "),
+                                                        new Pair("Occurs occured ", "Occurs "),
+                                                        new Pair("Occurs occurred ", "Occurs "),
+                                                        new Pair("Occurs occuring ", "Occurs "),
+                                                        new Pair("Occurs occurring ", "Occurs "),
+                                                        new Pair("Occurs that ", "Occurs when "),
+                                                        new Pair("Occurs if ", "Occurs when "),
+                                                    };
+
+        private static readonly string[] CleanUpPhrases = CleanUpMap.ToArray(_ => _.Key);
 
 //// ncrunch: rdi default
 
@@ -44,23 +64,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax syntax)
         {
-            var preparedComment = PrepareComment(syntax);
-
+            var preparedComment = Comment(syntax, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
             var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.EventSummaryStartingPhrase);
+            var cleanedComment = Comment(fixedComment, CleanUpPhrases, CleanUpMap);
 
-            var text = fixedComment.Content[0].WithoutXmlCommentExterior();
-
-            if (text.StartsWith(SpecialTerm, StringComparison.Ordinal))
-            {
-                return Comment(fixedComment, SpecialTerms, SpecialTermReplacementMap);
-            }
-
-            return fixedComment;
+            return cleanedComment;
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
-
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         private static HashSet<string> CreatePhrases()
         {

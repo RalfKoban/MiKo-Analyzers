@@ -1447,7 +1447,7 @@ namespace Bla
                                                     ?.ToString());
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
@@ -1467,7 +1467,103 @@ namespace Bla
             return DoSomethingCore((someValue) => someValue?.ToString());
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_simple_lambda_expression_with_conditional_access_and_closing_parenthesis_both_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static string DoSomething()
+        {
+            return DoSomethingCore(someValue =>
+                                   someValue?.ToString()
+                                  );
+        }
+
+        private static string DoSomethingCore(Func<int, string> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static string DoSomething()
+        {
+            return DoSomethingCore(someValue => someValue?.ToString());
+        }
+
+        private static string DoSomethingCore(Func<int, string> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_conditional_access_and_closing_parenthesis_both_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static string DoSomething()
+        {
+            return DoSomethingCore((someValue) =>
+                                   someValue?.ToString()
+                                  );
+        }
+
+        private static string DoSomethingCore(Func<int, string> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static string DoSomething()
+        {
+            return DoSomethingCore((someValue) => someValue?.ToString());
+        }
+
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }

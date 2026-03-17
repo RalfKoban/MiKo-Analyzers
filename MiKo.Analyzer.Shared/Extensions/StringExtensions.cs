@@ -2256,14 +2256,22 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static string[] GetNumbers(this string value)
         {
-            var matches = NumberRegex.Matches(value);
-
-            if (matches.Count is 0)
+            try
             {
-                return Array.Empty<string>();
+                var matches = NumberRegex.Matches(value);
+
+                if (matches.Count > 0)
+                {
+                    return matches.Cast<Match>().ToArray(_ => _.Value);
+                }
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                // it took too long, so we assume we do not have a number here
+                // (although that is not correct, it is sufficient for now as the regex might not time out next time)
             }
 
-            return matches.Cast<Match>().ToArray(_ => _.Value);
+            return Array.Empty<string>();
         }
 
         /// <summary>
@@ -2834,7 +2842,21 @@ namespace MiKoSolutions.Analyzers
             {
                 case 0: return false;
                 case 1: return value[0].IsNumber();
-                default: return OnlyNumberRegex.IsMatch(value);
+                default: return IsNumberLocal(value);
+            }
+
+            bool IsNumberLocal(string s)
+            {
+                try
+                {
+                    return OnlyNumberRegex.IsMatch(s);
+                }
+                catch (RegexMatchTimeoutException)
+                {
+                    // it took too long, so we assume we do not have a number here
+                    // (although that is not correct, it is sufficient for now as the regex might not time out next time)
+                    return false;
+                }
             }
         }
 
@@ -2855,6 +2877,8 @@ namespace MiKoSolutions.Analyzers
             }
             catch (RegexMatchTimeoutException)
             {
+                // it took too long, so we assume we do not have a pascal casing here
+                // (although that is not correct, it is sufficient for now as the regex might not time out next time)
                 return false;
             }
         }
@@ -2948,6 +2972,18 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCaseLetter(this in char value) => value.IsUpperCase() && value.IsLetter();
+
+        /// <summary>
+        /// Determines whether the character is in uppercase or a number.
+        /// </summary>
+        /// <param name="value">
+        /// The character to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character is in uppercase or a number; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsUpperCaseOrNumber(this in char value) => value.IsUpperCase() || value.IsNumber();
 
         /// <summary>
         /// Determines whether the character is a white-space character.

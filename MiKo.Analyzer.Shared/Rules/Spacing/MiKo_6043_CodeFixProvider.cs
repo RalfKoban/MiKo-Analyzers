@@ -38,6 +38,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return Task.FromResult(updatedSyntax);
         }
 
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, syntax);
+
+            return Task.FromResult(updatedSyntaxRoot);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax)
+        {
+            if (syntax.Parent is ArgumentSyntax a && a.Parent is ArgumentListSyntax list && list.Arguments.Count is 1)
+            {
+                return root.ReplaceNode(list, list.WithCloseParenToken(list.CloseParenToken.WithoutLeadingTrivia()));
+            }
+
+            return root;
+        }
+
         private static GenericNameSyntax GetUpdatedSyntax(GenericNameSyntax syntax) => syntax.WithIdentifier(syntax.Identifier)
                                                                                              .WithTypeArgumentList(GetUpdatedSyntax(syntax.TypeArgumentList));
 
