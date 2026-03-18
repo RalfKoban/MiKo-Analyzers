@@ -5596,7 +5596,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Avoid naming types with the &apos;Sub&apos; prefix. This suffix does not add useful information because any type can be a supporting type for another type. Use meaningful, specific type names that make the purpose of the type obvious..
+        ///   Looks up a localized string similar to Avoid naming types with the &apos;Sub&apos; suffix. This suffix does not add useful information because any type can be a supporting type for another type. Use meaningful, specific type names that make the purpose of the type obvious..
         /// </summary>
         internal static string MiKo_1527_Description {
             get {
