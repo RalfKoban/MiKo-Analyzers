@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1524_SubMethodAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1524_MethodPrefixedWithSubAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_method_with_correct_name() => No_issue_is_reported_for(@"
@@ -57,9 +57,9 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", term), Template.Replace("###", string.Empty));
         }
 
-        protected override string GetDiagnosticId() => MiKo_1524_SubMethodAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1524_MethodPrefixedWithSubAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1524_SubMethodAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1524_MethodPrefixedWithSubAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1524_CodeFixProvider();
     }

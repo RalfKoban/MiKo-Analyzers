@@ -5587,6 +5587,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Sub&apos; suffix from type name.
+        /// </summary>
+        internal static string MiKo_1527_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1527_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid naming types with the &apos;Sub&apos; suffix. This suffix does not add useful information because any type can be a supporting type for another type. Use meaningful, specific type names that make the purpose of the type obvious..
+        /// </summary>
+        internal static string MiKo_1527_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1527_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Sub&apos; suffix from type name.
+        /// </summary>
+        internal static string MiKo_1527_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1527_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suffix types with &apos;Sub&apos;.
+        /// </summary>
+        internal static string MiKo_1527_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1527_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -18333,7 +18369,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surround base calls with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        ///   Looks up a localized string similar to Surround calls to the base class with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6072_Description {
             get {
@@ -18342,7 +18378,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surround base call with a blank line.
+        ///   Looks up a localized string similar to Surround call to base class with a blank line.
         /// </summary>
         internal static string MiKo_6072_MessageFormat {
             get {
@@ -18351,7 +18387,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surround base calls with blank lines.
+        ///   Looks up a localized string similar to Surround base class calls with blank lines.
         /// </summary>
         internal static string MiKo_6072_Title {
             get {
