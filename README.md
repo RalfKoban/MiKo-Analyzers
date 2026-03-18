@@ -191,7 +191,7 @@ The following tables list all the 541 rules that are currently provided by the a
 |[MiKo_1524](/Documentation/MiKo_1524.md)|Do not prefix methods with 'Sub_'|&#x2713;|&#x2713;|
 |[MiKo_1525](/Documentation/MiKo_1525.md)|Do not prefix non-boolean properties with boolean indicators|&#x2713;|\-|
 |[MiKo_1526](/Documentation/MiKo_1526.md)|Suffix delegate properties with 'Callback'|&#x2713;|&#x2713;|
-|[MiKo_1526](/Documentation/MiKo_1527.md)|Do not suffix types with 'Sub'|&#x2713;|&#x2713;|
+|[MiKo_1527](/Documentation/MiKo_1527.md)|Do not suffix types with 'Sub'|&#x2713;|&#x2713;|
 
 ### Documentation
 
