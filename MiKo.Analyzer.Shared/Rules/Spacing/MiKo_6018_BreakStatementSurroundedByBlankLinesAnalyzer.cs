@@ -15,5 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         protected override SyntaxToken GetKeyword(BreakStatementSyntax node) => node.BreakKeyword;
+
+        protected override bool ShallAnalyzeSwitchSection(SwitchSectionSyntax section, in SyntaxToken keyword) => keyword.IsOnSameLineAs(section.Labels.Last()) is false;
     }
 }
