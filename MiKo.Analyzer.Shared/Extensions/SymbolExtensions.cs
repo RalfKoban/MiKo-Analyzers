@@ -177,6 +177,145 @@ namespace MiKoSolutions.Analyzers
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind is TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
 
         /// <summary>
+        /// Determines whether a type directly implements an interface with the specified name and not indirectly via its base type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The interface type to check for implementation.
+        /// </typeparam>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type directly implements the specified interface; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="Implements{T}(ITypeSymbol)"/>
+        /// <seealso cref="Implements(ITypeSymbol,string)"/>
+        /// <seealso cref="Implements(ITypeSymbol,string,string)"/>
+        internal static bool DirectlyImplements<T>(this ITypeSymbol value) => value.DirectlyImplements(typeof(T).FullName);
+
+        /// <summary>
+        /// Determines whether a type directly implements an interface with the specified name and not indirectly via its base type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="interfaceTypeName">
+        /// The name of the interface to check for implementation.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type directly implements the interface with the specified name; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="Implements{T}(ITypeSymbol)"/>
+        /// <seealso cref="Implements(ITypeSymbol,string)"/>
+        /// <seealso cref="Implements(ITypeSymbol,string,string)"/>
+        internal static bool DirectlyImplements(this ITypeSymbol value, string interfaceTypeName)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            switch (value.SpecialType)
+            {
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                case SpecialType.System_Object:
+                case SpecialType.System_Enum:
+                case SpecialType.System_Delegate:
+                case SpecialType.System_MulticastDelegate:
+                case SpecialType.System_TypedReference:
+                case SpecialType.System_ArgIterator:
+                case SpecialType.System_RuntimeArgumentHandle:
+                case SpecialType.System_RuntimeFieldHandle:
+                case SpecialType.System_RuntimeMethodHandle:
+                case SpecialType.System_RuntimeTypeHandle:
+                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
+                case SpecialType.System_AsyncCallback:
+                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
+                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
+                {
+                    return false;
+                }
+            }
+
+            switch (value.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Dynamic:
+                case TypeKind.Enum:
+                case TypeKind.FunctionPointer:
+                case TypeKind.Module:
+                case TypeKind.Pointer:
+                case TypeKind.Submission:
+                case TypeKind.TypeParameter:
+                {
+                    return false;
+                }
+            }
+
+            var fullName = value.ToString();
+
+            if (fullName == interfaceTypeName)
+            {
+                return true;
+            }
+
+            var interfaces = value.Interfaces;
+            var length = interfaces.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var fullInterfaceName = interfaces[index].ToString();
+
+                    if (fullInterfaceName == interfaceTypeName)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether a type directly implements an interface with either of the specified names and not indirectly via its base type..
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="interfaceTypeName">
+        /// The first name of the interface to check for implementation.
+        /// </param>
+        /// <param name="interfaceTypeFullQualifiedName">
+        /// The second, fully qualified name of the interface to check for implementation.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type directly implements an interface with either of the specified names; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="Implements{T}(ITypeSymbol)"/>
+        /// <seealso cref="Implements(ITypeSymbol,string)"/>
+        /// <seealso cref="Implements(ITypeSymbol,string,string)"/>
+        internal static bool DirectlyImplements(this ITypeSymbol value, string interfaceTypeName, string interfaceTypeFullQualifiedName) => value.DirectlyImplements(interfaceTypeName) || value.DirectlyImplements(interfaceTypeFullQualifiedName);
+
+        /// <summary>
         /// Finds the containing type from the syntax node analysis context.
         /// </summary>
         /// <param name="value">
@@ -1359,6 +1498,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type implements the specified interface; otherwise, <see langword="false"/>.
         /// </returns>
+        /// <seealso cref="DirectlyImplements{T}(ITypeSymbol)"/>
+        /// <seealso cref="DirectlyImplements(ITypeSymbol,string)"/>
+        /// <seealso cref="DirectlyImplements(ITypeSymbol,string,string)"/>
         internal static bool Implements<T>(this ITypeSymbol value) => value.Implements(typeof(T).FullName);
 
         /// <summary>
@@ -1373,6 +1515,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type implements the interface with the specified name; otherwise, <see langword="false"/>.
         /// </returns>
+        /// <seealso cref="DirectlyImplements{T}(ITypeSymbol)"/>
+        /// <seealso cref="DirectlyImplements(ITypeSymbol,string)"/>
+        /// <seealso cref="DirectlyImplements(ITypeSymbol,string,string)"/>
         internal static bool Implements(this ITypeSymbol value, string interfaceTypeName)
         {
             if (value is null)
@@ -1475,6 +1620,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type implements an interface with either of the specified names; otherwise, <see langword="false"/>.
         /// </returns>
+        /// <seealso cref="DirectlyImplements{T}(ITypeSymbol)"/>
+        /// <seealso cref="DirectlyImplements(ITypeSymbol,string)"/>
+        /// <seealso cref="DirectlyImplements(ITypeSymbol,string,string)"/>
         internal static bool Implements(this ITypeSymbol value, string interfaceTypeName, string interfaceTypeFullQualifiedName) => value.Implements(interfaceTypeName) || value.Implements(interfaceTypeFullQualifiedName);
 
         /// <summary>
@@ -2071,7 +2219,7 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            return true;
+            return value.IsDirectEnumerable();
         }
 
         /// <summary>
@@ -2225,6 +2373,69 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey">DependencyPropertyKey</see>; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name is Constants.DependencyPropertyKey.TypeName || value.Name is Constants.DependencyPropertyKey.FullyQualifiedTypeName;
+
+        /// <summary>
+        /// Determines whether a type directly implements <see cref="IEnumerable"/> and not via its base types.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type directly implements <see cref="IEnumerable"/>; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsDirectEnumerable(this ITypeSymbol value)
+        {
+            var specialType = value.SpecialType;
+
+            switch (specialType)
+            {
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                    return false;
+
+                default:
+                {
+                    if (value.TypeKind is TypeKind.Array)
+                    {
+                        return true;
+                    }
+
+                    if (IsEnumerable(specialType))
+                    {
+                        return true;
+                    }
+
+                    if (value.IsValueType)
+                    {
+                        // value types may also implement the interface
+                        return value.DirectlyImplements<IEnumerable>();
+                    }
+
+                    if (value is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
+                    {
+                        return true;
+                    }
+
+                    return value.DirectlyImplements<IEnumerable>();
+                }
+            }
+        }
 
         /// <summary>
         /// Determines whether a type implements <see cref="IDisposable"/> or <see cref="IAsyncDisposable"/>.
