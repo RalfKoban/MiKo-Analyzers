@@ -87,6 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Interfaces",
                                                                            "Intf",
                                                                            "Intfs",
+                                                                           "Intfc",
                                                                            "Intfcs",
                                                                            "Intrfc",
                                                                            "Intrfcs",
