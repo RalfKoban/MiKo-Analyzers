@@ -149,6 +149,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parameter_of_enumerable_type_with_structure_name() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IXyzStructure : IEnumerable<string>, IEnumerable
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(IXyzStructure structure)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parameter_of_indirect_enumerable_type() => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
