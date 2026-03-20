@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return false;
 
                 default:
-                    return true;
+                    return base.ShallAnalyze(symbol);
             }
         }
 
