@@ -99,7 +99,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_field_of_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_of_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,6 +111,38 @@ public interface IXyzObject42 : IEnumerable<string>, IEnumerable
 public class TestMe
 {
     private IXyzObject42 xyzObject;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_of_indirect_enumerable_type() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IMyOwnBaseType : IEnumerable { }
+
+public interface IMyOwnType : IMyOwnBaseType { }
+
+public class TestMe
+{
+    private IMyOwnType myOwnItem;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_of_direct_enumerable_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IMyOwnType : IEnumerable
+{
+}
+
+public class TestMe
+{
+    private IMyOwnType myOwnItem;
 }
 ");
 

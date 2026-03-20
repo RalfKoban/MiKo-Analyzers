@@ -135,7 +135,6 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_collection_variable_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
-using System.Threading;
 
 public class TestMe
 {
@@ -149,7 +148,6 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_collection_variable_with_suffix_([ValueSource(nameof(CorrectNamesWithSuffixes))] string name) => No_issue_is_reported_for(@"
 using System;
-using System.Threading;
 
 public class TestMe
 {
@@ -163,7 +161,6 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_var_collection_variable_with_plural_name() => No_issue_is_reported_for(@"
 using System;
-using System.Threading;
 
 public class TestMe
 {
@@ -177,7 +174,6 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_byte_array_named_hash() => No_issue_is_reported_for(@"
 using System;
-using System.Threading;
 
 public class TestMe
 {
@@ -225,51 +221,8 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_collection_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
-using System;
-using System.Threading;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        int[] " + name + @" = new int[0];
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_collection_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
-using System;
-using System.Threading;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        int[] " + name + @" = new int[0];
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_var_collection_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
-using System;
-using System.Threading;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        var " + name + @" = new int[0];
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_variable_declaration_pattern_with_plural_name() => No_issue_is_reported_for(@"
 using System;
-using System.Threading;
 
 public class TestMe
 {
@@ -278,24 +231,6 @@ public class TestMe
         switch (o)
         {
             case int[] items: return;
-            default: return;
-        }
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_variable_declaration_pattern_with_singular_name() => An_issue_is_reported_for(@"
-using System;
-using System.Threading;
-
-public class TestMe
-{
-    public void DoSomething(object o)
-    {
-        switch (o)
-        {
-            case int[] item: return;
             default: return;
         }
     }
@@ -423,6 +358,160 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_variable_of_indirect_enumerable_type() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IMyOwnBaseType : IEnumerable { }
+
+public interface IMyOwnType : IMyOwnBaseType { }
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        IMyOwnType firstItem = null;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_of_direct_enumerable_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IMyOwnType : IEnumerable
+{
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        IMyOwnType firstItem = null;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_interface_list_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        IList<int> " + name + @" = new List<int>();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_ínterface_list_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        IList<int> " + name + @" = new List<int>();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_list_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        List<int> " + name + @" = new List<int>();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_list_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        List<int> " + name + @" = new List<int>();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_array_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] " + name + @" = new int[0];
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_array_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] " + name + @" = new int[0];
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_var_collection_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var " + name + @" = new int[0];
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_declaration_pattern_with_singular_name() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        switch (o)
+        {
+            case int[] item: return;
+            default: return;
+        }
+    }
+}
+");
+
         [TestCase("number", "numbers")]
         [TestCase("resultOfSomething", "resultsOfSomething")]
         [TestCase("resultToShow", "resultsToShow")]
@@ -456,7 +545,6 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
-using System.Threading;
 
 public class TestMe
 {
@@ -473,7 +561,6 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
-using System.Threading;
 
 public class TestMe
 {
