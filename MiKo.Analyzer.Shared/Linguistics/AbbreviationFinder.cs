@@ -68,7 +68,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("diag", "diagnostic"),
                                                       new Pair("diags", "diagnostics"),
                                                       new Pair("dic", "dictionary"),
+                                                      new Pair("dics", "dictionaries"),
                                                       new Pair("dict", "dictionary"),
+                                                      new Pair("dicts", "dictionaries"),
                                                       new Pair("diff", "difference"),
                                                       new Pair("diffs", "differences"),
                                                       new Pair("dir", "directory"),
@@ -135,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("mngr", "manager"),
                                                       new Pair("mngrs", "managers"),
                                                       new Pair("mnu", "menuItem"),
+                                                      new Pair("mod", "modified"),
                                                       new Pair("msg", "message"),
                                                       new Pair("msgs", "messages"),
                                                       new Pair("nav", "navigation"),
@@ -279,7 +282,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Diag", "Diagnostic"),
                                                           new Pair("Diags", "Diagnostics"),
                                                           new Pair("Dic", "Dictionary"),
+                                                          new Pair("Dics", "Dictionaries"),
                                                           new Pair("Dict", "Dictionary"),
+                                                          new Pair("Dicts", "Dictionaries"),
                                                           new Pair("Diff", "Difference"),
                                                           new Pair("Diffs", "Differences"),
                                                           new Pair("Dir", "Directory"),
@@ -349,6 +354,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Mngr", "Manager"),
                                                           new Pair("Mngrs", "Managers"),
                                                           new Pair("Mnu", "MenuItem"),
+                                                          new Pair("Mod", "Modified"),
                                                           new Pair("Msg", "Message"),
                                                           new Pair("Nav", "Navigation"),
                                                           new Pair("Navig", "Navigation"),
@@ -437,6 +443,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] OnlyPostFixes =
                                                        {
+                                                           new Pair("Mod", "Modification"),
                                                            new Pair("Prot", "Protection"),
                                                            new Pair("Seq", "Sequence"),
                                                        };
@@ -637,6 +644,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ntervalene", "ntervene"), // 'interv' within 'intervene'
                                                       new Pair("nvironmentironment", "nvironment"), // 'env' within 'environment'
                                                       new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
+                                                      new Pair("odifiede", "ode"), // 'mod' within 'mode'
+                                                      new Pair("odifiedif", "odif"), // 'mod' within 'modify' / 'modified' / 'modification'
+                                                      new Pair("odifiedul", "odul"), // 'mod' within 'module' / 'modulo'
                                                       new Pair("ollectionect", "ollect"), // 'coll' within 'collect' / 'collection'
                                                       new Pair("olumeum", "olum"), // 'vol' within 'volume'
                                                       new Pair("ommunicationunicat", "ommunicat"), // 'comm' within 'communicate' / 'communication'
