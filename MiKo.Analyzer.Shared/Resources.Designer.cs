@@ -5623,6 +5623,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;arg&apos; from name.
+        /// </summary>
+        internal static string MiKo_1528_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1528_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters in .NET are also known as arguments, so adding &apos;arg&apos; to their names is redundant. Use names that describe the parameter&apos;s role..
+        /// </summary>
+        internal static string MiKo_1528_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1528_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1528_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1528_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix parameters with &apos;arg&apos;.
+        /// </summary>
+        internal static string MiKo_1528_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1528_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
