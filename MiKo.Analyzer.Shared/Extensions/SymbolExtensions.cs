@@ -208,95 +208,10 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="Implements{T}(ITypeSymbol)"/>
         /// <seealso cref="Implements(ITypeSymbol,string)"/>
         /// <seealso cref="Implements(ITypeSymbol,string,string)"/>
-        internal static bool DirectlyImplements(this ITypeSymbol value, string interfaceTypeName)
-        {
-            if (value is null)
-            {
-                return false;
-            }
-
-            switch (value.SpecialType)
-            {
-                case SpecialType.System_Void:
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Decimal:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                case SpecialType.System_String:
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                case SpecialType.System_DateTime:
-                case SpecialType.System_Object:
-                case SpecialType.System_Enum:
-                case SpecialType.System_Delegate:
-                case SpecialType.System_MulticastDelegate:
-                case SpecialType.System_TypedReference:
-                case SpecialType.System_ArgIterator:
-                case SpecialType.System_RuntimeArgumentHandle:
-                case SpecialType.System_RuntimeFieldHandle:
-                case SpecialType.System_RuntimeMethodHandle:
-                case SpecialType.System_RuntimeTypeHandle:
-                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
-                case SpecialType.System_AsyncCallback:
-                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
-                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
-                {
-                    return false;
-                }
-            }
-
-            switch (value.TypeKind)
-            {
-                case TypeKind.Delegate:
-                case TypeKind.Dynamic:
-                case TypeKind.Enum:
-                case TypeKind.FunctionPointer:
-                case TypeKind.Module:
-                case TypeKind.Pointer:
-                case TypeKind.Submission:
-                case TypeKind.TypeParameter:
-                {
-                    return false;
-                }
-            }
-
-            var fullName = value.ToString();
-
-            if (fullName == interfaceTypeName)
-            {
-                return true;
-            }
-
-            var interfaces = value.Interfaces;
-            var length = interfaces.Length;
-
-            if (length > 0)
-            {
-                for (var index = 0; index < length; index++)
-                {
-                    var fullInterfaceName = interfaces[index].ToString();
-
-                    if (fullInterfaceName == interfaceTypeName)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
+        internal static bool DirectlyImplements(this ITypeSymbol value, string interfaceTypeName) => value.Implements(interfaceTypeName, _ => _.Interfaces);
 
         /// <summary>
-        /// Determines whether a type directly implements an interface with either of the specified names and not indirectly via its base type..
+        /// Determines whether a type directly implements an interface with either of the specified names and not indirectly via its base type.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
@@ -1518,92 +1433,7 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="DirectlyImplements{T}(ITypeSymbol)"/>
         /// <seealso cref="DirectlyImplements(ITypeSymbol,string)"/>
         /// <seealso cref="DirectlyImplements(ITypeSymbol,string,string)"/>
-        internal static bool Implements(this ITypeSymbol value, string interfaceTypeName)
-        {
-            if (value is null)
-            {
-                return false;
-            }
-
-            switch (value.SpecialType)
-            {
-                case SpecialType.System_Void:
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Decimal:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                case SpecialType.System_String:
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                case SpecialType.System_DateTime:
-                case SpecialType.System_Object:
-                case SpecialType.System_Enum:
-                case SpecialType.System_Delegate:
-                case SpecialType.System_MulticastDelegate:
-                case SpecialType.System_TypedReference:
-                case SpecialType.System_ArgIterator:
-                case SpecialType.System_RuntimeArgumentHandle:
-                case SpecialType.System_RuntimeFieldHandle:
-                case SpecialType.System_RuntimeMethodHandle:
-                case SpecialType.System_RuntimeTypeHandle:
-                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
-                case SpecialType.System_AsyncCallback:
-                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
-                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
-                {
-                    return false;
-                }
-            }
-
-            switch (value.TypeKind)
-            {
-                case TypeKind.Delegate:
-                case TypeKind.Dynamic:
-                case TypeKind.Enum:
-                case TypeKind.FunctionPointer:
-                case TypeKind.Module:
-                case TypeKind.Pointer:
-                case TypeKind.Submission:
-                case TypeKind.TypeParameter:
-                {
-                    return false;
-                }
-            }
-
-            var fullName = value.ToString();
-
-            if (fullName == interfaceTypeName)
-            {
-                return true;
-            }
-
-            var interfaces = value.AllInterfaces;
-            var length = interfaces.Length;
-
-            if (length > 0)
-            {
-                for (var index = 0; index < length; index++)
-                {
-                    var fullInterfaceName = interfaces[index].ToString();
-
-                    if (fullInterfaceName == interfaceTypeName)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
+        internal static bool Implements(this ITypeSymbol value, string interfaceTypeName) => value.Implements(interfaceTypeName, _ => _.AllInterfaces);
 
         /// <summary>
         /// Determines whether a type implements an interface with either of the specified names.
@@ -2385,6 +2215,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsDirectEnumerable(this ITypeSymbol value)
         {
+            if (value is null)
+            {
+                return false;
+            }
+
             var specialType = value.SpecialType;
 
             switch (specialType)
@@ -2506,6 +2341,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsEnumerable(this ITypeSymbol value)
         {
+            if (value is null)
+            {
+                return false;
+            }
+
             var specialType = value.SpecialType;
 
             switch (specialType)
@@ -3666,6 +3506,93 @@ namespace MiKoSolutions.Analyzers
             }
 
             return typeName;
+        }
+
+        private static bool Implements(this ITypeSymbol value, string interfaceTypeName, Func<ITypeSymbol, ImmutableArray<INamedTypeSymbol>> getInterfacesCallback)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            switch (value.SpecialType)
+            {
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                case SpecialType.System_Object:
+                case SpecialType.System_Enum:
+                case SpecialType.System_Delegate:
+                case SpecialType.System_MulticastDelegate:
+                case SpecialType.System_TypedReference:
+                case SpecialType.System_ArgIterator:
+                case SpecialType.System_RuntimeArgumentHandle:
+                case SpecialType.System_RuntimeFieldHandle:
+                case SpecialType.System_RuntimeMethodHandle:
+                case SpecialType.System_RuntimeTypeHandle:
+                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
+                case SpecialType.System_AsyncCallback:
+                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
+                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
+                {
+                    return false;
+                }
+            }
+
+            switch (value.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Dynamic:
+                case TypeKind.Enum:
+                case TypeKind.FunctionPointer:
+                case TypeKind.Module:
+                case TypeKind.Pointer:
+                case TypeKind.Submission:
+                case TypeKind.TypeParameter:
+                {
+                    return false;
+                }
+            }
+
+            var fullName = value.ToString();
+
+            if (fullName == interfaceTypeName)
+            {
+                return true;
+            }
+
+            var interfaces = getInterfacesCallback(value);
+            var length = interfaces.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var fullInterfaceName = interfaces[index].ToString();
+
+                    if (fullInterfaceName == interfaceTypeName)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static bool IsEnumerable(in SpecialType type)
