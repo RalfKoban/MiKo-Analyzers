@@ -2031,6 +2031,18 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
   <data name="MiKo_1527_Title" xml:space="preserve">
     <value>Do not suffix types with 'Sub'</value>
   </data>
+  <data name="MiKo_1528_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'arg' from name</value>
+  </data>
+  <data name="MiKo_1528_Description" xml:space="preserve">
+    <value>Parameters in .NET are also known as arguments, so adding 'arg' to their names is redundant. Use names that describe the parameter's role.</value>
+  </data>
+  <data name="MiKo_1528_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1528_Title" xml:space="preserve">
+    <value>Do not prefix parameters with 'arg'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
