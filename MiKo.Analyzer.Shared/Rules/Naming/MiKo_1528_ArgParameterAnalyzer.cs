@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IParameterSymbol symbol)
         {
-            switch (symbol.GetEnclosingMethod().Name)
+            switch (symbol.GetEnclosingMethod()?.Name)
             {
                 case "Format":
                 case "FormatWith":
