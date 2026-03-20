@@ -226,7 +226,7 @@ namespace MiKoSolutions.Analyzers
                                                                              "atalog", // ignore stuff like the MEF aggregate catalog
                                                                              "ocument", // ignore stuff like the documents
                                                                              "Object",
-                                                                             "Structure",
+                                                                             "tructure",
                                                                          };
         }
 
