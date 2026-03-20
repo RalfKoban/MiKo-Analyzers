@@ -2013,13 +2013,7 @@ namespace MiKoSolutions.Analyzers
                 return symbolName.EndsWithAny(Constants.Markers.Collections);
             }
 
-            if (symbolName.EndsWith("atalog", StringComparison.Ordinal))
-            {
-                // ignore stuff like the MEF aggregate catalog
-                return false;
-            }
-
-            if (symbolName.EndsWith("ocument", StringComparison.Ordinal))
+            if (symbolName.AsSpan().WithoutNumberSuffix().EndsWithAny(Constants.Markers.AllowedCollectionEndings))
             {
                 return false;
             }
@@ -2040,11 +2034,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             if (value.IsIQueryable())
-            {
-                return false;
-            }
-
-            if (symbolName.AsSpan().WithoutNumberSuffix().EndsWith("Object"))
             {
                 return false;
             }

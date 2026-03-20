@@ -220,6 +220,14 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] BitNumbers = { "8", "16", "32", "64", "128" };
 
             internal static readonly string[] ReSharper = { "ReSharper disable", "ReSharper restore" };
+
+            internal static readonly string[] AllowedCollectionEndings =
+                                                                         {
+                                                                             "atalog", // ignore stuff like the MEF aggregate catalog
+                                                                             "ocument", // ignore stuff like the documents
+                                                                             "Object",
+                                                                             "Structure",
+                                                                         };
         }
 
         internal static class Comments
