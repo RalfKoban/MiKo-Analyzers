@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+
+using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -6,1454 +8,512 @@ namespace MiKoSolutions.Analyzers.Linguistics
     [TestFixture]
     public static class AbbreviationFinderTests
     {
-        [TestCase("alt", ExpectedResult = "alternative")]
-        [TestCase("app", ExpectedResult = "application")]
-        [TestCase("apps", ExpectedResult = "applications")]
-        [TestCase("arg", ExpectedResult = "argument")]
-        [TestCase("arr", ExpectedResult = "array")]
-        [TestCase("assoc", ExpectedResult = "association")]
-        [TestCase("assocs", ExpectedResult = "associations")]
-        [TestCase("asynchron", ExpectedResult = "asynchronous")]
-        [TestCase("attr", ExpectedResult = "attribute")]
-        [TestCase("auth", ExpectedResult = "authorization")]
-        [TestCase("bk", ExpectedResult = "back")]
-        [TestCase("bmp", ExpectedResult = "bitmap")]
-        [TestCase("btn", ExpectedResult = "button")]
-        [TestCase("calc", ExpectedResult = "calculate")]
-        [TestCase("calib", ExpectedResult = "calibration")]
-        [TestCase("cb", ExpectedResult = "checkBox")]
-        [TestCase("cert", ExpectedResult = "certificate")]
-        [TestCase("chk", ExpectedResult = "checkBox")]
-        [TestCase("cls", ExpectedResult = "class")]
-        [TestCase("cm", ExpectedResult = "contextMenu")]
-        [TestCase("cmb", ExpectedResult = "comboBox")]
-        [TestCase("cmd", ExpectedResult = "command")]
-        [TestCase("cmp", ExpectedResult = "comparison")]
-        [TestCase("coll", ExpectedResult = "collection")]
-        [TestCase("comm", ExpectedResult = "communication")]
-        [TestCase("comp", ExpectedResult = "compile")]
-        [TestCase("compat", ExpectedResult = "compatible")]
-        [TestCase("conf", ExpectedResult = "configuration")]
-        [TestCase("config", ExpectedResult = "configuration")]
-        [TestCase("configs", ExpectedResult = "configurations")]
-        [TestCase("conn", ExpectedResult = "connection")]
-        [TestCase("conv", ExpectedResult = "conversion")]
-        [TestCase("ctg", ExpectedResult = "category")]
-        [TestCase("ctl", ExpectedResult = "control")]
-        [TestCase("ctlg", ExpectedResult = "catalog")]
-        [TestCase("ctrl", ExpectedResult = "control")]
-        [TestCase("ctx", ExpectedResult = "context")]
-        [TestCase("cur", ExpectedResult = "current")]
-        [TestCase("db", ExpectedResult = "database")]
-        [TestCase("ddl", ExpectedResult = "dropDownList")]
-        [TestCase("decl", ExpectedResult = "declaration")]
-        [TestCase("decr", ExpectedResult = "decrypt")]
-        [TestCase("def", ExpectedResult = "definition")]
-        [TestCase("defs", ExpectedResult = "definitions")]
-        [TestCase("dep", ExpectedResult = "dependent")]
-        [TestCase("deps", ExpectedResult = "dependencies")]
-        [TestCase("desc", ExpectedResult = "description")]
-        [TestCase("dest", ExpectedResult = "destination")]
-        [TestCase("diag", ExpectedResult = "diagnostic")]
-        [TestCase("diags", ExpectedResult = "diagnostics")]
-        [TestCase("dic", ExpectedResult = "dictionary")]
-        [TestCase("dics", ExpectedResult = "dictionaries")]
-        [TestCase("dict", ExpectedResult = "dictionary")]
-        [TestCase("dicts", ExpectedResult = "dictionaries")]
-        [TestCase("diff", ExpectedResult = "difference")]
-        [TestCase("diffs", ExpectedResult = "differences")]
-        [TestCase("dir", ExpectedResult = "directory")]
-        [TestCase("dirs", ExpectedResult = "directories")]
-        [TestCase("dist", ExpectedResult = "distance")]
-        [TestCase("div", ExpectedResult = "division")]
-        [TestCase("dlg", ExpectedResult = "dialog")]
-        [TestCase("dlgt", ExpectedResult = "delegate")]
-        [TestCase("dm", ExpectedResult = "")]
-        [TestCase("doc", ExpectedResult = "document")]
-        [TestCase("docs", ExpectedResult = "documents")]
-        [TestCase("docu", ExpectedResult = "documentation")]
-        [TestCase("docus", ExpectedResult = "documentations")]
-        [TestCase("dst", ExpectedResult = "destination")]
-        [TestCase("dto", ExpectedResult = "")]
-        [TestCase("dyn", ExpectedResult = "dynamic")]
-        [TestCase("ed", ExpectedResult = "edit")]
-        [TestCase("el", ExpectedResult = "element")]
-        [TestCase("ele", ExpectedResult = "element")]
-        [TestCase("elem", ExpectedResult = "element")]
-        [TestCase("encr", ExpectedResult = "encrypt")]
-        [TestCase("env", ExpectedResult = "environment")]
-        [TestCase("environ", ExpectedResult = "environment")]
-        [TestCase("eq", ExpectedResult = "equal")]
-        [TestCase("err", ExpectedResult = "error")]
-        [TestCase("eval", ExpectedResult = "evaluation")]
-        [TestCase("exec", ExpectedResult = "execute")]
-        [TestCase("ext", ExpectedResult = "extension")]
-        [TestCase("fnc", ExpectedResult = "function")]
-        [TestCase("frm", ExpectedResult = "form")]
-        [TestCase("fwd", ExpectedResult = "forwarded")]
-        [TestCase("hdls", ExpectedResult = "headless")]
-        [TestCase("hlp", ExpectedResult = "help")]
-        [TestCase("his", ExpectedResult = "history")]
-        [TestCase("hist", ExpectedResult = "history")]
-        [TestCase("horiz", ExpectedResult = "horizontal")]
-        [TestCase("horz", ExpectedResult = "horizontal")]
-        [TestCase("ident", ExpectedResult = "identification")]
-        [TestCase("idents", ExpectedResult = "identifications")]
-        [TestCase("idx", ExpectedResult = "index")]
-        [TestCase("idxs", ExpectedResult = "indices")]
-        [TestCase("imp", ExpectedResult = "implementation")]
-        [TestCase("impl", ExpectedResult = "implementation")]
-        [TestCase("init", ExpectedResult = "initialize")]
-        [TestCase("interv", ExpectedResult = "interval")]
-        [TestCase("intf", ExpectedResult = "interface")]
-        [TestCase("intfc", ExpectedResult = "interface")]
-        [TestCase("intrfc", ExpectedResult = "interface")]
-        [TestCase("itf", ExpectedResult = "interface")]
-        [TestCase("kvp", ExpectedResult = "pair")]
-        [TestCase("lang", ExpectedResult = "language")]
-        [TestCase("lbl", ExpectedResult = "label")]
-        [TestCase("len", ExpectedResult = "length")]
-        [TestCase("lib", ExpectedResult = "library")]
-        [TestCase("libs", ExpectedResult = "libraries")]
-        [TestCase("lv", ExpectedResult = "listView")]
-        [TestCase("man", ExpectedResult = "manager")]
-        [TestCase("max", ExpectedResult = "maximum")]
-        [TestCase("meth", ExpectedResult = "method")]
-        [TestCase("mgmt", ExpectedResult = "management")]
-        [TestCase("mgr", ExpectedResult = "manager")]
-        [TestCase("mgrs", ExpectedResult = "managers")]
-        [TestCase("min", ExpectedResult = "minimum")]
-        [TestCase("mngr", ExpectedResult = "manager")]
-        [TestCase("mngrs", ExpectedResult = "managers")]
-        [TestCase("mnu", ExpectedResult = "menuItem")]
-        [TestCase("mod", ExpectedResult = "modified")]
-        [TestCase("msg", ExpectedResult = "message")]
-        [TestCase("msgs", ExpectedResult = "messages")]
-        [TestCase("nav", ExpectedResult = "navigation")]
-        [TestCase("navig", ExpectedResult = "navigation")]
-        [TestCase("neg", ExpectedResult = "negative")]
-        [TestCase("num", ExpectedResult = "number")]
-        [TestCase("nums", ExpectedResult = "numbers")]
-        [TestCase("obj", ExpectedResult = "object")]
-        [TestCase("op", ExpectedResult = "operation")]
-        [TestCase("ops", ExpectedResult = "operations")]
-        [TestCase("opt", ExpectedResult = "option")]
-        [TestCase("opts", ExpectedResult = "options")]
-        [TestCase("para", ExpectedResult = "parameter")]
-        [TestCase("param", ExpectedResult = "parameter")]
-        [TestCase("params", ExpectedResult = "parameters")]
-        [TestCase("perc", ExpectedResult = "percentage")]
-        [TestCase("perf", ExpectedResult = "performance")]
-        [TestCase("phys", ExpectedResult = "physical")]
-        [TestCase("pos", ExpectedResult = "position")]
-        [TestCase("pow", ExpectedResult = "power")]
-        [TestCase("prev", ExpectedResult = "previous")]
-        [TestCase("proc", ExpectedResult = "process")]
-        [TestCase("procs", ExpectedResult = "processes")]
-        [TestCase("prop", ExpectedResult = "property")]
-        [TestCase("props", ExpectedResult = "properties")]
-        [TestCase("prot", ExpectedResult = "protected")]
-        [TestCase("pt", ExpectedResult = "point")]
-        [TestCase("pts", ExpectedResult = "points")]
-        [TestCase("pw", ExpectedResult = "password")]
-        [TestCase("pwd", ExpectedResult = "password")]
-        [TestCase("pswd", ExpectedResult = "password")]
-        [TestCase("passwd", ExpectedResult = "password")]
-        [TestCase("qty", ExpectedResult = "quantity")]
-        [TestCase("rec", ExpectedResult = "record")]
-        [TestCase("rect", ExpectedResult = "rectangle")]
-        [TestCase("ref", ExpectedResult = "reference")]
-        [TestCase("refs", ExpectedResult = "references")]
-        [TestCase("rel", ExpectedResult = "relative")]
-        [TestCase("reloc", ExpectedResult = "relocation")]
-        [TestCase("repo", ExpectedResult = "repository")]
-        [TestCase("repos", ExpectedResult = "repositories")]
-        [TestCase("req", ExpectedResult = "request")]
-        [TestCase("res", ExpectedResult = "result")]
-        [TestCase("resp", ExpectedResult = "response")]
-        [TestCase("rest", ExpectedResult = "restore")]
-        [TestCase("rgn", ExpectedResult = "region")]
-        [TestCase("sem", ExpectedResult = "semantic")]
-        [TestCase("sep", ExpectedResult = "separator")]
-        [TestCase("sepa", ExpectedResult = "separator")]
-        [TestCase("sess", ExpectedResult = "session")]
-        [TestCase("spec", ExpectedResult = "specification")]
-        [TestCase("specs", ExpectedResult = "specifications")]
-        [TestCase("src", ExpectedResult = "source")]
-        [TestCase("srcs", ExpectedResult = "sources")]
-        [TestCase("srv", ExpectedResult = "service")]
-        [TestCase("std", ExpectedResult = "standard")]
-        [TestCase("str", ExpectedResult = "string")]
-        [TestCase("svc", ExpectedResult = "service")]
-        [TestCase("svr", ExpectedResult = "server")]
-        [TestCase("syn", ExpectedResult = "syntax")]
-        [TestCase("sync", ExpectedResult = "synchronization")]
-        [TestCase("synchron", ExpectedResult = "synchronous")]
-        [TestCase("sys", ExpectedResult = "system")]
-        [TestCase("tgt", ExpectedResult = "target")]
-        [TestCase("tgts", ExpectedResult = "targets")]
-        [TestCase("tm", ExpectedResult = "time")]
-        [TestCase("tmp", ExpectedResult = "temp")]
-        [TestCase("txt", ExpectedResult = "text")]
-        [TestCase("txts", ExpectedResult = "texts")]
-        [TestCase("util", ExpectedResult = "utility")]
-        [TestCase("utils", ExpectedResult = "utilities")]
-        [TestCase("val", ExpectedResult = "value")]
-        [TestCase("var", ExpectedResult = "variable")]
-        [TestCase("vars", ExpectedResult = "variables")]
-        [TestCase("ver", ExpectedResult = "version")]
-        [TestCase("vert", ExpectedResult = "vertical")]
-        [TestCase("vm", ExpectedResult = "viewModel")]
-        [TestCase("vms", ExpectedResult = "viewModels")]
-        [TestCase("vol", ExpectedResult = "volume")]
-        public static string Finds_prefix_abbreviation_in_(string value)
+        private static readonly Pair[] Prefixes =
+                                                  [
+                                                      new("alt", "alternative"),
+                                                      new("app", "application"),
+                                                      new("apps", "applications"),
+                                                      new("arg", "argument"),
+                                                      new("args", "arguments"),
+                                                      new("arr", "array"),
+                                                      new("assoc", "association"),
+                                                      new("assocs", "associations"),
+                                                      new("asynchron", "asynchronous"),
+                                                      new("attr", "attribute"),
+                                                      new("auth", "authorization"),
+                                                      new("bk", "back"),
+                                                      new("bmp", "bitmap"),
+                                                      new("btn", "button"),
+                                                      new("calc", "calculate"),
+                                                      new("calib", "calibration"),
+                                                      new("cb", "checkBox"),
+                                                      new("cert", "certificate"),
+                                                      new("chk", "checkBox"),
+                                                      new("cls", "class"),
+                                                      new("cm", "contextMenu"),
+                                                      new("cmb", "comboBox"),
+                                                      new("cmd", "command"),
+                                                      new("cmp", "comparison"),
+                                                      new("coll", "collection"),
+                                                      new("comm", "communication"),
+                                                      new("comp", "compile"),
+                                                      new("compat", "compatible"),
+                                                      new("conf", "configuration"),
+                                                      new("config", "configuration"),
+                                                      new("configs", "configurations"),
+                                                      new("conn", "connection"),
+                                                      new("conv", "conversion"),
+                                                      new("ctg", "category"),
+                                                      new("ctl", "control"),
+                                                      new("ctlg", "catalog"),
+                                                      new("ctrl", "control"),
+                                                      new("ctx", "context"),
+                                                      new("cur", "current"),
+                                                      new("db", "database"),
+                                                      new("ddl", "dropDownList"),
+                                                      new("decl", "declaration"),
+                                                      new("decr", "decrypt"),
+                                                      new("def", "definition"),
+                                                      new("defs", "definitions"),
+                                                      new("dep", "dependent"),
+                                                      new("deps", "dependencies"),
+                                                      new("desc", "description"),
+                                                      new("dest", "destination"),
+                                                      new("diag", "diagnostic"),
+                                                      new("diags", "diagnostics"),
+                                                      new("dic", "dictionary"),
+                                                      new("dics", "dictionaries"),
+                                                      new("dict", "dictionary"),
+                                                      new("dicts", "dictionaries"),
+                                                      new("diff", "difference"),
+                                                      new("diffs", "differences"),
+                                                      new("dir", "directory"),
+                                                      new("dirs", "directories"),
+                                                      new("dist", "distance"),
+                                                      new("div", "division"),
+                                                      new("dlg", "dialog"),
+                                                      new("dlgt", "delegate"),
+                                                      new("dm", string.Empty),
+                                                      new("doc", "document"),
+                                                      new("docs", "documents"),
+                                                      new("docu", "documentation"),
+                                                      new("docus", "documentations"),
+                                                      new("dst", "destination"),
+                                                      new("dto", string.Empty),
+                                                      new("dyn", "dynamic"),
+                                                      new("ed", "edit"),
+                                                      new("el", "element"),
+                                                      new("ele", "element"),
+                                                      new("elem", "element"),
+                                                      new("encr", "encrypt"),
+                                                      new("env", "environment"),
+                                                      new("environ", "environment"),
+                                                      new("eq", "equal"),
+                                                      new("err", "error"),
+                                                      new("eval", "evaluation"),
+                                                      new("exec", "execute"),
+                                                      new("ext", "extension"),
+                                                      new("fnc", "function"),
+                                                      new("frm", "form"),
+                                                      new("fwd", "forwarded"),
+                                                      new("hdls", "headless"),
+                                                      new("his", "history"),
+                                                      new("hist", "history"),
+                                                      new("hlp", "help"),
+                                                      new("horiz", "horizontal"),
+                                                      new("horz", "horizontal"),
+                                                      new("ident", "identification"),
+                                                      new("idents", "identifications"),
+                                                      new("idx", "index"),
+                                                      new("idxs", "indices"),
+                                                      new("imp", "implementation"),
+                                                      new("impl", "implementation"),
+                                                      new("init", "initialize"),
+                                                      new("interv", "interval"),
+                                                      new("intf", "interface"),
+                                                      new("intfc", "interface"),
+                                                      new("intrfc", "interface"),
+                                                      new("itf", "interface"),
+                                                      new("kvp", "pair"),
+                                                      new("lang", "language"),
+                                                      new("lb", "label"),
+                                                      new("lbl", "label"),
+                                                      new("len", "length"),
+                                                      new("lib", "library"),
+                                                      new("libs", "libraries"),
+                                                      new("lv", "listView"),
+                                                      new("lvw", "listView"),
+                                                      new("man", "manager"),
+                                                      new("max", "maximum"),
+                                                      new("meth", "method"),
+                                                      new("mgmt", "management"),
+                                                      new("mgr", "manager"),
+                                                      new("mgrs", "managers"),
+                                                      new("min", "minimum"),
+                                                      new("mngr", "manager"),
+                                                      new("mngrs", "managers"),
+                                                      new("mnu", "menuItem"),
+                                                      new("mod", "modified"),
+                                                      new("msg", "message"),
+                                                      new("msgs", "messages"),
+                                                      new("nav", "navigation"),
+                                                      new("navig", "navigation"),
+                                                      new("neg", "negative"),
+                                                      new("nfy", "notificationIcon"),
+                                                      new("num", "number"),
+                                                      new("nums", "numbers"),
+                                                      new("obj", "object"),
+                                                      new("op", "operation"),
+                                                      new("ops", "operations"),
+                                                      new("opt", "option"),
+                                                      new("opts", "options"),
+                                                      new("para", "parameter"),
+                                                      new("param", "parameter"),
+                                                      new("params", "parameters"),
+                                                      new("passwd", "password"),
+                                                      new("pct", "picture"),
+                                                      new("perc", "percentage"),
+                                                      new("perf", "performance"),
+                                                      new("phys", "physical"),
+                                                      new("pnl", "panel"),
+                                                      new("pos", "position"),
+                                                      new("pow", "power"),
+                                                      new("prev", "previous"),
+                                                      new("proc", "process"),
+                                                      new("procs", "processes"),
+                                                      new("prop", "property"),
+                                                      new("props", "properties"),
+                                                      new("prot", "protected"),
+                                                      new("pswd", "password"),
+                                                      new("pt", "point"),
+                                                      new("pts", "points"),
+                                                      new("pw", "password"),
+                                                      new("pwd", "password"),
+                                                      new("qty", "quantity"),
+                                                      new("rec", "record"),
+                                                      new("rect", "rectangle"),
+                                                      new("ref", "reference"),
+                                                      new("refs", "references"),
+                                                      new("rel", "relative"),
+                                                      new("reloc", "relocation"),
+                                                      new("repo", "repository"),
+                                                      new("repos", "repositories"),
+                                                      new("req", "request"),
+                                                      new("res", "result"),
+                                                      new("resp", "response"),
+                                                      new("rest", "restore"),
+                                                      new("rgn", "region"),
+                                                      new("sem", "semantic"),
+                                                      new("sep", "separator"),
+                                                      new("sepa", "separator"),
+                                                      new("sess", "session"),
+                                                      new("spec", "specification"),
+                                                      new("specs", "specifications"),
+                                                      new("src", "source"),
+                                                      new("srcs", "sources"),
+                                                      new("srv", "service"),
+                                                      new("std", "standard"),
+                                                      new("str", "string"),
+                                                      new("sts", "status"),
+                                                      new("svc", "service"),
+                                                      new("svr", "server"),
+                                                      new("syn", "syntax"),
+                                                      new("sync", "synchronization"),
+                                                      new("synchron", "synchronous"),
+                                                      new("sys", "system"),
+                                                      new("tb", "textBox"),
+                                                      new("tgt", "target"),
+                                                      new("tgts", "targets"),
+                                                      new("tm", "time"),
+                                                      new("tmp", "temp"),
+                                                      new("tmr", "timer"),
+                                                      new("tvw", "treeView"),
+                                                      new("txt", "text"),
+                                                      new("txts", "texts"),
+                                                      new("util", "utility"),
+                                                      new("utils", "utilities"),
+                                                      new("val", "value"),
+                                                      new("var", "variable"),
+                                                      new("vars", "variables"),
+                                                      new("ver", "version"),
+                                                      new("vert", "vertical"),
+                                                      new("vm", "viewModel"),
+                                                      new("vms", "viewModels"),
+                                                      new("vol", "volume"),
+                                                  ];
+
+        private static readonly Pair[] Postfixes =
+                                                   [
+                                                       new("Alt", "Alternative"),
+                                                       new("App", "Application"),
+                                                       new("Apps", "Applications"),
+                                                       new("Arg", "Argument"),
+                                                       new("Args", "Arguments"),
+                                                       new("Arr", "Array"),
+                                                       new("Assoc", "Association"),
+                                                       new("Assocs", "Associations"),
+                                                       new("Asynchron", "Asynchronous"),
+                                                       new("Attr", "Attribute"),
+                                                       new("Auth", "Authorization"),
+                                                       new("Bk", "Back"),
+                                                       new("Bl", "BusinessLogic"),
+                                                       new("BL", "BusinessLogic"),
+                                                       new("Bmp", "Bitmap"),
+                                                       new("Btn", "Button"),
+                                                       new("Btns", "Buttons"),
+                                                       new("Calc", "Calculation"),
+                                                       new("Calib", "Calibration"),
+                                                       new("Cb", "CheckBox"),
+                                                       new("Cert", "Certificate"),
+                                                       new("Certs", "Certificates"),
+                                                       new("Cfg", "Configuration"),
+                                                       new("Chk", "CheckBox"),
+                                                       new("Cli", "CommandLineInterface"),
+                                                       new("CLI", "CommandLineInterface"),
+                                                       new("Cls", "Class"),
+                                                       new("Cmb", "ComboBox"),
+                                                       new("Cmd", "Command"),
+                                                       new("Cmp", "Comparison"),
+                                                       new("Coll", "Collection"),
+                                                       new("Comm", "Communication"),
+                                                       new("Comp", "Compile"),
+                                                       new("Compat", "Compatibility"),
+                                                       new("Conf", "Configuration"),
+                                                       new("Config", "Configuration"),
+                                                       new("Configs", "Configurations"),
+                                                       new("Conn", "Connection"),
+                                                       new("Conns", "Connections"),
+                                                       new("Conv", "Conversion"),
+                                                       new("Ctg", "Category"),
+                                                       new("Ctl", "Control"),
+                                                       new("Ctlg", "Catalog"),
+                                                       new("Ctrl", "Control"),
+                                                       new("Ctx", "Context"),
+                                                       new("Cur", "Current"),
+                                                       new("Db", "Database"),
+                                                       new("Ddl", "DropDownList"),
+                                                       new("Decl", "Declaration"),
+                                                       new("Decr", "Decrypt"),
+                                                       new("Def", "Definition"),
+                                                       new("Defs", "Definitions"),
+                                                       new("Dep", "Dependency"),
+                                                       new("Deps", "Dependencies"),
+                                                       new("Desc", "Description"),
+                                                       new("Dest", "Destination"),
+                                                       new("Diag", "Diagnostic"),
+                                                       new("Diags", "Diagnostics"),
+                                                       new("Dic", "Dictionary"),
+                                                       new("Dics", "Dictionaries"),
+                                                       new("Dict", "Dictionary"),
+                                                       new("Dicts", "Dictionaries"),
+                                                       new("Diff", "Difference"),
+                                                       new("Diffs", "Differences"),
+                                                       new("Dir", "Directory"),
+                                                       new("Dirs", "Directories"),
+                                                       new("Dist", "Distance"),
+                                                       new("Div", "Division"),
+                                                       new("Dlg", "Dialog"),
+                                                       new("Dlgt", "Delegate"),
+                                                       new("Dm", string.Empty),
+                                                       new("DM", string.Empty),
+                                                       new("Doc", "Document"),
+                                                       new("Docs", "Documents"),
+                                                       new("Dst", "Destination"),
+                                                       new("Dto", string.Empty),
+                                                       new("DTO", string.Empty),
+                                                       new("Dyn", "Dynamic"),
+                                                       new("Ed", "Edit"),
+                                                       new("Ef", "EntityFramework"),
+                                                       new("EF", "EntityFramework"),
+                                                       new("El", "Element"),
+                                                       new("Ele", "Element"),
+                                                       new("Elem", "Element"),
+                                                       new("Encr", "Encrypt"),
+                                                       new("Env", "Environment"),
+                                                       new("Environ", "Environment"),
+                                                       new("Eq", "Equal"),
+                                                       new("Err", "Error"),
+                                                       new("Eval", "Evaluation"),
+                                                       new("Exec", "Execute"),
+                                                       new("Ext", "Extension"),
+                                                       new("Fnc", "Function"),
+                                                       new("Frm", "Form"),
+                                                       new("Fwd", "Forwarded"),
+                                                       new("Hdls", "Headless"),
+                                                       new("His", "History"),
+                                                       new("Hist", "History"),
+                                                       new("Hlp", "Help"),
+                                                       new("Horiz", "Horizontal"),
+                                                       new("Horz", "Horizontal"),
+                                                       new("Ident", "Identification"),
+                                                       new("Idents", "Identifications"),
+                                                       new("Idx", "Index"),
+                                                       new("Idxs", "Indices"),
+                                                       new("Imp", "Implementation"),
+                                                       new("Impl", "Implementation"),
+                                                       new("Init", "Initialize"),
+                                                       new("Interv", "Interval"),
+                                                       new("Intf", "Interface"),
+                                                       new("Intfc", "Interface"),
+                                                       new("Intrfc", "Interface"),
+                                                       new("Itf", "Interface"),
+                                                       new("Lang", "Language"),
+                                                       new("Lb", "Label"),
+                                                       new("Lbl", "Label"),
+                                                       new("Len", "Length"),
+                                                       new("Lib", "Library"),
+                                                       new("Libs", "Libraries"),
+                                                       new("Lv", "ListView"),
+                                                       new("Lvw", "ListView"),
+                                                       new("Man", "Manager"),
+                                                       new("Max", "Maximum"),
+                                                       new("Meth", "Method"),
+                                                       new("Mgmt", "Management"),
+                                                       new("Mgr", "Manager"),
+                                                       new("Mgrs", "Managers"),
+                                                       new("Min", "Minimum"),
+                                                       new("Mngr", "Manager"),
+                                                       new("Mngrs", "Managers"),
+                                                       new("Mnu", "MenuItem"),
+                                                       new("Mod", "Modification"),
+                                                       new("Msg", "Message"),
+                                                       new("Nav", "Navigation"),
+                                                       new("Navig", "Navigation"),
+                                                       new("Neg", "Negative"),
+                                                       new("Nfy", "NotificationIcon"),
+                                                       new("Ns", "Namespace"),
+                                                       new("Num", "Number"),
+                                                       new("Obj", "Object"),
+                                                       new("Objs", "Objects"),
+                                                       new("Op", "Operation"),
+                                                       new("Ops", "Operations"),
+                                                       new("Opt", "Option"),
+                                                       new("Opts", "Options"),
+                                                       new("Para", "Parameter"),
+                                                       new("Param", "Parameter"),
+                                                       new("Params", "Parameters"),
+                                                       new("Passwd", "Password"),
+                                                       new("Pct", "Picture"),
+                                                       new("Perc", "Percentage"),
+                                                       new("Perf", "Performance"),
+                                                       new("Phys", "Physical"),
+                                                       new("Plausi", "Plausibility"),
+                                                       new("Pnl", "Panel"),
+                                                       new("Pos", "Position"),
+                                                       new("Pow", "Power"),
+                                                       new("Prev", "Previous"),
+                                                       new("Proc", "Process"),
+                                                       new("Procs", "Processes"),
+                                                       new("Prop", "Property"),
+                                                       new("Props", "Properties"),
+                                                       new("Prot", "Protection"),
+                                                       new("Pswd", "Password"),
+                                                       new("Pt", "Point"),
+                                                       new("Pts", "Points"),
+                                                       new("Pw", "Password"),
+                                                       new("Pwd", "Password"),
+                                                       new("Qty", "Quantity"),
+                                                       new("Rec", "Record"),
+                                                       new("Rect", "Rectangle"),
+                                                       new("Ref", "Reference"),
+                                                       new("Refs", "References"),
+                                                       new("Rel", "Relative"),
+                                                       new("Reloc", "Relocation"),
+                                                       new("Repo", "Repository"),
+                                                       new("Repos", "Repositories"),
+                                                       new("Req", "Request"),
+                                                       new("Res", "Result"),
+                                                       new("Resp", "Response"),
+                                                       new("Rest", "Restore"),
+                                                       new("Rgn", "Region"),
+                                                       new("Sel", "Selection"),
+                                                       new("Sem", "Semantic"),
+                                                       new("Sep", "Separator"),
+                                                       new("Sepa", "Separator"),
+                                                       new("Sess", "Session"),
+                                                       new("Spec", "Specification"),
+                                                       new("Src", "Source"),
+                                                       new("Srcs", "Sources"),
+                                                       new("Srv", "Service"),
+                                                       new("Std", "Standard"),
+                                                       new("Str", "String"),
+                                                       new("Sts", "Status"),
+                                                       new("Svc", "Service"),
+                                                       new("Svr", "Server"),
+                                                       new("Syn", "Syntax"),
+                                                       new("Sync", "Synchronization"),
+                                                       new("Synchron", "Synchronous"),
+                                                       new("Sys", "System"),
+                                                       new("Tgt", "Target"),
+                                                       new("Tgts", "Targets"),
+                                                       new("Tm", "Time"),
+                                                       new("Tmp", "Temp"),
+                                                       new("Tmr", "Timer"),
+                                                       new("Tvw", "TreeView"),
+                                                       new("Txt", "Text"),
+                                                       new("Util", "Utility"),
+                                                       new("Utils", "Utilities"),
+                                                       new("Val", "Value"),
+                                                       new("Var", "Variable"),
+                                                       new("Vars", "Variables"),
+                                                       new("Ver", "Version"),
+                                                       new("Vert", "Vertical"),
+                                                       new("Vm", "ViewModel"),
+                                                       new("VM", "ViewModel"),
+                                                       new("Vms", "ViewModels"),
+                                                       new("VMs", "ViewModels"),
+                                                       new("Vol", "Volume"),
+                                                   ];
+
+        private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot")).ConcatenatedWith(new Pair("Mod", "Modified"), new Pair("Prot", "Protected"))];
+
+        private static readonly Pair[] StandalonePrefixes = [.. Prefixes.Where(_ => _.Key is not ("obj" or "args"))];
+
+        private static readonly Pair[] StandalonePostfixes = [.. Postfixes.Where(_ => _.Key is not ("Obj" or "Args"))];
+
+        [Test]
+        public static void Finds_prefix_abbreviation_in_([ValueSource(nameof(Prefixes))] Pair prefix)
         {
-            var findings = AbbreviationFinder.Find(value + "SomeName");
+            var findings = AbbreviationFinder.Find(prefix.Key + "SomeName");
 
-            Assert.That(findings.Length, Is.EqualTo(1));
-
-            return findings[0].Value;
+            Assert.That(findings.Length, Is.EqualTo(1), "different findings");
+            Assert.That(findings[0].Value, Is.EqualTo(prefix.Value), "wrong finding");
         }
 
-        [TestCase("Alt", ExpectedResult = "Alternative")]
-        [TestCase("App", ExpectedResult = "Application")]
-        [TestCase("Apps", ExpectedResult = "Applications")]
-        [TestCase("Arg", ExpectedResult = "Argument")]
-        [TestCase("Args", ExpectedResult = "Arguments")]
-        [TestCase("Arr", ExpectedResult = "Array")]
-        [TestCase("Assoc", ExpectedResult = "Association")]
-        [TestCase("Assocs", ExpectedResult = "Associations")]
-        [TestCase("Asynchron", ExpectedResult = "Asynchronous")]
-        [TestCase("Attr", ExpectedResult = "Attribute")]
-        [TestCase("Auth", ExpectedResult = "Authorization")]
-        [TestCase("Bl", ExpectedResult = "BusinessLogic")]
-        [TestCase("BL", ExpectedResult = "BusinessLogic")]
-        [TestCase("Bk", ExpectedResult = "Back")]
-        [TestCase("Bmp", ExpectedResult = "Bitmap")]
-        [TestCase("Btn", ExpectedResult = "Button")]
-        [TestCase("Btns", ExpectedResult = "Buttons")]
-        [TestCase("Calc", ExpectedResult = "Calculation")]
-        [TestCase("Calib", ExpectedResult = "Calibration")]
-        [TestCase("Cb", ExpectedResult = "CheckBox")]
-        [TestCase("Cert", ExpectedResult = "Certificate")]
-        [TestCase("Certs", ExpectedResult = "Certificates")]
-        [TestCase("Cfg", ExpectedResult = "Configuration")]
-        [TestCase("Chk", ExpectedResult = "CheckBox")]
-        [TestCase("Cli", ExpectedResult = "CommandLineInterface")]
-        [TestCase("CLI", ExpectedResult = "CommandLineInterface")]
-        [TestCase("Cls", ExpectedResult = "Class")]
-        [TestCase("Cmb", ExpectedResult = "ComboBox")]
-        [TestCase("Cmd", ExpectedResult = "Command")]
-        [TestCase("Cmp", ExpectedResult = "Comparison")]
-        [TestCase("Coll", ExpectedResult = "Collection")]
-        [TestCase("Comm", ExpectedResult = "Communication")]
-        [TestCase("Comp", ExpectedResult = "Compile")]
-        [TestCase("Compat", ExpectedResult = "Compatibility")]
-        [TestCase("Conf", ExpectedResult = "Configuration")]
-        [TestCase("Config", ExpectedResult = "Configuration")]
-        [TestCase("Configs", ExpectedResult = "Configurations")]
-        [TestCase("Conn", ExpectedResult = "Connection")]
-        [TestCase("Conns", ExpectedResult = "Connections")]
-        [TestCase("Conv", ExpectedResult = "Conversion")]
-        [TestCase("Ctg", ExpectedResult = "Category")]
-        [TestCase("Ctl", ExpectedResult = "Control")]
-        [TestCase("Ctlg", ExpectedResult = "Catalog")]
-        [TestCase("Ctrl", ExpectedResult = "Control")]
-        [TestCase("Ctx", ExpectedResult = "Context")]
-        [TestCase("Cur", ExpectedResult = "Current")]
-        [TestCase("Db", ExpectedResult = "Database")]
-        [TestCase("Ddl", ExpectedResult = "DropDownList")]
-        [TestCase("Decl", ExpectedResult = "Declaration")]
-        [TestCase("Decr", ExpectedResult = "Decrypt")]
-        [TestCase("Def", ExpectedResult = "Definition")]
-        [TestCase("Defs", ExpectedResult = "Definitions")]
-        [TestCase("Dep", ExpectedResult = "Dependency")]
-        [TestCase("Deps", ExpectedResult = "Dependencies")]
-        [TestCase("Desc", ExpectedResult = "Description")]
-        [TestCase("Dest", ExpectedResult = "Destination")]
-        [TestCase("Diag", ExpectedResult = "Diagnostic")]
-        [TestCase("Diags", ExpectedResult = "Diagnostics")]
-        [TestCase("Dic", ExpectedResult = "Dictionary")]
-        [TestCase("Dics", ExpectedResult = "Dictionaries")]
-        [TestCase("Dict", ExpectedResult = "Dictionary")]
-        [TestCase("Dicts", ExpectedResult = "Dictionaries")]
-        [TestCase("Diff", ExpectedResult = "Difference")]
-        [TestCase("Diffs", ExpectedResult = "Differences")]
-        [TestCase("Dir", ExpectedResult = "Directory")]
-        [TestCase("Dirs", ExpectedResult = "Directories")]
-        [TestCase("Dist", ExpectedResult = "Distance")]
-        [TestCase("Div", ExpectedResult = "Division")]
-        [TestCase("Dlg", ExpectedResult = "Dialog")]
-        [TestCase("Dlgt", ExpectedResult = "Delegate")]
-        [TestCase("Dm", ExpectedResult = "")]
-        [TestCase("DM", ExpectedResult = "")]
-        [TestCase("Doc", ExpectedResult = "Document")]
-        [TestCase("Docs", ExpectedResult = "Documents")]
-        [TestCase("Dst", ExpectedResult = "Destination")]
-        [TestCase("Dto", ExpectedResult = "")]
-        [TestCase("DTO", ExpectedResult = "")]
-        [TestCase("Dyn", ExpectedResult = "Dynamic")]
-        [TestCase("Ed", ExpectedResult = "Edit")]
-        [TestCase("Ef", ExpectedResult = "EntityFramework")]
-        [TestCase("EF", ExpectedResult = "EntityFramework")]
-        [TestCase("El", ExpectedResult = "Element")]
-        [TestCase("Ele", ExpectedResult = "Element")]
-        [TestCase("Elem", ExpectedResult = "Element")]
-        [TestCase("Encr", ExpectedResult = "Encrypt")]
-        [TestCase("Env", ExpectedResult = "Environment")]
-        [TestCase("Environ", ExpectedResult = "Environment")]
-        [TestCase("Eq", ExpectedResult = "Equal")]
-        [TestCase("Err", ExpectedResult = "Error")]
-        [TestCase("Eval", ExpectedResult = "Evaluation")]
-        [TestCase("Exec", ExpectedResult = "Execute")]
-        [TestCase("Ext", ExpectedResult = "Extension")]
-        [TestCase("Fnc", ExpectedResult = "Function")]
-        [TestCase("Frm", ExpectedResult = "Form")]
-        [TestCase("Fwd", ExpectedResult = "Forwarded")]
-        [TestCase("Hdls", ExpectedResult = "Headless")]
-        [TestCase("Hlp", ExpectedResult = "Help")]
-        [TestCase("His", ExpectedResult = "History")]
-        [TestCase("Hist", ExpectedResult = "History")]
-        [TestCase("Horiz", ExpectedResult = "Horizontal")]
-        [TestCase("Horz", ExpectedResult = "Horizontal")]
-        [TestCase("Ident", ExpectedResult = "Identification")]
-        [TestCase("Idents", ExpectedResult = "Identifications")]
-        [TestCase("Idx", ExpectedResult = "Index")]
-        [TestCase("Idxs", ExpectedResult = "Indices")]
-        [TestCase("Imp", ExpectedResult = "Implementation")]
-        [TestCase("Impl", ExpectedResult = "Implementation")]
-        [TestCase("Init", ExpectedResult = "Initialize")]
-        [TestCase("Interv", ExpectedResult = "Interval")]
-        [TestCase("Intf", ExpectedResult = "Interface")]
-        [TestCase("Intfc", ExpectedResult = "Interface")]
-        [TestCase("Intrfc", ExpectedResult = "Interface")]
-        [TestCase("Itf", ExpectedResult = "Interface")]
-        [TestCase("Lang", ExpectedResult = "Language")]
-        [TestCase("Lbl", ExpectedResult = "Label")]
-        [TestCase("Len", ExpectedResult = "Length")]
-        [TestCase("Lib", ExpectedResult = "Library")]
-        [TestCase("Libs", ExpectedResult = "Libraries")]
-        [TestCase("Lv", ExpectedResult = "ListView")]
-        [TestCase("Man", ExpectedResult = "Manager")]
-        [TestCase("Max", ExpectedResult = "Maximum")]
-        [TestCase("Meth", ExpectedResult = "Method")]
-        [TestCase("Mgmt", ExpectedResult = "Management")]
-        [TestCase("Mgr", ExpectedResult = "Manager")]
-        [TestCase("Mgrs", ExpectedResult = "Managers")]
-        [TestCase("Min", ExpectedResult = "Minimum")]
-        [TestCase("Mngr", ExpectedResult = "Manager")]
-        [TestCase("Mngrs", ExpectedResult = "Managers")]
-        [TestCase("Mnu", ExpectedResult = "MenuItem")]
-        [TestCase("Mod", ExpectedResult = "Modification")]
-        [TestCase("Msg", ExpectedResult = "Message")]
-        [TestCase("Nav", ExpectedResult = "Navigation")]
-        [TestCase("Navig", ExpectedResult = "Navigation")]
-        [TestCase("Neg", ExpectedResult = "Negative")]
-        [TestCase("Ns", ExpectedResult = "Namespace")]
-        [TestCase("Num", ExpectedResult = "Number")]
-        [TestCase("Obj", ExpectedResult = "Object")]
-        [TestCase("Objs", ExpectedResult = "Objects")]
-        [TestCase("Op", ExpectedResult = "Operation")]
-        [TestCase("Ops", ExpectedResult = "Operations")]
-        [TestCase("Opt", ExpectedResult = "Option")]
-        [TestCase("Opts", ExpectedResult = "Options")]
-        [TestCase("Para", ExpectedResult = "Parameter")]
-        [TestCase("Param", ExpectedResult = "Parameter")]
-        [TestCase("Params", ExpectedResult = "Parameters")]
-        [TestCase("Perc", ExpectedResult = "Percentage")]
-        [TestCase("Perf", ExpectedResult = "Performance")]
-        [TestCase("Phys", ExpectedResult = "Physical")]
-        [TestCase("Plausi", ExpectedResult = "Plausibility")]
-        [TestCase("Pos", ExpectedResult = "Position")]
-        [TestCase("Pow", ExpectedResult = "Power")]
-        [TestCase("Prev", ExpectedResult = "Previous")]
-        [TestCase("Proc", ExpectedResult = "Process")]
-        [TestCase("Procs", ExpectedResult = "Processes")]
-        [TestCase("Prop", ExpectedResult = "Property")]
-        [TestCase("Props", ExpectedResult = "Properties")]
-        [TestCase("Prot", ExpectedResult = "Protection")]
-        [TestCase("Pt", ExpectedResult = "Point")]
-        [TestCase("Pts", ExpectedResult = "Points")]
-        [TestCase("Pw", ExpectedResult = "Password")]
-        [TestCase("Pwd", ExpectedResult = "Password")]
-        [TestCase("Pswd", ExpectedResult = "Password")]
-        [TestCase("Passwd", ExpectedResult = "Password")]
-        [TestCase("Qty", ExpectedResult = "Quantity")]
-        [TestCase("Rec", ExpectedResult = "Record")]
-        [TestCase("Rect", ExpectedResult = "Rectangle")]
-        [TestCase("Ref", ExpectedResult = "Reference")]
-        [TestCase("Refs", ExpectedResult = "References")]
-        [TestCase("Rel", ExpectedResult = "Relative")]
-        [TestCase("Reloc", ExpectedResult = "Relocation")]
-        [TestCase("Repo", ExpectedResult = "Repository")]
-        [TestCase("Repos", ExpectedResult = "Repositories")]
-        [TestCase("Req", ExpectedResult = "Request")]
-        [TestCase("Res", ExpectedResult = "Result")]
-        [TestCase("Resp", ExpectedResult = "Response")]
-        [TestCase("Rest", ExpectedResult = "Restore")]
-        [TestCase("Rgn", ExpectedResult = "Region")]
-        [TestCase("Sel", ExpectedResult = "Selection")]
-        [TestCase("Sem", ExpectedResult = "Semantic")]
-        [TestCase("Sep", ExpectedResult = "Separator")]
-        [TestCase("Sepa", ExpectedResult = "Separator")]
-        [TestCase("Sess", ExpectedResult = "Session")]
-        [TestCase("Spec", ExpectedResult = "Specification")]
-        [TestCase("Src", ExpectedResult = "Source")]
-        [TestCase("Srcs", ExpectedResult = "Sources")]
-        [TestCase("Srv", ExpectedResult = "Service")]
-        [TestCase("Std", ExpectedResult = "Standard")]
-        [TestCase("Str", ExpectedResult = "String")]
-        [TestCase("Svc", ExpectedResult = "Service")]
-        [TestCase("Svr", ExpectedResult = "Server")]
-        [TestCase("Syn", ExpectedResult = "Syntax")]
-        [TestCase("Sync", ExpectedResult = "Synchronization")]
-        [TestCase("Synchron", ExpectedResult = "Synchronous")]
-        [TestCase("Sys", ExpectedResult = "System")]
-        [TestCase("Tgt", ExpectedResult = "Target")]
-        [TestCase("Tgts", ExpectedResult = "Targets")]
-        [TestCase("Tm", ExpectedResult = "Time")]
-        [TestCase("Tmp", ExpectedResult = "Temp")]
-        [TestCase("Txt", ExpectedResult = "Text")]
-        [TestCase("Util", ExpectedResult = "Utility")]
-        [TestCase("Utils", ExpectedResult = "Utilities")]
-        [TestCase("Val", ExpectedResult = "Value")]
-        [TestCase("Var", ExpectedResult = "Variable")]
-        [TestCase("Vars", ExpectedResult = "Variables")]
-        [TestCase("Ver", ExpectedResult = "Version")]
-        [TestCase("Vert", ExpectedResult = "Vertical")]
-        [TestCase("Vm", ExpectedResult = "ViewModel")]
-        [TestCase("VM", ExpectedResult = "ViewModel")]
-        [TestCase("Vms", ExpectedResult = "ViewModels")]
-        [TestCase("VMs", ExpectedResult = "ViewModels")]
-        [TestCase("Vol", ExpectedResult = "Volume")]
-        public static string Finds_postfix_abbreviation_in_(string value)
+        [Test]
+        public static void Finds_postfix_abbreviation_in_([ValueSource(nameof(Postfixes))] Pair postfix)
         {
-            var findings = AbbreviationFinder.Find("someName" + value);
+            var findings = AbbreviationFinder.Find("someName" + postfix.Key);
 
-            Assert.That(findings.Length, Is.EqualTo(1));
-
-            return findings[0].Value;
+            Assert.That(findings.Length, Is.EqualTo(1), "Different findings");
+            Assert.That(findings[0].Value, Is.EqualTo(postfix.Value), "wrong finding");
         }
 
-        [TestCase("appSomeName", ExpectedResult = "applicationSomeName")]
-        [TestCase("appsSomeName", ExpectedResult = "applicationsSomeName")]
-        [TestCase("argSomeName", ExpectedResult = "argumentSomeName")]
-        [TestCase("argsSomeName", ExpectedResult = "argumentsSomeName")]
-        [TestCase("arrSomeName", ExpectedResult = "arraySomeName")]
-        [TestCase("assocSomeName", ExpectedResult = "associationSomeName")]
-        [TestCase("assocsSomeName", ExpectedResult = "associationsSomeName")]
-        [TestCase("asynchronSomeName", ExpectedResult = "asynchronousSomeName")]
-        [TestCase("authSomeName", ExpectedResult = "authorizationSomeName")]
-        [TestCase("bkSomeName", ExpectedResult = "backSomeName")]
-        [TestCase("bmpSomeName", ExpectedResult = "bitmapSomeName")]
-        [TestCase("btnSomeName", ExpectedResult = "buttonSomeName")]
-        [TestCase("calcSomeName", ExpectedResult = "calculateSomeName")]
-        [TestCase("calibSomeName", ExpectedResult = "calibrationSomeName")]
-        [TestCase("cbSomeName", ExpectedResult = "checkBoxSomeName")]
-        [TestCase("certSomeName", ExpectedResult = "certificateSomeName")]
-        [TestCase("cfgSomeName", ExpectedResult = "configurationSomeName")]
-        [TestCase("chkSomeName", ExpectedResult = "checkBoxSomeName")]
-        [TestCase("clsSomeName", ExpectedResult = "classSomeName")]
-        [TestCase("cmSomeName", ExpectedResult = "contextMenuSomeName")]
-        [TestCase("cmbSomeName", ExpectedResult = "comboBoxSomeName")]
-        [TestCase("cmdSomeName", ExpectedResult = "commandSomeName")]
-        [TestCase("cmpSomeName", ExpectedResult = "comparisonSomeName")]
-        [TestCase("collSomeName", ExpectedResult = "collectionSomeName")]
-        [TestCase("commSomeName", ExpectedResult = "communicationSomeName")]
-        [TestCase("compatSomeName", ExpectedResult = "compatibleSomeName")]
-        [TestCase("compSomeName", ExpectedResult = "compileSomeName")]
-        [TestCase("configSomeName", ExpectedResult = "configurationSomeName")]
-        [TestCase("configsSomeName", ExpectedResult = "configurationsSomeName")]
-        [TestCase("confSomeName", ExpectedResult = "configurationSomeName")]
-        [TestCase("connSomeName", ExpectedResult = "connectionSomeName")]
-        [TestCase("connsSomeName", ExpectedResult = "connectionsSomeName")]
-        [TestCase("convSomeName", ExpectedResult = "conversionSomeName")]
-        [TestCase("ctgSomeName", ExpectedResult = "categorySomeName")]
-        [TestCase("ctlgSomeName", ExpectedResult = "catalogSomeName")]
-        [TestCase("ctlSomeName", ExpectedResult = "controlSomeName")]
-        [TestCase("ctrlSomeName", ExpectedResult = "controlSomeName")]
-        [TestCase("ctxSomeName", ExpectedResult = "contextSomeName")]
-        [TestCase("curSomeName", ExpectedResult = "currentSomeName")]
-        [TestCase("dbSomeName", ExpectedResult = "databaseSomeName")]
-        [TestCase("ddlSomeName", ExpectedResult = "dropDownListSomeName")]
-        [TestCase("declSomeName", ExpectedResult = "declarationSomeName")]
-        [TestCase("decrSomeName", ExpectedResult = "decryptSomeName")]
-        [TestCase("defSomeName", ExpectedResult = "definitionSomeName")]
-        [TestCase("defsSomeName", ExpectedResult = "definitionsSomeName")]
-        [TestCase("depSomeName", ExpectedResult = "dependentSomeName")]
-        [TestCase("depsSomeName", ExpectedResult = "dependenciesSomeName")]
-        [TestCase("descSomeName", ExpectedResult = "descriptionSomeName")]
-        [TestCase("destSomeName", ExpectedResult = "destinationSomeName")]
-        [TestCase("diagSomeName", ExpectedResult = "diagnosticSomeName")]
-        [TestCase("diagsSomeName", ExpectedResult = "diagnosticsSomeName")]
-        [TestCase("dicSomeName", ExpectedResult = "dictionarySomeName")]
-        [TestCase("dictSomeName", ExpectedResult = "dictionarySomeName")]
-        [TestCase("dicsSomeName", ExpectedResult = "dictionariesSomeName")]
-        [TestCase("dictsSomeName", ExpectedResult = "dictionariesSomeName")]
-        [TestCase("diffSomeName", ExpectedResult = "differenceSomeName")]
-        [TestCase("diffsSomeName", ExpectedResult = "differencesSomeName")]
-        [TestCase("dirSomeName", ExpectedResult = "directorySomeName")]
-        [TestCase("dirsSomeName", ExpectedResult = "directoriesSomeName")]
-        [TestCase("distSomeName", ExpectedResult = "distanceSomeName")]
-        [TestCase("divSomeName", ExpectedResult = "divisionSomeName")]
-        [TestCase("dlgSomeName", ExpectedResult = "dialogSomeName")]
-        [TestCase("dlgtSomeName", ExpectedResult = "delegateSomeName")]
-        [TestCase("dmSomeName", ExpectedResult = "SomeName")]
-        [TestCase("docSomeName", ExpectedResult = "documentSomeName")]
-        [TestCase("docsSomeName", ExpectedResult = "documentsSomeName")]
-        [TestCase("docuSomeName", ExpectedResult = "documentationSomeName")]
-        [TestCase("docusSomeName", ExpectedResult = "documentationsSomeName")]
-        [TestCase("dstSomeName", ExpectedResult = "destinationSomeName")]
-        [TestCase("dtoSomeName", ExpectedResult = "SomeName")]
-        [TestCase("dynSomeName", ExpectedResult = "dynamicSomeName")]
-        [TestCase("edSomeName", ExpectedResult = "editSomeName")]
-        [TestCase("encrSomeName", ExpectedResult = "encryptSomeName")]
-        [TestCase("environSomeName", ExpectedResult = "environmentSomeName")]
-        [TestCase("envSomeName", ExpectedResult = "environmentSomeName")]
-        [TestCase("eqSomeName", ExpectedResult = "equalSomeName")]
-        [TestCase("errSomeName", ExpectedResult = "errorSomeName")]
-        [TestCase("evalSomeName", ExpectedResult = "evaluationSomeName")]
-        [TestCase("extSomeName", ExpectedResult = "extensionSomeName")]
-        [TestCase("fncSomeName", ExpectedResult = "functionSomeName")]
-        [TestCase("frmSomeName", ExpectedResult = "formSomeName")]
-        [TestCase("fwdSomeName", ExpectedResult = "forwardedSomeName")]
-        [TestCase("hdlsSomeName", ExpectedResult = "headlessSomeName")]
-        [TestCase("hlpSomeName", ExpectedResult = "helpSomeName")]
-        [TestCase("hisSomeName", ExpectedResult = "historySomeName")]
-        [TestCase("histSomeName", ExpectedResult = "historySomeName")]
-        [TestCase("horizSomeName", ExpectedResult = "horizontalSomeName")]
-        [TestCase("horzSomeName", ExpectedResult = "horizontalSomeName")]
-        [TestCase("identSomeName", ExpectedResult = "identificationSomeName")]
-        [TestCase("identsSomeName", ExpectedResult = "identificationsSomeName")]
-        [TestCase("idxSomeName", ExpectedResult = "indexSomeName")]
-        [TestCase("idxsSomeName", ExpectedResult = "indicesSomeName")]
-        [TestCase("implSomeName", ExpectedResult = "implementationSomeName")]
-        [TestCase("impSomeName", ExpectedResult = "implementationSomeName")]
-        [TestCase("initSomeName", ExpectedResult = "initializeSomeName")]
-        [TestCase("intervSomeName", ExpectedResult = "intervalSomeName")]
-        [TestCase("intfSomeName", ExpectedResult = "interfaceSomeName")]
-        [TestCase("intfcSomeName", ExpectedResult = "interfaceSomeName")]
-        [TestCase("intrfcSomeName", ExpectedResult = "interfaceSomeName")]
-        [TestCase("itfSomeName", ExpectedResult = "interfaceSomeName")]
-        [TestCase("langSomeName", ExpectedResult = "languageSomeName")]
-        [TestCase("lblSomeName", ExpectedResult = "labelSomeName")]
-        [TestCase("lenSomeName", ExpectedResult = "lengthSomeName")]
-        [TestCase("libSomeName", ExpectedResult = "librarySomeName")]
-        [TestCase("libsSomeName", ExpectedResult = "librariesSomeName")]
-        [TestCase("lvSomeName", ExpectedResult = "listViewSomeName")]
-        [TestCase("manSomeName", ExpectedResult = "managerSomeName")]
-        [TestCase("maxSomeName", ExpectedResult = "maximumSomeName")]
-        [TestCase("methSomeName", ExpectedResult = "methodSomeName")]
-        [TestCase("mgmtSomeName", ExpectedResult = "managementSomeName")]
-        [TestCase("mgrSomeName", ExpectedResult = "managerSomeName")]
-        [TestCase("mgrsSomeName", ExpectedResult = "managersSomeName")]
-        [TestCase("minSomeName", ExpectedResult = "minimumSomeName")]
-        [TestCase("mngrSomeName", ExpectedResult = "managerSomeName")]
-        [TestCase("mngrsSomeName", ExpectedResult = "managersSomeName")]
-        [TestCase("mnuSomeName", ExpectedResult = "menuItemSomeName")]
-        [TestCase("modSomeName", ExpectedResult = "modifiedSomeName")]
-        [TestCase("msgSomeName", ExpectedResult = "messageSomeName")]
-        [TestCase("msgsSomeName", ExpectedResult = "messagesSomeName")]
-        [TestCase("navSomeName", ExpectedResult = "navigationSomeName")]
-        [TestCase("navigSomeName", ExpectedResult = "navigationSomeName")]
-        [TestCase("negSomeName", ExpectedResult = "negativeSomeName")]
-        [TestCase("numSomeName", ExpectedResult = "numberSomeName")]
-        [TestCase("numsSomeName", ExpectedResult = "numbersSomeName")]
-        [TestCase("objSomeName", ExpectedResult = "objectSomeName")]
-        [TestCase("paramSomeName", ExpectedResult = "parameterSomeName")]
-        [TestCase("paramsSomeName", ExpectedResult = "parametersSomeName")]
-        [TestCase("paraSomeName", ExpectedResult = "parameterSomeName")]
-        [TestCase("percSomeName", ExpectedResult = "percentageSomeName")]
-        [TestCase("perfSomeName", ExpectedResult = "performanceSomeName")]
-        [TestCase("physSomeName", ExpectedResult = "physicalSomeName")]
-        [TestCase("plausiSomeName", ExpectedResult = "plausibilitySomeName")]
-        [TestCase("posSomeName", ExpectedResult = "positionSomeName")]
-        [TestCase("powSomeName", ExpectedResult = "powerSomeName")]
-        [TestCase("prevSomeName", ExpectedResult = "previousSomeName")]
-        [TestCase("procSomeName", ExpectedResult = "processSomeName")]
-        [TestCase("procsSomeName", ExpectedResult = "processesSomeName")]
-        [TestCase("propSomeName", ExpectedResult = "propertySomeName")]
-        [TestCase("propsSomeName", ExpectedResult = "propertiesSomeName")]
-        [TestCase("protSomeName", ExpectedResult = "protectedSomeName")]
-        [TestCase("ptSomeName", ExpectedResult = "pointSomeName")]
-        [TestCase("ptsSomeName", ExpectedResult = "pointsSomeName")]
-        [TestCase("pwSomeName", ExpectedResult = "passwordSomeName")]
-        [TestCase("pwdSomeName", ExpectedResult = "passwordSomeName")]
-        [TestCase("pswdSomeName", ExpectedResult = "passwordSomeName")]
-        [TestCase("passwdSomeName", ExpectedResult = "passwordSomeName")]
-        [TestCase("qtySomeName", ExpectedResult = "quantitySomeName")]
-        [TestCase("recSomeName", ExpectedResult = "recordSomeName")]
-        [TestCase("rectSomeName", ExpectedResult = "rectangleSomeName")]
-        [TestCase("refSomeName", ExpectedResult = "referenceSomeName")]
-        [TestCase("refsSomeName", ExpectedResult = "referencesSomeName")]
-        [TestCase("relSomeName", ExpectedResult = "relativeSomeName")]
-        [TestCase("repoSomeName", ExpectedResult = "repositorySomeName")]
-        [TestCase("reposSomeName", ExpectedResult = "repositoriesSomeName")]
-        [TestCase("reqSomeName", ExpectedResult = "requestSomeName")]
-        [TestCase("respSomeName", ExpectedResult = "responseSomeName")]
-        [TestCase("resSomeName", ExpectedResult = "resultSomeName")]
-        [TestCase("restSomeName", ExpectedResult = "restoreSomeName")]
-        [TestCase("rgnSomeName", ExpectedResult = "regionSomeName")]
-        [TestCase("semSomeName", ExpectedResult = "semanticSomeName")]
-        [TestCase("sepSomeName", ExpectedResult = "separatorSomeName")]
-        [TestCase("sepaSomeName", ExpectedResult = "separatorSomeName")]
-        [TestCase("sessSomeName", ExpectedResult = "sessionSomeName")]
-        [TestCase("specSomeName", ExpectedResult = "specificationSomeName")]
-        [TestCase("specsSomeName", ExpectedResult = "specificationsSomeName")]
-        [TestCase("srcSomeName", ExpectedResult = "sourceSomeName")]
-        [TestCase("srcsSomeName", ExpectedResult = "sourcesSomeName")]
-        [TestCase("srvSomeName", ExpectedResult = "serviceSomeName")]
-        [TestCase("stdSomeName", ExpectedResult = "standardSomeName")]
-        [TestCase("strSomeName", ExpectedResult = "stringSomeName")]
-        [TestCase("svcSomeName", ExpectedResult = "serviceSomeName")]
-        [TestCase("svrSomeName", ExpectedResult = "serverSomeName")]
-        [TestCase("synchronSomeName", ExpectedResult = "synchronousSomeName")]
-        [TestCase("syncSomeName", ExpectedResult = "synchronizationSomeName")]
-        [TestCase("synSomeName", ExpectedResult = "syntaxSomeName")]
-        [TestCase("sysSomeName", ExpectedResult = "systemSomeName")]
-        [TestCase("tgtSomeName", ExpectedResult = "targetSomeName")]
-        [TestCase("tgtsSomeName", ExpectedResult = "targetsSomeName")]
-        [TestCase("tmpSomeName", ExpectedResult = "tempSomeName")]
-        [TestCase("tmSomeName", ExpectedResult = "timeSomeName")]
-        [TestCase("txtSomeName", ExpectedResult = "textSomeName")]
-        [TestCase("txtsSomeName", ExpectedResult = "textsSomeName")]
-        [TestCase("utilSomeName", ExpectedResult = "utilitySomeName")]
-        [TestCase("utilsSomeName", ExpectedResult = "utilitiesSomeName")]
-        [TestCase("valSomeName", ExpectedResult = "valueSomeName")]
-        [TestCase("varSomeName", ExpectedResult = "variableSomeName")]
-        [TestCase("varsSomeName", ExpectedResult = "variablesSomeName")]
-        [TestCase("verSomeName", ExpectedResult = "versionSomeName")]
-        [TestCase("vertSomeName", ExpectedResult = "verticalSomeName")]
-        [TestCase("vmSomeName", ExpectedResult = "viewModelSomeName")]
-        [TestCase("vmsSomeName", ExpectedResult = "viewModelsSomeName")]
-        [TestCase("volSomeName", ExpectedResult = "volumeSomeName")]
-        public static string Finds_prefix_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+        [Test]
+        public static void Finds_prefix_abbreviations_and_fixes_them_in_([ValueSource(nameof(Prefixes))] Pair prefix)
+        {
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(prefix.Key + "SomeName");
+
+            Assert.That(replacement, Is.EqualTo(prefix.Value + "SomeName"));
+        }
 
         [TestCase("some_op_name", ExpectedResult = "some_operation_name")]
         [TestCase("some_ops_name", ExpectedResult = "some_operations_name")]
         [TestCase("some_opt_name", ExpectedResult = "some_option_name")]
         [TestCase("some_opts_name", ExpectedResult = "some_options_name")]
-        [TestCase("someAppName", ExpectedResult = "someApplicationName")]
-        [TestCase("someAppsName", ExpectedResult = "someApplicationsName")]
-        [TestCase("someArgName", ExpectedResult = "someArgumentName")]
-        [TestCase("someArgsName", ExpectedResult = "someArgumentsName")]
-        [TestCase("someArrName", ExpectedResult = "someArrayName")]
-        [TestCase("someAssocName", ExpectedResult = "someAssociationName")]
-        [TestCase("someAssocsName", ExpectedResult = "someAssociationsName")]
-        [TestCase("someAsynchronName", ExpectedResult = "someAsynchronousName")]
-        [TestCase("someAuthName", ExpectedResult = "someAuthorizationName")]
-        [TestCase("someBkName", ExpectedResult = "someBackName")]
-        [TestCase("someBlName", ExpectedResult = "someBusinessLogicName")]
-        [TestCase("someBLName", ExpectedResult = "someBusinessLogicName")]
-        [TestCase("someBlueName", ExpectedResult = "someBlueName")]
-        [TestCase("someBmpName", ExpectedResult = "someBitmapName")]
-        [TestCase("someBtnName", ExpectedResult = "someButtonName")]
-        [TestCase("someBtnsName", ExpectedResult = "someButtonsName")]
-        [TestCase("someCalcName", ExpectedResult = "someCalculationName")]
-        [TestCase("someCalibName", ExpectedResult = "someCalibrationName")]
-        [TestCase("someCbName", ExpectedResult = "someCheckBoxName")]
-        [TestCase("someCertName", ExpectedResult = "someCertificateName")]
-        [TestCase("someCertsName", ExpectedResult = "someCertificatesName")]
-        [TestCase("someChkName", ExpectedResult = "someCheckBoxName")]
-        [TestCase("someCliName", ExpectedResult = "someCommandLineInterfaceName")]
-        [TestCase("someCLIName", ExpectedResult = "someCommandLineInterfaceName")]
-        [TestCase("someClsName", ExpectedResult = "someClassName")]
-        [TestCase("someCmbName", ExpectedResult = "someComboBoxName")]
-        [TestCase("someCmdName", ExpectedResult = "someCommandName")]
-        [TestCase("someCmpName", ExpectedResult = "someComparisonName")]
-        [TestCase("someCollName", ExpectedResult = "someCollectionName")]
-        [TestCase("someCommName", ExpectedResult = "someCommunicationName")]
-        [TestCase("someCompatName", ExpectedResult = "someCompatibilityName")]
-        [TestCase("someCompName", ExpectedResult = "someCompileName")]
-        [TestCase("someConfigName", ExpectedResult = "someConfigurationName")]
-        [TestCase("someConfigsName", ExpectedResult = "someConfigurationsName")]
-        [TestCase("someConfName", ExpectedResult = "someConfigurationName")]
-        [TestCase("someConnName", ExpectedResult = "someConnectionName")]
-        [TestCase("someConnsName", ExpectedResult = "someConnectionsName")]
-        [TestCase("someConvName", ExpectedResult = "someConversionName")]
-        [TestCase("someCtgName", ExpectedResult = "someCategoryName")]
-        [TestCase("someCtlgName", ExpectedResult = "someCatalogName")]
-        [TestCase("someCtlName", ExpectedResult = "someControlName")]
-        [TestCase("someCtrlName", ExpectedResult = "someControlName")]
-        [TestCase("someCtxName", ExpectedResult = "someContextName")]
-        [TestCase("someCurName", ExpectedResult = "someCurrentName")]
-        [TestCase("someDbName", ExpectedResult = "someDatabaseName")]
-        [TestCase("someDdlName", ExpectedResult = "someDropDownListName")]
-        [TestCase("someDeclName", ExpectedResult = "someDeclarationName")]
-        [TestCase("someDecrName", ExpectedResult = "someDecryptName")]
-        [TestCase("someDefName", ExpectedResult = "someDefinitionName")]
-        [TestCase("someDefsName", ExpectedResult = "someDefinitionsName")]
-        [TestCase("someDepName", ExpectedResult = "someDependencyName")]
-        [TestCase("someDepsName", ExpectedResult = "someDependenciesName")]
-        [TestCase("someDescName", ExpectedResult = "someDescriptionName")]
-        [TestCase("someDestName", ExpectedResult = "someDestinationName")]
-        [TestCase("someDiagName", ExpectedResult = "someDiagnosticName")]
-        [TestCase("someDiagsName", ExpectedResult = "someDiagnosticsName")]
-        [TestCase("someDicName", ExpectedResult = "someDictionaryName")]
-        [TestCase("someDicsName", ExpectedResult = "someDictionariesName")]
-        [TestCase("someDictName", ExpectedResult = "someDictionaryName")]
-        [TestCase("someDictsName", ExpectedResult = "someDictionariesName")]
-        [TestCase("someDiffName", ExpectedResult = "someDifferenceName")]
-        [TestCase("someDiffsName", ExpectedResult = "someDifferencesName")]
-        [TestCase("someDirName", ExpectedResult = "someDirectoryName")]
-        [TestCase("someDirsName", ExpectedResult = "someDirectoriesName")]
-        [TestCase("someDistName", ExpectedResult = "someDistanceName")]
-        [TestCase("someDivName", ExpectedResult = "someDivisionName")]
-        [TestCase("someDlgName", ExpectedResult = "someDialogName")]
-        [TestCase("someDlgtName", ExpectedResult = "someDelegateName")]
-        [TestCase("someDmName", ExpectedResult = "someName")]
-        [TestCase("someDMName", ExpectedResult = "someName")]
-        [TestCase("someDocName", ExpectedResult = "someDocumentName")]
-        [TestCase("someDocsName", ExpectedResult = "someDocumentsName")]
-        [TestCase("someDocuName", ExpectedResult = "someDocumentationName")]
-        [TestCase("someDocusName", ExpectedResult = "someDocumentationsName")]
-        [TestCase("someDstName", ExpectedResult = "someDestinationName")]
-        [TestCase("someDtoName", ExpectedResult = "someName")]
-        [TestCase("someDTOName", ExpectedResult = "someName")]
-        [TestCase("someDynName", ExpectedResult = "someDynamicName")]
-        [TestCase("someEdName", ExpectedResult = "someEditName")]
-        [TestCase("someEFName", ExpectedResult = "someEntityFrameworkName")]
-        [TestCase("someEncrName", ExpectedResult = "someEncryptName")]
-        [TestCase("someEnvironName", ExpectedResult = "someEnvironmentName")]
-        [TestCase("someEnvName", ExpectedResult = "someEnvironmentName")]
-        [TestCase("someEqName", ExpectedResult = "someEqualName")]
-        [TestCase("someErrName", ExpectedResult = "someErrorName")]
-        [TestCase("someEvalName", ExpectedResult = "someEvaluationName")]
-        [TestCase("someExtName", ExpectedResult = "someExtensionName")]
-        [TestCase("someFncName", ExpectedResult = "someFunctionName")]
-        [TestCase("someFrmName", ExpectedResult = "someFormName")]
-        [TestCase("someFwdName", ExpectedResult = "someForwardedName")]
-        [TestCase("someHdlsName", ExpectedResult = "someHeadlessName")]
-        [TestCase("someHlpName", ExpectedResult = "someHelpName")]
-        [TestCase("someHisName", ExpectedResult = "someHistoryName")]
-        [TestCase("someHistName", ExpectedResult = "someHistoryName")]
-        [TestCase("someHorizName", ExpectedResult = "someHorizontalName")]
-        [TestCase("someHorzName", ExpectedResult = "someHorizontalName")]
-        [TestCase("someIdentName", ExpectedResult = "someIdentificationName")]
-        [TestCase("someIdentsName", ExpectedResult = "someIdentificationsName")]
-        [TestCase("someIdxName", ExpectedResult = "someIndexName")]
-        [TestCase("someIdxsName", ExpectedResult = "someIndicesName")]
-        [TestCase("someImplName", ExpectedResult = "someImplementationName")]
-        [TestCase("someImpName", ExpectedResult = "someImplementationName")]
-        [TestCase("someInitName", ExpectedResult = "someInitializeName")]
-        [TestCase("someIntervName", ExpectedResult = "someIntervalName")]
-        [TestCase("someIntfName", ExpectedResult = "someInterfaceName")]
-        [TestCase("someIntfcName", ExpectedResult = "someInterfaceName")]
-        [TestCase("someIntrfcName", ExpectedResult = "someInterfaceName")]
-        [TestCase("someItfName", ExpectedResult = "someInterfaceName")]
-        [TestCase("someLangName", ExpectedResult = "someLanguageName")]
-        [TestCase("someLblName", ExpectedResult = "someLabelName")]
-        [TestCase("someLibName", ExpectedResult = "someLibraryName")]
-        [TestCase("someLibsName", ExpectedResult = "someLibrariesName")]
-        [TestCase("someLvName", ExpectedResult = "someListViewName")]
-        [TestCase("someManName", ExpectedResult = "someManagerName")]
-        [TestCase("someMaxName", ExpectedResult = "someMaximumName")]
-        [TestCase("someMethName", ExpectedResult = "someMethodName")]
-        [TestCase("someMgmtName", ExpectedResult = "someManagementName")]
-        [TestCase("someMgrName", ExpectedResult = "someManagerName")]
-        [TestCase("someMgrsName", ExpectedResult = "someManagersName")]
-        [TestCase("someMinName", ExpectedResult = "someMinimumName")]
-        [TestCase("someMngrName", ExpectedResult = "someManagerName")]
-        [TestCase("someMngrsName", ExpectedResult = "someManagersName")]
-        [TestCase("someMnuName", ExpectedResult = "someMenuItemName")]
-        [TestCase("someModName", ExpectedResult = "someModifiedName")]
-        [TestCase("someMsgName", ExpectedResult = "someMessageName")]
-        [TestCase("someNavName", ExpectedResult = "someNavigationName")]
-        [TestCase("someNavigName", ExpectedResult = "someNavigationName")]
-        [TestCase("someNegName", ExpectedResult = "someNegativeName")]
-        [TestCase("someNsName", ExpectedResult = "someNamespaceName")]
-        [TestCase("someNumName", ExpectedResult = "someNumberName")]
-        [TestCase("someObjName", ExpectedResult = "someObjectName")]
-        [TestCase("someObjsName", ExpectedResult = "someObjectsName")]
-        [TestCase("someOpName", ExpectedResult = "someOperationName")]
-        [TestCase("someOpsName", ExpectedResult = "someOperationsName")]
-        [TestCase("someOptName", ExpectedResult = "someOptionName")]
-        [TestCase("someOptsName", ExpectedResult = "someOptionsName")]
-        [TestCase("someParamName", ExpectedResult = "someParameterName")]
-        [TestCase("someParamsName", ExpectedResult = "someParametersName")]
-        [TestCase("someParaName", ExpectedResult = "someParameterName")]
-        [TestCase("somePercName", ExpectedResult = "somePercentageName")]
-        [TestCase("somePerfName", ExpectedResult = "somePerformanceName")]
-        [TestCase("somePhysName", ExpectedResult = "somePhysicalName")]
-        [TestCase("somePosName", ExpectedResult = "somePositionName")]
-        [TestCase("somePowName", ExpectedResult = "somePowerName")]
-        [TestCase("somePrevName", ExpectedResult = "somePreviousName")]
-        [TestCase("someProcName", ExpectedResult = "someProcessName")]
-        [TestCase("someProcsName", ExpectedResult = "someProcessesName")]
-        [TestCase("somePropName", ExpectedResult = "somePropertyName")]
-        [TestCase("somePropsName", ExpectedResult = "somePropertiesName")]
-        [TestCase("someProtName", ExpectedResult = "someProtectedName")]
-        [TestCase("somePtName", ExpectedResult = "somePointName")]
-        [TestCase("somePtsName", ExpectedResult = "somePointsName")]
-        [TestCase("somePwName", ExpectedResult = "somePasswordName")]
-        [TestCase("somePwdName", ExpectedResult = "somePasswordName")]
-        [TestCase("somePswdName", ExpectedResult = "somePasswordName")]
-        [TestCase("somePasswdName", ExpectedResult = "somePasswordName")]
-        [TestCase("someQtyName", ExpectedResult = "someQuantityName")]
-        [TestCase("someRecName", ExpectedResult = "someRecordName")]
-        [TestCase("someRectName", ExpectedResult = "someRectangleName")]
-        [TestCase("someRefName", ExpectedResult = "someReferenceName")]
-        [TestCase("someRefsName", ExpectedResult = "someReferencesName")]
-        [TestCase("someRelName", ExpectedResult = "someRelativeName")]
-        [TestCase("someRelocName", ExpectedResult = "someRelocationName")]
-        [TestCase("someRepoName", ExpectedResult = "someRepositoryName")]
-        [TestCase("someReposName", ExpectedResult = "someRepositoriesName")]
-        [TestCase("someReqName", ExpectedResult = "someRequestName")]
-        [TestCase("someResName", ExpectedResult = "someResultName")]
-        [TestCase("someRespName", ExpectedResult = "someResponseName")]
-        [TestCase("someRestName", ExpectedResult = "someRestoreName")]
-        [TestCase("someRgnName", ExpectedResult = "someRegionName")]
-        [TestCase("someSelName", ExpectedResult = "someSelectionName")]
-        [TestCase("someSemName", ExpectedResult = "someSemanticName")]
-        [TestCase("someSepName", ExpectedResult = "someSeparatorName")]
-        [TestCase("someSepaName", ExpectedResult = "someSeparatorName")]
-        [TestCase("someSpecName", ExpectedResult = "someSpecificationName")]
-        [TestCase("someSrcName", ExpectedResult = "someSourceName")]
-        [TestCase("someSrcsName", ExpectedResult = "someSourcesName")]
-        [TestCase("someSrvName", ExpectedResult = "someServiceName")]
-        [TestCase("someStdName", ExpectedResult = "someStandardName")]
-        [TestCase("someStrName", ExpectedResult = "someStringName")]
-        [TestCase("someSvcName", ExpectedResult = "someServiceName")]
-        [TestCase("someSvrName", ExpectedResult = "someServerName")]
-        [TestCase("someSynchronName", ExpectedResult = "someSynchronousName")]
-        [TestCase("someSyncName", ExpectedResult = "someSynchronizationName")]
-        [TestCase("someSynName", ExpectedResult = "someSyntaxName")]
-        [TestCase("someSysName", ExpectedResult = "someSystemName")]
-        [TestCase("someTgtName", ExpectedResult = "someTargetName")]
-        [TestCase("someTgtsName", ExpectedResult = "someTargetsName")]
-        [TestCase("someTmName", ExpectedResult = "someTimeName")]
-        [TestCase("someTmpName", ExpectedResult = "someTempName")]
-        [TestCase("someTxtName", ExpectedResult = "someTextName")]
-        [TestCase("someUtilName", ExpectedResult = "someUtilityName")]
-        [TestCase("someUtilsName", ExpectedResult = "someUtilitiesName")]
-        [TestCase("someValName", ExpectedResult = "someValueName")]
-        [TestCase("someVarName", ExpectedResult = "someVariableName")]
-        [TestCase("someVarsName", ExpectedResult = "someVariablesName")]
-        [TestCase("someVerName", ExpectedResult = "someVersionName")]
-        [TestCase("someVertName", ExpectedResult = "someVerticalName")]
-        [TestCase("someVmName", ExpectedResult = "someViewModelName")]
-        [TestCase("someVMName", ExpectedResult = "someViewModelName")]
-        [TestCase("someVmsName", ExpectedResult = "someViewModelsName")]
-        [TestCase("someVMsName", ExpectedResult = "someViewModelsName")]
-        [TestCase("someVolName", ExpectedResult = "someVolumeName")]
-        public static string Finds_midterm_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+        public static string Finds_midterm_abbreviations_with_underlines_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
-        [TestCase("someNameApp", ExpectedResult = "someNameApplication")]
-        [TestCase("someNameApps", ExpectedResult = "someNameApplications")]
-        [TestCase("someNameArg", ExpectedResult = "someNameArgument")]
-        [TestCase("someNameArgs", ExpectedResult = "someNameArguments")]
-        [TestCase("someNameArr", ExpectedResult = "someNameArray")]
-        [TestCase("someNameAssoc", ExpectedResult = "someNameAssociation")]
-        [TestCase("someNameAssocs", ExpectedResult = "someNameAssociations")]
-        [TestCase("someNameAsynchron", ExpectedResult = "someNameAsynchronous")]
-        [TestCase("someNameAuth", ExpectedResult = "someNameAuthorization")]
-        [TestCase("someNameBk", ExpectedResult = "someNameBack")]
-        [TestCase("someNameBl", ExpectedResult = "someNameBusinessLogic")]
-        [TestCase("someNameBL", ExpectedResult = "someNameBusinessLogic")]
-        [TestCase("someNameBmp", ExpectedResult = "someNameBitmap")]
-        [TestCase("someNameBtn", ExpectedResult = "someNameButton")]
-        [TestCase("someNameBtns", ExpectedResult = "someNameButtons")]
-        [TestCase("someNameCalc", ExpectedResult = "someNameCalculation")]
-        [TestCase("someNameCalib", ExpectedResult = "someNameCalibration")]
-        [TestCase("someNameCb", ExpectedResult = "someNameCheckBox")]
-        [TestCase("someNameCert", ExpectedResult = "someNameCertificate")]
-        [TestCase("someNameCerts", ExpectedResult = "someNameCertificates")]
-        [TestCase("someNameChk", ExpectedResult = "someNameCheckBox")]
-        [TestCase("someNameCli", ExpectedResult = "someNameCommandLineInterface")]
-        [TestCase("someNameCLI", ExpectedResult = "someNameCommandLineInterface")]
-        [TestCase("someNameCls", ExpectedResult = "someNameClass")]
-        [TestCase("someNameCmb", ExpectedResult = "someNameComboBox")]
-        [TestCase("someNameCmd", ExpectedResult = "someNameCommand")]
-        [TestCase("someNameCmp", ExpectedResult = "someNameComparison")]
-        [TestCase("someNameColl", ExpectedResult = "someNameCollection")]
-        [TestCase("someNameComm", ExpectedResult = "someNameCommunication")]
-        [TestCase("someNameComp", ExpectedResult = "someNameCompile")]
-        [TestCase("someNameCompat", ExpectedResult = "someNameCompatibility")]
-        [TestCase("someNameConf", ExpectedResult = "someNameConfiguration")]
-        [TestCase("someNameConfig", ExpectedResult = "someNameConfiguration")]
-        [TestCase("someNameConfigs", ExpectedResult = "someNameConfigurations")]
-        [TestCase("someNameConn", ExpectedResult = "someNameConnection")]
-        [TestCase("someNameConns", ExpectedResult = "someNameConnections")]
-        [TestCase("someNameConv", ExpectedResult = "someNameConversion")]
-        [TestCase("someNameCtg", ExpectedResult = "someNameCategory")]
-        [TestCase("someNameCtl", ExpectedResult = "someNameControl")]
-        [TestCase("someNameCtlg", ExpectedResult = "someNameCatalog")]
-        [TestCase("someNameCtrl", ExpectedResult = "someNameControl")]
-        [TestCase("someNameCtx", ExpectedResult = "someNameContext")]
-        [TestCase("someNameCur", ExpectedResult = "someNameCurrent")]
-        [TestCase("someNameDb", ExpectedResult = "someNameDatabase")]
-        [TestCase("someNameDdl", ExpectedResult = "someNameDropDownList")]
-        [TestCase("someNameDecl", ExpectedResult = "someNameDeclaration")]
-        [TestCase("someNameDecr", ExpectedResult = "someNameDecrypt")]
-        [TestCase("someNameDef", ExpectedResult = "someNameDefinition")]
-        [TestCase("someNameDefs", ExpectedResult = "someNameDefinitions")]
-        [TestCase("someNameDep", ExpectedResult = "someNameDependency")]
-        [TestCase("someNameDeps", ExpectedResult = "someNameDependencies")]
-        [TestCase("someNameDesc", ExpectedResult = "someNameDescription")]
-        [TestCase("someNameDest", ExpectedResult = "someNameDestination")]
-        [TestCase("someNameDiag", ExpectedResult = "someNameDiagnostic")]
-        [TestCase("someNameDiags", ExpectedResult = "someNameDiagnostics")]
-        [TestCase("someNameDic", ExpectedResult = "someNameDictionary")]
-        [TestCase("someNameDics", ExpectedResult = "someNameDictionaries")]
-        [TestCase("someNameDict", ExpectedResult = "someNameDictionary")]
-        [TestCase("someNameDicts", ExpectedResult = "someNameDictionaries")]
-        [TestCase("someNameDiff", ExpectedResult = "someNameDifference")]
-        [TestCase("someNameDiffs", ExpectedResult = "someNameDifferences")]
-        [TestCase("someNameDir", ExpectedResult = "someNameDirectory")]
-        [TestCase("someNameDirs", ExpectedResult = "someNameDirectories")]
-        [TestCase("someNameDist", ExpectedResult = "someNameDistance")]
-        [TestCase("someNameDiv", ExpectedResult = "someNameDivision")]
-        [TestCase("someNameDlg", ExpectedResult = "someNameDialog")]
-        [TestCase("someNameDlgt", ExpectedResult = "someNameDelegate")]
-        [TestCase("someNameDm", ExpectedResult = "someName")]
-        [TestCase("someNameDM", ExpectedResult = "someName")]
-        [TestCase("someNameDoc", ExpectedResult = "someNameDocument")]
-        [TestCase("someNameDocs", ExpectedResult = "someNameDocuments")]
-        [TestCase("someNameDocu", ExpectedResult = "someNameDocumentation")]
-        [TestCase("someNameDocus", ExpectedResult = "someNameDocumentations")]
-        [TestCase("someNameDst", ExpectedResult = "someNameDestination")]
-        [TestCase("someNameDto", ExpectedResult = "someName")]
-        [TestCase("someNameDTO", ExpectedResult = "someName")]
-        [TestCase("someNameDyn", ExpectedResult = "someNameDynamic")]
-        [TestCase("someNameEd", ExpectedResult = "someNameEdit")]
-        [TestCase("someNameEf", ExpectedResult = "someNameEntityFramework")]
-        [TestCase("someNameEF", ExpectedResult = "someNameEntityFramework")]
-        [TestCase("someNameEncr", ExpectedResult = "someNameEncrypt")]
-        [TestCase("someNameEnv", ExpectedResult = "someNameEnvironment")]
-        [TestCase("someNameEnviron", ExpectedResult = "someNameEnvironment")]
-        [TestCase("someNameEq", ExpectedResult = "someNameEqual")]
-        [TestCase("someNameErr", ExpectedResult = "someNameError")]
-        [TestCase("someNameEval", ExpectedResult = "someNameEvaluation")]
-        [TestCase("someNameExt", ExpectedResult = "someNameExtension")]
-        [TestCase("someNameFnc", ExpectedResult = "someNameFunction")]
-        [TestCase("someNameFrm", ExpectedResult = "someNameForm")]
-        [TestCase("someNameFwd", ExpectedResult = "someNameForwarded")]
-        [TestCase("someNameHdls", ExpectedResult = "someNameHeadless")]
-        [TestCase("someNameHlp", ExpectedResult = "someNameHelp")]
-        [TestCase("someNameHis", ExpectedResult = "someNameHistory")]
-        [TestCase("someNameHist", ExpectedResult = "someNameHistory")]
-        [TestCase("someNameHoriz", ExpectedResult = "someNameHorizontal")]
-        [TestCase("someNameHorz", ExpectedResult = "someNameHorizontal")]
-        [TestCase("someNameIdent", ExpectedResult = "someNameIdentification")]
-        [TestCase("someNameIdents", ExpectedResult = "someNameIdentifications")]
-        [TestCase("someNameIdx", ExpectedResult = "someNameIndex")]
-        [TestCase("someNameIdxs", ExpectedResult = "someNameIndices")]
-        [TestCase("someNameImp", ExpectedResult = "someNameImplementation")]
-        [TestCase("someNameImpl", ExpectedResult = "someNameImplementation")]
-        [TestCase("someNameInit", ExpectedResult = "someNameInitialize")]
-        [TestCase("someNameInterv", ExpectedResult = "someNameInterval")]
-        [TestCase("someNameIntf", ExpectedResult = "someNameInterface")]
-        [TestCase("someNameIntfc", ExpectedResult = "someNameInterface")]
-        [TestCase("someNameIntrfc", ExpectedResult = "someNameInterface")]
-        [TestCase("someNameItf", ExpectedResult = "someNameInterface")]
-        [TestCase("someNameLang", ExpectedResult = "someNameLanguage")]
-        [TestCase("someNameLbl", ExpectedResult = "someNameLabel")]
-        [TestCase("someNameLen", ExpectedResult = "someNameLength")]
-        [TestCase("someNameLib", ExpectedResult = "someNameLibrary")]
-        [TestCase("someNameLibs", ExpectedResult = "someNameLibraries")]
-        [TestCase("someNameLv", ExpectedResult = "someNameListView")]
-        [TestCase("someNameMan", ExpectedResult = "someNameManager")]
-        [TestCase("someNameMax", ExpectedResult = "someNameMaximum")]
-        [TestCase("someNameMeth", ExpectedResult = "someNameMethod")]
-        [TestCase("someNameMgmt", ExpectedResult = "someNameManagement")]
-        [TestCase("someNameMgr", ExpectedResult = "someNameManager")]
-        [TestCase("someNameMgrs", ExpectedResult = "someNameManagers")]
-        [TestCase("someNameMin", ExpectedResult = "someNameMinimum")]
-        [TestCase("someNameMngr", ExpectedResult = "someNameManager")]
-        [TestCase("someNameMngrs", ExpectedResult = "someNameManagers")]
-        [TestCase("someNameMnu", ExpectedResult = "someNameMenuItem")]
-        [TestCase("someNameMod", ExpectedResult = "someNameModification")]
-        [TestCase("someNameMsg", ExpectedResult = "someNameMessage")]
-        [TestCase("someNameNav", ExpectedResult = "someNameNavigation")]
-        [TestCase("someNameNavig", ExpectedResult = "someNameNavigation")]
-        [TestCase("someNameNeg", ExpectedResult = "someNameNegative")]
-        [TestCase("someNameNs", ExpectedResult = "someNameNamespace")]
-        [TestCase("someNameNum", ExpectedResult = "someNameNumber")]
-        [TestCase("someNameObj", ExpectedResult = "someNameObject")]
-        [TestCase("someNameObjs", ExpectedResult = "someNameObjects")]
-        [TestCase("someNameOp", ExpectedResult = "someNameOperation")]
-        [TestCase("someNameOps", ExpectedResult = "someNameOperations")]
-        [TestCase("someNameOpt", ExpectedResult = "someNameOption")]
-        [TestCase("someNameOpts", ExpectedResult = "someNameOptions")]
-        [TestCase("someNamePara", ExpectedResult = "someNameParameter")]
-        [TestCase("someNameParam", ExpectedResult = "someNameParameter")]
-        [TestCase("someNameParams", ExpectedResult = "someNameParameters")]
-        [TestCase("someNamePerc", ExpectedResult = "someNamePercentage")]
-        [TestCase("someNamePerf", ExpectedResult = "someNamePerformance")]
-        [TestCase("someNamePhys", ExpectedResult = "someNamePhysical")]
-        [TestCase("someNamePos", ExpectedResult = "someNamePosition")]
-        [TestCase("someNamePow", ExpectedResult = "someNamePower")]
-        [TestCase("someNamePrev", ExpectedResult = "someNamePrevious")]
-        [TestCase("someNameProc", ExpectedResult = "someNameProcess")]
-        [TestCase("someNameProcs", ExpectedResult = "someNameProcesses")]
-        [TestCase("someNameProp", ExpectedResult = "someNameProperty")]
-        [TestCase("someNameProps", ExpectedResult = "someNameProperties")]
-        [TestCase("someNameProt", ExpectedResult = "someNameProtection")]
-        [TestCase("someNamePt", ExpectedResult = "someNamePoint")]
-        [TestCase("someNamePts", ExpectedResult = "someNamePoints")]
-        [TestCase("someNamePw", ExpectedResult = "someNamePassword")]
-        [TestCase("someNamePwd", ExpectedResult = "someNamePassword")]
-        [TestCase("someNamePswd", ExpectedResult = "someNamePassword")]
-        [TestCase("someNamePasswd", ExpectedResult = "someNamePassword")]
-        [TestCase("someNameQty", ExpectedResult = "someNameQuantity")]
-        [TestCase("someNameRec", ExpectedResult = "someNameRecord")]
-        [TestCase("someNameRect", ExpectedResult = "someNameRectangle")]
-        [TestCase("someNameRef", ExpectedResult = "someNameReference")]
-        [TestCase("someNameRefs", ExpectedResult = "someNameReferences")]
-        [TestCase("someNameRel", ExpectedResult = "someNameRelative")]
-        [TestCase("someNameReloc", ExpectedResult = "someNameRelocation")]
-        [TestCase("someNameRepo", ExpectedResult = "someNameRepository")]
-        [TestCase("someNameRepos", ExpectedResult = "someNameRepositories")]
-        [TestCase("someNameReq", ExpectedResult = "someNameRequest")]
-        [TestCase("someNameRes", ExpectedResult = "someNameResult")]
-        [TestCase("someNameResp", ExpectedResult = "someNameResponse")]
-        [TestCase("someNameRest", ExpectedResult = "someNameRestore")]
-        [TestCase("someNameRgn", ExpectedResult = "someNameRegion")]
-        [TestCase("someNameSel", ExpectedResult = "someNameSelection")]
-        [TestCase("someNameSem", ExpectedResult = "someNameSemantic")]
-        [TestCase("someNameSep", ExpectedResult = "someNameSeparator")]
-        [TestCase("someNameSepa", ExpectedResult = "someNameSeparator")]
-        [TestCase("someNameSess", ExpectedResult = "someNameSession")]
-        [TestCase("someNameSpec", ExpectedResult = "someNameSpecification")]
-        [TestCase("someNameSrc", ExpectedResult = "someNameSource")]
-        [TestCase("someNameSrcs", ExpectedResult = "someNameSources")]
-        [TestCase("someNameSrv", ExpectedResult = "someNameService")]
-        [TestCase("someNameStd", ExpectedResult = "someNameStandard")]
-        [TestCase("someNameStr", ExpectedResult = "someNameString")]
-        [TestCase("someNameSvc", ExpectedResult = "someNameService")]
-        [TestCase("someNameSvr", ExpectedResult = "someNameServer")]
-        [TestCase("someNameSyn", ExpectedResult = "someNameSyntax")]
-        [TestCase("someNameSync", ExpectedResult = "someNameSynchronization")]
-        [TestCase("someNameSynchron", ExpectedResult = "someNameSynchronous")]
-        [TestCase("someNameSys", ExpectedResult = "someNameSystem")]
-        [TestCase("someNameTgt", ExpectedResult = "someNameTarget")]
-        [TestCase("someNameTgts", ExpectedResult = "someNameTargets")]
-        [TestCase("someNameTm", ExpectedResult = "someNameTime")]
-        [TestCase("someNameTmp", ExpectedResult = "someNameTemp")]
-        [TestCase("someNameTxt", ExpectedResult = "someNameText")]
-        [TestCase("someNameUtil", ExpectedResult = "someNameUtility")]
-        [TestCase("someNameUtils", ExpectedResult = "someNameUtilities")]
-        [TestCase("someNameVal", ExpectedResult = "someNameValue")]
-        [TestCase("someNameVar", ExpectedResult = "someNameVariable")]
-        [TestCase("someNameVars", ExpectedResult = "someNameVariables")]
-        [TestCase("someNameVer", ExpectedResult = "someNameVersion")]
-        [TestCase("someNameVert", ExpectedResult = "someNameVertical")]
-        [TestCase("someNameVm", ExpectedResult = "someNameViewModel")]
-        [TestCase("someNameVM", ExpectedResult = "someNameViewModel")]
-        [TestCase("someNameVms", ExpectedResult = "someNameViewModels")]
-        [TestCase("someNameVMs", ExpectedResult = "someNameViewModels")]
-        [TestCase("someNameVol", ExpectedResult = "someNameVolume")]
-        public static string Finds_postfix_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+        [Test]
+        public static void Finds_midterm_abbreviations_and_fixes_them_in_([ValueSource(nameof(MidTerms))] Pair midterm)
+        {
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations("some" + midterm.Key + "Name");
 
-        [TestCase("alt", ExpectedResult = "alternative")]
-        [TestCase("Alt", ExpectedResult = "Alternative")]
-        [TestCase("app", ExpectedResult = "application")]
-        [TestCase("App", ExpectedResult = "Application")]
-        [TestCase("apps", ExpectedResult = "applications")]
-        [TestCase("Apps", ExpectedResult = "Applications")]
-        [TestCase("arg", ExpectedResult = "argument")]
-        [TestCase("Arg", ExpectedResult = "Argument")]
-        [TestCase("arr", ExpectedResult = "array")]
-        [TestCase("Arr", ExpectedResult = "Array")]
-        [TestCase("assoc", ExpectedResult = "association")]
-        [TestCase("Assoc", ExpectedResult = "Association")]
-        [TestCase("assocs", ExpectedResult = "associations")]
-        [TestCase("Assocs", ExpectedResult = "Associations")]
-        [TestCase("asynchron", ExpectedResult = "asynchronous")]
-        [TestCase("Asynchron", ExpectedResult = "Asynchronous")]
-        [TestCase("attr", ExpectedResult = "attribute")]
-        [TestCase("Attr", ExpectedResult = "Attribute")]
-        [TestCase("auth", ExpectedResult = "authorization")]
-        [TestCase("Auth", ExpectedResult = "Authorization")]
-        [TestCase("bk", ExpectedResult = "back")]
-        [TestCase("Bk", ExpectedResult = "Back")]
-        [TestCase("Bl", ExpectedResult = "BusinessLogic")]
-        [TestCase("BL", ExpectedResult = "BusinessLogic")]
-        [TestCase("bmp", ExpectedResult = "bitmap")]
-        [TestCase("Bmp", ExpectedResult = "Bitmap")]
-        [TestCase("btn", ExpectedResult = "button")]
-        [TestCase("Btn", ExpectedResult = "Button")]
-        [TestCase("Btns", ExpectedResult = "Buttons")]
-        [TestCase("calc", ExpectedResult = "calculate")]
-        [TestCase("Calc", ExpectedResult = "Calculation")]
-        [TestCase("calib", ExpectedResult = "calibration")]
-        [TestCase("Calib", ExpectedResult = "Calibration")]
-        [TestCase("cb", ExpectedResult = "checkBox")]
-        [TestCase("Cb", ExpectedResult = "CheckBox")]
-        [TestCase("cert", ExpectedResult = "certificate")]
-        [TestCase("Cert", ExpectedResult = "Certificate")]
-        [TestCase("Certs", ExpectedResult = "Certificates")]
-        [TestCase("Cfg", ExpectedResult = "Configuration")]
-        [TestCase("chk", ExpectedResult = "checkBox")]
-        [TestCase("Chk", ExpectedResult = "CheckBox")]
-        [TestCase("Cli", ExpectedResult = "CommandLineInterface")]
-        [TestCase("CLI", ExpectedResult = "CommandLineInterface")]
-        [TestCase("cls", ExpectedResult = "class")]
-        [TestCase("Cls", ExpectedResult = "Class")]
-        [TestCase("cm", ExpectedResult = "contextMenu")]
-        [TestCase("cmb", ExpectedResult = "comboBox")]
-        [TestCase("Cmb", ExpectedResult = "ComboBox")]
-        [TestCase("cmd", ExpectedResult = "command")]
-        [TestCase("Cmd", ExpectedResult = "Command")]
-        [TestCase("cmp", ExpectedResult = "comparison")]
-        [TestCase("Cmp", ExpectedResult = "Comparison")]
-        [TestCase("coll", ExpectedResult = "collection")]
-        [TestCase("Coll", ExpectedResult = "Collection")]
-        [TestCase("comm", ExpectedResult = "communication")]
-        [TestCase("Comm", ExpectedResult = "Communication")]
-        [TestCase("comp", ExpectedResult = "compile")]
-        [TestCase("Comp", ExpectedResult = "Compile")]
-        [TestCase("Compat", ExpectedResult = "Compatibility")]
-        [TestCase("compat", ExpectedResult = "compatible")]
-        [TestCase("conf", ExpectedResult = "configuration")]
-        [TestCase("Conf", ExpectedResult = "Configuration")]
-        [TestCase("config", ExpectedResult = "configuration")]
-        [TestCase("Config", ExpectedResult = "Configuration")]
-        [TestCase("configs", ExpectedResult = "configurations")]
-        [TestCase("Configs", ExpectedResult = "Configurations")]
-        [TestCase("conn", ExpectedResult = "connection")]
-        [TestCase("Conn", ExpectedResult = "Connection")]
-        [TestCase("Conns", ExpectedResult = "Connections")]
-        [TestCase("conv", ExpectedResult = "conversion")]
-        [TestCase("Conv", ExpectedResult = "Conversion")]
-        [TestCase("ctg", ExpectedResult = "category")]
-        [TestCase("Ctg", ExpectedResult = "Category")]
-        [TestCase("ctl", ExpectedResult = "control")]
-        [TestCase("Ctl", ExpectedResult = "Control")]
-        [TestCase("ctlg", ExpectedResult = "catalog")]
-        [TestCase("Ctlg", ExpectedResult = "Catalog")]
-        [TestCase("ctrl", ExpectedResult = "control")]
-        [TestCase("Ctrl", ExpectedResult = "Control")]
-        [TestCase("ctx", ExpectedResult = "context")]
-        [TestCase("Ctx", ExpectedResult = "Context")]
-        [TestCase("cur", ExpectedResult = "current")]
-        [TestCase("Cur", ExpectedResult = "Current")]
-        [TestCase("db", ExpectedResult = "database")]
-        [TestCase("Db", ExpectedResult = "Database")]
-        [TestCase("ddl", ExpectedResult = "dropDownList")]
-        [TestCase("Ddl", ExpectedResult = "DropDownList")]
-        [TestCase("decl", ExpectedResult = "declaration")]
-        [TestCase("Decl", ExpectedResult = "Declaration")]
-        [TestCase("decr", ExpectedResult = "decrypt")]
-        [TestCase("Decr", ExpectedResult = "Decrypt")]
-        [TestCase("def", ExpectedResult = "definition")]
-        [TestCase("Def", ExpectedResult = "Definition")]
-        [TestCase("defs", ExpectedResult = "definitions")]
-        [TestCase("Defs", ExpectedResult = "Definitions")]
-        [TestCase("Dep", ExpectedResult = "Dependency")]
-        [TestCase("dep", ExpectedResult = "dependent")]
-        [TestCase("deps", ExpectedResult = "dependencies")]
-        [TestCase("Deps", ExpectedResult = "Dependencies")]
-        [TestCase("desc", ExpectedResult = "description")]
-        [TestCase("Desc", ExpectedResult = "Description")]
-        [TestCase("dest", ExpectedResult = "destination")]
-        [TestCase("Dest", ExpectedResult = "Destination")]
-        [TestCase("diag", ExpectedResult = "diagnostic")]
-        [TestCase("Diag", ExpectedResult = "Diagnostic")]
-        [TestCase("diags", ExpectedResult = "diagnostics")]
-        [TestCase("Diags", ExpectedResult = "Diagnostics")]
-        [TestCase("dic", ExpectedResult = "dictionary")]
-        [TestCase("Dic", ExpectedResult = "Dictionary")]
-        [TestCase("dics", ExpectedResult = "dictionaries")]
-        [TestCase("Dics", ExpectedResult = "Dictionaries")]
-        [TestCase("dict", ExpectedResult = "dictionary")]
-        [TestCase("Dict", ExpectedResult = "Dictionary")]
-        [TestCase("dicts", ExpectedResult = "dictionaries")]
-        [TestCase("Dicts", ExpectedResult = "Dictionaries")]
-        [TestCase("diff", ExpectedResult = "difference")]
-        [TestCase("Diff", ExpectedResult = "Difference")]
-        [TestCase("diffs", ExpectedResult = "differences")]
-        [TestCase("Diffs", ExpectedResult = "Differences")]
-        [TestCase("dir", ExpectedResult = "directory")]
-        [TestCase("Dir", ExpectedResult = "Directory")]
-        [TestCase("dirs", ExpectedResult = "directories")]
-        [TestCase("Dirs", ExpectedResult = "Directories")]
-        [TestCase("dist", ExpectedResult = "distance")]
-        [TestCase("Dist", ExpectedResult = "Distance")]
-        [TestCase("div", ExpectedResult = "division")]
-        [TestCase("Div", ExpectedResult = "Division")]
-        [TestCase("dlg", ExpectedResult = "dialog")]
-        [TestCase("Dlg", ExpectedResult = "Dialog")]
-        [TestCase("dlgt", ExpectedResult = "delegate")]
-        [TestCase("Dlgt", ExpectedResult = "Delegate")]
-        [TestCase("dm", ExpectedResult = "")]
-        [TestCase("Dm", ExpectedResult = "")]
-        [TestCase("DM", ExpectedResult = "")]
-        [TestCase("doc", ExpectedResult = "document")]
-        [TestCase("Doc", ExpectedResult = "Document")]
-        [TestCase("docs", ExpectedResult = "documents")]
-        [TestCase("Docs", ExpectedResult = "Documents")]
-        [TestCase("docu", ExpectedResult = "documentation")]
-        [TestCase("docus", ExpectedResult = "documentations")]
-        [TestCase("dst", ExpectedResult = "destination")]
-        [TestCase("Dst", ExpectedResult = "Destination")]
-        [TestCase("dto", ExpectedResult = "")]
-        [TestCase("Dto", ExpectedResult = "")]
-        [TestCase("DTO", ExpectedResult = "")]
-        [TestCase("dyn", ExpectedResult = "dynamic")]
-        [TestCase("Dyn", ExpectedResult = "Dynamic")]
-        [TestCase("ed", ExpectedResult = "edit")]
-        [TestCase("Ed", ExpectedResult = "Edit")]
-        [TestCase("Ef", ExpectedResult = "EntityFramework")]
-        [TestCase("EF", ExpectedResult = "EntityFramework")]
-        [TestCase("el", ExpectedResult = "element")]
-        [TestCase("El", ExpectedResult = "Element")]
-        [TestCase("ele", ExpectedResult = "element")]
-        [TestCase("Ele", ExpectedResult = "Element")]
-        [TestCase("elem", ExpectedResult = "element")]
-        [TestCase("Elem", ExpectedResult = "Element")]
-        [TestCase("encr", ExpectedResult = "encrypt")]
-        [TestCase("Encr", ExpectedResult = "Encrypt")]
-        [TestCase("env", ExpectedResult = "environment")]
-        [TestCase("Env", ExpectedResult = "Environment")]
-        [TestCase("environ", ExpectedResult = "environment")]
-        [TestCase("Environ", ExpectedResult = "Environment")]
-        [TestCase("eq", ExpectedResult = "equal")]
-        [TestCase("Eq", ExpectedResult = "Equal")]
-        [TestCase("err", ExpectedResult = "error")]
-        [TestCase("Err", ExpectedResult = "Error")]
-        [TestCase("eval", ExpectedResult = "evaluation")]
-        [TestCase("Eval", ExpectedResult = "Evaluation")]
-        [TestCase("exec", ExpectedResult = "execute")]
-        [TestCase("Exec", ExpectedResult = "Execute")]
-        [TestCase("ext", ExpectedResult = "extension")]
-        [TestCase("Ext", ExpectedResult = "Extension")]
-        [TestCase("fnc", ExpectedResult = "function")]
-        [TestCase("Fnc", ExpectedResult = "Function")]
-        [TestCase("frm", ExpectedResult = "form")]
-        [TestCase("Frm", ExpectedResult = "Form")]
-        [TestCase("fwd", ExpectedResult = "forwarded")]
-        [TestCase("Fwd", ExpectedResult = "Forwarded")]
-        [TestCase("hdls", ExpectedResult = "headless")]
-        [TestCase("Hdls", ExpectedResult = "Headless")]
-        [TestCase("his", ExpectedResult = "history")]
-        [TestCase("His", ExpectedResult = "History")]
-        [TestCase("hist", ExpectedResult = "history")]
-        [TestCase("Hist", ExpectedResult = "History")]
-        [TestCase("hlp", ExpectedResult = "help")]
-        [TestCase("Hlp", ExpectedResult = "Help")]
-        [TestCase("horiz", ExpectedResult = "horizontal")]
-        [TestCase("Horiz", ExpectedResult = "Horizontal")]
-        [TestCase("horz", ExpectedResult = "horizontal")]
-        [TestCase("Horz", ExpectedResult = "Horizontal")]
-        [TestCase("ident", ExpectedResult = "identification")]
-        [TestCase("Ident", ExpectedResult = "Identification")]
-        [TestCase("idents", ExpectedResult = "identifications")]
-        [TestCase("Idents", ExpectedResult = "Identifications")]
-        [TestCase("idx", ExpectedResult = "index")]
-        [TestCase("Idx", ExpectedResult = "Index")]
-        [TestCase("idxs", ExpectedResult = "indices")]
-        [TestCase("Idxs", ExpectedResult = "Indices")]
-        [TestCase("imp", ExpectedResult = "implementation")]
-        [TestCase("Imp", ExpectedResult = "Implementation")]
-        [TestCase("impl", ExpectedResult = "implementation")]
-        [TestCase("Impl", ExpectedResult = "Implementation")]
-        [TestCase("init", ExpectedResult = "initialize")]
-        [TestCase("Init", ExpectedResult = "Initialize")]
-        [TestCase("interv", ExpectedResult = "interval")]
-        [TestCase("Interv", ExpectedResult = "Interval")]
-        [TestCase("intf", ExpectedResult = "interface")]
-        [TestCase("Intf", ExpectedResult = "Interface")]
-        [TestCase("intfc", ExpectedResult = "interface")]
-        [TestCase("Intfc", ExpectedResult = "Interface")]
-        [TestCase("intrfc", ExpectedResult = "interface")]
-        [TestCase("Intrfc", ExpectedResult = "Interface")]
-        [TestCase("itf", ExpectedResult = "interface")]
-        [TestCase("Itf", ExpectedResult = "Interface")]
-        [TestCase("kvp", ExpectedResult = "pair")]
-        [TestCase("lang", ExpectedResult = "language")]
-        [TestCase("Lang", ExpectedResult = "Language")]
-        [TestCase("lbl", ExpectedResult = "label")]
-        [TestCase("Lbl", ExpectedResult = "Label")]
-        [TestCase("len", ExpectedResult = "length")]
-        [TestCase("Len", ExpectedResult = "Length")]
-        [TestCase("lib", ExpectedResult = "library")]
-        [TestCase("Lib", ExpectedResult = "Library")]
-        [TestCase("libs", ExpectedResult = "libraries")]
-        [TestCase("Libs", ExpectedResult = "Libraries")]
-        [TestCase("lv", ExpectedResult = "listView")]
-        [TestCase("Lv", ExpectedResult = "ListView")]
-        [TestCase("man", ExpectedResult = "manager")]
-        [TestCase("Man", ExpectedResult = "Manager")]
-        [TestCase("max", ExpectedResult = "maximum")]
-        [TestCase("Max", ExpectedResult = "Maximum")]
-        [TestCase("meth", ExpectedResult = "method")]
-        [TestCase("Meth", ExpectedResult = "Method")]
-        [TestCase("mgmt", ExpectedResult = "management")]
-        [TestCase("Mgmt", ExpectedResult = "Management")]
-        [TestCase("mgr", ExpectedResult = "manager")]
-        [TestCase("Mgr", ExpectedResult = "Manager")]
-        [TestCase("mgrs", ExpectedResult = "managers")]
-        [TestCase("Mgrs", ExpectedResult = "Managers")]
-        [TestCase("min", ExpectedResult = "minimum")]
-        [TestCase("Min", ExpectedResult = "Minimum")]
-        [TestCase("mngr", ExpectedResult = "manager")]
-        [TestCase("Mngr", ExpectedResult = "Manager")]
-        [TestCase("mngrs", ExpectedResult = "managers")]
-        [TestCase("Mngrs", ExpectedResult = "Managers")]
-        [TestCase("mnu", ExpectedResult = "menuItem")]
-        [TestCase("Mnu", ExpectedResult = "MenuItem")]
-        [TestCase("mod", ExpectedResult = "modified")]
-        [TestCase("Mod", ExpectedResult = "Modification")]
-        [TestCase("msg", ExpectedResult = "message")]
-        [TestCase("Msg", ExpectedResult = "Message")]
-        [TestCase("msgs", ExpectedResult = "messages")]
-        [TestCase("nav", ExpectedResult = "navigation")]
-        [TestCase("Nav", ExpectedResult = "Navigation")]
-        [TestCase("navig", ExpectedResult = "navigation")]
-        [TestCase("Navig", ExpectedResult = "Navigation")]
-        [TestCase("neg", ExpectedResult = "negative")]
-        [TestCase("Neg", ExpectedResult = "Negative")]
-        [TestCase("Ns", ExpectedResult = "Namespace")]
-        [TestCase("num", ExpectedResult = "number")]
-        [TestCase("Num", ExpectedResult = "Number")]
-        [TestCase("nums", ExpectedResult = "numbers")]
-        [TestCase("Objs", ExpectedResult = "Objects")]
-        [TestCase("op", ExpectedResult = "operation")]
-        [TestCase("Op", ExpectedResult = "Operation")]
-        [TestCase("ops", ExpectedResult = "operations")]
-        [TestCase("Ops", ExpectedResult = "Operations")]
-        [TestCase("opt", ExpectedResult = "option")]
-        [TestCase("Opt", ExpectedResult = "Option")]
-        [TestCase("opts", ExpectedResult = "options")]
-        [TestCase("Opts", ExpectedResult = "Options")]
-        [TestCase("para", ExpectedResult = "parameter")]
-        [TestCase("Para", ExpectedResult = "Parameter")]
-        [TestCase("param", ExpectedResult = "parameter")]
-        [TestCase("Param", ExpectedResult = "Parameter")]
-        [TestCase("params", ExpectedResult = "parameters")]
-        [TestCase("Params", ExpectedResult = "Parameters")]
-        [TestCase("passwd", ExpectedResult = "password")]
-        [TestCase("Passwd", ExpectedResult = "Password")]
-        [TestCase("perc", ExpectedResult = "percentage")]
-        [TestCase("Perc", ExpectedResult = "Percentage")]
-        [TestCase("perf", ExpectedResult = "performance")]
-        [TestCase("Perf", ExpectedResult = "Performance")]
-        [TestCase("phys", ExpectedResult = "physical")]
-        [TestCase("Phys", ExpectedResult = "Physical")]
-        [TestCase("Plausi", ExpectedResult = "Plausibility")]
-        [TestCase("pos", ExpectedResult = "position")]
-        [TestCase("Pos", ExpectedResult = "Position")]
-        [TestCase("pow", ExpectedResult = "power")]
-        [TestCase("Pow", ExpectedResult = "Power")]
-        [TestCase("prev", ExpectedResult = "previous")]
-        [TestCase("Prev", ExpectedResult = "Previous")]
-        [TestCase("proc", ExpectedResult = "process")]
-        [TestCase("Proc", ExpectedResult = "Process")]
-        [TestCase("procs", ExpectedResult = "processes")]
-        [TestCase("Procs", ExpectedResult = "Processes")]
-        [TestCase("prop", ExpectedResult = "property")]
-        [TestCase("Prop", ExpectedResult = "Property")]
-        [TestCase("props", ExpectedResult = "properties")]
-        [TestCase("Props", ExpectedResult = "Properties")]
-        [TestCase("prot", ExpectedResult = "protected")]
-        [TestCase("Prot", ExpectedResult = "Protection")]
-        [TestCase("pswd", ExpectedResult = "password")]
-        [TestCase("Pswd", ExpectedResult = "Password")]
-        [TestCase("pt", ExpectedResult = "point")]
-        [TestCase("Pt", ExpectedResult = "Point")]
-        [TestCase("pts", ExpectedResult = "points")]
-        [TestCase("Pts", ExpectedResult = "Points")]
-        [TestCase("pw", ExpectedResult = "password")]
-        [TestCase("Pw", ExpectedResult = "Password")]
-        [TestCase("pwd", ExpectedResult = "password")]
-        [TestCase("Pwd", ExpectedResult = "Password")]
-        [TestCase("qty", ExpectedResult = "quantity")]
-        [TestCase("Qty", ExpectedResult = "Quantity")]
-        [TestCase("rec", ExpectedResult = "record")]
-        [TestCase("Rec", ExpectedResult = "Record")]
-        [TestCase("rect", ExpectedResult = "rectangle")]
-        [TestCase("Rect", ExpectedResult = "Rectangle")]
-        [TestCase("ref", ExpectedResult = "reference")]
-        [TestCase("Ref", ExpectedResult = "Reference")]
-        [TestCase("refs", ExpectedResult = "references")]
-        [TestCase("Refs", ExpectedResult = "References")]
-        [TestCase("rel", ExpectedResult = "relative")]
-        [TestCase("Rel", ExpectedResult = "Relative")]
-        [TestCase("reloc", ExpectedResult = "relocation")]
-        [TestCase("Reloc", ExpectedResult = "Relocation")]
-        [TestCase("repo", ExpectedResult = "repository")]
-        [TestCase("Repo", ExpectedResult = "Repository")]
-        [TestCase("repos", ExpectedResult = "repositories")]
-        [TestCase("Repos", ExpectedResult = "Repositories")]
-        [TestCase("req", ExpectedResult = "request")]
-        [TestCase("Req", ExpectedResult = "Request")]
-        [TestCase("res", ExpectedResult = "result")]
-        [TestCase("Res", ExpectedResult = "Result")]
-        [TestCase("resp", ExpectedResult = "response")]
-        [TestCase("Resp", ExpectedResult = "Response")]
-        [TestCase("rest", ExpectedResult = "restore")]
-        [TestCase("Rest", ExpectedResult = "Restore")]
-        [TestCase("rgn", ExpectedResult = "region")]
-        [TestCase("Rgn", ExpectedResult = "Region")]
-        [TestCase("Sel", ExpectedResult = "Selection")]
-        [TestCase("sem", ExpectedResult = "semantic")]
-        [TestCase("Sem", ExpectedResult = "Semantic")]
-        [TestCase("sep", ExpectedResult = "separator")]
-        [TestCase("Sep", ExpectedResult = "Separator")]
-        [TestCase("sepa", ExpectedResult = "separator")]
-        [TestCase("Sepa", ExpectedResult = "Separator")]
-        [TestCase("sess", ExpectedResult = "session")]
-        [TestCase("Sess", ExpectedResult = "Session")]
-        [TestCase("spec", ExpectedResult = "specification")]
-        [TestCase("Spec", ExpectedResult = "Specification")]
-        [TestCase("specs", ExpectedResult = "specifications")]
-        [TestCase("src", ExpectedResult = "source")]
-        [TestCase("Src", ExpectedResult = "Source")]
-        [TestCase("srcs", ExpectedResult = "sources")]
-        [TestCase("Srcs", ExpectedResult = "Sources")]
-        [TestCase("srv", ExpectedResult = "service")]
-        [TestCase("Srv", ExpectedResult = "Service")]
-        [TestCase("std", ExpectedResult = "standard")]
-        [TestCase("Std", ExpectedResult = "Standard")]
-        [TestCase("str", ExpectedResult = "string")]
-        [TestCase("Str", ExpectedResult = "String")]
-        [TestCase("svc", ExpectedResult = "service")]
-        [TestCase("Svc", ExpectedResult = "Service")]
-        [TestCase("svr", ExpectedResult = "server")]
-        [TestCase("Svr", ExpectedResult = "Server")]
-        [TestCase("syn", ExpectedResult = "syntax")]
-        [TestCase("Syn", ExpectedResult = "Syntax")]
-        [TestCase("sync", ExpectedResult = "synchronization")]
-        [TestCase("Sync", ExpectedResult = "Synchronization")]
-        [TestCase("synchron", ExpectedResult = "synchronous")]
-        [TestCase("Synchron", ExpectedResult = "Synchronous")]
-        [TestCase("sys", ExpectedResult = "system")]
-        [TestCase("Sys", ExpectedResult = "System")]
-        [TestCase("tgt", ExpectedResult = "target")]
-        [TestCase("Tgt", ExpectedResult = "Target")]
-        [TestCase("tgts", ExpectedResult = "targets")]
-        [TestCase("Tgts", ExpectedResult = "Targets")]
-        [TestCase("tm", ExpectedResult = "time")]
-        [TestCase("Tm", ExpectedResult = "Time")]
-        [TestCase("tmp", ExpectedResult = "temp")]
-        [TestCase("Tmp", ExpectedResult = "Temp")]
-        [TestCase("txt", ExpectedResult = "text")]
-        [TestCase("Txt", ExpectedResult = "Text")]
-        [TestCase("txts", ExpectedResult = "texts")]
-        [TestCase("util", ExpectedResult = "utility")]
-        [TestCase("Util", ExpectedResult = "Utility")]
-        [TestCase("utils", ExpectedResult = "utilities")]
-        [TestCase("Utils", ExpectedResult = "Utilities")]
-        [TestCase("val", ExpectedResult = "value")]
-        [TestCase("Val", ExpectedResult = "Value")]
-        [TestCase("var", ExpectedResult = "variable")]
-        [TestCase("Var", ExpectedResult = "Variable")]
-        [TestCase("vars", ExpectedResult = "variables")]
-        [TestCase("Vars", ExpectedResult = "Variables")]
-        [TestCase("ver", ExpectedResult = "version")]
-        [TestCase("Ver", ExpectedResult = "Version")]
-        [TestCase("vert", ExpectedResult = "vertical")]
-        [TestCase("Vert", ExpectedResult = "Vertical")]
-        [TestCase("vm", ExpectedResult = "viewModel")]
-        [TestCase("Vm", ExpectedResult = "ViewModel")]
-        [TestCase("VM", ExpectedResult = "ViewModel")]
-        [TestCase("vms", ExpectedResult = "viewModels")]
-        [TestCase("Vms", ExpectedResult = "ViewModels")]
-        [TestCase("VMs", ExpectedResult = "ViewModels")]
-        [TestCase("vol", ExpectedResult = "volume")]
-        [TestCase("Vol", ExpectedResult = "Volume")]
-        public static string Finds_complete_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+            Assert.That(replacement, Is.EqualTo("some" + midterm.Value + "Name"));
+        }
+
+        [Test]
+        public static void Finds_postfix_abbreviations_and_fixes_them_in_([ValueSource(nameof(Postfixes))] Pair postfix)
+        {
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations("someName" + postfix.Key);
+
+            Assert.That(replacement, Is.EqualTo("someName" + postfix.Value));
+        }
+
+        [Test]
+        public static void Finds_standalone_prefix_abbreviation_and_fixes_them_in_([ValueSource(nameof(StandalonePrefixes))] Pair prefix)
+        {
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(prefix.Key);
+
+            Assert.That(replacement, Is.EqualTo(prefix.Value));
+        }
+
+        [Test]
+        public static void Finds_standalone_postfix_abbreviation_and_fixes_them_in_([ValueSource(nameof(StandalonePostfixes))] Pair postfix)
+        {
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(postfix.Key);
+
+            Assert.That(replacement, Is.EqualTo(postfix.Value));
+        }
 
         [TestCase("sepaMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
         [TestCase("sepaMysepSepStuff",  ExpectedResult = "separatorMyseparatorSeparatorStuff", Ignore = "Currently not fixed but very unlikely")]
