@@ -146,6 +146,51 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_loop() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+            Console.CancelKeyPress -= OnCancelKeyPress;
+        }
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_add_and_remove_of_different_handlers() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Console.CancelKeyPress += OnCancelKeyPress1;
+
+        Console.CancelKeyPress -= OnCancelKeyPress2;
+    }
+
+    private void OnCancelKeyPress1(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+
+    private void OnCancelKeyPress2(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_differences_in_add_and_remove() => An_issue_is_reported_for(@"
 using System;
 
@@ -249,6 +294,28 @@ public class TestMe
     public void DoSomething()
     {
         Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
     }
 
     private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
