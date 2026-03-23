@@ -11,8 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1528_ArgParameterAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] AllowedMethodNames = ["Main", "Concat", "ConcatWidth", "ConcatenatedWith", "Format", "FormatWith", "FormattedWith"];
+
         [Test]
-        public void No_issue_is_reported_for_parameter_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_without_arg_in_its_name() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -26,7 +28,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_special_method_parameter_(
-                                                                   [Values("Main", "Format", "FormatWith")] string method,
+                                                                   [ValueSource(nameof(AllowedMethodNames))] string method,
                                                                    [Values("arg", "args", "argument", "arguments")] string term)
             => No_issue_is_reported_for(@"
 namespace Bla
@@ -34,6 +36,32 @@ namespace Bla
     public class TestMe
     {
         private void " + method + "(int " + term + @")
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameter_name_when_there_is_no_better_name_([Values("argument", "arguments")] string term) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        private void DoSomething(int " + term + @")
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameter_name_when_there_is_only_a_number_left_as_better_name_([Values("argument", "arguments")] string term) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        private void DoSomething(int " + term + @"42)
         {
         }
     }
