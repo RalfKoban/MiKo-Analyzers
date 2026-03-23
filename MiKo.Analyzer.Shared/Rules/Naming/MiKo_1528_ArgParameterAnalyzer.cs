@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbolName);
 
-                if (symbolName != betterName)
+                if (symbolName != betterName && betterName[0].IsNumber() is false)
                 {
                     return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
                 }

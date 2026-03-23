@@ -56,6 +56,19 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parameter_name_when_there_is_only_a_number_left_as_better_name_([Values("argument", "arguments")] string term) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        private void DoSomething(int " + term + @"42)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_parameter_starting_with_([Values("arg", "args", "argument", "arguments")] string term) => An_issue_is_reported_for(@"
 namespace Bla
 {
