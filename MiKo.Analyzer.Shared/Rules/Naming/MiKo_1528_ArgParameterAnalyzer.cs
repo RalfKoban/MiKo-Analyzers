@@ -21,8 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             switch (symbol.GetEnclosingMethod()?.Name)
             {
+                case "Concat":
+                case "ConcatWidth":
+                case "ConcatenatedWith":
                 case "Format":
                 case "FormatWith":
+                case "FormattedWith":
                 case "Main":
                     return false;
 
@@ -39,8 +43,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbolName);
 
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                if (symbolName != betterName)
+                {
+                    return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
+                }
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(string symbolName)
