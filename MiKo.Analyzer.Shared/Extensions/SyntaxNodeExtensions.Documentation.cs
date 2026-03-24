@@ -1569,12 +1569,10 @@ namespace MiKoSolutions.Analyzers
 
                 if (replaced)
                 {
-                    map[token] = token.WithText(result.ToStringAndRelease());
+                    map[token] = token.WithText(result.ToString());
                 }
-                else
-                {
-                    StringBuilderCache.Release(result);
-                }
+
+                StringBuilderCache.Release(result);
             }
 
             if (map.Count is 0)

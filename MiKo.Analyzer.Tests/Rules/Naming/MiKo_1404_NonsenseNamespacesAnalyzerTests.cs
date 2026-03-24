@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] ForbiddenNamespaceNames =
                                                                    [
+                                                                       "AsyncHelper",
+                                                                       "AsyncHelpers",
                                                                        "Helper",
                                                                        "Helpers",
                                                                        "Misc",
