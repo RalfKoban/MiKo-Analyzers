@@ -24,6 +24,8 @@ namespace MiKoSolutions.Analyzers
     {
         private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> EmptyConstraintClauses = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
 
+        private static readonly SyntaxKind[] LogicalConditions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
+
         /// <summary>
         /// Determines whether the specified value contains the given character.
         /// </summary>
@@ -122,6 +124,40 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyList<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax
         {
             return value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
+
+        /// <summary>
+        /// Gets all condition kinds from a binary expression tree.
+        /// </summary>
+        /// <param name="value">
+        /// The binary expression syntax to analyze.
+        /// </param>
+        /// <returns>
+        /// A stack of syntax kinds representing the conditions in the binary expression tree.
+        /// </returns>
+        internal static Stack<SyntaxKind> GetConditionKinds(this BinaryExpressionSyntax value)
+        {
+            var leafs = new Stack<SyntaxKind>();
+
+            CollectLeafs(value);
+
+            return leafs;
+
+            void CollectLeafs(BinaryExpressionSyntax node)
+            {
+                Collect(node.Right.WithoutParenthesis());
+                Collect(node.Left.WithoutParenthesis());
+            }
+
+            void Collect(ExpressionSyntax expression)
+            {
+                if (expression is BinaryExpressionSyntax b && b.IsAnyKind(LogicalConditions))
+                {
+                    leafs.Push(expression.Kind());
+
+                    CollectLeafs(b);
+                }
+            }
         }
 
         /// <summary>
@@ -275,6 +311,42 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                     return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets all leaf expressions from a binary expression tree.
+        /// </summary>
+        /// <param name="value">
+        /// The binary expression syntax to analyze.
+        /// </param>
+        /// <returns>
+        /// A stack of leaf expression syntax nodes from the binary expression tree.
+        /// </returns>
+        internal static Stack<ExpressionSyntax> GetLeafs(this BinaryExpressionSyntax value)
+        {
+            var leafs = new Stack<ExpressionSyntax>();
+
+            CollectLeafs(value);
+
+            return leafs;
+
+            void CollectLeafs(BinaryExpressionSyntax node)
+            {
+                Collect(node.Right.WithoutParenthesis());
+                Collect(node.Left.WithoutParenthesis());
+            }
+
+            void Collect(ExpressionSyntax expression)
+            {
+                if (expression is BinaryExpressionSyntax b && b.IsAnyKind(LogicalConditions))
+                {
+                    CollectLeafs(b);
+                }
+                else
+                {
+                    leafs.Push(expression);
+                }
             }
         }
 
@@ -1168,6 +1240,39 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether an is pattern expression represents a boolean check.
+        /// </summary>
+        /// <param name="value">
+        /// The is pattern expression to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the pattern checks for boolean values; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsBooleanCheck(this IsPatternExpressionSyntax value)
+        {
+            switch (value.Pattern)
+            {
+                case ConstantPatternSyntax constant when IsBoolean(constant): return true;
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && IsBoolean(constant): return true;
+                default:
+                    return false;
+            }
+
+            bool IsBoolean(ConstantPatternSyntax constant)
+            {
+                switch (constant.Expression.Kind())
+                {
+                    case SyntaxKind.TrueLiteralExpression:
+                    case SyntaxKind.FalseLiteralExpression:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Determines whether a type syntax represents a <see cref="byte"/> type.
         /// </summary>
         /// <param name="value">
@@ -1375,6 +1480,28 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether an expression syntax represents an element access operation.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents an element access; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsElementAccess(this ExpressionSyntax value) => value is BinaryExpressionSyntax binary && IsElementAccess(binary);
+
+        /// <summary>
+        /// Determines whether a binary expression syntax contains an element access operation.
+        /// </summary>
+        /// <param name="value">
+        /// The binary expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression contains an element access; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsElementAccess(this BinaryExpressionSyntax value) => value.Left.IsKind(SyntaxKind.ElementAccessExpression) || value.Right.IsKind(SyntaxKind.ElementAccessExpression);
 
         /// <summary>
         /// Determines whether an is pattern expression represents an enum check.
@@ -1926,6 +2053,37 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsNameOf(this InvocationExpressionSyntax value) => value.Expression.IsNameOf();
 
         /// <summary>
+        /// Determines whether a binary expression syntax represents a null check.
+        /// </summary>
+        /// <param name="value">
+        /// The binary expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents a null check; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullCheck(this BinaryExpressionSyntax value) => value.Left.IsKind(SyntaxKind.NullLiteralExpression) || value.Right.IsKind(SyntaxKind.NullLiteralExpression);
+
+        /// <summary>
+        /// Determines whether an is pattern expression syntax represents a null check.
+        /// </summary>
+        /// <param name="value">
+        /// The is pattern expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the pattern checks for null; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullCheck(this IsPatternExpressionSyntax value)
+        {
+            switch (value.Pattern)
+            {
+                case ConstantPatternSyntax constant when constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is null
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is not null
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Determines whether a type syntax represents an object type.
         /// </summary>
         /// <param name="value">
@@ -2452,6 +2610,40 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the variable declarator represents a type under test variable; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax value) => Constants.Names.TypeUnderTestVariableNames.Contains(value.GetName());
+
+        /// <summary>
+        /// Determines whether an expression syntax represents a value type.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <param name="semanticModel">
+        /// The semantic model to use for analysis.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents a value type; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsValueType(this ExpressionSyntax value, SemanticModel semanticModel)
+        {
+            switch (value?.Kind())
+            {
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.TrueLiteralExpression:
+                case SyntaxKind.FalseLiteralExpression:
+                case SyntaxKind.CharacterLiteralExpression:
+                    return true;
+
+                case SyntaxKind.NullLiteralExpression:
+                case SyntaxKind.StringLiteralExpression:
+#if VS2022
+                case SyntaxKind.Utf8StringLiteralExpression:
+#endif
+                    return false;
+
+                default:
+                    return value.GetTypeSymbol(semanticModel)?.IsValueType is true;
+            }
+        }
 
         /// <summary>
         /// Determines whether a type syntax represents a void type.
@@ -2984,6 +3176,30 @@ namespace MiKoSolutions.Analyzers
                 if (value is ParenthesizedExpressionSyntax parenthesized)
                 {
                     value = parenthesized.Expression;
+
+                    continue;
+                }
+
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the parent syntax node without any enclosing parenthesis.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the parent for.
+        /// </param>
+        /// <returns>
+        /// The parent node of the syntax node without any parenthesis, or the original node if no parenthesis are found.
+        /// </returns>
+        internal static SyntaxNode WithoutParenthesisParent(this SyntaxNode value)
+        {
+            while (true)
+            {
+                if (value is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    value = parenthesized.Parent;
 
                     continue;
                 }

@@ -566,6 +566,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Performance", "5. Perfor
 		Documentation\MiKo_5015.md = Documentation\MiKo_5015.md
 		Documentation\MiKo_5016.md = Documentation\MiKo_5016.md
 		Documentation\MiKo_5017.md = Documentation\MiKo_5017.md
+		Documentation\MiKo_5018.md = Documentation\MiKo_5018.md
 		Documentation\MiKo_5019.md = Documentation\MiKo_5019.md
 	EndProjectSection
 EndProject
