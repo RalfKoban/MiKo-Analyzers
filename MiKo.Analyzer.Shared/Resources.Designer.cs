@@ -11239,7 +11239,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment causes potential memory leak.
+        ///   Looks up a localized string similar to Assignment may cause a memory leak.
         /// </summary>
         internal static string MiKo_3029_MessageFormat {
             get {
