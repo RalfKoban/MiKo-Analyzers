@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1404";
 
-        private static readonly HashSet<string> NonsenseNamespaces = new HashSet<string> { "Helper", "Helpers", "Util", "Utils", "Utility", "Utilities", "Misc", "Miscellaneous" };
+        private static readonly HashSet<string> NonsenseNamespaces = new HashSet<string> { "AsyncHelper", "AsyncHelpers", "Helper", "Helpers", "Util", "Utils", "Utility", "Utilities", "Misc", "Miscellaneous" };
 
         public MiKo_1404_NonsenseNamespacesAnalyzer() : base(Id)
         {
