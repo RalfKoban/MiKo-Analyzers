@@ -69,6 +69,28 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section_when_on_same_line_as_case() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(GCCollectionMode mode)
+        {
+            int value = 0;
+
+            switch (mode)
+            {
+                case GCCollectionMode.Default:   value = 1; break;
+                case GCCollectionMode.Forced:    value = 2; break;
+                case GCCollectionMode.Optimized: value = 3; break;
+                default:                         value = 4; break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_method() => An_issue_is_reported_for(@"
 namespace Bla
 {
