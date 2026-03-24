@@ -214,12 +214,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         newText = newText.ReplaceAllWithProbe(TrailingSentenceMarkers, ".");
 
-                        summary = summary.ReplaceToken(token, token.WithText(newText.ToStringAndRelease()));
+                        summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));
                     }
-                    else
-                    {
-                        StringBuilderCache.Release(newText);
-                    }
+
+                    StringBuilderCache.Release(newText);
                 }
             }
 
