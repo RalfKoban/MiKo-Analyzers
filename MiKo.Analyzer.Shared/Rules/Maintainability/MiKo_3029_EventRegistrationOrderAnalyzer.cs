@@ -30,15 +30,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsInsideLoop(AssignmentExpressionSyntax node)
         {
-            switch (node?.Parent?.Parent?.Parent)
-            {
-                case ForEachStatementSyntax _:
-                case ForStatementSyntax _:
-                case WhileStatementSyntax _:
-                    return true;
+            var grandParent = node?.Parent?.Parent;
 
-                default:
-                    return false;
+            return IsInsideLoopLocal(grandParent) || IsInsideLoopLocal(grandParent?.Parent);
+
+            bool IsInsideLoopLocal(SyntaxNode syntax)
+            {
+                switch (syntax)
+                {
+                    case ForEachStatementSyntax _:
+                    case ForStatementSyntax _:
+                    case WhileStatementSyntax _:
+                    case DoStatementSyntax _:
+                        return true;
+
+                    default:
+                        return false;
+                }
             }
         }
 
@@ -105,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     assignments.Remove(assignment);
 
-                    // we found a de-registration for from anonymous method, so that's an issue
+                    // we found a de-registration for an anonymous method, so that's an issue
                     yield return Issue(assignment);
                 }
             }
@@ -139,7 +147,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var add = addAssignments[0];
                 var remove = subtractAssignments[0];
 
-                // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
                 if (add.Right is IdentifierNameSyntax added && remove.Right is IdentifierNameSyntax removed && added.GetName() != removed.GetName())
                 {
                     if (Is(MethodKind.EventAdd, add, semanticModel))
@@ -158,8 +165,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
-                // TODO RKN: Check for add and subtract assignments whether they are part of a loop (if so, report them)
-
                 // we have multiple or even different amounts of += and -= assignments, so check the used events and order of += or -= calls
                 var subtractAssignmentsForInvestigation = subtractAssignments.ToList();
 
@@ -169,7 +174,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var addedIdentifier = addedHandler.GetName();
 
-                        // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
                         var remove = subtractAssignmentsForInvestigation.Find(_ => _.Right is IdentifierNameSyntax removedHandler && removedHandler.GetName() == addedIdentifier);
 
                         if (remove is null)

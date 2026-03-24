@@ -325,6 +325,26 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_loop_without_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_loop() => An_issue_is_reported_for(@"
 using System;
 
