@@ -3950,7 +3950,7 @@ Generally, this behavior is not desirable. The object reference should remain th
     <value>Forgetting to unregister from an event can lead to memory leaks, especially when the event is static or belongs to an object with a long lifetime. Always ensure you unregister from events to prevent these issues. Proper event handling maintains memory efficiency and keeps your applications running smoothly.</value>
   </data>
   <data name="MiKo_3029_MessageFormat" xml:space="preserve">
-    <value>Assignment causes potential memory leak</value>
+    <value>Assignment may cause a memory leak</value>
   </data>
   <data name="MiKo_3029_Title" xml:space="preserve">
     <value>Prevent memory leaks in event registrations</value>
