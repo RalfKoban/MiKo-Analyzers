@@ -25,6 +25,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("asynchron", "asynchronous"),
                                                       new Pair("attr", "attribute"),
                                                       new Pair("auth", "authorization"),
+                                                      new Pair("bk", "back"),
+                                                      new Pair("bmp", "bitmap"),
                                                       new Pair("btn", "button"),
                                                       new Pair("calc", "calculate"),
                                                       new Pair("calib", "calibration"),
@@ -66,7 +68,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("diag", "diagnostic"),
                                                       new Pair("diags", "diagnostics"),
                                                       new Pair("dic", "dictionary"),
+                                                      new Pair("dics", "dictionaries"),
                                                       new Pair("dict", "dictionary"),
+                                                      new Pair("dicts", "dictionaries"),
                                                       new Pair("diff", "difference"),
                                                       new Pair("diffs", "differences"),
                                                       new Pair("dir", "directory"),
@@ -102,6 +106,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("his", "history"),
                                                       new Pair("hist", "history"),
                                                       new Pair("hlp", "help"),
+                                                      new Pair("horiz", "horizontal"),
                                                       new Pair("horz", "horizontal"),
                                                       new Pair("ident", "identification"),
                                                       new Pair("idents", "identifications"),
@@ -110,15 +115,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
                                                       new Pair("init", "initialize"),
+                                                      new Pair("interv", "interval"),
                                                       new Pair("intf", "interface"),
+                                                      new Pair("intfc", "interface"),
+                                                      new Pair("intrfc", "interface"),
                                                       new Pair("itf", "interface"),
                                                       new Pair("kvp", "pair"),
                                                       new Pair("lang", "language"),
+                                                      new Pair("lb", "label"),
                                                       new Pair("lbl", "label"),
                                                       new Pair("len", "length"),
                                                       new Pair("lib", "library"),
                                                       new Pair("libs", "libraries"),
                                                       new Pair("lv", "listView"),
+                                                      new Pair("lvw", "listView"),
                                                       new Pair("man", "manager"),
                                                       new Pair("max", "maximum"),
                                                       new Pair("meth", "method"),
@@ -129,10 +139,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("mngr", "manager"),
                                                       new Pair("mngrs", "managers"),
                                                       new Pair("mnu", "menuItem"),
+                                                      new Pair("mod", "modified"),
                                                       new Pair("msg", "message"),
                                                       new Pair("msgs", "messages"),
                                                       new Pair("nav", "navigation"),
                                                       new Pair("navig", "navigation"),
+                                                      new Pair("neg", "negative"),
+                                                      new Pair("nfy", "notificationIcon"),
                                                       new Pair("num", "number"),
                                                       new Pair("nums", "numbers"),
                                                       new Pair("obj", "object"),
@@ -144,10 +157,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
                                                       new Pair("passwd", "password"),
+                                                      new Pair("pct", "picture"),
                                                       new Pair("perc", "percentage"),
                                                       new Pair("perf", "performance"),
                                                       new Pair("phys", "physical"),
                                                       new Pair("plausi", "plausibility"),
+                                                      new Pair("pnl", "panel"),
                                                       new Pair("pos", "position"),
                                                       new Pair("pow", "power"),
                                                       new Pair("prev", "previous"),
@@ -187,16 +202,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("srv", "service"),
                                                       new Pair("std", "standard"),
                                                       new Pair("str", "string"),
+                                                      new Pair("sts", "status"),
                                                       new Pair("svc", "service"),
                                                       new Pair("svr", "server"),
                                                       new Pair("syn", "syntax"),
                                                       new Pair("sync", "synchronization"),
                                                       new Pair("synchron", "synchronous"),
                                                       new Pair("sys", "system"),
+                                                      new Pair("tb", "textBox"),
                                                       new Pair("tgt", "target"),
                                                       new Pair("tgts", "targets"),
                                                       new Pair("tm", "time"),
                                                       new Pair("tmp", "temp"),
+                                                      new Pair("tmr", "timer"),
+                                                      new Pair("tvw", "treeView"),
                                                       new Pair("txt", "text"),
                                                       new Pair("txts", "texts"),
                                                       new Pair("util", "utility"),
@@ -224,8 +243,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Asynchron", "Asynchronous"),
                                                           new Pair("Attr", "Attribute"),
                                                           new Pair("Auth", "Authorization"),
+                                                          new Pair("Bk", "Back"),
                                                           new Pair("Bl", "BusinessLogic"),
                                                           new Pair("BL", "BusinessLogic"),
+                                                          new Pair("Bmp", "Bitmap"),
                                                           new Pair("Btn", "Button"),
                                                           new Pair("Btns", "Buttons"),
                                                           new Pair("Calc", "Calculation"),
@@ -270,7 +291,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Diag", "Diagnostic"),
                                                           new Pair("Diags", "Diagnostics"),
                                                           new Pair("Dic", "Dictionary"),
+                                                          new Pair("Dics", "Dictionaries"),
                                                           new Pair("Dict", "Dictionary"),
+                                                          new Pair("Dicts", "Dictionaries"),
                                                           new Pair("Diff", "Difference"),
                                                           new Pair("Diffs", "Differences"),
                                                           new Pair("Dir", "Directory"),
@@ -310,6 +333,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("His", "History"),
                                                           new Pair("Hist", "History"),
                                                           new Pair("Hlp", "Help"),
+                                                          new Pair("Horiz", "Horizontal"),
                                                           new Pair("Horz", "Horizontal"),
                                                           new Pair("Ident", "Identification"),
                                                           new Pair("Idents", "Identifications"),
@@ -318,14 +342,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
                                                           new Pair("Init", "Initialize"),
+                                                          new Pair("Interv", "Interval"),
                                                           new Pair("Intf", "Interface"),
+                                                          new Pair("Intfc", "Interface"),
+                                                          new Pair("Intrfc", "Interface"),
                                                           new Pair("Itf", "Interface"),
                                                           new Pair("Lang", "Language"),
+                                                          new Pair("Lb", "Label"),
                                                           new Pair("Lbl", "Label"),
                                                           new Pair("Len", "Length"),
                                                           new Pair("Lib", "Library"),
                                                           new Pair("Libs", "Libraries"),
                                                           new Pair("Lv", "ListView"),
+                                                          new Pair("Lvw", "ListView"),
                                                           new Pair("Man", "Manager"),
                                                           new Pair("Max", "Maximum"),
                                                           new Pair("Meth", "Method"),
@@ -336,9 +365,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Mngr", "Manager"),
                                                           new Pair("Mngrs", "Managers"),
                                                           new Pair("Mnu", "MenuItem"),
+                                                          new Pair("Mod", "Modified"),
                                                           new Pair("Msg", "Message"),
                                                           new Pair("Nav", "Navigation"),
                                                           new Pair("Navig", "Navigation"),
+                                                          new Pair("Neg", "Negative"),
+                                                          new Pair("Nfy", "NotificationIcon"),
                                                           new Pair("Ns", "Namespace"),
                                                           new Pair("Num", "Number"),
                                                           new Pair("Obj", "Object"),
@@ -351,10 +383,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
                                                           new Pair("Passwd", "Password"),
+                                                          new Pair("Pct", "Picture"),
                                                           new Pair("Perc", "Percentage"),
                                                           new Pair("Perf", "Performance"),
                                                           new Pair("Phys", "Physical"),
                                                           new Pair("Plausi", "Plausibility"),
+                                                          new Pair("Pnl", "Panel"),
                                                           new Pair("Pos", "Position"),
                                                           new Pair("Pow", "Power"),
                                                           new Pair("Prev", "Previous"),
@@ -394,16 +428,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Srv", "Service"),
                                                           new Pair("Std", "Standard"),
                                                           new Pair("Str", "String"),
+                                                          new Pair("Sts", "Status"),
                                                           new Pair("Svc", "Service"),
                                                           new Pair("Svr", "Server"),
                                                           new Pair("Syn", "Syntax"),
                                                           new Pair("Sync", "Synchronization"),
                                                           new Pair("Synchron", "Synchronous"),
                                                           new Pair("Sys", "System"),
+                                                          new Pair("Tb", "TextBox"),
                                                           new Pair("Tgt", "Target"),
                                                           new Pair("Tgts", "Targets"),
                                                           new Pair("Tm", "Time"),
                                                           new Pair("Tmp", "Temp"),
+                                                          new Pair("Tmr", "Timer"),
+                                                          new Pair("Tvw", "TreeView"),
                                                           new Pair("Txt", "Text"),
                                                           new Pair("Util", "Utility"),
                                                           new Pair("Utils", "Utilities"),
@@ -423,6 +461,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] OnlyPostFixes =
                                                        {
+                                                           new Pair("Mod", "Modification"),
                                                            new Pair("Prot", "Protection"),
                                                            new Pair("Seq", "Sequence"),
                                                        };
@@ -548,6 +587,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("eferencee", "efe"), // 'ref' within 'refers' / 'reference'
                                                       new Pair("eferencer", "efr"), // 'ref' within 'refresh'
                                                       new Pair("efinitionin", "efin"), // 'def' within 'define' / 'definition'
+                                                      new Pair("egativeative", "egative"), // 'neg' within 'negative'
+                                                      new Pair("egativeotiation", "egotiation"), // 'neg' within 'negotiation'
                                                       new Pair("elativeat", "elat"), // 'rel' within 'relate' / 'relating'
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
@@ -617,8 +658,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ncryptypt", "ncrypt"), // 'encr' within 'encrypt'
                                                       new Pair("nitializeialize", "nitialize"), // 'init' within 'initialize'
                                                       new Pair("ntaxtax", "ntax"), // 'syn' within 'syntax'
+                                                      new Pair("ntervalal", "nterval"), // 'interv' within 'interval'
+                                                      new Pair("ntervalene", "ntervene"), // 'interv' within 'intervene'
                                                       new Pair("nvironmentironment", "nvironment"), // 'env' within 'environment'
                                                       new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
+                                                      new Pair("odifiede", "ode"), // 'mod' within 'mode'
+                                                      new Pair("odifiedif", "odif"), // 'mod' within 'modify' / 'modified' / 'modification'
+                                                      new Pair("odifiedul", "odul"), // 'mod' within 'module' / 'modulo'
                                                       new Pair("ollectionect", "ollect"), // 'coll' within 'collect' / 'collection'
                                                       new Pair("olumeum", "olum"), // 'vol' within 'volume'
                                                       new Pair("ommunicationunicat", "ommunicat"), // 'comm' within 'communicate' / 'communication'
@@ -632,6 +678,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("onversionsation", "onversation"), // 'ver' within 'conversation'
                                                       new Pair("onversiont", "onvert"), // 'ver' within 'convert'
                                                       new Pair("onvertical", "onvert"), // 'vert' within 'convert'
+                                                      new Pair("orizontalon", "orizon"), // 'horiz' within 'horizon' / 'horizontal'
                                                       new Pair("ousous", "ous"), // 'sync' within 'asynchronous'
                                                       new Pair("oversion", "over"), // 'ver' within 'hover'
                                                       new Pair("Oversion", "Over"), // 'ver' within 'Over'
@@ -850,11 +897,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (PrefixHasIssue(keySpan, textSpan))
                 {
                     results.Add(pair);
-                }
 
-                if (CompleteTermHasIssue(keySpan, textSpan))
+                    // does not make sense to look further
+                    break;
+                }
+                else
                 {
-                    results.Add(pair);
+                    if (CompleteTermHasIssue(keySpan, textSpan))
+                    {
+                        results.Add(pair);
+
+                        // does not make sense to look further
+                        break;
+                    }
                 }
             }
 
@@ -867,6 +922,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (PostFixHasIssue(pair.Key.AsSpan(), textSpan))
                 {
                     results.Add(pair);
+
+                    // does not make sense to look further
+                    break;
                 }
             }
 
@@ -890,7 +948,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
         }
-        //// ncrunch: rdi default
+
+//// ncrunch: rdi default
 
         /// <summary>
         /// Determines whether the specified character indicates the start of a new word.
