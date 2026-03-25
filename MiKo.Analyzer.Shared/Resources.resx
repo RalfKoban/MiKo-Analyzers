@@ -2047,7 +2047,7 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
     <value>Replace 3rd person singular verb in method name</value>
   </data>
   <data name="MiKo_1529_Description" xml:space="preserve">
-    <value>Methods should start with a verb in its base form because they represent actions the code performs.
+    <value>Methods should start with a verb in its base form because methods represent actions the code performs.
 Using the base form (e.g. "Create", "Update", "Calculate") makes method names clear, consistent, and easy to read.
 Third-person verbs like "Creates" read like descriptions instead of commands, which can make the intention less direct.</value>
   </data>

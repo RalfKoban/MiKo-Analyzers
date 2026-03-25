@@ -5668,7 +5668,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should start with a verb in its base form because they represent actions the code performs.
+        ///   Looks up a localized string similar to Methods should start with a verb in its base form because methods represent actions the code performs.
         ///Using the base form (e.g. &quot;Create&quot;, &quot;Update&quot;, &quot;Calculate&quot;) makes method names clear, consistent, and easy to read.
         ///Third-person verbs like &quot;Creates&quot; read like descriptions instead of commands, which can make the intention less direct..
         /// </summary>
@@ -5679,7 +5679,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name method using base form &apos;{1}&apos; instead of &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1529_MessageFormat {
             get {
