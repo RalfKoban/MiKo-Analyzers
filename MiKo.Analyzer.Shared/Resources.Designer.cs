@@ -5450,7 +5450,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not start void methods with &apos;Get&apos;.
+        ///   Looks up a localized string similar to Do not prefix &apos;void&apos; methods with &apos;Get&apos;.
         /// </summary>
         internal static string MiKo_1522_Title {
             get {

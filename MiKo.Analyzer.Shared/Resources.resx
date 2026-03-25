@@ -1973,7 +1973,7 @@ This makes your code clearer and follows common .NET naming conventions.</value>
     <value>Rename method to not start with 'Get'</value>
   </data>
   <data name="MiKo_1522_Title" xml:space="preserve">
-    <value>Do not start void methods with 'Get'</value>
+    <value>Do not prefix 'void' methods with 'Get'</value>
   </data>
   <data name="MiKo_1523_Description" xml:space="preserve">
     <value>Method names should describe the specific behavior they provide, not label the method as a generic helper.
