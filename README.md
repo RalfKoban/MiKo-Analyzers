@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 542 rules that are currently provided by the analyzer.
+The following tables list all the 543 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -193,6 +193,7 @@ The following tables list all the 542 rules that are currently provided by the a
 |[MiKo_1526](/Documentation/MiKo_1526.md)|Suffix delegate properties with 'Callback'|&#x2713;|&#x2713;|
 |[MiKo_1527](/Documentation/MiKo_1527.md)|Do not suffix types with 'Sub'|&#x2713;|&#x2713;|
 |[MiKo_1528](/Documentation/MiKo_1528.md)|Do not prefix parameters with 'arg'|&#x2713;|&#x2713;|
+|[MiKo_1529](/Documentation/MiKo_1529.md)|Do not prefix methods with 3rd person singular verb|&#x2713;|&#x2713;|
 
 ### Documentation
 
