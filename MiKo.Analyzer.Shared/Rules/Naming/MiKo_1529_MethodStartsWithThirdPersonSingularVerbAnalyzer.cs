@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            // prove for dependency properties
+            // probe for dependency properties
             if (methodName.StartsWith("Is", StringComparison.Ordinal) && symbol.IsDependencyPropertyChangedCallback())
             {
                 // 'Is' is an allowed start, see remarks section of 'https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertychangedeventhandler?view=netframework-4.0'
