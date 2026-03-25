@@ -5697,6 +5697,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename method according to dependency property changed callback pattern.
+        /// </summary>
+        internal static string MiKo_1530_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1530_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DependencyPropertyChanged callback handlers should be named starting with &apos;On&apos; followed by the dependency property name, followed by &apos;Changed&apos; to show they handle changes of dependency property values..
+        /// </summary>
+        internal static string MiKo_1530_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1530_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1530_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1530_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks.
+        /// </summary>
+        internal static string MiKo_1530_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1530_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
