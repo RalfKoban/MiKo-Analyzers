@@ -61,6 +61,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
+
+            // probe for dependency properties
+            if (methodName.StartsWith("Is", StringComparison.Ordinal) && symbol.IsDependencyPropertyChangedCallback())
+            {
+                // 'Is' is an allowed start, see remarks section of 'https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertychangedeventhandler?view=netframework-4.0'
+                // ("Typically these events follow the naming pattern Is(PropertyName)Changed, where PropertyName is the DependencyProperty.Name of the property that changed.")
+                return Array.Empty<Diagnostic>();
+            }
+
             var firstWord = methodName.AsSpan().FirstWord();
 
             if (HasIssue(firstWord))

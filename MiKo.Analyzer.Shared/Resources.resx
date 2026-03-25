@@ -2057,6 +2057,18 @@ Third-person verbs like "Creates" read like descriptions instead of commands, wh
   <data name="MiKo_1529_Title" xml:space="preserve">
     <value>Do not prefix methods with 3rd person singular verb</value>
   </data>
+  <data name="MiKo_1530_CodeFixTitle" xml:space="preserve">
+    <value>Rename method according to dependency property changed callback pattern</value>
+  </data>
+  <data name="MiKo_1530_Description" xml:space="preserve">
+    <value>DependencyPropertyChanged callback handlers should be named starting with 'On' followed by the dependency property name, followed by 'Changed' to show they handle changes of dependency property values.</value>
+  </data>
+  <data name="MiKo_1530_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1530_Title" xml:space="preserve">
+    <value>Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
