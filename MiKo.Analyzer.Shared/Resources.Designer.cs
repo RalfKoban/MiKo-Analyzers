@@ -5659,6 +5659,44 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace 3rd person singular verb in method name.
+        /// </summary>
+        internal static string MiKo_1529_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1529_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should start with a verb in its base form because methods represent actions the code performs.
+        ///Using the base form (e.g. &quot;Create&quot;, &quot;Update&quot;, &quot;Calculate&quot;) makes method names clear, consistent, and easy to read.
+        ///Third-person verbs like &quot;Creates&quot; read like descriptions instead of commands, which can make the intention less direct..
+        /// </summary>
+        internal static string MiKo_1529_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1529_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1529_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1529_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix methods with 3rd person singular verb.
+        /// </summary>
+        internal static string MiKo_1529_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1529_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {

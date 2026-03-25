@@ -2043,6 +2043,20 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
   <data name="MiKo_1528_Title" xml:space="preserve">
     <value>Do not prefix parameters with 'arg'</value>
   </data>
+  <data name="MiKo_1529_CodeFixTitle" xml:space="preserve">
+    <value>Replace 3rd person singular verb in method name</value>
+  </data>
+  <data name="MiKo_1529_Description" xml:space="preserve">
+    <value>Methods should start with a verb in its base form because methods represent actions the code performs.
+Using the base form (e.g. "Create", "Update", "Calculate") makes method names clear, consistent, and easy to read.
+Third-person verbs like "Creates" read like descriptions instead of commands, which can make the intention less direct.</value>
+  </data>
+  <data name="MiKo_1529_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1529_Title" xml:space="preserve">
+    <value>Do not prefix methods with 3rd person singular verb</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
