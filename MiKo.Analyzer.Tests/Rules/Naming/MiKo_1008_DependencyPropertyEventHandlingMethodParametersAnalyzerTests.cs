@@ -18,221 +18,122 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("DependencyObject d, DependencyPropertyChangedEventArgs args, object whatever")]
         [TestCase("object whatever, DependencyObject d, DependencyPropertyChangedEventArgs args")]
         public void No_issue_is_reported_for_non_event_handling_method_(string parameters) => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void DoSomething(" + parameters + @") { }
-    }
+    public void DoSomething(" + parameters + @") { }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_method_with_d_and_e_parameters() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-    }
+    public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_local_function_with_d_and_e_parameters() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething()
     {
-        public void DoSomething()
-        {
-            void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-        }
+        void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
     }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_local_function_inside_event_handling_method() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            void SomeLocal(DependencyObject dep, DependencyPropertyChangedEventArgs args) { }
-        }
+        void SomeLocal(DependencyObject dep, DependencyPropertyChangedEventArgs args) { }
     }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_method_with_DependencyObject_parameter_named_s() => An_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
-    }
+    public void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_overridden_method_with_DependencyObject_parameter_named_s() => An_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public override void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
-    }
+    public override void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_local_function_with_DependencyObject_parameter_named_s() => An_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething()
     {
-        public void DoSomething()
-        {
-            void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
-        }
+        void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
     }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_method_with_DependencyPropertyChangedEventArgs_parameter_named_args() => An_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
-    }
+    public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_overridden_method_with_DependencyPropertyChangedEventArgs_parameter_named_args() => An_issue_is_reported_for(@"
-namespace System.Windows
+using System;
+using System.Windows;
+
+public class TestMe
 {
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
+    public override void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
 }
-
-namespace Bla
-{
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public override void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
-    }
-}");
+");
 
         [Test]
         public void An_issue_is_reported_for_local_function_with_DependencyPropertyChangedEventArgs_parameter_named_args() => An_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething()
     {
-        public void DoSomething()
-        {
-            void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
-        }
+        void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
     }
 }
 ");
@@ -241,23 +142,14 @@ namespace Bla
         public void Code_gets_fixed_for_method()
         {
             const string Template = @"
-namespace System.Windows
+using System;
+using System.Windows;
+
+public class TestMe
 {
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
+    public void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
 }
-
-namespace Bla
-{
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
-    }
-}";
+";
 
             var originalCode = Template.Replace("#1", "obj").Replace("#2", "args");
             var fixedCode = Template.Replace("#1", "d").Replace("#2", "e");
@@ -269,26 +161,17 @@ namespace Bla
         public void Code_gets_fixed_for_local_function()
         {
             const string Template = @"
-namespace System.Windows
+using System;
+using System.Windows;
+
+public class TestMe
 {
-    public struct DependencyPropertyChangedEventArgs
+    public void DoSomething()
     {
+        void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
     }
 }
-
-namespace Bla
-{
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void DoSomething()
-        {
-            void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
-        }
-    }
-}";
+";
 
             var originalCode = Template.Replace("#1", "obj").Replace("#2", "args");
             var fixedCode = Template.Replace("#1", "d").Replace("#2", "e");
