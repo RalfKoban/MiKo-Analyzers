@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -14,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string Prefix = "On";
         private const string Suffix = "Changed";
 
-        private static readonly string[] ReplaceCandidates = { "Property", "Change" + Suffix, Suffix + Suffix };
-
         public MiKo_1530_DependencyPropertyChangeHandlingMethodNamesAnalyzer() : base(Id)
         {
         }
@@ -25,32 +26,73 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
+            var betterName = FindBetterName(symbol);
 
-            var correctPrefix = methodName.StartsWith(Prefix, StringComparison.Ordinal);
-            var correctSuffix = methodName.EndsWith(Suffix, StringComparison.Ordinal);
-
-            if (correctPrefix && correctSuffix)
+            if (methodName != betterName)
             {
-                return Array.Empty<Diagnostic>();
+                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
 
-            var builder = methodName.AsCachedBuilder();
+            return Array.Empty<Diagnostic>();
+        }
 
-            if (correctPrefix is false)
+        private static string FindBetterName(IMethodSymbol symbol)
+        {
+            var registeredPropertyName = GetRegisteredPropertyName(symbol);
+            var betterName = Prefix + registeredPropertyName + Suffix;
+
+            return betterName;
+        }
+
+        private static string GetRegisteredPropertyName(IMethodSymbol symbol)
+        {
+            var methodName = symbol.Name;
+            var fields = symbol.ContainingType.GetFields();
+
+            foreach (var dependencyProperty in fields.Where(_ => _.IsDependencyProperty()))
             {
-                builder = builder.Insert(0, Prefix); // prefix does not match
+                var declaration = dependencyProperty.GetSyntax<FieldDeclarationSyntax>();
+
+                foreach (var declarator in declaration.Declaration.Variables)
+                {
+                    if (declarator.Initializer is EqualsValueClauseSyntax initializer)
+                    {
+                        var hasMethodAsArgument = initializer.DescendantNodes<IdentifierNameSyntax>().Any(_ => Matches(_, methodName));
+
+                        if (hasMethodAsArgument && initializer.Value is InvocationExpressionSyntax invocation)
+                        {
+                            var arguments = invocation.ArgumentList.Arguments;
+
+                            if (arguments.Count > 0)
+                            {
+                                switch (arguments[0].Expression)
+                                {
+                                    case LiteralExpressionSyntax l when l.IsKind(SyntaxKind.StringLiteralExpression):
+                                        return l.Token.ValueText;
+
+                                    case InvocationExpressionSyntax i when i.IsNameOf():
+                                        return i.ArgumentList.Arguments.FirstOrDefault().GetName();
+
+                                    default:
+                                        return string.Empty;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-            if (correctSuffix is false)
+            return string.Empty;
+
+            bool Matches(IdentifierNameSyntax identifier, string identifierName)
             {
-                builder = builder.Append(Suffix); // suffix does not match
+                if (identifier.GetName() == identifierName)
+                {
+                    return identifier.Parent is ArgumentSyntax a && a.Parent?.Parent is ObjectCreationExpressionSyntax;
+                }
+
+                return false;
             }
-
-            builder = builder.ReplaceAllWithProbe(ReplaceCandidates, Suffix);
-
-            string betterName = builder.ToStringAndRelease();
-
-            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
     }
 }

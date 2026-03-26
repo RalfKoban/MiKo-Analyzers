@@ -2131,6 +2131,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a field is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The field to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the field is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsDependencyProperty(this IFieldSymbol value) => value != null && value.Type.IsDependencyProperty();
+
+        /// <summary>
         /// Determines whether a type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>.
         /// </summary>
         /// <param name="value">
