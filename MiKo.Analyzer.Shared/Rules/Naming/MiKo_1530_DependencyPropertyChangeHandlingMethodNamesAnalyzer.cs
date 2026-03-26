@@ -14,9 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1530";
 
-        private const string Prefix = "On";
-        private const string Suffix = "Changed";
-
         public MiKo_1530_DependencyPropertyChangeHandlingMethodNamesAnalyzer() : base(Id)
         {
         }
@@ -26,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
-            var betterName = FindBetterName(symbol);
+            var betterName = FindBetterName(symbol, methodName);
 
             if (methodName != betterName)
             {
@@ -36,22 +33,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(IMethodSymbol symbol)
+        private static string FindBetterName(IMethodSymbol method, string methodName)
         {
-            var registeredPropertyName = GetRegisteredPropertyName(symbol);
-            var betterName = Prefix + registeredPropertyName + Suffix;
+            var registeredPropertyName = GetRegisteredPropertyName(method, methodName);
 
-            return betterName;
+            if (registeredPropertyName.Length > 0)
+            {
+                return "On" + registeredPropertyName + "Changed";
+            }
+
+            return methodName;
         }
 
-        private static string GetRegisteredPropertyName(IMethodSymbol symbol)
+        private static string GetRegisteredPropertyName(IMethodSymbol method, string methodName)
         {
-            var methodName = symbol.Name;
-            var fields = symbol.ContainingType.GetFields();
+            var fields = method.ContainingType.GetFields();
 
             foreach (var dependencyProperty in fields.Where(_ => _.IsDependencyProperty()))
             {
                 var declaration = dependencyProperty.GetSyntax<FieldDeclarationSyntax>();
+
+                if (declaration is null)
+                {
+                    // we cannot find that out
+                    continue;
+                }
 
                 foreach (var declarator in declaration.Declaration.Variables)
                 {
@@ -70,8 +76,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                     case LiteralExpressionSyntax l when l.IsKind(SyntaxKind.StringLiteralExpression):
                                         return l.Token.ValueText;
 
-                                    case InvocationExpressionSyntax i when i.IsNameOf():
-                                        return i.ArgumentList.Arguments.FirstOrDefault().GetName();
+                                    case InvocationExpressionSyntax i when i.IsNameOf() && i.ArgumentList.Arguments.FirstOrDefault() is ArgumentSyntax argument:
+                                        return argument.GetName();
 
                                     default:
                                         return string.Empty;
@@ -86,9 +92,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             bool Matches(IdentifierNameSyntax identifier, string identifierName)
             {
-                if (identifier.GetName() == identifierName)
+                if (identifier.Parent is ArgumentSyntax a && identifier.GetName() == identifierName)
                 {
-                    return identifier.Parent is ArgumentSyntax a && a.Parent?.Parent is ObjectCreationExpressionSyntax;
+                    switch (a.Parent?.Parent)
+                    {
+                        case ObjectCreationExpressionSyntax _:
+                        case ImplicitObjectCreationExpressionSyntax _:
+                            return true;
+                    }
                 }
 
                 return false;
