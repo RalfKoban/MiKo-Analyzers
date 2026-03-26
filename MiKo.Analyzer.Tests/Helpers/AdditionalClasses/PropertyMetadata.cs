@@ -6,6 +6,14 @@ namespace System.Windows
 {
     public class PropertyMetadata
     {
+        public PropertyMetadata()
+        {
+        }
+
+        public PropertyMetadata(object defaultValue)
+        {
+        }
+
         public PropertyMetadata(PropertyChangedCallback propertyChangedCallback)
         {
         }
