@@ -125,7 +125,7 @@ using System.Linq;
 
 public class TestMe
 {
-    public void DoSomething("" + parameter + @"")
+    public void DoSomething(" + parameter + @")
     { }
 }
 ");

@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IFieldSymbol field && field.Type.IsDependencyProperty();
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IFieldSymbol field && field.IsDependencyProperty();
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {

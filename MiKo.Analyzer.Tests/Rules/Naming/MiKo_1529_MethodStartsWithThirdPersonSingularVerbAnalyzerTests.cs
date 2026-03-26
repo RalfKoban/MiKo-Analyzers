@@ -89,22 +89,12 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_DependencyProperty_changed_callback() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void IsWhateverChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-    }
+    public void IsWhateverChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
 }
 ");
 

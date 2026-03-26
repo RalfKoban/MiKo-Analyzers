@@ -16,22 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("object s, EventArgs args")]
         [TestCase("DependencyObject d, DependencyPropertyChangedEventArgs args")]
         public void No_issue_is_reported_for_parameters_on_event_handling_method_(string parameters) => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void DoSomething(" + parameters + @") { }
-    }
+    public void DoSomething(" + parameters + @") { }
 }
 ");
 
@@ -62,22 +52,12 @@ public class TestMe
         [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever", 1)]
         [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args", 1)]
         public void An_issue_is_reported_for_matching_parameters_on_method_(string parameters, in int violations) => An_issue_is_reported_for(violations, @"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void DoSomething(" + parameters + @") { }
-    }
+    public void DoSomething(" + parameters + @") { }
 }
 ");
 
@@ -93,25 +73,15 @@ namespace Bla
         [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever", 1)]
         [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args", 1)]
         public void An_issue_is_reported_for_matching_parameters_on_local_function_(string parameters, in int violations) => An_issue_is_reported_for(violations, @"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething()
     {
-        public void DoSomething()
+        void LocalFunction(" + parameters + @")
         {
-            void LocalFunction(" + parameters + @")
-            {
-            }
         }
     }
 }
@@ -124,22 +94,12 @@ namespace Bla
         [TestCase("DependencyPropertyChangedEventArgs e, string a")]
         [TestCase("DependencyPropertyChangedEventArgs e0, DependencyPropertyChangedEventArgs e1")]
         public void No_issue_is_reported_for_correctly_named_parameters_on_method_(string parameters) => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
-    {
-        public void DoSomething(" + parameters + @") { }
-    }
+    public void DoSomething(" + parameters + @") { }
 }
 ");
 
@@ -150,25 +110,15 @@ namespace Bla
         [TestCase("DependencyPropertyChangedEventArgs e, string a")]
         [TestCase("DependencyPropertyChangedEventArgs e0, DependencyPropertyChangedEventArgs e1")]
         public void No_issue_is_reported_for_correctly_named_parameters_on_local_function_(string parameters) => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething()
     {
-        public void DoSomething()
+        void LocalFunction(" + parameters + @")
         {
-            void LocalFunction(" + parameters + @")
-            {
-            }
         }
     }
 }
@@ -201,24 +151,14 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_is_event_handling_method() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            void SomeLocal(DependencyObject dep, DependencyPropertyChangedEventArgs args) { }
-        }
+        void SomeLocal(DependencyObject dep, DependencyPropertyChangedEventArgs args) { }
     }
 }
 ");
@@ -231,23 +171,13 @@ namespace Bla
         public void Code_gets_fixed_for_method_(string expected, string wanted)
         {
             const string Template = @"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+class TestMe
 {
-    using System;
-    using System.Windows;
-
-    class TestMe
+    void DoSomething(###)
     {
-        void DoSomething(###)
-        {
-        }
     }
 }
 ";
@@ -263,25 +193,15 @@ namespace Bla
         public void Code_gets_fixed_for_local_function_(string expected, string wanted)
         {
             const string Template = @"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+class TestMe
 {
-    using System;
-    using System.Windows;
-
-    class TestMe
+    public void DoSomething()
     {
-        public void DoSomething()
+        void LocalFunction(###)
         {
-            void LocalFunction(###)
-            {
-            }
         }
     }
 }
