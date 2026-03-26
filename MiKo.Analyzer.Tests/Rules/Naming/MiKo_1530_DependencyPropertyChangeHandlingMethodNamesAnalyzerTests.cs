@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_with_nameof() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_method_matching_propertyName_with_nameof() => No_issue_is_reported_for("""
 
             using System;
             using System.Windows;
@@ -38,13 +38,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 public bool MyProperty { get; set; }
 
-                public void OnMyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                private static void OnMyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
             }
 
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_with_string_literal() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_method_matching_propertyName_with_string_literal() => No_issue_is_reported_for("""
 
             using System;
             using System.Windows;
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 public bool MyProperty { get; set; }
 
-                public void OnMyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                private static void OnMyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
             }
 
             """);
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 public bool MyProperty { get; set; }
 
-                public void Whatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                private static void Whatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
             }
 
             """);
@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 public bool MyProperty { get; set; }
 
-                public void Whatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                private static void Whatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
             }
 
             """);
@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 public bool MyProperty { get; set; }
 
-                public void Whatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                private static void Whatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
             }
 
             """);
@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             """);
 
-        [Test, Ignore("Currently I have no idea why the code-fix only changes the method name but not the callback, as that works in production.")]
+        [Test]
         public void Code_gets_fixed_for_method_with_nameof()
         {
             const string Template = """
@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     public bool MyProperty { get; set; }
 
-                    public void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                    private static void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
                 }
 
                 """;
@@ -168,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             VerifyCSharpFix(Template.Replace("###", "Whatever"), Template.Replace("###", "OnMyPropertyChanged"));
         }
 
-        [Test, Ignore("Currently I have no idea why the code-fix only changes the method name but not the callback, as that works in production.")]
+        [Test]
         public void Code_gets_fixed_for_method_with_string_literal()
         {
             const string Template = """
@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     public bool MyProperty { get; set; }
 
-                    public void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                    private static void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
                 }
 
                 """;
@@ -193,7 +193,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             VerifyCSharpFix(Template.Replace("###", "Whatever"), Template.Replace("###", "OnMyPropertyChanged"));
         }
 
-        [Test, Ignore("Currently I have no idea why the code-fix only changes the method name but not the callback, as that works in production.")]
+        [Test]
         public void Code_gets_fixed_for_method_with_nameof_and_implicit_PropertyMetadata()
         {
             const string Template = """
@@ -210,7 +210,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     public bool MyProperty { get; set; }
 
-                    public void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                    private static void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
                 }
 
                 """;
@@ -218,7 +218,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             VerifyCSharpFix(Template.Replace("###", "Whatever"), Template.Replace("###", "OnMyPropertyChanged"));
         }
 
-        [Test, Ignore("Currently I have no idea why the code-fix only changes the method name but not the callback, as that works in production.")]
+        [Test]
         public void Code_gets_fixed_for_method_with_string_literal_and_implicit_PropertyMetadata()
         {
             const string Template = """
@@ -235,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     public bool MyProperty { get; set; }
 
-                    public void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+                    private static void ###(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
                 }
 
                 """;
