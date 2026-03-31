@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace);
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
