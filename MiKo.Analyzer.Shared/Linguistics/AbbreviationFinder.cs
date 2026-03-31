@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
                                                       new Pair("cmp", "comparison"),
+                                                      new Pair("col", "column"),
                                                       new Pair("coll", "collection"),
                                                       new Pair("comm", "communication"),
                                                       new Pair("comp", "compile"),
@@ -262,6 +263,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Cmb", "ComboBox"),
                                                           new Pair("Cmd", "Command"),
                                                           new Pair("Cmp", "Comparison"),
+                                                          new Pair("Col", "Column"),
                                                           new Pair("Coll", "Collection"),
                                                           new Pair("Comm", "Communication"),
                                                           new Pair("Comp", "Compile"),
@@ -667,6 +669,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("odifiedul", "odul"), // 'mod' within 'module' / 'modulo'
                                                       new Pair("ollectionect", "ollect"), // 'coll' within 'collect' / 'collection'
                                                       new Pair("olumeum", "olum"), // 'vol' within 'volume'
+                                                      new Pair("olumnlect", "ollect"), // 'col' within 'collect' / 'collection'
+                                                      new Pair("olumnumn", "olumn"), // 'col' within 'column'
                                                       new Pair("ommunicationunicat", "ommunicat"), // 'comm' within 'communicate' / 'communication'
                                                       new Pair("ompatibleibilit", "ompatibilit"), // 'comp' within 'compatibility' / 'compatibilities'
                                                       new Pair("ompatibleible", "ompatible"), // 'comp' within 'compatible'
