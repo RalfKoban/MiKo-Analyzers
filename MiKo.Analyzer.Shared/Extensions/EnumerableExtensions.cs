@@ -961,7 +961,7 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
 
         /// <summary>
         /// Determines whether all elements in the specified array satisfy the given condition.
