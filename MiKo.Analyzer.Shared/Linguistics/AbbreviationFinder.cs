@@ -670,6 +670,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ollectionect", "ollect"), // 'coll' within 'collect' / 'collection'
                                                       new Pair("olumeum", "olum"), // 'vol' within 'volume'
                                                       new Pair("olumnlect", "ollect"), // 'col' within 'collect' / 'collection'
+                                                      new Pair("olumnor", "olor"), // 'col' within 'color'
+                                                      new Pair("olumnour", "olour"), // 'col' within 'colour'
                                                       new Pair("olumnumn", "olumn"), // 'col' within 'column'
                                                       new Pair("ommunicationunicat", "ommunicat"), // 'comm' within 'communicate' / 'communication'
                                                       new Pair("ompatibleibilit", "ompatibilit"), // 'comp' within 'compatibility' / 'compatibilities'
