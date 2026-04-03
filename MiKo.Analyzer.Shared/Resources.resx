@@ -5319,6 +5319,15 @@ This approach improves type safety and makes it harder to accidentally mix up di
   <data name="MiKo_3503_Title" xml:space="preserve">
     <value>Do not assign variables in try-catch blocks that are returned directly outside</value>
   </data>
+  <data name="MiKo_3504_Description" xml:space="preserve">
+    <value>Avoid writing long chains of method or property calls, because they tightly couple your code to the internal structure of multiple objects. This makes the code fragile and harder to read or test. Instead, expose clear operations on your objects to keep the code simple and maintainable.</value>
+  </data>
+  <data name="MiKo_3504_MessageFormat" xml:space="preserve">
+    <value>Do not use train wreck</value>
+  </data>
+  <data name="MiKo_3504_Title" xml:space="preserve">
+    <value>Do not use train wrecks</value>
+  </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>
   </data>

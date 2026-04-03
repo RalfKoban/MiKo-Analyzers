@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 544 rules that are currently provided by the analyzer.
+The following tables list all the 545 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -32,7 +32,7 @@ The following tables list all the 544 rules that are currently provided by the a
 ### Naming
 
 |ID|Title|Enabled by default|CodeFix available|
-|:-|:----|:----------------:|:---------------:|
+|:-|:----|:----------------:|:---------------:|---|---|
 |[MiKo_1000](/Documentation/MiKo_1000.md)|Suffix 'System.EventArgs' types with 'EventArgs'|&#x2713;|&#x2713;|
 |[MiKo_1001](/Documentation/MiKo_1001.md)|Name 'System.EventArgs' parameters 'e'|&#x2713;|&#x2713;|
 |[MiKo_1002](/Documentation/MiKo_1002.md)|Follow .NET Framework Design Guidelines for event handler parameter names|&#x2713;|&#x2713;|
@@ -488,6 +488,7 @@ The following tables list all the 544 rules that are currently provided by the a
 |[MiKo_3501](/Documentation/MiKo_3501.md)|Do not suppress nullable warnings on Null-conditional operators|&#x2713;|&#x2713;|
 |[MiKo_3502](/Documentation/MiKo_3502.md)|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
 |[MiKo_3503](/Documentation/MiKo_3503.md)|Do not assign variables in try-catch blocks that are returned directly outside|&#x2713;|&#x2713;|
+|[MiKo_3504](/Documentation/MiKo_3504.md)|Do not use train wrecks|&#x2713;|\-|
 
 ### Ordering
 
