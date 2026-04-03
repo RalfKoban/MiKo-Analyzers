@@ -640,7 +640,7 @@ namespace MiKoSolutions.Analyzers
         internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 
         /// <summary>
-        /// Bypasses elements in a sequence in case as a specified condition is <see langword="true"/> and returns the remaining elements.
+        /// Bypasses elements in a sequence for which the specified condition is <see langword="true"/> and returns the remaining elements.
         /// </summary>
         /// <typeparam name="TSource">
         /// The type of elements in the sequence.
