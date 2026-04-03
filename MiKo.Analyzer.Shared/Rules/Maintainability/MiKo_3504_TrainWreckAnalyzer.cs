@@ -74,15 +74,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                               SyntaxKind.PreIncrementExpression,
                                                                               SyntaxKind.UnaryMinusExpression,
                                                                               SyntaxKind.UnaryPlusExpression,
-#if VS2022
-                                                                              SyntaxKind.UnsignedRightShiftExpression,
-#endif
                                                                           };
 
         private static readonly SyntaxKind[] PostfixUnaryExpressionKinds =
                                                                            {
-                                                                               SyntaxKind.PostIncrementExpression,
                                                                                SyntaxKind.PostDecrementExpression,
+                                                                               SyntaxKind.PostIncrementExpression,
                                                                                SyntaxKind.SuppressNullableWarningExpression,
                                                                            };
 
