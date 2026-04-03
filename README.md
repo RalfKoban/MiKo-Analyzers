@@ -32,7 +32,7 @@ The following tables list all the 545 rules that are currently provided by the a
 ### Naming
 
 |ID|Title|Enabled by default|CodeFix available|
-|:-|:----|:----------------:|:---------------:|---|---|
+|:-|:----|:----------------:|:---------------:|
 |[MiKo_1000](/Documentation/MiKo_1000.md)|Suffix 'System.EventArgs' types with 'EventArgs'|&#x2713;|&#x2713;|
 |[MiKo_1001](/Documentation/MiKo_1001.md)|Name 'System.EventArgs' parameters 'e'|&#x2713;|&#x2713;|
 |[MiKo_1002](/Documentation/MiKo_1002.md)|Follow .NET Framework Design Guidelines for event handler parameter names|&#x2713;|&#x2713;|
