@@ -563,7 +563,7 @@ public class TestMe
 
     public void DoSomething(object o)
     {
-        switch (p)
+        switch (o)
         {
             case TestMeA a when a.B.C.D:
                 break;
@@ -1539,7 +1539,7 @@ public class TestMe
 
     public void DoSomething(object o)
     {
-        switch (p)
+        switch (o)
         {
             case TestMeA a when a.B.C.D.E:
                 break;
@@ -2016,6 +2016,7 @@ public class TestMe
 
         return 0;
     }
+}
 
 public class TestMeA
 {
