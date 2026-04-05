@@ -15223,6 +15223,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        internal static string MiKo_3504_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3504_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use train wreck.
+        /// </summary>
+        internal static string MiKo_3504_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3504_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use train wrecks.
+        /// </summary>
+        internal static string MiKo_3504_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3504_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place and order method side-by-side with overloads.
         /// </summary>
         internal static string MiKo_4001_CodeFixTitle {
