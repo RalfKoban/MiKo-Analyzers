@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
 
+using MiKoSolutions.Analyzers;
+
 using NUnit.Framework;
 
 //// ncrunch: rdi off
@@ -101,8 +103,8 @@ namespace TestHelper
             VerifyFix(
                   GetObjectUnderTest(),
                   GetCSharpCodeFixProvider(),
-                  oldSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
-                  newSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
+                  StringCache.Intern(oldSource.ReplaceLineEndings()), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
+                  StringCache.Intern(newSource.ReplaceLineEndings()), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
                   languageVersion,
                   codeFixIndex,
                   allowNewCompilerDiagnostics,
