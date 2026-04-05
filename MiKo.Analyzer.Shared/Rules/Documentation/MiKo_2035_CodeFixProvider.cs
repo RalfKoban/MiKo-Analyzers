@@ -282,7 +282,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : Constants.Comments.CollectionReturnTypeStartingPhrase;
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 //// ncrunch: no coverage start
 
         private sealed class MapData

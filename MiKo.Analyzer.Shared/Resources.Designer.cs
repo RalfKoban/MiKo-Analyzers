@@ -5450,7 +5450,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not start void methods with &apos;Get&apos;.
+        ///   Looks up a localized string similar to Do not prefix &apos;void&apos; methods with &apos;Get&apos;.
         /// </summary>
         internal static string MiKo_1522_Title {
             get {
@@ -5655,6 +5655,80 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1528_Title {
             get {
                 return ResourceManager.GetString("MiKo_1528_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace 3rd person singular verb in method name.
+        /// </summary>
+        internal static string MiKo_1529_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1529_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should start with a verb in its base form because methods represent actions the code performs.
+        ///Using the base form (e.g. &quot;Create&quot;, &quot;Update&quot;, &quot;Calculate&quot;) makes method names clear, consistent, and easy to read.
+        ///Third-person verbs like &quot;Creates&quot; read like descriptions instead of commands, which can make the intention less direct..
+        /// </summary>
+        internal static string MiKo_1529_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1529_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1529_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1529_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix methods with 3rd person singular verb.
+        /// </summary>
+        internal static string MiKo_1529_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1529_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename method according to dependency property changed callback pattern.
+        /// </summary>
+        internal static string MiKo_1530_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1530_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DependencyPropertyChanged callback handlers should be named starting with &apos;On&apos; followed by the dependency property name, followed by &apos;Changed&apos; to show they handle changes of dependency property values..
+        /// </summary>
+        internal static string MiKo_1530_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1530_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1530_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1530_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks.
+        /// </summary>
+        internal static string MiKo_1530_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1530_Title", resourceCulture);
             }
         }
         
@@ -11239,7 +11313,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment causes potential memory leak.
+        ///   Looks up a localized string similar to Assignment may cause a memory leak.
         /// </summary>
         internal static string MiKo_3029_MessageFormat {
             get {
@@ -15145,6 +15219,33 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3503_Title {
             get {
                 return ResourceManager.GetString("MiKo_3503_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        internal static string MiKo_3504_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3504_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use train wreck.
+        /// </summary>
+        internal static string MiKo_3504_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3504_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use train wrecks.
+        /// </summary>
+        internal static string MiKo_3504_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3504_Title", resourceCulture);
             }
         }
         
