@@ -355,6 +355,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3501_DoNotUseSuppressNullableWarningOnConditionalAccessAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3502_DoNotUseSuppressNullableWarningOnLinqCallAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3503_DoNotReturnVariableImmediatelyAfterTryCatchBlockAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3504_TrainWreckAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\UsePatternMatchingForBinaryExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\UsePatternMatchingForExpressionAnalyzer.cs" />
@@ -528,6 +529,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1526_DelegatePropertyNameSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1527_TypeSuffixedWithSubAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1528_ArgParameterAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1529_MethodStartsWithThirdPersonSingularVerbAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1530_DependencyPropertyChangeHandlingMethodNamesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamespaceNamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLengthAnalyzer.cs" />

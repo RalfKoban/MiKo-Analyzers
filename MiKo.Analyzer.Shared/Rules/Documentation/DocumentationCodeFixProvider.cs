@@ -50,8 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
-        //// ncrunch: rdi off
-        //// ncrunch: no coverage start
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
 
         /// <summary>
         /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
@@ -233,7 +233,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment) => Comment(comment, text[0], additionalComment);
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         /// <summary>
         /// Creates an XML comment element with the specified text and additional content nodes.

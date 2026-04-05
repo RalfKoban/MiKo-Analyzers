@@ -2057,7 +2057,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var c = text[index];
 
-                    if (c.IsUpperCase())
+                    if (c.IsUpperCase() || (c is '_' && index > 2))
                     {
                         return text.Slice(0, index);
                     }
