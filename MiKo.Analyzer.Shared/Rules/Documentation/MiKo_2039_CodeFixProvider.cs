@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Task.FromResult(updatedSyntax);
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         private static HashSet<string> CreateReplacementMapKeys()
         {

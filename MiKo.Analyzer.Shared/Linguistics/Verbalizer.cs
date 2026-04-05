@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
-        private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers", "asses" };
+        private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers", "asses", "blings", "klings" };
 
         private static readonly string[] ExceptionsToNonThirdPersonSingularEndingsWithS = { "factors", "monitors", "triggers", "passes" };
 
@@ -568,7 +568,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word;
                     }
 
-                    if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
+                    if (word.EndsWith("oes", StringComparison.Ordinal)
+                    || word.EndsWith("shes", StringComparison.Ordinal)
+                    || word.EndsWith("sses", StringComparison.Ordinal)
+                    || word.EndsWith("tches", StringComparison.Ordinal))
                     {
                         return word.Substring(0, word.Length - 2);
                     }
@@ -585,12 +588,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     if (word.EndsWith("nt", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (word.EndsWith("ant", StringComparison.OrdinalIgnoreCase))
-                        {
-                            return word.Substring(0, word.Length - 1);
-                        }
-
-                        if (word.EndsWith("rnt", StringComparison.OrdinalIgnoreCase))
+                        if (word.EndsWith("ant", StringComparison.OrdinalIgnoreCase) || word.EndsWith("rnt", StringComparison.OrdinalIgnoreCase))
                         {
                             return word.Substring(0, word.Length - 1);
                         }

@@ -1973,7 +1973,7 @@ This makes your code clearer and follows common .NET naming conventions.</value>
     <value>Rename method to not start with 'Get'</value>
   </data>
   <data name="MiKo_1522_Title" xml:space="preserve">
-    <value>Do not start void methods with 'Get'</value>
+    <value>Do not prefix 'void' methods with 'Get'</value>
   </data>
   <data name="MiKo_1523_Description" xml:space="preserve">
     <value>Method names should describe the specific behavior they provide, not label the method as a generic helper.
@@ -2042,6 +2042,32 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
   </data>
   <data name="MiKo_1528_Title" xml:space="preserve">
     <value>Do not prefix parameters with 'arg'</value>
+  </data>
+  <data name="MiKo_1529_CodeFixTitle" xml:space="preserve">
+    <value>Replace 3rd person singular verb in method name</value>
+  </data>
+  <data name="MiKo_1529_Description" xml:space="preserve">
+    <value>Methods should start with a verb in its base form because methods represent actions the code performs.
+Using the base form (e.g. "Create", "Update", "Calculate") makes method names clear, consistent, and easy to read.
+Third-person verbs like "Creates" read like descriptions instead of commands, which can make the intention less direct.</value>
+  </data>
+  <data name="MiKo_1529_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1529_Title" xml:space="preserve">
+    <value>Do not prefix methods with 3rd person singular verb</value>
+  </data>
+  <data name="MiKo_1530_CodeFixTitle" xml:space="preserve">
+    <value>Rename method according to dependency property changed callback pattern</value>
+  </data>
+  <data name="MiKo_1530_Description" xml:space="preserve">
+    <value>DependencyPropertyChanged callback handlers should be named starting with 'On' followed by the dependency property name, followed by 'Changed' to show they handle changes of dependency property values.</value>
+  </data>
+  <data name="MiKo_1530_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1530_Title" xml:space="preserve">
+    <value>Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks</value>
   </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
@@ -3950,7 +3976,7 @@ Generally, this behavior is not desirable. The object reference should remain th
     <value>Forgetting to unregister from an event can lead to memory leaks, especially when the event is static or belongs to an object with a long lifetime. Always ensure you unregister from events to prevent these issues. Proper event handling maintains memory efficiency and keeps your applications running smoothly.</value>
   </data>
   <data name="MiKo_3029_MessageFormat" xml:space="preserve">
-    <value>Assignment causes potential memory leak</value>
+    <value>Assignment may cause a memory leak</value>
   </data>
   <data name="MiKo_3029_Title" xml:space="preserve">
     <value>Prevent memory leaks in event registrations</value>
@@ -5292,6 +5318,15 @@ This approach improves type safety and makes it harder to accidentally mix up di
   </data>
   <data name="MiKo_3503_Title" xml:space="preserve">
     <value>Do not assign variables in try-catch blocks that are returned directly outside</value>
+  </data>
+  <data name="MiKo_3504_Description" xml:space="preserve">
+    <value>Avoid writing long chains of method or property calls, because they tightly couple your code to the internal structure of multiple objects. This makes the code fragile and harder to read or test. Instead, expose clear operations on your objects to keep the code simple and maintainable.</value>
+  </data>
+  <data name="MiKo_3504_MessageFormat" xml:space="preserve">
+    <value>Do not use train wreck</value>
+  </data>
+  <data name="MiKo_3504_Title" xml:space="preserve">
+    <value>Do not use train wrecks</value>
   </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>
