@@ -161,46 +161,26 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_dependency_property_changed_event_handling_method() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething(object sender, DependencyPropertyChangedEventArgs e)
     {
-        public void DoSomething(object sender, DependencyPropertyChangedEventArgs e)
-        {
-        }
     }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_dependency_object_event_handling_method() => No_issue_is_reported_for(@"
-namespace System.Windows
-{
-    public struct DependencyPropertyChangedEventArgs
-    {
-    }
-}
+using System;
+using System.Windows;
 
-namespace Bla
+public class TestMe
 {
-    using System;
-    using System.Windows;
-
-    public class TestMe
+    public void DoSomething(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
     {
-        public void DoSomething(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
-        {
-        }
     }
 }
 ");

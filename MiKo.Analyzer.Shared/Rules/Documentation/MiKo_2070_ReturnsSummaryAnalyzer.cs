@@ -51,8 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             problematicText = string.Empty;
             comparison = StringComparison.OrdinalIgnoreCase;
 
-            var firstWord = valueText.Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
-                                     .FirstWord();
+            var withoutAsync = valueText.Without(Constants.Comments.AsynchronouslyStartingPhrase); // skip over async starting phrase
+            var firstWord = withoutAsync.AsSpan().FirstWord();
 
             if (firstWord.EqualsAny(Constants.Comments.ReturnWords, StringComparison.OrdinalIgnoreCase))
             {
