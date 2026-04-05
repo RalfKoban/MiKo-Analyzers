@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Task.FromResult(updatedSyntax);
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         private static HashSet<string> CreateCommandStartingPhrases()
         {
@@ -235,5 +235,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
     }
 
-    //// ncrunch: rdi default
+//// ncrunch: rdi default
 }

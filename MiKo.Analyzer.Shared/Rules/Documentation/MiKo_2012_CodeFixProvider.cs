@@ -626,6 +626,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Implementer of this class can ");
             yield return new Pair("Implementer of this interface can ");
 
+            yield return new Pair("This class is used for ", "Performs ");
+
             yield return new Pair("This class is responsible for ");
             yield return new Pair("This interface is responsible for ");
             yield return new Pair("This method is responsible for ");

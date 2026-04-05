@@ -640,6 +640,35 @@ namespace MiKoSolutions.Analyzers
         internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 
         /// <summary>
+        /// Bypasses elements in a sequence for which the specified condition is <see langword="true"/> and returns the remaining elements.
+        /// </summary>
+        /// <typeparam name="TSource">
+        /// The type of elements in the sequence.
+        /// </typeparam>
+        /// <param name="source">
+        /// The sequence to filter.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// A sequence that contains only the elements from the source sequence that do not pass the test specified by <paramref name="predicate" />.
+        /// </returns>
+        internal static IEnumerable<TSource> SkipWhere<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : class
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    continue;
+                }
+
+                yield return item;
+            }
+        }
+
+        /// <summary>
         /// Converts the specified read-only collection to an array.
         /// </summary>
         /// <typeparam name="T">
@@ -961,7 +990,7 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
 
         /// <summary>
         /// Determines whether all elements in the specified array satisfy the given condition.
@@ -998,10 +1027,12 @@ namespace MiKoSolutions.Analyzers
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var item in source)
             {
-                if (item != null)
+                if (item is null)
                 {
-                    yield return item;
+                    continue;
                 }
+
+                yield return item;
             }
         }
     }

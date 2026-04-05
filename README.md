@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 542 rules that are currently provided by the analyzer.
+The following tables list all the 545 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -186,13 +186,15 @@ The following tables list all the 542 rules that are currently provided by the a
 |[MiKo_1519](/Documentation/MiKo_1519.md)|Do not prefix or suffix parameters with 'reference'|&#x2713;|&#x2713;|
 |[MiKo_1520](/Documentation/MiKo_1520.md)|Do not prefix or suffix local variables with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1521](/Documentation/MiKo_1521.md)|Do not prefix or suffix parameters with 'toCopy'|&#x2713;|&#x2713;|
-|[MiKo_1522](/Documentation/MiKo_1522.md)|Do not start void methods with 'Get'|&#x2713;|\-|
+|[MiKo_1522](/Documentation/MiKo_1522.md)|Do not prefix 'void' methods with 'Get'|&#x2713;|\-|
 |[MiKo_1523](/Documentation/MiKo_1523.md)|Do not name methods 'Helper'|&#x2713;|\-|
 |[MiKo_1524](/Documentation/MiKo_1524.md)|Do not prefix methods with 'Sub_'|&#x2713;|&#x2713;|
 |[MiKo_1525](/Documentation/MiKo_1525.md)|Do not prefix non-boolean properties with boolean indicators|&#x2713;|\-|
 |[MiKo_1526](/Documentation/MiKo_1526.md)|Suffix delegate properties with 'Callback'|&#x2713;|&#x2713;|
 |[MiKo_1527](/Documentation/MiKo_1527.md)|Do not suffix types with 'Sub'|&#x2713;|&#x2713;|
 |[MiKo_1528](/Documentation/MiKo_1528.md)|Do not prefix parameters with 'arg'|&#x2713;|&#x2713;|
+|[MiKo_1529](/Documentation/MiKo_1529.md)|Do not prefix methods with 3rd person singular verb|&#x2713;|&#x2713;|
+|[MiKo_1530](/Documentation/MiKo_1530.md)|Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks|&#x2713;|&#x2713;|
 
 ### Documentation
 
@@ -486,6 +488,7 @@ The following tables list all the 542 rules that are currently provided by the a
 |[MiKo_3501](/Documentation/MiKo_3501.md)|Do not suppress nullable warnings on Null-conditional operators|&#x2713;|&#x2713;|
 |[MiKo_3502](/Documentation/MiKo_3502.md)|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
 |[MiKo_3503](/Documentation/MiKo_3503.md)|Do not assign variables in try-catch blocks that are returned directly outside|&#x2713;|&#x2713;|
+|[MiKo_3504](/Documentation/MiKo_3504.md)|Do not use train wrecks|&#x2713;|\-|
 
 ### Ordering
 
