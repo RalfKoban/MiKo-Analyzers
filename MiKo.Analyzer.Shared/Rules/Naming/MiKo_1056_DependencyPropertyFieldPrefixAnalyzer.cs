@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (symbol.Type.IsDependencyProperty() is false)
+            if (symbol.IsDependencyProperty() is false)
             {
                 return false;
             }

@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return cleanedComment;
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         private static HashSet<string> CreatePhrases()
         {
