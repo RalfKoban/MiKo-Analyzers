@@ -2131,6 +2131,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a field is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The field to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the field is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsDependencyProperty(this IFieldSymbol value) => value != null && value.Type.IsDependencyProperty();
+
+        /// <summary>
         /// Determines whether a type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>.
         /// </summary>
         /// <param name="value">
@@ -2141,6 +2153,27 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name is Constants.DependencyProperty.TypeName || value.Name is Constants.DependencyProperty.FullyQualifiedTypeName;
+
+        /// <summary>
+        /// Determines whether a method is a callback for a dependency property changed event.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a callback for a dependency property changed event; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsDependencyPropertyChangedCallback(this IMethodSymbol value)
+        {
+            if (value.ReturnsVoid)
+            {
+                var parameters = value.Parameters;
+
+                return parameters.Length is 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether a type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertychangedeventargs">DependencyPropertyChangedEventArgs</see>.
@@ -2177,9 +2210,14 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
         {
-            var parameters = value.Parameters;
+            if (value.ReturnsVoid)
+            {
+                var parameters = value.Parameters;
 
-            return parameters.Length is 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+                return parameters.Length is 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+            }
+
+            return false;
         }
 
         /// <summary>

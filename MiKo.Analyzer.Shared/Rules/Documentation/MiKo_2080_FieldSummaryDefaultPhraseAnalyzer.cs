@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false;
                 }
 
-                if (field.Type.IsDependencyProperty())
+                if (field.IsDependencyProperty())
                 {
                     return false; // validated by rule MiKo_2017
                 }

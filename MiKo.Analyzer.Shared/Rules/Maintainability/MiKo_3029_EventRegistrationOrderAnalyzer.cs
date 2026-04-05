@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -25,6 +26,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeSetAccessorDeclaration, SyntaxKind.SetAccessorDeclaration);
         }
 
+        private static bool Is(in MethodKind kind, AssignmentExpressionSyntax node, SemanticModel semanticModel) => node.GetSymbol(semanticModel) is IMethodSymbol method && method.MethodKind == kind;
+
+        private static bool IsInsideLoop(AssignmentExpressionSyntax node)
+        {
+            var grandParent = node?.Parent?.Parent;
+
+            return IsInsideLoopLocal(grandParent) || IsInsideLoopLocal(grandParent?.Parent);
+
+            bool IsInsideLoopLocal(SyntaxNode syntax)
+            {
+                switch (syntax)
+                {
+                    case ForEachStatementSyntax _:
+                    case ForStatementSyntax _:
+                    case WhileStatementSyntax _:
+                    case DoStatementSyntax _:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        }
+
         private void AnalyzeConstructorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
 
         private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
@@ -48,74 +73,130 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeSetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
 
-        private void AnalyzeAssignmentExpressions(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node));
+        private void AnalyzeAssignmentExpressions(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node, context.SemanticModel));
 
-        private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node)
+        private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node, SemanticModel semanticModel)
         {
-            var assignments = node.DescendantNodes<AssignmentExpressionSyntax>().ToList();
+            var assignments = node.DescendantNodes<AssignmentExpressionSyntax>()
+                                  .Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression) || _.IsKind(SyntaxKind.SubtractAssignmentExpression))
+                                  .Where(_ => _.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+                                  .ToList();
 
-            if (assignments.Count > 0)
+            if (assignments.Count is 0)
             {
-                var addAssignments = assignments.OfKind(SyntaxKind.AddAssignmentExpression);
-                var subtractAssignments = assignments.OfKind(SyntaxKind.SubtractAssignmentExpression);
+                // nothing to report
+                return Array.Empty<Diagnostic>();
+            }
 
-                foreach (var assignment in addAssignments.Concat(subtractAssignments).Where(_ => _.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Right is ParenthesizedLambdaExpressionSyntax))
+            return AnalyzeAssignments(assignments, semanticModel);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeAssignments(List<AssignmentExpressionSyntax> assignments, SemanticModel semanticModel)
+        {
+            var addedLambdas = assignments.Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression) && _.Right is LambdaExpressionSyntax).ToList();
+            var removedLambdas = assignments.Where(_ => _.IsKind(SyntaxKind.SubtractAssignmentExpression) && _.Right is LambdaExpressionSyntax).ToList();
+
+            foreach (var assignment in addedLambdas)
+            {
+                if (Is(MethodKind.EventAdd, assignment, semanticModel))
                 {
+                    assignments.Remove(assignment);
+
                     // we found a registration for an anonymous method, so that's an issue
                     yield return Issue(assignment);
                 }
+            }
 
-                var addAssignmentsCount = addAssignments.Count;
-                var subtractAssignmentsCount = subtractAssignments.Count;
-
-                // report violations only if we have both += and -= calls
-                if (addAssignmentsCount != 0 && subtractAssignmentsCount != 0)
+            foreach (var assignment in removedLambdas)
+            {
+                if (Is(MethodKind.EventRemove, assignment, semanticModel))
                 {
-                    if (addAssignmentsCount == subtractAssignmentsCount && addAssignmentsCount is 1)
-                    {
-                        var addAssignment = addAssignments[0];
-                        var subtractAssignment = subtractAssignments[0];
+                    assignments.Remove(assignment);
 
-                        // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
-                        if (addAssignment.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                         && addAssignment.Right is IdentifierNameSyntax addedHandler
-                         && subtractAssignment.Right is IdentifierNameSyntax removedHandler
-                         && addedHandler.GetName() != removedHandler.GetName())
-                        {
-                            yield return Issue(addAssignment);
-                        }
+                    // we found a de-registration for an anonymous method, so that's an issue
+                    yield return Issue(assignment);
+                }
+            }
+
+            var addAssignments = assignments.OfKind(SyntaxKind.AddAssignmentExpression);
+            var subtractAssignments = assignments.OfKind(SyntaxKind.SubtractAssignmentExpression);
+
+            if (addAssignments.Count is 0 || subtractAssignments.Count is 0)
+            {
+                // do not report violations as we have
+                // - either nothing
+                // - or only '+=' or '-=' calls that are no lambdas
+                yield break;
+            }
+
+            var issues = AnalyzeAssignments(addAssignments, subtractAssignments, semanticModel);
+
+            foreach (var issue in issues)
+            {
+                yield return issue;
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeAssignments(IReadOnlyList<AssignmentExpressionSyntax> addAssignments, IReadOnlyList<AssignmentExpressionSyntax> subtractAssignments, SemanticModel semanticModel)
+        {
+            // seems we have both += and -= calls
+            if (addAssignments.Count is 1 && addAssignments.Count == subtractAssignments.Count)
+            {
+                // seems we have only a single += and -= call
+                // so what could go wrong here is that we use different events
+                var add = addAssignments[0];
+                var remove = subtractAssignments[0];
+
+                if (add.Right is IdentifierNameSyntax added && remove.Right is IdentifierNameSyntax removed && added.GetName() != removed.GetName())
+                {
+                    if (Is(MethodKind.EventAdd, add, semanticModel))
+                    {
+                        yield return Issue(add);
                     }
-                    else
+                }
+
+                if (IsInsideLoop(add) && IsInsideLoop(remove) is false)
+                {
+                    if (Is(MethodKind.EventAdd, add, semanticModel))
                     {
-                        // we have multiple or even different amounts of += and -= assignments, so check the used events and order of += or -= calls
-                        var subtractAssignmentsForInvestigation = subtractAssignments.ToList();
+                        yield return Issue(add);
+                    }
+                }
+            }
+            else
+            {
+                // we have multiple or even different amounts of += and -= assignments, so check the used events and order of += or -= calls
+                var subtractAssignmentsForInvestigation = subtractAssignments.ToList();
 
-                        foreach (var addAssignment in addAssignments.Where(_ => _.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression)))
+                foreach (var add in addAssignments)
+                {
+                    if (add.Right is IdentifierNameSyntax addedHandler && Is(MethodKind.EventAdd, add, semanticModel))
+                    {
+                        var addedIdentifier = addedHandler.GetName();
+
+                        var remove = subtractAssignmentsForInvestigation.Find(_ => _.Right is IdentifierNameSyntax removedHandler && removedHandler.GetName() == addedIdentifier);
+
+                        if (remove is null)
                         {
-                            if (addAssignment.Right is IdentifierNameSyntax addedHandler)
+                            // we found an add but no remove, so that's an issue
+                            yield return Issue(add);
+                        }
+                        else
+                        {
+                            if (Is(MethodKind.EventRemove, remove, semanticModel))
                             {
-                                var addedIdentifier = addedHandler.GetName();
+                                // we found one, so get rid of it as it shall not be re-used (adding more events than removing leads to those leaks that we want to find
+                                subtractAssignmentsForInvestigation.Remove(remove);
 
-                                // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
-                                var handler = subtractAssignmentsForInvestigation.Find(_ => _.Right is IdentifierNameSyntax removedHandler && removedHandler.GetName() == addedIdentifier);
-
-                                if (handler is null)
+                                if (IsInsideLoop(add) && IsInsideLoop(remove) is false)
                                 {
-                                    // we found an add but no remove, so that's an issue
-                                    yield return Issue(addAssignment);
-                                }
-                                else
-                                {
-                                    // TODO: Check for event
-                                    // we found one, so get rid of it as it shall not be re-used (adding more events than removing leads to those leaks that we want to find
-                                    subtractAssignmentsForInvestigation.Remove(handler);
+                                    // we found an add inside a loop, so that's an issue
+                                    yield return Issue(add);
                                 }
                             }
                         }
                     }
                 }
-
-                // TODO RKN more situations
             }
         }
 
