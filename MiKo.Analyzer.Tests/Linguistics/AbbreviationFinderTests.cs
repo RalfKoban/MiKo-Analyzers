@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                   [
                                                       new("alt", "alternative"),
                                                       new("app", "application"),
+                                                      new("appl", "application"),
+                                                      new("appls", "applications"),
                                                       new("apps", "applications"),
                                                       new("arg", "argument"),
                                                       new("args", "arguments"),
@@ -124,6 +126,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("len", "length"),
                                                       new("lib", "library"),
                                                       new("libs", "libraries"),
+                                                      new("loc", "local"),
                                                       new("lv", "listView"),
                                                       new("lvw", "listView"),
                                                       new("man", "manager"),
@@ -231,6 +234,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                    [
                                                           new("Alt", "Alternative"),
                                                           new("App", "Application"),
+                                                          new("Appl", "Application"),
+                                                          new("Appls", "Applications"),
                                                           new("Apps", "Applications"),
                                                           new("Arg", "Argument"),
                                                           new("Args", "Arguments"),
@@ -351,6 +356,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new("Len", "Length"),
                                                           new("Lib", "Library"),
                                                           new("Libs", "Libraries"),
+                                                          new("Loc", "Local"),
                                                           new("Lv", "ListView"),
                                                           new("Lvw", "ListView"),
                                                           new("Man", "Manager"),

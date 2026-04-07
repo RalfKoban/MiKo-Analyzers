@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                   {
                                                       new Pair("alt", "alternative"),
                                                       new Pair("app", "application"),
+                                                      new Pair("appl", "application"),
+                                                      new Pair("appls", "applications"),
                                                       new Pair("apps", "applications"),
                                                       new Pair("arg", "argument"),
                                                       new Pair("args", "arguments"),
@@ -128,6 +130,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("len", "length"),
                                                       new Pair("lib", "library"),
                                                       new Pair("libs", "libraries"),
+                                                      new Pair("loc", "local"),
                                                       new Pair("lv", "listView"),
                                                       new Pair("lvw", "listView"),
                                                       new Pair("man", "manager"),
@@ -235,6 +238,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       {
                                                           new Pair("Alt", "Alternative"),
                                                           new Pair("App", "Application"),
+                                                          new Pair("Appl", "Application"),
+                                                          new Pair("Appls", "Applications"),
                                                           new Pair("Apps", "Applications"),
                                                           new Pair("Arg", "Argument"),
                                                           new Pair("Args", "Arguments"),
@@ -355,6 +360,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Len", "Length"),
                                                           new Pair("Lib", "Library"),
                                                           new Pair("Libs", "Libraries"),
+                                                          new Pair("Loc", "Local"),
                                                           new Pair("Lv", "ListView"),
                                                           new Pair("Lvw", "ListView"),
                                                           new Pair("Man", "Manager"),
@@ -664,6 +670,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ntervalene", "ntervene"), // 'interv' within 'intervene'
                                                       new Pair("nvironmentironment", "nvironment"), // 'env' within 'environment'
                                                       new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
+                                                      new Pair("ocalal", "ocal"), // 'loc' within 'local'
+                                                      new Pair("ocalat", "ocat"), // 'loc' within 'locate' / 'location'
                                                       new Pair("odifiede", "ode"), // 'mod' within 'mode'
                                                       new Pair("odifiedif", "odif"), // 'mod' within 'modify' / 'modified' / 'modification'
                                                       new Pair("odifiedul", "odul"), // 'mod' within 'module' / 'modulo'
@@ -689,6 +697,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("oversion", "over"), // 'ver' within 'hover'
                                                       new Pair("Oversion", "Over"), // 'ver' within 'Over'
                                                       new Pair("pecificationif", "pecif"), // 'spec' within 'specific' / 'specification' / 'specific'
+                                                      new Pair("pplicationication", "pplication"), // 'app' within 'application'
                                                       new Pair("pplicationlication", "pplication"), // 'app' within 'application'
                                                       new Pair("qualual", "qual"), // 'eq' within 'equal'
                                                       new Pair("questuest", "quest"), // 'req' within 'request'
