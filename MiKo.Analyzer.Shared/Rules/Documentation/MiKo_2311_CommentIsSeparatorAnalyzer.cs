@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -30,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<Diagnostic> issues = null;
 
             // TODO RKN: Consider to not include all descendants, especially 'SyntaxKind.SingleLineDocumentationCommentTrivia' as inspecting documentation might take a lot of time
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var trivia in node.DescendantTrivia())
             {
                 if (trivia.IsSingleLineComment() && CommentContainsSeparator(trivia.ToString().AsSpan()))
