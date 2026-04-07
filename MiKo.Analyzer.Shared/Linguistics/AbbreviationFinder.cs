@@ -697,7 +697,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("oversion", "over"), // 'ver' within 'hover'
                                                       new Pair("Oversion", "Over"), // 'ver' within 'Over'
                                                       new Pair("pecificationif", "pecif"), // 'spec' within 'specific' / 'specification' / 'specific'
-                                                      new Pair("pplicationication", "pplication"), // 'app' within 'application'
+                                                      new Pair("pplicationication", "pplication"), // 'appl' within 'application'
                                                       new Pair("pplicationlication", "pplication"), // 'app' within 'application'
                                                       new Pair("qualual", "qual"), // 'eq' within 'equal'
                                                       new Pair("questuest", "quest"), // 'req' within 'request'
