@@ -334,6 +334,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("indicating that indicates whether", "indicating whether");
             builder.ReplaceWithProbe("indicating which indicates whether", "indicating whether");
             builder.ReplaceWithProbe("indicating that", "indicating whether");
+            builder.ReplaceWithProbe("indicating flag ", "indicating whether ");
             builder.ReplaceWithProbe("indicating if ", "indicating whether ");
             builder.ReplaceWithProbe("indicating to", "indicating whether to");
             builder.ReplaceWithProbe("whether to true if to", "whether to");
