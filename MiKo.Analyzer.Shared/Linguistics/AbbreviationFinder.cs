@@ -68,6 +68,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("deps", "dependencies"),
                                                       new Pair("desc", "description"),
                                                       new Pair("dest", "destination"),
+                                                      new Pair("dev", "device"),
                                                       new Pair("diag", "diagnostic"),
                                                       new Pair("diags", "diagnostics"),
                                                       new Pair("dic", "dictionary"),
@@ -105,6 +106,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("fnc", "function"),
                                                       new Pair("frm", "form"),
                                                       new Pair("fwd", "forwarded"),
+                                                      new Pair("geo", "geometry"),
                                                       new Pair("hdls", "headless"),
                                                       new Pair("his", "history"),
                                                       new Pair("hist", "history"),
@@ -295,6 +297,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Deps", "Dependencies"),
                                                           new Pair("Desc", "Description"),
                                                           new Pair("Dest", "Destination"),
+                                                          new Pair("Dev", "Device"),
                                                           new Pair("Diag", "Diagnostic"),
                                                           new Pair("Diags", "Diagnostics"),
                                                           new Pair("Dic", "Dictionary"),
@@ -336,6 +339,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Fnc", "Function"),
                                                           new Pair("Frm", "Form"),
                                                           new Pair("Fwd", "Forwarded"),
+                                                          new Pair("Geo", "Geometry"),
                                                           new Pair("Hdls", "Headless"),
                                                           new Pair("His", "History"),
                                                           new Pair("Hist", "History"),
@@ -601,6 +605,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
                                                       new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
+                                                      new Pair("eometrygraph", "eograph"), // 'geo' within 'geography'
+                                                      new Pair("eometrymetr", "eometr"), // 'geo' within 'geometry'
                                                       new Pair("eparatora", "eparator"), // combination of 'sep' and 'sepa'
                                                       new Pair("eparatorarat", "eparat"), // 'sep' within 'separate'
                                                       new Pair("eparatorrat", "eparat"), // 'sepa' within 'separate'
@@ -626,6 +632,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("estoreor", "estor"), // 'rest' within 'restore' / 'restoring' / 'restoration'
                                                       new Pair("esultpon", "espon"), // 'res' within 'response' / 'responding' / 'respond' / 'responsible'
                                                       new Pair("esulttor", "estor"), // 'res' within 'restore' / 'restoring' / 'restoration'
+                                                      new Pair("eviceelop", "evelop"), // 'dev' within 'develop'
+                                                      new Pair("eviceice", "evice"), // 'dev' within 'device'
                                                       new Pair("gthgth", "gth"), // 'len' within 'length'
                                                       new Pair("iagnosticnos", "iagnos"), // 'diag' within 'diagnosis' / 'diagnostics'
                                                       new Pair("iagnosticram", "iagram"), // 'diag' within 'diagram'
