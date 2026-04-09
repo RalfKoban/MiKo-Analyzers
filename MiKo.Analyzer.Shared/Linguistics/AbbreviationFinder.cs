@@ -102,6 +102,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("eq", "equal"),
                                                       new Pair("err", "error"),
                                                       new Pair("eval", "evaluation"),
+                                                      new Pair("evnt", "event"),
+                                                      new Pair("evt", "event"),
                                                       new Pair("exec", "execute"),
                                                       new Pair("ext", "extension"),
                                                       new Pair("fnc", "function"),
@@ -336,6 +338,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Eq", "Equal"),
                                                           new Pair("Err", "Error"),
                                                           new Pair("Eval", "Evaluation"),
+                                                          new Pair("Evnt", "Event"),
+                                                          new Pair("Evt", "Event"),
                                                           new Pair("Exec", "Execute"),
                                                           new Pair("Ext", "Extension"),
                                                           new Pair("Fnc", "Function"),
@@ -635,6 +639,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("estoreor", "estor"), // 'rest' within 'restore' / 'restoring' / 'restoration'
                                                       new Pair("esultpon", "espon"), // 'res' within 'response' / 'responding' / 'respond' / 'responsible'
                                                       new Pair("esulttor", "estor"), // 'res' within 'restore' / 'restoring' / 'restoration'
+                                                      new Pair("eventool", "evtool"), // 'evt' within 'Devtools'
                                                       new Pair("eviceelop", "evelop"), // 'dev' within 'develop'
                                                       new Pair("eviceice", "evice"), // 'dev' within 'device'
                                                       new Pair("gthgth", "gth"), // 'len' within 'length'
