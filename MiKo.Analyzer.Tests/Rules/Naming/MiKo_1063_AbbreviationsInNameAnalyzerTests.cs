@@ -483,6 +483,7 @@ namespace Bla
         [TestCase("eval", "evaluation", "evaluating")]
         [TestCase("eval", "evaluation", "evaluation")]
         [TestCase("eval", "evaluation", "evaluations")]
+        [TestCase("evt", "event", "Devtools")]
         [TestCase("exec", "execute", "executable")]
         [TestCase("exec", "execute", "execute")]
         [TestCase("exec", "execute", "executing")]
