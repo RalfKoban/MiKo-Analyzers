@@ -1057,18 +1057,44 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Returns the <see cref="string"/> representation of the specified <see cref="ArgumentSyntax"/> with any verbatim identifier prefixes removed.
+        /// Converts the specified <see cref="ArgumentSyntax"/> to its textual representation with verbatim identifier prefixes removed.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The argument syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the string representation of the argument without any '@' verbatim identifier prefixes; or <see langword="null"/> if the argument is <see langword="null"/>.
+        /// A <see cref="string"/> that contains the textual representation of the argument without any '@' verbatim identifier prefixes; or <see langword="null"/> if the argument is <see langword="null"/>.
         /// </returns>
         /// <remarks>
-        /// This method removes the verbatim identifier prefix ('@') from the argument's string representation.
-        /// Verbatim identifiers in C# are used to allow reserved keywords to be used as identifiers by prefixing them with '@'.
+        /// This method removes the verbatim identifier prefix ('@') from the argument's textual representation.
+        /// Verbatim identifiers in C# allow reserved keywords to be used as identifiers by prefixing them with '@'.
         /// </remarks>
-        internal static string ToStringWithoutVerbatimIdentifier(this ArgumentSyntax value) => value?.ToString().Without('@'); // get rid of verbatim identifiers
+        internal static string ToStringWithoutVerbatimIdentifier(this ArgumentSyntax source)
+        {
+            if (source is null)
+            {
+                return null;
+            }
+
+            switch (source.Expression)
+            {
+                case IdentifierNameSyntax identifier:
+                {
+                    return StringWithoutVerbatimIdentifier(identifier);
+                }
+
+                case InvocationExpressionSyntax invocation when invocation.IsNameOf():
+                {
+                    return string.Concat("nameof(", StringWithoutVerbatimIdentifier(invocation.ArgumentList.Arguments[0].Expression), ")");
+                }
+
+                default:
+                    return source.ToString();
+            }
+
+            string StringWithoutVerbatimIdentifier(ExpressionSyntax e) => e is IdentifierNameSyntax i
+                                                                          ? i.Identifier.ValueText.Without('@') // get rid of verbatim identifiers
+                                                                          : e.ToCleanedUpString();
+        }
     }
 }
