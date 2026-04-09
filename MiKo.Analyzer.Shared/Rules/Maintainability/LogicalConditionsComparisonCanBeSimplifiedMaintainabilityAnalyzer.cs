@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var nameB = partB.ToString();
 
                         var argument = arguments[0];
-                        var argumentName = argument.ToStringWithoutVerbatimIdentifier();
+                        var argumentName = argument.ToString();
 
                         if (nameB == argumentName || nameA == argumentName)
                         {
