@@ -61,6 +61,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("db", "database"),
                                                       new Pair("ddl", "dropDownList"),
                                                       new Pair("decl", "declaration"),
+                                                      new Pair("decomp", "decomposition"),
                                                       new Pair("decr", "decrypt"),
                                                       new Pair("def", "definition"),
                                                       new Pair("defs", "definitions"),
@@ -290,6 +291,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Db", "Database"),
                                                           new Pair("Ddl", "DropDownList"),
                                                           new Pair("Decl", "Declaration"),
+                                                          new Pair("Decomp", "Decomposition"),
                                                           new Pair("Decr", "Decrypt"),
                                                           new Pair("Def", "Definition"),
                                                           new Pair("Defs", "Definitions"),
@@ -589,6 +591,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("dentificationi", "denti"), // 'ident' within 'identification' / 'identifier' / 'identify' / 'identity'
                                                       new Pair("dopoint", "dopt"), // 'pt' within 'adopt'
                                                       new Pair("eclarationar", "eclar"), // 'decl' within 'declaration' / 'declare' / 'declaring'
+                                                      new Pair("ecompositionos", "ecompos"), // 'decomp' within 'decompose'
                                                       new Pair("ecordord", "ecord"), // 'rec' within 'record'
                                                       new Pair("ecordtangl", "ectangl"), // 'rec' within 'rectangle'
                                                       new Pair("ecryptement", "ecrement"), // 'decr' within 'decrement'
