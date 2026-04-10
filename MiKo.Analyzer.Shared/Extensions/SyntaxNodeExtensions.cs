@@ -2679,7 +2679,57 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A cleaned-up <see cref="string"/> representation of the expression.
         /// </returns>
-        internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
+        internal static string ToCleanedUpString(this ExpressionSyntax source)
+        {
+            switch (source)
+            {
+                case null:
+                    return null;
+
+                case IdentifierNameSyntax i:
+                    return i.Identifier.ValueText;
+
+                default:
+                    return source.ToString().Without(Constants.WhiteSpaces);
+            }
+        }
+
+        /// <summary>
+        /// Converts the specified <see cref="ArgumentSyntax"/> to its textual representation with verbatim identifier prefixes removed.
+        /// </summary>
+        /// <param name="source">
+        /// The argument syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the textual representation of the argument without any '@' verbatim identifier prefixes; or <see langword="null"/> if the argument is <see langword="null"/>.
+        /// </returns>
+        /// <remarks>
+        /// This method removes the verbatim identifier prefix ('@') from the argument's textual representation.
+        /// Verbatim identifiers in C# allow reserved keywords to be used as identifiers by prefixing them with '@'.
+        /// </remarks>
+        internal static string ToStringWithoutVerbatimIdentifier(this ArgumentSyntax source)
+        {
+            if (source is null)
+            {
+                return null;
+            }
+
+            switch (source.Expression)
+            {
+                case IdentifierNameSyntax identifier:
+                    return StringWithoutVerbatimIdentifier(identifier);
+
+                case InvocationExpressionSyntax invocation when invocation.IsNameOf() && invocation.ArgumentList.Arguments.FirstOrDefault() is ArgumentSyntax argument:
+                    return string.Concat("nameof(", StringWithoutVerbatimIdentifier(argument.Expression), ")");
+
+                default:
+                    return source.ToString();
+            }
+
+            string StringWithoutVerbatimIdentifier(ExpressionSyntax e) => e is IdentifierNameSyntax i
+                                                                          ? i.Identifier.ValueText.Without('@') // get rid of verbatim identifiers
+                                                                          : e.ToCleanedUpString();
+        }
 
         /// <summary>
         /// Attempts to get Moq types from a member access expression.
