@@ -2717,18 +2717,14 @@ namespace MiKoSolutions.Analyzers
             switch (source.Expression)
             {
                 case IdentifierNameSyntax identifier:
-                    return StringWithoutVerbatimIdentifier(identifier);
+                    return identifier.Identifier.ValueText;
 
                 case InvocationExpressionSyntax invocation when invocation.IsNameOf() && invocation.ArgumentList.Arguments.FirstOrDefault() is ArgumentSyntax argument:
-                    return string.Concat("nameof(", StringWithoutVerbatimIdentifier(argument.Expression), ")");
+                    return string.Concat("nameof(", argument.ToString().Without('@'), ")"); // get rid of verbatim identifiers
 
                 default:
                     return source.ToString();
             }
-
-            string StringWithoutVerbatimIdentifier(ExpressionSyntax e) => e is IdentifierNameSyntax i
-                                                                          ? i.Identifier.ValueText.Without('@') // get rid of verbatim identifiers
-                                                                          : e.ToCleanedUpString();
         }
 
         /// <summary>
