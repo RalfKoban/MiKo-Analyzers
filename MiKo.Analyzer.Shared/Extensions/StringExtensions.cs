@@ -3663,7 +3663,7 @@ namespace MiKoSolutions.Analyzers
         /// A <see cref="string"/> that contains the original value with the specified character removed.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string Without(this string value, in char character) => value.Without(character.ToString());
+        public static string Without(this string value, in char character) => value?.Without(character.ToString());
 
         /// <summary>
         /// Creates a new <see cref="string"/> with the specified string removed.
@@ -3678,7 +3678,7 @@ namespace MiKoSolutions.Analyzers
         /// A <see cref="string"/> that contains the original value with the specified substring removed.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
+        public static string Without(this string value, string phrase) => value?.Replace(phrase, string.Empty);
 
         /// <summary>
         /// Creates a new <see cref="string"/> with all specified phrases removed.
