@@ -584,25 +584,22 @@ namespace MiKoSolutions.Analyzers
 
             if (value.GetSyntaxNodeInSource() is BaseMethodDeclarationSyntax node)
             {
-                var localFunctions = GetLocalFunctionsLocal(node);
+                var body = node.Body;
 
-                if (localFunctions != null)
+                if (body is null)
                 {
-                    return localFunctions;
+                    // seems we have an expression body which cannot contain local functions
+                    return Array.Empty<LocalFunctionStatementSyntax>();
                 }
+
+                // most time we do not have local functions (only around 0.2%)
+                return GetLocalFunctionsLocal(body) ?? Array.Empty<LocalFunctionStatementSyntax>();
             }
 
             return Array.Empty<LocalFunctionStatementSyntax>();
 
-            LocalFunctionStatementSyntax[] GetLocalFunctionsLocal(BaseMethodDeclarationSyntax declaration)
+            LocalFunctionStatementSyntax[] GetLocalFunctionsLocal(BlockSyntax body)
             {
-                var body = declaration.Body;
-
-                if (body is null)
-                {
-                    return null;
-                }
-
                 List<LocalFunctionStatementSyntax> result = null;
 
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery

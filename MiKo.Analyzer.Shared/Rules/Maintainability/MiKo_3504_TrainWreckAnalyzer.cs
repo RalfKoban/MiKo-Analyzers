@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -175,9 +174,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return IsTrainWreckFinalMarker(problematicSyntax);
         }
 
-        private static IReadOnlyCollection<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
+        private static Stack<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
         {
-            Stack<ExpressionSyntax> expressions = null;
+            var expressions = new Stack<ExpressionSyntax>();
+            expressions.Push(start);
 
             var current = start;
 
@@ -190,20 +190,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
                 }
 
-                if (expressions is null)
-                {
-                    expressions = new Stack<ExpressionSyntax>();
-                    expressions.Push(start);
-                }
-
                 expressions.Push(next);
 
                 current = next;
-            }
-
-            if (expressions is null)
-            {
-                return Array.Empty<ExpressionSyntax>();
             }
 
             return expressions;
