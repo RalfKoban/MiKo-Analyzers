@@ -15,212 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] BadPrefixes =
                                                        [
-                                                           "alt",
                                                            "app",
                                                            "apps",
-                                                           "assoc",
-                                                           "auth",
-                                                           "attr",
-                                                           "btn",
-                                                           "cb",
-                                                           "cert",
-                                                           "cfg",
-                                                           "chk",
-                                                           "cls",
-                                                           "cmb",
-                                                           "cmd",
-                                                           "conf",
-                                                           "config",
-                                                           "configs",
-                                                           "conn",
-                                                           "ctg",
-                                                           "ctl",
-                                                           "ctlg",
-                                                           "ctrl",
-                                                           "ctx",
-                                                           "db",
-                                                           "ddl",
-                                                           "decl",
-                                                           "decr",
-                                                           "def",
-                                                           "desc",
-                                                           "dest",
-                                                           "diag",
-                                                           "diags",
-                                                           "dict",
-                                                           "diff",
-                                                           "diffs",
-                                                           "dir",
-                                                           "dlg",
-                                                           "doc",
-                                                           "dst",
-                                                           "dto",
-                                                           "encr",
-                                                           "env",
-                                                           "environ",
-                                                           "err",
-                                                           "ext",
-                                                           "frm",
-                                                           "hdls",
-                                                           "ident",
-                                                           "idx",
-                                                           "init",
-                                                           "itf",
-                                                           "lang",
-                                                           "lbl",
-                                                           "lib",
-                                                           "libs",
-                                                           "lv",
-                                                           "max",
-                                                           "methName",
-                                                           "mgmt",
-                                                           "mgr",
-                                                           "min",
-                                                           "mngr",
-                                                           "mnu",
-                                                           "msg",
-                                                           "num",
-                                                           "obj",
-                                                           "opts",
-                                                           "param",
-                                                           "params",
-                                                           "perc",
-                                                           "perf",
-                                                           "phys",
-                                                           "plausi",
-                                                           "pos",
-                                                           "pow",
-                                                           "proc",
-                                                           "procs",
-                                                           "propName",
-                                                           "pt",
-                                                           "pts",
-                                                           "qty",
-                                                           "ref",
-                                                           "repo",
-                                                           "req",
-                                                           "res",
-                                                           "resp",
-                                                           "sem",
-                                                           "seq",
-                                                           "spec",
-                                                           "src",
-                                                           "std",
-                                                           "str",
-                                                           "sync",
-                                                           "svc",
-                                                           "tm",
-                                                           "tmp",
-                                                           "txt",
-                                                           "var",
-                                                           "ver",
-                                                           "vol",
                                                        ];
 
         private static readonly string[] BadMidTerms =
                                                        [
-                                                           "Alt",
                                                            "App",
                                                            "Apps",
-                                                           "Assoc",
-                                                           "Attr",
-                                                           "Auth",
-                                                           "Btn",
-                                                           "Cb",
-                                                           "Cert",
-                                                           "Cfg",
-                                                           "Chk",
-                                                           "Cli",
-                                                           "Cls",
-                                                           "Cmb",
-                                                           "Cmd",
-                                                           "Conf",
-                                                           "Config",
-                                                           "Configs",
-                                                           "Conn",
-                                                           "Ctg",
-                                                           "Ctl",
-                                                           "Ctlg",
-                                                           "Ctrl",
-                                                           "Ctx",
-                                                           "Db",
-                                                           "Ddl",
-                                                           "Def",
-                                                           "Decl",
-                                                           "Decr",
-                                                           "Desc",
-                                                           "Dest",
-                                                           "Diag",
-                                                           "Diags",
-                                                           "Dict",
-                                                           "Diff",
-                                                           "Diffs",
-                                                           "Dir",
-                                                           "Dlg",
-                                                           "Doc",
-                                                           "Dst",
-                                                           "Ef",
-                                                           "El",
-                                                           "Encr",
-                                                           "Env",
-                                                           "Environ",
-                                                           "Err",
-                                                           "Ext",
-                                                           "Frm",
-                                                           "Hdls",
-                                                           "Ident",
-                                                           "Idx",
-                                                           "Init",
-                                                           "Itf",
-                                                           "Lang",
-                                                           "Lbl",
-                                                           "Lib",
-                                                           "Libs",
-                                                           "Lv",
-                                                           "Max",
                                                            "MethName",
-                                                           "Mgmt",
-                                                           "Mgr",
-                                                           "Min",
-                                                           "Mngr",
-                                                           "Mnu",
-                                                           "Msg",
-                                                           "Num",
-                                                           "Obj",
-                                                           "Op",
-                                                           "Opt",
-                                                           "Opts",
-                                                           "Params",
-                                                           "Perc",
-                                                           "Perf",
-                                                           "Phys",
-                                                           "Plausi",
-                                                           "Pos",
-                                                           "Pow",
-                                                           "Proc",
-                                                           "Procs",
                                                            "PropName",
-                                                           "Pt",
-                                                           "Pts",
-                                                           "Qty",
-                                                           "Repo",
-                                                           "Ref",
-                                                           "Req",
-                                                           "Res",
-                                                           "Resp",
-                                                           "Sem",
-                                                           "Seq",
-                                                           "Spec",
-                                                           "Src",
-                                                           "Std",
-                                                           "Sync",
-                                                           "Svc",
-                                                           "Tm",
-                                                           "Tmp",
-                                                           "Txt",
-                                                           "Var",
-                                                           "Ver",
-                                                           "Vol",
                                                        ];
 
         private static readonly string[] BadPostfixes = [.. BadMidTerms.Union([
@@ -522,6 +326,8 @@ namespace Bla
         [TestCase("alt", "alternative", "alternatives")]
         [TestCase("app", "application", "application")]
         [TestCase("app", "application", "applications")]
+        [TestCase("appl", "application", "application")]
+        [TestCase("appl", "application", "applications")]
         [TestCase("arg", "argument", "argument")]
         [TestCase("arg", "argument", "arguments")]
         [TestCase("arr", "array", "array")]
@@ -609,6 +415,9 @@ namespace Bla
         [TestCase("decl", "declaration", "declarations")]
         [TestCase("decl", "declaration", "declare")]
         [TestCase("decl", "declaration", "declaring")]
+        [TestCase("decomp", "decomposition", "decomposition")]
+        [TestCase("decomp", "decomposition", "decompose")]
+        [TestCase("decomp", "decomposition", "decomposing")]
         [TestCase("decr", "decrypt", "decrement")]
         [TestCase("decr", "decrypt", "decrementing")]
         [TestCase("decr", "decrypt", "decrements")]
@@ -625,6 +434,12 @@ namespace Bla
         [TestCase("desc", "description", "descriptions")]
         [TestCase("dest", "destination", "destination")]
         [TestCase("dest", "destination", "destinations")]
+        [TestCase("dev", "device", "device")]
+        [TestCase("dev", "device", "devices")]
+        [TestCase("dev", "device", "develop")]
+        [TestCase("dev", "device", "developer")]
+        [TestCase("dev", "device", "developing")]
+        [TestCase("dev", "device", "development")]
         [TestCase("diag", "diagnostic", "diagnosis")]
         [TestCase("diag", "diagnostic", "diagnostic")]
         [TestCase("diag", "diagnostic", "diagram")]
@@ -668,6 +483,7 @@ namespace Bla
         [TestCase("eval", "evaluation", "evaluating")]
         [TestCase("eval", "evaluation", "evaluation")]
         [TestCase("eval", "evaluation", "evaluations")]
+        [TestCase("evt", "event", "Devtools")]
         [TestCase("exec", "execute", "executable")]
         [TestCase("exec", "execute", "execute")]
         [TestCase("exec", "execute", "executing")]
@@ -677,6 +493,10 @@ namespace Bla
         [TestCase("ext", "extension", "extension")]
         [TestCase("ext", "extension", "exterior")]
         [TestCase("ext", "extension", "extern")]
+        [TestCase("geo", "geometry", "geometry")]
+        [TestCase("geo", "geometry", "geometries")]
+        [TestCase("geo", "geometry", "geography")]
+        [TestCase("geo", "geometry", "geographies")]
         [TestCase("his", "history", "history")]
         [TestCase("his", "history", "histories")]
         [TestCase("hist", "history", "history")]
@@ -715,6 +535,14 @@ namespace Bla
         [TestCase("lib", "library", "libraries")]
         [TestCase("lib", "library", "library")]
         [TestCase("libs", "libraries", "libraries")]
+        [TestCase("loc", "local", "local")]
+        [TestCase("loc", "local", "locate")]
+        [TestCase("loc", "local", "locating")]
+        [TestCase("loc", "local", "location")]
+        [TestCase("Loc", "Local", "Local")]
+        [TestCase("Loc", "Local", "Locate")]
+        [TestCase("Loc", "Local", "Locating")]
+        [TestCase("Loc", "Local", "Location")]
         [TestCase("man", "manager", "manage")]
         [TestCase("man", "manager", "manager")]
         [TestCase("man", "manager", "managing")]

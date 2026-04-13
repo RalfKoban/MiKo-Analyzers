@@ -414,7 +414,7 @@ namespace MiKoSolutions.Analyzers
 
                         if (arguments.Count > 0)
                         {
-                            return arguments[0].ToString();
+                            return arguments[0].ToStringWithoutVerbatimIdentifier();
                         }
                     }
 
