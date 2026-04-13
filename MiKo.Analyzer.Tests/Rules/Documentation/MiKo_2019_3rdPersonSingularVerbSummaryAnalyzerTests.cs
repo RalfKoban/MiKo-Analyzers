@@ -746,6 +746,8 @@ public class TestMe
         [TestCase("Only when set to true, then")]
         [TestCase("Only when set to True, then")]
         [TestCase("Only when set to TRUE, then")]
+        [TestCase("Flag")]
+        [TestCase("flag")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalText)
         {
             const string Template = @"

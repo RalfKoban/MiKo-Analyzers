@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argument = arguments[0];
 
-                    if (argument.ToString() == parameter.GetName().SurroundedWithDoubleQuote())
+                    if (argument.ToStringWithoutVerbatimIdentifier() == parameter.GetName().SurroundedWithDoubleQuote())
                     {
                         // seems like the 'message' parameter has been misused for the parameter name
                         return ArgumentList(ToDo(), ParamName(parameter));
