@@ -3663,7 +3663,7 @@ namespace MiKoSolutions.Analyzers
         /// A <see cref="string"/> that contains the original value with the specified character removed.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string Without(this string value, in char character) => value.Without(character.ToString());
+        public static string Without(this string value, in char character) => value?.Without(character.ToString());
 
         /// <summary>
         /// Creates a new <see cref="string"/> with the specified string removed.
@@ -3678,7 +3678,7 @@ namespace MiKoSolutions.Analyzers
         /// A <see cref="string"/> that contains the original value with the specified substring removed.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
+        public static string Without(this string value, string phrase) => value?.Replace(phrase, string.Empty);
 
         /// <summary>
         /// Creates a new <see cref="string"/> with all specified phrases removed.
@@ -4356,10 +4356,10 @@ namespace MiKoSolutions.Analyzers
                 switch (comparison)
                 {
                     case StringComparison.Ordinal:
-                        return QuickSubstringProbeOrdinal(value, other);
+                        return QuickStartSubstringProbeOrdinal(value, other);
 
                     case StringComparison.OrdinalIgnoreCase:
-                        return QuickSubstringProbeOrdinalIgnoreCase(value, other);
+                        return QuickStartSubstringProbeOrdinalIgnoreCase(value, other);
                 }
             }
 
@@ -4380,7 +4380,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the first and last characters match; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
+        private static bool QuickStartSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = Math.Min(value.Length, other.Length);
 
@@ -4389,7 +4389,8 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
-            return value[0] == other[0] && value[length - 1] == other[length - 1];
+            // compare last character first as it is more unique than the first character
+            return value[length - 1] == other[length - 1] && value[0] == other[0];
         }
 
         /// <summary>
@@ -4404,7 +4405,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if a more detailed check should be performed; otherwise, <see langword="false"/>.
         /// </returns>
-        private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
+        private static unsafe bool QuickStartSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = Math.Min(value.Length, other.Length);
 
@@ -4418,13 +4419,15 @@ namespace MiKoSolutions.Analyzers
             {
                 fixed (char* bp = &MemoryMarshal.GetReference(other))
                 {
-                    if (QuickDiff(ap, bp, 0)) // uppercase both chars - notice that we need just one compare per char
+                    // compare last character first as it is more unique than the first character
+                    if (QuickDiff(ap, bp, length - 1)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(ap, bp, length - 1)) // uppercase both chars - notice that we need just one compare per char
+                    // now compare first characters
+                    if (QuickDiff(ap, bp, 0)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
