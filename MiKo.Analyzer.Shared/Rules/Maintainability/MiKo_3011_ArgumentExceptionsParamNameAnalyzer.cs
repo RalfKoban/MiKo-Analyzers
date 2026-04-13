@@ -166,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ParameterIsReferenced(ArgumentSyntax argument, IMethodSymbol method)
         {
-            var argumentName = argument.ToString();
+            var argumentName = argument.ToStringWithoutVerbatimIdentifier();
 
             return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == _.SurroundedWithDoubleQuote() || argumentName == AsNameof(_));
         }
