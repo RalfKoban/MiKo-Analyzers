@@ -21,6 +21,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_ArgumentNullException_with_valid_verbatim_parameter_name() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int @event)
+    {
+        if (@event == 42) throw new ArgumentNullException(nameof(@event));
+    }
+}
+");
+
         [TestCase("")]
         [TestCase("\"X\"")]
         [TestCase("nameof(TestMe)")]
