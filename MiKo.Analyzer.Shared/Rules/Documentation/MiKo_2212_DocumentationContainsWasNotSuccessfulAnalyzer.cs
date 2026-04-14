@@ -49,17 +49,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var locations = GetAllLocations(token, Phrase);
                 var locationsCount = locations.Count;
 
-                if (locationsCount > 0)
+                if (locationsCount is 0)
                 {
-                    if (results is null)
-                    {
-                        results = new List<Diagnostic>(locationsCount);
-                    }
+                    continue;
+                }
 
-                    for (var index = 0; index < locationsCount; index++)
-                    {
-                        results.Add(Issue(locations[index]));
-                    }
+                if (results is null)
+                {
+                    results = new List<Diagnostic>(locationsCount);
+                }
+
+                for (var index = 0; index < locationsCount; index++)
+                {
+                    results.Add(Issue(locations[index]));
                 }
             }
 
