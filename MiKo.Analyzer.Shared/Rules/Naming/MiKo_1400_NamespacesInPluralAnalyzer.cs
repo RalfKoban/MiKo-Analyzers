@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1400_NamespacesInPluralAnalyzer : NamespaceNamingAnalyzer
     {
         public const string Id = "MiKo_1400";
+
+        private static readonly ConcurrentDictionary<string, string> BetterNames = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         private static readonly string[] AllowedSuffixes = new[]
                                                                {
@@ -65,25 +68,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(string name)
         {
-            if (name is "Model")
-            {
-                return Pluralizer.GetPluralName(Constants.Entity);
-            }
+            return BetterNames.GetOrAdd(name, FindBetterNameLocal);
 
-            // maybe it's a number, so we have to check for that
-            if (name.EndsWithNumber() || name.IsAcronym() || name.EndsWithAny(AllowedSuffixes, StringComparison.OrdinalIgnoreCase))
+            string FindBetterNameLocal(string originalName)
             {
-                // nothing to do here
-                return name;
-            }
+                if (originalName is "Model")
+                {
+                    return Pluralizer.GetPluralName(Constants.Entity);
+                }
 
-            return Pluralizer.GetPluralName(name);
+                // maybe it's a number, so we have to check for that
+                if (originalName.EndsWithNumber() || originalName.IsAcronym() || originalName.EndsWithAny(AllowedSuffixes, StringComparison.OrdinalIgnoreCase))
+                {
+                    // nothing to do here
+                    return originalName;
+                }
+
+                return Pluralizer.GetPluralName(originalName);
+            }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
+        protected override IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames)
         {
-            var namespaceNames = names.ToList();
-            var namespaceNamesCount = namespaceNames.Count;
+            var namespaceNamesCount = namespaceNames.Length;
 
             if (namespaceNamesCount > 1)
             {
