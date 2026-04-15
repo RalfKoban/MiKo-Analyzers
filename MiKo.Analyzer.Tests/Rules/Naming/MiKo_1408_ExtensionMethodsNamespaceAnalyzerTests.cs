@@ -22,6 +22,28 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_incomplete_extension_method() => No_issue_is_reported_for(@"
+namespace System
+{
+    public static class TestMe
+    {
+        public static void DoSomething(this 
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_extension_method_with_type() => No_issue_is_reported_for(@"
+namespace System
+{
+    public static class TestMe
+    {
+        public static void DoSomething(this int 
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_extension_method_class_with_correct_namespace() => No_issue_is_reported_for(@"
 namespace System
 {
@@ -33,7 +55,7 @@ namespace System
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_method_class_with_global_namespace() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_methods_extending_type_in_global_namespace() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
