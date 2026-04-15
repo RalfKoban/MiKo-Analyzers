@@ -34,6 +34,23 @@ namespace System
 
         [Test]
         public void No_issue_is_reported_for_extension_method_class_with_global_namespace() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething(int i) { }
+}
+
+namespace Blubber.Bla.Blubb
+{
+    public static class TestMeExtensions
+    {
+        public static void DoSomething(this TestMe t) { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extension_method_class_with_same_sub_namespace_as_extended_type() => No_issue_is_reported_for(@"
 namespace Bla.Blubb
 {
     public class TestMe
