@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,11 +21,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic[] AnalyzeNamespaceNames(INamedTypeSymbol symbol, string qualifiedNamespaceOfExtensionMethod)
         {
-            // get namespace (qualified) of class and of extension method parameter (first one) and compare those
-
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var namespaceSymbol in symbol.GetExtensionMethods().Select(_ => _.Parameters[0].Type.ContainingNamespace).WhereNotNull())
+            foreach (var extensionMethod in symbol.GetExtensionMethods())
             {
+                // get namespace (qualified) of class and of extension method parameter (first one) and compare those
+                var namespaceSymbol = extensionMethod.Parameters[0].Type.ContainingNamespace;
+
+                if (namespaceSymbol is null || namespaceSymbol.IsGlobalNamespace)
+                {
+                    // we cannot move it into no namespace or the global one, so we keep the name
+                    continue;
+                }
+
                 var ns = namespaceSymbol.ToString();
 
                 if (ns != qualifiedNamespaceOfExtensionMethod)
