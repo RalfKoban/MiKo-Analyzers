@@ -139,6 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [TestCase("MiKoSolutions")]
         [TestCase("MiKoSolutions.Infrastructure")]
+        [TestCase("MiKoSolutions.Core")]
         public void No_issue_is_reported_for_proper_namespace_(string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
@@ -179,9 +180,8 @@ namespace ABCD.EFG." + ns + @".HIJK
 
         private static string[] CreateNames(params string[] names)
         {
-            var results = new HashSet<string>((3 * names.Length) + 2)
+            var results = new HashSet<string>((3 * names.Length) + 1)
                               {
-                                  "Core",
                                   "Shared",
                               };
 

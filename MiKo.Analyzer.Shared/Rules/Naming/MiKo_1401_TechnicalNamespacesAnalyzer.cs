@@ -98,7 +98,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var result = new HashSet<string>
                              {
-                                 "Core",
                                  "Shared",
                              };
 
