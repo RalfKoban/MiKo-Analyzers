@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] Phrases = CreatePhrases().ToHashSet().Except("If the ").ToArray();
+        private static readonly string[] Phrases = CreatePhrases().ToHashSet().Except("If the ").OrderDescendingByLengthAndText();
 //// ncrunch: rdi default
 
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment, ISymbol symbol)
