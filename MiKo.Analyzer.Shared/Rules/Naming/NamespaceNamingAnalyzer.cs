@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected abstract IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames);
 
-        private static ReadOnlySpan<SyntaxToken> CollectNames(NamespaceDeclarationSyntax node, in SyntaxToken[] rentedArray)
+        private static ReadOnlySpan<SyntaxToken> CollectNames(NamespaceDeclarationSyntax node, SyntaxToken[] rentedArray)
         {
             switch (node.Name)
             {
@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
             finally
             {
-                Pool.Return(rentedArray);
+                Pool.Return(rentedArray, clearArray: true);
             }
         }
     }
