@@ -179,9 +179,9 @@ namespace ABCD.EFG." + ns + @".HIJK
 
         private static string[] CreateNames(params string[] names)
         {
-            var results = new HashSet<string>((3 * names.Length) + 2)
+            var results = new HashSet<string>((3 * names.Length) + 1)
                               {
-                                  "Core",
+                                  // we accept "Core",
                                   "Shared",
                               };
 
