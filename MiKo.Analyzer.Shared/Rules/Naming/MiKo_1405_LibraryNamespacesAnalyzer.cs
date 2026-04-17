@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var libraryNamespace = LibraryNamespaces[index];
 
-                    if (namespaceName.EndsWith(libraryNamespace, StringComparison.Ordinal))
+                    if (namespaceName.EndsWith(libraryNamespace, StringComparison.OrdinalIgnoreCase))
                     {
                         if (issues is null)
                         {
