@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             return Array.Empty<Diagnostic>();
                         }
 
-                        if (otherStatements.Any(_ => _ is BlockSyntax other && other.Statements.Count >= MaximumAllowedFollowUpStatements))
+                        if (otherStatements.Any(_ => _ is BlockSyntax other && other.Statements.Count > MaximumAllowedFollowUpStatements))
                         {
                             // inverting the code makes it less readable, so we do not report
                             return Array.Empty<Diagnostic>();
