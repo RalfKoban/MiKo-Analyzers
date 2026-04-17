@@ -682,6 +682,31 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_followed_up_by_single_block_with_4_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+            DoSomethingElse(4);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_a_single_following_line() => An_issue_is_reported_for(@"
 public class TestMe
 {
