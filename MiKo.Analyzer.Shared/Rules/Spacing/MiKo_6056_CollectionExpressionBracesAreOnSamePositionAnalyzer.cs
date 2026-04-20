@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 var startPosition = GetStartPosition(syntax);
 
-                if (openBracketPosition.Line != startPosition.Line && openBracketPosition.Character != startPosition.Character)
+                if (NotVerticallyAligned(openBracketPosition, startPosition))
                 {
                     return Issue(openBracketToken, CreateProposalForSpaces(startPosition.Character));
                 }
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var closeBracketToken = syntax.CloseBracketToken;
                 var closeBracketPosition = closeBracketToken.GetStartPosition();
 
-                if (openBracketPosition.Line != closeBracketPosition.Line && openBracketPosition.Character != closeBracketPosition.Character)
+                if (NotVerticallyAligned(openBracketPosition, closeBracketPosition))
                 {
                     return Issue(closeBracketToken, CreateProposalForSpaces(openBracketPosition.Character));
                 }

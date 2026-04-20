@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     var typePosition = GetStartPosition(initializer);
                     var openBracePosition = openBraceToken.GetStartPosition();
 
-                    if (typePosition.Line != openBracePosition.Line && typePosition.Character != openBracePosition.Character)
+                    if (NotVerticallyAligned(typePosition, openBracePosition))
                     {
                         return Issue(openBraceToken, CreateProposalForSpaces(typePosition.Character));
                     }
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     var keywordPosition = anonymous.NewKeyword.GetPositionAfterEnd();
                     var openBracePosition = openBraceToken.GetStartPosition();
 
-                    if (keywordPosition.Line != openBracePosition.Line && openBracePosition.Character != keywordPosition.Character)
+                    if (NotVerticallyAligned(keywordPosition, openBracePosition))
                     {
                         return Issue(openBraceToken, CreateProposalForSpaces(keywordPosition.Character));
                     }

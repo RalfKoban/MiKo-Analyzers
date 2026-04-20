@@ -55,5 +55,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                                                new Pair(Constants.AnalyzerCodeFixSharedData.Spaces, spaces.ToString("D")),
                                                                                                                new Pair(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, additionalSpaces.ToString("D")),
                                                                                                            };
+
+        /// <summary>
+        /// Determines whether two <see cref="LinePosition"/> values are not vertically aligned.
+        /// </summary>
+        /// <param name="left">
+        /// The first <see cref="LinePosition"/> to compare.
+        /// </param>
+        /// <param name="right">
+        /// The second <see cref="LinePosition"/> to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> differ in both line number and character position;
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool NotVerticallyAligned(in LinePosition left, in LinePosition right) => left.Line != right.Line && left.Character != right.Character;
     }
 }

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var openBraceToken = syntax.OpenBraceToken;
                 var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (switchPosition.Line != openBracePosition.Line && switchPosition.Character != openBracePosition.Character)
+                if (NotVerticallyAligned(switchPosition, openBracePosition))
                 {
                     ReportDiagnostics(context, Issue(openBraceToken, CreateProposalForSpaces(switchPosition.Character)));
                 }

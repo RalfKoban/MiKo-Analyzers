@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var casePosition = caseToken.GetStartPosition();
                 var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (casePosition.Line != openBracePosition.Line && casePosition.Character != openBracePosition.Character)
+                if (NotVerticallyAligned(casePosition, openBracePosition))
                 {
                     ReportDiagnostics(context, Issue(openBraceToken, CreateProposalForSpaces(casePosition.Character)));
                 }
