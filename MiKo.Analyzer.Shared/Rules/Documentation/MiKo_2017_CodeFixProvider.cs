@@ -33,8 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return syntax;
             }
 
-            var fieldName = fieldDeclaration.Declaration.Variables.First().Identifier.ValueText;
-            var name = fieldName.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
+            var variable = fieldDeclaration.Declaration.Variables.First();
+            var name = variable.Identifier.ValueText.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
 
             var type = SyntaxFactory.ParseName(name);
 
