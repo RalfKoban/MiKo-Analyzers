@@ -132,6 +132,7 @@ public class TestMeB
 
         [Test]
         public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method_inside_using_declaration_statement() => No_issue_is_reported_for(@"
+using System;
 
 public class TestMe
 {
@@ -161,6 +162,7 @@ public class TestMeC
 
         [Test]
         public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method_inside_using_statement() => No_issue_is_reported_for(@"
+using System;
 
 public class TestMe
 {
@@ -1017,6 +1019,7 @@ public static class TestMe
 
         [Test]
         public void An_issue_is_reported_for_accessing_4_properties_in_a_row_when_invoking_a_method_inside_using_declaration_statement() => An_issue_is_reported_for(@"
+using System;
 
 public class TestMe
 {
@@ -1051,6 +1054,7 @@ public class TestMeD
 
         [Test]
         public void An_issue_is_reported_for_accessing_4_properties_in_a_row_when_invoking_a_method_inside_using_statement() => An_issue_is_reported_for(@"
+using System;
 
 public class TestMe
 {
