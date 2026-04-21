@@ -102,6 +102,7 @@ public class TestMe
 ");
 
         [TestCase(nameof(Exception), "If it's ", "It's ")]
+        [TestCase(nameof(Exception), "If the ", "The ")]
         [TestCase(nameof(Exception), """Gets thrown when <paramref name="o"/> """, """<paramref name="o"/> """)]
         [TestCase(nameof(Exception), """Gets thrown when the <paramref name="o"/> """, """<paramref name="o"/> """)]
         [TestCase(nameof(Exception), """gets thrown when <paramref name="o"/> """, """<paramref name="o"/> """)]

@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                      "Extensions",
                                                                      "Framework",
                                                                      "Generic",
+                                                                     "History",
                                                                      "Infrastructure",
                                                                      "Interop",
                                                                      "IO",
@@ -53,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                      "Threading",
                                                                      "TypeScript",
                                                                      "UI",
+                                                                     "UndoRedo",
                                                                      "UserExperience",
                                                                      "VisualBasic",
                                                                      "Web"

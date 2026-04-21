@@ -1124,7 +1124,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the sequence is found; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
+        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0; // Perf: when compared other than with Ordinal comparison, a string gets created internally
 
         /// <summary>
         /// Determines whether the span of characters contains the specified substring using the given <see cref="string"/> comparison.
@@ -1149,7 +1149,7 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            return value.Contains(finding.AsSpan(), comparison);
+            return value.Contains(finding.AsSpan(), comparison); // Perf: when compared other than with Ordinal comparison, a string gets created internally
         }
 
         /// <summary>
@@ -4038,6 +4038,7 @@ namespace MiKoSolutions.Analyzers
 
             for (int index = 0, findingLength = finding.Length; ; index += findingLength)
             {
+                // do not use 'IndexOf' from 'Span' as in case of 'StringComparison.OrdinalIgnoreCase' it would create multiple strings (see 'IndexOf' method inside 'MemoryExtensions')
                 index = value.IndexOf(finding, index, StringComparison.OrdinalIgnoreCase);
 
                 if (index is -1)
