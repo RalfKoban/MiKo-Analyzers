@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     case ArgumentSyntax _:
                         foundArgument = true;
+
                         break;
 
                     case InvocationExpressionSyntax i when foundArgument:
