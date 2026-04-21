@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -145,17 +146,25 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            var sourceText = tree.GetText();
-            var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
+            const int MaximumCharacters = 200;
 
-            var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
+            var sourceSpanEnd = value.SourceSpan.End;
+            var sourceSpanStart = Math.Max(0, sourceSpanEnd - MaximumCharacters);
+
+            var sourceText = tree.GetText();
+
+            var startUpTextBounds = TextSpan.FromBounds(sourceSpanStart, sourceSpanEnd);
+            var startUpText = sourceText.ToString(startUpTextBounds).AsSpan();
+
+            var lastIndexOfFirstSpace = startUpText.LastIndexOfAny(Constants.WhiteSpaceCharacters);
 
             if (lastIndexOfFirstSpace is -1)
             {
                 return null;
             }
 
-            var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
+            var followUpTextBounds = TextSpan.FromBounds(sourceSpanEnd, Math.Min(sourceSpanEnd + MaximumCharacters, sourceText.Length));
+            var followUpText = sourceText.ToString(followUpTextBounds).AsSpan();
 
             var firstIndexOfNextSpace = followUpText.StartsWith('<') // seems like the comment finished
                                         ? 0
@@ -166,7 +175,7 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            return sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
+            return sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, startUpText.Length + firstIndexOfNextSpace));
         }
 
         /// <summary>
