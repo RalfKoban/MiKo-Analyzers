@@ -12,9 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] ForbiddenNamespaceNames =
                                                                    [
+                                                                       "lib",
                                                                        "Lib",
+                                                                       "libraries",
+                                                                       "Libraries",
+                                                                       "library",
                                                                        "Library",
-                                                                       "Libraries"
+                                                                       "libs",
+                                                                       "Libs",
                                                                    ];
 
         [TestCase("MiKoSolutions")]

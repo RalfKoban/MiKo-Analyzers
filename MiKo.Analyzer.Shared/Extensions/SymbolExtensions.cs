@@ -2035,6 +2035,11 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
+            if (value.IsICollectionView())
+            {
+                return false;
+            }
+
             return value.IsDirectEnumerable();
         }
 
@@ -2584,6 +2589,30 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Guid);
+
+        /// <summary>
+        /// Determines whether a type is the <c>System.ComponentModel.ICollectionView</c> interface.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is the <c>System.ComponentModel.ICollectionView</c> interface; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsICollectionView(this ITypeSymbol value)
+        {
+            if (value.TypeKind is TypeKind.Interface)
+            {
+                switch (value.Name)
+                {
+                    case "ICollectionView":
+                    case "System.ComponentModel.ICollectionView":
+                        return true;
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether a type is an <see cref="IGrouping{TKey,TElement}"/> interface.

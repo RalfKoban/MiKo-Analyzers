@@ -15223,7 +15223,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO.
+        ///   Looks up a localized string similar to Avoid writing long chains of method or property calls, because they tightly couple your code to the internal structure of multiple objects. This makes the code fragile and harder to read or test. Instead, expose clear operations on your objects to keep the code simple and maintainable..
         /// </summary>
         internal static string MiKo_3504_Description {
             get {
@@ -18565,6 +18565,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6072_Title {
             get {
                 return ResourceManager.GetString("MiKo_6072_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align LINQ query clause vertically along with others.
+        /// </summary>
+        internal static string MiKo_6073_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6073_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when LINQ query clauses are aligned vertically. This makes the query clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6073_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6073_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align LINQ query clause vertically along with others.
+        /// </summary>
+        internal static string MiKo_6073_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6073_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align LINQ query clauses vertically.
+        /// </summary>
+        internal static string MiKo_6073_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6073_Title", resourceCulture);
             }
         }
     }

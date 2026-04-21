@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,9 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
+        protected override IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames)
         {
-            foreach (var name in names)
+            List<Diagnostic> issues = null;
+
+            foreach (var name in namespaceNames)
             {
                 var namespaceName = name.ValueText;
 
@@ -30,9 +33,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (TechnicalWPFNamespaces.Contains(namespaceName))
                 {
-                    yield return Issue(name);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(name));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }

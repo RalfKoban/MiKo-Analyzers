@@ -687,6 +687,12 @@ namespace MiKoSolutions.Analyzers.Rules
                 return null;
             }
 
+            if (block.Statements.Count is 1 && block.Statements[0] is BlockSyntax nested)
+            {
+                // return the nested block instead of the original one
+                block = nested;
+            }
+
             var indentation = spaces + Constants.Indentation;
 
             return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))

@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(ReadOnlySpan<char> symbolName)
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName)
         {
             var nameWithoutSuffix = symbolName.WithoutSuffixes(WrongSuffixes);
 
