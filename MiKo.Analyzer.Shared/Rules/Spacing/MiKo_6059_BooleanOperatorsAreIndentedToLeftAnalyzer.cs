@@ -52,6 +52,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case LambdaExpressionSyntax lambda:
                         return lambda.ArrowToken;
+
+                    case WhereClauseSyntax whereClause:
+                        return whereClause.WhereKeyword;
                 }
             }
 
@@ -84,6 +87,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case LambdaExpressionSyntax lambda:
                         return lambda.ArrowToken.GetPositionWithinEndLine() - 2;
+
+                    case WhereClauseSyntax whereClause:
+                        return whereClause.WhereKeyword.GetPositionWithinEndLine() - 2;
                 }
             }
 
