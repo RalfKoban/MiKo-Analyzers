@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -74,6 +75,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (node.FirstDescendant<ReturnStatementSyntax>().HasComment())
                         {
                             // the developer documented a reason, in that case we keep the if statement
+                            return Array.Empty<Diagnostic>();
+                        }
+
+                        if (otherStatements.Any(_ => _ is BlockSyntax other && other.Statements.Count > MaximumAllowedFollowUpStatements))
+                        {
+                            // inverting the code makes it less readable, so we do not report
                             return Array.Empty<Diagnostic>();
                         }
 

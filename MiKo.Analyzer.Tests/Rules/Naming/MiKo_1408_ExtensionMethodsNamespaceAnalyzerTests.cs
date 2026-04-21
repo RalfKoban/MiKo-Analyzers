@@ -14,10 +14,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public void No_issue_is_reported_for_non_extension_method_class() => No_issue_is_reported_for(@"
 namespace Bla
 {
-  public class TestMe
-  {
-      public void DoSomething(int i) { }
-  }
+    public class TestMe
+    {
+        public void DoSomething(int i) { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_extension_method() => No_issue_is_reported_for(@"
+namespace System
+{
+    public static class TestMe
+    {
+        public static void DoSomething(this 
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_extension_method_with_type() => No_issue_is_reported_for(@"
+namespace System
+{
+    public static class TestMe
+    {
+        public static void DoSomething(this int 
+    }
 }
 ");
 
@@ -25,40 +47,46 @@ namespace Bla
         public void No_issue_is_reported_for_extension_method_class_with_correct_namespace() => No_issue_is_reported_for(@"
 namespace System
 {
-  public static class TestMe
-  {
-      public static void DoSomething(this int i) { }
-  }
+    public static class TestMe
+    {
+        public static void DoSomething(this int i) { }
+    }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace() => An_issue_is_reported_for(@"
-namespace Bla
-{
-  public static class TestMe
-  {
-      public static void DoSomething(this int i) { }
-  }
-}
-");
+        public void No_issue_is_reported_for_extension_methods_extending_type_in_global_namespace() => No_issue_is_reported_for(@"
 
-        [Test]
-        public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace_2() => An_issue_is_reported_for(@"
-namespace Bla.Blubb
+public class TestMe
 {
-  public class TestMe
-  {
-      public void DoSomething(int i) { }
-  }
+    public void DoSomething(int i) { }
 }
 
 namespace Blubber.Bla.Blubb
 {
-  public static class TestMeExtensions
-  {
-      public static void DoSomething(this TestMe t) { }
-  }
+    public static class TestMeExtensions
+    {
+        public static void DoSomething(this TestMe t) { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extension_method_class_with_same_sub_namespace_as_extended_type() => No_issue_is_reported_for(@"
+namespace Bla.Blubb
+{
+    public class TestMe
+    {
+        public void DoSomething(int i) { }
+    }
+}
+
+namespace Blubber.Bla.Blubb
+{
+    public static class TestMeExtensions
+    {
+        public static void DoSomething(this TestMe t) { }
+    }
 }
 ");
 
@@ -71,6 +99,38 @@ namespace Bla
         public static void DoSomething<T>(this T value) where T : class
         {
         } 
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public static class TestMe
+    {
+        public static void DoSomething(this int i) { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace_2() => An_issue_is_reported_for(@"
+namespace Blah.Blubb
+{
+    public class TestMe
+    {
+        public void DoSomething(int i) { }
+    }
+}
+
+namespace Blubber.Bla.Blubbdiblubb
+{
+    using Blah.Blubb;
+
+    public static class TestMeExtensions
+    {
+        public static void DoSomething(this TestMe t) { }
     }
 }
 ");

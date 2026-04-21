@@ -131,6 +131,68 @@ public class TestMeB
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method_inside_using_declaration_statement() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        using var x = A.B.C.DoSomething();
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public IDisposable DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method_inside_using_statement() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        using (A.B.C.DoSomething())
+        {
+        }
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public IDisposable DoSomething() => null;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -952,6 +1014,78 @@ public static class TestMe
                                                           .Concat(MoreNames)
                                                           .Concat(EventMoreNames)
                                                           .ToHashSet();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_4_properties_in_a_row_when_invoking_a_method_inside_using_declaration_statement() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        using var x = A.B.C.D.DoSomething();
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public IDisposable DoSomething() => null;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_4_properties_in_a_row_when_invoking_a_method_inside_using_statement() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        using (A.B.C.D.DoSomething())
+        {
+        }
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public IDisposable DoSomething() => null;
 }
 ");
 

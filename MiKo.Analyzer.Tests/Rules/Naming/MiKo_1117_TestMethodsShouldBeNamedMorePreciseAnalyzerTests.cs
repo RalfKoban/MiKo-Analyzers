@@ -51,6 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_with_an_event_handler",
                                                                   "Something_with_an_EventHandler",
                                                                   "Something_with_a_handler",
+                                                                  "Something_with_properties",
+                                                                  "Something_with_uppercase_Properties",
                                                                   "Something_is_normalizing_stuff",
                                                                   "Something_gets_normalized",
                                                                   "Normalize_something",
