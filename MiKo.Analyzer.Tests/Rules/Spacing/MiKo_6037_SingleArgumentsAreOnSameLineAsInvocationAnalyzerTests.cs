@@ -261,6 +261,45 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_complete_AddRange_call_spanning_multiple_lines_with_single_argument_on_separate_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        var items = new List<string>();
+
+        items.AddRange(
+            values.Select(_ => _.ToString()));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        var items = new List<string>();
+
+        items.AddRange(values.Select(_ => _.ToString()));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6037_SingleArgumentsAreOnSameLineAsInvocationAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6037_SingleArgumentsAreOnSameLineAsInvocationAnalyzer();

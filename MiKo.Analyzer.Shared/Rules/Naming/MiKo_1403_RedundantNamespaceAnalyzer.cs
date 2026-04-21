@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,17 +15,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
+        protected override IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames)
         {
+            if (namespaceNames.Length is 1)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> issues = null;
+
             var knownNamespaces = new HashSet<string>();
 
-            foreach (var name in names)
+            foreach (var name in namespaceNames)
             {
-                if (knownNamespaces.Add(name.ValueText) is false)
+                if (knownNamespaces.Add(name.ValueText))
                 {
-                    yield return Issue(name);
+                    continue;
                 }
+
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(Issue(name));
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -319,6 +319,53 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_IGrouping_variable() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public void DoSomething(IEnumerable<TestMe> items)
+    {
+        var itemsGroupedByName = items.GroupBy(_ => _.Name);
+
+        foreach (var itemGroup in itemsGroupedByName)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ICollectionView_variable() => No_issue_is_reported_for(@"
+namespace System.ComponentModel
+{
+    public interface ICollectionView : System.Collections.IEnumerable, System.Collections.Specialized.INotifyCollectionChanged
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.ComponentModel;
+
+    public class TestMe
+    {
+        public void DoSomething(object o)
+        {
+            if (o is ICollectionView view)
+            {
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_variable_of_enumerable_type_named_after_type() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -350,27 +397,6 @@ public class TestMe
     public void DoSomething(IEnumerable<Document> documents)
     {
         foreach (var document in documents)
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_IGrouping_variable() => No_issue_is_reported_for(@"
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-public class TestMe
-{
-    public string Name { get; set; }
-
-    public void DoSomething(IEnumerable<TestMe> items)
-    {
-        var itemsGroupedByName = items.GroupBy(_ => _.Name);
-
-        foreach (var itemGroup in itemsGroupedByName)
         {
         }
     }

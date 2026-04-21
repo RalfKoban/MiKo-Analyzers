@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +14,28 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6037";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            var foundArgument = false;
+
+            // we have an argument that is part of an invocation, but the invocation itself could also be part of another argument,
+            // so we need to find the argument first and then get the invocation from it (as otherwise we would report the wrong, nested invocation)
+            foreach (var node in syntaxNodes)
+            {
+                switch (node)
+                {
+                    case ArgumentSyntax _:
+                        foundArgument = true;
+
+                        break;
+
+                    case InvocationExpressionSyntax i when foundArgument:
+                        return i;
+                }
+            }
+
+            return null;
+        }
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
