@@ -70,6 +70,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                "Normaliz",
                                                                "property",
                                                                "Property",
+                                                               "properties",
+                                                               "Properties",
                                                            };
 
         private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);

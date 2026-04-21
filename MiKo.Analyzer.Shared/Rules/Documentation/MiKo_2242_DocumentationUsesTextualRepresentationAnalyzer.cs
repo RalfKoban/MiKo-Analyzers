@@ -52,10 +52,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     var locations = GetAllLocations(token, Phrase, StringComparison.OrdinalIgnoreCase);
+                    var locationsCount = locations.Count;
+
+                    if (locationsCount is 0)
+                    {
+                        continue;
+                    }
 
                     if (issues is null)
                     {
-                        issues = new List<Diagnostic>(locations.Count);
+                        issues = new List<Diagnostic>(locationsCount);
                     }
 
                     foreach (var location in locations)

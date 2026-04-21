@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,15 +17,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
+        protected override IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames)
         {
-            foreach (var name in names)
+            List<Diagnostic> issues = null;
+
+            foreach (var name in namespaceNames)
             {
                 if (TechnicalNamespaces.Contains(name.ValueText))
                 {
-                    yield return Issue(name);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(name));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
 //// ncrunch: rdi off
@@ -40,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Builder", "Builders",
                                 "Base", "Class", "Classes",
                                 "Client", "Clients", "HttpClient", "HttpClients",
+                                "Command", "Commands", "CommandPattern", "CommandPatterns",
                                 "Compare", "Comparer", "Comparers",
                                 "Constants",
                                 "Contract", "Contracts",
@@ -62,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Indexer", "Indexers",
                                 "Interactions", "Interceptors",
                                 "Interface", "Interfaces", "Itf", "Itfs", "Intf", "Intfs", "Intfc", "Intfcs", "Intrfc", "Intrfcs",
+                                "Memento", "Mementos",
                                 "Middleware",
                                 "Mocks",
                                 "Module", "Modules",
@@ -76,19 +88,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Repositories",
                                 "Resources",
                                 "Service", "Services", "ServiceProxies", "ServiceProxy", "ApplicationService", "ApplicationServices", "Microservice", "MicroService", "Microservices", "MicroServices",
+                                "Stack", "Stacks",
                                 "State", "States", "Statements",
                                 "Struct", "Structs",
                                 "Type", "Types",
                                 "Transaction", "Transactions",
                                 "UiOperations", "UiOperation",
                                 "UIOperations", "UIOperation",
+                                "UndoRedo",
                                 "ValueObject", "ValueObjects",
                                 "Wrapper", "Wrappers",
                             };
 
             var result = new HashSet<string>
                              {
-                                 "Core",
                                  "Shared",
                              };
 

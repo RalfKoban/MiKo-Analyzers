@@ -64,14 +64,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     var openBraceToken = initializer.OpenBraceToken;
 
                     var typePosition = GetStartPosition(initializer);
-                    var openBracePosition = openBraceToken.GetStartPosition();
 
-                    if (typePosition.Line != openBracePosition.Line && typePosition.Character != openBracePosition.Character)
-                    {
-                        return Issue(openBraceToken, CreateProposalForSpaces(typePosition.Character));
-                    }
-
-                    return null;
+                    return NotVerticallyAligned(openBraceToken, typePosition)
+                           ? Issue(openBraceToken, CreateProposalForSpaces(typePosition.Character))
+                           : null;
                 }
 
                 case AnonymousObjectCreationExpressionSyntax anonymous:
@@ -79,14 +75,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     var openBraceToken = anonymous.OpenBraceToken;
 
                     var keywordPosition = anonymous.NewKeyword.GetPositionAfterEnd();
-                    var openBracePosition = openBraceToken.GetStartPosition();
 
-                    if (keywordPosition.Line != openBracePosition.Line && openBracePosition.Character != keywordPosition.Character)
-                    {
-                        return Issue(openBraceToken, CreateProposalForSpaces(keywordPosition.Character));
-                    }
-
-                    return null;
+                    return NotVerticallyAligned(openBraceToken, keywordPosition)
+                           ? Issue(openBraceToken, CreateProposalForSpaces(keywordPosition.Character))
+                           : null;
                 }
 
                 default:

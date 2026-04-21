@@ -55,5 +55,35 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                                                new Pair(Constants.AnalyzerCodeFixSharedData.Spaces, spaces.ToString("D")),
                                                                                                                new Pair(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, additionalSpaces.ToString("D")),
                                                                                                            };
+
+        /// <summary>
+        /// Determines whether two <see cref="LinePosition"/> values are not vertically aligned.
+        /// </summary>
+        /// <param name="left">
+        /// The first <see cref="LinePosition"/> to compare.
+        /// </param>
+        /// <param name="right">
+        /// The second <see cref="LinePosition"/> to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> differ in both line number and character position;
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool NotVerticallyAligned(in LinePosition left, in LinePosition right) => left.Line != right.Line && left.Character != right.Character;
+
+        /// <summary>
+        /// Determines whether a given <see cref="SyntaxToken"/> is not vertically aligned based on a given <see cref="LinePosition"/>.
+        /// </summary>
+        /// <param name="token">
+        /// The <see cref="SyntaxToken"/> to compare.
+        /// </param>
+        /// <param name="position">
+        /// The <see cref="LinePosition"/> to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="LinePosition"/> of <paramref name="token"/> and <paramref name="position"/> differ in both line number and character position;
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool NotVerticallyAligned(in SyntaxToken token, in LinePosition position) => NotVerticallyAligned(position, token.GetStartPosition());
     }
 }
