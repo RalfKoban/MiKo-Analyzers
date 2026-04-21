@@ -34,20 +34,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var token = textTokens[index];
 
-                var allLocations = GetAllLocations(token, Phrase, StringComparison.OrdinalIgnoreCase);
-                var allLocationsCount = allLocations.Count;
+                var locations = GetAllLocations(token, Phrase, StringComparison.OrdinalIgnoreCase);
+                var locationsCount = locations.Count;
 
-                if (allLocationsCount > 0)
+                if (locationsCount is 0)
                 {
-                    if (issues is null)
-                    {
-                        issues = new List<Diagnostic>(allLocationsCount);
-                    }
+                    continue;
+                }
 
-                    for (var locationIndex = 0; locationIndex < allLocationsCount; locationIndex++)
-                    {
-                        issues.Add(Issue(allLocations[locationIndex]));
-                    }
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(locationsCount);
+                }
+
+                foreach (var location in locations)
+                {
+                    issues.Add(Issue(location));
                 }
             }
 
