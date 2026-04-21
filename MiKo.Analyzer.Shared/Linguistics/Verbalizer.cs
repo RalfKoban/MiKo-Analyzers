@@ -569,9 +569,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
 
                     if (word.EndsWith("oes", StringComparison.Ordinal)
-                    || word.EndsWith("shes", StringComparison.Ordinal)
-                    || word.EndsWith("sses", StringComparison.Ordinal)
-                    || word.EndsWith("tches", StringComparison.Ordinal))
+                     || word.EndsWith("shes", StringComparison.Ordinal)
+                     || word.EndsWith("sses", StringComparison.Ordinal)
+                     || word.EndsWith("tches", StringComparison.Ordinal))
                     {
                         return word.Substring(0, word.Length - 2);
                     }

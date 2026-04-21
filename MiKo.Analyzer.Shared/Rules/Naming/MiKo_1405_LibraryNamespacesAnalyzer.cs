@@ -17,11 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
+        protected override IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames)
         {
+            List<Diagnostic> issues = null;
+
             var libraryNamespacesLength = LibraryNamespaces.Length;
 
-            foreach (var name in names)
+            foreach (var name in namespaceNames)
             {
                 var namespaceName = name.ValueText;
 
@@ -29,14 +31,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var libraryNamespace = LibraryNamespaces[index];
 
-                    if (namespaceName.EndsWith(libraryNamespace, StringComparison.Ordinal))
+                    if (namespaceName.EndsWith(libraryNamespace, StringComparison.OrdinalIgnoreCase))
                     {
-                        yield return Issue(namespaceName, name, libraryNamespace);
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>(1);
+                        }
+
+                        issues.Add(Issue(namespaceName, name, libraryNamespace));
 
                         break;
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }
