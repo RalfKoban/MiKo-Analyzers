@@ -947,6 +947,206 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_vertically_aligned_Linq_query_if_where_clause_after_continuation_clause_is_indented()
+        {
+            const string OriginalCode = """
+
+                                        using System;
+                                        using System.Collections.Generic;
+                                        using System.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                            {
+                                                var result = from word in words
+                                                             group word by word.ToLower()
+                                                             into g   // <-- QueryContinuationSyntax starts here
+                                                              where g.Count() > 1
+                                                             select (Key: g.Key, Count: g.Count());
+
+                                                return result;
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+                                     using System.Collections.Generic;
+                                     using System.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                         {
+                                             var result = from word in words
+                                                          group word by word.ToLower()
+                                                          into g   // <-- QueryContinuationSyntax starts here
+                                                          where g.Count() > 1
+                                                          select (Key: g.Key, Count: g.Count());
+
+                                             return result;
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_vertically_aligned_Linq_query_if_where_clause_after_continuation_clause_is_outdented()
+        {
+            const string OriginalCode = """
+
+                                        using System;
+                                        using System.Collections.Generic;
+                                        using System.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                            {
+                                                var result = from word in words
+                                                             group word by word.ToLower()
+                                                             into g   // <-- QueryContinuationSyntax starts here
+                                                            where g.Count() > 1
+                                                             select (Key: g.Key, Count: g.Count());
+
+                                                return result;
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+                                     using System.Collections.Generic;
+                                     using System.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                         {
+                                             var result = from word in words
+                                                          group word by word.ToLower()
+                                                          into g   // <-- QueryContinuationSyntax starts here
+                                                          where g.Count() > 1
+                                                          select (Key: g.Key, Count: g.Count());
+
+                                             return result;
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_vertically_aligned_Linq_query_if_select_clause_after_continuation_clause_is_indented()
+        {
+            const string OriginalCode = """
+
+                                        using System;
+                                        using System.Collections.Generic;
+                                        using System.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                            {
+                                                var result = from word in words
+                                                             group word by word.ToLower()
+                                                             into g   // <-- QueryContinuationSyntax starts here
+                                                             where g.Count() > 1
+                                                              select (Key: g.Key, Count: g.Count());
+
+                                                return result;
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+                                     using System.Collections.Generic;
+                                     using System.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                         {
+                                             var result = from word in words
+                                                          group word by word.ToLower()
+                                                          into g   // <-- QueryContinuationSyntax starts here
+                                                          where g.Count() > 1
+                                                          select (Key: g.Key, Count: g.Count());
+
+                                             return result;
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_vertically_aligned_Linq_query_if_select_clause_after_continuation_clause_is_outdented()
+        {
+            const string OriginalCode = """
+
+                                        using System;
+                                        using System.Collections.Generic;
+                                        using System.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                            {
+                                                var result = from word in words
+                                                             group word by word.ToLower()
+                                                             into g   // <-- QueryContinuationSyntax starts here
+                                                             where g.Count() > 1
+                                                            select (Key: g.Key, Count: g.Count());
+
+                                                return result;
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+                                     using System.Collections.Generic;
+                                     using System.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public static IEnumerable<(string Key, int Count)> GetGroupCounts(IEnumerable<string> words)
+                                         {
+                                             var result = from word in words
+                                                          group word by word.ToLower()
+                                                          into g   // <-- QueryContinuationSyntax starts here
+                                                          where g.Count() > 1
+                                                          select (Key: g.Key, Count: g.Count());
+
+                                             return result;
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6073_LinqQueriesAreVerticallyAlignedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6073_LinqQueriesAreVerticallyAlignedAnalyzer();

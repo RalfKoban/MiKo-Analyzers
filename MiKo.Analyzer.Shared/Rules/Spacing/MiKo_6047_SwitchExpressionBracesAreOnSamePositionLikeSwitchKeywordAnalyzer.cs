@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -25,9 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var switchPosition = syntax.SwitchKeyword.GetPositionAfterEnd();
 
                 var openBraceToken = syntax.OpenBraceToken;
-                var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (NotVerticallyAligned(switchPosition, openBracePosition))
+                if (NotVerticallyAligned(openBraceToken, switchPosition))
                 {
                     ReportDiagnostics(context, Issue(openBraceToken, CreateProposalForSpaces(switchPosition.Character)));
                 }

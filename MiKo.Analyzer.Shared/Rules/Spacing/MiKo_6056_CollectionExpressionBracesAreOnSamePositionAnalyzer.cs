@@ -53,18 +53,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var openBracketToken = syntax.OpenBracketToken;
                 var openBracketPosition = openBracketToken.GetStartPosition();
-
                 var startPosition = GetStartPosition(syntax);
 
-                if (NotVerticallyAligned(openBracketPosition, startPosition))
+                if (NotVerticallyAligned(startPosition, openBracketPosition))
                 {
                     return Issue(openBracketToken, CreateProposalForSpaces(startPosition.Character));
                 }
 
                 var closeBracketToken = syntax.CloseBracketToken;
-                var closeBracketPosition = closeBracketToken.GetStartPosition();
 
-                if (NotVerticallyAligned(openBracketPosition, closeBracketPosition))
+                if (NotVerticallyAligned(closeBracketToken, openBracketPosition))
                 {
                     return Issue(closeBracketToken, CreateProposalForSpaces(openBracketPosition.Character));
                 }

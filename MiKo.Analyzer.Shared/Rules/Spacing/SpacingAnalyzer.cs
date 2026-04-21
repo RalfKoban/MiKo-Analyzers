@@ -70,5 +70,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         /// otherwise, <see langword="false"/>.
         /// </returns>
         protected static bool NotVerticallyAligned(in LinePosition left, in LinePosition right) => left.Line != right.Line && left.Character != right.Character;
+
+        /// <summary>
+        /// Determines whether a given <see cref="SyntaxToken"/> is not vertically aligned based on a given <see cref="LinePosition"/>.
+        /// </summary>
+        /// <param name="token">
+        /// The <see cref="SyntaxToken"/> to compare.
+        /// </param>
+        /// <param name="position">
+        /// The <see cref="LinePosition"/> to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="LinePosition"/> of <paramref name="token"/> and <paramref name="position"/> differ in both line number and character position;
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool NotVerticallyAligned(in SyntaxToken token, in LinePosition position) => NotVerticallyAligned(position, token.GetStartPosition());
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -18,48 +19,59 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQueryExpression, SyntaxKind.QueryExpression);
 
-        private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
+        private static IEnumerable<SyntaxNode> GetProblematicNodes(QueryBodySyntax body, LinePosition startPosition)
         {
-            if (context.Node is QueryExpressionSyntax node)
+            var currentBody = body;
+
+            while (true)
             {
-                var issues = AnalyzeQuery(node);
-
-                ReportDiagnostics(context, issues);
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeQuery(QueryExpressionSyntax node)
-        {
-            var startPosition = node.FromClause.GetStartPosition();
-            var startPositionCharacter = startPosition.Character;
-
-            foreach (var clause in node.Body.Clauses)
-            {
-                var clausePosition = clause.GetStartPosition();
-
-                if (NotVerticallyAligned(startPosition, clausePosition))
+                foreach (var clause in currentBody.Clauses)
                 {
-                    yield return Issue(clause, CreateProposalForSpaces(startPositionCharacter));
+                    var clausePosition = clause.GetStartPosition();
+
+                    if (NotVerticallyAligned(startPosition, clausePosition))
+                    {
+                        yield return clause;
+                    }
                 }
-            }
 
-            var selectPart = node.Body.SelectOrGroup;
-            var selectPartPosition = selectPart.GetStartPosition();
+                var selectPart = currentBody.SelectOrGroup;
+                var selectPartPosition = selectPart.GetStartPosition();
 
-            if (NotVerticallyAligned(startPosition, selectPartPosition))
-            {
-                yield return Issue(selectPart, CreateProposalForSpaces(startPositionCharacter));
-            }
+                if (NotVerticallyAligned(startPosition, selectPartPosition))
+                {
+                    yield return selectPart;
+                }
 
-            var continuationPart = node.Body.Continuation;
+                var continuationPart = currentBody.Continuation;
 
-            if (continuationPart != null)
-            {
+                if (continuationPart is null)
+                {
+                    // nothing more to report
+                    yield break;
+                }
+
+                currentBody = continuationPart.Body;
+
                 var continuationPartPosition = continuationPart.GetStartPosition();
 
                 if (selectPartPosition.Line != continuationPartPosition.Line && NotVerticallyAligned(startPosition, continuationPartPosition))
                 {
-                    yield return Issue(continuationPart, CreateProposalForSpaces(startPositionCharacter));
+                    yield return continuationPart;
+                }
+            }
+        }
+
+        private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is QueryExpressionSyntax node)
+            {
+                var startPosition = node.FromClause.GetStartPosition();
+                var problematicNodes = GetProblematicNodes(node.Body, startPosition);
+
+                foreach (var problematicNode in problematicNodes)
+                {
+                    ReportDiagnostics(context, Issue(problematicNode, CreateProposalForSpaces(startPosition.Character)));
                 }
             }
         }
