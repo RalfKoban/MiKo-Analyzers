@@ -23,6 +23,29 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_StringBuilder_build_chain() => No_issue_is_reported_for("""
+                                                                                                       using System;
+                                                                                                       using System.Text;
+
+                                                                                                       public class TestMe
+                                                                                                       {
+                                                                                                           public void DoSomething()
+                                                                                                           {
+                                                                                                               var value = new StringBuilder()
+                                                                                                                                        .Append('A')
+                                                                                                                                        .Append('B')
+                                                                                                                                        .Append('C')
+                                                                                                                                        .Append('D')
+                                                                                                                                        .Append('E')
+                                                                                                                                        .Append('F')
+                                                                                                                                        .Append('G')
+                                                                                                                                        .ToString();
+                                                                                                           }
+                                                                                                       }
+
+                                                                                                       """);
+
+        [Test]
         public void No_issue_is_reported_for_event_registration_when_used_with_full_qualified_names() => No_issue_is_reported_for(@"
 using System;
 
