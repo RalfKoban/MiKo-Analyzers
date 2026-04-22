@@ -77,23 +77,11 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_hyperlink() => No_issue_is_reported_for(@"
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-// Those usings are used to have enough characters as 'preamble' to find the hyperlink in the documentation and not report an issue for the question mark in the hyperlink
-
-namespace MyNamespace
+/// <summary>
+/// See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/loggermessage?view=aspnetcore-6.0.
+/// </summary>
+public class TestMe
 {
-    /// <summary>
-    /// See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/loggermessage?view=aspnetcore-6.0.
-    /// </summary>
-    public class TestMe
-    {
-    }
 }");
 
         protected override string GetDiagnosticId() => MiKo_2219_DocumentationContainsNoQuestionOrExclamationMarkAnalyzer.Id;
