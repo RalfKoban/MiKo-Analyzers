@@ -121,6 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
+                case ConditionalAccessExpressionSyntax _:
                 case ElementAccessExpressionSyntax _:
                 case IdentifierNameSyntax _:
                 case InvocationExpressionSyntax _:
@@ -136,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (syntax)
             {
+                case ConditionalAccessExpressionSyntax conditional when IsTrainWreck(conditional, semanticModel):
                 case ElementAccessExpressionSyntax access when IsTrainWreck(access, semanticModel):
                 case InvocationExpressionSyntax invocation when IsTrainWreck(invocation, semanticModel):
                 case MemberAccessExpressionSyntax member when IsTrainWreck(member, semanticModel):
@@ -145,6 +147,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return false;
             }
         }
+
+        private static bool IsTrainWreck(ConditionalAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
         private static bool IsTrainWreck(ElementAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
@@ -203,6 +207,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
+                case ConditionalAccessExpressionSyntax c:
+                {
+                    return c.WhenNotNull;
+                }
+
                 case MemberAccessExpressionSyntax m:
                 {
                     if (m.Expression is ElementAccessExpressionSyntax next)
