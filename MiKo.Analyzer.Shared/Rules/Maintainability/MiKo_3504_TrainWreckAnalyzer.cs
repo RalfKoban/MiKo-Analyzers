@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -166,8 +167,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var remainingExpressions = expressions.SkipWhile(_ => _.GetSymbol(semanticModel) is INamespaceOrTypeSymbol) // skip namespaces and types (fully qualified names)
-                                                  .SkipWhere(_ => _.GetSymbol(semanticModel) is IMethodSymbol m && m.IsExtensionMethod) // ignore extension methods as they are allowed to be chained
-                                                  .SkipWhere(_ => _.GetTypeSymbol(semanticModel)?.ContainingNamespace is INamespaceSymbol ns && Constants.Names.AssertionNamespaces.Contains(ns.FullyQualifiedName())); // ignore NUnit constraints
+                                                  .SkipWhere(MethodCanBeIgnored)
+                                                  .SkipWhere(TypeCanBeIgnored);
 
             var problematicSyntax = remainingExpressions.ElementAtOrDefault(allowedDepth);
 
@@ -177,6 +178,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return IsTrainWreckFinalMarker(problematicSyntax);
+
+            bool MethodCanBeIgnored(ExpressionSyntax syntax)
+            {
+                if (syntax.GetSymbol(semanticModel) is IMethodSymbol method)
+                {
+                    // TODO: Ignore others
+                    // ignore extension methods as they are allowed to be chained
+                    return method.IsExtensionMethod;
+                }
+
+                return false;
+            }
+
+            bool TypeCanBeIgnored(ExpressionSyntax syntax)
+            {
+                if (syntax.GetTypeSymbol(semanticModel) is INamedTypeSymbol type)
+                {
+                    if (type.Name is nameof(StringBuilder))
+                    {
+                        // ignore string builders
+                        return true;
+                    }
+
+                    // ignore NUnit constraints
+                    return type.ContainingNamespace is INamespaceSymbol ns && Constants.Names.AssertionNamespaces.Contains(ns.FullyQualifiedName());
+                }
+
+                return false;
+            }
         }
 
         private static Stack<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
