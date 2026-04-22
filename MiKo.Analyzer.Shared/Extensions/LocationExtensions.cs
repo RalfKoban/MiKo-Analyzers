@@ -175,7 +175,7 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            return sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, startUpText.Length + firstIndexOfNextSpace));
+            return sourceText.ToString(TextSpan.FromBounds(sourceSpanStart + lastIndexOfFirstSpace + 1, sourceSpanEnd + firstIndexOfNextSpace));
         }
 
         /// <summary>
