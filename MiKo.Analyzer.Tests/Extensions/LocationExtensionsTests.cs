@@ -70,14 +70,12 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void GetSurroundingWord_returns_correct_word_when_location_is_beyond_200_characters()
+        public static void GetSurroundingWord_returns_correct_word_when_location_is_beyond_200_characters_([Values(0, 19, 20, 40)] int repeatCount)
         {
             const string Word = "SomeWord?param=value";
 
-            var prefix = string.Concat(Enumerable.Repeat("1234567890", 20)) + "12345678 ";
-            var source = prefix + Word + " some more suffix at the end";
-
-            Assert.That(prefix.Length, Is.EqualTo(209), "Precondition not met");
+            var prefix = string.Concat(Enumerable.Repeat("1234567890", repeatCount));
+            var source = prefix + " " + Word + " some more suffix at the end";
 
             var questionMarkIndex = source.IndexOf('?');
 
