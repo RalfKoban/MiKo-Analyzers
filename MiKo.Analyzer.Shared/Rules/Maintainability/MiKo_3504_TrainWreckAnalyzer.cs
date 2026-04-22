@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -183,9 +184,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (syntax.GetSymbol(semanticModel) is IMethodSymbol method)
                 {
-                    // TODO: Ignore others
-                    // ignore extension methods as they are allowed to be chained
-                    return method.IsExtensionMethod;
+                    if (method.IsExtensionMethod)
+                    {
+                        // ignore extension methods as they are allowed to be chained
+                        return true;
+                    }
+
+                    if (method.Name.StartsWith("With", StringComparison.Ordinal))
+                    {
+                        // ignore (Roslyn) methods that are defined as fluent API
+                        return true;
+                    }
+
+                    // TODO RKN: Ignore others
                 }
 
                 return false;

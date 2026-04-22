@@ -23,27 +23,48 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_StringBuilder_build_chain() => No_issue_is_reported_for("""
-                                                                                                       using System;
-                                                                                                       using System.Text;
+        public void No_issue_is_reported_for_a_StringBuilder_call_chain() => No_issue_is_reported_for(@"
+using System;
+using System.Text;
 
-                                                                                                       public class TestMe
-                                                                                                       {
-                                                                                                           public void DoSomething()
-                                                                                                           {
-                                                                                                               var value = new StringBuilder()
-                                                                                                                                        .Append('A')
-                                                                                                                                        .Append('B')
-                                                                                                                                        .Append('C')
-                                                                                                                                        .Append('D')
-                                                                                                                                        .Append('E')
-                                                                                                                                        .Append('F')
-                                                                                                                                        .Append('G')
-                                                                                                                                        .ToString();
-                                                                                                           }
-                                                                                                       }
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var value = new StringBuilder()
+                                 .Append('A')
+                                 .Append('B')
+                                 .Append('C')
+                                 .Append('D')
+                                 .Append('E')
+                                 .Append('F')
+                                 .Append('G')
+                                 .ToString();
+    }
+}
+");
 
-                                                                                                       """);
+        [Test]
+        public void No_issue_is_reported_for_a_Roslyn_call_chain() => No_issue_is_reported_for(@"
+using System;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+
+public class TestMe
+{
+    public RecursivePatternSyntax DoSomething(RecursivePatternSyntax node)
+    {
+        return node.WithoutTrivia()
+                   .WithType(null)
+                   .WithPropertyPatternClause(null)
+                   .WithDesignation(null)
+                   .WithPositionalPatternClause(null);
+    }
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_event_registration_when_used_with_full_qualified_names() => No_issue_is_reported_for(@"
