@@ -919,27 +919,31 @@ namespace MiKoSolutions.Analyzers.Linguistics
         {
             var results = new HashSet<Pair>(KeyComparer.Instance);
 
-            for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
+            // only inspect prefixes if text span starts lowercase
+            if (textSpan.Length > 0 && textSpan[0].IsLowerCaseLetter())
             {
-                var pair = Prefixes[index];
-
-                var keySpan = pair.Key.AsSpan();
-
-                if (PrefixHasIssue(keySpan, textSpan))
+                for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
                 {
-                    results.Add(pair);
+                    var pair = Prefixes[index];
 
-                    // does not make sense to look further
-                    break;
-                }
-                else
-                {
-                    if (CompleteTermHasIssue(keySpan, textSpan))
+                    var keySpan = pair.Key.AsSpan();
+
+                    if (PrefixHasIssue(keySpan, textSpan))
                     {
                         results.Add(pair);
 
                         // does not make sense to look further
                         break;
+                    }
+                    else
+                    {
+                        if (CompleteTermHasIssue(keySpan, textSpan))
+                        {
+                            results.Add(pair);
+
+                            // does not make sense to look further
+                            break;
+                        }
                     }
                 }
             }
