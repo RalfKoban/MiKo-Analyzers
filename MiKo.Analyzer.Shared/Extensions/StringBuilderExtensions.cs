@@ -316,7 +316,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (textSpan.Length < pair.Key.Length)
                 {
-                    // cannot be part in the replacement as other value is too long and cannot fit current value
+                    // cannot be part in the replacement as the substring is too long and cannot fit
                     continue;
                 }
 
@@ -1261,67 +1261,102 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines the starting position where the specified text could potentially occur within the current text, using a quick probe optimization.
+        /// Determines the starting position where the specified text could potentially occur within the given text, using a quick probe optimization.
         /// </summary>
-        /// <param name="current">
-        /// The current text to search within.
+        /// <param name="source">
+        /// The text to search within.
         /// </param>
-        /// <param name="other">
+        /// <param name="substring">
         /// The text to search for.
         /// </param>
         /// <returns>
         /// The zero-based starting position where the specified text might occur, or <c>-1</c> if it does not occur.
         /// </returns>
-        private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
+        private static int QuickSubstringProbe(in ReadOnlySpan<char> source, in ReadOnlySpan<char> substring)
         {
-            var delta = current.Length - other.Length;
+            var delta = source.Length - substring.Length;
 
             if (delta < 0)
             {
-                // cannot be part in the replacement as other value is too long and cannot fit current value
+                // cannot be part in the replacement as the substring is too long to fit within the source
                 return -1;
             }
 
-            if (other.Length < QuickSubstringProbeLengthThreshold)
+            if (substring.Length < QuickSubstringProbeLengthThreshold)
             {
-                // can be part in the replacement as other value is smaller and could fit current value
+                // can be part in the replacement as the substring is small enough to fit within the source
                 return 0;
             }
 
-            var lastIndex = other.Length - 1;
-            var startChar = other[0];
-            var endChar = other[lastIndex];
+            var startChar = substring[0];
 
-            if (lastIndex < QuickSubstringProbeLengthThreshold)
+            // Performance-Note:
+            // - restrict the search space upfront so that IndexOf never overshoots delta
+            var searchSpace = source.Slice(0, delta + 1);
+
+            // Performance-Note:
+            // - fast-exit: if startChar is not present at all in the valid window,
+            //   there is no point iterating; IndexOf is a tight single-comparison loop even without SIMD
+            var startIndex = searchSpace.IndexOf(startChar);
+
+            if (startIndex < 0)
             {
-                // Performance-Note:
-                // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
-                for (var position = 0; position <= delta; position++)
+                return -1;
+            }
+
+            var lastIndex = substring.Length - 1;
+            var endChar = substring[lastIndex];
+
+            if (substring.Length is QuickSubstringProbeLengthThreshold)
+            {
+                for (var offset = startIndex; offset <= delta; offset++)
                 {
-                    // Performance-Note:
-                    // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
-                    if (current[position + lastIndex] == endChar && current[position /* + 0 */] == startChar)
+                    var index = searchSpace.Slice(offset).IndexOf(startChar);
+
+                    if (index < 0)
+                    {
+                        return -1;
+                    }
+
+                    var position = offset + index;
+
+                    if (source[position + lastIndex] == endChar)
                     {
                         // could be part in the replacement as characters match both at start and end
                         return position;
                     }
+
+                    // Performance-Note:
+                    // - set offset to position here so the for-increment adds the +1,
+                    //   avoiding a separate variable and keeping the loop idiomatic
+                    offset = position;
                 }
             }
             else
             {
-                var middleChar = other[QuickSubstringProbeLengthThreshold];
+                var extraProbeChar = substring[QuickSubstringProbeLengthThreshold];
 
-                // Performance-Note:
-                // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
-                for (var position = 0; position <= delta; position++)
+                for (var offset = startIndex; offset <= delta; offset++)
                 {
-                    // Performance-Note:
-                    // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
-                    if (current[position + lastIndex] == endChar && current[position /* + 0 */] == startChar && current[position + QuickSubstringProbeLengthThreshold] == middleChar)
+                    var index = searchSpace.Slice(offset).IndexOf(startChar);
+
+                    if (index < 0)
+                    {
+                        return -1;
+                    }
+
+                    var position = offset + index;
+
+                    if (source[position + lastIndex] == endChar && source[position + QuickSubstringProbeLengthThreshold] == extraProbeChar)
                     {
                         // could be part in the replacement as characters match both at start and end
                         return position;
                     }
+
+                    // Performance-Note:
+                    // - set offset to position here so the for-increment adds the +1,
+                    //   avoiding a separate variable and keeping the loop idiomatic
+                    offset = position;
                 }
             }
 
