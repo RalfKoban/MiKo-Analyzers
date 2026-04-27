@@ -1307,9 +1307,25 @@ namespace MiKoSolutions.Analyzers
             var lastIndex = substring.Length - 1;
             var endChar = substring[lastIndex];
 
-            if (substring.Length is QuickSubstringProbeLengthThreshold)
+            // Performance-Note:
+            // - fast-exit: if endChar does not appear anywhere in the valid end-character window,
+            //   no complete match is possible; also narrows delta from the right to skip trailing positions
+            //   where endChar is absent, reducing loop iterations especially when startChar is dense
+            var endCharLastIndex = source.Slice(startIndex + lastIndex, delta - startIndex + 1).LastIndexOf(endChar);
+
+            if (endCharLastIndex < 0)
             {
-                for (var offset = startIndex; offset <= delta; offset++)
+                return -1;
+            }
+
+            // Performance-Note:
+            // - tighten delta to the last position where endChar actually appears,
+            //   so the loop never scans positions that cannot possibly yield a match
+            var effectiveDelta = startIndex + endCharLastIndex;
+
+            if (substring.Length <= 2 * QuickSubstringProbeLengthThreshold)
+            {
+                for (var offset = startIndex; offset <= effectiveDelta; offset++)
                 {
                     var index = searchSpace.Slice(offset).IndexOf(startChar);
 
@@ -1319,6 +1335,11 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     var position = offset + index;
+
+                    if (position > effectiveDelta)
+                    {
+                        return -1;
+                    }
 
                     if (source[position + lastIndex] == endChar)
                     {
@@ -1336,7 +1357,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var extraProbeChar = substring[QuickSubstringProbeLengthThreshold];
 
-                for (var offset = startIndex; offset <= delta; offset++)
+                for (var offset = startIndex; offset <= effectiveDelta; offset++)
                 {
                     var index = searchSpace.Slice(offset).IndexOf(startChar);
 
@@ -1346,6 +1367,11 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     var position = offset + index;
+
+                    if (position > effectiveDelta)
+                    {
+                        return -1;
+                    }
 
                     if (source[position + lastIndex] == endChar && source[position + QuickSubstringProbeLengthThreshold] == extraProbeChar)
                     {
