@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                         // underline comment instead of field declaration
-                        var summaryXml = comment.GetSummaryXmls()[0];
+                        var summaryXml = comment.GetSummaryXmls()[index];
 
                         issues.Add(Issue(symbol.Name, summaryXml.GetContentsLocation(), Constants.XmlTag.Summary, summaryPhrases[0]));
                     }
@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                         // underline comment instead of field declaration
-                        var valueXml = comment.GetValueXmls()[0];
+                        var valueXml = comment.GetValueXmls()[index];
 
                         issues.Add(Issue(symbol.Name, valueXml.GetContentsLocation(), Constants.XmlTag.Value, valuePhrases[0]));
                     }
