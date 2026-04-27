@@ -1327,7 +1327,7 @@ namespace MiKoSolutions.Analyzers
             {
                 for (var offset = startIndex; offset <= effectiveDelta; offset++)
                 {
-                    var index = searchSpace.Slice(offset).IndexOf(startChar);
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
 
                     if (index < 0)
                     {
@@ -1335,11 +1335,6 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     var position = offset + index;
-
-                    if (position > effectiveDelta)
-                    {
-                        return -1;
-                    }
 
                     if (source[position + lastIndex] == endChar)
                     {
@@ -1359,7 +1354,7 @@ namespace MiKoSolutions.Analyzers
 
                 for (var offset = startIndex; offset <= effectiveDelta; offset++)
                 {
-                    var index = searchSpace.Slice(offset).IndexOf(startChar);
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
 
                     if (index < 0)
                     {
@@ -1367,11 +1362,6 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     var position = offset + index;
-
-                    if (position > effectiveDelta)
-                    {
-                        return -1;
-                    }
 
                     if (source[position + lastIndex] == endChar && source[position + QuickSubstringProbeLengthThreshold] == extraProbeChar)
                     {
