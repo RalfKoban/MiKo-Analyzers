@@ -1308,9 +1308,7 @@ namespace MiKoSolutions.Analyzers
             var endChar = substring[lastIndex];
 
             // Performance-Note:
-            // - fast-exit: if endChar does not appear anywhere in the valid end-character window,
-            //   no complete match is possible; also narrows delta from the right to skip trailing positions
-            //   where endChar is absent, reducing loop iterations especially when startChar is dense
+            // - fast-exit: if endChar does not appear anywhere in the valid end-character window, no complete match is possible
             var endCharLastIndex = source.Slice(startIndex + lastIndex, delta - startIndex + 1).LastIndexOf(endChar);
 
             if (endCharLastIndex < 0)
