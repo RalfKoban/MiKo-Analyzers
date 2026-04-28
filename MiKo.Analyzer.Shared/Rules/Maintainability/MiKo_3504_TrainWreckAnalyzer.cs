@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -121,6 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
+                case ConditionalAccessExpressionSyntax _:
                 case ElementAccessExpressionSyntax _:
                 case IdentifierNameSyntax _:
                 case InvocationExpressionSyntax _:
@@ -136,6 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (syntax)
             {
+                case ConditionalAccessExpressionSyntax conditional when IsTrainWreck(conditional, semanticModel):
                 case ElementAccessExpressionSyntax access when IsTrainWreck(access, semanticModel):
                 case InvocationExpressionSyntax invocation when IsTrainWreck(invocation, semanticModel):
                 case MemberAccessExpressionSyntax member when IsTrainWreck(member, semanticModel):
@@ -145,6 +149,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return false;
             }
         }
+
+        private static bool IsTrainWreck(ConditionalAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
         private static bool IsTrainWreck(ElementAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
@@ -162,8 +168,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var remainingExpressions = expressions.SkipWhile(_ => _.GetSymbol(semanticModel) is INamespaceOrTypeSymbol) // skip namespaces and types (fully qualified names)
-                                                  .SkipWhere(_ => _.GetSymbol(semanticModel) is IMethodSymbol m && m.IsExtensionMethod) // ignore extension methods as they are allowed to be chained
-                                                  .SkipWhere(_ => _.GetTypeSymbol(semanticModel)?.ContainingNamespace is INamespaceSymbol ns && Constants.Names.AssertionNamespaces.Contains(ns.FullyQualifiedName())); // ignore NUnit constraints
+                                                  .SkipWhere(MethodCanBeIgnored)
+                                                  .SkipWhere(TypeCanBeIgnored);
 
             var problematicSyntax = remainingExpressions.ElementAtOrDefault(allowedDepth);
 
@@ -173,6 +179,45 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return IsTrainWreckFinalMarker(problematicSyntax);
+
+            bool MethodCanBeIgnored(ExpressionSyntax syntax)
+            {
+                if (syntax.GetSymbol(semanticModel) is IMethodSymbol method)
+                {
+                    if (method.IsExtensionMethod)
+                    {
+                        // ignore extension methods as they are allowed to be chained
+                        return true;
+                    }
+
+                    if (method.Name.StartsWith("With", StringComparison.Ordinal))
+                    {
+                        // ignore (Roslyn) methods that are defined as fluent API
+                        return true;
+                    }
+
+                    // TODO RKN: Ignore others
+                }
+
+                return false;
+            }
+
+            bool TypeCanBeIgnored(ExpressionSyntax syntax)
+            {
+                if (syntax.GetTypeSymbol(semanticModel) is INamedTypeSymbol type)
+                {
+                    if (type.Name is nameof(StringBuilder))
+                    {
+                        // ignore string builders
+                        return true;
+                    }
+
+                    // ignore NUnit constraints
+                    return type.ContainingNamespace is INamespaceSymbol ns && Constants.Names.AssertionNamespaces.Contains(ns.FullyQualifiedName());
+                }
+
+                return false;
+            }
         }
 
         private static Stack<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
@@ -203,6 +248,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
+                case ConditionalAccessExpressionSyntax c:
+                {
+                    return c.WhenNotNull;
+                }
+
                 case MemberAccessExpressionSyntax m:
                 {
                     if (m.Expression is ElementAccessExpressionSyntax next)
