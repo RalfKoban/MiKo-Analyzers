@@ -368,9 +368,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var semanticModel = compilation.GetSemanticModel(localFunctions[0].SyntaxTree);
 
-            return localFunctions.Select(_ => _.GetSymbol(semanticModel))
-                                 .Where(ShallAnalyzeLocalFunction)
-                                 .SelectMany(_ => AnalyzeName(_, compilation));
+            List<Diagnostic> issues = null;
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var function in localFunctions)
+            {
+                var localSymbol = function.GetSymbol(semanticModel);
+
+                if (ShallAnalyzeLocalFunction(localSymbol))
+                {
+                    foreach (var issue in AnalyzeName(localSymbol, compilation))
+                    {
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>(1);
+                        }
+
+                        issues.Add(issue);
+                    }
+                }
+            }
+
+            return (IEnumerable<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         /// <summary>

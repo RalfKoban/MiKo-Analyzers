@@ -23,6 +23,50 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_StringBuilder_call_chain() => No_issue_is_reported_for(@"
+using System;
+using System.Text;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var value = new StringBuilder()
+                                 .Append('A')
+                                 .Append('B')
+                                 .Append('C')
+                                 .Append('D')
+                                 .Append('E')
+                                 .Append('F')
+                                 .Append('G')
+                                 .ToString();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_Roslyn_call_chain() => No_issue_is_reported_for(@"
+using System;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+
+public class TestMe
+{
+    public RecursivePatternSyntax DoSomething(RecursivePatternSyntax node)
+    {
+        return node.WithoutTrivia()
+                   .WithType(null)
+                   .WithPropertyPatternClause(null)
+                   .WithDesignation(null)
+                   .WithPositionalPatternClause(null);
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_event_registration_when_used_with_full_qualified_names() => No_issue_is_reported_for(@"
 using System;
 
@@ -255,6 +299,34 @@ public class TestMeC
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_3_array_elements_in_a_row_when_being_an_argument() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA[] A { get; }
+
+    public void DoSomething()
+    {
+        DoSomething(A[1].B[2].C[3]);
+    }
+
+    private void DoSomething(int value)
+    {
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB[] B { get; }
+}
+
+public class TestMeB
+{
+    public int[] C { get; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_accessing_3_array_elements_in_a_row_when_invoking_a_method_when_being_an_argument() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -297,6 +369,35 @@ public class TestMe
     public void DoSomething()
     {
         var value = A.B.C.D;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public int D { get; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_accessing_4_properties_in_a_row_when_assigning_a_value_using_conditional_access() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        var value = A?.B?.C?.D;
     }
 }
 
@@ -676,6 +777,38 @@ public class TestMeB
 public class TestMeC
 {
     public int D { get; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_accessing_4_properties_in_a_row_via_conditional_access_when_being_used_in_if_condition() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        if (A?.B?.C?.D != null)
+            return 42;
+
+        return 0;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public object D { get; }
 }
 ");
 
@@ -1277,6 +1410,40 @@ public class TestMeD
 ");
 
         [Test]
+        public void An_issue_is_reported_for_accessing_5_properties_in_a_row_when_assigning_a_value_when_using_conditional_access() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        var value = A?.B?.C?.D?.E;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public int E { get; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_accessing_5_properties_in_a_row_when_being_an_argument() => An_issue_is_reported_for(@"
 
 public class TestMe
@@ -1311,6 +1478,44 @@ public class TestMeC
 public class TestMeD
 {
     public int E { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_5_array_elements_in_a_row_when_being_an_argument() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA[] A { get; }
+
+    public void DoSomething()
+    {
+        DoSomething(A[1].B[2].C[3].D[4].E[5]);
+    }
+
+    private void DoSomething(int value)
+    {
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB[] B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC[] C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD[] D { get; }
+}
+
+public class TestMeD
+{
+    public int[] E { get; }
 }
 ");
 
@@ -1738,6 +1943,43 @@ public class TestMeD
 ");
 
         [Test]
+        public void An_issue_is_reported_for_accessing_5_properties_in_a_row_via_conditional_access_when_being_used_in_if_condition() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        if (A?.B?.C?.D?.E != null)
+            return 42;
+
+        return 0;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public object E { get; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_accessing_5_properties_in_a_row_when_being_used_in_if_condition() => An_issue_is_reported_for(@"
 
 public class TestMe
@@ -2128,6 +2370,43 @@ public class TestMeD
 ");
 
         [Test]
+        public void An_issue_is_reported_for_accessing_5_properties_in_a_row_when_being_used_in_conditional_access_and_pattern_in_if_condition() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        if (A?.B?.C?.D?.E is { })
+            return 42;
+
+        return 0;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public object E { get; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_accessing_5_properties_in_a_row_when_being_used_in_recursive_pattern_in_if_condition() => An_issue_is_reported_for(@"
 
 public class TestMe
@@ -2137,13 +2416,59 @@ public class TestMe
     public int DoSomething()
     {
         if (A.B.C.D.E is not MemberExpression
-            {
-                Member: PropertyInfo
-                {
-                    ReflectedType: { } reflectedType,
-                    Name: { } name
-                }
-            })
+                             {
+                                 Member: PropertyInfo
+                                 {
+                                     ReflectedType: { } reflectedType,
+                                     Name: { } name
+                                 }
+                             })
+        {
+            return 42;
+        }
+
+        return 0;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public object E { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_5_properties_in_a_row_when_being_used_in_conditional_access_and_recursive_pattern_in_if_condition() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        if (A?.B?.C?.D?.E is not MemberExpression
+                                 {
+                                     Member: PropertyInfo
+                                     {
+                                         ReflectedType: { } reflectedType,
+                                         Name: { } name
+                                     }
+                                 })
         {
             return 42;
         }
@@ -2174,7 +2499,6 @@ public class TestMeD
 ");
 
         //// TODO RKN: Implement tests for method invocations, be aware of builder patterns
-        //// TODO RKN: Implement tests for conditional access expressions A?.B?.C?.D...
 
         protected override string GetDiagnosticId() => MiKo_3504_TrainWreckAnalyzer.Id;
 
