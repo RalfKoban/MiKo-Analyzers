@@ -155,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (summary.Contains(phrase, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (phrase.EndsWith(" used", StringComparison.Ordinal) && summary.Contains(" used in ", StringComparison.OrdinalIgnoreCase))
+                        if (phrase.EndsWith(" used", StringComparison.Ordinal) && summary.Contains(" used in ", StringComparison.Ordinal))
                         {
                             // ignore the specific phrase
                             continue;
