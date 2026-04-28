@@ -134,7 +134,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (text.StartsWith("Interaction logic for"))
             {
                 // seems like this is the default comment for WPF controls
-                return Comment(comment, XmlText("Represents a TODO"));
+                var type = comment.GetEnclosing<TypeDeclarationSyntax>();
+                var name = type.GetName();
+
+                if (name.IsNullOrEmpty())
+                {
+                    return Comment(comment, XmlText("Represents a TODO"));
+                }
+
+                var fixedName = AbbreviationFinder.FindAndReplaceAllAbbreviations(name);
+                var nameSpan = type.IsKind(SyntaxKind.InterfaceDeclaration) && fixedName[0] == 'I'
+                               ? fixedName.AsSpan(1) // do not use the leading 'I' of interfaces
+                               : fixedName.AsSpan();
+
+                var article = ArticleProvider.GetArticleFor(nameSpan, FirstWordAdjustment.StartLowerCase);
+                var continuation = nameSpan.WordsAsSpan().Select(_ => _.Text.ToLowerCaseAt(0)).ConcatenatedWith(" ");
+
+                return Comment(comment, XmlText($"Represents {article}{continuation}."));
             }
 
             if (text.StartsWithAny(EmptyReplacementsMapKeys))
