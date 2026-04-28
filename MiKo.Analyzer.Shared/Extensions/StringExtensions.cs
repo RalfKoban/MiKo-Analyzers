@@ -290,6 +290,33 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether any of the characters in the span is uppercase.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if any character in the span is uppercase; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool AnyUpper(this in ReadOnlySpan<char> value)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var index = 0; index < valueLength; index++)
+                {
+                    if (char.IsUpper(value[index]))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Creates a cached <see cref="StringBuilder"/> initialized with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">

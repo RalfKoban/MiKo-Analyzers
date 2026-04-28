@@ -1404,6 +1404,48 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_where_clause()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> numbers)
+    {
+        var result = from number in numbers
+                     where number > 0
+                  && number != 5
+                  && number < 10
+                     select number;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> numbers)
+    {
+        var result = from number in numbers
+                     where number > 0
+                        && number != 5
+                        && number < 10
+                     select number;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6059_BooleanOperatorsAreIndentedToLeftAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6059_BooleanOperatorsAreIndentedToLeftAnalyzer();

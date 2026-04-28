@@ -917,45 +917,52 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </returns>
         private static Pair[] FindCore(in ReadOnlySpan<char> textSpan)
         {
-            var results = new HashSet<Pair>(KeyComparer.Instance);
+            HashSet<Pair> results = null;
 
-            for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
+            var searchForPostfixes = true;
+
+            // only inspect prefixes if text span starts lowercase
+            if (textSpan.Length > 0 && textSpan[0].IsLowerCaseLetter())
             {
-                var pair = Prefixes[index];
-
-                var keySpan = pair.Key.AsSpan();
-
-                if (PrefixHasIssue(keySpan, textSpan))
+                for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
                 {
-                    results.Add(pair);
+                    var pair = Prefixes[index];
 
-                    // does not make sense to look further
-                    break;
-                }
-                else
-                {
+                    var keySpan = pair.Key.AsSpan();
+
+                    if (PrefixHasIssue(keySpan, textSpan))
+                    {
+                        AddToResults(ref results, pair);
+
+                        break; // does not make sense to look further
+                    }
+
                     if (CompleteTermHasIssue(keySpan, textSpan))
                     {
-                        results.Add(pair);
+                        AddToResults(ref results, pair);
 
-                        // does not make sense to look further
-                        break;
+                        break; // does not make sense to look further
                     }
                 }
+
+                // we only have to search for postfixes if there is any upper case character
+                searchForPostfixes = textSpan.AnyUpper();
             }
 
             //// TODO RKN: replace prefixes to not find them again as middle terms or whatever?
 
-            for (int index = 0, postfixesLength = Postfixes.Length; index < postfixesLength; index++)
+            if (searchForPostfixes)
             {
-                var pair = Postfixes[index];
-
-                if (PostFixHasIssue(pair.Key.AsSpan(), textSpan))
+                for (int index = 0, postfixesLength = Postfixes.Length; index < postfixesLength; index++)
                 {
-                    results.Add(pair);
+                    var pair = Postfixes[index];
 
-                    // does not make sense to look further
-                    break;
+                    if (PostFixHasIssue(pair.Key.AsSpan(), textSpan))
+                    {
+                        AddToResults(ref results, pair);
+
+                        break; // does not make sense to look further
+                    }
                 }
             }
 
@@ -973,11 +980,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (MidTermHasIssue(key, textSpan))
                 {
-                    results.Add(pair);
+                    AddToResults(ref results, pair);
                 }
             }
 
-            return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
+            return results?.ToArray() ?? Array.Empty<Pair>();
+
+            void AddToResults(ref HashSet<Pair> hashSet, in Pair pair)
+            {
+                if (hashSet is null)
+                {
+                    hashSet = new HashSet<Pair>(KeyComparer.Instance);
+                }
+
+                hashSet.Add(pair);
+            }
         }
 
 //// ncrunch: rdi default
