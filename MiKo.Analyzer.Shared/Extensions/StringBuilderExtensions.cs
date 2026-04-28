@@ -1307,11 +1307,28 @@ namespace MiKoSolutions.Analyzers
             var lastIndex = substring.Length - 1;
             var endChar = substring[lastIndex];
 
-            if (substring.Length is QuickSubstringProbeLengthThreshold)
+            // Performance-Note:
+            // - fast-exit: if endChar does not appear anywhere in the valid end-character window, no complete match is possible
+            var endCharLastIndex = source.Slice(startIndex + lastIndex, delta - startIndex + 1).LastIndexOf(endChar);
+
+            if (endCharLastIndex < 0)
             {
-                for (var offset = startIndex; offset <= delta; offset++)
+                return -1;
+            }
+
+            // Performance-Note:
+            // - tighten delta to the last position where endChar actually appears,
+            //   so the loop never scans positions that cannot possibly yield a match
+            var effectiveDelta = startIndex + endCharLastIndex;
+
+            // Performance-Note:
+            // - if the substring is short enough, we can skip checking an extra probe character and just check the start and end characters;
+            // - note that most times the else part is run as the substring is often long enough
+            if (substring.Length <= 2 * QuickSubstringProbeLengthThreshold)
+            {
+                for (var offset = startIndex; offset <= effectiveDelta; offset++)
                 {
-                    var index = searchSpace.Slice(offset).IndexOf(startChar);
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
 
                     if (index < 0)
                     {
@@ -1336,9 +1353,9 @@ namespace MiKoSolutions.Analyzers
             {
                 var extraProbeChar = substring[QuickSubstringProbeLengthThreshold];
 
-                for (var offset = startIndex; offset <= delta; offset++)
+                for (var offset = startIndex; offset <= effectiveDelta; offset++)
                 {
-                    var index = searchSpace.Slice(offset).IndexOf(startChar);
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
 
                     if (index < 0)
                     {
