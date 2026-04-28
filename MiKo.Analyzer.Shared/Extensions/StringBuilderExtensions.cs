@@ -1321,6 +1321,9 @@ namespace MiKoSolutions.Analyzers
             //   so the loop never scans positions that cannot possibly yield a match
             var effectiveDelta = startIndex + endCharLastIndex;
 
+            // Performance-Note:
+            // - if the substring is short enough, we can skip checking an extra probe character and just check the start and end characters;
+            // - note that most times the else part is run as the substring is often long enough
             if (substring.Length <= 2 * QuickSubstringProbeLengthThreshold)
             {
                 for (var offset = startIndex; offset <= effectiveDelta; offset++)
