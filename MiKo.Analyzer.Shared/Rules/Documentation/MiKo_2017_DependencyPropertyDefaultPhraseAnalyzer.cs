@@ -61,7 +61,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             issues = new List<Diagnostic>(1);
                         }
 
-                        issues.Add(Issue(symbol, Constants.XmlTag.Summary, summaryPhrases[0]));
+                        // underline comment instead of field declaration
+                        var summaryXml = comment.GetSummaryXmls()[index];
+
+                        issues.Add(Issue(symbol.Name, summaryXml.GetContentsLocation(), Constants.XmlTag.Summary, summaryPhrases[0]));
                     }
                 }
             }
@@ -84,7 +87,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             issues = new List<Diagnostic>(1);
                         }
 
-                        issues.Add(Issue(symbol, Constants.XmlTag.Value, valuePhrases[0]));
+                        // underline comment instead of field declaration
+                        var valueXml = comment.GetValueXmls()[index];
+
+                        issues.Add(Issue(symbol.Name, valueXml.GetContentsLocation(), Constants.XmlTag.Value, valuePhrases[0]));
                     }
                 }
             }
