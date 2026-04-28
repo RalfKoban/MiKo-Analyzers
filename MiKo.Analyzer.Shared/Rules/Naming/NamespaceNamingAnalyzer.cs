@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
             finally
             {
-                Pool.Return(rentedArray, clearArray: true);
+                Pool.Return(rentedArray);
             }
         }
     }
