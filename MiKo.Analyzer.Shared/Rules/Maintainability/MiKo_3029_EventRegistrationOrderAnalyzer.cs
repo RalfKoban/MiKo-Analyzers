@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3029";
 
+        private static readonly string[] UnregistrationMethodNames = { "Unregister", "Deregister", "Unsubscribe", "Desubscribe" };
+
         public MiKo_3029_EventRegistrationOrderAnalyzer() : base(Id)
         {
         }
@@ -66,7 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            AnalyzeAssignmentExpressions(context);
+            var methodName = method.GetName();
+
+            if (methodName.StartsWithAny(UnregistrationMethodNames, StringComparison.OrdinalIgnoreCase))
+            {
+                AnalyzeUnregistrationAssignmentExpressions(context);
+            }
+            else
+            {
+                AnalyzeAssignmentExpressions(context);
+            }
         }
 
         private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
@@ -196,6 +207,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             }
                         }
                     }
+                }
+            }
+        }
+
+        private void AnalyzeUnregistrationAssignmentExpressions(in SyntaxNodeAnalysisContext context)
+        {
+            foreach (var add in context.Node.DescendantNodes<AssignmentExpressionSyntax>())
+            {
+                if (add.IsKind(SyntaxKind.AddAssignmentExpression) && Is(MethodKind.EventAdd, add, context.SemanticModel))
+                {
+                    ReportDiagnostics(context, Issue(add));
                 }
             }
         }

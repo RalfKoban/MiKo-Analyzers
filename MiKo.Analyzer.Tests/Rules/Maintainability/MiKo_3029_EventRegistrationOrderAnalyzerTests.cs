@@ -12,6 +12,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3029_EventRegistrationOrderAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] UnregistrationMethodNames =
+                                                                     [
+                                                                         "DeregisterEvents",
+                                                                         "DeRegisterEvents",
+                                                                         "DesubscribeEvents",
+                                                                         "DeSubscribeEvents",
+                                                                         "UnregisterEvents",
+                                                                         "UnRegisterEvents",
+                                                                         "UnsubscribeEvents",
+                                                                         "UnSubscribeEvents"
+                                                                     ];
+
         [Test]
         public void No_issue_is_reported_for_add_and_subtract_of_numbers() => No_issue_is_reported_for(@"
 using System;
@@ -90,6 +102,42 @@ using System;
 public class TestMe
 {
     public void DoSomething()
+    {
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_single_remove_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private void " + name + @"()
+    {
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_remove_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void " + name + @"()
     {
         Console.CancelKeyPress -= OnCancelKeyPress;
         Console.CancelKeyPress -= OnCancelKeyPress;
@@ -362,6 +410,66 @@ public class TestMe
     }
 
     private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_single_add_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void " + name + @"()
+    {
+        Console.CancelKeyPress += OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_multiple_add_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => An_issue_is_reported_for(3, @"
+using System;
+
+public class TestMe
+{
+    public void " + name + @"()
+    {
+        Console.CancelKeyPress += OnCancelKeyPress;
+        Console.CancelKeyPress += OnCancelKeyPress;
+        Console.CancelKeyPress += OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_multiple_remove_but_single_add_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void " + name + @"()
+    {
+        Console.CancelKeyPress -= OnCancelKeyPress1;
+        Console.CancelKeyPress += OnCancelKeyPress2;
+        Console.CancelKeyPress -= OnCancelKeyPress1;
+    }
+
+    private void OnCancelKeyPress1(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+
+    private void OnCancelKeyPress2(object sender, ConsoleCancelEventArgs e)
     {
     }
 }
