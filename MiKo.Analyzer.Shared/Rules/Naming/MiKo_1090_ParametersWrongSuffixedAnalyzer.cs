@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             {
                                                                 "old",
                                                                 "new",
+                                                                "current",
                                                                 "source",
                                                                 "target",
                                                                 "xml",

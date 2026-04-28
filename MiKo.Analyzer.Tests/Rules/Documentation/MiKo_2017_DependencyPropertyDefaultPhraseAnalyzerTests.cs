@@ -141,7 +141,8 @@ public class TestMe
     public int MyDependency { get; set; }
 
     /// <summary>
-    /// Identifies the <see cref=""MyDependency""/> dependency property. This field is read-only.
+    /// Identifies the <see cref=""MyDependency""/> dependency property.
+    /// This field is read-only.
     /// </summary>
     /// <value>
     /// The identifier for the <see cref=""MyDependency""/> dependency property.

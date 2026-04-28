@@ -38,14 +38,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var type = SyntaxFactory.ParseName(name);
 
-            var readOnlyMarker = string.Empty;
+            var summary = Comment(XmlElement(Constants.XmlTag.Summary), SummaryText[0], SeeCref(type), SummaryText[1]);
 
             if (fieldDeclaration.IsReadOnly())
             {
-                readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
+                var content = summary.Content.Add(XmlText(Constants.Comments.FieldIsReadOnly).WithLeadingXmlComment());
+
+                summary = summary.WithContent(content);
             }
 
-            var summary = Comment(XmlElement(Constants.XmlTag.Summary), SummaryText[0], SeeCref(type), SummaryText[1] + readOnlyMarker);
             var field = Comment(XmlElement(Constants.XmlTag.Value), ValueText[0], SeeCref(type), ValueText[1]);
 
             return syntax.WithoutTrivia()
