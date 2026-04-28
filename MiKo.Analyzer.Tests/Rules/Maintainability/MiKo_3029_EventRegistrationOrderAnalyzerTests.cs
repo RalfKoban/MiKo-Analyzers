@@ -475,6 +475,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_remove_with_lambda_in_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => An_issue_is_reported_for(@"
+ using System;
+
+ public class TestMe
+ {
+     public void " + name + @"()
+     {
+         Console.CancelKeyPress -= (sender, args) => { };
+     }
+ }
+ ");
+
         protected override string GetDiagnosticId() => MiKo_3029_EventRegistrationOrderAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3029_EventRegistrationOrderAnalyzer();

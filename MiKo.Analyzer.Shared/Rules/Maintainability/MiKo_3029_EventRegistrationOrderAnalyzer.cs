@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (methodName.StartsWithAny(UnregistrationMethodNames, StringComparison.OrdinalIgnoreCase))
             {
-                AnalyzeUnregistrationAssignmentExpressions(context);
+                AnalyzeUnregistrationAssignments(context);
             }
             else
             {
@@ -85,6 +85,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeSetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
 
         private void AnalyzeAssignmentExpressions(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node, context.SemanticModel));
+
+        private void AnalyzeUnregistrationAssignments(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeUnregistrationAssignments(context.Node, context.SemanticModel));
 
         private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node, SemanticModel semanticModel)
         {
@@ -211,13 +213,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeUnregistrationAssignmentExpressions(in SyntaxNodeAnalysisContext context)
+        private IEnumerable<Diagnostic> AnalyzeUnregistrationAssignments(SyntaxNode node, SemanticModel semanticModel)
         {
-            foreach (var add in context.Node.DescendantNodes<AssignmentExpressionSyntax>())
+            foreach (var assignment in node.DescendantNodes<AssignmentExpressionSyntax>())
             {
-                if (add.IsKind(SyntaxKind.AddAssignmentExpression) && Is(MethodKind.EventAdd, add, context.SemanticModel))
+                switch (assignment.Kind())
                 {
-                    ReportDiagnostics(context, Issue(add));
+                    case SyntaxKind.AddAssignmentExpression when Is(MethodKind.EventAdd, assignment, semanticModel):
+                    case SyntaxKind.SubtractAssignmentExpression when assignment.Right is LambdaExpressionSyntax && Is(MethodKind.EventRemove, assignment, semanticModel):
+                    {
+                        yield return Issue(assignment);
+
+                        break;
+                    }
                 }
             }
         }
