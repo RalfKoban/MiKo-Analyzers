@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
 
-        private static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(ITypeSymbol testClass, SemanticModel semanticModel)
+        private static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(ITypeSymbol testClass, SemanticModel semanticModel)
         {
             var syntaxTree = semanticModel.SyntaxTree;
 
@@ -95,18 +95,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
-                var controlFlow = semanticModel.AnalyzeControlFlow(body);
-                var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
+                IEnumerable<ReturnStatementSyntax> returnStatements = null;
 
-                foreach (var variable in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
+                foreach (var variable in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>(SyntaxKind.VariableDeclaration).SelectMany(_ => _.Variables))
                 {
-                    var variableName = variable.GetName();
-
-                    if (variable.Initializer?.Value is ObjectCreationExpressionSyntax oces && returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variableName == ins.GetName()))
+                    if (variable.Initializer?.Value is ObjectCreationExpressionSyntax oces)
                     {
-                        var typeUnderTest = oces.GetTypeSymbol(semanticModel);
+                        if (returnStatements is null)
+                        {
+                            var controlFlow = semanticModel.AnalyzeControlFlow(body);
+                            var statements = controlFlow.ReturnStatements;
 
-                        return typeUnderTest;
+                            if (statements.Length is 0)
+                            {
+                                continue;
+                            }
+
+                            returnStatements = statements.OfType<ReturnStatementSyntax>();
+                        }
+
+                        var variableName = variable.GetName();
+
+                        if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variableName == ins.GetName()))
+                        {
+                            var typeUnderTest = oces.GetTypeSymbol(semanticModel);
+
+                            return typeUnderTest;
+                        }
                     }
                 }
             }
@@ -116,14 +131,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ITypeSymbol AnalyzeTestMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            foreach (var variableDeclaration in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>())
+            if (methodDeclaration.Body is var body)
             {
-                // inspect associated test method
-                if (variableDeclaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
+                foreach (var variableDeclaration in body.DescendantNodes<VariableDeclarationSyntax>(SyntaxKind.VariableDeclaration))
                 {
-                    var typeUnderTest = variableDeclaration.GetTypeSymbol(semanticModel);
+                    // inspect associated test method
+                    if (variableDeclaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
+                    {
+                        var typeUnderTest = variableDeclaration.GetTypeSymbol(semanticModel);
 
-                    return typeUnderTest;
+                        return typeUnderTest;
+                    }
                 }
             }
 
@@ -137,19 +155,41 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeTypeSymbol(SyntaxNodeAnalysisContext context)
+        private Diagnostic[] AnalyzeTypeSymbol(SyntaxNodeAnalysisContext context)
         {
             if (context.FindContainingType() is ITypeSymbol testClass && testClass.IsTestClass())
             {
-                var semanticModel = context.SemanticModel;
+                var typesUnderTest = GetTypeUnderTestTypes(testClass, context.SemanticModel);
 
-                var typesUnderTest = GetTypeUnderTestTypes(testClass, semanticModel);
-
-                foreach (var typeUnderTest in typesUnderTest)
+                if (typesUnderTest.Count > 0)
                 {
-                    yield return TypeHasNamespaceIssue(testClass, typeUnderTest);
+                    List<Diagnostic> issues = null;
+
+                    foreach (var typeUnderTest in typesUnderTest)
+                    {
+                        var issue = TypeHasNamespaceIssue(testClass, typeUnderTest);
+
+                        if (issue is null)
+                        {
+                            continue;
+                        }
+
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>(1);
+                        }
+
+                        issues.Add(issue);
+                    }
+
+                    if (issues != null)
+                    {
+                        return issues.ToArray();
+                    }
                 }
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         private Diagnostic TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest)
