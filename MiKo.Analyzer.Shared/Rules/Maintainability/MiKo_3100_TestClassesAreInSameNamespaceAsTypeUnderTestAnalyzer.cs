@@ -108,7 +108,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                             if (statements.Length is 0)
                             {
-                                continue;
+                                // No return statements in the method body at all, so no variable can be returned
+                                return null;
                             }
 
                             returnStatements = statements.OfType<ReturnStatementSyntax>();
