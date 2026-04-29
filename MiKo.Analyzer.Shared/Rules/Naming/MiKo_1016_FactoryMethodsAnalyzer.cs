@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -37,7 +36,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false; // do not consider local functions at all
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation));
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            var namedMethods = symbol.GetNamedMethods();
+
+            if (namedMethods.Count is 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> issues = null;
+
+            foreach (IMethodSymbol method in namedMethods)
+            {
+                foreach (var issue in AnalyzeMethod(method, compilation))
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>();
+                    }
+
+                    issues.Add(issue);
+                }
+            }
+
+            return (IEnumerable<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
