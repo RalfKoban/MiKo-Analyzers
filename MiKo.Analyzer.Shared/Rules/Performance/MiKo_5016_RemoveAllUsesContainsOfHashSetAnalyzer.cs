@@ -23,7 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             SemanticModel semanticModel = null;
 
-            foreach (var node in syntax.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression)))
+            List<Diagnostic> issues = null;
+
+            foreach (var node in syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
             {
                 var name = node.GetName();
 
@@ -45,10 +47,17 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     if (type != null && type.Name != "HashSet" && type.Name != "ISet")
                     {
-                        yield return Issue(maes);
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>(1);
+                        }
+
+                        issues.Add(Issue(maes));
                     }
                 }
             }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }
