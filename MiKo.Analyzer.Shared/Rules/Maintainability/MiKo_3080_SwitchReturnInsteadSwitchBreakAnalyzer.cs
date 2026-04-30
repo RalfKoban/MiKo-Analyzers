@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<string> GetAssignmentIdentifierCandidates(SyntaxNode node)
         {
-            var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
+            var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
                                  .Select(_ => _.FirstChild<IdentifierNameSyntax>())
                                  .WhereNotNull()
                                  .Select(_ => _.GetName());
