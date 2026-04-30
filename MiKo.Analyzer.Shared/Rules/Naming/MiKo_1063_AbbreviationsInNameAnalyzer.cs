@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -25,9 +24,42 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             base.InitializeCore(context);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => identifiers.Select(_ => _.GetSymbol(semanticModel))
-                                                                                                                                                                     .WhereNotNull() // code seems to be obfuscated or contains no valid symbol, so ignore it silently
-                                                                                                                                                                     .SelectMany(AnalyzeName);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            if (identifiers.Length is 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> overallIssues = null;
+
+            foreach (var identifier in identifiers)
+            {
+                var symbol = identifier.GetSymbol(semanticModel);
+
+                if (symbol is null)
+                {
+                    // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                    continue;
+                }
+
+                var issues = AnalyzeName(symbol);
+
+                if (issues.Length is 0)
+                {
+                    continue;
+                }
+
+                if (overallIssues is null)
+                {
+                    overallIssues = new List<Diagnostic>(issues.Length);
+                }
+
+                overallIssues.AddRange(issues);
+            }
+
+            return (IEnumerable<Diagnostic>)overallIssues ?? Array.Empty<Diagnostic>();
+        }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsExtern is false && base.ShallAnalyze(symbol);
 

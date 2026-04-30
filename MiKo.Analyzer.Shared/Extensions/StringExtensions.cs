@@ -140,7 +140,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static int[] AllIndicesOf(this string value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            // Perf: This code sits on the hot path and is invoked quite often (several million times), so we directly use 'string.IsNullOrWhiteSpace(value)'
+            // Performance-Note: This code sits on the hot path and is invoked quite often (several million times), so we directly use 'string.IsNullOrWhiteSpace(value)'
             //       (otherwise, it would cost about 1/10 of the overall time here which is - given the several million times - recognizable)
             if (string.IsNullOrWhiteSpace(value))
             {
@@ -154,7 +154,7 @@ namespace MiKoSolutions.Analyzers
 
             if (comparison is StringComparison.Ordinal)
             {
-                // Perf: about 1/3 the times the strings are compared ordinal, so splitting this up increases the overall performance significantly
+                // Performance-Note: about 1/3 the times the strings are compared ordinal, so splitting this up increases the overall performance significantly
                 return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
             }
 
@@ -1151,7 +1151,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the sequence is found; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0; // Perf: when compared other than with Ordinal comparison, a string gets created internally
+        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0; // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
 
         /// <summary>
         /// Determines whether the span of characters contains the specified substring using the given <see cref="string"/> comparison.
@@ -1176,7 +1176,7 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            return value.Contains(finding.AsSpan(), comparison); // Perf: when compared other than with Ordinal comparison, a string gets created internally
+            return value.Contains(finding.AsSpan(), comparison); // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
         }
 
         /// <summary>
@@ -1382,6 +1382,8 @@ namespace MiKoSolutions.Analyzers
             {
                 var ordinalComparison = comparison is StringComparison.Ordinal;
 
+                string valueString = null;
+
                 for (int index = 0, length = phrases.Length; index < length; index++)
                 {
                     var phrase = phrases[index];
@@ -1398,7 +1400,14 @@ namespace MiKoSolutions.Analyzers
                         }
                         else
                         {
-                            if (value.Contains(phraseSpan, comparison)) // Perf: when compared other than with Ordinal comparison, a string gets created internally
+                            // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
+                            // to avoid that, we cache the string representation of the value and reuse it for all phrases
+                            if (valueString is null)
+                            {
+                                valueString = value.ToString();
+                            }
+
+                            if (valueString.Contains(phrase, comparison))
                             {
                                 return true;
                             }
@@ -2324,7 +2333,7 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasCharacters(this string value)
         {
-            // Perf: As this method is invoked several million times, we directly use 'string.IsNullOrEmpty(value)' here instead of our own extension method helper
+            // Performance-Note: As this method is invoked several million times, we directly use 'string.IsNullOrEmpty(value)' here instead of our own extension method helper
             return string.IsNullOrEmpty(value) is false;
         }
 
