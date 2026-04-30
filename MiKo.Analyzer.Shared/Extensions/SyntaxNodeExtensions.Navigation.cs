@@ -170,9 +170,9 @@ namespace MiKoSolutions.Analyzers
         /// One of the enumeration members that specifies the syntax kind to filter by.
         /// </param>
         /// <returns>
-        /// A sequence that contains all descendant nodes of the specified type and syntax kind.
+        /// A collection of syntax nodes that contains all descendant nodes of the specified type and syntax kind.
         /// </returns>
-        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode
+        internal static IReadOnlyList<T> DescendantNodes<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode
         {
             List<T> results = null;
 
@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers
                 results.Add((T)node);
             }
 
-            return results ?? Enumerable.Empty<T>();
+            return (IReadOnlyList<T>)results ?? Array.Empty<T>();
         }
 
         /// <summary>

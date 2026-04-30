@@ -143,15 +143,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var issues = AnalyzeParameters(methodName, methodBody, parameters, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Count > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameters(string methodName, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, SemanticModel semanticModel)
+        private IReadOnlyCollection<Diagnostic> AnalyzeParameters(string methodName, SyntaxNode methodBody, in SeparatedSyntaxList<ParameterSyntax> parameters, SemanticModel semanticModel)
         {
             var eventAssignments = new Lazy<List<AssignmentExpressionSyntax>>(CollectEventAssignments);
             var identifiersUsedAsArguments = new Lazy<ISet<string>>(CollectArgumentIdentifiers);
 
             var used = methodBody.GetAllUsedVariables(semanticModel);
+
+            List<Diagnostic> issues = null;
 
             for (int index = 0, count = parameters.Count; index < count; index++)
             {
@@ -179,8 +184,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                 }
 
-                yield return Issue(parameterName, parameter.Identifier);
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(Issue(parameterName, parameter.Identifier));
             }
+
+            return (IReadOnlyCollection<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
 
             List<AssignmentExpressionSyntax> CollectEventAssignments()
             {
