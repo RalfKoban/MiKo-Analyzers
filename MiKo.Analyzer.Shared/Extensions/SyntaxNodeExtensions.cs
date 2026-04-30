@@ -1926,6 +1926,73 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsNameOf(this InvocationExpressionSyntax value) => value.Expression.IsNameOf();
 
         /// <summary>
+        /// Determines whether the specified condition expression represents a null check for the given identifier.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition expression to inspect.
+        /// </param>
+        /// <param name="identifier">
+        /// The identifier to check against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="condition"/> is a not-equal-to-<see langword="null"/> binary expression
+        /// or a not-<see langword="null"/> pattern expression that references <paramref name="identifier"/>;
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullCheck(this ExpressionSyntax condition, IdentifierNameSyntax identifier) => condition.IsNullCheck(identifier.GetName());
+
+        /// <summary>
+        /// Determines whether the specified condition expression represents a null check for the given identifier.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition expression to inspect.
+        /// </param>
+        /// <param name="identifier">
+        /// The identifier to check against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="condition"/> is a not-equal-to-<see langword="null"/> binary expression
+        /// or a not-<see langword="null"/> pattern expression that references <paramref name="identifier"/>;
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullCheck(this ExpressionSyntax condition, string identifier)
+        {
+            switch (condition)
+            {
+                case BinaryExpressionSyntax b:
+                {
+                    if (b.IsKind(SyntaxKind.NotEqualsExpression))
+                    {
+                        if (b.Right.IsKind(SyntaxKind.NullLiteralExpression) && b.Left is IdentifierNameSyntax left)
+                        {
+                            return left.GetName() == identifier;
+                        }
+
+                        if (b.Left.IsKind(SyntaxKind.NullLiteralExpression) && b.Right is IdentifierNameSyntax right)
+                        {
+                            return right.GetName() == identifier;
+                        }
+                    }
+
+                    return false;
+                }
+
+                case IsPatternExpressionSyntax p:
+                {
+                    if (p.Pattern is UnaryPatternSyntax u && u.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.NullLiteralExpression) && p.Expression is IdentifierNameSyntax name)
+                    {
+                        return name.GetName() == identifier;
+                    }
+
+                    return false;
+                }
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Determines whether a type syntax represents an object type.
         /// </summary>
         /// <param name="value">
