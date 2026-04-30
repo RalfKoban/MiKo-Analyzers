@@ -45,6 +45,35 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_builder_call_chain() => No_issue_is_reported_for(@"
+using System;
+
+public interface ISomeBuilder
+{
+    ISomeBuilder Append();
+
+    object Build();
+}
+
+public class TestMe
+{
+    private ISomeBuilder Builder { get; set; }
+
+    public void DoSomething()
+    {
+        var value = Builder.Append()
+                           .Append()
+                           .Append()
+                           .Append()
+                           .Append()
+                           .Append()
+                           .Append()
+                           .Build();
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_a_Roslyn_call_chain() => No_issue_is_reported_for(@"
 using System;
 
@@ -2498,7 +2527,7 @@ public class TestMeD
 }
 ");
 
-        //// TODO RKN: Implement tests for method invocations, be aware of builder patterns
+        //// TODO RKN: Implement tests for method invocations
 
         protected override string GetDiagnosticId() => MiKo_3504_TrainWreckAnalyzer.Id;
 
