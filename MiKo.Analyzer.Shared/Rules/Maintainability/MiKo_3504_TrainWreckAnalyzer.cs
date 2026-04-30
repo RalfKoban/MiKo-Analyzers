@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -206,9 +205,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (syntax.GetTypeSymbol(semanticModel) is INamedTypeSymbol type)
                 {
-                    if (type.Name is nameof(StringBuilder))
+                    if (type.Name.AsSpan().EndsWith("Builder"))
                     {
-                        // ignore string builders
+                        // ignore builders
                         return true;
                     }
 
