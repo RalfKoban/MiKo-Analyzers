@@ -15016,6 +15016,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Using &quot;is var something&quot; always succeeds, even when the value is &apos;null&apos;. That means something can be &apos;null&apos; and any access on it will throw a &apos;NullReferenceException&apos;.
+        ///Instead, to avoid &apos;null&apos;, use a non-null pattern (such as &quot;is { } something&quot;), a specific type (such as &quot;is SomeType something&quot;), or add an explicit &apos;null&apos; check after the pattern match. This keeps your code safe and makes your intent clear..
+        /// </summary>
+        internal static string MiKo_3233_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3233_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use explicit type or null check.
+        /// </summary>
+        internal static string MiKo_3233_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3233_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use var patterns for null checks.
+        /// </summary>
+        internal static string MiKo_3233_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3233_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

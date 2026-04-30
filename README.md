@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 546 rules that are currently provided by the analyzer.
+The following tables list all the 547 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -483,6 +483,7 @@ The following tables list all the 546 rules that are currently provided by the a
 |[MiKo_3230](/Documentation/MiKo_3230.md)|Do not use 'Guid' as type for identifiers|&#x2713;|\-|
 |[MiKo_3231](/Documentation/MiKo_3231.md)|Use pattern matching for ordinal string comparison equality checks|&#x2713;|&#x2713;|
 |[MiKo_3232](/Documentation/MiKo_3232.md)|Use null checks instead of empty property pattern|&#x2713;|\-|
+|[MiKo_3233](/Documentation/MiKo_3233.md)|Do not use var patterns for null checks|&#x2713;|\-|
 |[MiKo_3301](/Documentation/MiKo_3301.md)|Use lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |[MiKo_3302](/Documentation/MiKo_3302.md)|Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |[MiKo_3401](/Documentation/MiKo_3401.md)|Keep namespace hierarchies from becoming too deep|&#x2713;|\-|
