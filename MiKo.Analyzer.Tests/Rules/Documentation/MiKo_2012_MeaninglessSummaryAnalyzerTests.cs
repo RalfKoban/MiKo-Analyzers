@@ -428,7 +428,31 @@ public class TestMe
 /// <summary>
 /// Interaction logic for TestMe.xaml
 /// </summary>
-public class TestMe
+public class TestMeCfg
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Represents a test me configuration.
+/// </summary>
+public class TestMeCfg
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_unfinished_XAML_like_code()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Interaction logic for TestMe.xaml
+/// </summary>
+public class 
 {
 }
 ";
@@ -437,7 +461,31 @@ public class TestMe
 /// <summary>
 /// Represents a TODO
 /// </summary>
-public class TestMe
+public class 
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_XAML_like_comment()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Interaction logic for TestMe.xaml
+/// </summary>
+public interface ITestMeCfg
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Represents a test me configuration.
+/// </summary>
+public interface ITestMeCfg
 {
 }
 ";

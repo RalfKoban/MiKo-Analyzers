@@ -146,9 +146,11 @@ public class TestMe
         [TestCase("Something_should_call", "Something_calls")]
         [TestCase("Something_should_create", "Something_creates")]
         [TestCase("Something_should_fail", "Something_fails")]
+        [TestCase("Something_should_Fail", "Something_fails")]
         [TestCase("Something_should_have_Anything", "Something_has_Anything")]
         [TestCase("Something_should_not_have_Anything", "Something_does_not_have_Anything")]
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
+        [TestCase("Something_should_Be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
         [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
         [TestCase("Something_should_returns_Anything", "Something_returns_Anything")]
@@ -162,6 +164,33 @@ public class TestMe
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
                                                                                              "using System; class TestMe { void " + method + "() { } }",
                                                                                              "using System; class TestMe { void " + wanted + "() { } }");
+
+        [TestCase("AppsShouldBeHandled", "AppsAreHandled")]
+        [TestCase("AppShouldBeHandled", "AppIsHandled")]
+        [TestCase("AccessShouldBeHandled", "AccessIsHandled")]
+        [TestCase("AreasShouldBeHandled", "AreasAreHandled")]
+        [TestCase("ApisShouldBeAvailable", "ApisAreAvailable")]
+        [TestCase("APIsShouldBeAvailable", "APIsAreAvailable")]
+        [TestCase("UrisShouldBeAvailable", "UrisAreAvailable")]
+        [TestCase("URIsShouldBeAvailable", "URIsAreAvailable")]
+        [TestCase("Apps_should_be_handled", "Apps_are_handled")]
+        [TestCase("Access_should_be_handled", "Access_is_handled")]
+        [TestCase("Apis_should_be_available", "Apis_are_available")]
+        [TestCase("APIs_should_be_available", "APIs_are_available")]
+        [TestCase("Uris_should_be_available", "Uris_are_available")]
+        [TestCase("URIs_should_be_available", "URIs_are_available")]
+        [TestCase("Areas_should_be_large", "Areas_are_large")]
+        [TestCase("BusShouldBeLate", "BusIsLate")]
+        [TestCase("Bus_should_be_late", "Bus_is_late")]
+        [TestCase("GasShouldBeOn", "GasIsOn")]
+        [TestCase("Gas_should_be_on", "Gas_is_on")]
+        [TestCase("TestRunsShouldBeOK", "TestRunsAreOK")]
+        [TestCase("Test_runs_should_Be_OK", "Test_runs_are_OK")]
+        [TestCase("ThisShouldBeOK", "ThisIsOK")]
+        [TestCase("This_should_be_OK", "This_is_OK")]
+        public void Code_gets_fixed_for_method_in_plural_(string method, string wanted) => VerifyCSharpFix(
+                                                                                                       "using System; class TestMe { void " + method + "() { } }",
+                                                                                                       "using System; class TestMe { void " + wanted + "() { } }");
 
         [TestCase("SomethingShouldFail", "SomethingFails")]
         [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]
