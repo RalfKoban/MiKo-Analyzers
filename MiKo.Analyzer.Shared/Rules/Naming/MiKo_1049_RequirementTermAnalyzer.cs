@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMapEntries().Distinct().ToArray();
 
-        private static readonly ConcurrentDictionary<string, string> AnalyzeNameCache = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> AnalyzeNameCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
-        private static readonly ConcurrentDictionary<string, string> BetterNameCache = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> BetterNameCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         public MiKo_1049_RequirementTermAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -96,11 +96,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             yield return new Pair("sIs", "sAre");
+            yield return new Pair("asAre", "asIs");
             yield return new Pair("isAre", "isIs");
             yield return new Pair("ssAre", "ssIs");
             yield return new Pair("usAre", "usIs");
 
             yield return new Pair("s_is_", "s_are_");
+            yield return new Pair("as_are_", "as_is_");
             yield return new Pair("is_are_", "is_is_");
             yield return new Pair("ss_are_", "ss_is_");
             yield return new Pair("us_are_", "us_is_");

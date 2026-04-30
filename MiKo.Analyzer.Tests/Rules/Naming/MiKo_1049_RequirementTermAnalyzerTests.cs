@@ -172,6 +172,8 @@ public class TestMe
         [TestCase("Access_should_be_handled", "Access_is_handled")]
         [TestCase("BusShouldBeLate", "BusIsLate")]
         [TestCase("Bus_should_be_late", "Bus_is_late")]
+        [TestCase("GasShouldBeOn", "GasIsOn")]
+        [TestCase("Gas_should_be_on", "Gas_is_on")]
         [TestCase("TestRunsShouldBeOK", "TestRunsAreOK")]
         [TestCase("Test_runs_should_Be_OK", "Test_runs_are_OK")]
         [TestCase("ThisShouldBeOK", "ThisIsOK")]
