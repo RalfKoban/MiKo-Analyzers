@@ -18,9 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeVarPattern, SyntaxKind.VarPattern);
 
+        private static bool HasIssue(VarPatternSyntax pattern)
+        {
+            if (pattern.Designation is SingleVariableDesignationSyntax s && pattern.Parent is SyntaxNode parent)
+            {
+                if (parent.IsAnyKind(ParentKinds))
+                {
+                    if (parent.Parent is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.LogicalAndExpression) && parent == b.Left && b.Right.IsNullCheck(s.Identifier.ValueText))
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeVarPattern(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is VarPatternSyntax pattern && pattern.Parent.IsAnyKind(ParentKinds))
+            if (context.Node is VarPatternSyntax pattern && HasIssue(pattern))
             {
                 ReportDiagnostics(context, Issue(pattern.VarKeyword));
             }

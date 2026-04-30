@@ -93,6 +93,40 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_var_pattern_in_is_pattern_in_if_condition_followed_by_a_null_check() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public void DoSomething(TestMe testee)
+    {
+        if (testee.Name is var name && name != null)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_var_pattern_in_is_pattern_in_if_condition_followed_by_a_is_not_null_check() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public void DoSomething(TestMe testee)
+    {
+        if (testee.Name is var name && name is not null)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_var_pattern_in_is_pattern_in_if_condition() => An_issue_is_reported_for(@"
 using System;
 
