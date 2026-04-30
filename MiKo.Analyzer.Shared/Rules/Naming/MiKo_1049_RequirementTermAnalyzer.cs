@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1049";
 
-        private static readonly Pair[] ReplacementMap = CreateReplacementMapEntries().ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMapEntries().Distinct().ToArray();
+
+        private static readonly ConcurrentDictionary<string, string> AnalyzeNameCache = new ConcurrentDictionary<string, string>();
+
+        private static readonly ConcurrentDictionary<string, string> BetterNameCache = new ConcurrentDictionary<string, string>();
 
         public MiKo_1049_RequirementTermAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -63,7 +68,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair(term + "Throw", "Throws");
                 yield return new Pair(term + "_Throw", "Throws");
                 yield return new Pair(term + "Run", "Runs");
+                yield return new Pair(term + "Runss", "Runs"); // in-place fix for 'Runs' just being replaced to 'Runss'
                 yield return new Pair(term + "_Run", "Runs");
+                yield return new Pair(term + "_Runss", "Runs"); // in-place fix for 'Runs' just being replaced to 'Runss'
                 yield return new Pair(term + "DoNothing", "DoesNothing");
                 yield return new Pair(term + "_DoNothing", "DoesNothing");
                 yield return new Pair(term + "Handle", "Handles");
@@ -71,42 +78,49 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair(term, "Does");
 
                 yield return new Pair("_" + lowerTerm + "_be_", "_is_");
+                yield return new Pair("_" + lowerTerm + "_Be_", "_is_");
                 yield return new Pair("_" + lowerTerm + "_call", "_calls");
                 yield return new Pair("_" + lowerTerm + "_create", "_creates");
                 yield return new Pair("_" + lowerTerm + "_fail", "_fails");
+                yield return new Pair("_" + lowerTerm + "_Fail", "_fails");
                 yield return new Pair("_" + lowerTerm + "_have_", "_has_");
                 yield return new Pair("_" + lowerTerm + "_not_have_", "_does_not_have_");
                 yield return new Pair("_" + lowerTerm + "_not_be_", "_is_not_");
                 yield return new Pair("_" + lowerTerm + "_return_", "_returns_");
                 yield return new Pair("_" + lowerTerm + "_returns_", "_returns_");
                 yield return new Pair("_" + lowerTerm + "_run", "_runs");
+                yield return new Pair("_" + lowerTerm + "_runss", "_runs"); // in-place fix for '_runs' just being replaced to '_runss'
                 yield return new Pair("_" + lowerTerm + "_throw_", "_throws_");
                 yield return new Pair("_" + lowerTerm + "_handle_", "_handles_");
                 yield return new Pair("_" + lowerTerm + "_", "_does_");
             }
 
             yield return new Pair("sIs", "sAre");
+            yield return new Pair("isAre", "isIs");
             yield return new Pair("ssAre", "ssIs");
+            yield return new Pair("usAre", "usIs");
 
             yield return new Pair("s_is_", "s_are_");
+            yield return new Pair("is_are_", "is_is_");
             yield return new Pair("ss_are_", "ss_is_");
+            yield return new Pair("us_are_", "us_is_");
         }
 
-        private static string FindBetterName(string symbolName) => symbolName.AsCachedBuilder()
-                                                                             .ReplaceAllWithProbe(ReplacementMap)
-                                                                             .ToStringAndRelease();
+        private static string FindBetterName(string symbolName) => BetterNameCache.GetOrAdd(symbolName, _ => _.AsCachedBuilder()
+                                                                                                              .ReplaceAllWithProbe(ReplacementMap)
+                                                                                                              .ToStringAndRelease());
 
         private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
             var symbolName = symbol.Name;
 
-            var name = symbolName.AsCachedBuilder()
-                                 .ReplaceWithProbe("efresh", "#") // filter 'refresh' and 'Refresh'
-                                 .ReplaceWithProbe("hallow", "#") // filter 'shallow' and 'Shallow'
-                                 .ReplaceWithProbe("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
-                                 .ReplaceWithProbe("eeded", "#") // filter 'needed' and 'Needed'
-                                 .ReplaceWithProbe("eeds", "#") // filter 'needs' and 'Needs'
-                                 .ToStringAndRelease();
+            var name = AnalyzeNameCache.GetOrAdd(symbolName, _ => _.AsCachedBuilder()
+                                                                   .ReplaceWithProbe("efresh", "#") // filter 'refresh' and 'Refresh'
+                                                                   .ReplaceWithProbe("hallow", "#") // filter 'shallow' and 'Shallow'
+                                                                   .ReplaceWithProbe("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                                                   .ReplaceWithProbe("eeded", "#") // filter 'needed' and 'Needed'
+                                                                   .ReplaceWithProbe("eeds", "#") // filter 'needs' and 'Needs'
+                                                                   .ToStringAndRelease());
 
             List<string> findings = null;
 
