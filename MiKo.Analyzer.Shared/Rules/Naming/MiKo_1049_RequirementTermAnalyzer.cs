@@ -97,13 +97,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             yield return new Pair("sIs", "sAre");
             yield return new Pair("asAre", "asIs");
+            yield return new Pair("easIs", "easAre");
             yield return new Pair("isAre", "isIs");
+            yield return new Pair("pisIs", "pisAre");
+            yield return new Pair("risIs", "risAre");
             yield return new Pair("ssAre", "ssIs");
             yield return new Pair("usAre", "usIs");
 
             yield return new Pair("s_is_", "s_are_");
             yield return new Pair("as_are_", "as_is_");
+            yield return new Pair("eas_is_", "eas_are_");
             yield return new Pair("is_are_", "is_is_");
+            yield return new Pair("pis_is_", "pis_are_");
+            yield return new Pair("ris_is_", "ris_are_");
             yield return new Pair("ss_are_", "ss_is_");
             yield return new Pair("us_are_", "us_is_");
         }
