@@ -132,7 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ITypeSymbol AnalyzeTestMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            if (methodDeclaration.Body is var body)
+            if (methodDeclaration.Body is BlockSyntax body)
             {
                 foreach (var variableDeclaration in body.DescendantNodes<VariableDeclarationSyntax>(SyntaxKind.VariableDeclaration))
                 {
