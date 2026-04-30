@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,10 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3060";
 
-        private const string DebugInvocation = nameof(Debug) + "." + nameof(Debug.Assert);
-
-        private const string TraceInvocation = nameof(Trace) + "." + nameof(Trace.Assert);
-
         public MiKo_3060_DebugTraceAssertAnalyzer() : base(Id)
         {
         }
@@ -24,24 +21,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            var methodCalls = symbol.GetSyntax().DescendantNodes<MemberAccessExpressionSyntax>();
+            var syntax = symbol.GetSyntax();
 
-            foreach (var methodCall in methodCalls)
+            List<Diagnostic> issues = null;
+
+            foreach (var methodCall in syntax.DescendantNodes<MemberAccessExpressionSyntax>())
             {
-                var call = methodCall.ToCleanedUpString();
-
-                switch (call)
+                if (methodCall.GetName() is nameof(Debug.Assert))
                 {
-                    case "System.Diagnostics." + DebugInvocation:
-                    case "System.Diagnostics." + TraceInvocation:
-                    case DebugInvocation:
-                    case TraceInvocation:
+                    var identifierName = methodCall.GetIdentifierName();
 
-                        yield return Issue(symbol.Name, methodCall, call);
+                    if (identifierName is nameof(Debug) || identifierName is nameof(Trace))
+                    {
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>(1);
+                        }
 
-                        break;
+                        issues.Add(Issue(symbol.Name, methodCall, methodCall.ToCleanedUpString()));
+                    }
                 }
             }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

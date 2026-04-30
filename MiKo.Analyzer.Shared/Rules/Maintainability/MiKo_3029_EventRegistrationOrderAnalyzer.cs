@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3029";
 
+        private static readonly string[] UnregistrationMethodNames = { "Unregister", "Deregister", "Unsubscribe", "Desubscribe" };
+
         public MiKo_3029_EventRegistrationOrderAnalyzer() : base(Id)
         {
         }
@@ -66,7 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            AnalyzeAssignmentExpressions(context);
+            var methodName = method.GetName();
+
+            if (methodName.StartsWithAny(UnregistrationMethodNames, StringComparison.OrdinalIgnoreCase))
+            {
+                AnalyzeUnregistrationAssignments(context);
+            }
+            else
+            {
+                AnalyzeAssignmentExpressions(context);
+            }
         }
 
         private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
@@ -74,6 +85,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeSetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
 
         private void AnalyzeAssignmentExpressions(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node, context.SemanticModel));
+
+        private void AnalyzeUnregistrationAssignments(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeUnregistrationAssignments(context.Node, context.SemanticModel));
 
         private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node, SemanticModel semanticModel)
         {
@@ -195,6 +208,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeUnregistrationAssignments(SyntaxNode node, SemanticModel semanticModel)
+        {
+            foreach (var assignment in node.DescendantNodes<AssignmentExpressionSyntax>())
+            {
+                switch (assignment.Kind())
+                {
+                    case SyntaxKind.AddAssignmentExpression when Is(MethodKind.EventAdd, assignment, semanticModel):
+                    case SyntaxKind.SubtractAssignmentExpression when assignment.Right is LambdaExpressionSyntax && Is(MethodKind.EventRemove, assignment, semanticModel):
+                    {
+                        yield return Issue(assignment);
+
+                        break;
                     }
                 }
             }
