@@ -84,6 +84,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair("_" + lowerTerm + "_handle_", "_handles_");
                 yield return new Pair("_" + lowerTerm + "_", "_does_");
             }
+
+            yield return new Pair("sIs", "sAre");
+            yield return new Pair("ssAre", "ssIs");
+
+            yield return new Pair("s_is_", "s_are_");
+            yield return new Pair("ss_are_", "ss_is_");
         }
 
         private static string FindBetterName(string symbolName) => symbolName.AsCachedBuilder()

@@ -159,6 +159,11 @@ public class TestMe
         [TestCase("Something_ShouldDocumentNothingForReasons", "Something_DoesDocumentNothingForReasons")]
         [TestCase("Something_ShouldHandleStuff", "Something_HandlesStuff")]
         [TestCase("Something_Should_HandleStuff", "Something_HandlesStuff")]
+        [TestCase("AppsShouldBeHandled", "AppsAreHandled")]
+        [TestCase("AppShouldBeHandled", "AppIsHandled")]
+        [TestCase("AccessShouldBeHandled", "AccessIsHandled")]
+        [TestCase("Apps_should_be_handled", "Apps_are_handled")]
+        [TestCase("Access_should_be_handled", "Access_is_handled")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
                                                                                              "using System; class TestMe { void " + method + "() { } }",
                                                                                              "using System; class TestMe { void " + wanted + "() { } }");
