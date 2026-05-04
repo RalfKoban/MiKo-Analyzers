@@ -27,8 +27,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiKo.Analyzer.2022\MiKo.Analyzer.2022.csproj" />
-    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2022\MiKo.Analyzer.Codefixes.2022.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.2026\MiKo.Analyzer.2026.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2026\MiKo.Analyzer.Codefixes.2026.csproj" />
   </ItemGroup>  
 
   <ItemGroup>
@@ -37,8 +37,8 @@
 
   <Target Name="_AddAnalyzersToOutput">
     <ItemGroup>
-      <TfmSpecificPackageFile Include="$(OutputPath)\MiKoSolutions.Analyzers.2022.dll" PackagePath="analyzers/dotnet/cs" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\MiKoSolutions.Analyzers.CodeFixes.2022.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\MiKoSolutions.Analyzers.2026.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\MiKoSolutions.Analyzers.CodeFixes.2026.dll" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>
 
