@@ -48,15 +48,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                 return null; // remove the return statement
                                                                             }
 
-                                                                            switch (rewritten)
+                                                                            if (rewritten is TryStatementSyntax statement)
                                                                             {
-                                                                                case TryStatementSyntax statement:
-                                                                                    // move the return statement inside the try block
-                                                                                    return statement.WithBlock(UpdateBlock(statement.Block, returnStatement));
-
-                                                                                default:
-                                                                                    return rewritten;
+                                                                                // move the return statement inside the try block
+                                                                                return statement.WithBlock(UpdateBlock(statement.Block, returnStatement));
                                                                             }
+
+                                                                            return rewritten;
                                                                         });
 
                 return updatedRoot;
