@@ -537,6 +537,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Maintenance", "3. Mainte
 		Documentation\MiKo_3502.md = Documentation\MiKo_3502.md
 		Documentation\MiKo_3503.md = Documentation\MiKo_3503.md
 		Documentation\MiKo_3504.md = Documentation\MiKo_3504.md
+		Documentation\MiKo_3505.md = Documentation\MiKo_3505.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Ordering", "4. Ordering", "{FCBF9905-EEB7-4800-B438-35BA6C797B31}"

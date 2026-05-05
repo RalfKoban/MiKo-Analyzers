@@ -15278,6 +15278,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Return value inside try/catch block.
+        /// </summary>
+        internal static string MiKo_3505_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3505_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid returning values immediately after a try/catch block when the value can be returned from within the try block instead. This makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_3505_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3505_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return inside the try/catch block.
+        /// </summary>
+        internal static string MiKo_3505_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3505_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return values directly after try-catch blocks.
+        /// </summary>
+        internal static string MiKo_3505_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3505_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place and order method side-by-side with overloads.
         /// </summary>
         internal static string MiKo_4001_CodeFixTitle {
