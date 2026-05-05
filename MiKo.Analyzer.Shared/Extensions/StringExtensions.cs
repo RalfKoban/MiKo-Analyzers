@@ -4347,21 +4347,8 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe bool QuickDiff(in char* a, in char* b, in int index)
         {
-            int charA = *(a + index);
-
-            if ((uint)(charA - 'a') <= 'z' - 'a')
-            {
-                charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-            }
-
-            int charB = *(b + index);
-
-            if ((uint)(charB - 'a') <= 'z' - 'a') // see 'IsAsciiLetterLower', inlined for performance reasons
-            {
-                charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-            }
-
-            return charA != charB;
+            // the following code will work for ASCII but not exotic unicode, however we assume that the language is English so it is sufficient for our purposes
+            return (*(a + index) | DifferenceBetweenUpperAndLowerCaseAscii) != (*(b + index) | DifferenceBetweenUpperAndLowerCaseAscii);
         }
 
         /// <summary>
