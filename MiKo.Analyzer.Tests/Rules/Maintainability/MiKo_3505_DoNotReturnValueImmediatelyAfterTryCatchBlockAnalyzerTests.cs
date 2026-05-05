@@ -806,6 +806,48 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_when_returning_a_value_inside_try_block_of_try_finally_block_without_catch_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+
+            return 42;
+        }
+        finally
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_when_returning_an_enum_value_inside_try_block_of_try_finally_block_without_catch_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+
+            return StringComparison.Ordinal;
+        }
+        finally
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_when_returning_a_value_directly_after_try_catch_block_and_the_catch_block_throws() => An_issue_is_reported_for(@"
 using System;
 
@@ -1182,6 +1224,92 @@ public class TestMe
         catch (Exception ex) when (ex is InvalidOperationException)
         {
             return StringComparison.CurrentCulture;
+        }
+
+        return StringComparison.Ordinal;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_returning_a_value_directly_after_try_finally_block_without_catch_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+        }
+
+        return 42;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_returning_an_enum_value_directly_after_try_finally_block_without_catch_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+        }
+
+        return StringComparison.Ordinal;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_returning_a_value_directly_after_try_finally_block_without_catch_block_and_finally_block_has_statements() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+            DoSomething(null);
+        }
+
+        return 42;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_returning_an_enum_value_directly_after_try_finally_block_without_catch_block_and_finally_block_has_statements() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+            DoSomething(null);
         }
 
         return StringComparison.Ordinal;
@@ -2013,6 +2141,194 @@ public class TestMe
         catch (Exception ex) when (ex is InvalidOperationException)
         {
             return StringComparison.CurrentCulture;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_returning_a_value_directly_after_try_finally_block_without_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+        }
+
+        return 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+
+            return 42;
+        }
+        finally
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_returning_an_enum_value_directly_after_try_finally_block_without_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+        }
+
+        return StringComparison.Ordinal;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+
+            return StringComparison.Ordinal;
+        }
+        finally
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_returning_a_value_directly_after_try_finally_block_without_catch_block_and_finally_block_has_statements()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+            DoSomething(null);
+        }
+
+        return 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+
+            return 42;
+        }
+        finally
+        {
+            DoSomething(null);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_returning_an_enum_value_directly_after_try_finally_block_without_catch_block_and_finally_block_has_statements()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+        }
+        finally
+        {
+            DoSomething(null);
+        }
+
+        return StringComparison.Ordinal;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison DoSomething(object o)
+    {
+        try
+        {
+            DoSomething(null);
+
+            return StringComparison.Ordinal;
+        }
+        finally
+        {
+            DoSomething(null);
         }
     }
 }
