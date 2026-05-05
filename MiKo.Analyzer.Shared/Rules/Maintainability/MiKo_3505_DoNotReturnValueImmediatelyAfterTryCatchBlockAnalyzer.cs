@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (expression is LiteralExpressionSyntax || expression.IsEnum(semanticModel))
                 {
-                    return Issue(expression);
+                    return Issue(returnStatement.ReturnKeyword);
                 }
             }
 
