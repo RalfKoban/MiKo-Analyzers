@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 548 rules that are currently provided by the analyzer.
+The following tables list all the 551 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -195,6 +195,9 @@ The following tables list all the 548 rules that are currently provided by the a
 |[MiKo_1528](/Documentation/MiKo_1528.md)|Do not prefix parameters with 'arg'|&#x2713;|&#x2713;|
 |[MiKo_1529](/Documentation/MiKo_1529.md)|Do not prefix methods with 3rd person singular verb|&#x2713;|&#x2713;|
 |[MiKo_1530](/Documentation/MiKo_1530.md)|Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks|&#x2713;|&#x2713;|
+|[MiKo_1531](/Documentation/MiKo_1531.md)|Do not prefix local variables with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1532](/Documentation/MiKo_1532.md)|Do not prefix parameters with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1533](/Documentation/MiKo_1533.md)|Do not prefix fields with 'should'|&#x2713;|&#x2713;|
 
 ### Documentation
 

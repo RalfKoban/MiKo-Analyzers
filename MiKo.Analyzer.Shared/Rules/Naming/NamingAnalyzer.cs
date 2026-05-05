@@ -131,6 +131,68 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return name;
         }
 
+        /// <summary>
+        /// Finds a better name for a symbol that uses "shall" or "should" as prefix.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix to preserve in the name.
+        /// The default is <c>""</c>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name with corrected name.
+        /// </returns>
+        protected static string FindBetterNameForShouldPrefix(string name, string prefix = "")
+        {
+            var startIndex = prefix.Length;
+
+            var nameSpan = name.AsSpan(prefix.Length);
+
+            foreach (var shouldPrefix in Constants.Names.ShouldPrefixes)
+            {
+                if (nameSpan.StartsWith(shouldPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    var nextWordPosition = startIndex + shouldPrefix.Length;
+                    var secondWord = nameSpan.SecondWord(WordBoundary.UpperCaseCharacters);
+
+                    var builder = StringBuilderCache.Acquire();
+
+                    if (startIndex > 0)
+                    {
+                        builder.Append(prefix);
+                    }
+
+                    if (secondWord.Equals("Be", StringComparison.Ordinal))
+                    {
+                        builder.Append("Is");
+
+                        nextWordPosition += 2; // skip 'Be'
+                    }
+                    else if (secondWord.Equals("Not", StringComparison.Ordinal))
+                    {
+                        var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
+
+                        if (thirdWord.Equals("Be", StringComparison.Ordinal))
+                        {
+                            builder.Append("IsNot");
+
+                            nextWordPosition += 5; // skip 'NotBe'
+                        }
+                    }
+
+                    builder.Append(name, nextWordPosition, name.Length - nextWordPosition);
+
+                    builder.ToLowerCaseAt(prefix.Length);
+
+                    return builder.ToStringAndRelease();
+                }
+            }
+
+            return name;
+        }
+
 #pragma warning disable CA1021
 
         /// <summary>
