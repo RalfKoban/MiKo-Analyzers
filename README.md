@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 547 rules that are currently provided by the analyzer.
+The following tables list all the 548 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -490,6 +490,7 @@ The following tables list all the 547 rules that are currently provided by the a
 |[MiKo_3502](/Documentation/MiKo_3502.md)|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
 |[MiKo_3503](/Documentation/MiKo_3503.md)|Do not assign variables in try-catch blocks that are returned directly outside|&#x2713;|&#x2713;|
 |[MiKo_3504](/Documentation/MiKo_3504.md)|Do not use train wrecks|&#x2713;|\-|
+|[MiKo_3505](/Documentation/MiKo_3505.md)|Do not return values directly after try-catch blocks|&#x2713;|&#x2713;|
 
 ### Ordering
 

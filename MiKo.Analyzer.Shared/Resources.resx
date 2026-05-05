@@ -5338,6 +5338,18 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
   <data name="MiKo_3504_Title" xml:space="preserve">
     <value>Do not use train wrecks</value>
   </data>
+  <data name="MiKo_3505_CodeFixTitle" xml:space="preserve">
+    <value>Return value inside try/catch block</value>
+  </data>
+  <data name="MiKo_3505_Description" xml:space="preserve">
+    <value>Avoid returning values immediately after a try/catch block when the value can be returned from within the try block instead. This makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3505_MessageFormat" xml:space="preserve">
+    <value>Place return inside the try/catch block</value>
+  </data>
+  <data name="MiKo_3505_Title" xml:space="preserve">
+    <value>Do not return values directly after try-catch blocks</value>
+  </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>
   </data>
