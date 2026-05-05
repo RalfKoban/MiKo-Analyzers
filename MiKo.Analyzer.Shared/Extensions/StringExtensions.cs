@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers
                                                        (?!\w)                     # no word character after
                                                    ";
 
-        private const int QuickSubstringProbeLengthThreshold = 4;
+        private const int QuickStartSubstringProbeLengthThreshold = 4;
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
@@ -4388,20 +4388,18 @@ namespace MiKoSolutions.Analyzers
             }
 
             // both are at least of similar length, so perform a quick compare first
-            if (value.Length > QuickSubstringProbeLengthThreshold)
+            switch (comparison)
             {
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                        return QuickStartSubstringProbeOrdinal(value, other);
+                // this is the most likely case, so we put it first
+                case StringComparison.OrdinalIgnoreCase:
+                    return QuickStartSubstringProbeOrdinalIgnoreCase(value, other);
 
-                    case StringComparison.OrdinalIgnoreCase:
-                        return QuickStartSubstringProbeOrdinalIgnoreCase(value, other);
-                }
+                case StringComparison.Ordinal:
+                    return QuickStartSubstringProbeOrdinal(value, other);
+
+                default:
+                    return true; // continue to check
             }
-
-            // continue to check
-            return true;
         }
 
         /// <summary>
@@ -4421,7 +4419,7 @@ namespace MiKoSolutions.Analyzers
         {
             var length = Math.Min(value.Length, other.Length);
 
-            if (length < QuickSubstringProbeLengthThreshold)
+            if (length < QuickStartSubstringProbeLengthThreshold)
             {
                 return true;
             }
@@ -4446,7 +4444,7 @@ namespace MiKoSolutions.Analyzers
         {
             var length = Math.Min(value.Length, other.Length);
 
-            if (length < QuickSubstringProbeLengthThreshold)
+            if (length < QuickStartSubstringProbeLengthThreshold)
             {
                 return true;
             }
