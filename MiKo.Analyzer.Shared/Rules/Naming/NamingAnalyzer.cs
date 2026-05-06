@@ -146,6 +146,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected static string FindBetterNameForShouldPrefix(string name, string prefix = "")
         {
+            const string Be = "Be";
+            const string Not = "Not";
+            const string Is = "Is";
+
             var startIndex = prefix.Length;
 
             var nameSpan = name.AsSpan(prefix.Length);
@@ -164,21 +168,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         builder.Append(prefix);
                     }
 
-                    if (secondWord.Equals("Be", StringComparison.Ordinal))
+                    if (secondWord.Equals(Be, StringComparison.Ordinal))
                     {
-                        builder.Append("Is");
+                        builder.Append(Is);
 
-                        nextWordPosition += 2; // skip 'Be'
+                        nextWordPosition += Be.Length; // skip 'Be'
                     }
-                    else if (secondWord.Equals("Not", StringComparison.Ordinal))
+                    else
                     {
-                        var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
-
-                        if (thirdWord.Equals("Be", StringComparison.Ordinal))
+                        if (secondWord.Equals(Not, StringComparison.Ordinal))
                         {
-                            builder.Append("IsNot");
+                            var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
 
-                            nextWordPosition += 5; // skip 'NotBe'
+                            if (thirdWord.Equals(Be, StringComparison.Ordinal))
+                            {
+                                builder.Append(Is + Not);
+
+                                nextWordPosition += Not.Length + Be.Length; // skip 'NotBe'
+                            }
                         }
                     }
 
