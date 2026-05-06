@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var identifier = identifiers[index];
                     var name = identifier.ValueText;
 
-                    if (name.StartsWithAny(Constants.Names.ShouldPrefixes, StringComparison.OrdinalIgnoreCase))
+                    if (name.StartsWithAny(Constants.Names.IntentPrefixes, StringComparison.OrdinalIgnoreCase))
                     {
                         var betterName = FindBetterNameForShouldPrefix(name);
 

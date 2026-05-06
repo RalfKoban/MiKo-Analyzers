@@ -1627,7 +1627,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                                  },
                                                                                                                                              StringComparer.Ordinal);
 
-            internal static readonly string[] ShouldPrefixes =
+            internal static readonly string[] IntentPrefixes =
                                                               {
                                                                   "should",
                                                                   "shall",

@@ -156,7 +156,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var nameSpan = name.AsSpan(prefix.Length);
 
-            foreach (var shouldPrefix in Constants.Names.ShouldPrefixes)
+            foreach (var shouldPrefix in Constants.Names.IntentPrefixes)
             {
                 if (nameSpan.StartsWith(shouldPrefix, StringComparison.OrdinalIgnoreCase))
                 {

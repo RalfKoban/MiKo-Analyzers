@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var name = symbol.Name;
             var prefix = GetFieldPrefix(name);
 
-            if (name.AsSpan(prefix.Length).StartsWithAny(Constants.Names.ShouldPrefixes, StringComparison.OrdinalIgnoreCase))
+            if (name.AsSpan(prefix.Length).StartsWithAny(Constants.Names.IntentPrefixes, StringComparison.OrdinalIgnoreCase))
             {
                 var betterName = FindBetterNameForShouldPrefix(name, prefix);
 
