@@ -1626,6 +1626,15 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                                      new KeyValuePair<string, string>("Decorator", "decorated"),
                                                                                                                                                  },
                                                                                                                                              StringComparer.Ordinal);
+
+            internal static readonly string[] IntentPrefixes =
+                                                              {
+                                                                  "should",
+                                                                  "shall",
+                                                                  "will",
+                                                                  "would",
+                                                                  "could",
+                                                              };
         }
 
         internal static class AnalyzerCodeFixSharedData
