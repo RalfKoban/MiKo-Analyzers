@@ -2069,6 +2069,45 @@ Third-person verbs like "Creates" read like descriptions instead of commands, wh
   <data name="MiKo_1530_Title" xml:space="preserve">
     <value>Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks</value>
   </data>
+  <data name="MiKo_1531_CodeFixTitle" xml:space="preserve">
+    <value>Rename to express a fact</value>
+  </data>
+  <data name="MiKo_1531_Description" xml:space="preserve">
+    <value>Local variables that are prefixed with 'shall', 'should', 'will', 'would', or 'could' are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the variable.
+Naming the variable based on what it represents, rather than what it implies, makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_1531_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1531_Title" xml:space="preserve">
+    <value>Do not prefix local variables with words that express intent or expectation</value>
+  </data>
+  <data name="MiKo_1532_CodeFixTitle" xml:space="preserve">
+    <value>Rename to express a fact</value>
+  </data>
+  <data name="MiKo_1532_Description" xml:space="preserve">
+    <value>Parameters that are prefixed with 'shall', 'should', 'will', 'would', or 'could' are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the parameter.
+Naming the parameter based on what it represents, rather than what it implies, makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_1532_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1532_Title" xml:space="preserve">
+    <value>Do not prefix parameters with words that express intent or expectation</value>
+  </data>
+  <data name="MiKo_1533_CodeFixTitle" xml:space="preserve">
+    <value>Rename to express a fact</value>
+  </data>
+  <data name="MiKo_1533_Description" xml:space="preserve">
+    <value>Fields that are prefixed with 'shall', 'should', 'will', 'would', or 'could' are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the field.
+Naming the field based on what it represents, rather than what it implies, makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_1533_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1533_Title" xml:space="preserve">
+    <value>Do not prefix fields with words that express intent or expectation</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
@@ -5337,6 +5376,18 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
   </data>
   <data name="MiKo_3504_Title" xml:space="preserve">
     <value>Do not use train wrecks</value>
+  </data>
+  <data name="MiKo_3505_CodeFixTitle" xml:space="preserve">
+    <value>Return value inside try/catch block</value>
+  </data>
+  <data name="MiKo_3505_Description" xml:space="preserve">
+    <value>Avoid returning values immediately after a try/catch block when the value can be returned from within the try block instead. This makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3505_MessageFormat" xml:space="preserve">
+    <value>Place return inside the try/catch block</value>
+  </data>
+  <data name="MiKo_3505_Title" xml:space="preserve">
+    <value>Do not return values directly after try-catch blocks</value>
   </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>

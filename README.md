@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 547 rules that are currently provided by the analyzer.
+The following tables list all the 551 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -196,6 +196,9 @@ The following tables list all the 547 rules that are currently provided by the a
 |[MiKo_1528](/Documentation/MiKo_1528.md)|Do not prefix parameters with 'arg'|&#x2713;|&#x2713;|
 |[MiKo_1529](/Documentation/MiKo_1529.md)|Do not prefix methods with 3rd person singular verb|&#x2713;|&#x2713;|
 |[MiKo_1530](/Documentation/MiKo_1530.md)|Follow .NET Framework Design Guidelines for method names of DependencyPropertyChanged callbacks|&#x2713;|&#x2713;|
+|[MiKo_1531](/Documentation/MiKo_1531.md)|Do not prefix local variables with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1532](/Documentation/MiKo_1532.md)|Do not prefix parameters with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1533](/Documentation/MiKo_1533.md)|Do not prefix fields with 'should'|&#x2713;|&#x2713;|
 
 ### Documentation
 
@@ -491,6 +494,7 @@ The following tables list all the 547 rules that are currently provided by the a
 |[MiKo_3502](/Documentation/MiKo_3502.md)|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
 |[MiKo_3503](/Documentation/MiKo_3503.md)|Do not assign variables in try-catch blocks that are returned directly outside|&#x2713;|&#x2713;|
 |[MiKo_3504](/Documentation/MiKo_3504.md)|Do not use train wrecks|&#x2713;|\-|
+|[MiKo_3505](/Documentation/MiKo_3505.md)|Do not return values directly after try-catch blocks|&#x2713;|&#x2713;|
 
 ### Ordering
 

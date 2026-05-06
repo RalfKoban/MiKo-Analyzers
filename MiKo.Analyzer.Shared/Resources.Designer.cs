@@ -5733,6 +5733,117 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename to express a fact.
+        /// </summary>
+        internal static string MiKo_1531_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1531_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables that are prefixed with &apos;shall&apos;, &apos;should&apos;, &apos;will&apos;, &apos;would&apos;, or &apos;could&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the variable.
+        ///Naming the variable based on what it represents, rather than what it implies, makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_1531_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1531_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1531_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1531_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix local variables with words that express intent or expectation.
+        /// </summary>
+        internal static string MiKo_1531_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1531_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename to express a fact.
+        /// </summary>
+        internal static string MiKo_1532_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1532_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters that are prefixed with &apos;shall&apos;, &apos;should&apos;, &apos;will&apos;, &apos;would&apos;, or &apos;could&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the parameter.
+        ///Naming the parameter based on what it represents, rather than what it implies, makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_1532_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1532_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1532_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1532_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix parameters with words that express intent or expectation.
+        /// </summary>
+        internal static string MiKo_1532_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1532_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename to express a fact.
+        /// </summary>
+        internal static string MiKo_1533_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1533_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields that are prefixed with &apos;shall&apos;, &apos;should&apos;, &apos;will&apos;, &apos;would&apos;, or &apos;could&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the field.
+        ///Naming the field based on what it represents, rather than what it implies, makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_1533_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1533_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1533_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1533_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix fields with words that express intent or expectation.
+        /// </summary>
+        internal static string MiKo_1533_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1533_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -15274,6 +15385,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3504_Title {
             get {
                 return ResourceManager.GetString("MiKo_3504_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return value inside try/catch block.
+        /// </summary>
+        internal static string MiKo_3505_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3505_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid returning values immediately after a try/catch block when the value can be returned from within the try block instead. This makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_3505_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3505_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return inside the try/catch block.
+        /// </summary>
+        internal static string MiKo_3505_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3505_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return values directly after try-catch blocks.
+        /// </summary>
+        internal static string MiKo_3505_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3505_Title", resourceCulture);
             }
         }
         

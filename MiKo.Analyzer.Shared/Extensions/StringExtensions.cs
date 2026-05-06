@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers
                                                        (?!\w)                     # no word character after
                                                    ";
 
-        private const int QuickSubstringProbeLengthThreshold = 4;
+        private const int QuickStartSubstringProbeLengthThreshold = 4;
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
@@ -3179,10 +3179,14 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The <see cref="string"/> to process.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the second word from the <see cref="string"/>.
         /// </returns>
-        public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
+        public static string SecondWord(this string value, in WordBoundary boundary = WordBoundary.WhiteSpaces) => SecondWord(value.AsSpan(), boundary).ToString();
 
         /// <summary>
         /// Gets the second word from the span of characters.
@@ -3190,10 +3194,14 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The span of characters to process.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// The second word from the span.
         /// </returns>
-        public static ReadOnlySpan<char> SecondWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().FirstWord();
+        public static ReadOnlySpan<char> SecondWord(this in ReadOnlySpan<char> value, in WordBoundary boundary = WordBoundary.WhiteSpaces) => value.WithoutFirstWord(boundary).FirstWord();
 
         /// <summary>
         /// Determines whether the <see cref="string"/> starts with the specified character.
@@ -3459,10 +3467,14 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The <see cref="string"/> to process.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the third word from the <see cref="string"/>.
         /// </returns>
-        public static string ThirdWord(this string value) => ThirdWord(value.AsSpan()).ToString();
+        public static string ThirdWord(this string value, in WordBoundary boundary = WordBoundary.WhiteSpaces) => ThirdWord(value.AsSpan(), boundary).ToString();
 
         /// <summary>
         /// Gets the third word from the span of characters.
@@ -3470,10 +3482,14 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The span of characters to process.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// The third word from the span.
         /// </returns>
-        public static ReadOnlySpan<char> ThirdWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().WithoutFirstWord().FirstWord();
+        public static ReadOnlySpan<char> ThirdWord(this in ReadOnlySpan<char> value, in WordBoundary boundary = WordBoundary.WhiteSpaces) => value.WithoutFirstWord(boundary).WithoutFirstWord(boundary).FirstWord();
 
 #pragma warning disable CA1308
         /// <summary>
@@ -3736,11 +3752,15 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The <see cref="string"/> to process.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value with the first word removed.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
+        public static string WithoutFirstWord(this string value, in WordBoundary boundary = WordBoundary.WhiteSpaces) => WithoutFirstWord(value.AsSpan(), boundary).ToString();
 
         /// <summary>
         /// Removes the first word from the span of characters.
@@ -3748,22 +3768,47 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The span of characters to process.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// The span of characters after the first word.
         /// </returns>
-        public static ReadOnlySpan<char> WithoutFirstWord(this in ReadOnlySpan<char> value)
+        public static ReadOnlySpan<char> WithoutFirstWord(this in ReadOnlySpan<char> value, in WordBoundary boundary = WordBoundary.WhiteSpaces)
         {
             var text = value.TrimStart();
 
-            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
-
-            if (firstSpace < 0)
+            if (boundary is WordBoundary.WhiteSpaces)
             {
-                // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
-                return " ".AsSpan();
+                var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+
+                if (firstSpace < 0)
+                {
+                    // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
+                    return " ".AsSpan();
+                }
+
+                return text.Slice(firstSpace);
             }
 
-            return text.Slice(firstSpace);
+            var textLength = text.Length;
+
+            if (textLength > 1)
+            {
+                // start at index 1 to skip first upper case character (and avoid return of empty word)
+                for (var index = 1; index < textLength; index++)
+                {
+                    var c = text[index];
+
+                    if (c.IsUpperCase() || (c is '_' && index > 2))
+                    {
+                        return text.Slice(index);
+                    }
+                }
+            }
+
+            return ReadOnlySpan<char>.Empty;
         }
 
         /// <summary>
@@ -4388,20 +4433,18 @@ namespace MiKoSolutions.Analyzers
             }
 
             // both are at least of similar length, so perform a quick compare first
-            if (value.Length > QuickSubstringProbeLengthThreshold)
+            switch (comparison)
             {
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                        return QuickStartSubstringProbeOrdinal(value, other);
+                // this is the most likely case, so we put it first
+                case StringComparison.OrdinalIgnoreCase:
+                    return QuickStartSubstringProbeOrdinalIgnoreCase(value, other);
 
-                    case StringComparison.OrdinalIgnoreCase:
-                        return QuickStartSubstringProbeOrdinalIgnoreCase(value, other);
-                }
+                case StringComparison.Ordinal:
+                    return QuickStartSubstringProbeOrdinal(value, other);
+
+                default:
+                    return true; // continue to check
             }
-
-            // continue to check
-            return true;
         }
 
         /// <summary>
@@ -4421,7 +4464,7 @@ namespace MiKoSolutions.Analyzers
         {
             var length = Math.Min(value.Length, other.Length);
 
-            if (length < QuickSubstringProbeLengthThreshold)
+            if (length < QuickStartSubstringProbeLengthThreshold)
             {
                 return true;
             }
@@ -4446,7 +4489,7 @@ namespace MiKoSolutions.Analyzers
         {
             var length = Math.Min(value.Length, other.Length);
 
-            if (length < QuickSubstringProbeLengthThreshold)
+            if (length < QuickStartSubstringProbeLengthThreshold)
             {
                 return true;
             }
