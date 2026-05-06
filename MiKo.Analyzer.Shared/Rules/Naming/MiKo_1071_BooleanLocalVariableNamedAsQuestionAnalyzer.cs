@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -25,8 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
-            foreach (var identifier in identifiers)
+            List<Diagnostic> issues = null;
+
+            for (int index = 0, length = identifiers.Length; index < length; index++)
             {
+                var identifier = identifiers[index];
                 var name = identifier.ValueText;
 
                 if (name.Length <= 5)
@@ -37,9 +41,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(1) && name.StartsWith("isInDesign", StringComparison.Ordinal) is false)
                 {
-                    yield return Issue(name, identifier);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(name, identifier));
                 }
             }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }
