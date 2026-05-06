@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] FieldPrefixes = Constants.Markers.FieldPrefixes;
 
-        private static readonly string[] Prefixes = ["shall", "should"];
+        private static readonly string[] Prefixes = ["shall", "should", "will", "would", "could"];
 
         private static readonly TestCaseData[] CodeFixData = [.. CreateCodeFixData()];
 
@@ -72,13 +72,30 @@ namespace Bla
         {
             Pair[] pairs =
                            [
+                               new("couldBeNotOnline", "isNotOnline"),
+                               new("couldBeOnline", "isOnline"),
+                               new("couldConnect", "connect"),
+                               new("couldHaveState", "hasState"),
+                               new("couldNotBeOnline", "isNotOnline"),
                                new("shallBeOnline", "isOnline"),
                                new("shallConnect", "connect"),
+                               new("shallHaveState", "hasState"),
                                new("shallNotConnect", "notConnect"),
                                new("shouldBeNotOnline", "isNotOnline"),
                                new("shouldBeOnline", "isOnline"),
                                new("shouldConnect", "connect"),
+                               new("shouldHaveState", "hasState"),
                                new("shouldNotBeOnline", "isNotOnline"),
+                               new("willBeOnline", "isOnline"),
+                               new("willConnect", "connect"),
+                               new("willHaveState", "hasState"),
+                               new("willNotConnect", "notConnect"),
+                               new("wouldBeNotOnline", "isNotOnline"),
+                               new("wouldBeOnline", "isOnline"),
+                               new("wouldConnect", "connect"),
+                               new("wouldHaveState", "hasState"),
+                               new("wouldNotBeOnline", "isNotOnline"),
+                               new("wouldNotHaveState", "hasNotState"),
                            ];
 
             foreach (var prefix in FieldPrefixes)

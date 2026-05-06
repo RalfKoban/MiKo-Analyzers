@@ -149,6 +149,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             const string Be = "Be";
             const string Not = "Not";
             const string Is = "Is";
+            const string Has = "Has";
+            const string Have = "Have";
 
             var startIndex = prefix.Length;
 
@@ -170,22 +172,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (secondWord.Equals(Be, StringComparison.Ordinal))
                     {
-                        builder.Append(Is);
-
                         nextWordPosition += Be.Length; // skip 'Be'
+
+                        builder.Append(Is);
                     }
-                    else
+                    else if (secondWord.Equals(Have, StringComparison.Ordinal))
                     {
-                        if (secondWord.Equals(Not, StringComparison.Ordinal))
+                        nextWordPosition += Have.Length; // skip 'Have'
+
+                        builder.Append(Has);
+                    }
+                    else if (secondWord.Equals(Not, StringComparison.Ordinal))
+                    {
+                        var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
+
+                        if (thirdWord.Equals(Be, StringComparison.Ordinal))
                         {
-                            var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
+                            nextWordPosition += Not.Length + Be.Length; // skip 'NotBe'
 
-                            if (thirdWord.Equals(Be, StringComparison.Ordinal))
-                            {
-                                builder.Append(Is + Not);
+                            builder.Append(Is + Not);
+                        }
+                        else if (thirdWord.Equals(Have, StringComparison.Ordinal))
+                        {
+                            nextWordPosition += Not.Length + Have.Length; // skip 'NotHave'
 
-                                nextWordPosition += Not.Length + Be.Length; // skip 'NotBe'
-                            }
+                            builder.Append(Has + Not);
                         }
                     }
 

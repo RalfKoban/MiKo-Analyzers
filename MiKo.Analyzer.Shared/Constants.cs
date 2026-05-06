@@ -1631,6 +1631,9 @@ namespace MiKoSolutions.Analyzers
                                                               {
                                                                   "should",
                                                                   "shall",
+                                                                  "will",
+                                                                  "would",
+                                                                  "could",
                                                               };
         }
 

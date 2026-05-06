@@ -25,7 +25,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_prefix_([Values("shall", "should")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_with_prefix_([Values("shall", "should", "will", "would", "could")] string name) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -40,13 +40,30 @@ namespace Bla
 }
 ");
 
+        [TestCase("couldBeNotOnline", "isNotOnline")]
+        [TestCase("couldBeOnline", "isOnline")]
+        [TestCase("couldConnect", "connect")]
+        [TestCase("couldHaveState", "hasState")]
+        [TestCase("couldNotBeOnline", "isNotOnline")]
         [TestCase("shallBeOnline", "isOnline")]
         [TestCase("shallConnect", "connect")]
+        [TestCase("shallHaveState", "hasState")]
         [TestCase("shallNotConnect", "notConnect")]
         [TestCase("shouldBeNotOnline", "isNotOnline")]
         [TestCase("shouldBeOnline", "isOnline")]
         [TestCase("shouldConnect", "connect")]
+        [TestCase("shouldHaveState", "hasState")]
         [TestCase("shouldNotBeOnline", "isNotOnline")]
+        [TestCase("willBeOnline", "isOnline")]
+        [TestCase("willConnect", "connect")]
+        [TestCase("willHaveState", "hasState")]
+        [TestCase("willNotConnect", "notConnect")]
+        [TestCase("wouldBeNotOnline", "isNotOnline")]
+        [TestCase("wouldBeOnline", "isOnline")]
+        [TestCase("wouldConnect", "connect")]
+        [TestCase("wouldHaveState", "hasState")]
+        [TestCase("wouldNotBeOnline", "isNotOnline")]
+        [TestCase("wouldNotHaveState", "hasNotState")]
         public void Code_gets_fixed_for_parameter_(string originalName, string fixedName)
         {
             const string Template = @"

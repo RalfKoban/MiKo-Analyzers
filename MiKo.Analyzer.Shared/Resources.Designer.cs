@@ -5733,7 +5733,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;should&apos; prefix.
+        ///   Looks up a localized string similar to Rename to express a fact.
         /// </summary>
         internal static string MiKo_1531_CodeFixTitle {
             get {
@@ -5742,7 +5742,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local variables that are prefixed with &apos;shall&apos; or &apos;should&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the variable.
+        ///   Looks up a localized string similar to Local variables that are prefixed with &apos;shall&apos;, &apos;should&apos;, &apos;will&apos;, &apos;would&apos;, or &apos;could&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the variable.
         ///Naming the variable based on what it represents, rather than what it implies, makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_1531_Description {
@@ -5761,7 +5761,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not prefix local variables with &apos;should&apos;.
+        ///   Looks up a localized string similar to Do not prefix local variables with words that express intent or expectation.
         /// </summary>
         internal static string MiKo_1531_Title {
             get {
@@ -5770,7 +5770,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;should&apos; prefix.
+        ///   Looks up a localized string similar to Rename to express a fact.
         /// </summary>
         internal static string MiKo_1532_CodeFixTitle {
             get {
@@ -5779,7 +5779,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters that are prefixed with &apos;shall&apos; or &apos;should&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the parameter.
+        ///   Looks up a localized string similar to Parameters that are prefixed with &apos;shall&apos;, &apos;should&apos;, &apos;will&apos;, &apos;would&apos;, or &apos;could&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the parameter.
         ///Naming the parameter based on what it represents, rather than what it implies, makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_1532_Description {
@@ -5798,7 +5798,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not prefix parameters with &apos;should&apos;.
+        ///   Looks up a localized string similar to Do not prefix parameters with words that express intent or expectation.
         /// </summary>
         internal static string MiKo_1532_Title {
             get {
@@ -5807,7 +5807,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;should&apos; prefix.
+        ///   Looks up a localized string similar to Rename to express a fact.
         /// </summary>
         internal static string MiKo_1533_CodeFixTitle {
             get {
@@ -5816,7 +5816,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields that are prefixed with &apos;shall&apos; or &apos;should&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the field.
+        ///   Looks up a localized string similar to Fields that are prefixed with &apos;shall&apos;, &apos;should&apos;, &apos;will&apos;, &apos;would&apos;, or &apos;could&apos; are most likely indicators for boolean values. Such prefixes describe a condition or intent rather than clearly expressing the purpose of the field.
         ///Naming the field based on what it represents, rather than what it implies, makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_1533_Description {
@@ -5835,7 +5835,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not prefix fields with &apos;should&apos;.
+        ///   Looks up a localized string similar to Do not prefix fields with words that express intent or expectation.
         /// </summary>
         internal static string MiKo_1533_Title {
             get {
