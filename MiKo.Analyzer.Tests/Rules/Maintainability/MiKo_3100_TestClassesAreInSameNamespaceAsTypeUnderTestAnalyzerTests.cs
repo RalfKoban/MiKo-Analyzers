@@ -200,6 +200,82 @@ namespace BlaBla.BlaBlubb
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace_(
+                                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                   [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                   [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => No_issue_is_reported_for(@"
+namespace BlaBla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+    [" + fixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_same_namespace_(
+                                                                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                                    [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                                    [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => No_issue_is_reported_for(@"
+namespace BlaBla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+    [" + fixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe " + methodPrefix + propertyName + @"()
+        {
+            BaseTestMe me = new TestMe();
+            return me;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_expression_body_test_method_(
+                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                      [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+public static class TestMe
+{
+    public static TestMe Parse(string s) => null;
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    [" + test + @"]
+    public static string Parse_parses_text() => TestMe.Parse(123.ToString());
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces_(
                                                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                                                 [ValueSource(nameof(PropertyNames))] string propertyName,
@@ -302,33 +378,6 @@ namespace BlaBla.BlaBlubb
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace_(
-                                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                                   [ValueSource(nameof(PropertyNames))] string propertyName,
-                                                                                                                   [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
-            => No_issue_is_reported_for(@"
-namespace BlaBla
-{
-    public class BaseTestMe
-    {
-    }
-}
-
-namespace BlaBla.BlaBlubb
-{
-    public class TestMe : BaseTestMe
-    {
-    }
-
-    [" + fixture + @"]
-    public class TestMeTests
-    {
-        private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
-    }
-}
-");
-
-        [Test]
         public void An_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_different_namespace_(
                                                                                                                         [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                                                         [ValueSource(nameof(PropertyNames))] string propertyName,
@@ -355,37 +404,6 @@ namespace BlaBla.BlaBlubb.Tests
     public class TestMeTests
     {
         private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_same_namespace_(
-                                                                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                                                    [ValueSource(nameof(PropertyNames))] string propertyName,
-                                                                                                                                    [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
-            => No_issue_is_reported_for(@"
-namespace BlaBla
-{
-    public class BaseTestMe
-    {
-    }
-}
-
-namespace BlaBla.BlaBlubb
-{
-    public class TestMe : BaseTestMe
-    {
-    }
-
-    [" + fixture + @"]
-    public class TestMeTests
-    {
-        private BaseTestMe " + methodPrefix + propertyName + @"()
-        {
-            BaseTestMe me = new TestMe();
-            return me;
-        }
     }
 }
 ");

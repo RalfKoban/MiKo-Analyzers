@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeConstructorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
+        private void AnalyzeConstructorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignments(context);
 
         private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
         {
@@ -76,17 +76,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
-                AnalyzeAssignmentExpressions(context);
+                AnalyzeAssignments(context);
             }
         }
 
-        private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
+        private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignments(context);
 
-        private void AnalyzeSetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
+        private void AnalyzeSetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignments(context);
 
-        private void AnalyzeAssignmentExpressions(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node, context.SemanticModel));
-
-        private void AnalyzeUnregistrationAssignments(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeUnregistrationAssignments(context.Node, context.SemanticModel));
+        private void AnalyzeAssignments(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node, context.SemanticModel));
 
         private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node, SemanticModel semanticModel)
         {
@@ -212,6 +210,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
         }
+
+        private void AnalyzeUnregistrationAssignments(in SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeUnregistrationAssignments(context.Node, context.SemanticModel));
 
         private IEnumerable<Diagnostic> AnalyzeUnregistrationAssignments(SyntaxNode node, SemanticModel semanticModel)
         {

@@ -128,43 +128,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool IsNullCheck(ExpressionSyntax condition, IdentifierNameSyntax identifier)
-        {
-            switch (condition)
-            {
-                case BinaryExpressionSyntax b:
-                {
-                    if (b.IsKind(SyntaxKind.NotEqualsExpression))
-                    {
-                        if (b.Right.IsKind(SyntaxKind.NullLiteralExpression) && b.Left is IdentifierNameSyntax left)
-                        {
-                            return left.GetName() == identifier.GetName();
-                        }
-
-                        if (b.Left.IsKind(SyntaxKind.NullLiteralExpression) && b.Right is IdentifierNameSyntax right)
-                        {
-                            return right.GetName() == identifier.GetName();
-                        }
-                    }
-
-                    return false;
-                }
-
-                case IsPatternExpressionSyntax p:
-                {
-                    if (p.Pattern is UnaryPatternSyntax u && u.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.NullLiteralExpression) && p.Expression is IdentifierNameSyntax name)
-                    {
-                        return name.GetName() == identifier.GetName();
-                    }
-
-                    return false;
-                }
-
-                default:
-                    return false;
-            }
-        }
-
         private bool CanBeIgnored(in SyntaxNodeAnalysisContext context)
         {
             if (context.CancellationToken.IsCancellationRequested)
@@ -268,8 +231,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 switch (grandParent)
                 {
-                    case BlockSyntax block when block.Parent is IfStatementSyntax i1 && IsNullCheck(i1.Condition, identifier):
-                    case IfStatementSyntax i2 when IsNullCheck(i2.Condition, identifier):
+                    case BlockSyntax block when block.Parent is IfStatementSyntax i1 && i1.Condition.IsNullCheck(identifier):
+                    case IfStatementSyntax i2 when i2.Condition.IsNullCheck(identifier):
                     {
                         // we seem to have a check for null that avoids returning null
                         return;

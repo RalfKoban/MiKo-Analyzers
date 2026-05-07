@@ -27,15 +27,16 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
         // [Timeout(1 * 60 * 60 * 1000)] // 1h
-        [Ignore("Shall be run manually")]
-        [Explicit]
-        [TestCase("TODO")]
-        public static void Performance_(string path)
+        [Test, Explicit, Ignore("Shall be run manually")]
+        public static void Performance()
         {
 //// ncrunch: no coverage start
-            var files = Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
-                                 .Where(_ => _.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false);
-            var sources = files.ToHashSet(File.ReadAllText).ToArray();
+            var files1 = Directory.EnumerateFiles(@"TODO", "*.cs", SearchOption.AllDirectories);
+            var files2 = Directory.EnumerateFiles(@"TODO", "*.cs", SearchOption.AllDirectories);
+            var sources = files1.Concat(files2)
+                                .Where(_ => _.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                                .ToHashSet(File.ReadAllText)
+                                .ToArray();
 
             var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray(), true);
 
@@ -412,7 +413,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var markdownBuilder = new StringBuilder().AppendLine()
                                                      .AppendLine("## Available Rules")
-                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables lists all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
+                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
 
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
@@ -427,6 +428,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
                     markdownBuilder.AppendLine()
                                    .AppendLine("### " + category)
+                                   .AppendLine()
                                    .AppendFormat(CultureInfo.CurrentCulture, tableFormat, "ID", "Title", "Enabled by default", "CodeFix available")
                                    .AppendFormat(CultureInfo.CurrentCulture, tableFormat, ":-", ":----", ":----------------:", ":---------------:");
                 }
