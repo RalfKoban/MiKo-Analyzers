@@ -132,7 +132,7 @@ namespace MiKoSolutions.Analyzers
         /// The <see cref="string"/> to seek within the current <see cref="string"/>.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the comparison option to use when finding the <see cref="string"/> (for example, ordinal, ignore case).
+        /// One of the enumeration members that specifies the comparison option to use when finding the <see cref="string"/>.
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
@@ -171,7 +171,7 @@ namespace MiKoSolutions.Analyzers
         /// The <see cref="string"/> to seek within the current span.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the comparison option to use when finding the <see cref="string"/> (for example, ordinal, ignore case).
+        /// One of the enumeration members that specifies the comparison option to use when finding the <see cref="string"/>.
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
@@ -1681,7 +1681,7 @@ namespace MiKoSolutions.Analyzers
         /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="suffixes">
-        /// The enumerable of suffixes to check for.
+        /// The suffixes to check for.
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
@@ -1919,7 +1919,7 @@ namespace MiKoSolutions.Analyzers
         /// The <see cref="string"/> to compare.
         /// </param>
         /// <param name="phrases">
-        /// The enumerable of phrases to compare with.
+        /// The phrases to compare with.
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
