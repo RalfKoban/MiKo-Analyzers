@@ -20,7 +20,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(identifiers);
 
-        private IEnumerable<Diagnostic> AnalyzeIdentifiers(IEnumerable<SyntaxToken> identifiers) => identifiers.Where(_ => _.ValueText.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase) && _.ValueText.EndsWith("ransaction", StringComparison.OrdinalIgnoreCase) is false)
-                                                                                                               .Select(_ => Issue(_, CreateBetterNameProposal(Constants.Names.callback)));
+        private IEnumerable<Diagnostic> AnalyzeIdentifiers(in ReadOnlySpan<SyntaxToken> identifiers)
+        {
+            List<Diagnostic> issues = null;
+
+            for (int index = 0, length = identifiers.Length; index < length; index++)
+            {
+                var identifier = identifiers[index];
+                var name = identifier.ValueText;
+
+                if (name.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase) && name.EndsWith("ransaction", StringComparison.OrdinalIgnoreCase) is false)
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(identifier, CreateBetterNameProposal(Constants.Names.callback)));
+                }
+            }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
+        }
     }
 }

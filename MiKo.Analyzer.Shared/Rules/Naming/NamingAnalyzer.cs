@@ -131,6 +131,86 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return name;
         }
 
+        /// <summary>
+        /// Finds a better name for a symbol that uses "shall" or "should" as prefix.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix to preserve in the name.
+        /// The default is <c>""</c>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name with corrected name.
+        /// </returns>
+        protected static string FindBetterNameForShouldPrefix(string name, string prefix = "")
+        {
+            const string Be = "Be";
+            const string Not = "Not";
+            const string Is = "Is";
+            const string Has = "Has";
+            const string Have = "Have";
+
+            var startIndex = prefix.Length;
+
+            var nameSpan = name.AsSpan(prefix.Length);
+
+            foreach (var shouldPrefix in Constants.Names.IntentPrefixes)
+            {
+                if (nameSpan.StartsWith(shouldPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    var nextWordPosition = startIndex + shouldPrefix.Length;
+                    var secondWord = nameSpan.SecondWord(WordBoundary.UpperCaseCharacters);
+
+                    var builder = StringBuilderCache.Acquire();
+
+                    if (startIndex > 0)
+                    {
+                        builder.Append(prefix);
+                    }
+
+                    if (secondWord.Equals(Be, StringComparison.Ordinal))
+                    {
+                        nextWordPosition += Be.Length; // skip 'Be'
+
+                        builder.Append(Is);
+                    }
+                    else if (secondWord.Equals(Have, StringComparison.Ordinal))
+                    {
+                        nextWordPosition += Have.Length; // skip 'Have'
+
+                        builder.Append(Has);
+                    }
+                    else if (secondWord.Equals(Not, StringComparison.Ordinal))
+                    {
+                        var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
+
+                        if (thirdWord.Equals(Be, StringComparison.Ordinal))
+                        {
+                            nextWordPosition += Not.Length + Be.Length; // skip 'NotBe'
+
+                            builder.Append(Is + Not);
+                        }
+                        else if (thirdWord.Equals(Have, StringComparison.Ordinal))
+                        {
+                            nextWordPosition += Not.Length + Have.Length; // skip 'NotHave'
+
+                            builder.Append(Has + Not);
+                        }
+                    }
+
+                    builder.Append(name, nextWordPosition, name.Length - nextWordPosition);
+
+                    builder.ToLowerCaseAt(prefix.Length);
+
+                    return builder.ToStringAndRelease();
+                }
+            }
+
+            return name;
+        }
+
 #pragma warning disable CA1021
 
         /// <summary>
