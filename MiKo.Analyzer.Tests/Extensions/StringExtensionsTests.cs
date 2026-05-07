@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Extensions
         private const string SentenceParts = ".?!;:,-";
         private const string SpecialCases = " \t" + SentenceParts + Numbers;
 
+        private static readonly char[] WhiteSpaces = [' ', '\t', '\r', '\n', '\v', '\f'];
+
         [TestCase(null, ExpectedResult = null)]
         [TestCase("", ExpectedResult = "")]
         [TestCase("a", ExpectedResult = "a")]
@@ -263,16 +265,77 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCaseSource(nameof(LowerCaseCharacters))]
         [TestCaseSource(nameof(Numbers))]
         [TestCaseSource(nameof(SentenceParts))]
-        public static void IsWhiteSpace_for_letter_(in char c) => Assert.That(c.IsWhiteSpace(), Is.False);
+        public static void IsWhiteSpace_is_false_for_letter_(in char c) => Assert.That(c.IsWhiteSpace(), Is.False);
 
         [Test]
-        public static void IsWhiteSpace_for_whitespace_([Values(' ', '\t', '\r', '\n', '\v', '\f')] in char c) => Assert.That(c.IsWhiteSpace(), Is.True);
+        public static void IsWhiteSpace_is_true_for_whitespace_([ValueSource(nameof(WhiteSpaces))] in char c) => Assert.That(c.IsWhiteSpace(), Is.True);
 
-        [TestCase("1")]
-        [TestCase("123")]
-        [TestCase("-1")]
+        [TestCase("+1")]
+        [TestCase("+1_234_567_890")]
+        [TestCase("+42")]
+        [TestCase("0")]
         [TestCase("-0")]
+        [TestCase("1")]
+        [TestCase("-1")]
+        [TestCase("1,000")]
+        [TestCase("1,000.5")]
+        [TestCase("1,5")]
+        [TestCase("1.000")]
+        [TestCase("1.000,5")]
+        [TestCase("1.5")]
+        [TestCase("1_000")]
+        [TestCase("1_000_000")]
+        [TestCase("1_000_000_000")]
+        [TestCase("1_234_567_890")]
+        [TestCase("-1_234_567_890")]
+        [TestCase("123")]
         [TestCase("-123")]
+        [TestCase("123.45")]
+        [TestCase("3.1415927")]
+        [TestCase("42")]
+        [TestCase("-42")]
+        [TestCase("5")]
+        [TestCase("9")]
+        public static void IsNumber_is_true_for_(string value) => Assert.That(value.IsNumber());
+
+        [TestCase(" ")]
+        [TestCase("")]
+        [TestCase("-")]
+        [TestCase(".")]
+        [TestCase("+-1")]
+        [TestCase("1 2")]
+        [TestCase("1234.-215.12.12412.1sgsgd")]
+        [TestCase("1abc")]
+        [TestCase("3.1415927.")]
+        [TestCase("a")]
+        [TestCase("abc")]
+        [TestCase("abc1")]
+        [TestCase("some")]
+        [TestCase("TestMe42")]
+        [TestCase("X-123")]
+        public static void IsNumber_is_false_for_(string value) => Assert.That(value.IsNumber(), Is.False);
+
+        [Test]
+        public static void IsNumber_char_is_true_for_([ValueSource(nameof(Numbers))] char value) => Assert.That(value.IsNumber());
+
+        [TestCase('+')]
+        [TestCaseSource(nameof(UpperCaseCharacters))]
+        [TestCaseSource(nameof(LowerCaseCharacters))]
+        [TestCaseSource(nameof(SentenceParts))]
+        [TestCaseSource(nameof(WhiteSpaces))]
+        public static void IsNumber_char_is_false_for_(char value) => Assert.That(value.IsNumber(), Is.False);
+
+        [TestCase("0")]
+        [TestCase("-0")]
+        [TestCase("+1")]
+        [TestCase("-1")]
+        [TestCase("+42")]
+        [TestCase("-42")]
+        [TestCase("-123")]
+        [TestCase("1.5")]
+        [TestCase("1,5")]
+        [TestCase("42")]
+        [TestCase("123")]
         [TestCase("123.45")]
         [TestCase("3.1415927")]
         [TestCase("1.000")]
@@ -283,18 +346,26 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("1_234_567_890")]
         [TestCase("+1_234_567_890")]
         [TestCase("-1_234_567_890")]
-        public static void IsNumber_returns_true_for_(string value) => Assert.That(value.IsNumber());
+        [TestCase("1,000.5")]
+        [TestCase("1.000,5")]
+        public static void IsNumber_span_is_true_for_(string value) => Assert.That(value.AsSpan().IsNumber());
 
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(".")]
         [TestCase("-")]
+        [TestCase("a")]
+        [TestCase("abc")]
         [TestCase("some")]
+        [TestCase("1abc")]
+        [TestCase("abc1")]
+        [TestCase("1 2")]
+        [TestCase("+-1")]
         [TestCase("1234.-215.12.12412.1sgsgd")]
         [TestCase("3.1415927.")]
         [TestCase("X-123")]
         [TestCase("TestMe42")]
-        public static void IsNumber_returns_false_for_(string value) => Assert.That(value.IsNumber(), Is.False);
+        public static void IsNumber_span_is_false_for_(string value) => Assert.That(value.AsSpan().IsNumber(), Is.False);
 
         [Test]
         public static void GetNumber_returns_small_numbers()
