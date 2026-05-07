@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,26 +18,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
-            var length = identifiers.Length;
+            List<Diagnostic> issues = null;
 
-            if (length > 0)
+            for (int index = 0, length = identifiers.Length; index < length; index++)
             {
-                for (var index = 0; index < length; index++)
+                var identifier = identifiers[index];
+                var name = identifier.ValueText;
+
+                if (name.Contains("Proxy", StringComparison.OrdinalIgnoreCase))
                 {
-                    var identifier = identifiers[index];
-                    var name = identifier.ValueText;
+                    var betterName = FindBetterName(name);
 
-                    if (name.Contains("Proxy", StringComparison.OrdinalIgnoreCase))
+                    if (betterName != name)
                     {
-                        var betterName = FindBetterName(name);
-
-                        if (betterName != name)
+                        if (issues is null)
                         {
-                            yield return Issue(name, identifier, betterName, CreateBetterNameProposal(betterName));
+                            issues = new List<Diagnostic>(1);
                         }
+
+                        issues.Add(Issue(name, identifier, betterName, CreateBetterNameProposal(betterName)));
                     }
                 }
             }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(string name) => name.Length > 5
