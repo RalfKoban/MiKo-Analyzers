@@ -166,6 +166,7 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_KeepsValue", "Method_name_keeps_value_if_some_condition")]
         [TestCase("MethodName_SomeCondition_DoesAlter", "Method_name_alters_if_some_condition")]
         [TestCase("MethodName_SomeCondition_DoesNotAlter", "Method_name_does_not_alter_if_some_condition")]
+        [TestCase("MethodName_WhenSomeCondition_ShowsStuff", "Method_name_shows_stuff_if_some_condition")]
         public void Code_gets_fixed_for_2_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");
