@@ -525,7 +525,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            var adjustedPart2 = part2.AdjustFirstWord(FirstWordAdjustment.MakeThirdPersonSingular);
+            // do not fix something like 'ValidationExceptionThrown' here to something like 'ValidatesExceptionThrown' as we need the correct exceptions
+            var adjustedPart2 = part2.EndsWith("ExceptionThrown", StringComparison.Ordinal)
+                                ? part2
+                                : part2.AdjustFirstWord(FirstWordAdjustment.MakeThirdPersonSingular);
 
             var addIf = IsIfRequired(part1, adjustedPart2);
             var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part1.AsSpan().FirstWord()) ? IfIt : If;
