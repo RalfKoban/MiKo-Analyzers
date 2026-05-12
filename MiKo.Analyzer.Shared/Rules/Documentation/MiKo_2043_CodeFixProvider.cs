@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (comment.GetEnclosingSyntaxNode() is DelegateDeclarationSyntax d)
             {
-                // fix if delegate only contains it's name + " delegate" (e.g. "MyDelegate delegate") and nothing else
+                // fix if delegate only contains it's name followed by " delegate" (e.g. "MyDelegate delegate") and nothing else
                 var lookupTerm = d.GetName() + " delegate";
 
                 var preparedComment1 = Comment(comment, new[] { lookupTerm }, new[] { new Pair(lookupTerm, Constants.Comments.DelegateSummaryStartingPhrase + Constants.TODO) });
@@ -64,6 +64,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             yield return new Pair("Delegate used to", string.Empty);
             yield return new Pair("Delegate used for", string.Empty);
+
+            var delegateTexts = new[]
+                                {
+                                    "delegate", "a delegate", "the delegate",
+                                    "delegate signature", "a delegate signature", "the delegate signature",
+                                    "delegate type", "a delegate type", "the delegate type",
+                                };
+
+            foreach (var delegateText in delegateTexts)
+            {
+                yield return new Pair("Declare " + delegateText + " for", string.Empty);
+                yield return new Pair("Declares " + delegateText + " for", string.Empty);
+            }
         }
 
         private static IEnumerable<Pair> CreateCleanUpMap()
@@ -103,6 +116,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("represents the getter of ", "gets the ");
             yield return new Pair("represents the setter of the ", "sets the ");
             yield return new Pair("represents the setter of ", "sets the ");
+            yield return new Pair("represents the signature for the ", "has the same signature as the ");
+            yield return new Pair("represents the signature of the ", "has the same signature as the ");
+            yield return new Pair("represents the signature for ", "has the same signature as the ");
+            yield return new Pair("represents the signature of ", "has the same signature as the ");
             yield return new Pair("represents the ", "handles a call to the ");
 
             // events
