@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -36,7 +37,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return comment.ReplaceNode(contents[0], XmlText(phrase + Constants.TODO + ".").WithLeadingXmlComment().WithTrailingXmlComment());
 
                 default:
+                {
+                    var text = comment.GetTextTrimmed();
+
+                    if (text.StartsWith("False", StringComparison.OrdinalIgnoreCase) && text.Contains("if the default implementation"))
+                    {
+                        return Comment(preparedComment, phrase, "if the default implementation shall be skipped.");
+                    }
+
                     return CommentStartingWith(preparedComment, phrase);
+                }
             }
         }
 
