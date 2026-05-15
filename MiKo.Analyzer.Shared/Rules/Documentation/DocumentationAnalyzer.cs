@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                   };
 
         /// <summary>
-        /// Gets the location of the first occurrence of the specified value within the token's text.
+        /// Gets the location of the first occurrence of the specified value within the token's text or <see langword="null"/> if the value is not found.
         /// </summary>
         /// <param name="textToken">
         /// The syntax token to search.
@@ -134,7 +134,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets the location of the first occurrence of the specified value within the trivia's text.
+        /// Gets the location of the first occurrence of the specified value within the trivia's text or <see langword="null"/> if the value is not found.
         /// </summary>
         /// <param name="trivia">
         /// The syntax trivia to search.
@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets the location of the last occurrence of the specified value within the trivia's text.
+        /// Gets the location of the last occurrence of the specified value within the trivia's text or <see langword="null"/> if the value is not found.
         /// </summary>
         /// <param name="trivia">
         /// The syntax trivia to search.
@@ -188,7 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets the location of the last occurrence of the specified value within the token's text.
+        /// Gets the location of the last occurrence of the specified value within the token's text or <see langword="null"/> if the value is not found.
         /// </summary>
         /// <param name="textToken">
         /// The syntax token to search.

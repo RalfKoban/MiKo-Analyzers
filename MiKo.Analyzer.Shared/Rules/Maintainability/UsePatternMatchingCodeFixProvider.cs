@@ -59,6 +59,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true; // enum is on wrong side, so swap sides
             }
 
+            // we probably have a 'nameof'
+            if (expression is InvocationExpressionSyntax right && right.IsNameOf())
+            {
+                return false; // we are already on the correct sides
+            }
+
+            if (operand is InvocationExpressionSyntax left && left.IsNameOf())
+            {
+                return true; // enum is on wrong side, so swap sides
+            }
+
             return false;
         }
 

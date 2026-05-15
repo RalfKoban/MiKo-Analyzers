@@ -323,6 +323,18 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this ConversionOperatorDeclarationSyntax value) => value?.OperatorKeyword.ValueText;
 
         /// <summary>
+        /// Gets the name of the specified <see cref="DelegateDeclarationSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The delegate declaration syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name of the delegate; or <see langword="null"/> if no name is found.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static string GetName(this DelegateDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        /// <summary>
         /// Gets the name of the specified <see cref="DestructorDeclarationSyntax"/>.
         /// </summary>
         /// <param name="value">
@@ -536,6 +548,7 @@ namespace MiKoSolutions.Analyzers
                 case BaseMethodDeclarationSyntax s: return s.GetName();
                 case BasePropertyDeclarationSyntax s: return s.GetName();
                 case BaseFieldDeclarationSyntax s: return s.GetName();
+                case DelegateDeclarationSyntax s: return s.GetName();
                 case EnumMemberDeclarationSyntax s: return s.GetName();
                 default:
                     return string.Empty;
