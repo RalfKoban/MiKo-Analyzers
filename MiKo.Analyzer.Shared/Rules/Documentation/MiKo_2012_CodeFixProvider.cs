@@ -324,6 +324,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("indicating return ", "indicating ");
             builder.ReplaceWithProbe("indicating indicating", "indicating");
             builder.ReplaceWithProbe("indicating for ", "indicating whether the ");
+            builder.ReplaceWithProbe("indicating property for ", "indicating whether ");
             builder.ReplaceWithProbe("bool indicating", "value indicating");
             builder.ReplaceWithProbe("bool that indicates", "value indicating");
             builder.ReplaceWithProbe("bool which indicates", "value indicating");
@@ -387,6 +388,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("Gets returns", "Gets");
             builder.ReplaceWithProbe("sets returns", "sets");
             builder.ReplaceWithProbe("Sets returns", "Sets");
+            builder.ReplaceWithProbe("Gets or sets property for ", "Gets or sets ");
+            builder.ReplaceWithProbe("Gets or sets property ", "Gets or sets ");
+            builder.ReplaceWithProbe("Gets property for ", "Gets ");
+            builder.ReplaceWithProbe("Sets property for ", "Sets ");
             builder.ReplaceWithProbe(" the the ", " the ");
             builder.ReplaceWithProbe(" the an ", " an ");
             builder.ReplaceWithProbe(" the a ", " a ");

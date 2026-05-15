@@ -485,6 +485,9 @@ namespace MiKoSolutions.Analyzers
 
                     case BaseTypeDeclarationSyntax _:
                         return Array.Empty<ParameterSyntax>();
+
+                    case DelegateDeclarationSyntax d:
+                        return d.ParameterList.Parameters.ToArray();
                 }
             }
 

@@ -22,6 +22,16 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_root_file_scoped_namespace() => No_issue_is_reported_for(@"
+namespace Bla;
+
+public class TestMe
+{
+    public void DoSomething() { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_non_redundant_namespace() => No_issue_is_reported_for(@"
 namespace Bla.Blubb
 {
@@ -33,6 +43,16 @@ namespace Bla.Blubb
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_redundant_file_scoped_namespace() => No_issue_is_reported_for(@"
+namespace Bla.Blubb;
+
+public class TestMe
+{
+    public void DoSomething() { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_redundant_namespace_([Values("Bla.Bla", "Bla.Blubb.Bla", "Bla.Blubb.Blubber.Blubb")] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @"
 {
@@ -40,6 +60,16 @@ namespace " + ns + @"
   {
       public void DoSomething() { }
   }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_redundant_file_scoped_namespace_([Values("Bla.Bla", "Bla.Blubb.Bla", "Bla.Blubb.Blubber.Blubb")] string ns) => An_issue_is_reported_for(@"
+namespace " + ns + @";
+
+public class TestMe
+{
+    public void DoSomething() { }
 }
 ");
 
