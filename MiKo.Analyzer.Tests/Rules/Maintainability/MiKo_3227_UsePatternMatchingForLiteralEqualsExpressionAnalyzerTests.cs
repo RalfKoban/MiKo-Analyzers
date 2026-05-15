@@ -121,6 +121,38 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_a_left_sided_comparison_using_nameof() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(string a)
+    {
+        if (nameof(DoSomething) == a)
+            return true;
+        else
+            return false;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_right_sided_comparison_using_nameof() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(string a)
+    {
+        if (a == nameof(DoSomething))
+            return true;
+        else
+            return false;
+    }
+}
+");
+
         [TestCase("class TestMe { bool Do(int a) { return (a == 42); } }", "class TestMe { bool Do(int a) { return (a is 42); } }")]
         [TestCase("class TestMe { bool Do(int a) { return (42 == a); } }", "class TestMe { bool Do(int a) { return (a is 42); } }")]
         [TestCase("class TestMe { bool Do(int a) => a == 42; }", "class TestMe { bool Do(int a) => a is 42; }")]
@@ -136,10 +168,15 @@ public class TestMe
         [TestCase("class TestMe { bool Do(char a) => a == 'X'; }", "class TestMe { bool Do(char a) => a is 'X'; }")]
         [TestCase("class TestMe { bool Do(char a) => 'X' == a; }", "class TestMe { bool Do(char a) => a is 'X'; }")]
 
-        [TestCase(@"class TestMe { bool Do(string a) { return (a == ""some text""); } }", @"class TestMe { bool Do(string a) { return (a is ""some text""); } }")]
-        [TestCase(@"class TestMe { bool Do(string a) { return (""some text"" == a); } }", @"class TestMe { bool Do(string a) { return (a is ""some text""); } }")]
-        [TestCase(@"class TestMe { bool Do(string a) => a == ""some text""; }", @"class TestMe { bool Do(string a) => a is ""some text""; }")]
-        [TestCase(@"class TestMe { bool Do(string a) => ""some text"" == a; }", @"class TestMe { bool Do(string a) => a is ""some text""; }")]
+        [TestCase("""class TestMe { bool Do(string a) { return (a == "some text"); } }""", """class TestMe { bool Do(string a) { return (a is "some text"); } }""")]
+        [TestCase("""class TestMe { bool Do(string a) { return ("some text" == a); } }""", """class TestMe { bool Do(string a) { return (a is "some text"); } }""")]
+        [TestCase("""class TestMe { bool Do(string a) => a == "some text"; }""", """class TestMe { bool Do(string a) => a is "some text"; }""")]
+        [TestCase("""class TestMe { bool Do(string a) => "some text" == a; }""", """class TestMe { bool Do(string a) => a is "some text"; }""")]
+
+        [TestCase("class TestMe { bool Do(string a) { return (a == nameof(Do)); } }", "class TestMe { bool Do(string a) { return (a is nameof(Do)); } }")]
+        [TestCase("class TestMe { bool Do(string a) { return (nameof(Do) == a); } }", "class TestMe { bool Do(string a) { return (a is nameof(Do)); } }")]
+        [TestCase("class TestMe { bool Do(string a) => a == nameof(Do); }", "class TestMe { bool Do(string a) => a is nameof(Do); }")]
+        [TestCase("class TestMe { bool Do(string a) => nameof(Do) == a; }", "class TestMe { bool Do(string a) => a is nameof(Do); }")]
 
         [TestCase("using System; class TestMe { bool Do(StringComparison a) { return (a == StringComparison.Ordinal); } }", "using System; class TestMe { bool Do(StringComparison a) { return (a is StringComparison.Ordinal); } }")]
         [TestCase("using System; class TestMe { bool Do(StringComparison a) { return (StringComparison.Ordinal == a); } }", "using System; class TestMe { bool Do(StringComparison a) { return (a is StringComparison.Ordinal); } }")]

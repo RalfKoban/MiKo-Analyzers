@@ -47,7 +47,15 @@ namespace MiKoSolutions.Analyzers
             }
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-            value.TrimLeadingSpacesTo(adjustment.HasSet(FirstWordAdjustment.KeepSingleLeadingSpace) ? 1 : 0);
+            var wantedLeadingSpaces = adjustment.HasSet(FirstWordAdjustment.KeepSingleLeadingSpace) ? 1 : 0;
+
+            value.TrimLeadingSpacesTo(wantedLeadingSpaces);
+
+            if (value.Length <= wantedLeadingSpaces)
+            {
+                // nothing more to adjust
+                return value;
+            }
 
             if (adjustment.HasSet(FirstWordAdjustment.StartLowerCase))
             {
@@ -1244,7 +1252,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts the first word in the text to its third person singular verb form.
+        /// Converts the first word in the text to its 3rd person singular verb form.
         /// </summary>
         /// <param name="value">
         /// The text to modify.

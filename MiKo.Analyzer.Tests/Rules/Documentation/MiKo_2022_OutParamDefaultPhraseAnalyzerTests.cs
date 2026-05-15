@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -11,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2022_OutParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] SpecialFalsePhrases = CreateSpecialFalsePhrases().Distinct().OrderDescendingByLengthAndText();
+
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
@@ -30,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_out_parameter_with_standard_phrase_for_contains() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_out_parameter_with_standard_phrase_for_contains() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -40,12 +45,61 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_bool_out_parameter_with_standard_phrase_for_indicates() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_bool_out_parameter_with_standard_phrase_for_indicates() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
     /// <param name='o'>On successful return, indicates the object.</param>
     public void DoSomething(out bool o) { }
+}
+");
+
+        [TestCase("<summary />")]
+        [TestCase("<inheritdoc />")]
+        [TestCase("<exclude />")]
+        public void No_issue_is_reported_for_method_with_missing_out_parameter_documentation_(string xmlElement) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// " + xmlElement + @"
+    public void DoSomething(out object o) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_undocumented_delegate() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public delegate void DoSomething(out object o);
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_delegate_without_out_parameter() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>Whatever</param>
+    public delegate void DoSomething(object o);
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_delegate_with_out_parameter_with_standard_phrase_for_contains() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>On successful return, contains the object.</param>
+    public delegate void DoSomething(out object o);
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_delegate_with_bool_out_parameter_with_standard_phrase_for_indicates() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='b'>On successful return, indicates the object.</param>
+    public delegate void DoSomething(out bool b);
 }
 ");
 
@@ -57,7 +111,7 @@ public class TestMe
         [TestCase("On return, indicates something.")]
         [TestCase("On successful return, indicates something.")]
         [TestCase("")]
-        public void An_issue_is_reported_for_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -70,7 +124,7 @@ public class TestMe
         [TestCase("On false, returns something.")]
         [TestCase("On successful return, contains something.")]
         [TestCase("")]
-        public void An_issue_is_reported_for_bool_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_bool_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -79,14 +133,33 @@ public class TestMe
 }
 ");
 
-        [TestCase("<summary />")]
-        [TestCase("<inheritdoc />")]
-        [TestCase("<exclude />")]
-        public void No_issue_is_reported_for_method_with_missing_out_parameter_documentation_(string xmlElement) => No_issue_is_reported_for(@"
+        [TestCase("whatever.")]
+        [TestCase("Whatever.")]
+        [TestCase("On true, returns something.")]
+        [TestCase("On <see langword='true' />, returns something.")]
+        [TestCase("On return, contains something.")]
+        [TestCase("On return, indicates something.")]
+        [TestCase("On successful return, indicates something.")]
+        [TestCase("")]
+        public void An_issue_is_reported_for_delegate_with_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
-    /// " + xmlElement + @"
-    public void DoSomething(out object o) { }
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
+    public delegate void DoSomething(out object o);
+}
+");
+
+        [TestCase("On true, returns something.")]
+        [TestCase("On false, returns something.")]
+        [TestCase("On successful return, contains something.")]
+        [TestCase("")]
+        public void An_issue_is_reported_for_delegate_with_bool_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='b'>" + comment + @"</param>
+    public delegate void DoSomething(out bool b);
 }
 ");
 
@@ -273,7 +346,7 @@ public class TestMe
         [TestCase("Value that indicates the something.")]
         [TestCase("value which indicates the something.")]
         [TestCase("Value which indicates the something.")]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_bool_out_parameter_(string text)
+        public void Code_gets_fixed_for_method_by_replacing_with_standard_phrase_for_bool_out_parameter_(string text)
         {
             var originalCode = @"
 using System.Windows;
@@ -497,7 +570,7 @@ public class TestMe
         [TestCase("Will receive the object.")]
         [TestCase("will return the object.")]
         [TestCase("Will return the object.")]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_out_parameter_(string text)
+        public void Code_gets_fixed_for_method_by_replacing_with_standard_phrase_for_out_parameter_(string text)
         {
             var originalCode = @"
 using System.Windows;
@@ -525,7 +598,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_by_adding_standard_phrase_with_TODO_for_empty_out_parameter_on_single_line()
+        public void Code_gets_fixed_for_method_by_adding_standard_phrase_with_TODO_for_empty_out_parameter_on_single_line()
         {
             const string OriginalCode = @"
 using System.Windows;
@@ -553,7 +626,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_by_adding_standard_phrase_with_TODO_for_empty_out_parameter_on_separate_lines()
+        public void Code_gets_fixed_for_method_by_adding_standard_phrase_with_TODO_for_empty_out_parameter_on_separate_lines()
         {
             const string OriginalCode = @"
 using System.Windows;
@@ -581,10 +654,91 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_delegate_for_specific_false_phrase_on_single_line_([ValueSource(nameof(SpecialFalsePhrases))] string originalComment)
+        {
+            var originalCode = @"
+using System.Windows;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='b'>" + originalComment + @"</param>
+    public delegate void DoSomething(out bool b) { }
+}";
+
+            const string FixedCode = @"
+using System.Windows;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='b'>
+    /// On successful return, indicates if the default implementation shall be skipped.
+    /// </param>
+    public delegate void DoSomething(out bool b) { }
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_delegate_for_specific_false_phrase_on_separate_lines_([ValueSource(nameof(SpecialFalsePhrases))] string originalComment)
+        {
+            var originalCode = @"
+using System.Windows;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='b'>
+    /// " + originalComment + @"
+    /// </param>
+    public delegate void DoSomething(out bool b) { }
+}";
+
+            const string FixedCode = @"
+using System.Windows;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='b'>
+    /// On successful return, indicates if the default implementation shall be skipped.
+    /// </param>
+    public delegate void DoSomething(out bool b) { }
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2022_OutParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2022_OutParamDefaultPhraseAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2022_CodeFixProvider();
+
+        private static IEnumerable<string> CreateSpecialFalsePhrases()
+        {
+            string[] verbs = ["called", "invoked"];
+            string[] conditions = ["shall", "should"];
+
+            string[] starts = ["False", "False,"];
+            string[] endings = ["; true otherwise.", "; otherwise, true.", "; otherwise true.", ". Otherwise true.", "True otherwise."];
+
+            foreach (var condition in conditions)
+            {
+                foreach (var verb in verbs)
+                {
+                    foreach (var start in starts)
+                    {
+                        foreach (var ending in endings)
+                        {
+                            yield return string.Concat(start, " if the default implementation ", condition, " also be ", verb, ending);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -22,6 +22,16 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_extension_method_class_in_file_scoped_namespace() => No_issue_is_reported_for(@"
+namespace Bla;
+
+public class TestMe
+{
+    public void DoSomething(int i) { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_incomplete_extension_method() => No_issue_is_reported_for(@"
 namespace System
 {
@@ -51,6 +61,16 @@ namespace System
     {
         public static void DoSomething(this int i) { }
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extension_method_class_with_correct_file_scoped_namespace() => No_issue_is_reported_for(@"
+namespace System;
+
+public static class TestMe
+{
+    public static void DoSomething(this int i) { }
 }
 ");
 
@@ -104,6 +124,18 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_generic_extension_in_file_scoped_namespace() => No_issue_is_reported_for(@"
+namespace Bla;
+
+public static class TestMe
+{
+    public static void DoSomething<T>(this T value) where T : class
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -132,6 +164,16 @@ namespace Blubber.Bla.Blubbdiblubb
     {
         public static void DoSomething(this TestMe t) { }
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_extension_method_class_with_incorrect_file_scoped_namespace() => An_issue_is_reported_for(@"
+namespace Bla;
+
+public static class TestMe
+{
+    public static void DoSomething(this int i) { }
 }
 ");
 
