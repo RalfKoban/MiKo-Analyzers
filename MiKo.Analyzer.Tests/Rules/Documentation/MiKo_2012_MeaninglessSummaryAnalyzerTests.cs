@@ -1312,6 +1312,7 @@ public class TestMe
         [TestCase("Used to get", "Gets")]
         [TestCase("The", "Gets the")]
         [TestCase("All", "Gets all")]
+        [TestCase("Property for", "Gets")]
         public void Code_gets_fixed_for_expression_body_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1330,6 +1331,7 @@ public class TestMe
         [TestCase("Used to get", "Gets")]
         [TestCase("The", "Gets the")]
         [TestCase("All", "Gets all")]
+        [TestCase("Property for", "Gets")]
         public void Code_gets_fixed_for_getter_only_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1348,6 +1350,7 @@ public class TestMe
         [TestCase("Used to set", "Sets")]
         [TestCase("The", "Sets the")]
         [TestCase("All", "Sets all")]
+        [TestCase("Property for", "Sets")]
         public void Code_gets_fixed_for_setter_only_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1367,6 +1370,7 @@ public class TestMe
         [TestCase("Used to get", "Gets or sets")]
         [TestCase("The", "Gets or sets the")]
         [TestCase("All", "Gets or sets all")]
+        [TestCase("Property for", "Gets or sets")]
         public void Code_gets_fixed_for_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"

@@ -902,73 +902,63 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, string text)
         {
+            var contents = values;
+
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var count = values.Count;
-
-            if (count is 0)
+            for (int index = 0, count = values.Count; index < count; index++)
             {
-                return values;
-            }
-
-            var contents = values.ToList();
-
-            for (var index = 0; index < count; index++)
-            {
-                if (values[index] is XmlTextSyntax s)
+                if (contents[index] is XmlTextSyntax s)
                 {
-                    var originalTextTokens = s.TextTokens;
-
-                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                    var originalTextTokensCount = originalTextTokens.Count;
-
-                    if (originalTextTokensCount is 0)
-                    {
-                        continue;
-                    }
-
-                    var textTokens = originalTextTokens.ToList();
-
                     var modified = false;
+                    var textTokens = s.TextTokens.ToList();
 
-                    for (var i = 0; i < originalTextTokensCount; i++)
+                    for (var i = 0; i < textTokens.Count; i++)
                     {
-                        var token = originalTextTokens[i];
+                        var token = textTokens[i];
 
-                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                         {
-                            // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = token.Text
-                                                    .AsCachedBuilder()
-                                                    .Without(text)
-                                                    .WithoutMultipleWhiteSpaces()
-                                                    .ToStringAndRelease();
+                            var tokenText = token.Text;
 
-                            if (modifiedText.IsNullOrWhiteSpace())
+                            if (tokenText.Contains(text))
                             {
-                                textTokens.Remove(token);
+                                // do not trim the end as we want to have a space before <param> or other tags
+                                var modifiedText = tokenText.AsCachedBuilder()
+                                                            .Without(text)
+                                                            .WithoutMultipleWhiteSpaces()
+                                                            .ToStringAndRelease();
 
-                                if (i > 0)
+                                if (modifiedText.IsNullOrWhiteSpace())
                                 {
-                                    textTokens.Remove(originalTextTokens[i - 1]);
-                                }
-                            }
-                            else
-                            {
-                                textTokens[i] = token.WithText(modifiedText);
-                            }
+                                    textTokens.Remove(token);
 
-                            modified = true;
+                                    if (i > 0)
+                                    {
+                                        textTokens.Remove(textTokens[i - 1]);
+
+                                        i--;
+                                    }
+
+                                    i--;
+                                }
+                                else
+                                {
+                                    textTokens[i] = token.WithText(modifiedText);
+                                }
+
+                                modified = true;
+                            }
                         }
                     }
 
                     if (modified)
                     {
-                        contents[index] = textTokens.AsXmlText();
+                        contents = contents.Replace(s, textTokens.AsXmlText());
                     }
                 }
             }
 
-            return contents.ToSyntaxList();
+            return contents;
         }
 
         /// <summary>
