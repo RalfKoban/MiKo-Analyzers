@@ -2502,7 +2502,7 @@ namespace MiKoSolutions.Analyzers
         /// The span of characters to process.
         /// </param>
         /// <param name="maximum">
-        /// The maximum length to take.
+        /// The maximum number of characters to take.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the first part of the span with ellipsis if truncated.
@@ -2517,6 +2517,13 @@ namespace MiKoSolutions.Analyzers
             }
 
             var span = value.Slice(0, minimumLength).TrimEnd();
+
+            // do not append '...' if the remaining parts are only whitespaces
+            if (value.Slice(minimumLength).Trim().IsEmpty)
+            {
+                return span.ToString();
+            }
+
             minimumLength = span.Length;
 
             var length = minimumLength + 3;
@@ -2534,6 +2541,35 @@ namespace MiKoSolutions.Analyzers
 
                 return new string(buffer, 0, length);
             }
+        }
+
+        /// <summary>
+        /// Takes the first part of the span up to the maximum length and adds ellipsis if needed.
+        /// </summary>
+        /// <param name="value">
+        /// The text to process.
+        /// </param>
+        /// <param name="maximum">
+        /// The maximum number of characters to take.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the first part of the span with ellipsis if truncated.
+        /// </returns>
+        public static string HumanizedTakeFirst(this string value, in int maximum)
+        {
+            if (value is null)
+            {
+                return string.Empty;
+            }
+
+            var minimumLength = Math.Min(maximum, value.Length);
+
+            if (minimumLength <= 0 || minimumLength == value.Length)
+            {
+                return value.TrimEnd();
+            }
+
+            return value.AsSpan().HumanizedTakeFirst(maximum);
         }
 
         /// <summary>

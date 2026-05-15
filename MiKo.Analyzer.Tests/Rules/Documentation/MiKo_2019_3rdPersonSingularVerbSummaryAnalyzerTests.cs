@@ -710,6 +710,7 @@ public class TestMe
         [TestCase("This property returns")]
         [TestCase("This Property will return")]
         [TestCase("This Property returns")]
+        [TestCase("Property for ")]
         [TestCase("If set to true then")]
         [TestCase("If set to True then")]
         [TestCase("If set to TRUE then")]
@@ -778,6 +779,7 @@ public interface TestMe
         [TestCase("This Property will return")]
         [TestCase("This Property returns")]
         [TestCase("get information about")]
+        [TestCase("Property for ")]
         public void Code_gets_fixed_for_non_boolean_property_text_(string originalText)
         {
             const string Template = @"

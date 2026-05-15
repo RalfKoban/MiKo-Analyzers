@@ -42,6 +42,14 @@ private sealed class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_delegate_type() => No_issue_is_reported_for(@"
+/// <summary>
+/// Something.
+/// </summary>
+public delegate void MyDelegate();
+");
+
+        [Test]
         public void No_issue_is_reported_for_undocumented_sealed_class() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {

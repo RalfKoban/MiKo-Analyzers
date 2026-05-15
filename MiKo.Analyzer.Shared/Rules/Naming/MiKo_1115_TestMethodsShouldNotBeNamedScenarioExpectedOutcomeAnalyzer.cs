@@ -56,6 +56,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "NoLongerThrow",
                                                                };
 
+        private static readonly string[] SpecialConditionPhrases =
+                                                                   {
+                                                                       "If",
+                                                                       "When",
+                                                                   };
+
         public MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {
         }
@@ -83,8 +89,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var parts = methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
             var first = true;
 
-            foreach (var part in parts)
+            for (int index = 0; index < parts.Length; index++)
             {
+                string part = parts[index];
+
                 if (part[0].IsUpperCaseOrNumber() is false)
                 {
                     return false;
@@ -98,9 +106,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                for (int index = 0, length = ExpectedOutcomeMarkers.Length; index < length; index++)
+                if (index is 1 && part.StartsWithAny(SpecialConditionPhrases))
                 {
-                    var marker = ExpectedOutcomeMarkers[index];
+                    return true;
+                }
+
+                for (int i = 0, length = ExpectedOutcomeMarkers.Length; i < length; i++)
+                {
+                    var marker = ExpectedOutcomeMarkers[i];
 
                     if (part.Contains(marker, StringComparison.OrdinalIgnoreCase))
                     {
