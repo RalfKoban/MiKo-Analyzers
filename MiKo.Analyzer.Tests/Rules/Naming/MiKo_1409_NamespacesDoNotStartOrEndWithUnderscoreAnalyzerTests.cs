@@ -64,8 +64,8 @@ public static class TestMe
         [TestCase("Abc.Def._Ghi")]
         [TestCase("Abc.Def._Ghi_")]
         [TestCase("Abc.Def.Ghi_")]
-        public void An_issue_is_reported_for_namespace_with_underscore_(string fullQualifiedNamespaceName) => An_issue_is_reported_for(@"
-namespace " + fullQualifiedNamespaceName + @"
+        public void An_issue_is_reported_for_namespace_with_underscore_(string fullyQualifiedNamespaceName) => An_issue_is_reported_for(@"
+namespace " + fullyQualifiedNamespaceName + @"
 {
   public static class TestMe
   {
@@ -86,8 +86,8 @@ namespace " + fullQualifiedNamespaceName + @"
         [TestCase("Abc.Def._Ghi")]
         [TestCase("Abc.Def._Ghi_")]
         [TestCase("Abc.Def.Ghi_")]
-        public void An_issue_is_reported_for_file_scoped_namespace_with_underscore_(string fullQualifiedNamespaceName) => An_issue_is_reported_for(@"
-namespace " + fullQualifiedNamespaceName + @";
+        public void An_issue_is_reported_for_file_scoped_namespace_with_underscore_(string fullyQualifiedNamespaceName) => An_issue_is_reported_for(@"
+namespace " + fullyQualifiedNamespaceName + @";
 
 public static class TestMe
 {
