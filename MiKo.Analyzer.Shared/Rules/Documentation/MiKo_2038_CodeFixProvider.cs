@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair(" can a ", " can "),
                                                         new Pair(" can an ", " can "),
                                                         new Pair(" can the ", " can "),
-                                                        new Pair(" can extension of ", " can extend "),
+                                                        new Pair(" can extend of ", " can extend "),
                                                         new Pair(" export and in ", " in "),
                                                         new Pair(" in context menu usable extension of ", " be used within a context menu of "),
                                                         new Pair(" in context menu useable extension of ", " be used within a context menu of "),

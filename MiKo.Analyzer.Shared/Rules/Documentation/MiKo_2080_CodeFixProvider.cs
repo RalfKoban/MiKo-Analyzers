@@ -273,10 +273,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static void FillCollectionReplacementMapKeys(List<string> keys)
             {
                 keys.Add("Containing ");
-                keys.Add("Storing ");
-                keys.Add("Stores ");
                 keys.Add("Holding ");
                 keys.Add("Holds ");
+                keys.Add("Remembering ");
+                keys.Add("Remembers ");
+                keys.Add("Storing ");
+                keys.Add("Stores ");
                 keys.Add("This is ");
 
                 foreach (var begin in CollectionStartupPhrases())
@@ -301,6 +303,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     keys.Add(begin + " is containing ");
                     keys.Add(begin + " that is containing ");
                     keys.Add(begin + " which is containing ");
+
+                    keys.Add(begin + " that remembers ");
+                    keys.Add(begin + " which remembers ");
+                    keys.Add(begin + " remembers ");
+                    keys.Add(begin + " remembering ");
+                    keys.Add(begin + " is remembering ");
+                    keys.Add(begin + " that is remembering ");
+                    keys.Add(begin + " which is remembering ");
 
                     keys.Add(begin + " that stores ");
                     keys.Add(begin + " which stores ");
@@ -381,6 +391,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Stack", "stack",
                                      "Queue", "queue",
                                      "Enumerable", "enumerable",
+                                     "Member variable", "member variable",
                                  };
 
                 foreach (var article in articles)
