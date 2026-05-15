@@ -2038,7 +2038,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var endRegionTrivia = relatedDirectives[1];
 
-                    var otherSyntaxNode = endRegionTrivia.ParentTrivia.Token.Parent;
+                    var otherSyntaxNode = endRegionTrivia.GetEnclosingSyntaxNode();
 
                     if (otherSyntaxNode != null)
                     {

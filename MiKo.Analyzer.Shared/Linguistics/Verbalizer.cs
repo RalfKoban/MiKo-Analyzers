@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting", "rting", "enting" };
 
-        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "kling", "ging", "sing", "ting", "uing", "ving", "zing", "mining" };
+        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "dling", "kling", "ging", "sing", "ting", "uing", "ving", "zing", "mining" };
 
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
@@ -83,8 +83,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                                              new KeyValuePair<string, string>("Had", "Has"),
                                                                                                                                              new KeyValuePair<string, string>("has", "has"),
                                                                                                                                              new KeyValuePair<string, string>("Has", "Has"),
-                                                                                                                                             new KeyValuePair<string, string>("implementation", "implements"),
-                                                                                                                                             new KeyValuePair<string, string>("Implementation", "Implements"),
                                                                                                                                              new KeyValuePair<string, string>("is", "is"),
                                                                                                                                              new KeyValuePair<string, string>("Is", "Is"),
                                                                                                                                              new KeyValuePair<string, string>("maintenance", "maintains"),
@@ -114,14 +112,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                    "not", "Not",
                                                                                    "null", "Null",
                                                                                    "object", "Object",
-                                                                                   "Operation",
                                                                                    "should", "Should",
                                                                                    "string", "String",
                                                                                    "task", "Task",
                                                                                    "true", "True",
                                                                                    "unauthorized", "Unauthorized",
                                                                                    "valid", "Valid",
-                                                                                   "validation", "Validation",
                                                                                };
 
         private static readonly string[] NounsWithGerundEnding =
@@ -649,9 +645,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith("ing", StringComparison.OrdinalIgnoreCase))
                 {
-                    var wordLength = word.Length;
-
-                    if (wordLength is 4)
+                    if (word.Length is 4)
                     {
                         // ignore short word such as "ping" or "thing"
                         return word;
@@ -664,25 +658,55 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     if (word.EndsWithAny(FourCharacterGerundEndings, StringComparison.OrdinalIgnoreCase))
                     {
-                        return word.Substring(0, wordLength - 4);
+                        return word.Substring(0, word.Length - 4);
                     }
 
                     if (word.EndsWithAny(ThreeCharacterGerundEndings, StringComparison.OrdinalIgnoreCase))
                     {
-                        return word.Substring(0, wordLength - 3);
+                        return word.Substring(0, word.Length - 3);
                     }
 
                     if (word.EndsWithAny(ThreeCharacterGerundEndingsWithE, StringComparison.OrdinalIgnoreCase))
                     {
-                        return word.AsSpan(0, wordLength - 3).ConcatenatedWith('e');
+                        return word.AsSpan(0, word.Length - 3).ConcatenatedWith('e');
                     }
 
-                    return word.Substring(0, wordLength - 3);
+                    return word.Substring(0, word.Length - 3);
                 }
 
                 if (IsPastTense(word))
                 {
                     return CreateFromPast(word);
+                }
+
+                if (word.EndsWith("ion", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    if (word.EndsWith("nsion", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.AsSpan(0, word.Length - 4).ConcatenatedWith('d');
+                    }
+
+                    if (word.EndsWith("ndation", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 5);
+                    }
+
+                    if (word.EndsWith("idation", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.AsSpan(0, word.Length - 3).ConcatenatedWith('e');
+                    }
+
+                    if (word.EndsWith("ration", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.AsSpan(0, word.Length - 3).ConcatenatedWith('e');
+                    }
+
+                    if (word.EndsWith("tation", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 5);
+                    }
+
+                    return word.Substring(0, word.Length - 3);
                 }
 
                 return word;
@@ -903,6 +927,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
                 {
                     return word[0].IsUpperCaseLetter() ? "Shuts down" : "shuts down";
+                }
+
+                if (word.EndsWith("ion", StringComparison.Ordinal))
+                {
+                    var infinite = MakeInfiniteVerb(word);
+
+                    if (word != infinite)
+                    {
+                        return MakeThirdPersonSingularVerb(infinite);
+                    }
                 }
 
                 return AppendEndingS(word);
