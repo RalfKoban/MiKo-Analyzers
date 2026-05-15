@@ -22,11 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                    && m.GetIdentifierName() is nameof(StringComparison)
                                                                                    && m.GetName() is nameof(StringComparison.Ordinal);
 
-        private static bool IsStringComparisonOrdinal(in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
+        private static bool IsStringComparisonOrdinal(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxNodeAnalysisContext context)
         {
             switch (arguments.Count)
             {
-                case 1 when arguments[0].IsString(semanticModel):
+                case 1 when arguments[0].IsString(context.SemanticModel):
                 case 2 when IsStringComparisonOrdinal(arguments[1].Expression):
                     return true;
 
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (IsStringComparisonOrdinal(arguments, context.SemanticModel))
+                if (IsStringComparisonOrdinal(arguments, context))
                 {
                     var argumentExpression = arguments[0].Expression;
                     var expression = maes.Expression;
