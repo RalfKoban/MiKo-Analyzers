@@ -487,7 +487,7 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 node = node is DocumentationCommentTriviaSyntax d
-                       ? d.ParentTrivia.Token.Parent
+                       ? d.GetEnclosingSyntaxNode()
                        : node.Parent;
             }
         }
@@ -521,7 +521,7 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 node = node is DocumentationCommentTriviaSyntax d
-                       ? d.ParentTrivia.Token.Parent
+                       ? d.GetEnclosingSyntaxNode()
                        : node.Parent;
             }
         }
@@ -585,7 +585,7 @@ namespace MiKoSolutions.Analyzers
                     case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
                     case DocumentationCommentTriviaSyntax d:
                     {
-                        value = d.ParentTrivia.Token.Parent;
+                        value = d.GetEnclosingSyntaxNode();
 
                         continue;
                     }
@@ -594,6 +594,39 @@ namespace MiKoSolutions.Analyzers
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the syntax node that encloses the specified documentation comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia whose enclosing syntax node to retrieve.
+        /// </param>
+        /// <returns>
+        /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
+        /// </returns>
+        internal static SyntaxNode GetEnclosingSyntaxNode(this DocumentationCommentTriviaSyntax value) => value?.ParentTrivia.Token.Parent;
+
+        /// <summary>
+        /// Gets the syntax node that encloses the specified structured trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The structured trivia whose enclosing syntax node to retrieve.
+        /// </param>
+        /// <returns>
+        /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
+        /// </returns>
+        internal static SyntaxNode GetEnclosingSyntaxNode(this StructuredTriviaSyntax value) => value?.ParentTrivia.Token.Parent;
+
+        /// <summary>
+        /// Gets the syntax node that encloses the specified XML node.
+        /// </summary>
+        /// <param name="value">
+        /// The XML node whose enclosing syntax node to retrieve.
+        /// </param>
+        /// <returns>
+        /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
+        /// </returns>
+        internal static SyntaxNode GetEnclosingSyntaxNode(this XmlNodeSyntax value) => value?.FirstAncestor<DocumentationCommentTriviaSyntax>().GetEnclosingSyntaxNode();
 
         /// <summary>
         /// Gets the last child node of the specified syntax node that is of type <typeparamref name="T"/>.

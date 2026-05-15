@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case LiteralExpressionSyntax literal: return IsResponsibleNode(literal.Kind());
                 case PrefixUnaryExpressionSyntax unary: return IsResponsibleNode(unary.Operand.Kind());
                 case MemberAccessExpressionSyntax maes: return maes.IsConst(semanticModel);
+                case InvocationExpressionSyntax i: return i.IsNameOf();
                 default:
                     return false;
             }

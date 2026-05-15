@@ -15,17 +15,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected bool IgnoreEmptyParameters { get; set; } = true;
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind is SymbolKind.Method;
+        protected override bool ShallAnalyze(ISymbol symbol)
+        {
+            if (symbol.Kind is SymbolKind.Method)
+            {
+                return true;
+            }
+
+            return symbol is INamedTypeSymbol t && t.IsDelegate();
+        }
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            if (symbol is IMethodSymbol method)
+            switch (symbol)
             {
-                var parameters = method.Parameters;
-
-                if (parameters.Length > 0)
+                case IMethodSymbol method:
                 {
-                    return AnalyzeParameters(parameters, comment);
+                    var parameters = method.Parameters;
+
+                    if (parameters.Length > 0)
+                    {
+                        return AnalyzeParameters(parameters, comment);
+                    }
+
+                    break;
+                }
+
+                case INamedTypeSymbol type when type.DelegateInvokeMethod is IMethodSymbol invokeMethod:
+                {
+                    var parameters = invokeMethod.Parameters;
+
+                    if (parameters.Length > 0)
+                    {
+                        return AnalyzeParameters(parameters, comment);
+                    }
+
+                    break;
                 }
             }
 

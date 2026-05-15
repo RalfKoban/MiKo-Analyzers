@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);
 
-            return AnalyzeSummaryPhrases(symbol, summaries.Value, phrases.Concat(symbolNames));
+            return AnalyzeSummaryPhrases(symbol, summaries.Value, summaryXmls, phrases.Concat(symbolNames));
         }
 
         private static string[] GetPhrases(ISymbol symbol)
@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return names;
         }
 
-        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, in ReadOnlySpan<string> summaries, IEnumerable<string> phrases)
+        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, in ReadOnlySpan<string> summaries, IReadOnlyList<XmlElementSyntax> summaryXmls, IEnumerable<string> phrases)
         {
             var summariesLength = summaries.Length;
 
@@ -124,20 +124,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             for (var index = 0; index < summariesLength; index++)
             {
                 var summary = summaries[index];
+                var summaryXml = summaryXmls.ElementAtOrDefault(index);
 
                 if (summary.StartsWith(Constants.Comments.XmlElementStartingTagChar))
                 {
                     var i = summary.AsSpan().IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
-                    var phrase = i > 0 ? summary.AsSpan(0, i + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
+                    var phrase = i > 0 ? summary.AsSpan(0, i + 2).ToString() : Constants.Comments.XmlElementStartingTag;
 
-                    return ReportIssueStartingPhrase(symbol, phrase);
+                    return ReportIssueStartingPhrase(symbol, summaryXml, phrase);
                 }
 
                 foreach (var phrase in phrases)
                 {
                     if (summary.StartsWith(phrase, StringComparison.OrdinalIgnoreCase))
                     {
-                        return ReportIssueStartingPhrase(symbol, phrase.AsSpan());
+                        return ReportIssueStartingPhrase(symbol, summaryXml, phrase);
                     }
                 }
 
@@ -179,21 +180,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             }
                         }
 
-                        return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
+                        return ReportIssueContainsPhrase(symbol, summaryXml, phrase);
                     }
                 }
 
                 if (property != null && isExpectedPropertyStart is false)
                 {
-                    return ReportIssueStartingPhrase(property, summary.AsSpan().FirstWord());
+                    return ReportIssueStartingPhrase(property, summaryXml, summary.FirstWord());
                 }
             }
 
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, in ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
+        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, XmlElementSyntax summaryXml, string phrase) => Issue(symbol, summaryXml, "contain", phrase);
 
-        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, in ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
+        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, XmlElementSyntax summaryXml, string phrase) => Issue(symbol, summaryXml, "start with", phrase);
+
+        private Diagnostic[] Issue(ISymbol symbol, XmlElementSyntax summaryXml, string condition, string phrase)
+        {
+            // safety check to see if we have really a summary XML (for whatever reason that could be null as tested with a real-life project)
+            if (summaryXml != null)
+            {
+                var startOffset = phrase.StartsWith(' ') ? 1 : 0; // we do not want to underline the first space
+                var endOffset = phrase.EndsWith(' ') ? 1 : 0; // we do not want to underline the last space
+
+                // let's find the phrase in the summary XML to report the issue at the correct location
+                foreach (var textToken in summaryXml.GetXmlTextTokens())
+                {
+                    var location = GetFirstLocation(textToken, phrase, startOffset: startOffset, endOffset: endOffset);
+
+                    if (location is null)
+                    {
+                        // it is not part of the current text token, so we have to search further
+                        continue;
+                    }
+
+                    return new[] { Issue(symbol.Name, location, condition, phrase.HumanizedTakeFirst(200)) };
+                }
+            }
+
+            // fall-back to default location if the phrase is not found in the summary XML (could happen if the phrase spans multiple lines)
+            return new[] { Issue(symbol, condition, phrase.HumanizedTakeFirst(200)) };
+        }
     }
 }

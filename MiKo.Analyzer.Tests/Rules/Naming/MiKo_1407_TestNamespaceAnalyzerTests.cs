@@ -44,6 +44,16 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_test_class_in_file_scoped_namespace() => No_issue_is_reported_for(@"
+namespace Bla;
+
+public class TestMe
+{
+    public void DoSomething() { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_class_with_correct_namespace_(
                                                                             [ValueSource(nameof(TestFixtures))] string fixture,
                                                                             [ValueSource(nameof(Tests))] string test)
@@ -56,6 +66,21 @@ namespace Bla
       [" + test + @"]
       public void DoSomething_does_something() { }
   }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_class_with_correct_file_scoped_namespace_(
+                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                        [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+namespace Bla;
+
+[" + fixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void DoSomething_does_something() { }
 }
 ");
 
@@ -73,6 +98,22 @@ namespace " + namespaceName + @"
       [" + test + @"]
       public void DoSomething_does_something() { }
   }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_class_with_incorrect_file_scoped_namespace_(
+                                                                                          [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
+                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                          [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+namespace " + namespaceName + @";
+
+[" + fixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void DoSomething_does_something() { }
 }
 ");
 

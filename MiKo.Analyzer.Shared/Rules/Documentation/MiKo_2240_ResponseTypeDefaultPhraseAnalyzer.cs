@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             var betterText = FindBetterText(text);
 
-                            return new[] { Issue(node, betterText.AsSpan().HumanizedTakeFirst(50), CreatePhraseProposal(betterText)) };
+                            return new[] { Issue(node, betterText.HumanizedTakeFirst(50), CreatePhraseProposal(betterText)) };
                         }
                     }
                 }
