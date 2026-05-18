@@ -318,12 +318,12 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,ISet{string})"/>
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, string tag)
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
+            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>(SyntaxKind.XmlEmptyElement))
             {
                 if (element.GetName() == tag)
                 {
@@ -346,12 +346,12 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,ISet{string})"/>
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, ISet<string> tags)
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
+            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>(SyntaxKind.XmlEmptyElement))
             {
                 if (tags.Contains(element.GetName()))
                 {
@@ -827,12 +827,16 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,ISet{string})"/>
         internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, string tag)
         {
             List<XmlElementSyntax> elements = null;
 
-            foreach (var element in value.AllDescendantNodes<XmlElementSyntax>())
+            var descendantNodes = value is MemberDeclarationSyntax
+                                  ? value.AllDescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement)
+                                  : value.DescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement);
+
+            foreach (var element in descendantNodes)
             {
                 if (element.GetName() == tag)
                 {
@@ -863,12 +867,12 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
-        internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, ISet<string> tags)
+        internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this DocumentationCommentTriviaSyntax value, ISet<string> tags)
         {
             // we have to delve into the trivia to find the XML syntax nodes
             List<XmlElementSyntax> elements = null;
 
-            foreach (var element in value.AllDescendantNodes<XmlElementSyntax>())
+            foreach (var element in value.DescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement))
             {
                 if (tags.Contains(element.GetName()))
                 {
