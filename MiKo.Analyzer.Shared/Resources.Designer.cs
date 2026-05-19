@@ -15155,6 +15155,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3234_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3234_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calling &apos;.Equals(value) == true&apos; is redundant - the boolean result is compared to &apos;true&apos; again, which is unnecessary. Using &apos;is value&apos; instead expresses the intent directly and makes the code easier to understand at a glance..
+        /// </summary>
+        internal static string MiKo_3234_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3234_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;Equals() ==&apos;.
+        /// </summary>
+        internal static string MiKo_3234_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3234_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching over boolean Equals checks.
+        /// </summary>
+        internal static string MiKo_3234_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3234_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
