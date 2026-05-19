@@ -5844,6 +5844,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Event&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1537_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1537_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event handlers should be named starting with &apos;On&apos; followed by the event name to show they handle events..
+        /// </summary>
+        internal static string MiKo_1537_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1537_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Event&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1537_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1537_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix methods with &apos;Event&apos;.
+        /// </summary>
+        internal static string MiKo_1537_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1537_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
