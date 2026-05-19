@@ -17,39 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_)).OrderDescendingByLengthAndText(_ => _.Key);
+        private static readonly Pair[] ReplacementMap = CreatePhrases().OrderDescendingByLengthAndText(_ => _.Key);
 
         private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
-        private static readonly Pair[] CleanUpMap =
-                                                    {
-                                                        new Pair("Occurs fire ", "Occurs "),
-                                                        new Pair("Occurs fired ", "Occurs "),
-                                                        new Pair("Occurs fires ", "Occurs "),
-                                                        new Pair("Occurs firing ", "Occurs "),
-                                                        new Pair("Occurs raise ", "Occurs "),
-                                                        new Pair("Occurs raised ", "Occurs "),
-                                                        new Pair("Occurs raises ", "Occurs "),
-                                                        new Pair("Occurs raising ", "Occurs "),
-                                                        new Pair("Occurs trigger ", "Occurs "),
-                                                        new Pair("Occurs triggered ", "Occurs "),
-                                                        new Pair("Occurs triggers ", "Occurs "),
-                                                        new Pair("Occurs triggering ", "Occurs "),
+        private static readonly Pair[] CleanUpMap = CreateCleanupPhrases().OrderDescendingByLengthAndText(_ => _.Key);
 
-                                                        new Pair("Occurs invoked ", "Occurs "),
-
-                                                        // special cases
-                                                        new Pair("Occurs occur ", "Occurs "),
-                                                        new Pair("Occurs occurs ", "Occurs "),
-                                                        new Pair("Occurs occured ", "Occurs "),
-                                                        new Pair("Occurs occurred ", "Occurs "),
-                                                        new Pair("Occurs occuring ", "Occurs "),
-                                                        new Pair("Occurs occurring ", "Occurs "),
-                                                        new Pair("Occurs that ", "Occurs when "),
-                                                        new Pair("Occurs if ", "Occurs when "),
-                                                    };
-
-        private static readonly string[] CleanUpPhrases = CleanUpMap.ToArray(_ => _.Key);
+        private static readonly string[] CleanUpMapKeys = GetTermsForQuickLookup(CleanUpMap);
 
 //// ncrunch: rdi default
 
@@ -66,14 +40,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var preparedComment = Comment(syntax, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
             var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.EventSummaryStartingPhrase);
-            var cleanedComment = Comment(fixedComment, CleanUpPhrases, CleanUpMap);
+            var cleanedComment = Comment(fixedComment, CleanUpMapKeys, CleanUpMap);
 
             return cleanedComment;
         }
 
 //// ncrunch: rdi off
 
-        private static HashSet<string> CreatePhrases()
+        private static IEnumerable<Pair> CreatePhrases()
         {
             var starts = new[] { "Event", "This event", "The event", "An event", "A event" };
             var adverbs = new[]
@@ -87,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   "will be ", "that will be ", "which will be ",
                                   "would be ", "that would be ", "which would be ",
                               };
-            var verbs = new[] { "fired", "raised", "caused", "triggered", "occurred", "occured" };
+            var verbs = new[] { "fired", "raised", "caused", "triggerd", "triggered", "occurred", "occured", "notifying", "notfying", "informing" };
 
             var results = new HashSet<string>();
 
@@ -118,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    "will", "that will", "which will",
                                    "would", "that would", "which would",
                                };
-            var verbsInfinite = new[] { "fire", "raise", "cause", "trigger", "occur" };
+            var verbsInfinite = new[] { "fire", "raise", "cause", "trigger", "occur", "notify", "notfy", "inform", };
 
             foreach (var start in starts)
             {
@@ -133,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var verbsPresent = new[] { "fires", "raises", "causes", "triggers", "occurs" };
+            var verbsPresent = new[] { "fires", "raises", "causes", "triggers", "occurs", "notifies", "notfies", "informs" };
 
             foreach (var start in starts)
             {
@@ -145,7 +119,74 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             results.Add("Indicates");
 
-            return results;
+            return results.Select(_ => new Pair(_));
+        }
+
+        private static IEnumerable<Pair> CreateCleanupPhrases()
+        {
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "fire ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "fired ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "fires ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "firing ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "inform ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "informs ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "informing ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notfies ", Constants.Comments.EventSummaryStartingPhrase); // typo
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notfying ", Constants.Comments.EventSummaryStartingPhrase); // typo
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notfy ", Constants.Comments.EventSummaryStartingPhrase); // typo
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notify ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notifies ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notifying ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "raise ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "raised ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "raises ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "raising ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "trigger ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "triggerd ", Constants.Comments.EventSummaryStartingPhrase); // typo
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "triggered ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "triggers ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "triggering ", Constants.Comments.EventSummaryStartingPhrase);
+
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "invoked ", Constants.Comments.EventSummaryStartingPhrase);
+
+            // special cases
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occur ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occurs ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occured ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occurred ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occuring ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occurring ", Constants.Comments.EventSummaryStartingPhrase);
+
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "about ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "if ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notify if ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notfy if ", Constants.Comments.EventSummaryStartingPhrase + "when "); // typo
+
+            var starts = new[] { "Event", "This event", "The event", "An event", "A event" };
+
+            foreach (var start in starts.Select(_ => Constants.Comments.EventSummaryStartingPhrase + _.ToLowerCaseAt(0)))
+            {
+               yield return new Pair(start + " that allows to perform an action ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " that allows us to perform an action ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " which allows to perform an action ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " which allows us to perform an action ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " allowing to perform an action ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " allowing us to perform an action ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+
+               yield return new Pair(start + " that informs about ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " which informs about ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+
+               yield return new Pair(start + " that notifies about ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " which notifies about ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+               yield return new Pair(start + " that notfies about ", Constants.Comments.EventSummaryStartingPhrase + "when "); // typo
+               yield return new Pair(start + " which notfies about ", Constants.Comments.EventSummaryStartingPhrase + "when "); // typo
+            }
+
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification sent by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification triggered by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification triggerd by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when "); // typo
         }
 //// ncrunch: rdi default
     }
