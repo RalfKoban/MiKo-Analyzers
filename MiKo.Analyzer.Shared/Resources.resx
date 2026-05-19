@@ -2108,6 +2108,18 @@ Naming the field based on what it represents, rather than what it implies, makes
   <data name="MiKo_1533_Title" xml:space="preserve">
     <value>Do not prefix fields with words that express intent or expectation</value>
   </data>
+  <data name="MiKo_1537_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Event' prefix from method name</value>
+  </data>
+  <data name="MiKo_1537_Description" xml:space="preserve">
+    <value>Event handlers should be named starting with 'On' followed by the event name to show they handle events.</value>
+  </data>
+  <data name="MiKo_1537_MessageFormat" xml:space="preserve">
+    <value>Remove 'Event' prefix from method name</value>
+  </data>
+  <data name="MiKo_1537_Title" xml:space="preserve">
+    <value>Do not prefix methods with 'Event'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

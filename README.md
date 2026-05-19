@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 552 rules that are currently provided by the analyzer.
+The following tables list all the 553 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -154,7 +154,7 @@ The following tables list all the 552 rules that are currently provided by the a
 |[MiKo_1119](/Documentation/MiKo_1119.md)|Do not include 'when_present' in test method names|&#x2713;|\-|
 |[MiKo_1200](/Documentation/MiKo_1200.md)|Name catch block exceptions consistently|&#x2713;|&#x2713;|
 |[MiKo_1201](/Documentation/MiKo_1201.md)|Name exception parameters consistently|&#x2713;|&#x2713;|
-|[MiKo_1300](/Documentation/MiKo_1300.md)|Name unimportant lambda parameters '_'|&#x2713;|&#x2713;|
+|[MiKo_1300](/Documentation/MiKo_1300.md)|Name unimportant lambda parameters `_`|&#x2713;|&#x2713;|
 |[MiKo_1400](/Documentation/MiKo_1400.md)|Use plural for namespace names|&#x2713;|\-|
 |[MiKo_1401](/Documentation/MiKo_1401.md)|Do not include technical language names in namespaces|&#x2713;|\-|
 |[MiKo_1402](/Documentation/MiKo_1402.md)|Do not name namespaces after WPF-specific design patterns|&#x2713;|\-|
@@ -198,6 +198,7 @@ The following tables list all the 552 rules that are currently provided by the a
 |[MiKo_1531](/Documentation/MiKo_1531.md)|Do not prefix local variables with 'should'|&#x2713;|&#x2713;|
 |[MiKo_1532](/Documentation/MiKo_1532.md)|Do not prefix parameters with 'should'|&#x2713;|&#x2713;|
 |[MiKo_1533](/Documentation/MiKo_1533.md)|Do not prefix fields with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1537](/Documentation/MiKo_1537.md)|Do not prefix methods with 'Event'|&#x2713;|&#x2713;|
 
 ### Documentation
 
