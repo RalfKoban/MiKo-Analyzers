@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -116,8 +117,115 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_empty_returns_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <returns></returns>
+    public object DoSomething(object o) { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <returns>
+    /// The TODO
+    /// </returns>
+    public object DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_is_not_fixed_for_returns_starting_with_If()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <returns>
+    /// If something.
+    /// </returns>
+    public object DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, OriginalCode);
+        }
+
+        [TestCase("Something.", "The something.")]
+        [TestCase("a something.", "A something.")]
+        [TestCase("an something.", "An something.")]
+        [TestCase("the something.", "The something.")]
+        [TestCase("this something.", "The something.")]
+        [TestCase("Always something.", "The something.")]
+        [TestCase("Always a something.", "A something.")]
+        [TestCase("Always an something.", "An something.")]
+        [TestCase("Always the something.", "The something.")]
+        [TestCase("always this something.", "The something.")]
+        [TestCase("always something.", "The something.")]
+        [TestCase("always a something.", "A something.")]
+        [TestCase("always an something.", "An something.")]
+        [TestCase("always the something.", "The something.")]
+        [TestCase("always this something.", "The something.")]
+        public void Code_gets_fixed_for_returns_(string originalText, string fixedText)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary />
+    /// <returns>
+    /// ###
+    /// </returns>
+    public object DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("return a something.", "A something.")]
+        [TestCase("Return a something.", "A something.")]
+        [TestCase("return an item.", "An item.")]
+        [TestCase("Return an item.", "An item.")]
+        [TestCase("return something.", "The something.")]
+        [TestCase("Return something.", "The something.")]
+        [TestCase("return the something.", "The something.")]
+        [TestCase("Return the something.", "The something.")]
+        [TestCase("return this something.", "The something.")]
+        [TestCase("Return this something.", "The something.")]
+        [TestCase("returns a something.", "A something.")]
+        [TestCase("Returns a something.", "A something.")]
+        [TestCase("returns an item.", "An item.")]
+        [TestCase("Returns an item.", "An item.")]
+        [TestCase("returns something.", "The something.")]
+        [TestCase("Returns something.", "The something.")]
+        [TestCase("returns the something.", "The something.")]
+        [TestCase("Returns the something.", "The something.")]
+        [TestCase("returns this something.", "The something.")]
+        [TestCase("Returns this something.", "The something.")]
+        public void Code_gets_fixed_for_returns_starting_with_Returns_(string originalText, string fixedText)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary />
+    /// <returns>
+    /// ###
+    /// </returns>
+    public object DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2030_ReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2030_ReturnTypeDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2030_CodeFixProvider();
     }
 }
