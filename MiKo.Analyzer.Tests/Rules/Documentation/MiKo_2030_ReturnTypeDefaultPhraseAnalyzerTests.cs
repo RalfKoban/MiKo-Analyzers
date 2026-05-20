@@ -158,6 +158,9 @@ public class TestMe
         }
 
         [TestCase("Something.", "The something.")]
+        [TestCase("a something.", "A something.")]
+        [TestCase("an something.", "An something.")]
+        [TestCase("the something.", "The something.")]
         public void Code_gets_fixed_for_returns_(string originalText, string fixedText)
         {
             const string Template = @"

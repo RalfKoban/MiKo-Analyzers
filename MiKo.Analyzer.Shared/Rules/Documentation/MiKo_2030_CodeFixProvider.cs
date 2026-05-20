@@ -22,6 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("The returns the ", "The "),
                                                             new Pair("The return ", "The "),
                                                             new Pair("The returns ", "The "),
+                                                            new Pair("The a ", "A "),
+                                                            new Pair("The an ", "An "),
+                                                            new Pair("The the ", "The "),
                                                         };
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
@@ -53,15 +56,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return comment;
             }
 
-            var fixedComment = CommentStartingWith(comment, "The ");
+            var preparedComment = CommentStartingWith(comment, "The ");
 
-            if (text.StartsWith("Return", StringComparison.OrdinalIgnoreCase))
-            {
-                // we have to remove the first word
-                return Comment(fixedComment, ReplacementMapKeys, ReplacementMap);
-            }
-
-            return fixedComment;
+            return Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
         }
     }
 }
