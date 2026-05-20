@@ -168,6 +168,103 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", original + " " + condition), Template.Replace("###", "Occurs when"));
         }
 
+        [TestCase("An event informing about")]
+        [TestCase("An event notifying about")]
+        [TestCase("An event that informs about")]
+        [TestCase("An event that notifies about")]
+        [TestCase("An event which informs about")]
+        [TestCase("An event which notifies about")]
+        [TestCase("Event informing about")]
+        [TestCase("Event notifying about")]
+        [TestCase("Event that informs about")]
+        [TestCase("Event that notifies about")]
+        [TestCase("Event which informs about")]
+        [TestCase("Event which notifies about")]
+        public void Code_gets_fixed_for_notifying_phrase_(string original)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", "Occurs when"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_allowing_phrase_(
+                                                     [Values("An event", "Event")] string start,
+                                                     [Values("allowing", "that allows", "which allows")] string middle,
+                                                     [Values("to perform an action", "us to perform an action")] string end)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", start + " " + middle + " " + end), Template.Replace("###", "Occurs when"));
+        }
+
+        [TestCase("Notification by a DTM that")]
+        [TestCase("Notification sent by a DTM that")]
+        [TestCase("Notification triggered by a DTM that")]
+        [TestCase("Notification triggerd by a DTM that")] // typo
+        public void Code_gets_fixed_for_DTM_phrase_(string original)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", "Occurs when"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Important_phrase_in_remarks()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Event will be raised if something happens.
+    /// </summary>
+    /// <remarks>
+    /// IMPORTANT: This event is fired when something happens.
+    /// </remarks>
+    public event EventHandler MyEvent;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Occurs when something happens.
+    /// </summary>
+    /// <remarks>
+    /// IMPORTANT: This event is fired when something happens.
+    /// </remarks>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2001_EventSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_EventSummaryAnalyzer();
@@ -189,7 +286,7 @@ public class TestMe
                                 "will be ", "that will be ", "which will be ",
                                 "would be ", "that would be ", "which would be ",
                                ];
-            string[] verbs = ["fired", "raised", "caused", "triggered", "occurred", "occured"];
+            string[] verbs = ["fired", "raised", "caused", "triggerd", "triggered", "occurred", "occured", "notifying", "informing"];
 
             var results = new HashSet<string>();
 
@@ -219,7 +316,7 @@ public class TestMe
                                  "will", "that will", "which will",
                                  "would", "that would", "which would"
                                 ];
-            string[] verbsInfinite = ["fire", "raise", "cause", "trigger", "occur"];
+            string[] verbsInfinite = ["fire", "raise", "cause", "trigger", "occur", "notify", "inform"];
 
             foreach (var start in starts)
             {
@@ -234,7 +331,7 @@ public class TestMe
                 }
             }
 
-            string[] verbsPresent = ["fires", "raises", "causes", "triggers", "occurs"];
+            string[] verbsPresent = ["fires", "raises", "causes", "triggers", "occurs", "notifies", "informs"];
 
             foreach (var start in starts)
             {
@@ -268,11 +365,20 @@ public class TestMe
             results.Add("Triggering");
             results.Add("trigger");
             results.Add("triggered");
+            results.Add("triggerd"); // typo
             results.Add("triggers");
             results.Add("triggering");
 
             results.Add("Invoked");
             results.Add("invoked");
+
+            results.Add("Notifies");
+            results.Add("Notify");
+            results.Add("Notifying");
+
+            results.Add("Inform");
+            results.Add("Informs");
+            results.Add("Informing");
 
             return results;
         }
