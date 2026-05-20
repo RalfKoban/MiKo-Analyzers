@@ -14,17 +14,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Pair[] ReplacementMap =
                                                         {
+                                                            new Pair("The a ", "A "),
+                                                            new Pair("The an ", "An "),
+                                                            new Pair("The the ", "The "),
+                                                            new Pair("The this ", "The "),
+                                                            new Pair("The always a ", "A "),
+                                                            new Pair("The always an ", "An "),
+                                                            new Pair("The always the ", "The "),
+                                                            new Pair("The always this ", "The "),
+                                                            new Pair("The always ", "The "),
                                                             new Pair("The return a ", "A "),
                                                             new Pair("The returns a ", "A "),
                                                             new Pair("The return an ", "An "),
                                                             new Pair("The returns an ", "An "),
                                                             new Pair("The return the ", "The "),
                                                             new Pair("The returns the ", "The "),
+                                                            new Pair("The return this ", "The "),
+                                                            new Pair("The returns this ", "The "),
                                                             new Pair("The return ", "The "),
                                                             new Pair("The returns ", "The "),
-                                                            new Pair("The a ", "A "),
-                                                            new Pair("The an ", "An "),
-                                                            new Pair("The the ", "The "),
                                                         };
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
