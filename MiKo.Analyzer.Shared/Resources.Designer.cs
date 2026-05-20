@@ -6828,6 +6828,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix return comment.
+        /// </summary>
+        internal static string MiKo_2030_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2030_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation for a return value should start with a default phrase that provides a detailed description of what the returned value is. This approach helps clarify the purpose and use of the return value for developers..
         /// </summary>
         internal static string MiKo_2030_Description {
