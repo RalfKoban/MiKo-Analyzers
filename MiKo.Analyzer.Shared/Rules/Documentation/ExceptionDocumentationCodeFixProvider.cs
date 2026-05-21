@@ -240,17 +240,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var c in conditions)
                 {
-                    var phrase = string.Concat(v, " ", c, " ");
+                    var phrase = string.Concat(v, Constants.SingleSpace, c, Constants.SingleSpace);
 
                     foreach (var s in starts)
                     {
-                        var phrase0 = string.Concat(s, " ", phrase);
+                        var phrase0 = string.Concat(s, Constants.SingleSpace, phrase);
 
                         foreach (var p in parts)
                         {
-                            var part = p + " ";
+                            var part = p + Constants.SingleSpace;
 
-                            var phrase1 = string.Concat(s, " ", part, phrase);
+                            var phrase1 = string.Concat(s, Constants.SingleSpace, part, phrase);
                             var phrase2 = phrase1 + part;
                             var phrase3 = phrase0 + part;
 
@@ -288,8 +288,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var c in rawConditions)
                 {
-                    var phrase = string.Concat(sp, " ", c, " ");
-                    var upperCasePhrase = string.Concat(up, " ", c, " ");
+                    var phrase = string.Concat(sp, Constants.SingleSpace, c, Constants.SingleSpace);
+                    var upperCasePhrase = string.Concat(up, Constants.SingleSpace, c, Constants.SingleSpace);
 
                     yield return phrase + "the ";
                     yield return phrase;
@@ -301,7 +301,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var c in conditions)
             {
-                var phrase = c + " ";
+                var phrase = c + Constants.SingleSpace;
 
                 yield return phrase + "the ";
                 yield return phrase;

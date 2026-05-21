@@ -788,7 +788,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     set.Add(" to provide " + continuation);
                     set.Add(" to " + continuation);
 
-                    set.Add(" " + continuation);
+                    set.Add(Constants.SingleSpace + continuation);
                 }
             }
         }

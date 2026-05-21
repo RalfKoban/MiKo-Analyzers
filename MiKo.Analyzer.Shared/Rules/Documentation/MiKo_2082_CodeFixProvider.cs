@@ -124,11 +124,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var continuation in continuations)
                 {
-                    yield return string.Concat(start, ", ", continuation, " ");
-                    yield return string.Concat(start, " ", continuation, " ");
+                    yield return string.Concat(start, ", ", continuation, Constants.SingleSpace);
+                    yield return string.Concat(start, Constants.SingleSpace, continuation, Constants.SingleSpace);
                 }
 
-                yield return start + " ";
+                yield return start + Constants.SingleSpace;
             }
         }
 

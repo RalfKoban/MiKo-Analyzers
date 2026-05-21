@@ -150,12 +150,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (shouldBeMatch.Success)
                     {
                         var shouldBeText = shouldBeMatch.Value;
-                        var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(shouldBeText.ThirdWord()) + " ";
+                        var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(shouldBeText.ThirdWord()) + Constants.SingleSpace;
 
                         // re-phrase the text to fix it later on
                         var updatedText = textTrimmed.AsCachedBuilder()
                                                      .ReplaceAllWithProbe(data.Map)
-                                                     .Without(" " + shouldBeText)
+                                                     .Without(Constants.SingleSpace + shouldBeText)
                                                      .TrimmedStart()
                                                      .WithoutStarting(Conditionals, StringComparison.OrdinalIgnoreCase)
                                                      .TrimmedStart()
@@ -742,7 +742,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
                     {
                         var verb = verbs[verbIndex];
-                        var middle = " " + verb + end; // TODO RKN: Change string creation
+                        var middle = Constants.SingleSpace + verb + end; // TODO RKN: Change string creation
 
                         // for performance reasons we use for loops here
                         for (var startIndex = 0; startIndex < startsCount; startIndex++)
@@ -769,8 +769,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 string[] CreateStartTermsWithOptionals()
                 {
-                    var startTerms = new[] { "A ", "An ", "The ", " " };
-                    var optionals = new[] { "Optional ", "(optional) ", "(Optional) ", "optional ", " " };
+                    var startTerms = new[] { "A ", "An ", "The ", Constants.SingleSpace };
+                    var optionals = new[] { "Optional ", "(optional) ", "(Optional) ", "optional ", Constants.SingleSpace };
 
                     var startTermsLength = startTerms.Length;
                     var optionalsLength = optionals.Length;

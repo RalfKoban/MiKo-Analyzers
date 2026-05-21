@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (leadingComment.Length > 0)
                 {
-                    var comment = SyntaxFactory.Comment(Constants.Comments.CommentExterior + " " + leadingComment.ConcatenatedWith(" "));
+                    var comment = SyntaxFactory.Comment(Constants.Comments.CommentExterior + Constants.SingleSpace + leadingComment.ConcatenatedWith(Constants.SingleSpace));
 
                     updatedSyntax = updatedSyntax.WithTrailingTrivia(SyntaxFactory.Space, comment, SyntaxFactory.CarriageReturnLineFeed);
                 }

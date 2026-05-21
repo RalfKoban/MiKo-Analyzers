@@ -211,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " which describes ";
                 yield return start + " which represents ";
 
-                yield return start + " ";
+                yield return start + Constants.SingleSpace;
 
                 yield return "Gets or sets ";
                 yield return "Gets or Sets ";

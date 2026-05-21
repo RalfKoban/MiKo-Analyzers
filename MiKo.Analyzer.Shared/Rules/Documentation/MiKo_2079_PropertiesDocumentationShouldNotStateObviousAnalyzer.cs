@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     foreach (var continuation in ContinuationPhrases)
                     {
-                        var phrase = obviousPhrase + " " + continuation;
+                        var phrase = obviousPhrase + Constants.SingleSpace + continuation;
 
                         result.Add(phrase);
                         result.Add(phrase + ".");

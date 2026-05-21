@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var verb in verbs)
             {
-                results.Add(string.Concat(verb.ToUpperCaseAt(0), " "));
+                results.Add(string.Concat(verb.ToUpperCaseAt(0), Constants.SingleSpace));
 
                 foreach (var adverb in adverbs)
                 {
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     foreach (var start in starts)
                     {
-                        results.Add(string.Concat(start, " ", end, " "));
+                        results.Add(string.Concat(start, Constants.SingleSpace, end, Constants.SingleSpace));
                     }
                 }
             }
@@ -98,11 +98,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var midTerm in midTerms)
                 {
-                    var begin = string.Concat(start, " ", midTerm, " ");
+                    var begin = string.Concat(start, Constants.SingleSpace, midTerm, Constants.SingleSpace);
 
                     foreach (var verb in verbsInfinite)
                     {
-                        results.Add(string.Concat(begin, verb, " "));
+                        results.Add(string.Concat(begin, verb, Constants.SingleSpace));
                     }
                 }
             }
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var verb in verbsPresent)
                 {
-                    results.Add(string.Concat(start, " ", verb, " "));
+                    results.Add(string.Concat(start, Constants.SingleSpace, verb, Constants.SingleSpace));
                 }
             }
 

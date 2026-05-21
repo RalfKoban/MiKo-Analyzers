@@ -3822,7 +3822,7 @@ namespace MiKoSolutions.Analyzers
                 if (firstSpace < 0)
                 {
                     // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
-                    return " ".AsSpan();
+                    return Constants.SingleSpace.AsSpan();
                 }
 
                 return text.Slice(firstSpace);

@@ -93,12 +93,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var startText = GetCorrectStartText(summary);
                         var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString(); // TODO RKN: Use Span and create a ConcatenatedWith
 
-                        var newText = string.Concat(" ", startText, " ", remainingText);
+                        var newText = string.Concat(Constants.SingleSpace, startText, Constants.SingleSpace, remainingText);
 
                         if (contents.Count > 1 && contents[1].IsKind(SyntaxKind.XmlText) is false)
                         {
                             // we have another non-text, so add a space
-                            newText = newText.TrimEnd() + " ";
+                            newText = newText.TrimEnd() + Constants.SingleSpace;
                         }
 
                         return summary.ReplaceToken(token, token.WithText(newText));

@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.Length > 0)
                     {
-                        startingPhrase = startingPhrase + text + " " + Constants.Comments.ThatContainsTerm + " ";
+                        startingPhrase = startingPhrase + text + Constants.SingleSpace + Constants.Comments.ThatContainsTerm + Constants.SingleSpace;
                     }
                 }
             }
@@ -402,31 +402,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var preposition in prepositions)
                     {
-                        var phrase = string.Concat(collection, " ", preposition, " ");
+                        var phrase = string.Concat(collection, Constants.SingleSpace, preposition, Constants.SingleSpace);
 
                         yield return phrase;
                         yield return phrase.ToUpperCaseAt(0);
 
                         foreach (var modification in modifications)
                         {
-                            var modificationPhrase = string.Concat(modification, " ", phrase);
+                            var modificationPhrase = string.Concat(modification, Constants.SingleSpace, phrase);
 
                             yield return modificationPhrase;
                             yield return modificationPhrase.ToUpperCaseAt(0);
 
                             foreach (var startingWord in startingWords)
                             {
-                                var shortStartingPhrase = string.Concat(startingWord, " ", collection, " ");
+                                var shortStartingPhrase = string.Concat(startingWord, Constants.SingleSpace, collection, Constants.SingleSpace);
 
                                 yield return shortStartingPhrase;
                                 yield return shortStartingPhrase.ToUpperCaseAt(0);
 
-                                var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
+                                var modifiedStartingPhrase = string.Concat(startingWord, Constants.SingleSpace, modificationPhrase);
 
                                 yield return modifiedStartingPhrase;
                                 yield return modifiedStartingPhrase.ToUpperCaseAt(0);
 
-                                var startingPhrase = string.Concat(startingWord, " ", phrase);
+                                var startingPhrase = string.Concat(startingWord, Constants.SingleSpace, phrase);
 
                                 if (startingPhrase is Constants.Comments.CollectionReturnTypeStartingPhraseLowerCase)
                                 {
