@@ -1519,6 +1519,6 @@ namespace MiKoSolutions.Analyzers
         /// A syntax trivia consisting of the specified number of spaces.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(' ', count));
+        private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(Constants.Space, count));
     }
 }

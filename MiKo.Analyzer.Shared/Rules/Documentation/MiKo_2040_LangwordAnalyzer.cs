@@ -112,16 +112,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results.Add(new Pair('('.ConcatenatedWith(phrase, ' '), '('.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair('('.ConcatenatedWith(phrase, Constants.Space), '('.ConcatenatedWith(proposal, Constants.Space)));
                 results.Add(new Pair('('.ConcatenatedWith(phrase, ')'), '('.ConcatenatedWith(proposal, ')')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, ')'), ' '.ConcatenatedWith(proposal, ')')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, ' '), ' '.ConcatenatedWith(proposal, ' ')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, '.'), ' '.ConcatenatedWith(proposal, '.')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, '?'), ' '.ConcatenatedWith(proposal, '?')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, '!'), ' '.ConcatenatedWith(proposal, '!')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, ','), ' '.ConcatenatedWith(proposal, ',')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, ';'), ' '.ConcatenatedWith(proposal, ';')));
-                results.Add(new Pair(' '.ConcatenatedWith(phrase, ':'), ' '.ConcatenatedWith(proposal, ':')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, ')'), Constants.Space.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, Constants.Space), Constants.Space.ConcatenatedWith(proposal, Constants.Space)));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, '.'), Constants.Space.ConcatenatedWith(proposal, '.')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, '?'), Constants.Space.ConcatenatedWith(proposal, '?')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, '!'), Constants.Space.ConcatenatedWith(proposal, '!')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, ','), Constants.Space.ConcatenatedWith(proposal, ',')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, ';'), Constants.Space.ConcatenatedWith(proposal, ';')));
+                results.Add(new Pair(Constants.Space.ConcatenatedWith(phrase, ':'), Constants.Space.ConcatenatedWith(proposal, ':')));
                 results.Add(new Pair('\''.ConcatenatedWith(phrase, '\''), proposal));
             }
 
@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results[i] = new Pair(' '.ConcatenatedWith(phrase), ' '.ConcatenatedWith(proposal));
+                results[i] = new Pair(Constants.Space.ConcatenatedWith(phrase), Constants.Space.ConcatenatedWith(proposal));
             }
 
             return results;

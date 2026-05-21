@@ -207,11 +207,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var verb in verbs)
                     {
-                        var begin = start + " " + verb;
+                        var begin = start + Constants.SingleSpace + verb;
 
                         foreach (var continuation in continuations)
                         {
-                            results.Add(begin + continuation + " ");
+                            results.Add(begin + continuation + Constants.SingleSpace);
                         }
                     }
                 }
@@ -220,7 +220,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var continuation in continuations)
                     {
-                        var end = continuation + " ";
+                        var end = continuation + Constants.SingleSpace;
 
                         results.Add(start + " control" + end);
                         results.Add(start + " control," + end);
@@ -235,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         if (continuation.IsNullOrEmpty() is false)
                         {
-                            var end = continuation + " ";
+                            var end = continuation + Constants.SingleSpace;
 
                             results.Add(start + end);
                             results.Add(start + "," + end);
@@ -256,11 +256,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var type in types)
                     {
-                        var begin = start + type + " ";
+                        var begin = start + type + Constants.SingleSpace;
 
                         foreach (var continuation in continuations)
                         {
-                            keys.Add(begin + continuation + " ");
+                            keys.Add(begin + continuation + Constants.SingleSpace);
                         }
                     }
                 }

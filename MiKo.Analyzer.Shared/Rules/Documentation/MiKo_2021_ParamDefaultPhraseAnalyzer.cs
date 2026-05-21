@@ -11,9 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2021";
 
-        public MiKo_2021_ParamDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2021_ParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
         {
@@ -26,15 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (parameterType.IsEnum())
             {
-                return false; // MiKo 2023
+                return false; // MiKo 2024
             }
 
             if (parameterType.IsCancellationToken())
             {
-                return false; // MiKo 2024
+                return false; // MiKo 2025
             }
 
-            return parameterType.IsBoolean() is false;
+            if (parameterType.IsBoolean())
+            {
+                return false; // MiKo 2023
+            }
+
+            return true;
         }
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
