@@ -166,7 +166,7 @@ public class TestMe
         [TestCase("Always a something.", "A something.")]
         [TestCase("Always an something.", "An something.")]
         [TestCase("Always the something.", "The something.")]
-        [TestCase("always this something.", "The something.")]
+        [TestCase("Always this something.", "The something.")]
         [TestCase("always something.", "The something.")]
         [TestCase("always a something.", "A something.")]
         [TestCase("always an something.", "An something.")]
