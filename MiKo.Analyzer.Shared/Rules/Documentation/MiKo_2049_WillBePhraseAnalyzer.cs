@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string WillPhrase = "will";
         private const string NeverPhrase = "never";
-        private const string WillNeverPhrase = WillPhrase + " " + NeverPhrase;
+        private const string WillNeverPhrase = WillPhrase + Constants.SingleSpace + NeverPhrase;
 
         private static readonly string WillPhraseStartUpperCase = WillPhrase.ToUpperCaseAt(0);
         private static readonly string WillNeverPhraseStartUpperCase = WillNeverPhrase.ToUpperCaseAt(0);
@@ -163,8 +163,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)));
-                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhrase, _ => NeverPhrase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)));
+                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + Constants.SingleSpace + Verbalizer.MakeThirdPersonSingularVerb(_)));
+                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhrase, _ => NeverPhrase + Constants.SingleSpace + Verbalizer.MakeThirdPersonSingularVerb(_)));
             }
 
             return issues;

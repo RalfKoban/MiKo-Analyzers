@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var commentEnd = continuation.AsCachedBuilder()
                                                  .Append(startText)
                                                  .Without(ConstructorPhrases)
-                                                 .Append(' ')
+                                                 .Append(Constants.Space)
                                                  .Replace(" for ", " with ")
                                                  .TrimmedEnd()
                                                  .ToStringAndRelease();

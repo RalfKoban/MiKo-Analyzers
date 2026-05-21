@@ -230,7 +230,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var verb in verbs)
                 {
-                    var middle = string.Concat(" ", verb, " ");
+                    var middle = string.Concat(Constants.SingleSpace, verb, Constants.SingleSpace);
 
                     var begin = string.Concat(start, middle);
                     var beginLowerCase = begin.ToLowerCaseAt(0);
