@@ -247,6 +247,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Naming", "1. Naming", "{
 		Documentation\MiKo_1531.md = Documentation\MiKo_1531.md
 		Documentation\MiKo_1532.md = Documentation\MiKo_1532.md
 		Documentation\MiKo_1533.md = Documentation\MiKo_1533.md
+		Documentation\MiKo_1537.md = Documentation\MiKo_1537.md
+		Documentation\MiKo_1538.md = Documentation\MiKo_1538.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Documentation", "2. Documentation", "{572678B8-C70C-4E91-BE64-E688D7959CA6}"
@@ -533,6 +535,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Maintenance", "3. Mainte
 		Documentation\MiKo_3231.md = Documentation\MiKo_3231.md
 		Documentation\MiKo_3232.md = Documentation\MiKo_3232.md
 		Documentation\MiKo_3233.md = Documentation\MiKo_3233.md
+		Documentation\MiKo_3234.md = Documentation\MiKo_3234.md
 		Documentation\MiKo_3301.md = Documentation\MiKo_3301.md
 		Documentation\MiKo_3302.md = Documentation\MiKo_3302.md
 		Documentation\MiKo_3401.md = Documentation\MiKo_3401.md

@@ -23,6 +23,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                 ];
 
         [Test]
+        public void No_issue_is_reported_for_enum_equals() => No_issue_is_reported_for(@"
+using Bla
+{
+    public enum MyEnum
+    {
+        Value1,
+        Value2,
+        Value3,
+    }
+
+    public class TestMe
+    {
+        public MyEnum Value { get; set; }
+
+        public void DoSomething(TestMe other)
+        {
+            if (other.Value.Equals(MyEnum.Value1)
+            {
+            }
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_1_variable_of_type_([Values("bool", "char", "int", "object", "StringComparison")] string type) => No_issue_is_reported_for(@"
 public class TestMe
 {

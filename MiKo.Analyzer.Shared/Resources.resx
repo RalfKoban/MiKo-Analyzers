@@ -2108,6 +2108,30 @@ Naming the field based on what it represents, rather than what it implies, makes
   <data name="MiKo_1533_Title" xml:space="preserve">
     <value>Do not prefix fields with words that express intent or expectation</value>
   </data>
+  <data name="MiKo_1537_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Event' prefix from method name</value>
+  </data>
+  <data name="MiKo_1537_Description" xml:space="preserve">
+    <value>Event handlers should be named starting with 'On' followed by the event name to show they handle events.</value>
+  </data>
+  <data name="MiKo_1537_MessageFormat" xml:space="preserve">
+    <value>Remove 'Event' prefix from method name</value>
+  </data>
+  <data name="MiKo_1537_Title" xml:space="preserve">
+    <value>Do not prefix methods with 'Event'</value>
+  </data>
+  <data name="MiKo_1538_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'On' prefix</value>
+  </data>
+  <data name="MiKo_1538_Description" xml:space="preserve">
+    <value>Avoid using 'On' as a prefix in event names because it is reserved for event handling methods.</value>
+  </data>
+  <data name="MiKo_1538_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1538_Title" xml:space="preserve">
+    <value>Do not prefix events with 'On'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
@@ -2331,7 +2355,7 @@ This ensures clarity and precision in your code.</value>
     <value>The documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>Start parameter documentation with default phrase</value>
@@ -2343,7 +2367,7 @@ This ensures clarity and precision in your code.</value>
     <value>For [out] parameter documentation, start with the success case, such as "On successful return, contains...". This approach aligns with the .NET framework documentation and ensures clarity for developers.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>Start [out] parameter documentation with default phrase</value>
@@ -2355,7 +2379,7 @@ This ensures clarity and precision in your code.</value>
     <value>For Boolean parameters, documentation should explicitly describe the 'true' case followed by the 'false' case. Use the format '&lt;see langword="true"/&gt; to indicate that ...; otherwise, &lt;see langword="false"/&gt;.'. This aligns with best practices and provides clarity for developers.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>Documentation should follow pattern: '{1} ... {2}'</value>
+    <value>&lt;param&gt; documentation should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>Start Boolean parameter documentation with default phrase</value>
@@ -2367,7 +2391,7 @@ This ensures clarity and precision in your code.</value>
     <value>The Enum parameter documentation should begin with a phrase specifying the action to be taken with the Enum. This ensures clarity about how the Enum will be used and what it represents.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Start Enum parameter documentation with default phrase</value>
@@ -2379,7 +2403,7 @@ This ensures clarity and precision in your code.</value>
     <value>Documentation for 'CancellationToken' parameters should begin with a phrase that outlines its usage, like: 'The token to monitor for cancellation requests.' This keeps the documentation clear and consistent, aiding developers in understanding its purpose.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2025_Title" xml:space="preserve">
     <value>Start 'CancellationToken' parameter documentation with default phrase</value>
@@ -2388,7 +2412,7 @@ This ensures clarity and precision in your code.</value>
     <value>Documentation must always be accurate. If a parameter is still in use, it should never be labeled as unused. Keeping documentation truthful and clear is crucial for effective maintenance and development.</value>
   </data>
   <data name="MiKo_2026_MessageFormat" xml:space="preserve">
-    <value>Documentation lies about being unused</value>
+    <value>&lt;param&gt; documentation lies about being unused</value>
   </data>
   <data name="MiKo_2026_Title" xml:space="preserve">
     <value>Do not document used parameters as unused</value>
@@ -2400,7 +2424,7 @@ This ensures clarity and precision in your code.</value>
     <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
   </data>
   <data name="MiKo_2027_MessageFormat" xml:space="preserve">
-    <value>Change documentation to: '{1}'</value>
+    <value>Change &lt;param&gt; documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2027_Title" xml:space="preserve">
     <value>Document serialization constructor parameters with specific phrase</value>
@@ -2409,7 +2433,7 @@ This ensures clarity and precision in your code.</value>
     <value>Documentation must go beyond just listing parameter names. It should clearly describe what the parameters represent and how they are used. Simply stating the parameter's name doesn't provide enough context or information. Accurate and detailed documentation makes code easier to understand and maintain.</value>
   </data>
   <data name="MiKo_2028_MessageFormat" xml:space="preserve">
-    <value>Documentation should contain more than just the parameter name</value>
+    <value>&lt;param&gt; documentation should contain more than just the parameter name</value>
   </data>
   <data name="MiKo_2028_Title" xml:space="preserve">
     <value>Provide more information than just parameter name in documentation</value>
@@ -2425,6 +2449,9 @@ This ensures clarity and precision in your code.</value>
   </data>
   <data name="MiKo_2029_Title" xml:space="preserve">
     <value>Do not use self-referencing 'cref' in &lt;inheritdoc&gt; documentation</value>
+  </data>
+  <data name="MiKo_2030_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
   </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
     <value>Documentation for a return value should start with a default phrase that provides a detailed description of what the returned value is. This approach helps clarify the purpose and use of the return value for developers.</value>
@@ -3563,7 +3590,7 @@ Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lis
     <value>Wrap numbers with &lt;c&gt; in documentation</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
-    <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
+    <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works - let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
   </data>
   <data name="MiKo_2300_MessageFormat" xml:space="preserve">
@@ -5298,6 +5325,18 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
   </data>
   <data name="MiKo_3233_Title" xml:space="preserve">
     <value>Do not use var patterns for null checks</value>
+  </data>
+  <data name="MiKo_3234_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is' pattern</value>
+  </data>
+  <data name="MiKo_3234_Description" xml:space="preserve">
+    <value>Calling '.Equals(value) == true' is redundant - the boolean result is compared to 'true' again, which is unnecessary. Using 'is value' instead expresses the intent directly and makes the code easier to understand at a glance.</value>
+  </data>
+  <data name="MiKo_3234_MessageFormat" xml:space="preserve">
+    <value>Use 'is' instead of 'Equals() =='</value>
+  </data>
+  <data name="MiKo_3234_Title" xml:space="preserve">
+    <value>Prefer pattern matching over boolean Equals checks</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>

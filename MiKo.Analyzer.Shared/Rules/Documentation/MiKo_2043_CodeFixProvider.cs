@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var article in articles)
                 {
-                    var start = verb + " " + article + " method ";
+                    var start = verb + Constants.SingleSpace + article + " method ";
 
                     foreach (var action in actions)
                     {

@@ -146,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 case '{': return "CLOSING_BRACE";
                 case '<': return "OPENING_CHEVRON";
                 case '>': return "CLOSING_CHEVRON";
-                case ' ': return "SPACE";
+                case Constants.Space: return "SPACE";
                 case '.': return "DOT";
                 case '?': return "QUESTION_MARK";
                 case '!': return "EXCLAMATION_MARK";

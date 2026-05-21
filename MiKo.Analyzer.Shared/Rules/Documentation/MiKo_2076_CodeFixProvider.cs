@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (element.StartTag.IsOnSameLineAs(element.EndTag))
             {
-                startText = XmlText(" " + Constants.Comments.DefaultStartingPhrase);
+                startText = XmlText(Constants.SingleSpace + Constants.Comments.DefaultStartingPhrase);
 
                 // no trailing '///' to add because the text is located on the same line
                 endText = XmlText(".");

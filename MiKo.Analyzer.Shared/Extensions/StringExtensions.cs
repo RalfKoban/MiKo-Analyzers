@@ -113,9 +113,9 @@ namespace MiKoSolutions.Analyzers
             if (adjustment.HasSet(FirstWordAdjustment.KeepSingleLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-                if (value.StartsWith(' '))
+                if (value.StartsWith(Constants.Space))
                 {
-                    return ' '.ConcatenatedWith(word, continuation);
+                    return Constants.Space.ConcatenatedWith(word, continuation);
                 }
             }
 
@@ -2093,7 +2093,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var c = text[index];
 
-                    if (c.IsUpperCase() || (c is '_' && index > 2))
+                    if (c.IsUpperCase() || (c is Constants.Underscore && index > 2))
                     {
                         return text.Slice(0, index);
                     }
@@ -2451,7 +2451,7 @@ namespace MiKoSolutions.Analyzers
 
             const string Separator = ", ";
 
-            var separatorForLast = ' '.ConcatenatedWith(lastSeparator, ' ');
+            var separatorForLast = Constants.Space.ConcatenatedWith(lastSeparator, Constants.Space);
 
             switch (count)
             {
@@ -3069,14 +3069,14 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this in char value)
         {
-            if (value > ' ')
+            if (value > Constants.Space)
             {
                 return value >= 127 && char.IsWhiteSpace(value);
             }
 
             switch (value)
             {
-                case ' ':
+                case Constants.Space:
                 case '\t':
                 case '\r':
                 case '\n':
@@ -3730,7 +3730,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var value = values[valuesIndex];
 
-                    result[resultIndex++] = ' '.ConcatenatedWith(value, delimiter);
+                    result[resultIndex++] = Constants.Space.ConcatenatedWith(value, delimiter);
                     result[resultIndex++] = '('.ConcatenatedWith(value, delimiter);
                 }
             }
@@ -3822,7 +3822,7 @@ namespace MiKoSolutions.Analyzers
                 if (firstSpace < 0)
                 {
                     // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
-                    return " ".AsSpan();
+                    return Constants.SingleSpace.AsSpan();
                 }
 
                 return text.Slice(firstSpace);
@@ -3837,7 +3837,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var c = text[index];
 
-                    if (c.IsUpperCase() || (c is '_' && index > 2))
+                    if (c.IsUpperCase() || (c is Constants.Underscore && index > 2))
                     {
                         return text.Slice(index);
                     }
@@ -3882,9 +3882,9 @@ namespace MiKoSolutions.Analyzers
             {
                 var word = words[index];
 
-                if (word.Contains(' '))
+                if (word.Contains(Constants.Space))
                 {
-                    foreach (var partialWord in word.Split(' '))
+                    foreach (var partialWord in word.Split(Constants.Space))
                     {
                         if (text.FirstWord().Equals(partialWord, StringComparison.OrdinalIgnoreCase))
                         {
@@ -3925,7 +3925,9 @@ namespace MiKoSolutions.Analyzers
 
             while (end >= 0)
             {
-                if (value[end].IsNumber())
+                var c = value[end];
+
+                if (c.IsNumber() || c is Constants.Underscore)
                 {
                     end--;
                 }
@@ -3937,9 +3939,13 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return end >= 0 && end <= totalLength
-                   ? value.Substring(0, end)
-                   : value;
+            if (end < 0)
+            {
+                // everything seems to be a number
+                return string.Empty;
+            }
+
+            return end <= totalLength ? value.Substring(0, end) : value;
         }
 
         /// <summary>
@@ -3963,7 +3969,9 @@ namespace MiKoSolutions.Analyzers
 
             while (end >= 0)
             {
-                if (value[end].IsNumber())
+                var c = value[end];
+
+                if (c.IsNumber() || c is Constants.Underscore)
                 {
                     end--;
                 }
@@ -3975,9 +3983,13 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return end >= 0 && end <= totalLength
-                   ? value.Slice(0, end)
-                   : value;
+            if (end < 0)
+            {
+                // everything seems to be a number
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            return end <= totalLength ? value.Slice(0, end) : value;
         }
 
         /// <summary>
