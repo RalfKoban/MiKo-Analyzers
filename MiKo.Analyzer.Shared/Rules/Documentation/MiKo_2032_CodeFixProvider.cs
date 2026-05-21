@@ -156,15 +156,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var boolean in booleans)
                 {
-                    var begin = start + boolean + " ";
+                    var begin = start + boolean + Constants.SingleSpace;
 
                     foreach (var verb in verbs)
                     {
-                        var beginWithVerb = begin + verb + " ";
+                        var beginWithVerb = begin + verb + Constants.SingleSpace;
 
                         foreach (var condition in conditions)
                         {
-                            results.Add(beginWithVerb + condition + " ");
+                            results.Add(beginWithVerb + condition + Constants.SingleSpace);
                         }
                     }
                 }
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var condition in conditions)
             {
-                results.Add("Indicates " + condition + " ");
+                results.Add("Indicates " + condition + Constants.SingleSpace);
             }
 
             results.AddRange(booleans);

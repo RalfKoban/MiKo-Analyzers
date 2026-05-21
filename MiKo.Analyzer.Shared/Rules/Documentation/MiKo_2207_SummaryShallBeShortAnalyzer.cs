@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire();
 
             var summary = xml.GetTextWithoutTrivia(builder)
-                             .ReplaceWithProbe(" - ", " ")
+                             .ReplaceWithProbe(" - ", Constants.SingleSpace)
                              .ReplaceWithProbe(" />", "/>")
                              .ReplaceWithProbe(" </", "</")
                              .ReplaceWithProbe("> <", "><")

@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var argument in arguments)
             {
-                if (argument.Contains(' '))
+                if (argument.Contains(Constants.Space))
                 {
                     // textual (string) message
                     return argument;

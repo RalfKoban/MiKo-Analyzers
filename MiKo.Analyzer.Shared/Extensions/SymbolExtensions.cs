@@ -847,7 +847,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         var returnType = method.ReturnType.MinimalTypeName();
 
-                        sb.Append(returnType).Append(' ').Append(method.Name);
+                        sb.Append(returnType).Append(Constants.Space).Append(method.Name);
 
                         if (method.IsGenericMethod)
                         {

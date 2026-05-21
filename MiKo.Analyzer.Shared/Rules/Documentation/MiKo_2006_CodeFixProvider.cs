@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (fieldDeclaration.IsReadOnly())
             {
-                readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
+                readOnlyMarker = Constants.SingleSpace + Constants.Comments.FieldIsReadOnly;
             }
 
             var summary = Comment(XmlElement(Constants.XmlTag.Summary), SummaryText[0], SeeCref(type), SummaryText[1] + readOnlyMarker);

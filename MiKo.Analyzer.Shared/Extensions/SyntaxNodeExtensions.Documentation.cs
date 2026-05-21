@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// The XML comment exterior trivia with a trailing space, used for formatting XML documentation comments.
         /// </summary>
-        internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior(Constants.Comments.XmlCommentExterior + " ");
+        internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior(Constants.Comments.XmlCommentExterior + Constants.SingleSpace);
 
         /// <summary>
         /// Contains the standard XML comment start sequence consisting of an elastic carriage return line feed followed by the XML comment exterior trivia.
@@ -2225,7 +2225,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var space = i is 0 ? string.Empty : " ";
+                var space = i is 0 ? string.Empty : Constants.SingleSpace;
 
                 // replace 3rd person word by infinite word if configured
                 var continuation = originalText.AdjustFirstWord(firstWordAdjustment);

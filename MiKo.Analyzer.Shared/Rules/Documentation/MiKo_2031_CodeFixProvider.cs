@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             {
                                 if (newText.EndsWith('.') is false)
                                 {
-                                    newText += " "; // add extra space so that next XML syntax node is placed well
+                                    newText += Constants.SingleSpace; // add extra space so that next XML syntax node is placed well
                                 }
                             }
 
@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var end in ContinueTextParts)
                 {
-                    results.Add(start + " " + end);
+                    results.Add(start + Constants.SingleSpace + end);
                 }
             }
 

@@ -41,6 +41,8 @@ namespace MiKoSolutions.Analyzers
         internal const string TODO = "TODO";
 
         internal const char Underscore = '_';
+        internal const char Space = ' ';
+        internal const string SingleSpace = " ";
 
         internal const string CSharpFileExtension = ".cs";
 
@@ -48,8 +50,8 @@ namespace MiKoSolutions.Analyzers
         internal static readonly char[] SentenceClauseMarkers = ",;".ToCharArray();
         internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
 
-        internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
-        internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
+        internal static readonly string[] WhiteSpaces = { SingleSpace, "\t", "\r", "\n" };
+        internal static readonly char[] WhiteSpaceCharacters = { Space, '\t', '\r', '\n' };
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
@@ -240,7 +242,7 @@ namespace MiKoSolutions.Analyzers
             internal const string ByteArrayReturnTypeStartingPhraseA = "A byte array containing ";
             internal const string ByteArrayReturnTypeStartingPhraseALowerCase = "a byte array containing ";
             internal const string Asynchronously = "Asynchronously";
-            internal const string AsynchronouslyStartingPhrase = Asynchronously + " ";
+            internal const string AsynchronouslyStartingPhrase = Asynchronously + SingleSpace;
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
             internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
@@ -323,7 +325,7 @@ namespace MiKoSolutions.Analyzers
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
             internal const string ValuePhrase = "Value";
             internal const string MeaningPhrase = "Meaning";
-            internal const string ValueMeaningPhrase = ValuePhrase + " " + MeaningPhrase;
+            internal const string ValueMeaningPhrase = ValuePhrase + SingleSpace + MeaningPhrase;
             internal const string LessThanZero = "Less than zero";
             internal const string Zero = "Zero";
             internal const string GreaterThanZero = "Greater than zero";
@@ -334,11 +336,16 @@ namespace MiKoSolutions.Analyzers
             internal const string XmlElementStartingTag = "<";
             internal const char XmlElementStartingTagChar = '<';
 
-            internal const string SingleWhitespaceString = " ";
+            internal const string SingleWhitespaceString = SingleSpace;
 
-            internal static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
+            internal static readonly string[] MultiWhitespaceStrings =
+                                                                       {
+                                                                           SingleSpace + SingleSpace + SingleSpace + SingleSpace,
+                                                                           SingleSpace + SingleSpace + SingleSpace,
+                                                                           SingleSpace + SingleSpace,
+                                                                       };
 
-            internal static readonly char[] Delimiters = { ' ', '.', ',', ';', ':', '!', '?', ')', ']', '>', '}' };
+            internal static readonly char[] Delimiters = { Space, '.', ',', ';', ':', '!', '?', ')', ']', '>', '}' };
             internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
             internal static readonly string[] FuturePhrase = { "Reserved for future usage.", "Reserved for future usage", "Reserved.", "Reserved", "future", };
 
@@ -882,10 +889,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionCtorExceptionParamPhrase =
                                                                                   {
-                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException""/>", @"<see langword=""null""/>", "<b>catch</b>"),
-                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException"" />", @"<see langword=""null"" />", "<b>catch</b>"),
-                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException"" />", @"<see langword=""null""/>", "<b>catch</b>"),
-                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException""/>", @"<see langword=""null"" />", "<b>catch</b>"),
+                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(SingleSpace, @"<paramref name=""innerException""/>", @"<see langword=""null""/>", "<b>catch</b>"),
+                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(SingleSpace, @"<paramref name=""innerException"" />", @"<see langword=""null"" />", "<b>catch</b>"),
+                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(SingleSpace, @"<paramref name=""innerException"" />", @"<see langword=""null""/>", "<b>catch</b>"),
+                                                                                      ExceptionCtorExceptionParamPhraseTemplate.FormatWith(SingleSpace, @"<paramref name=""innerException""/>", @"<see langword=""null"" />", "<b>catch</b>"),
                                                                                   };
 
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =

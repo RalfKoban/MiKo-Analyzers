@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 dictionary.Add(phrase + "a ", upperCase ? "A " : "a ");
                 dictionary.Add(phrase + "an ", upperCase ? "An " : "an ");
-                dictionary.Add(phrase, phrase.FirstWord() + " ");
+                dictionary.Add(phrase, phrase.FirstWord() + Constants.SingleSpace);
             }
 
             var map = dictionary.Select(_ => new Pair(_.Key, _.Value)).ToList();

@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var replacement = replacementCallback(nextWord.ToString());
 
                     var finalReplacement = adjective.Length > 0
-                                           ? adjective.ConcatenatedWith(' ', replacement.ToLowerCaseAt(0))
+                                           ? adjective.ConcatenatedWith(Constants.Space, replacement.ToLowerCaseAt(0))
                                            : replacement;
 
                     var finalLocation = CreateLocation(token, start, end);
@@ -141,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (trimmedTerm.Length == term.Length)
                     {
-                        // we could not trim, so we probably will not find it (as we get the terms with a ' ' character at the end
+                        // we could not trim, so we probably will not find it (as we get the terms with a Constants.Space character at the end
                         continue;
                     }
 
@@ -156,7 +156,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var end = offset + tokenText.Length;
                         var start = end - trimmedTerm.Length;
 
-                        if (trimmedTerm.StartsWith(' '))
+                        if (trimmedTerm.StartsWith(Constants.Space))
                         {
                             start += Offset; // we do not want to underline the first char
                         }
