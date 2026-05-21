@@ -15,14 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected UsePatternMatchingCodeFixProvider(in SyntaxKind syntaxKind = SyntaxKind.EqualsExpression) => m_syntaxKind = syntaxKind;
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(m_syntaxKind));
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(m_syntaxKind));
 
         protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            SyntaxNode updatedSyntax = GetUpdatedSyntax((BinaryExpressionSyntax)syntax);
+            var updatedSyntax = syntax;
+
+            if (syntax is BinaryExpressionSyntax binary)
+            {
+                updatedSyntax = GetUpdatedSyntax(binary);
+            }
+
+            if (syntax is IsPatternExpressionSyntax pattern)
+            {
+                updatedSyntax = GetUpdatedPatternSyntax(pattern);
+            }
 
             return Task.FromResult(updatedSyntax);
         }
+
+        protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(IsPatternExpressionSyntax pattern) => pattern;
 
         protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(ExpressionSyntax operand, ExpressionSyntax expression) => IsPattern(operand, expression);
 
