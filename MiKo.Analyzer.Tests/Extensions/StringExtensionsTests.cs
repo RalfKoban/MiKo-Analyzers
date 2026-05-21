@@ -349,7 +349,24 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("abc42", ExpectedResult = "abc")]
         [TestCase("a1bc", ExpectedResult = "a1bc")]
         [TestCase("a1bc42", ExpectedResult = "a1bc")]
-        public static string WithoutNumberSuffix_returns_text_without_number_suffix_(string input) => input.WithoutNumberSuffix();
+        [TestCase("a1bc_42", ExpectedResult = "a1bc")]
+        [TestCase("a1bc_4_2", ExpectedResult = "a1bc")]
+        [TestCase("_4_2", ExpectedResult = "")]
+        public static string WithoutNumberSuffix_String_returns_text_without_number_suffix_(string input) => input.WithoutNumberSuffix();
+
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("a", ExpectedResult = "a")]
+        [TestCase("a1", ExpectedResult = "a")]
+        [TestCase("ab", ExpectedResult = "ab")]
+        [TestCase("ab1", ExpectedResult = "ab")]
+        [TestCase("abc", ExpectedResult = "abc")]
+        [TestCase("abc42", ExpectedResult = "abc")]
+        [TestCase("a1bc", ExpectedResult = "a1bc")]
+        [TestCase("a1bc42", ExpectedResult = "a1bc")]
+        [TestCase("a1bc_42", ExpectedResult = "a1bc")]
+        [TestCase("a1bc_4_2", ExpectedResult = "a1bc")]
+        [TestCase("_4_2", ExpectedResult = "")]
+        public static string WithoutNumberSuffix_ReadOnlySpan_returns_text_without_number_suffix_(string input) => input.AsSpan().WithoutNumberSuffix().ToString();
 
         [Test]
         public static void WordsAsSpan_returns_words_in_method_name() => Assert.That("GetHashCode".WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(["Get", "Hash", "Code"]));

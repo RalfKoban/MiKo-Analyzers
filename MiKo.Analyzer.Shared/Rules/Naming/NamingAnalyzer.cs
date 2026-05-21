@@ -529,12 +529,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (symbol.CanBeReferencedByName is false)
+            if (symbol.IsOverride)
             {
                 return false;
             }
 
-            if (symbol.IsOverride)
+            if (symbol.CanBeReferencedByName is false)
             {
                 return false;
             }
