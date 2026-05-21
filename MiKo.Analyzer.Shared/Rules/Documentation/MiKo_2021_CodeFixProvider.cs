@@ -27,6 +27,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue)
         {
+            if (comment.GetTextTrimmed().IsNullOrEmpty())
+            {
+                return CommentStartingWith(comment, "The " + Constants.TODO);
+            }
+
             var preparedComment = PrepareComment(comment);
 
             return CommentStartingWith(preparedComment, "The ");

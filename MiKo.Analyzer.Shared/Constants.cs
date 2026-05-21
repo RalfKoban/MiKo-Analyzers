@@ -1060,7 +1060,7 @@ namespace MiKoSolutions.Analyzers
                                                                         "doesnt matter", // be able to detect typos
                                                                     };
 
-            internal static readonly string[] ReasoningPhrases = { "because", "reason", "so that" };
+            internal static readonly string[] ReasoningPhrases = { "because", "reason", "so that", "to ensure", "ensuring", "for efficient", "verify", "for verification" };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
 
@@ -1238,6 +1238,9 @@ namespace MiKoSolutions.Analyzers
             internal const string DefaultXUnitNamespace = "Xunit";
 
             internal const string DefaultPropertyParameterName = "value";
+
+            internal const string IComponentConnector = "IComponentConnector";
+            internal const string IComponentConnectorFullName = "System.Windows.Markup.IComponentConnector";
 
             internal const string IMultiValueConverter = "IMultiValueConverter";
             internal const string IMultiValueConverterFullName = "System.Windows.Data.IMultiValueConverter";

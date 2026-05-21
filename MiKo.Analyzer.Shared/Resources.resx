@@ -2438,6 +2438,9 @@ This ensures clarity and precision in your code.</value>
   <data name="MiKo_2029_Title" xml:space="preserve">
     <value>Do not use self-referencing 'cref' in &lt;inheritdoc&gt; documentation</value>
   </data>
+  <data name="MiKo_2030_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
+  </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
     <value>Documentation for a return value should start with a default phrase that provides a detailed description of what the returned value is. This approach helps clarify the purpose and use of the return value for developers.</value>
   </data>
@@ -3575,7 +3578,7 @@ Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lis
     <value>Wrap numbers with &lt;c&gt; in documentation</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
-    <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
+    <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works - let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
   </data>
   <data name="MiKo_2300_MessageFormat" xml:space="preserve">

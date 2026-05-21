@@ -232,7 +232,7 @@ The following tables list all the 553 rules that are currently provided by the a
 |[MiKo_2027](/Documentation/MiKo_2027.md)|Document serialization constructor parameters with specific phrase|&#x2713;|&#x2713;|
 |[MiKo_2028](/Documentation/MiKo_2028.md)|Provide more information than just parameter name in documentation|&#x2713;|\-|
 |[MiKo_2029](/Documentation/MiKo_2029.md)|Do not use self-referencing 'cref' in &lt;inheritdoc&gt; documentation|&#x2713;|&#x2713;|
-|[MiKo_2030](/Documentation/MiKo_2030.md)|Start return value documentation with default phrase|&#x2713;|\-|
+|[MiKo_2030](/Documentation/MiKo_2030.md)|Start return value documentation with default phrase|&#x2713;|&#x2713;|
 |[MiKo_2031](/Documentation/MiKo_2031.md)|Use specific (starting) phrase for Task return value documentation|&#x2713;|&#x2713;|
 |[MiKo_2032](/Documentation/MiKo_2032.md)|Use specific phrase for Boolean return value documentation|&#x2713;|&#x2713;|
 |[MiKo_2033](/Documentation/MiKo_2033.md)|Start String return value documentation with default phrase|&#x2713;|&#x2713;|

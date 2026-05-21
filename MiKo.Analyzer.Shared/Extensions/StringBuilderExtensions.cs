@@ -315,6 +315,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
         {
+            if (value.IsNullOrEmpty())
+            {
+                return value;
+            }
+
             char[] text = null;
             var textSpan = GetTextAsRentedArray(ref value, ref text);
 
@@ -367,6 +372,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<string> texts, string replacement)
         {
+            if (value.IsNullOrEmpty())
+            {
+                return value;
+            }
+
             char[] text = null;
             var textSpan = GetTextAsRentedArray(ref value, ref text);
 
@@ -413,6 +423,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static StringBuilder ReplaceWithProbe(this StringBuilder value, string oldValue, string newValue)
         {
+            if (value.IsNullOrEmpty())
+            {
+                return value;
+            }
+
             if (oldValue.IsNullOrEmpty())
             {
                 // cannot replace an empty value

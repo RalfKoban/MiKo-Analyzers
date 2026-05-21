@@ -28,17 +28,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {
-            return WithDefaultCommentAsync(comment, returnType, document, cancellationToken);
+            return GetDefaultCommentAsync(comment, returnType, document, cancellationToken);
         }
 
         protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
         {
-            return WithDefaultCommentAsync(comment, returnType, document, cancellationToken);
+            return GetDefaultCommentAsync(comment, returnType, document, cancellationToken);
         }
 
         protected abstract Task<XmlNodeSyntax[]> GetDefaultCommentAsync(TypeSyntax returnType, Document document, CancellationToken cancellationToken);
 
-        private async Task<SyntaxNode> WithDefaultCommentAsync(XmlElementSyntax comment, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        private async Task<SyntaxNode> GetDefaultCommentAsync(XmlElementSyntax comment, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {
             var texts = await GetDefaultCommentAsync(returnType, document, cancellationToken).ConfigureAwait(false);
 

@@ -567,6 +567,11 @@ namespace MiKoSolutions.Analyzers
                 return string.Empty;
             }
 
+            if (value.Content.Count is 0)
+            {
+                return string.Empty;
+            }
+
             var builder = StringBuilderCache.Acquire();
 
             var trimmed = value.GetTextWithoutTrivia(builder)

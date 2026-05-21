@@ -140,6 +140,15 @@ public abstract class TestMeCommand : ISomeCommand
 ");
 
         [Test]
+        public void No_issue_is_reported_for_type_implementing_IComponentConnector_interface() => No_issue_is_reported_for(@"
+using System.Windows.Markup;
+
+public class TestMeView : IComponentConnector
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_type_name_not_matching_interface_name() => An_issue_is_reported_for(@"
 using System;
 
