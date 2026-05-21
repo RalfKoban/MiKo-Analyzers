@@ -3925,7 +3925,9 @@ namespace MiKoSolutions.Analyzers
 
             while (end >= 0)
             {
-                if (value[end].IsNumber())
+                var c = value[end];
+
+                if (c.IsNumber() || c is '_')
                 {
                     end--;
                 }
@@ -3937,9 +3939,13 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return end >= 0 && end <= totalLength
-                   ? value.Substring(0, end)
-                   : value;
+            if (end < 0)
+            {
+                // everything seems to be a number
+                return string.Empty;
+            }
+
+            return end <= totalLength ? value.Substring(0, end) : value;
         }
 
         /// <summary>
@@ -3963,7 +3969,9 @@ namespace MiKoSolutions.Analyzers
 
             while (end >= 0)
             {
-                if (value[end].IsNumber())
+                var c = value[end];
+
+                if (c.IsNumber() || c is '_')
                 {
                     end--;
                 }
@@ -3975,9 +3983,13 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return end >= 0 && end <= totalLength
-                   ? value.Slice(0, end)
-                   : value;
+            if (end < 0)
+            {
+                // everything seems to be a number
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            return end <= totalLength ? value.Slice(0, end) : value;
         }
 
         /// <summary>
