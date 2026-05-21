@@ -6576,7 +6576,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2021_MessageFormat {
             get {
@@ -6612,7 +6612,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2022_MessageFormat {
             get {
@@ -6648,7 +6648,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to &lt;param&gt; documentation should follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         internal static string MiKo_2023_MessageFormat {
             get {
@@ -6684,7 +6684,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2024_MessageFormat {
             get {
@@ -6720,7 +6720,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2025_MessageFormat {
             get {
@@ -6747,7 +6747,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation lies about being unused.
+        ///   Looks up a localized string similar to &lt;param&gt; documentation lies about being unused.
         /// </summary>
         internal static string MiKo_2026_MessageFormat {
             get {
@@ -6783,7 +6783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change documentation to: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change &lt;param&gt; documentation to: &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2027_MessageFormat {
             get {
@@ -6810,7 +6810,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should contain more than just the parameter name.
+        ///   Looks up a localized string similar to &lt;param&gt; documentation should contain more than just the parameter name.
         /// </summary>
         internal static string MiKo_2028_MessageFormat {
             get {

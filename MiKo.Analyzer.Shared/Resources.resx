@@ -2355,7 +2355,7 @@ This ensures clarity and precision in your code.</value>
     <value>The documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>Start parameter documentation with default phrase</value>
@@ -2367,7 +2367,7 @@ This ensures clarity and precision in your code.</value>
     <value>For [out] parameter documentation, start with the success case, such as "On successful return, contains...". This approach aligns with the .NET framework documentation and ensures clarity for developers.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>Start [out] parameter documentation with default phrase</value>
@@ -2379,7 +2379,7 @@ This ensures clarity and precision in your code.</value>
     <value>For Boolean parameters, documentation should explicitly describe the 'true' case followed by the 'false' case. Use the format '&lt;see langword="true"/&gt; to indicate that ...; otherwise, &lt;see langword="false"/&gt;.'. This aligns with best practices and provides clarity for developers.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>Documentation should follow pattern: '{1} ... {2}'</value>
+    <value>&lt;param&gt; documentation should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>Start Boolean parameter documentation with default phrase</value>
@@ -2391,7 +2391,7 @@ This ensures clarity and precision in your code.</value>
     <value>The Enum parameter documentation should begin with a phrase specifying the action to be taken with the Enum. This ensures clarity about how the Enum will be used and what it represents.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Start Enum parameter documentation with default phrase</value>
@@ -2403,7 +2403,7 @@ This ensures clarity and precision in your code.</value>
     <value>Documentation for 'CancellationToken' parameters should begin with a phrase that outlines its usage, like: 'The token to monitor for cancellation requests.' This keeps the documentation clear and consistent, aiding developers in understanding its purpose.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {1}</value>
+    <value>Start &lt;param&gt; with: {1}</value>
   </data>
   <data name="MiKo_2025_Title" xml:space="preserve">
     <value>Start 'CancellationToken' parameter documentation with default phrase</value>
@@ -2412,7 +2412,7 @@ This ensures clarity and precision in your code.</value>
     <value>Documentation must always be accurate. If a parameter is still in use, it should never be labeled as unused. Keeping documentation truthful and clear is crucial for effective maintenance and development.</value>
   </data>
   <data name="MiKo_2026_MessageFormat" xml:space="preserve">
-    <value>Documentation lies about being unused</value>
+    <value>&lt;param&gt; documentation lies about being unused</value>
   </data>
   <data name="MiKo_2026_Title" xml:space="preserve">
     <value>Do not document used parameters as unused</value>
@@ -2424,7 +2424,7 @@ This ensures clarity and precision in your code.</value>
     <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
   </data>
   <data name="MiKo_2027_MessageFormat" xml:space="preserve">
-    <value>Change documentation to: '{1}'</value>
+    <value>Change &lt;param&gt; documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2027_Title" xml:space="preserve">
     <value>Document serialization constructor parameters with specific phrase</value>
@@ -2433,7 +2433,7 @@ This ensures clarity and precision in your code.</value>
     <value>Documentation must go beyond just listing parameter names. It should clearly describe what the parameters represent and how they are used. Simply stating the parameter's name doesn't provide enough context or information. Accurate and detailed documentation makes code easier to understand and maintain.</value>
   </data>
   <data name="MiKo_2028_MessageFormat" xml:space="preserve">
-    <value>Documentation should contain more than just the parameter name</value>
+    <value>&lt;param&gt; documentation should contain more than just the parameter name</value>
   </data>
   <data name="MiKo_2028_Title" xml:space="preserve">
     <value>Provide more information than just parameter name in documentation</value>
