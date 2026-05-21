@@ -25,8 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] CleanupMap =
                                                     {
-                                                        new Pair(" commands for ", " "),
-                                                        new Pair(" command for ", " "),
+                                                        new Pair(" commands for ", Constants.SingleSpace),
+                                                        new Pair(" command for ", Constants.SingleSpace),
                                                         new Pair(" can in ", " can be used in "),
                                                         new Pair(" can with ", " can be used with "),
                                                         new Pair(" can wrapper for ", " can wrap "),
@@ -222,10 +222,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var middle in middleParts)
                 {
-                    results.Add(new Pair(string.Concat(start, " ", middle, " ")));
+                    results.Add(new Pair(string.Concat(start, Constants.SingleSpace, middle, Constants.SingleSpace)));
                 }
 
-                results.Add(new Pair(string.Concat(start, " ")));
+                results.Add(new Pair(string.Concat(start, Constants.SingleSpace)));
             }
 
             results.Add(new Pair("Offers to "));

@@ -174,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     finalText.Add(suffix);
                 }
 
-                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
+                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(Constants.SingleSpace)))));
             }
 
             // let's see if we have the special case 'Is.Not.Null'
@@ -203,7 +203,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     finalText.Add(suffix);
                 }
 
-                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
+                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(Constants.SingleSpace)))));
             }
         }
     }

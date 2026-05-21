@@ -61,6 +61,7 @@ public class TestMe
 
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
+        [TestCase("")]
         public void An_issue_is_reported_for_CancellationToken_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
@@ -86,8 +87,9 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase()
+        [TestCase("Whatever.")]
+        [TestCase("")]
+        public void Code_gets_fixed_by_replacing_phrase_(string phrase)
         {
             const string OriginalCode = @"
 using System;
@@ -96,7 +98,7 @@ using System.Threading;
 public class TestMe
 {
     /// <summary />
-    /// <param name='token'>Whatever.</param>
+    /// <param name='token'>###</param>
     public void DoSomething(CancellationToken token) { }
 }
 ";
@@ -114,11 +116,13 @@ public class TestMe
     public void DoSomething(CancellationToken token) { }
 }
 ";
-            VerifyCSharpFix(OriginalCode, FixedCode);
+
+            VerifyCSharpFix(OriginalCode.Replace("###", phrase), FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_on_separate_lines()
+        [TestCase("Whatever.")]
+        [TestCase("")]
+        public void Code_gets_fixed_by_replacing_phrase_on_separate_lines_(string phrase)
         {
             const string OriginalCode = @"
 using System;
@@ -128,7 +132,7 @@ public class TestMe
 {
     /// <summary />
     /// <param name='token'>
-    /// Whatever.
+    /// ###
     /// </param>
     public void DoSomething(CancellationToken token) { }
 }
@@ -147,7 +151,8 @@ public class TestMe
     public void DoSomething(CancellationToken token) { }
 }
 ";
-            VerifyCSharpFix(OriginalCode, FixedCode);
+
+            VerifyCSharpFix(OriginalCode.Replace("###", phrase), FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer.Id;

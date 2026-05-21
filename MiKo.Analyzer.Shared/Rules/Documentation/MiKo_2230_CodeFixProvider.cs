@@ -141,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var text = StringBuilderCache.Acquire(Constants.Comments.XmlCommentExterior.Length + (2 * tag.Length) + 6 + description.Length)
                                          .Append(Constants.Comments.XmlCommentExterior)
-                                         .Append(' ')
+                                         .Append(Constants.Space)
                                          .Append('<').Append(tag).Append('>')
                                          .Append(description)
                                          .Append('<').Append('/').Append(tag).Append('>')
