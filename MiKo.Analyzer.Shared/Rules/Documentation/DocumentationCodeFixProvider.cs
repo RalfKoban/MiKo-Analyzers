@@ -1695,9 +1695,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var length = commentEndNodes.Length;
 
             // add a white space at the end of the comment in case we have further texts
-            if (length > 1 && commentEnd.Length > 0 && commentEnd[commentEnd.Length - 1] != ' ')
+            if (length > 1 && commentEnd.Length > 0 && commentEnd[commentEnd.Length - 1] != Constants.Space)
             {
-                commentEnd += " ";
+                commentEnd += Constants.SingleSpace;
             }
 
             if (commentEndNodes.FirstOrDefault() is XmlTextSyntax text)

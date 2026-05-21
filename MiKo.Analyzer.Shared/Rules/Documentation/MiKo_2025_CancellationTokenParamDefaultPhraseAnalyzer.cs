@@ -9,9 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2025";
 
-        public MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out && parameter.Type.IsCancellationToken();
 

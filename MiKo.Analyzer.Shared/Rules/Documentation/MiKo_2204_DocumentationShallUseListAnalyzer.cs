@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Delimiters = { ".)", ".", ")", ":" };
 
         private static readonly string[] Triggers = Array.Empty<string>()
-                                                         .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => delimiter.ConcatenatedWith(_, ' ')))
-                                                         .Union(new[] { "1", "2", "3", "a", "b", "c", "A", "B", "C" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
+                                                         .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => delimiter.ConcatenatedWith(_, Constants.Space)))
+                                                         .Union(new[] { "1", "2", "3", "a", "b", "c", "A", "B", "C" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(Constants.SingleSpace, _, delimiter, Constants.SingleSpace)))
                                                          .Union(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
                                                          .ToArray(AscendingStringComparer.Default);
 //// ncrunch: rdi default

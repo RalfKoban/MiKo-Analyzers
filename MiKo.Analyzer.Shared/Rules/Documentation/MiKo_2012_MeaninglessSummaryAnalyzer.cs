@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static HashSet<string> GetSelfSymbolNames(ISymbol symbol)
         {
-            var names = new HashSet<string> { symbol.Name.ConcatenatedWith(' ') };
+            var names = new HashSet<string> { symbol.Name.ConcatenatedWith(Constants.Space) };
 
             switch (symbol)
             {
@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (interfaces.Length > 0)
                     {
-                        names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(' ')));
+                        names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(Constants.Space)));
                     }
 
                     break;
@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (interfaces.Length > 0)
                     {
-                        names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(' ')));
+                        names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(Constants.Space)));
                     }
 
                     break;
@@ -202,8 +202,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // safety check to see if we have really a summary XML (for whatever reason that could be null as tested with a real-life project)
             if (summaryXml != null)
             {
-                var startOffset = phrase.StartsWith(' ') ? 1 : 0; // we do not want to underline the first space
-                var endOffset = phrase.EndsWith(' ') ? 1 : 0; // we do not want to underline the last space
+                var startOffset = phrase.StartsWith(Constants.Space) ? 1 : 0; // we do not want to underline the first space
+                var endOffset = phrase.EndsWith(Constants.Space) ? 1 : 0; // we do not want to underline the last space
 
                 // let's find the phrase in the summary XML to report the issue at the correct location
                 foreach (var textToken in summaryXml.GetXmlTextTokens())

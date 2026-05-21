@@ -221,13 +221,28 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_comment_with_reason_([ValueSource(nameof(Comments))] string comment, [Values("because", "reason")] string reason) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_reason_(
+                                                              [ValueSource(nameof(Comments))] string comment,
+                                                              [Values("because", "reason", "to ensure", "ensuring", "for efficient handling", "to verify", "verifying", "for verification")] string reason)
+            => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
     {
         // " + comment + " in addition to something much longer " + reason + @" I said it
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_uncommented_field_within_region() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    #region Some region
+
+    private int _someField;
+
+    #endregion
 }
 ");
 
@@ -303,18 +318,6 @@ public class TestMe
     {
         //" + gap + @" in addition to something much longer -> there is the arrow
     }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_uncommented_field_within_region() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    #region Some region
-
-    private int _someField;
-
-    #endregion
 }
 ");
 

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2075_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         private static readonly Pair[] ReplacementMap = Constants.Comments.ActionTerms.Select(_ => new Pair(_, Constants.Comments.CallbackTerm))
-                                                                 .ConcatenatedWith(new Pair(Constants.Comments.CallbackTerm + " " + Constants.Comments.CallbackTerm, Constants.Comments.CallbackTerm))
+                                                                 .ConcatenatedWith(new Pair(Constants.Comments.CallbackTerm + Constants.SingleSpace + Constants.Comments.CallbackTerm, Constants.Comments.CallbackTerm))
                                                                  .ToArray();
 
         public override string FixableDiagnosticId => "MiKo_2075";

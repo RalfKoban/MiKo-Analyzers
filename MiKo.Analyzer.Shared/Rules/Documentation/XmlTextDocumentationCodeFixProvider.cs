@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (endingTerm != null && text.EndsWith(endingTerm, StringComparison.OrdinalIgnoreCase))
             {
-                var ending = ' '.ConcatenatedWith(endingTerm);
+                var ending = Constants.Space.ConcatenatedWith(endingTerm);
 
                 if (text.EndsWith(ending, StringComparison.OrdinalIgnoreCase))
                 {

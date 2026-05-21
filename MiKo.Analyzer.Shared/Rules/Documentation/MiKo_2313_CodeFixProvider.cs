@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (TryFindComments(comments, commentTag, otherFoundCommentTags, out var index, out var count))
             {
-                var phrase = comments.Skip(index + 1).Take(count - 1).ConcatenatedWith(" ");
+                var phrase = comments.Skip(index + 1).Take(count - 1).ConcatenatedWith(Constants.SingleSpace);
 
                 // remove the processed items as we do not need to re-process them
                 comments.RemoveRange(index, count);
@@ -228,7 +228,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var parts = comments.Skip(index + 1).Take(takes).ConcatenatedWith(" ");
+                var parts = comments.Skip(index + 1).Take(takes).ConcatenatedWith(Constants.SingleSpace);
 
                 return new Pair(comments[index].TrimEnd(':'), parts);
             }

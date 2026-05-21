@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateReplacementMap()
         {
-            const string SyncPhrase = Constants.Comments.TryStartingPhrase + " ";
+            const string SyncPhrase = Constants.Comments.TryStartingPhrase + Constants.SingleSpace;
 
             var lowerCasePhrase = SyncPhrase.ToLowerCaseAt(0);
             var asyncPhrase = Constants.Comments.AsynchronouslyStartingPhrase + lowerCasePhrase;
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var startingWord in startingWords)
             {
-                var phrase = startingWord + " ";
+                var phrase = startingWord + Constants.SingleSpace;
                 var alternativePhrase = startingWord + " to ";
 
                 result[resultIndex++] = new Pair(phrase, SyncPhrase);
