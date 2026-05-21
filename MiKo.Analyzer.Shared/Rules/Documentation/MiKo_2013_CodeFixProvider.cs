@@ -144,7 +144,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    .Without("Enum")
                                                    .WithoutAbbreviations()
                                                    .AdjustFirstWord(FirstWordAdjustment.MakePlural)
-                                                   .SeparateWords(' ', FirstWordAdjustment.StartLowerCase);
+                                                   .SeparateWords(Constants.Space, FirstWordAdjustment.StartLowerCase);
                     }
                     else
                     {

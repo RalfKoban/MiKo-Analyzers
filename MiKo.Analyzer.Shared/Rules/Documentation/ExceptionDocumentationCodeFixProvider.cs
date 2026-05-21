@@ -148,7 +148,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => ' '.ConcatenatedWith(parameterName, _));
+        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => Constants.Space.ConcatenatedWith(parameterName, _));
 
         private static string GetParameterAsReference(string parameterName) => parameterName.SurroundedWithDoubleQuote();
 

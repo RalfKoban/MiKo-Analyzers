@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var replacement = enumType.AsCachedBuilder()
                                                   .Without(TypesSuffixes)
-                                                  .SeparateWords(' ', firstWordHandling)
+                                                  .SeparateWords(Constants.Space, firstWordHandling)
                                                   .Without(KindEndings)
                                                   .Insert(0, "The ")
                                                   .Append(isPlural ? " are " : " is ")

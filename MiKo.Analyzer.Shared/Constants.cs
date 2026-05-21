@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers
         internal const string TODO = "TODO";
 
         internal const char Underscore = '_';
+        internal const char Space = ' ';
 
         internal const string CSharpFileExtension = ".cs";
 
@@ -49,7 +50,7 @@ namespace MiKoSolutions.Analyzers
         internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
 
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
-        internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
+        internal static readonly char[] WhiteSpaceCharacters = { Space, '\t', '\r', '\n' };
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
@@ -338,7 +339,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
 
-            internal static readonly char[] Delimiters = { ' ', '.', ',', ';', ':', '!', '?', ')', ']', '>', '}' };
+            internal static readonly char[] Delimiters = { Space, '.', ',', ';', ':', '!', '?', ')', ']', '>', '}' };
             internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
             internal static readonly string[] FuturePhrase = { "Reserved for future usage.", "Reserved for future usage", "Reserved.", "Reserved", "future", };
 

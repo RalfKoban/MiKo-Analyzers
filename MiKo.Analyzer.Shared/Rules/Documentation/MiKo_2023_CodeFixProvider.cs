@@ -660,7 +660,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var optionalBooleanStart = StringBuilderCache.Acquire(optionalStart.Length + boolean.Length + 1)
                                                                      .Append(optionalStart)
                                                                      .Append(boolean)
-                                                                     .Append(' ')
+                                                                     .Append(Constants.Space)
                                                                      .WithoutMultipleWhiteSpaces()
                                                                      .TrimmedStart()
                                                                      .ToStringAndRelease();
@@ -736,7 +736,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var condition = conditions[conditionIndex];
 
                     // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var end = condition.SurroundedWith(' '); // TODO RKN: Change string creation
+                    var end = condition.SurroundedWith(Constants.Space); // TODO RKN: Change string creation
 
                     // for performance reasons we use for loops here
                     for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)

@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var text = typeName.AsCachedBuilder()
                                        .AdjustFirstWord(FirstWordAdjustment.MakePlural)
-                                       .SeparateWords(' ', FirstWordAdjustment.StartLowerCase)
+                                       .SeparateWords(Constants.Space, FirstWordAdjustment.StartLowerCase)
                                        .ToStringAndRelease();
 
                     if (text.Length > 0)
