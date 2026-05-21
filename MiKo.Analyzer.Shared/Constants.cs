@@ -1239,6 +1239,9 @@ namespace MiKoSolutions.Analyzers
 
             internal const string DefaultPropertyParameterName = "value";
 
+            internal const string IComponentConnector = "IComponentConnector";
+            internal const string IComponentConnectorFullName = "System.Windows.Markup.IComponentConnector";
+
             internal const string IMultiValueConverter = "IMultiValueConverter";
             internal const string IMultiValueConverterFullName = "System.Windows.Data.IMultiValueConverter";
 

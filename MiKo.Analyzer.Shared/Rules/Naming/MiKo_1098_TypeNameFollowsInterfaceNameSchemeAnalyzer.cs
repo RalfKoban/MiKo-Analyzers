@@ -100,6 +100,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         break;
                     }
 
+                    case Constants.Names.IComponentConnector:
+                        break; // ignore this specific interface
+
                     default:
                         names.Add(name.StartsWith('I') ? name.Substring(1) : name);
 
