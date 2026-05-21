@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.Serialization;
 
 using Microsoft.CodeAnalysis;
@@ -33,17 +32,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static List<string> CollectNames(in ImmutableArray<INamedTypeSymbol> directlyImplementedInterfaces)
+        private static List<string> CollectNames(in ImmutableArray<INamedTypeSymbol> directlyImplementedInterfaces, in bool nameEndsWithNumber)
         {
-            var names = new List<string>();
+            var length = directlyImplementedInterfaces.Length;
+            var names = new List<string>(length);
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            for (int index = 0, length = directlyImplementedInterfaces.Length; index < length; index++)
+            for (var index = 0; index < length; index++)
             {
                 var implementedInterface = directlyImplementedInterfaces[index];
-                var name = implementedInterface.Name
-                                               .WithoutNumberSuffix() // ignore number suffixes as they normally indicate only another version of the specific interface
-                                               .Without("Internal"); // ignore internal markers
+                var name = implementedInterface.Name.Without("Internal"); // ignore internal markers
+
+                if (nameEndsWithNumber is false)
+                {
+                    name = name.WithoutNumberSuffix(); // ignore number suffixes as they normally indicate only another version of the specific interface
+                }
 
                 if (name.EndsWith("able", StringComparison.Ordinal) && name.EndsWith("Table", StringComparison.Ordinal) is false)
                 {
@@ -104,7 +107,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         break; // ignore this specific interface
 
                     default:
-                        names.Add(name.StartsWith('I') ? name.Substring(1) : name);
+                        var hasInterfaceIndicator = name.StartsWith('I') && name.Length > 1 && name[1].IsUpperCase();
+
+                        names.Add(hasInterfaceIndicator ? name.Substring(1) : name);
 
                         break;
                 }
@@ -117,11 +122,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var directlyImplementedInterfaces = symbol.Interfaces;
 
-            if (directlyImplementedInterfaces.Any())
+            if (directlyImplementedInterfaces.Length > 0)
             {
-                var names = CollectNames(directlyImplementedInterfaces);
+                var symbolName = symbol.Name;
 
-                if (names.Count != 0 && symbol.Name.EndsWithAny(names) is false)
+                var names = CollectNames(directlyImplementedInterfaces, symbolName.EndsWithNumber());
+
+                if (names.Count > 0 && symbolName.EndsWithAny(names) is false)
                 {
                     return new[] { Issue(symbol, names.HumanizedConcatenated()) };
                 }
