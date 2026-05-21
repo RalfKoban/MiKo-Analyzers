@@ -148,7 +148,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                : fixedName.AsSpan();
 
                 var article = ArticleProvider.GetArticleFor(nameSpan, FirstWordAdjustment.StartLowerCase);
-                var continuation = nameSpan.WordsAsSpan().Select(_ => _.Text.ToLowerCaseAt(0)).ConcatenatedWith(" ");
+                var continuation = nameSpan.WordsAsSpan().Select(_ => _.Text.ToLowerCaseAt(0)).ConcatenatedWith(Constants.SingleSpace);
 
                 return Comment(comment, XmlText($"Represents {article}{continuation}."));
             }
@@ -309,11 +309,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
                                             .Append(startingPhrase)
                                             .Append(remainingText.ToLowerCaseAt(0))
-                                            .ReplaceAllWithProbe(GetSetReplacementPhrases, " ");
+                                            .ReplaceAllWithProbe(GetSetReplacementPhrases, Constants.SingleSpace);
 
             builder.ReplaceWithProbe(" only if ", " if ");
             builder.ReplaceWithProbe(" only when ", " when ");
-            builder.ReplaceWithProbe("  ", " ");
+            builder.ReplaceWithProbe(Constants.SingleSpace + Constants.SingleSpace, Constants.SingleSpace);
             builder.ReplaceWithProbe("indicating describes ", "indicating ");
             builder.ReplaceWithProbe("indicating describe ", "indicating ");
             builder.ReplaceWithProbe("indicating specifies ", "indicating ");
@@ -409,7 +409,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe(" when set to TRUE then ", " whether ");
             builder.ReplaceWithProbe(" when set to TRUE, then ", " whether ");
             builder.ReplaceWithProbe(" only whether ", " whether ");
-            builder.ReplaceWithProbe("  ", " ");
+            builder.ReplaceWithProbe(Constants.SingleSpace + Constants.SingleSpace, Constants.SingleSpace);
 
             var replacedFixedText = builder.ToStringAndRelease();
 
@@ -918,7 +918,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var thirdPersonVerb = thirdPersonStart.ToLowerCaseAt(0);
                 var gerundVerb = gerundVerbs[word].ToLowerCaseAt(0);
 
-                var fix = thirdPersonStart + " ";
+                var fix = thirdPersonStart + Constants.SingleSpace;
 
                 for (var beginningIndex = 0; beginningIndex < beginningsLength; beginningIndex++)
                 {
@@ -927,18 +927,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var middleIndex = 0; middleIndex < middlePartsLength; middleIndex++)
                     {
                         var middle = middleParts[middleIndex];
-                        var start = string.Concat(beginning, " ", middle, " ");
+                        var start = string.Concat(beginning, Constants.SingleSpace, middle, Constants.SingleSpace);
 
-                        yield return new Pair(string.Concat(start, verb, " "), fix);
-                        yield return new Pair(string.Concat(start, thirdPersonVerb, " "), fix);
+                        yield return new Pair(string.Concat(start, verb, Constants.SingleSpace), fix);
+                        yield return new Pair(string.Concat(start, thirdPersonVerb, Constants.SingleSpace), fix);
                     }
 
-                    yield return new Pair(string.Concat(beginning, " to ", noun, " "), fix);
-                    yield return new Pair(string.Concat(beginning, " to ", verb, " "), fix);
+                    yield return new Pair(string.Concat(beginning, " to ", noun, Constants.SingleSpace), fix);
+                    yield return new Pair(string.Concat(beginning, " to ", verb, Constants.SingleSpace), fix);
 
-                    yield return new Pair(string.Concat(beginning, " ", verb, " "), fix);
-                    yield return new Pair(string.Concat(beginning, " ", thirdPersonVerb, " "), fix);
-                    yield return new Pair(string.Concat(beginning, " ", gerundVerb, " "), fix);
+                    yield return new Pair(string.Concat(beginning, Constants.SingleSpace, verb, Constants.SingleSpace), fix);
+                    yield return new Pair(string.Concat(beginning, Constants.SingleSpace, thirdPersonVerb, Constants.SingleSpace), fix);
+                    yield return new Pair(string.Concat(beginning, Constants.SingleSpace, gerundVerb, Constants.SingleSpace), fix);
                 }
             }
 
@@ -978,7 +978,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 for (var middleIndex = 0; middleIndex < middlePartsLength; middleIndex++)
                 {
                     var middle = middleParts[middleIndex];
-                    var start = string.Concat(beginning, " ", middle, " ");
+                    var start = string.Concat(beginning, Constants.SingleSpace, middle, Constants.SingleSpace);
 
                     yield return new Pair(start + "contains ", Provides);
                     yield return new Pair(start + "contain ", Provides);
@@ -1022,15 +1022,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var conditional in conditionals)
                 {
-                    yield return string.Concat(subject, " ", conditional, " used to ");
-                    yield return string.Concat(subject, " ", conditional, " able to ");
-                    yield return string.Concat(subject, " ", conditional, " capable to ");
+                    yield return string.Concat(subject, Constants.SingleSpace, conditional, " used to ");
+                    yield return string.Concat(subject, Constants.SingleSpace, conditional, " able to ");
+                    yield return string.Concat(subject, Constants.SingleSpace, conditional, " capable to ");
                 }
 
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var conjunction in conjunctions)
                 {
-                    var beginning = string.Concat(subject, " ", conjunction, " ");
+                    var beginning = string.Concat(subject, Constants.SingleSpace, conjunction, Constants.SingleSpace);
 
                     yield return string.Concat(beginning, "allows to ");
 
@@ -1071,8 +1071,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var setter in sets)
                     {
-                        starts.Add(getter + conjunction + setter + " ");
-                        starts.Add(setter + conjunction + getter + " ");
+                        starts.Add(getter + conjunction + setter + Constants.SingleSpace);
+                        starts.Add(setter + conjunction + getter + Constants.SingleSpace);
                     }
                 }
             }
@@ -1094,7 +1094,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var getter in gets)
                 {
-                    var phrase = getter + " " + continuation;
+                    var phrase = getter + Constants.SingleSpace + continuation;
 
                     yield return phrase;
                     yield return phrase + "about ";
@@ -1102,7 +1102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var setter in sets)
                 {
-                    var phrase = setter + " " + continuation;
+                    var phrase = setter + Constants.SingleSpace + continuation;
 
                     yield return phrase;
                     yield return phrase + "about ";

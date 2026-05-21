@@ -94,6 +94,7 @@ public class TestMe
 
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
+        [TestCase("")]
         public void An_issue_is_reported_for_parameter_not_starting_with_article_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -102,6 +103,55 @@ public class TestMe
     public void DoSomething(object o) { }
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_empty_parameter_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'></param>
+    public void DoSomething(object o) { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// The TODO
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_parameter_on_separate_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// The TODO
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         [Test]
         public void Code_gets_fixed_for_parameter()

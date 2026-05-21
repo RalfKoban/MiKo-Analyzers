@@ -193,11 +193,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var middle in middles)
                 {
-                    var beginning = string.Concat(start, middle, " ");
+                    var beginning = string.Concat(start, middle, Constants.SingleSpace);
 
                     foreach (var text in TextParts)
                     {
-                        var beginningText = string.Concat(beginning, text, " ");
+                        var beginningText = string.Concat(beginning, text, Constants.SingleSpace);
 
                         yield return beginningText;
 

@@ -5844,6 +5844,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Event&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1537_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1537_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event handlers should be named starting with &apos;On&apos; followed by the event name to show they handle events..
+        /// </summary>
+        internal static string MiKo_1537_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1537_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Event&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1537_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1537_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix methods with &apos;Event&apos;.
+        /// </summary>
+        internal static string MiKo_1537_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1537_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;On&apos; prefix.
+        /// </summary>
+        internal static string MiKo_1538_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1538_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid using &apos;On&apos; as a prefix in event names because it is reserved for event handling methods..
+        /// </summary>
+        internal static string MiKo_1538_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1538_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1538_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1538_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix events with &apos;On&apos;.
+        /// </summary>
+        internal static string MiKo_1538_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1538_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -6504,7 +6576,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2021_MessageFormat {
             get {
@@ -6540,7 +6612,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2022_MessageFormat {
             get {
@@ -6576,7 +6648,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to &lt;param&gt; documentation should follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         internal static string MiKo_2023_MessageFormat {
             get {
@@ -6612,7 +6684,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2024_MessageFormat {
             get {
@@ -6648,7 +6720,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {1}.
+        ///   Looks up a localized string similar to Start &lt;param&gt; with: {1}.
         /// </summary>
         internal static string MiKo_2025_MessageFormat {
             get {
@@ -6675,7 +6747,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation lies about being unused.
+        ///   Looks up a localized string similar to &lt;param&gt; documentation lies about being unused.
         /// </summary>
         internal static string MiKo_2026_MessageFormat {
             get {
@@ -6711,7 +6783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change documentation to: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change &lt;param&gt; documentation to: &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2027_MessageFormat {
             get {
@@ -6738,7 +6810,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should contain more than just the parameter name.
+        ///   Looks up a localized string similar to &lt;param&gt; documentation should contain more than just the parameter name.
         /// </summary>
         internal static string MiKo_2028_MessageFormat {
             get {
@@ -6788,6 +6860,15 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2029_Title {
             get {
                 return ResourceManager.GetString("MiKo_2029_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix return comment.
+        /// </summary>
+        internal static string MiKo_2030_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2030_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -10108,7 +10189,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
+        ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works - let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
         internal static string MiKo_2300_Description {
@@ -15151,6 +15232,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3233_Title {
             get {
                 return ResourceManager.GetString("MiKo_3233_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3234_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3234_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calling &apos;.Equals(value) == true&apos; is redundant - the boolean result is compared to &apos;true&apos; again, which is unnecessary. Using &apos;is value&apos; instead expresses the intent directly and makes the code easier to understand at a glance..
+        /// </summary>
+        internal static string MiKo_3234_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3234_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;Equals() ==&apos;.
+        /// </summary>
+        internal static string MiKo_3234_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3234_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching over boolean Equals checks.
+        /// </summary>
+        internal static string MiKo_3234_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3234_Title", resourceCulture);
             }
         }
         

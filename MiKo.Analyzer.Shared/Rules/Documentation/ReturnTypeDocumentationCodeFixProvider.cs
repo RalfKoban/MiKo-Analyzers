@@ -149,7 +149,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var operation in operations)
                     {
-                        var middle = string.Concat(" ", continuation, " ", operation);
+                        var middle = string.Concat(Constants.SingleSpace, continuation, Constants.SingleSpace, operation);
 
                         foreach (var sentence in sentences)
                         {
@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             foreach (var verb in finalVerbs)
                             {
-                                var final = string.Concat(beginning, verb, " ");
+                                var final = string.Concat(beginning, verb, Constants.SingleSpace);
 
                                 results.Add(final);
                                 results.Add(final.ToUpperCaseAt(0));

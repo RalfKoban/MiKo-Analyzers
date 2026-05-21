@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 551 rules that are currently provided by the analyzer.
+The following tables list all the 554 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -154,7 +154,7 @@ The following tables list all the 551 rules that are currently provided by the a
 |[MiKo_1119](/Documentation/MiKo_1119.md)|Do not include 'when_present' in test method names|&#x2713;|\-|
 |[MiKo_1200](/Documentation/MiKo_1200.md)|Name catch block exceptions consistently|&#x2713;|&#x2713;|
 |[MiKo_1201](/Documentation/MiKo_1201.md)|Name exception parameters consistently|&#x2713;|&#x2713;|
-|[MiKo_1300](/Documentation/MiKo_1300.md)|Name unimportant lambda parameters '_'|&#x2713;|&#x2713;|
+|[MiKo_1300](/Documentation/MiKo_1300.md)|Name unimportant lambda parameters `_`|&#x2713;|&#x2713;|
 |[MiKo_1400](/Documentation/MiKo_1400.md)|Use plural for namespace names|&#x2713;|\-|
 |[MiKo_1401](/Documentation/MiKo_1401.md)|Do not include technical language names in namespaces|&#x2713;|\-|
 |[MiKo_1402](/Documentation/MiKo_1402.md)|Do not name namespaces after WPF-specific design patterns|&#x2713;|\-|
@@ -198,6 +198,8 @@ The following tables list all the 551 rules that are currently provided by the a
 |[MiKo_1531](/Documentation/MiKo_1531.md)|Do not prefix local variables with 'should'|&#x2713;|&#x2713;|
 |[MiKo_1532](/Documentation/MiKo_1532.md)|Do not prefix parameters with 'should'|&#x2713;|&#x2713;|
 |[MiKo_1533](/Documentation/MiKo_1533.md)|Do not prefix fields with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1537](/Documentation/MiKo_1537.md)|Do not prefix methods with 'Event'|&#x2713;|&#x2713;|
+|[MiKo_1538](/Documentation/MiKo_1538.md)|Do not prefix events with 'On'|&#x2713;|&#x2713;|
 
 ### Documentation
 
@@ -230,7 +232,7 @@ The following tables list all the 551 rules that are currently provided by the a
 |[MiKo_2027](/Documentation/MiKo_2027.md)|Document serialization constructor parameters with specific phrase|&#x2713;|&#x2713;|
 |[MiKo_2028](/Documentation/MiKo_2028.md)|Provide more information than just parameter name in documentation|&#x2713;|\-|
 |[MiKo_2029](/Documentation/MiKo_2029.md)|Do not use self-referencing 'cref' in &lt;inheritdoc&gt; documentation|&#x2713;|&#x2713;|
-|[MiKo_2030](/Documentation/MiKo_2030.md)|Start return value documentation with default phrase|&#x2713;|\-|
+|[MiKo_2030](/Documentation/MiKo_2030.md)|Start return value documentation with default phrase|&#x2713;|&#x2713;|
 |[MiKo_2031](/Documentation/MiKo_2031.md)|Use specific (starting) phrase for Task return value documentation|&#x2713;|&#x2713;|
 |[MiKo_2032](/Documentation/MiKo_2032.md)|Use specific phrase for Boolean return value documentation|&#x2713;|&#x2713;|
 |[MiKo_2033](/Documentation/MiKo_2033.md)|Start String return value documentation with default phrase|&#x2713;|&#x2713;|
@@ -486,6 +488,7 @@ The following tables list all the 551 rules that are currently provided by the a
 |[MiKo_3231](/Documentation/MiKo_3231.md)|Use pattern matching for ordinal string comparison equality checks|&#x2713;|&#x2713;|
 |[MiKo_3232](/Documentation/MiKo_3232.md)|Use null checks instead of empty property pattern|&#x2713;|\-|
 |[MiKo_3233](/Documentation/MiKo_3233.md)|Do not use var patterns for null checks|&#x2713;|\-|
+|[MiKo_3234](/Documentation/MiKo_3234.md)|Prefer pattern matching over boolean Equals checks|&#x2713;|\-|
 |[MiKo_3301](/Documentation/MiKo_3301.md)|Use lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |[MiKo_3302](/Documentation/MiKo_3302.md)|Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |[MiKo_3401](/Documentation/MiKo_3401.md)|Keep namespace hierarchies from becoming too deep|&#x2713;|\-|

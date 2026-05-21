@@ -73,8 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // get rid of the unwanted phrases and switch text parts
                     var parts = text.SplitBy(UnwantedResultTexts, options: StringSplitOptions.RemoveEmptyEntries);
-                    var switchedText = parts.ConcatenatedWith(" ").AdjustFirstWord(FirstWordAdjustment.StartLowerCase);
-                    var startText = switchedText.AsCachedBuilder().Insert(0, ' ').TrimmedEnd().ToStringAndRelease();
+                    var switchedText = parts.ConcatenatedWith(Constants.SingleSpace).AdjustFirstWord(FirstWordAdjustment.StartLowerCase);
+                    var startText = switchedText.AsCachedBuilder().Insert(0, Constants.Space).TrimmedEnd().ToStringAndRelease();
 
                     var updatedContents = contents.Remove(t);
 
