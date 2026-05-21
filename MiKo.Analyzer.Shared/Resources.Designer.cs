@@ -5880,6 +5880,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;On&apos; prefix.
+        /// </summary>
+        internal static string MiKo_1538_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1538_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid using &apos;On&apos; as a prefix in event names because it is reserved for event handling methods..
+        /// </summary>
+        internal static string MiKo_1538_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1538_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1538_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1538_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix events with &apos;On&apos;.
+        /// </summary>
+        internal static string MiKo_1538_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1538_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -10153,7 +10189,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
+        ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works - let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
         internal static string MiKo_2300_Description {
