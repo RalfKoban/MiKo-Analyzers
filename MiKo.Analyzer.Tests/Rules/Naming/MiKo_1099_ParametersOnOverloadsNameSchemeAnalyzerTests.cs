@@ -110,7 +110,7 @@ public interface IDoSomething
 }");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_1() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_string_value_and_char_param_while_longer_has_ReadOnlySpan_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this string value, char c) => false;
@@ -120,7 +120,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_2() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_ReadOnlySpan_value_and_char_param_while_longer_has_ReadOnlySpan_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, char c) => false;
@@ -130,7 +130,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_3() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_ReadOnlySpan_value_and_string_finding_while_longer_has_ReadOnlySpan_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, string finding) => false;
@@ -140,7 +140,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_4() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_string_value_and_string_finding_and_comparison_while_longer_has_ReadOnlySpan_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this string value, string finding, StringComparison comparison) => false;
@@ -150,7 +150,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_5() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_ReadOnlySpan_value_and_string_finding_and_comparison_while_longer_has_ReadOnlySpan_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, string finding, StringComparison comparison) => false;
@@ -160,7 +160,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_6() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_with_same_parameter_count_when_one_uses_string_finding_and_other_uses_ReadOnlySpan_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison) => false;
@@ -170,7 +170,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_1_1() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_string_value_and_char_param_while_longer_has_string_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this string value, char c) => false;
@@ -180,7 +180,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_2_1() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_ReadOnlySpan_value_and_char_param_while_longer_has_string_finding() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, char c) => false;
@@ -190,7 +190,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_3_1() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_ReadOnlySpan_value_and_string_finding_as_subset_of_longer() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, string finding) => false;
@@ -200,7 +200,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_4_1() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_string_value_and_string_finding_and_comparison_while_longer_has_additional_callback() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this string value, string finding, StringComparison comparison) => false;
@@ -210,7 +210,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DoSomething_5_1() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overloads_when_shorter_has_ReadOnlySpan_value_and_string_finding_and_comparison_while_longer_has_additional_callback() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool DoSomething(this ReadOnlySpan<char> value, string finding, StringComparison comparison) => false;
@@ -236,6 +236,24 @@ public class TestMe
     public static bool DoSomething(int value) => false;
 
     public static bool DoSomething(int value1, int value2) => false;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_type_with_6_similar_named_methods_if_all_follow_naming_scheme_and_last_is_an_out_parameter() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public bool DoSomething() => true;
+
+    public bool DoSomething(out int result) => true;
+
+    public bool DoSomething(int i, out int result) => true;
+
+    public bool DoSomething(int i, int j, out int result) => true;
+
+    public bool DoSomething(int i, int j, int k, out int result) => true;
+
+    public bool DoSomething(int i, int j, int k, int l, out int result) => true;
 }
 ");
 

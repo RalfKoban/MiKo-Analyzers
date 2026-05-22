@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             for (var index = 0; index < parametersLength; index++)
             {
-                if (parameters[index].RefKind is RefKind.Out)
+                if (parameters[index].IsOut())
                 {
                     if (outParameterIndex is -1)
                     {
