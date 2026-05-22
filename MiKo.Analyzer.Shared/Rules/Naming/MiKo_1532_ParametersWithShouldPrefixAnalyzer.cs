@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -19,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
-            var betterName = FindBetterNameForShouldPrefix(symbol.Name);
+            var betterName = NamesFinder.FindBetterNameForShouldPrefix(symbol.Name);
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }

@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -27,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (name.StartsWithAny(Constants.Names.IntentPrefixes, StringComparison.OrdinalIgnoreCase))
                 {
-                    var betterName = FindBetterNameForShouldPrefix(name);
+                    var betterName = NamesFinder.FindBetterNameForShouldPrefix(name);
 
                     if (issues is null)
                     {

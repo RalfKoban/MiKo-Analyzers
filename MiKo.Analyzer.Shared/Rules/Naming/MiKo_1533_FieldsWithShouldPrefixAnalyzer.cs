@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -22,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (name.AsSpan(prefix.Length).StartsWithAny(Constants.Names.IntentPrefixes, StringComparison.OrdinalIgnoreCase))
             {
-                var betterName = FindBetterNameForShouldPrefix(name, prefix);
+                var betterName = NamesFinder.FindBetterNameForShouldPrefix(name, prefix);
 
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
