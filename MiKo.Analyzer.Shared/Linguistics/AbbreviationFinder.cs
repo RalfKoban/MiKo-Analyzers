@@ -116,6 +116,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("hlp", "help"),
                                                       new Pair("horiz", "horizontal"),
                                                       new Pair("horz", "horizontal"),
+                                                      new Pair("hw", "hardware"),
                                                       new Pair("ident", "identification"),
                                                       new Pair("idents", "identifications"),
                                                       new Pair("idx", "index"),
@@ -352,6 +353,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Hlp", "Help"),
                                                           new Pair("Horiz", "Horizontal"),
                                                           new Pair("Horz", "Horizontal"),
+                                                          new Pair("Hw", "Hardware"),
                                                           new Pair("Ident", "Identification"),
                                                           new Pair("Idents", "Identifications"),
                                                           new Pair("Idx", "Index"),
@@ -571,6 +573,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "next",
                                                             "cref",
                                                             "href",
+                                                            "hwnd",
                                                             nameof(EventArgs),
                                                         };
 

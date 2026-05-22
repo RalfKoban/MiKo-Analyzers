@@ -112,6 +112,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("hlp", "help"),
                                                       new("horiz", "horizontal"),
                                                       new("horz", "horizontal"),
+                                                      new("hw", "hardware"),
                                                       new("ident", "identification"),
                                                       new("idents", "identifications"),
                                                       new("idx", "index"),
@@ -348,6 +349,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new("Hlp", "Help"),
                                                           new("Horiz", "Horizontal"),
                                                           new("Horz", "Horizontal"),
+                                                          new("Hw", "Hardware"),
                                                           new("Ident", "Identification"),
                                                           new("Idents", "Identifications"),
                                                           new("Idx", "Index"),
@@ -565,6 +567,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("HOVER")]
         [TestCase("hovering")]
         [TestCase("hoverSomeName")]
+        [TestCase("hwnd")] // common Windows API abbreviation, but not in our list
         [TestCase("indirectView")]
         [TestCase("LEFT")]
         [TestCase("MyEventArgs")]
