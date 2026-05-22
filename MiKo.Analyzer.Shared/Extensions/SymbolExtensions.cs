@@ -2967,6 +2967,18 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsOpenGeneric(this ITypeSymbol value) => value?.TypeKind is TypeKind.TypeParameter;
 
         /// <summary>
+        /// Determines whether a parameter is an "out" parameter.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the parameter is an "out" parameter; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsOut(this IParameterSymbol value) => value?.RefKind is RefKind.Out;
+
+        /// <summary>
         /// Determines whether a type is partial.
         /// </summary>
         /// <param name="value">
