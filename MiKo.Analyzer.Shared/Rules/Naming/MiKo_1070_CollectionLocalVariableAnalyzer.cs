@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -55,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var pluralName = FindPluralName(originalName, out var singularName);  // might return null in case there is none
+                var pluralName = NamesFinder.FindPluralName(originalName, out var singularName);  // might return null in case there is none
 
                 if (pluralName is null)
                 {

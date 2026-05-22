@@ -33,6 +33,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private const string Consumed = "Consumed";
         private const string Rejected = "Rejected";
         private const string Accepted = "Accepted";
+        private const string Be = "Be";
+        private const string Not = "Not";
+        private const string Has = "Has";
+        private const string Have = "Have";
 
         private static readonly string[] SpecialThrowPhrases =
                                                                {
@@ -52,7 +56,171 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "Wont",
                                                              };
 
+        private static readonly string[] Splitters = { "Of", "With", "To", "In", "From", "For" };
+
         private static readonly ConcurrentDictionary<string, string> TestNamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
+
+        private static readonly ConcurrentDictionary<string, Pair> PluralNamesCache = new ConcurrentDictionary<string, Pair>(StringComparer.Ordinal);
+
+        /// <summary>
+        /// Finds a better name for a symbol that contains entity marker suffixes.
+        /// </summary>
+        /// <param name="symbolName">
+        /// The name of the symbol to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name without entity marker suffixes.
+        /// </returns>
+        internal static string FindBetterNameForEntityMarker(string symbolName)
+        {
+            var expected = HandleSpecialEntityMarkerSituations(symbolName);
+
+            if (expected.HasCollectionMarker())
+            {
+                var plural = FindBetterNameForCollectionSuffix(expected);
+
+                // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
+                expected = plural ?? (symbolName[0].IsUpperCase() ? Constants.Entities : Constants.entities);
+            }
+
+            return expected;
+        }
+
+        /// <summary>
+        /// Finds a better name for a symbol that uses collection suffixes instead of plural forms.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name using plural forms, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
+        internal static string FindBetterNameForCollectionSuffix(string name)
+        {
+            var pluralName = FindPluralName(name, out _);
+
+            return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
+        }
+
+        /// <summary>
+        /// Finds a better name for a symbol that uses structural design pattern suffixes.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix to preserve in the name.
+        /// The default is <c>""</c>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name with corrected structural design pattern suffix.
+        /// </returns>
+        internal static string FindBetterNameForStructuralDesignPattern(string name, string prefix = "")
+        {
+            var startIndex = prefix.Length;
+
+            foreach (var pair in Constants.Names.StructuralDesignPatternNames)
+            {
+                if (name.EndsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
+                {
+                    var count = name.Length - pair.Key.Length;
+
+                    if (count is 0)
+                    {
+                        return pair.Value;
+                    }
+
+                    var builder = StringBuilderCache.Acquire();
+
+                    if (startIndex > 0)
+                    {
+                        builder.Append(prefix);
+                    }
+
+                    builder.Append(pair.Value);
+                    builder.Append(name, startIndex, count - startIndex);
+                    builder.ToUpperCaseAt(pair.Value.Length + startIndex);
+
+                    return builder.ToStringAndRelease();
+                }
+            }
+
+            return name;
+        }
+
+        /// <summary>
+        /// Finds a better name for a symbol that uses "shall" or "should" as prefix.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix to preserve in the name.
+        /// The default is <c>""</c>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name with corrected name.
+        /// </returns>
+        internal static string FindBetterNameForShouldPrefix(string name, string prefix = "")
+        {
+            var startIndex = prefix.Length;
+
+            var nameSpan = name.AsSpan(prefix.Length);
+
+            foreach (var intentPrefix in Constants.Names.IntentPrefixes)
+            {
+                if (nameSpan.StartsWith(intentPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    var nextWordPosition = startIndex + intentPrefix.Length;
+                    var secondWord = nameSpan.SecondWord(WordBoundary.UpperCaseCharacters);
+
+                    var builder = StringBuilderCache.Acquire();
+
+                    if (startIndex > 0)
+                    {
+                        builder.Append(prefix);
+                    }
+
+                    if (secondWord.Equals(Be, StringComparison.Ordinal))
+                    {
+                        nextWordPosition += Be.Length; // skip 'Be'
+
+                        builder.Append(Is);
+                    }
+                    else if (secondWord.Equals(Have, StringComparison.Ordinal))
+                    {
+                        nextWordPosition += Have.Length; // skip 'Have'
+
+                        builder.Append(Has);
+                    }
+                    else if (secondWord.Equals(Not, StringComparison.Ordinal))
+                    {
+                        var thirdWord = nameSpan.ThirdWord(WordBoundary.UpperCaseCharacters);
+
+                        if (thirdWord.Equals(Be, StringComparison.Ordinal))
+                        {
+                            nextWordPosition += Not.Length + Be.Length; // skip 'NotBe'
+
+                            builder.Append(Is + Not);
+                        }
+                        else if (thirdWord.Equals(Have, StringComparison.Ordinal))
+                        {
+                            nextWordPosition += Not.Length + Have.Length; // skip 'NotHave'
+
+                            builder.Append(Has + Not);
+                        }
+                    }
+
+                    builder.Append(name, nextWordPosition, name.Length - nextWordPosition);
+
+                    builder.ToLowerCaseAt(prefix.Length);
+
+                    return builder.ToStringAndRelease();
+                }
+            }
+
+            return name;
+        }
 
         /// <summary>
         /// Determines an improved test name based on the specified name and symbol.
@@ -176,6 +344,38 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+#pragma warning disable CA1021
+
+        /// <summary>
+        /// Finds the plural form of a name.
+        /// </summary>
+        /// <param name="originalName">
+        /// The original name to analyze.
+        /// </param>
+        /// <param name="singularName">
+        /// On successful return, contains the singular form of the name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
+        internal static string FindPluralName(string originalName, out string singularName)
+        {
+            var found = PluralNamesCache.GetOrAdd(
+                                              originalName,
+                                              _ =>
+                                                  {
+                                                      var plural = FindPluralName(_.AsSpan(), out var singular);
+
+                                                      return new Pair(plural, singular);
+                                                  });
+
+            singularName = found.Value;
+
+            return found.Key;
+        }
+
+#pragma warning restore CA1021
+
         /// <summary>
         /// Determines the property names that match the specified field symbol.
         /// </summary>
@@ -227,6 +427,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return propertyNames;
         }
+
+        /// <summary>
+        /// Determines whether a name ends with a structural design pattern suffix.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the name ends with a structural design pattern suffix; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNameForStructuralDesignPattern(string name) => name.EndsWithAny(Constants.Names.StructuralDesignPatternNames.Keys, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         /// Determines an improved test name based on the specified symbol name.
@@ -385,6 +596,86 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
+        /// Finds the plural form of a name.
+        /// </summary>
+        /// <param name="originalName">
+        /// The original name to analyze.
+        /// </param>
+        /// <param name="singularName">
+        /// On successful return, contains the singular form of the name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
+        private static string FindPluralName(in ReadOnlySpan<char> originalName, out string singularName)
+        {
+            if (originalName.EndsWith('s'))
+            {
+                singularName = originalName.ToString();
+
+                var pluralName = Pluralizer.GetPluralName(singularName, StringComparison.Ordinal);
+
+                if (pluralName != null && originalName.SequenceEqual(pluralName.AsSpan()))
+                {
+                    singularName = originalName.Slice(0, originalName.Length - 1).ToString();
+
+                    return null; // seems the original name is already the plural name, so we do not report that
+                }
+
+                return pluralName;
+            }
+
+            if (originalName.EndsWith("Map", StringComparison.OrdinalIgnoreCase)
+             || originalName.EndsWith("Batch", StringComparison.OrdinalIgnoreCase)
+             || originalName.EndsWith("Cache", StringComparison.OrdinalIgnoreCase))
+            {
+                singularName = originalName.ToString();
+
+                return null; // seems the original name is already the plural name, so we do not report that
+            }
+
+            var index = originalName.IndexOfAny(Splitters);
+
+            if (index > 0)
+            {
+                var nameToInspect = originalName.Slice(0, index);
+
+                var pluralName = FindPluralName(nameToInspect, out singularName);
+
+                if (pluralName is null)
+                {
+                    return null; // seems the original name is already the plural name, so we do not report that
+                }
+
+                var remainingPart = originalName.Slice(index);
+
+                singularName = singularName.ConcatenatedWith(remainingPart);
+
+                return pluralName.ConcatenatedWith(remainingPart);
+            }
+            else
+            {
+                var pluralName = originalName.EndsWithNumber()
+                                 ? originalName.WithoutNumberSuffix()
+                                 : originalName;
+
+                singularName = pluralName.ToString();
+
+                if (pluralName.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase))
+                {
+                    singularName = singularName.AsCachedBuilder()
+                                               .ReplaceWithProbe("lementNodeList", "lementList")
+                                               .ReplaceWithProbe("lementReferenceNodeList", "lementList")
+                                               .ToStringAndRelease();
+
+                    return Pluralizer.GetPluralName(singularName, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                }
+
+                return Pluralizer.GetPluralName(singularName);
+            }
+        }
+
+        /// <summary>
         /// Determines the registered name from the invocation arguments of the specified field symbol.
         /// </summary>
         /// <param name="symbol">
@@ -414,25 +705,25 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <param name="name">
         /// The name to reorder.
         /// </param>
-        /// <param name="result">
+        /// <param name="inOrder">
         /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
         /// </returns>
-        private static bool TryGetInOrder(string name, out string result)
+        private static bool TryGetInOrder(string name, out string inOrder)
         {
             var parts = name.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
 
             switch (parts.Length)
             {
-                case 2: return TryGetInOrder(parts[0], parts[1], out result);
-                case 3: return TryGetInOrder(parts[0], parts[1], parts[2], out result);
-                case 4: return TryGetInOrder(parts[0], parts[1], parts[2], parts[3], out result);
+                case 2: return TryGetInOrder(parts[0], parts[1], out inOrder);
+                case 3: return TryGetInOrder(parts[0], parts[1], parts[2], out inOrder);
+                case 4: return TryGetInOrder(parts[0], parts[1], parts[2], parts[3], out inOrder);
 
                 default:
                 {
-                    result = null;
+                    inOrder = null;
 
                     return false;
                 }
@@ -448,15 +739,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <param name="part1">
         /// The second part of the name.
         /// </param>
-        /// <param name="result">
+        /// <param name="inOrder">
         /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
         /// </returns>
-        private static bool TryGetInOrder(string part0, string part1, out string result)
+        private static bool TryGetInOrder(string part0, string part1, out string inOrder)
         {
-            result = null;
+            inOrder = null;
 
             if (part1.StartsWithAny(SpecialNotPhrases))
             {
@@ -492,7 +783,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
 
-            result = StringBuilderCache.GetStringAndRelease(builder);
+            inOrder = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -509,18 +800,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <param name="part2">
         /// The third part of the name.
         /// </param>
-        /// <param name="result">
+        /// <param name="inOrder">
         /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
         /// </returns>
-        private static bool TryGetInOrder(string part0, string part1, string part2, out string result)
+        private static bool TryGetInOrder(string part0, string part1, string part2, out string inOrder)
         {
             if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
             {
                 // it seems like this is in normal order, so do not change the order
-                result = null;
+                inOrder = null;
 
                 return false;
             }
@@ -558,7 +849,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
 
-            result = StringBuilderCache.GetStringAndRelease(builder);
+            inOrder = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -578,18 +869,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <param name="part3">
         /// The fourth part of the name.
         /// </param>
-        /// <param name="result">
+        /// <param name="inOrder">
         /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
         /// </returns>
-        private static bool TryGetInOrder(string part0, string part1, string part2, string part3, out string result)
+        private static bool TryGetInOrder(string part0, string part1, string part2, string part3, out string inOrder)
         {
             if (part2.StartsWith(And, StringComparison.Ordinal))
             {
                 // it seems like this is in normal order and a combination of 2 scenarios, so do not change the order
-                result = null;
+                inOrder = null;
 
                 return false;
             }
@@ -597,7 +888,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
             {
                 // it seems like this is in normal order, so do not change the order
-                result = null;
+                inOrder = null;
 
                 return false;
             }
@@ -637,7 +928,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
 
-            result = StringBuilderCache.GetStringAndRelease(builder);
+            inOrder = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -692,6 +983,63 @@ namespace MiKoSolutions.Analyzers.Linguistics
             else
             {
                 builder.Append(original);
+            }
+        }
+
+        private static string HandleSpecialEntityMarkerSituations(string symbolName)
+        {
+            var name = symbolName.Without(Constants.Markers.Models);
+
+            switch (name.Length)
+            {
+                case 0:
+                    return symbolName[0].IsUpperCase() ? Constants.Entity : Constants.entity;
+
+                case 1:
+                    switch (name)
+                    {
+                        case "s": return Constants.entities;
+                        case Constants.Markers.MemberFieldPrefix: return Constants.Markers.MemberFieldPrefix + Constants.entity;
+                        default: return name;
+                    }
+
+                case 2:
+                    switch (name)
+                    {
+                        case Constants.Markers.AlternativeMemberFieldPrefix: return Constants.Markers.AlternativeMemberFieldPrefix + Constants.entity;
+                        case Constants.Markers.StaticFieldPrefix: return Constants.Markers.StaticFieldPrefix + Constants.entity;
+                        case Constants.Markers.ThreadStaticFieldPrefix: return Constants.Markers.ThreadStaticFieldPrefix + Constants.entity;
+                        default: return name;
+                    }
+
+                default:
+                {
+                    var index = 0;
+
+                    var fieldPrefixes = Constants.Markers.FieldPrefixes;
+
+                    for (int i = 0, length = fieldPrefixes.Length; i < length; i++)
+                    {
+                        var prefix = fieldPrefixes[i];
+
+                        if (symbolName.StartsWith(prefix, StringComparison.Ordinal))
+                        {
+                            index = prefix.Length;
+                        }
+                    }
+
+                    if (symbolName[index].IsUpperCase() && name[index].IsLowerCase())
+                    {
+                        return name.ToUpperCaseAt(index);
+                    }
+
+                    if (symbolName[index].IsLowerCase() && name[index].IsUpperCase())
+                    {
+                        return name.ToLowerCaseAt(index);
+                    }
+
+                    return name;
+                }
             }
         }
     }
