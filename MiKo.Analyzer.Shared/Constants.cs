@@ -202,6 +202,8 @@ namespace MiKoSolutions.Analyzers
             internal const string MemberFieldPrefix = "_";
             internal const string AlternativeMemberFieldPrefix = "m_";
 
+            internal const string Have = "Have";
+
             internal static readonly string[] BaseClasses = { "Abstract", "Base" };
             internal static readonly string[] Models = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
