@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private const string Be = "Be";
         private const string Not = "Not";
         private const string Has = "Has";
-        private const string Have = "Have";
+        private const string Have = Constants.Markers.Have;
 
         private static readonly string[] SpecialThrowPhrases =
                                                                {
@@ -143,6 +143,47 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     return builder.ToStringAndRelease();
                 }
+            }
+
+            return name;
+        }
+
+        /// <summary>
+        /// Finds a better name for a symbol that uses "have" as prefix.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix to preserve in the name.
+        /// The default is <c>""</c>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name with corrected name.
+        /// </returns>
+        internal static string FindBetterNameForHavePrefix(string name, string prefix = "")
+        {
+            var startIndex = prefix.Length;
+
+            var nameSpan = name.AsSpan(prefix.Length);
+
+            if (nameSpan.StartsWith(Have, StringComparison.OrdinalIgnoreCase))
+            {
+                var nextWordPosition = startIndex + Have.Length;
+
+                var builder = StringBuilderCache.Acquire();
+
+                if (startIndex > 0)
+                {
+                    builder.Append(prefix);
+                }
+
+                builder.Append(Has);
+                builder.Append(name, nextWordPosition, name.Length - nextWordPosition);
+
+                builder.ToLowerCaseAt(prefix.Length);
+
+                return builder.ToStringAndRelease();
             }
 
             return name;
