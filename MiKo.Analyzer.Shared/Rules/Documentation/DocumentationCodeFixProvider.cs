@@ -395,6 +395,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
+                        // the lookup-phrases are mostly upper-case, so compare ignoring case here
                         if (originalText.ContainsAny(lookupPhrases, StringComparison.OrdinalIgnoreCase))
                         {
                             var replacedText = originalText.AsCachedBuilder()
