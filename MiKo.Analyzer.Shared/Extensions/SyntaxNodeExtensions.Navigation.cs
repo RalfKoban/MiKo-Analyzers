@@ -38,10 +38,22 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The syntax node to get descendants from.
         /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the syntax kind to filter by.
+        /// </param>
         /// <returns>
         /// A sequence that contains all descendant nodes of the specified type.
         /// </returns>
-        internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.AllDescendantNodes().OfType<T>();
+        internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode
+        {
+            foreach (var node in value.AllDescendantNodes())
+            {
+                if (node.IsKind(kind))
+                {
+                    yield return (T)node;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets all descendant nodes and tokens of the specified syntax node.
@@ -176,6 +188,12 @@ namespace MiKoSolutions.Analyzers
         {
             List<T> results = null;
 
+//// ncrunch: no coverage start
+            if (value.IsKind(kind))
+            {
+                results = new List<T> { (T)value };
+            }
+
             foreach (var node in value.DescendantNodes())
             {
                 if (node.RawKind != (int)kind)
@@ -190,6 +208,7 @@ namespace MiKoSolutions.Analyzers
 
                 results.Add((T)node);
             }
+//// ncrunch: no coverage end
 
             return (IReadOnlyList<T>)results ?? Array.Empty<T>();
         }

@@ -21,17 +21,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Task.FromResult(updatedSyntax);
         }
 
-        private static DocumentationCommentTriviaSyntax GetUpdatedSyntax(DocumentationCommentTriviaSyntax syntax)
+        private static DocumentationCommentTriviaSyntax GetUpdatedSyntax(DocumentationCommentTriviaSyntax comment)
         {
-            var remarks = syntax.GetXmlSyntax(Constants.XmlTag.Remarks)[0];
-            var summaries = syntax.GetXmlSyntax(Constants.XmlTag.Summary);
+            var remarks = comment.GetXmlSyntax(Constants.XmlTag.Remarks)[0];
+            var summaries = comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
             // add remarks into summary
             if (summaries.Count is 0)
             {
                 var newSummary = SyntaxFactory.XmlSummaryElement(remarks.Content.ToArray());
 
-                return syntax.ReplaceNode(remarks, newSummary);
+                return comment.ReplaceNode(remarks, newSummary);
             }
             else
             {

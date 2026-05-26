@@ -370,7 +370,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
-                foreach (var text in syntax.DescendantNodesAndSelf().OfType<XmlTextSyntax>())
+                foreach (var text in syntax.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText))
                 {
                     Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
 
