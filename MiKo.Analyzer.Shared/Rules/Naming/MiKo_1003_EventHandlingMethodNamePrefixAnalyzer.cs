@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var methodName = method.Name;
 
-                var adjustedName = methodName.StartsWith(Prefix, StringComparison.Ordinal)
+                var adjustedName = methodName.StartsWith(Prefix, StringComparison.Ordinal) && methodName.Length > Prefix.Length && methodName[Prefix.Length].IsUpperCase()
                                    ? methodName.AsSpan(Prefix.Length)
                                    : methodName.AsSpan();
 
@@ -69,11 +69,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
                 else
                 {
-                    name = adjustedName.ToString();
+                    name = adjustedName.Length == methodName.Length
+                           ? methodName
+                           : adjustedName.ToString();
                 }
             }
 
-            return name.AsCachedBuilder().Without(Constants.Underscore).ToUpperCaseAt(0).ToStringAndRelease();
+            return name.AsCachedBuilder()
+                       .Without(Constants.Underscore + Prefix)
+                       .Without(Constants.Underscore)
+                       .ToUpperCaseAt(0)
+                       .ToStringAndRelease();
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)
