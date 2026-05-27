@@ -34,6 +34,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "doesnt matter", // check for typo
                                                               ];
 
+        private static readonly string[] ReasoningPhrases =
+                                                            [
+                                                                "reason: we like it this way",
+                                                                "reason is we like it this way",
+                                                                "because we like it this way",
+                                                                "so that we like it this way",
+                                                                "to avoid issues",
+                                                                "as we want that exactly so why that is possible",
+                                                                "as we do not support it",
+                                                                "otherwise we fail",
+                                                                "as we have issues otherwise",
+                                                            ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -58,37 +71,28 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_reason_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
     {
-        // " + comment + @", reason: we like it this way
+        // " + comment + ", " + reason + @"
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_because_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_on_separate_line_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
     {
-        // " + comment + @" because we like it this way
+        // " + comment + @"
+        // " + reason + @"
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_so_that_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
-public class TestMe
-{
-    public void DoSomething()
-    {
-        // " + comment + @" so that we like it this way
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_reason_in_catch_block_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_in_catch_block_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -99,13 +103,13 @@ public class TestMe
         }
         catch
         {
-            // " + comment + @", reason: we like it this way
+            // " + comment + " " + reason + @"
         }
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_because_in_catch_block_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_in_catch_block_on_separate_line_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -116,51 +120,46 @@ public class TestMe
         }
         catch
         {
-            // " + comment + @" because we like it this way
+            // " + comment + @"
+            // " + reason + @"
         }
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_reason_on_property_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_on_property_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int SomeValue
     {
         get
         {
-            // " + comment + @" because we like it this way
+            // " + comment + " " + reason + @"
             return 42;
         }
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_because_on_property_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_on_property_on_separate_line_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int SomeValue
     {
         get
         {
-            // " + comment + @" because we like it this way
+            // " + comment + @"
+            // " + reason + @"
             return 42;
         }
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_reason_on_field_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_intentionally_comment_on_field_([ValueSource(nameof(IntentionalPhrases))] string comment, [ValueSource(nameof(ReasoningPhrases))] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public int MyField; // " + comment + @", reason: we like it this way
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_intentionally_comment_with_because_on_field_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
-public class TestMe
-{
-    public int MyField; // " + comment + @" because we like it this way
+    public int MyField; // " + comment + ", " + reason + @"
 }");
 
         [Test]
