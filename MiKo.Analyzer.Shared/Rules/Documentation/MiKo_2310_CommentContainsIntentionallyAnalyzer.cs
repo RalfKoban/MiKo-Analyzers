@@ -16,17 +16,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
-
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
-
-        private static bool CommentHasIssue(in ReadOnlySpan<char> comment)
+        protected override IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, SyntaxTrivia[] triviaToAnalyze, SemanticModel semanticModel)
         {
-            var c = comment.ToString();
-
-            if (c.ContainsAny(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
+            foreach (var trivia in triviaToAnalyze.GroupBy(_ => _.Token))
             {
-                return c.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
+                var sb = StringBuilderCache.Acquire();
+
+                foreach (var t in trivia)
+                {
+                    sb.Append(t.ToString());
+                }
+
+                var comment = sb.ToStringAndRelease();
+
+                if (CommentHasIssue(comment))
+                {
+                    foreach (var t in trivia)
+                    {
+                        var locations = GetAllLocations(t, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase);
+
+                        for (int index = 0, locationsCount = locations.Count; index < locationsCount; index++)
+                        {
+                            yield return Issue(name, locations[index]);
+                        }
+                    }
+                }
+            }
+        }
+
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => false; // we've overridden AnalyzeCommentTrivia, so this is not used
+
+        private static bool CommentHasIssue(string comment)
+        {
+            if (comment.ContainsAny(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
+            {
+                return comment.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
             }
 
             return false;

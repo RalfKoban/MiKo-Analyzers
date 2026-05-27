@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => DocumentationComment.ContainsPhrases(Constants.Comments.WhichIsToTerms, comment);
 
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.WhichIsToTerms, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _, Constants.Comments.ToTerm));
+        protected override IReadOnlyList<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.WhichIsToTerms, StringComparison.OrdinalIgnoreCase).ToArray(_ => Issue(name, _, Constants.Comments.ToTerm));
     }
 }
