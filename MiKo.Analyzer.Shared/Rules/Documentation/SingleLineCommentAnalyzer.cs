@@ -41,18 +41,80 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual bool CommentHasIssue(in SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             var comment = trivia.ToFullString()
-                                .AsSpan()
-                                .Slice(2) // removes the leading '//'
+                                .AsSpan(2) // removes the leading '//'
                                 .Trim(); // gets rid of all (leading or trailing) whitespaces to ease comment comparisons
 
             return CommentHasIssue(comment, semanticModel);
         }
 
-        protected virtual IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => new[] { Issue(name, trivia) };
+        protected virtual IReadOnlyList<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => new[] { Issue(name, trivia) };
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
 
         protected virtual bool ShallAnalyze(in SyntaxTrivia trivia) => trivia.IsSingleLineComment();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, SyntaxTrivia[] triviaToAnalyze, SemanticModel semanticModel)
+        {
+            for (int index = 0, count = triviaToAnalyze.Length; index < count; index++)
+            {
+                var trivia = triviaToAnalyze[index];
+
+                if (IgnoreMultipleLines && trivia.IsSpanningMultipleLines())
+                {
+                    continue;
+                }
+
+                if (CommentHasIssue(trivia, semanticModel))
+                {
+                    foreach (var issue in CollectIssues(name, trivia))
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            var triviaToAnalyze = FindTriviaToAnalyze(node);
+
+            if (triviaToAnalyze.Length is 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var name = node.GetName();
+
+            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseFieldDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            var triviaToAnalyze = FindTriviaToAnalyze(node);
+
+            if (triviaToAnalyze.Length is 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var name = node.GetName();
+
+            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            var triviaToAnalyze = FindTriviaToAnalyze(node);
+
+            if (triviaToAnalyze.Length is 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var name = node.GetName();
+
+            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+        }
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
@@ -105,76 +167,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (issues.IsEmptyArray() is false)
             {
                 ReportDiagnostics(context, issues);
-            }
-        }
-
-        private bool AnalyzeComment(in SyntaxTrivia trivia, SemanticModel semanticModel)
-        {
-            if (IgnoreMultipleLines && trivia.IsSpanningMultipleLines())
-            {
-                return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
-            }
-
-            return CommentHasIssue(trivia, semanticModel);
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
-        {
-            var triviaToAnalyze = FindTriviaToAnalyze(node);
-
-            if (triviaToAnalyze.Length is 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var name = node.GetName();
-
-            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseFieldDeclarationSyntax node, SemanticModel semanticModel)
-        {
-            var triviaToAnalyze = FindTriviaToAnalyze(node);
-
-            if (triviaToAnalyze.Length is 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var name = node.GetName();
-
-            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
-        {
-            var triviaToAnalyze = FindTriviaToAnalyze(node);
-
-            if (triviaToAnalyze.Length is 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var name = node.GetName();
-
-            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, SyntaxTrivia[] triviaToAnalyze, SemanticModel semanticModel)
-        {
-            for (int index = 0, count = triviaToAnalyze.Length; index < count; index++)
-            {
-                var trivia = triviaToAnalyze[index];
-
-                var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                if (hasIssue)
-                {
-                    foreach (var issue in CollectIssues(name, trivia))
-                    {
-                        yield return issue;
-                    }
-                }
             }
         }
 

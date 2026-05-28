@@ -912,7 +912,7 @@ namespace MiKoSolutions.Analyzers
                     return null;
                 }
 
-                var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
+                var identifiers = condition.DescendantNodes<IdentifierNameSyntax>(SyntaxKind.IdentifierName).ToHashSet(_ => _.GetName());
 
                 return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
             }
