@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,27 +15,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        // overridden as it is not important how the prefix looks like, so we can save some memory by not creating a new string for the field name
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol.Name, symbol);
+
         protected override Diagnostic[] AnalyzeName(string symbolName, ISymbol symbol, string prefix = "") => HasIssue(symbolName)
                                                                                                               ? new[] { Issue(symbol) }
                                                                                                               : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(string name)
         {
-            if (name.Length <= 1)
+            if (name.Length > 1 && name.AsSpan().IndexOfAny("AEIOUaeiou".AsSpan()) < 0)
             {
-                return false;
+                switch (name)
+                {
+                    case Constants.LambdaIdentifiers.FallbackUnderscores2:
+                    case Constants.LambdaIdentifiers.FallbackUnderscores3:
+                    case Constants.LambdaIdentifiers.FallbackUnderscores4:
+                        return false;
+
+                    default:
+                        return true;
+                }
             }
 
-            switch (name)
-            {
-                case Constants.LambdaIdentifiers.FallbackUnderscores2:
-                case Constants.LambdaIdentifiers.FallbackUnderscores3:
-                case Constants.LambdaIdentifiers.FallbackUnderscores4:
-                    return false;
-
-                default:
-                    return name.AsSpan().IndexOfAny("AEIOUaeiou".AsSpan()) < 0;
-            }
+            return false;
         }
     }
 }
