@@ -12,39 +12,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] IntentionalPhrases =
                                                               [
+                                                                  "by indent", // check for typo
+                                                                  "does not matter",
+                                                                  "doesn't matter",
+                                                                  "doesnt matter", // check for typo
+                                                                  "empty on purpose",
+                                                                  "empty with indention", // check for typo
+                                                                  "empty with intent",
+                                                                  "empty with intention",
+                                                                  "indentionally", // check for typo
+                                                                  "indentionaly", // check for typo
+                                                                  "intentionally empty",
+                                                                  "intentionaly empty", // check for typo
                                                                   "left empty by intent",
                                                                   "left empty by intention",
                                                                   "left empty intentionally",
                                                                   "left empty intentionaly", // check for typo
-                                                                  "intentionally empty",
-                                                                  "intentionaly empty", // check for typo
-                                                                  "empty with intent",
-                                                                  "empty with intention",
-                                                                  "empty on purpose",
                                                                   "left empty on purpose",
                                                                   "on purpose left empty",
                                                                   "purposely left empty",
                                                                   "purposly left empty", // check for typo
-                                                                  "by indent", // check for typo
-                                                                  "empty with indention", // check for typo
-                                                                  "indentionally", // check for typo
-                                                                  "indentionaly", // check for typo
-                                                                  "does not matter",
-                                                                  "doesn't matter",
-                                                                  "doesnt matter", // check for typo
                                                               ];
 
         private static readonly string[] ReasoningPhrases =
                                                             [
-                                                                "reason: we like it this way",
-                                                                "reason is we like it this way",
-                                                                "because we like it this way",
-                                                                "so that we like it this way",
-                                                                "to avoid issues",
-                                                                "as we want that exactly so why that is possible",
                                                                 "as we do not support it",
-                                                                "otherwise we fail",
                                                                 "as we have issues otherwise",
+                                                                "as we want that exactly so why that is possible",
+                                                                "because we like it this way",
+                                                                "just to keep it as it is",
+                                                                "otherwise we fail",
+                                                                "reason is we like it this way",
+                                                                "reason: we like it this way",
+                                                                "since we like it this way",
+                                                                "so that we like it this way",
+                                                                "there are no other options",
+                                                                "to avoid issues",
+                                                                "to be overridden by others",
+                                                                "to be overwritten by others",
+                                                                "to take care of stuff",
                                                             ];
 
         [Test]
