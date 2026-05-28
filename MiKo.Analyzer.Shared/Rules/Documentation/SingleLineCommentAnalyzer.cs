@@ -188,22 +188,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var trivia in node.DescendantTrivia(span))
             {
-                switch (trivia.RawKind)
+                // we use 'RawKind' for performance reasons as most likely, we have single line comments
+                // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
+                // Note that the method 'IsComment' got inlined here for performance reasons as invoking the method would have some remarkably costly overhead
+                if ((uint)(trivia.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1)
                 {
-                    case (int)SyntaxKind.WhitespaceTrivia:
-                    case (int)SyntaxKind.EndOfLineTrivia:
-                    case (int)SyntaxKind.SingleLineDocumentationCommentTrivia:
-                        continue;
-                }
-
-                if (ShallAnalyze(trivia))
-                {
-                    if (triviaToAnalyze is null)
+                    if (ShallAnalyze(trivia))
                     {
-                        triviaToAnalyze = new List<SyntaxTrivia>(4);
-                    }
+                        if (triviaToAnalyze is null)
+                        {
+                            triviaToAnalyze = new List<SyntaxTrivia>(4);
+                        }
 
-                    triviaToAnalyze.Add(trivia);
+                        triviaToAnalyze.Add(trivia);
+                    }
                 }
             }
 
