@@ -176,7 +176,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method_([Values("TME_MyEvent", "myEvent")] string method)
+        public void Code_gets_fixed_for_method_([Values("TME_MyEvent", "myEvent", "TME_OnMyEvent")] string method)
         {
             const string Template = @"
 using System;
@@ -202,6 +202,10 @@ public class TestMe
 
         [TestCase("CommandBinding_OnCanExecute", "OnCanExecuteCommandBinding")]
         [TestCase("CommandBinding_OnExecuted", "OnExecutedCommandBinding")]
+        [TestCase("Image_OnPreviewMouseDown", "OnImagePreviewMouseDown")]
+        [TestCase("Image_OnMouseLeftButtonUp", "OnImageMouseLeftButtonUp")]
+        [TestCase("OnlineManager_OnChanged", "OnOnlineManagerChanged")]
+        [TestCase("ZoomOut_OnClick", "OnZoomOutClick")]
         public void Code_gets_fixed_for_method_(string originalMethod, string fixedMethod)
         {
             const string Template = @"

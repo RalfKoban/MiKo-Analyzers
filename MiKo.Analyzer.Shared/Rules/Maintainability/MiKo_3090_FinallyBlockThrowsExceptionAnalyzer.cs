@@ -27,12 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            var method = context.GetEnclosingMethod();
+            var throwStatements = finallyBlock.DescendantNodes<ThrowStatementSyntax>(SyntaxKind.ThrowStatement);
 
-            var issues = finallyBlock.DescendantNodesAndSelf().OfType<ThrowStatementSyntax>()
-                                     .Select(_ => Issue(method.Name, _));
+            if (throwStatements.Count > 0)
+            {
+                var method = context.GetEnclosingMethod();
 
-            ReportDiagnostics(context, issues);
+                ReportDiagnostics(context, throwStatements.Select(_ => Issue(method.Name, _)));
+            }
         }
     }
 }
