@@ -3,6 +3,8 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -25,9 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var identifier = identifiers[index];
                     var name = identifier.ValueText;
 
-                    if (IsNameForStructuralDesignPattern(name))
+                    if (NamesFinder.IsNameForStructuralDesignPattern(name))
                     {
-                        var betterName = FindBetterNameForStructuralDesignPattern(name);
+                        var betterName = NamesFinder.FindBetterNameForStructuralDesignPattern(name);
 
                         yield return Issue(name, identifier, betterName, CreateBetterNameProposal(betterName));
                     }

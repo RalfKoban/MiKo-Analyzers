@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<Diagnostic> results = null;
 
-            foreach (var tokens in comment.DescendantNodes<XmlTextSyntax>().Select(_ => _.TextTokens))
+            foreach (var tokens in comment.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText).Select(_ => _.TextTokens))
             {
                 var count = tokens.Count - 1;
 
