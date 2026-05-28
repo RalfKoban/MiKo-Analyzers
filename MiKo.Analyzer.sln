@@ -247,6 +247,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Naming", "1. Naming", "{
 		Documentation\MiKo_1531.md = Documentation\MiKo_1531.md
 		Documentation\MiKo_1532.md = Documentation\MiKo_1532.md
 		Documentation\MiKo_1533.md = Documentation\MiKo_1533.md
+		Documentation\MiKo_1534.md = Documentation\MiKo_1534.md
+		Documentation\MiKo_1535.md = Documentation\MiKo_1535.md
+		Documentation\MiKo_1536.md = Documentation\MiKo_1536.md
 		Documentation\MiKo_1537.md = Documentation\MiKo_1537.md
 		Documentation\MiKo_1538.md = Documentation\MiKo_1538.md
 	EndProjectSection

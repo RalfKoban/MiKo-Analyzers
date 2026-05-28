@@ -24,6 +24,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("attr", "attribute"),
                                                       new("auth", "authorization"),
                                                       new("bk", "back"),
+                                                      new("bckgnd", "background"),
+                                                      new("bckgrnd", "background"),
                                                       new("bmp", "bitmap"),
                                                       new("btn", "button"),
                                                       new("calc", "calculate"),
@@ -112,6 +114,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("hlp", "help"),
                                                       new("horiz", "horizontal"),
                                                       new("horz", "horizontal"),
+                                                      new("hw", "hardware"),
                                                       new("ident", "identification"),
                                                       new("idents", "identifications"),
                                                       new("idx", "index"),
@@ -250,6 +253,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new("Asynchron", "Asynchronous"),
                                                           new("Attr", "Attribute"),
                                                           new("Auth", "Authorization"),
+                                                          new("Bckgnd", "Background"),
+                                                          new("Bckgrnd", "Background"),
                                                           new("Bk", "Back"),
                                                           new("Bl", "BusinessLogic"),
                                                           new("BL", "BusinessLogic"),
@@ -348,6 +353,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new("Hlp", "Help"),
                                                           new("Horiz", "Horizontal"),
                                                           new("Horz", "Horizontal"),
+                                                          new("Hw", "Hardware"),
                                                           new("Ident", "Identification"),
                                                           new("Idents", "Identifications"),
                                                           new("Idx", "Index"),
@@ -565,6 +571,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("HOVER")]
         [TestCase("hovering")]
         [TestCase("hoverSomeName")]
+        [TestCase("hwnd")] // common Windows API abbreviation, but not in our list
         [TestCase("indirectView")]
         [TestCase("LEFT")]
         [TestCase("MyEventArgs")]
