@@ -203,7 +203,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (results is null)
                 {
-                    results = new List<T>();
+                    results = new List<T>(8); // avoid resizing most times
                 }
 
                 results.Add((T)node);

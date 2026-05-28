@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, SyntaxTrivia[] triviaToAnalyze, SemanticModel semanticModel)
         {
+            List<Diagnostic> issues = null;
+
             foreach (var trivia in triviaToAnalyze.GroupBy(_ => _.Token))
             {
                 var sb = StringBuilderCache.Acquire();
@@ -31,17 +33,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (CommentHasIssue(comment))
                 {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
                     foreach (var t in trivia)
                     {
                         var locations = GetAllLocations(t, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase);
 
                         for (int index = 0, locationsCount = locations.Count; index < locationsCount; index++)
                         {
-                            yield return Issue(name, locations[index]);
+                            issues.Add(Issue(name, locations[index]));
                         }
                     }
                 }
             }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
 
         protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => false; // we've overridden AnalyzeCommentTrivia, so this is not used

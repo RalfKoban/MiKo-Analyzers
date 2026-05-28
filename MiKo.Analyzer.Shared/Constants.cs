@@ -1076,8 +1076,9 @@ namespace MiKoSolutions.Analyzers
                                                                      "to avoid", "avoiding",
                                                                      "for efficient",
                                                                      "verify", "for verification",
-                                                                     "otherwise",
+                                                                     "otherwise", "just", "since",
                                                                      "exactly", "why", "do not support",
+                                                                     "overwritten", "overridden", "to take care", "there are no",
                                                                  };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
