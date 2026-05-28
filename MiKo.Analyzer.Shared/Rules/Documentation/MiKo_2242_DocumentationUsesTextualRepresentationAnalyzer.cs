@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<Diagnostic> issues = null;
 
-            foreach (var xmlText in comment.DescendantNodes<XmlTextSyntax>())
+            foreach (var xmlText in comment.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText))
             {
                 var textTokens = xmlText.TextTokens;
 

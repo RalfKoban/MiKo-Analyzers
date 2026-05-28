@@ -18,23 +18,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            foreach (var methods in symbol.GetNamedMethods().Where(ShallAnalyze).GroupBy(_ => _.Name))
-            {
-                if (methods.MoreThan(1))
-                {
-                    // order by number of parameters, so that we get the one with the most parameters as first one (acts as reference)
-                    var methodsWithSameName = methods.OrderByDescending(_ => _.Parameters.Length).ToList();
+            var issues = symbol.GetNamedMethods()
+                               .Where(ShallAnalyze)
+                               .GroupBy(_ => _.Name)
+                               .Where(_ => _.MoreThan(1)) // we have more than 1 method with the name, so inspect the parameters
+                               .SelectMany(AnalyzeMethods)
+                               .ToArray();
 
-                    // we have more than 1 method with the name, so inspect the parameters
-                    foreach (var diagnostic in AnalyzeMethods(methodsWithSameName))
-                    {
-                        yield return diagnostic;
-                    }
-                }
-            }
+            return issues;
         }
 
         private static void RemoveIdenticalParameters(List<IParameterSymbol> referenceParameters, List<IParameterSymbol> otherParameters)
+        {
+            RemoveIdenticalParameters(referenceParameters, otherParameters, (r, o) => true);
+        }
+
+        private static void RemoveIdenticalParameters(List<IParameterSymbol> referenceParameters, List<IParameterSymbol> otherParameters, Func<IParameterSymbol, IParameterSymbol, bool> comparer)
         {
             var otherIndex = 0;
             var referenceIndex = 0;
@@ -47,7 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var otherParameter = otherParameters[otherIndex];
                 var referenceParameter = referenceParameters[referenceIndex];
 
-                if (otherParameter.Name == referenceParameter.Name && otherParameter.Type.Equals(referenceParameter.Type, SymbolEqualityComparer.Default))
+                if (otherParameter.Name == referenceParameter.Name
+                 && otherParameter.Type.Equals(referenceParameter.Type, SymbolEqualityComparer.Default)
+                 && comparer(referenceParameter, otherParameter))
                 {
                     // remove this one
                     indices.Push(referenceIndex);
@@ -70,8 +71,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeMethods(List<IMethodSymbol> methods)
+        private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methodsWithSameName)
         {
+            // order by number of parameters, so that we get the one with the most parameters as first one (acts as reference)
+            var methods = methodsWithSameName.OrderByDescending(_ => _.Parameters.Length).ToList();
+
             var referenceMethod = methods[0];
 
             foreach (var otherMethod in methods.Skip(1)) // skip the longest method as that one acts as reference
@@ -81,20 +85,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (referenceParameters.Count == otherParameters.Count)
                 {
+                    // strip shared trailing parameters first to avoid skewing the forward comparison
                     referenceParameters.Reverse();
                     otherParameters.Reverse();
 
                     RemoveIdenticalParameters(referenceParameters, otherParameters);
 
+                    // change back to original order
                     referenceParameters.Reverse();
                     otherParameters.Reverse();
                 }
 
                 RemoveIdenticalParameters(referenceParameters, otherParameters);
 
+                // strip shared trailing out-parameters (e.g. 'out int result') before forward traversal
+                referenceParameters.Reverse();
+                otherParameters.Reverse();
+
+                RemoveIdenticalParameters(referenceParameters, otherParameters, (r, o) => r.IsOut() && o.IsOut());
+
+                // change back to original order
+                referenceParameters.Reverse();
+                otherParameters.Reverse();
+
                 var referenceIndex = 0;
                 var otherIndex = 0;
 
+                // now compare the remaining parameters
                 while (otherIndex < otherParameters.Count && referenceIndex < referenceParameters.Count)
                 {
                     var otherParameter = otherParameters[otherIndex];

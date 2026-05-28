@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 554 rules that are currently provided by the analyzer.
+The following tables list all the 557 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -199,6 +199,9 @@ The following tables list all the 554 rules that are currently provided by the a
 |[MiKo_1531](/Documentation/MiKo_1531.md)|Do not prefix local variables with 'should'|&#x2713;|&#x2713;|
 |[MiKo_1532](/Documentation/MiKo_1532.md)|Do not prefix parameters with 'should'|&#x2713;|&#x2713;|
 |[MiKo_1533](/Documentation/MiKo_1533.md)|Do not prefix fields with 'should'|&#x2713;|&#x2713;|
+|[MiKo_1534](/Documentation/MiKo_1534.md)|Do not prefix local variables with 'have'|&#x2713;|&#x2713;|
+|[MiKo_1535](/Documentation/MiKo_1535.md)|Do not prefix parameters with 'have'|&#x2713;|&#x2713;|
+|[MiKo_1536](/Documentation/MiKo_1536.md)|Do not prefix fields with 'have'|&#x2713;|&#x2713;|
 |[MiKo_1537](/Documentation/MiKo_1537.md)|Do not prefix methods with 'Event'|&#x2713;|&#x2713;|
 |[MiKo_1538](/Documentation/MiKo_1538.md)|Do not prefix events with 'On'|&#x2713;|&#x2713;|
 

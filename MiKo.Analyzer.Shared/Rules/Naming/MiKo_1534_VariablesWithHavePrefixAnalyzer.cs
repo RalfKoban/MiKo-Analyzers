@@ -10,11 +10,11 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1531_VariablesWithShouldPrefixAnalyzer : LocalVariableNamingAnalyzer
+    public sealed class MiKo_1534_VariablesWithHavePrefixAnalyzer : LocalVariableNamingAnalyzer
     {
-        public const string Id = "MiKo_1531";
+        public const string Id = "MiKo_1534";
 
-        public MiKo_1531_VariablesWithShouldPrefixAnalyzer() : base(Id)
+        public MiKo_1534_VariablesWithHavePrefixAnalyzer() : base(Id)
         {
         }
 
@@ -27,9 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var identifier = identifiers[index];
                 var name = identifier.ValueText;
 
-                if (name.StartsWithAny(Constants.Names.IntentPrefixes, StringComparison.OrdinalIgnoreCase))
+                if (name.StartsWith(Constants.Markers.Have, StringComparison.OrdinalIgnoreCase))
                 {
-                    var betterName = NamesFinder.FindBetterNameForShouldPrefix(name);
+                    var betterName = NamesFinder.FindBetterNameForHavePrefix(name);
 
                     if (issues is null)
                     {

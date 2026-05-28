@@ -3,6 +3,8 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -22,14 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return IsNameForStructuralDesignPattern(symbol.Name);
+            return NamesFinder.IsNameForStructuralDesignPattern(symbol.Name);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var name = symbol.Name;
             var prefix = GetFieldPrefix(name);
-            var betterName = FindBetterNameForStructuralDesignPattern(name, prefix);
+            var betterName = NamesFinder.FindBetterNameForStructuralDesignPattern(name, prefix);
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }

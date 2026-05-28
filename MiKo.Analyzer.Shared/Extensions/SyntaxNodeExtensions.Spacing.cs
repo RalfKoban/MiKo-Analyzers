@@ -1224,7 +1224,7 @@ namespace MiKoSolutions.Analyzers
 
             for (; i > -1; i--)
             {
-                if (trivia[i].IsKind(SyntaxKind.WhitespaceTrivia) is false)
+                if (trivia[i].IsWhiteSpace() is false)
                 {
                     break;
                 }
