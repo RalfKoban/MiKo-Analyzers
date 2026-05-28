@@ -6027,6 +6027,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Names consisting entirely of consonants without any vowels are hard to read and understand. For example, a name like &apos;tsprg&apos; gives no clear indication of its purpose or meaning. Using descriptive names that include vowels improves code readability..
+        /// </summary>
+        internal static string MiKo_1539_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1539_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add vowels to name to make it readable.
+        /// </summary>
+        internal static string MiKo_1539_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1539_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names shall contain vowels.
+        /// </summary>
+        internal static string MiKo_1539_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1539_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
