@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                 if (parametersCount > MaxParametersCount && symbol.IsInterfaceImplementation() is false)
                 {
-                    var outParametersCount = parameters.Count(_ => _.RefKind is RefKind.Out);
+                    var outParametersCount = parameters.Count(_ => _.IsOut());
                     var count = parametersCount - outParametersCount;
 
                     if (count > MaxParametersCount)
