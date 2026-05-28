@@ -5844,6 +5844,117 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;have&apos; to &apos;has&apos;.
+        /// </summary>
+        internal static string MiKo_1534_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1534_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables that are prefixed with &apos;have&apos; are most likely indicators for boolean values. Such a prefix uses the wrong grammatical form - &apos;have&apos; should be &apos;has&apos; when used as a third-person singular indicator.
+        ///Renaming the prefix from &apos;have&apos; to &apos;has&apos; makes the code grammatically correct and easier to read and understand..
+        /// </summary>
+        internal static string MiKo_1534_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1534_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1534_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1534_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix local variables with &apos;have&apos;.
+        /// </summary>
+        internal static string MiKo_1534_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1534_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;have&apos; to &apos;has&apos;.
+        /// </summary>
+        internal static string MiKo_1535_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1535_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters that are prefixed with &apos;have&apos; are most likely indicators for boolean values. Such a prefix uses the wrong grammatical form - &apos;have&apos; should be &apos;has&apos; when used as a third-person singular indicator.
+        ///Renaming the prefix from &apos;have&apos; to &apos;has&apos; makes the code grammatically correct and easier to read and understand..
+        /// </summary>
+        internal static string MiKo_1535_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1535_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1535_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1535_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix parameters with &apos;have&apos;.
+        /// </summary>
+        internal static string MiKo_1535_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1535_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;have&apos; to &apos;has&apos;.
+        /// </summary>
+        internal static string MiKo_1536_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1536_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields that are prefixed with &apos;have&apos; are most likely indicators for boolean values. Such a prefix uses the wrong grammatical form - &apos;have&apos; should be &apos;has&apos; when used as a third-person singular indicator.
+        ///Renaming the prefix from &apos;have&apos; to &apos;has&apos; makes the code grammatically correct and easier to read and understand..
+        /// </summary>
+        internal static string MiKo_1536_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1536_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1536_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1536_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix fields with &apos;have&apos;.
+        /// </summary>
+        internal static string MiKo_1536_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1536_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove &apos;Event&apos; prefix from method name.
         /// </summary>
         internal static string MiKo_1537_CodeFixTitle {

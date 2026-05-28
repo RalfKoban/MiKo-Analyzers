@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public MiKo_2023_BooleanParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.Type.IsBoolean()
-                                                                                     && parameter.RefKind != RefKind.Out
+                                                                                     && parameter.IsOut() is false
                                                                                      && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)

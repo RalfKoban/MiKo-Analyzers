@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return null;
             }
 
-            if (method.ReturnType.IsBoolean() && method.Parameters.Any() && method.Parameters.Last().RefKind is RefKind.Out)
+            if (method.ReturnType.IsBoolean() && method.Parameters.Any() && method.Parameters.Last().IsOut())
             {
                 return null;
             }

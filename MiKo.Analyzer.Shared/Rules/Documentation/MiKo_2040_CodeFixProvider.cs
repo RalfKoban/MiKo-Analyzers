@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var nodes = new List<XmlTextSyntax>();
 
-            foreach (var node in comment.DescendantNodes<XmlTextSyntax>())
+            foreach (var node in comment.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText))
             {
                 if (node.Parent.IsCode())
                 {

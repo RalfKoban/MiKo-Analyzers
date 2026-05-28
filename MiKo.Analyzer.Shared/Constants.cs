@@ -202,6 +202,8 @@ namespace MiKoSolutions.Analyzers
             internal const string MemberFieldPrefix = "_";
             internal const string AlternativeMemberFieldPrefix = "m_";
 
+            internal const string Have = "Have";
+
             internal static readonly string[] BaseClasses = { "Abstract", "Base" };
             internal static readonly string[] Models = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
@@ -1067,7 +1069,17 @@ namespace MiKoSolutions.Analyzers
                                                                         "doesnt matter", // be able to detect typos
                                                                     };
 
-            internal static readonly string[] ReasoningPhrases = { "because", "reason", "so that", "to ensure", "ensuring", "for efficient", "verify", "for verification" };
+            internal static readonly string[] ReasoningPhrases =
+                                                                 {
+                                                                     "because", "reason", "so that",
+                                                                     "to ensure", "ensuring",
+                                                                     "to avoid", "avoiding",
+                                                                     "for efficient",
+                                                                     "verify", "for verification",
+                                                                     "otherwise", "just", "since",
+                                                                     "exactly", "why", "do not support",
+                                                                     "overwritten", "overridden", "to take care", "there are no",
+                                                                 };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
 

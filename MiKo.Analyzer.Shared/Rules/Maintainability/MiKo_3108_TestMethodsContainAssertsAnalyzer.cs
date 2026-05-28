@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (body != null)
                 {
-                    foreach (var statement in body.DescendantNodes<ExpressionStatementSyntax>())
+                    foreach (var statement in body.DescendantNodes<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement))
                     {
                         if (statement.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i, nestingLevel))
                         {
@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ContainsAssertionDirectly(MethodDeclarationSyntax syntax)
         {
-            var nodes = syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+            var nodes = (syntax.Body ?? (SyntaxNode)syntax.ExpressionBody).DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
 
             foreach (var node in nodes)
             {
