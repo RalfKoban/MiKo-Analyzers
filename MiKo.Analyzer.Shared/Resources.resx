@@ -2108,6 +2108,45 @@ Naming the field based on what it represents, rather than what it implies, makes
   <data name="MiKo_1533_Title" xml:space="preserve">
     <value>Do not prefix fields with words that express intent or expectation</value>
   </data>
+  <data name="MiKo_1534_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'have' to 'has'</value>
+  </data>
+  <data name="MiKo_1534_Description" xml:space="preserve">
+    <value>Local variables that are prefixed with 'have' are most likely indicators for boolean values. Such a prefix uses the wrong grammatical form - 'have' should be 'has' when used as a third-person singular indicator.
+Renaming the prefix from 'have' to 'has' makes the code grammatically correct and easier to read and understand.</value>
+  </data>
+  <data name="MiKo_1534_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1534_Title" xml:space="preserve">
+    <value>Do not prefix local variables with 'have'</value>
+  </data>
+  <data name="MiKo_1535_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'have' to 'has'</value>
+  </data>
+  <data name="MiKo_1535_Description" xml:space="preserve">
+    <value>Parameters that are prefixed with 'have' are most likely indicators for boolean values. Such a prefix uses the wrong grammatical form - 'have' should be 'has' when used as a third-person singular indicator.
+Renaming the prefix from 'have' to 'has' makes the code grammatically correct and easier to read and understand.</value>
+  </data>
+  <data name="MiKo_1535_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1535_Title" xml:space="preserve">
+    <value>Do not prefix parameters with 'have'</value>
+  </data>
+  <data name="MiKo_1536_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'have' to 'has'</value>
+  </data>
+  <data name="MiKo_1536_Description" xml:space="preserve">
+    <value>Fields that are prefixed with 'have' are most likely indicators for boolean values. Such a prefix uses the wrong grammatical form - 'have' should be 'has' when used as a third-person singular indicator.
+Renaming the prefix from 'have' to 'has' makes the code grammatically correct and easier to read and understand.</value>
+  </data>
+  <data name="MiKo_1536_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1536_Title" xml:space="preserve">
+    <value>Do not prefix fields with 'have'</value>
+  </data>
   <data name="MiKo_1537_CodeFixTitle" xml:space="preserve">
     <value>Remove 'Event' prefix from method name</value>
   </data>

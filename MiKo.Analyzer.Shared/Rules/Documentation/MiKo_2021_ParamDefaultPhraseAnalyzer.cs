@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
         {
-            if (parameter.RefKind is RefKind.Out)
+            if (parameter.IsOut())
             {
                 return false; // MiKo 2022
             }

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
-        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out && parameter.Type.IsCancellationToken();
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.IsOut() is false && parameter.Type.IsCancellationToken();
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => AnalyzePlainTextStartingPhrase(parameter, parameterComment, comment, Constants.Comments.CancellationTokenParameterPhrase);
     }
