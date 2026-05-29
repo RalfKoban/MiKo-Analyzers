@@ -6036,7 +6036,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add vowels to name to make it readable.
+        ///   Looks up a localized string similar to Add vowels to name &apos;{0}&apos; to make it readable.
         /// </summary>
         internal static string MiKo_1539_MessageFormat {
             get {

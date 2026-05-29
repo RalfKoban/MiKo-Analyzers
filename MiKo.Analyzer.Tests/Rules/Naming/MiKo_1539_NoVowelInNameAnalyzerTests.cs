@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1539_NoVowelInNameAnalyzerTests : CodeFixVerifier
     {
         private const string LowerCaseVowels = "aeiou";
-        private const string LowerCaseConstants = "bcdfghjklmnpqrstvwxyz";
+        private const string LowerCaseConstants = "bcdfghjklmnpqrstvwxz"; // we ignore 'Y' here intentionally, to avoid 'by' being reported as an issue
 
         private const string UpperCaseVowels = "AEIOU";
-        private const string UpperCaseConstants = "BCDFGHJKLMNPQRSTVWXYZ";
+        private const string UpperCaseConstants = "BCDFGHJKLMNPQRSTVWXZ"; // we ignore 'Y' here intentionally, to avoid 'BY' being reported as an issue
 
         [TestCaseSource(nameof(LowerCaseVowels))]
         [TestCaseSource(nameof(LowerCaseConstants))]
@@ -55,6 +55,34 @@ public class TestMe
         public void DoSomething()
         {
             var " + c1 + c2 + @" = 1;
+        }
+    }
+");
+
+        [TestCase("by")]
+        [TestCase("By")]
+        [TestCase("try")]
+        [TestCase("tcs")] // TaskCancellationSource
+        [TestCase("xml")]
+        [TestCase("Xml")]
+        [TestCase("XML")]
+        [TestCase("http")]
+        [TestCase("https")]
+        [TestCase("HTTP")]
+        [TestCase("HTTPS")]
+        [TestCase("tcp")]
+        [TestCase("TCP")]
+        [TestCase("html")]
+        [TestCase("Html")]
+        [TestCase("HTML")]
+        [TestCase("crc")]
+        [TestCase("CRC")]
+        public void No_issue_is_reported_for_(string name) => No_issue_is_reported_for(@"
+public class TestMe
+    {
+        public void DoSomething()
+        {
+            var " + name + @" = 1;
         }
     }
 ");
