@@ -13,18 +13,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly HashSet<string> AllowedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                                                                    {
-                                                                       Constants.LambdaIdentifiers.FallbackUnderscores2,
-                                                                       Constants.LambdaIdentifiers.FallbackUnderscores3,
-                                                                       Constants.LambdaIdentifiers.FallbackUnderscores4,
                                                                        "By",
-                                                                       "Try",
-                                                                       "XML",
+                                                                       "CRC",
+                                                                       "CSV",
                                                                        "HTML",
                                                                        "HTTP",
                                                                        "HTTPS",
-                                                                       "tcs", // TaskCancellationSource
-                                                                       "CRC",
                                                                        "TCP",
+                                                                       "tcs", // TaskCancellationSource
+                                                                       "Try",
+                                                                       "XML",
                                                                    };
 
         public MiKo_1539_NoVowelInNameAnalyzer() : base(Id)
@@ -40,9 +38,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string name)
         {
-            if (name.Length > 1 && name.AsSpan().IndexOfAny("AEIOUaeiou".AsSpan()) < 0)
+            var nameToInspect = name.AsSpan().WithoutNumberSuffix();
+
+            if (nameToInspect.Length <= 1)
             {
-                return AllowedNames.Contains(name) is false;
+                // we do not care for single letter names (such as for 'i' inside loops)
+                return false;
+            }
+
+            if (nameToInspect.IndexOfAny("AEIOUaeiou".AsSpan()) < 0)
+            {
+                return AllowedNames.Contains(nameToInspect.ToString()) is false;
             }
 
             return false;
