@@ -11,6 +11,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1539";
 
+        private static readonly HashSet<string> AllowedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                                                                   {
+                                                                       Constants.LambdaIdentifiers.FallbackUnderscores2,
+                                                                       Constants.LambdaIdentifiers.FallbackUnderscores3,
+                                                                       Constants.LambdaIdentifiers.FallbackUnderscores4,
+                                                                       "By",
+                                                                       "Try",
+                                                                       "XML",
+                                                                       "HTML",
+                                                                       "HTTP",
+                                                                       "HTTPS",
+                                                                       "tcs", // TaskCancellationSource
+                                                                       "CRC",
+                                                                       "TCP",
+                                                                   };
+
         public MiKo_1539_NoVowelInNameAnalyzer() : base(Id)
         {
         }
@@ -26,16 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (name.Length > 1 && name.AsSpan().IndexOfAny("AEIOUaeiou".AsSpan()) < 0)
             {
-                switch (name)
-                {
-                    case Constants.LambdaIdentifiers.FallbackUnderscores2:
-                    case Constants.LambdaIdentifiers.FallbackUnderscores3:
-                    case Constants.LambdaIdentifiers.FallbackUnderscores4:
-                        return false;
-
-                    default:
-                        return true;
-                }
+                return AllowedNames.Contains(name) is false;
             }
 
             return false;

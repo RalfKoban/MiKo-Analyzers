@@ -2175,7 +2175,7 @@ Renaming the prefix from 'have' to 'has' makes the code grammatically correct an
     <value>Names consisting entirely of consonants without any vowels are hard to read and understand. For example, a name like 'tsprg' gives no clear indication of its purpose or meaning. Using descriptive names that include vowels improves code readability.</value>
   </data>
   <data name="MiKo_1539_MessageFormat" xml:space="preserve">
-    <value>Add vowels to name to make it readable</value>
+    <value>Add vowels to name '{0}' to make it readable</value>
   </data>
   <data name="MiKo_1539_Title" xml:space="preserve">
     <value>Names shall contain vowels</value>
