@@ -15410,6 +15410,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A method parameter typed as `IEnumerable&lt;T&gt;` that is immediately converted via `.ToList()` signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
+        ///Using `IReadOnlyList&lt;T&gt;` as the parameter type instead makes the intent explicit..
+        /// </summary>
+        internal static string MiKo_3235_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3235_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change &apos;{0}&apos; type to &apos;IReadOnlyList&apos;.
+        /// </summary>
+        internal static string MiKo_3235_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3235_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not call &apos;ToList&apos; on an &apos;IEnumerable&apos; parameter.
+        /// </summary>
+        internal static string MiKo_3235_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3235_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
