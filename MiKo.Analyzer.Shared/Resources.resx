@@ -5386,6 +5386,16 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
   <data name="MiKo_3234_Title" xml:space="preserve">
     <value>Prefer pattern matching over boolean Equals checks</value>
   </data>
+  <data name="MiKo_3235_Description" xml:space="preserve">
+    <value>A method parameter typed as `IEnumerable&lt;T&gt;` that is immediately converted via `.ToList()` signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
+Using `IReadOnlyList&lt;T&gt;` as the parameter type instead makes the intent explicit.</value>
+  </data>
+  <data name="MiKo_3235_MessageFormat" xml:space="preserve">
+    <value>Change '{0}' type to 'IReadOnlyList'</value>
+  </data>
+  <data name="MiKo_3235_Title" xml:space="preserve">
+    <value>Do not call 'ToList' on an 'IEnumerable' parameter</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
