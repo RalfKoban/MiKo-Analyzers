@@ -25,18 +25,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodDeclaration = symbol.GetSyntax();
 
             var invocations = methodDeclaration.DescendantNodes<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression);
-            int invocationsCount = invocations.Count;
+            var invocationsCount = invocations.Count;
 
             if (invocationsCount > 0)
             {
-                var parameterNames = symbol.Parameters.Where(IsIEnumerable).ToDictionary(_ => _.Name);
+                Dictionary<string, IParameterSymbol> parameterNames = null;
 
                 for (var index = 0; index < invocationsCount; index++)
                 {
-                    var invocation = invocations[index];
-
-                    if (invocation.Expression is MemberAccessExpressionSyntax m && m.GetName() is nameof(Enumerable.ToList))
+                    if (invocations[index].Expression is MemberAccessExpressionSyntax m && IsCall(m))
                     {
+                        if (parameterNames is null)
+                        {
+                            parameterNames = symbol.Parameters.Where(IsIEnumerable).ToDictionary(_ => _.Name);
+                        }
+
                         if (parameterNames.TryGetValue(m.GetIdentifierName(), out var parameter))
                         {
                             var parameterSyntax = parameter.GetSyntax();
@@ -48,6 +51,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return Array.Empty<Diagnostic>();
+        }
+
+        private static bool IsCall(MemberAccessExpressionSyntax syntax)
+        {
+            var name = syntax.GetName();
+
+            return name is nameof(Enumerable.ToList) || name is nameof(Enumerable.ToArray);
         }
 
         private static bool IsIEnumerable(IParameterSymbol parameter) => parameter.Type.OriginalDefinition.SpecialType is SpecialType.System_Collections_Generic_IEnumerable_T;

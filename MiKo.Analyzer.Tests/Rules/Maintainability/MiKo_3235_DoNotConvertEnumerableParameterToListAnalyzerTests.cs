@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3235_DoNotConvertEnumerableParameterToListAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Calls = ["ToList", "ToArray"];
+
         [Test]
         public void No_issue_is_reported_for_methods_with_no_IEnumerable_parameter() => No_issue_is_reported_for(@"
 using System;
@@ -44,7 +46,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_methods_with_IEnumerable_parameter_and_unrelated_ToList_call() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_methods_with_IEnumerable_parameter_and_unrelated_call_([ValueSource(nameof(Calls))] string call) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,14 +67,14 @@ namespace Bla
                 }
             }
 
-            return results.ToList();
+            return results." + call + @"();
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_methods_with_IEnumerable_parameter_and_ToList_call_on_it() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_methods_with_IEnumerable_parameter_and_call_([ValueSource(nameof(Calls))] string call) => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +85,7 @@ namespace Bla
     {
         public void DoSomething(IEnumerable<int> values)
         {
-            var valuesList = values.ToList();
+            var valuesList = values." + call + @"();
 
             foreach (var value in valuesList)
             {
