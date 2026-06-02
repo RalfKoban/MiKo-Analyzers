@@ -948,7 +948,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             var searchForPostfixes = true;
 
-            // only inspect prefixes if text span starts lowercase
             if (textSpan.Length > 0)
             {
                 Pair[] prefixes = Array.Empty<Pair>();
