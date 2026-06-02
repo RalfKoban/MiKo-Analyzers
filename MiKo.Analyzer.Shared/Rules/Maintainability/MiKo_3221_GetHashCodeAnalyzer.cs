@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -28,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.GetSyntax<MethodDeclarationSyntax>() is MethodDeclarationSyntax method)
             {
                 var expressionsCount = 0;
-                var expressions = method.DescendantNodes<MemberAccessExpressionSyntax>();
+                var expressions = method.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
 
                 foreach (var expression in expressions)
                 {
