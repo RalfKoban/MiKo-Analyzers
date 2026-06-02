@@ -27,6 +27,10 @@ public class TestMe
 }
 ");
 
+        [TestCase("byte[] crc")]
+        [TestCase("byte[] myCRC")]
+        [TestCase("byte[] hash")]
+        [TestCase("byte[] myHash")]
         [TestCase("IGrouping<int, string> group")]
         [TestCase("IQueryable query")]
         [TestCase("IQueryable<int> query")]
