@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
@@ -12,7 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1401";
 
         private static readonly HashSet<string> TechnicalNamespaces = CreateTechnicalNamespaces();
-        private static readonly HashSet<string> AlreadyAcceptedNamespaces = new HashSet<string>();
+
+        private static readonly ConcurrentDictionary<string, byte> AlreadyAcceptedNamespaces = new ConcurrentDictionary<string, byte>(StringComparer.Ordinal); // we use 'byte' as the value type for minimal overhead (as we run on older .NET runtimes)
 
         public MiKo_1401_TechnicalNamespacesAnalyzer() : base(Id)
         {
@@ -27,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var namespaceName = name.ValueText;
 
                 // as namespaces are highly repetitive across the files of a solution, we first check if we already inspected such name (assumed, there are fewer namespace names than the technical ones)
-                if (AlreadyAcceptedNamespaces.Contains(namespaceName))
+                if (AlreadyAcceptedNamespaces.ContainsKey(namespaceName))
                 {
                     // seems we found the name ok, so let's ignore it
                     continue;
@@ -44,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
                 else
                 {
-                    AlreadyAcceptedNamespaces.Add(namespaceName);
+                    AlreadyAcceptedNamespaces.TryAdd(namespaceName, 0);
                 }
             }
 
