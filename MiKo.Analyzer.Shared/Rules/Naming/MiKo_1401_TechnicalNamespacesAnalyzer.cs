@@ -12,6 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1401";
 
         private static readonly HashSet<string> TechnicalNamespaces = CreateTechnicalNamespaces();
+        private static readonly HashSet<string> AlreadyAcceptedNamespaces = new HashSet<string>();
 
         public MiKo_1401_TechnicalNamespacesAnalyzer() : base(Id)
         {
@@ -23,7 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var name in namespaceNames)
             {
-                if (TechnicalNamespaces.Contains(name.ValueText))
+                var namespaceName = name.ValueText;
+
+                // as namespaces are highly repetitive across the files of a solution, we first check if we already inspected such name (assumed, there are fewer namespace names than the technical ones)
+                if (AlreadyAcceptedNamespaces.Contains(namespaceName))
+                {
+                    // seems we found the name ok, so let's ignore it
+                    continue;
+                }
+
+                if (TechnicalNamespaces.Contains(namespaceName))
                 {
                     if (issues is null)
                     {
@@ -31,6 +41,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     }
 
                     issues.Add(Issue(name));
+                }
+                else
+                {
+                    AlreadyAcceptedNamespaces.Add(namespaceName);
                 }
             }
 
