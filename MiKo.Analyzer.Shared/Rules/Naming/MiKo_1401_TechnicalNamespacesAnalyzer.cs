@@ -100,19 +100,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Wrapper", "Wrappers",
                             };
 
-            var result = new HashSet<string>
-                             {
-                                 "Shared",
-                             };
+            var results = new HashSet<string>
+                              {
+                                  "Shared",
+                                  "Technical",
+                                  "TechnicalDesign",
+                              };
 
             foreach (var name in names)
             {
-                result.Add("Core" + name);
-                result.Add("Shared" + name);
-                result.Add(name);
+                results.Add(name);
+
+                results.Add(name + "Core");
+                results.Add(name + "Shared");
+                results.Add(name + "Design");
+                results.Add(name + "Technical");
+                results.Add(name + "TechnicalDesign");
+
+                results.Add("Core" + name);
+                results.Add("Shared" + name);
+                results.Add("Technical" + name);
+                results.Add("TechnicalDesign" + name);
+                results.Add("Technical" + name + "Design");
             }
 
-            return result;
+            return results;
         }
 
 //// ncrunch: rdi default
