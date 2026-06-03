@@ -534,7 +534,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AllowedParts =
                                                         {
-                                                            // TODO RKN: Remove me "Async",
+                                                            "Dtm",
+                                                            "DTM",
                                                             "Enumerable",
                                                             "Enumeration",
                                                             "Enum", // must be after the others so that those get properly replaced
