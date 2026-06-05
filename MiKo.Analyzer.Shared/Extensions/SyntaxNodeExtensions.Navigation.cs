@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers
 //// ncrunch: no coverage start
             if (value.IsKind(kind))
             {
-                results = new List<T> { (T)value };
+                results = new List<T>(8) { (T)value }; // avoid resizing most times
             }
 
             foreach (var node in value.DescendantNodes())

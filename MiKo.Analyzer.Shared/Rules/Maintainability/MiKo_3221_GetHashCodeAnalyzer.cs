@@ -28,9 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.GetSyntax<MethodDeclarationSyntax>() is MethodDeclarationSyntax method)
             {
                 var expressionsCount = 0;
-                var expressions = method.DescendantNodes<MemberAccessExpressionSyntax>();
 
-                foreach (var expression in expressions)
+                foreach (var expression in method.DescendantNodes<MemberAccessExpressionSyntax>())
                 {
                     switch (expression.GetName())
                     {
