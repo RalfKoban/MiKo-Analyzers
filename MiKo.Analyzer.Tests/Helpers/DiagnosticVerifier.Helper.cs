@@ -142,7 +142,7 @@ namespace TestHelper
             }
 
             var documentsLength = documents.Length;
-            var diagnostics = new List<Diagnostic>(1);
+            List<Diagnostic> diagnostics = null;
 
             foreach (var project in projects)
             {
@@ -154,16 +154,17 @@ namespace TestHelper
                 var compilation = project.GetCompilationAsync().Result;
                 var compilationWithAnalyzers = compilation.WithAnalyzers(analyzers);
                 var issues = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
-                var issuesLength = issues.Length;
 
                 if (profileAnalysis)
                 {
                     JetBrains.Profiler.Api.MeasureProfiler.SaveData();
                 }
 
-                if (issuesLength > 0)
+                if (issues.Length > 0)
                 {
-                    for (var index = 0; index < issuesLength; index++)
+                    diagnostics ??= new List<Diagnostic>(issues.Length);
+
+                    for (var index = 0; index < issues.Length; index++)
                     {
                         var issue = issues[index];
 
@@ -175,8 +176,7 @@ namespace TestHelper
                         {
                             for (var documentIndex = 0; documentIndex < documentsLength; documentIndex++)
                             {
-                                var document = documents[documentIndex];
-                                var tree = document.GetSyntaxTreeAsync().Result;
+                                var tree = documents[documentIndex].GetSyntaxTreeAsync().Result;
 
                                 if (tree == issue.Location.SourceTree)
                                 {
@@ -190,7 +190,14 @@ namespace TestHelper
                 }
             }
 
-            return SortDiagnostics(diagnostics);
+            if (diagnostics is null)
+            {
+                return [];
+            }
+
+            return diagnostics.Count == 1
+                   ? [diagnostics[0]]
+                   : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
         /// <summary>
@@ -232,17 +239,6 @@ namespace TestHelper
         {
             return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
         }
-
-        /// <summary>
-        /// Sort diagnostics by location in source document.
-        /// </summary>
-        /// <param name="diagnostics">
-        /// The list of Diagnostics to be sorted.
-        /// </param>
-        /// <returns>
-        /// An array of <see cref="Diagnostic"/>s in order of <see cref="Diagnostic.Location"/>.
-        /// </returns>
-        private static Diagnostic[] SortDiagnostics(List<Diagnostic> diagnostics) => diagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
 
         /// <summary>
         /// Given an array of strings as sources and a language, turn them into a project and return the documents.
