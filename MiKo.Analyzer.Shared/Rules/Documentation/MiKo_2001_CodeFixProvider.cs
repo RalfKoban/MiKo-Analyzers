@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   "will be ", "that will be ", "which will be ",
                                   "would be ", "that would be ", "which would be ",
                               };
-            var verbs = new[] { "fired", "raised", "caused", "triggerd", "triggered", "occurred", "occured", "notifying", "notfying", "informing" };
+            var verbs = new[] { "fired", "raised", "caused", "triggerd", "triggered", "occurred", "occured", "notifying", "notfying", "informing", "invoked", "invoking", "sent", "sending" };
 
             var results = new HashSet<string>();
 
@@ -73,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var end = string.Concat(adverb, verb);
 
+                    results.Add(end);
                     results.Add(end.ToUpperCaseAt(0));
 
                     foreach (var start in starts)
@@ -92,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    "will", "that will", "which will",
                                    "would", "that would", "which would",
                                };
-            var verbsInfinite = new[] { "fire", "raise", "cause", "trigger", "occur", "notify", "notfy", "inform", };
+            var verbsInfinite = new[] { "fire", "raise", "cause", "trigger", "occur", "notify", "notfy", "inform", "invoke", "send" };
 
             foreach (var start in starts)
             {
@@ -107,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var verbsPresent = new[] { "fires", "raises", "causes", "triggers", "occurs", "notifies", "notfies", "informs" };
+            var verbsPresent = new[] { "fires", "raises", "causes", "triggers", "occurs", "notifies", "notfies", "informs", "invokes", "sends" };
 
             foreach (var start in starts)
             {
@@ -148,6 +149,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "triggering ", Constants.Comments.EventSummaryStartingPhrase);
 
             yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "invoked ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "send ", Constants.Comments.EventSummaryStartingPhrase);
 
             // special cases
             yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "occur ", Constants.Comments.EventSummaryStartingPhrase);
@@ -184,9 +186,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
+            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification  by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
             yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification sent by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
-            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification triggered by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when ");
-            yield return new Pair(Constants.Comments.EventSummaryStartingPhrase + "notification triggerd by a DTM that ", Constants.Comments.EventSummaryStartingPhrase + "when "); // typo
         }
 //// ncrunch: rdi default
     }
