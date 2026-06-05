@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("bk", "back"),
                                                       new Pair("bmp", "bitmap"),
                                                       new Pair("btn", "button"),
-                                                      new Pair("calc", "calculate"),
+                                                      new Pair("calc", "calculation"),
                                                       new Pair("calib", "calibration"),
                                                       new Pair("cb", "checkBox"),
                                                       new Pair("cert", "certificate"),
@@ -190,6 +190,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("pwd", "password"),
                                                       new Pair("qty", "quantity"),
                                                       new Pair("rec", "record"),
+                                                      new Pair("recalc", "recalculation"),
+                                                      new Pair("recalib", "recalibration"),
                                                       new Pair("rect", "rectangle"),
                                                       new Pair("ref", "reference"),
                                                       new Pair("refs", "references"),
@@ -202,6 +204,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("resp", "response"),
                                                       new Pair("rest", "restore"),
                                                       new Pair("rgn", "region"),
+                                                      new Pair("sec", "security"),
                                                       new Pair("sem", "semantic"),
                                                       new Pair("sep", "separator"),
                                                       new Pair("sepa", "separator"),
@@ -428,6 +431,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Pwd", "Password"),
                                                           new Pair("Qty", "Quantity"),
                                                           new Pair("Rec", "Record"),
+                                                          new Pair("Recalc", "Recalculation"),
+                                                          new Pair("Recalib", "Recalibration"),
                                                           new Pair("Rect", "Rectangle"),
                                                           new Pair("Ref", "Reference"),
                                                           new Pair("Refs", "References"),
@@ -440,6 +445,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Resp", "Response"),
                                                           new Pair("Rest", "Restore"),
                                                           new Pair("Rgn", "Region"),
+                                                          new Pair("Sec", "Security"),
                                                           new Pair("Sel", "Selection"),
                                                           new Pair("Sem", "Semantic"),
                                                           new Pair("Sep", "Separator"),
@@ -481,6 +487,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Vol", "Volume"),
                                                       };
 
+        private static readonly Pair[] UpperCasePrefixes =
+                                                           {
+                                                               new Pair("Auth", "Authenticate"),
+                                                               new Pair("Calc", "Calculate"),
+                                                               new Pair("Calib", "Calibrate"),
+                                                               new Pair("Recalc", "Recalculate"),
+                                                               new Pair("Recalib", "Recalibrate"),
+                                                               new Pair("Reloc", "Relocate"),
+                                                               new Pair("Sync", "Synchronize"),
+                                                           };
+
         private static readonly Pair[] MidTerms = OnlyMidTerms.Concat(Prefixes).ToArray();
 
         private static readonly Pair[] OnlyPostFixes =
@@ -517,7 +534,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AllowedParts =
                                                         {
-                                                            // TODO RKN: Remove me "Async",
+                                                            "Dtm",
+                                                            "DTM",
                                                             "Enumerable",
                                                             "Enumeration",
                                                             "Enum", // must be after the others so that those get properly replaced
@@ -588,7 +606,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly Pair[] Cleanups =
                                                   {
                                                       new Pair("agerag", "ag"), // 'man' within 'manager' / 'manage' / 'managing'
-                                                      new Pair("alculateulat", "alculat"), // 'calc' within 'calculate' / 'calculation'
+                                                      new Pair("alculationulate", "alculate"), // 'calc' within 'calculate'
+                                                      new Pair("alculationulat", "alculat"), // 'calc' within 'calculation'
                                                       new Pair("alibrationrat", "alibrat"), // 'calib' within 'calibrate' / 'calibration'
                                                       new Pair("alueue", "alue"), // 'val' within 'value'
                                                       new Pair("arametereter", "arameter"), // 'param' within 'parameter'
@@ -607,6 +626,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ecordtangl", "ectangl"), // 'rec' within 'rectangle'
                                                       new Pair("ecryptement", "ecrement"), // 'decr' within 'decrement'
                                                       new Pair("ecryptypt", "ecrypt"), // 'decr' within 'decrypt'
+                                                      new Pair("ecurityond", "econd"), // 'sec' within 'second'/'seconds'
+                                                      new Pair("ecurityur", "ecur"), // 'sec' within 'secure'/'security'
                                                       new Pair("ectangleangl", "ectangl"), // 'rect' within 'rectangle'
                                                       new Pair("ectect", "ect"), // 'obj' within 'object'
                                                       new Pair("eferencea", "efa"), // 'ref' within 'refactor'
@@ -928,12 +949,22 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             var searchForPostfixes = true;
 
-            // only inspect prefixes if text span starts lowercase
-            if (textSpan.Length > 0 && textSpan[0].IsLowerCaseLetter())
+            if (textSpan.Length > 0)
             {
-                for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
+                Pair[] prefixes = Array.Empty<Pair>();
+
+                if (textSpan[0].IsLowerCaseLetter())
                 {
-                    var pair = Prefixes[index];
+                    prefixes = Prefixes;
+                }
+                else if (textSpan[0].IsUpperCaseLetter())
+                {
+                    prefixes = UpperCasePrefixes;
+                }
+
+                for (int index = 0, prefixesLength = prefixes.Length; index < prefixesLength; index++)
+                {
+                    var pair = prefixes[index];
 
                     var keySpan = pair.Key.AsSpan();
 
