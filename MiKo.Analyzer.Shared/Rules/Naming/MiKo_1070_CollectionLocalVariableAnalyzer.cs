@@ -52,6 +52,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
+                if (IsChecksum(originalName, type))
+                {
+                    continue;
+                }
+
                 if (IsGrouping(originalName, type))
                 {
                     continue;
@@ -109,6 +114,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private static bool IsHash(string name, ITypeSymbol type) => name.EndsWith("Hash", StringComparison.OrdinalIgnoreCase) && type?.IsByteArray() is true;
+
+        private static bool IsChecksum(string name, ITypeSymbol type) => name.EndsWith("CRC", StringComparison.OrdinalIgnoreCase) && type?.IsByteArray() is true;
 
         private static bool IsGrouping(string name, ITypeSymbol type)
         {

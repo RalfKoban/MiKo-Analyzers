@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                 .ToHashSet(File.ReadAllText)
                                 .ToArray();
 
-            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray(), true);
+            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, [.. AllAnalyzers], true);
 
             Assert.That(results.Length, Is.Zero);
 //// ncrunch: no coverage end

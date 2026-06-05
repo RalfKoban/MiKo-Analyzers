@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var nodes = new List<SyntaxNode>();
 
-                foreach (var expression in method.DescendantNodes<MemberAccessExpressionSyntax>())
+                foreach (var expression in method.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
                 {
                     if (expression.Name.GetName() == nameof(GetHashCode))
                     {

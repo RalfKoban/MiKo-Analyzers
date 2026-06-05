@@ -86,9 +86,27 @@ public class TestMe
 }
 ");
 
+        [TestCase("byte[] crc")]
+        [TestCase("byte[] myCRC")]
+        [TestCase("byte[] hash")]
+        [TestCase("byte[] myHash")]
         [TestCase("object item")]
         [TestCase("string value")]
         [TestCase("string myValue")]
+        public void No_issue_is_reported_for_variable_(string variable) => No_issue_is_reported_for(@"
+using System;
+using System.Xml;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        " + variable + @" = null;
+    }
+}
+");
+
         [TestCase("XAttribute attribute")]
         [TestCase("XAttribute myAttribute")]
         [TestCase("XDocument document")]
@@ -105,7 +123,7 @@ public class TestMe
         [TestCase("XmlNode node")]
         [TestCase("XNode myNode")]
         [TestCase("XNode node")]
-        public void No_issue_is_reported_for_variable_(string variable) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_variable_(string variable) => No_issue_is_reported_for(@"
 using System;
 using System.Xml;
 using System.Xml.Linq;
@@ -114,7 +132,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        string " + variable + @" = null;
+        " + variable + @" = null;
     }
 }
 ");
