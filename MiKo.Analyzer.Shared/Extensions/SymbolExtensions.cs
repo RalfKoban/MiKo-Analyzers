@@ -1956,7 +1956,15 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type is a <see cref="byte"/> array; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
+        internal static bool IsByteArray(this ITypeSymbol value)
+        {
+            if (value is IArrayTypeSymbol array)
+            {
+                return array.ElementType.IsByte();
+            }
+
+            return value.SpecialType is SpecialType.None && value.Name is "ByteArray";
+        }
 
         /// <summary>
         /// Determines whether a type is a <see cref="CancellationToken"/>.
@@ -2010,7 +2018,9 @@ namespace MiKoSolutions.Analyzers
                 return symbolName.EndsWithAny(Constants.Markers.Collections);
             }
 
-            if (symbolName.AsSpan().WithoutNumberSuffix().EndsWithAny(Constants.Markers.AllowedCollectionEndings))
+            var nameWithoutNumberSuffix = symbolName.AsSpan().WithoutNumberSuffix();
+
+            if (nameWithoutNumberSuffix.EndsWithAny(Constants.Markers.AllowedCollectionEndings))
             {
                 return false;
             }
@@ -2038,6 +2048,19 @@ namespace MiKoSolutions.Analyzers
             if (value.IsICollectionView())
             {
                 return false;
+            }
+
+            if (value.IsByteArray())
+            {
+                if (nameWithoutNumberSuffix.EndsWith("Hash", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                if (nameWithoutNumberSuffix.EndsWith("CRC", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
             }
 
             return value.IsDirectEnumerable();

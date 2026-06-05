@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("bckgrnd", "background"),
                                                       new("bmp", "bitmap"),
                                                       new("btn", "button"),
-                                                      new("calc", "calculate"),
+                                                      new("calc", "calculation"),
                                                       new("calib", "calibration"),
                                                       new("cb", "checkBox"),
                                                       new("cert", "certificate"),
@@ -186,6 +186,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("pwd", "password"),
                                                       new("qty", "quantity"),
                                                       new("rec", "record"),
+                                                      new("recalc", "recalculation"),
+                                                      new("recalib", "recalibration"),
                                                       new("rect", "rectangle"),
                                                       new("ref", "reference"),
                                                       new("refs", "references"),
@@ -198,6 +200,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("resp", "response"),
                                                       new("rest", "restore"),
                                                       new("rgn", "region"),
+                                                      new("sec", "security"),
                                                       new("sem", "semantic"),
                                                       new("sep", "separator"),
                                                       new("sepa", "separator"),
@@ -237,6 +240,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("vms", "viewModels"),
                                                       new("vol", "volume"),
                                                   ];
+
+        private static readonly Pair[] UpperCasePrefixes =
+        [
+            new("Auth", "Authenticate"),
+            new("Calc", "Calculate"),
+            new("Calib", "Calibrate"),
+            new("Recalc", "Recalculate"),
+            new("Recalib", "Recalibrate"),
+            new("Reloc", "Relocate"),
+            new("Sync", "Synchronize"),
+        ];
 
         private static readonly Pair[] Postfixes =
                                                    [
@@ -424,6 +438,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new("Pwd", "Password"),
                                                           new("Qty", "Quantity"),
                                                           new("Rec", "Record"),
+                                                          new("Recalc", "Recalculation"),
+                                                          new("Recalib", "Recalibration"),
                                                           new("Rect", "Rectangle"),
                                                           new("Ref", "Reference"),
                                                           new("Refs", "References"),
@@ -436,6 +452,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new("Resp", "Response"),
                                                           new("Rest", "Restore"),
                                                           new("Rgn", "Region"),
+                                                          new("Sec", "Security"),
                                                           new("Sel", "Selection"),
                                                           new("Sem", "Semantic"),
                                                           new("Sep", "Separator"),
@@ -480,9 +497,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot" or "Seq"))
                                                                .ConcatenatedWith(new Pair("Mod", "Modified"), new Pair("Prot", "Protected"),  new Pair("Seq", "Sequential"))];
 
-        private static readonly Pair[] StandalonePrefixes = [.. Prefixes.Where(_ => _.Key is not ("obj" or "args"))];
+        private static readonly Pair[] StandalonePrefixes = [.. Prefixes.Concat(UpperCasePrefixes).Where(_ => _.Key is not ("obj" or "args"))];
 
-        private static readonly Pair[] StandalonePostfixes = [.. Postfixes.Where(_ => _.Key is not ("Obj" or "Args"))];
+        private static readonly Pair[] StandalonePostfixes = [.. Postfixes.Where(_ => _.Key is not ("Obj" or "Args")).Where(_ => UpperCasePrefixes.Exists(__ => _.Key == __.Key) is false)];
 
         [Test]
         public static void Finds_prefix_abbreviation_in_([ValueSource(nameof(Prefixes))] Pair prefix)
@@ -504,6 +521,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         [Test]
         public static void Finds_prefix_abbreviations_and_fixes_them_in_([ValueSource(nameof(Prefixes))] Pair prefix)
+        {
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(prefix.Key + "SomeName");
+
+            Assert.That(replacement, Is.EqualTo(prefix.Value + "SomeName"));
+        }
+
+        [Test]
+        public static void Finds_upper_case_prefix_abbreviations_and_fixes_them_in_([ValueSource(nameof(UpperCasePrefixes))] Pair prefix)
         {
             var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(prefix.Key + "SomeName");
 

@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 558 rules that are currently provided by the analyzer.
+The following tables list all the 560 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -203,6 +203,7 @@ The following tables list all the 558 rules that are currently provided by the a
 |[MiKo_1536](/Documentation/MiKo_1536.md)|Do not prefix fields with 'have'|&#x2713;|&#x2713;|
 |[MiKo_1537](/Documentation/MiKo_1537.md)|Do not prefix methods with 'Event'|&#x2713;|&#x2713;|
 |[MiKo_1538](/Documentation/MiKo_1538.md)|Do not prefix events with 'On'|&#x2713;|&#x2713;|
+|[MiKo_1539](/Documentation/MiKo_1539.md)|Names shall contain vowels|&#x2713;|\-|
 
 ### Documentation
 
@@ -492,6 +493,7 @@ The following tables list all the 558 rules that are currently provided by the a
 |[MiKo_3232](/Documentation/MiKo_3232.md)|Use null checks instead of empty property pattern|&#x2713;|\-|
 |[MiKo_3233](/Documentation/MiKo_3233.md)|Do not use var patterns for null checks|&#x2713;|\-|
 |[MiKo_3234](/Documentation/MiKo_3234.md)|Prefer pattern matching over boolean Equals checks|&#x2713;|\-|
+|[MiKo_3235](/Documentation/MiKo_3235.md)|Do not call 'ToList' on an 'IEnumerable' parameter|&#x2713;|\-|
 |[MiKo_3301](/Documentation/MiKo_3301.md)|Use lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |[MiKo_3302](/Documentation/MiKo_3302.md)|Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |[MiKo_3401](/Documentation/MiKo_3401.md)|Keep namespace hierarchies from becoming too deep|&#x2713;|\-|

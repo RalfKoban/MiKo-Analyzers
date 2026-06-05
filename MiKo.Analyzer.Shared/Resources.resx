@@ -2171,6 +2171,15 @@ Renaming the prefix from 'have' to 'has' makes the code grammatically correct an
   <data name="MiKo_1538_Title" xml:space="preserve">
     <value>Do not prefix events with 'On'</value>
   </data>
+  <data name="MiKo_1539_Description" xml:space="preserve">
+    <value>Names consisting entirely of consonants without any vowels are hard to read and understand. For example, a name like 'tsprg' gives no clear indication of its purpose or meaning. Using descriptive names that include vowels improves code readability.</value>
+  </data>
+  <data name="MiKo_1539_MessageFormat" xml:space="preserve">
+    <value>Add vowels to name '{0}' to make it readable</value>
+  </data>
+  <data name="MiKo_1539_Title" xml:space="preserve">
+    <value>Names shall contain vowels</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
@@ -5376,6 +5385,16 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
   </data>
   <data name="MiKo_3234_Title" xml:space="preserve">
     <value>Prefer pattern matching over boolean Equals checks</value>
+  </data>
+  <data name="MiKo_3235_Description" xml:space="preserve">
+    <value>A method parameter typed as `IEnumerable&lt;T&gt;` that is immediately converted via `.ToList()` signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
+Using `IReadOnlyList&lt;T&gt;` as the parameter type instead makes the intent explicit.</value>
+  </data>
+  <data name="MiKo_3235_MessageFormat" xml:space="preserve">
+    <value>Change '{0}' type to 'IReadOnlyList'</value>
+  </data>
+  <data name="MiKo_3235_Title" xml:space="preserve">
+    <value>Do not call 'ToList' on an 'IEnumerable' parameter</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
