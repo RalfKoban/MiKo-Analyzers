@@ -442,11 +442,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var result = StartingPhrasesCache.GetOrAdd(
                                                        (type, fullyQualifiedType, text, phrases),
-                                                       tuple => Enumerable.Empty<string>()
-                                                                          .Concat(tuple.Item4.Select(_ => _.FormatWith(tuple.Item1, tuple.Item3)).Take(1)) // for the phrases to show to the user
-                                                                          .Concat(tuple.Item4.Select(_ => _.FormatWith(tuple.Item2, tuple.Item3))) // for the real check
-                                                                          .Distinct()
-                                                                          .ToArray());
+                                                       tuple => Array.Empty<string>()
+                                                                     .Concat(tuple.Item4.Select(_ => _.FormatWith(tuple.Item1, tuple.Item3)).Take(1)) // for the phrases to show to the user
+                                                                     .Concat(tuple.Item4.Select(_ => _.FormatWith(tuple.Item2, tuple.Item3))) // for the real check
+                                                                     .Distinct()
+                                                                     .ToArray());
 
                 return result;
             }

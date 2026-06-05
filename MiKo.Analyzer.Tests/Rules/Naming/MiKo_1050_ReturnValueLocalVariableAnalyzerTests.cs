@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "retList",
                                                           "retMock",
                                                           "retMockVm",
+                                                          "rets",
                                                           "returnCommunicationChannel",
                                                           "returned",
                                                           "returningList",
@@ -44,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "retVal_5",
                                                           "retVal3",
                                                           "retValid",
+                                                          "retvals",
                                                           "retVals",
                                                       ];
 

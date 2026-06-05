@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Linq.Expressions;
@@ -131,7 +132,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in ReadOnlySpan<Document> documents, in bool profileAnalysis)
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(in ImmutableArray<DiagnosticAnalyzer> analyzers, in ReadOnlySpan<Document> documents, in bool profileAnalysis)
         {
             var projects = new HashSet<Project>();
 
@@ -141,7 +142,7 @@ namespace TestHelper
             }
 
             var documentsLength = documents.Length;
-            var diagnostics = new List<Diagnostic>();
+            List<Diagnostic> diagnostics = null;
 
             foreach (var project in projects)
             {
@@ -151,35 +152,37 @@ namespace TestHelper
                 }
 
                 var compilation = project.GetCompilationAsync().Result;
-                var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
-                var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
-                var diagsLength = diags.Length;
+                var compilationWithAnalyzers = compilation.WithAnalyzers(analyzers);
+                var issues = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
 
                 if (profileAnalysis)
                 {
                     JetBrains.Profiler.Api.MeasureProfiler.SaveData();
                 }
 
-                if (diagsLength > 0)
+                if (issues.Length > 0)
                 {
-                    for (var index = 0; index < diagsLength; index++)
-                    {
-                        var diag = diags[index];
+                    diagnostics ??= new List<Diagnostic>(issues.Length);
 
-                        if (diag.Location == Location.None || diag.Location.IsInMetadata)
+                    for (var index = 0; index < issues.Length; index++)
+                    {
+                        var issue = issues[index];
+
+                        if (issue.Location == Location.None || issue.Location.IsInMetadata)
                         {
-                            diagnostics.Add(diag);
+                            diagnostics.Add(issue);
                         }
                         else
                         {
                             for (var documentIndex = 0; documentIndex < documentsLength; documentIndex++)
                             {
-                                var document = documents[documentIndex];
-                                var tree = document.GetSyntaxTreeAsync().Result;
+                                var tree = documents[documentIndex].GetSyntaxTreeAsync().Result;
 
-                                if (tree == diag.Location.SourceTree)
+                                if (tree == issue.Location.SourceTree)
                                 {
-                                    diagnostics.Add(diag);
+                                    diagnostics.Add(issue);
+
+                                    break;
                                 }
                             }
                         }
@@ -187,7 +190,14 @@ namespace TestHelper
                 }
             }
 
-            return SortDiagnostics(diagnostics);
+            if (diagnostics is null)
+            {
+                return [];
+            }
+
+            return diagnostics.Count == 1
+                   ? [diagnostics[0]]
+                   : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
         /// <summary>
@@ -225,28 +235,9 @@ namespace TestHelper
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
+        private static Diagnostic[] GetSortedDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ImmutableArray<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
         {
             return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
-        }
-
-        /// <summary>
-        /// Sort diagnostics by location in source document.
-        /// </summary>
-        /// <param name="diagnostics">
-        /// The list of Diagnostics to be sorted.
-        /// </param>
-        /// <returns>
-        /// An array of <see cref="Diagnostic"/>s in order of <see cref="Diagnostic.Location"/>.
-        /// </returns>
-        private static Diagnostic[] SortDiagnostics(List<Diagnostic> diagnostics)
-        {
-            if (diagnostics.Count is 0)
-            {
-                return [];
-            }
-
-            return [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
         /// <summary>

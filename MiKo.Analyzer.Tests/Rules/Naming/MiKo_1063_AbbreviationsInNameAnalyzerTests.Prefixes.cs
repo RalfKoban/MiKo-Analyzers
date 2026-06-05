@@ -17,7 +17,23 @@ namespace Bla
         {
         }
     }
-}");
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_special_type_name_([Values("DtmLogic")] string specialName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class " + specialName + @"
+    {
+        public void DoSomething(string value)
+        {
+        }
+    }
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"

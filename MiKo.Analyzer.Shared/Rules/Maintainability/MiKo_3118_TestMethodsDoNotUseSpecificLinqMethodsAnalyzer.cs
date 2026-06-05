@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -40,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodSyntax = symbol.GetSyntax();
 
-            foreach (var maes in methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>())
+            foreach (var maes in methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
             {
                 if (maes.Parent is InvocationExpressionSyntax invocation)
                 {

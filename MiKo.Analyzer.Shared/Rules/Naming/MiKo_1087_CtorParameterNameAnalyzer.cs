@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         var baseParameter = baseCtorParameters[argumentPosition];
                         var baseParameterName = baseParameter.Name;
 
-                        if (baseParameterName != parameterName)
+                        if (baseParameterName != parameterName && parameter.IsParams == baseParameter.IsParams)
                         {
                             yield return Issue(parameter, baseParameterName, CreateBetterNameProposal(baseParameterName));
                         }
