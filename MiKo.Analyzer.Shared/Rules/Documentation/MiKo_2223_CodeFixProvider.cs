@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -36,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var valueText = token.ValueText;
                 var partBefore = valueText.Substring(0, span.Start - offset);
-                var partAfter = valueText.Substring(span.End - offset);
+                var partAfter = valueText.AsSpan(span.End - offset);
 
                 // we need to split at the specific token and place all other tokens into the new XML text
                 var textTokens = xmlText.TextTokens;
@@ -60,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var lastPart = textTokens.Replace(token, partAfter.AsToken()) // replace the original text token with a completely new text token, to avoid any preceding '///' characters
+                    var lastPart = textTokens.Replace(token, partAfter.ToString().AsToken()) // replace the original text token with a completely new text token, to avoid any preceding '///' characters
                                              .Skip(tokenIndex)
                                              .ToTokenList();
 

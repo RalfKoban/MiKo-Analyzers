@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace TestHelper
     {
         private static readonly string[] Placeholders = [.. Enumerable.Range(0, 10).Select(_ => "{" + _ + "}")];
 
-        internal static Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
+        internal static Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ImmutableArray<DiagnosticAnalyzer> analyzers, in bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
 
         /// <summary>
         /// Gets the C# analyzer being tested - to be implemented in non-abstract class.

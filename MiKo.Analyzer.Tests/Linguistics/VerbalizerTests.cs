@@ -340,6 +340,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("buzzes", ExpectedResult = "buzzes")]
         [TestCase("cache", ExpectedResult = "caches")]
         [TestCase("caches", ExpectedResult = "caches")]
+        [TestCase("calc", ExpectedResult = "calculates")]
+        [TestCase("recalc", ExpectedResult = "recalculates")]
         [TestCase("constructed", ExpectedResult = "constructs")]
         [TestCase("continue", ExpectedResult = "continues")]
         [TestCase("determine", ExpectedResult = "determines")]

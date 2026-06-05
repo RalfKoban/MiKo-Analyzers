@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -22,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var fieldSyntax = symbol.GetSyntax<FieldDeclarationSyntax>();
-            var identifierNames = fieldSyntax.DescendantNodes<IdentifierNameSyntax>().ToList();
+            var identifierNames = fieldSyntax.DescendantNodes<IdentifierNameSyntax>(SyntaxKind.IdentifierName);
 
             if (identifierNames.Count != 0)
             {

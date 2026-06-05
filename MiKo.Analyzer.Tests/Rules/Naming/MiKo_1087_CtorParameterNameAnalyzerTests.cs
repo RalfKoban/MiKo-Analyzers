@@ -129,6 +129,25 @@ public class ChildClass : BaseClass
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_ctor_if_the_base_constructor_has_params_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class BaseClass
+{
+    public BaseClass(int a, int b, params int[] others)
+    {
+    }
+}
+
+public class ChildClass : BaseClass
+{
+    public ChildClass(int a, int b, int x, int y, int z) : base(a, b, x, y, z)
+    {
+    }
+}
+");
+
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_ctor_if_the_names_to_not_match() => An_issue_is_reported_for(3, @"
