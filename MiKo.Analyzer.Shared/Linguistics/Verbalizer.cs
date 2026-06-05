@@ -95,6 +95,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                                              new KeyValuePair<string, string>("triggered", "triggers"),
                                                                                                                                              new KeyValuePair<string, string>("Trigger", "Triggers"),
                                                                                                                                              new KeyValuePair<string, string>("Triggered", "Triggers"),
+                                                                                                                                             new KeyValuePair<string, string>("calc", "calculates"),
+                                                                                                                                             new KeyValuePair<string, string>("Calc", "Calculates"),
+                                                                                                                                             new KeyValuePair<string, string>("recalc", "recalculates"),
+                                                                                                                                             new KeyValuePair<string, string>("Recalc", "Recalculates"),
                                                                                                                                          },
                                                                                                                                      StringComparer.Ordinal);
 

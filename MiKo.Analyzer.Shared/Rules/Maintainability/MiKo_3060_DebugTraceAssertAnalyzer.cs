@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -25,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             List<Diagnostic> issues = null;
 
-            foreach (var methodCall in syntax.DescendantNodes<MemberAccessExpressionSyntax>())
+            foreach (var methodCall in syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
             {
                 if (methodCall.GetName() is nameof(Debug.Assert))
                 {

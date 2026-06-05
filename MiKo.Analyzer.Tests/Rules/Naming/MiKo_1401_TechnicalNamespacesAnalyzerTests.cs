@@ -206,19 +206,31 @@ namespace ABCD.EFG." + ns + @".HIJK
 
         private static string[] CreateNames(params string[] names)
         {
-            var results = new HashSet<string>((3 * names.Length) + 1)
+            var results = new HashSet<string>((11 * names.Length) + 3)
                               {
                                   "Shared",
+                                  "Technical",
+                                  "TechnicalDesign",
                               };
 
             foreach (var name in names)
             {
                 results.Add(name);
+
+                results.Add(name + "Core");
+                results.Add(name + "Shared");
+                results.Add(name + "Design");
+                results.Add(name + "Technical");
+                results.Add(name + "TechnicalDesign");
+
                 results.Add("Core" + name);
                 results.Add("Shared" + name);
+                results.Add("Technical" + name);
+                results.Add("TechnicalDesign" + name);
+                results.Add("Technical" + name + "Design");
             }
 
-            return [.. results];
+            return results.OrderDescendingByLengthAndText();
         }
     }
 }
