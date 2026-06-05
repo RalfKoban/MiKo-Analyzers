@@ -3140,7 +3140,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxNode WithUsing(this SyntaxNode value, string usingNamespace)
         {
-            var usings = value.DescendantNodes<UsingDirectiveSyntax>().ToList();
+            var usings = value.DescendantNodes<UsingDirectiveSyntax>(SyntaxKind.UsingDirective);
 
             if (usings.Exists(_ => _.Name?.ToFullString() == usingNamespace))
             {

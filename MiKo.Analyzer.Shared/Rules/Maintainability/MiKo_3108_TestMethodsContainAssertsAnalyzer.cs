@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ContainsAssertionDirectly(MethodDeclarationSyntax syntax)
         {
-            var nodes = (syntax.Body ?? (SyntaxNode)syntax.ExpressionBody).DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+            var nodes = syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
 
             foreach (var node in nodes)
             {

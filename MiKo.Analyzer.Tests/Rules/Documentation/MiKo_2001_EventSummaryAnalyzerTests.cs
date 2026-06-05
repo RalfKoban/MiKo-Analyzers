@@ -234,7 +234,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_Important_phrase_in_remarks()
+        public void Code_gets_fixed_with_Important_phrase_in_remarks()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -277,16 +277,16 @@ public class TestMe
         {
             string[] starts = ["Event", "This event", "The event", "An event", "A event"];
             string[] adverbs = [
-                                string.Empty,
-                                "is ", "that is ", "which is ",
-                                "can be ", "that can be ", "which can be ",
-                                "could be ", "that could be ", "which could be ",
-                                "shall be ", "that shall be ", "which shall be ",
-                                "should be ", "that should be ", "which should be ",
-                                "will be ", "that will be ", "which will be ",
-                                "would be ", "that would be ", "which would be ",
+                                    string.Empty,
+                                    "is ", "that is ", "which is ",
+                                    "can be ", "that can be ", "which can be ",
+                                    "could be ", "that could be ", "which could be ",
+                                    "shall be ", "that shall be ", "which shall be ",
+                                    "should be ", "that should be ", "which should be ",
+                                    "will be ", "that will be ", "which will be ",
+                                    "would be ", "that would be ", "which would be ",
                                ];
-            string[] verbs = ["fired", "raised", "caused", "triggerd", "triggered", "occurred", "occured", "notifying", "informing"];
+            string[] verbs = ["fired", "raised", "caused", "triggerd", "triggered", "occurred", "occured", "notifying", "informing", "invoked", "invoking", "sent"];
 
             var results = new HashSet<string>();
 
@@ -298,6 +298,7 @@ public class TestMe
                 {
                     var end = string.Concat(adverb, verb);
 
+                    results.Add(end);
                     results.Add(end.ToUpperCaseAt(0));
 
                     foreach (var start in starts)
@@ -316,7 +317,7 @@ public class TestMe
                                  "will", "that will", "which will",
                                  "would", "that would", "which would"
                                 ];
-            string[] verbsInfinite = ["fire", "raise", "cause", "trigger", "occur", "notify", "inform"];
+            string[] verbsInfinite = ["fire", "raise", "cause", "trigger", "occur", "notify", "inform", "invoke", "send"];
 
             foreach (var start in starts)
             {
@@ -331,7 +332,7 @@ public class TestMe
                 }
             }
 
-            string[] verbsPresent = ["fires", "raises", "causes", "triggers", "occurs", "notifies", "informs"];
+            string[] verbsPresent = ["fires", "raises", "causes", "triggers", "occurs", "notifies", "informs", "invokes", "sends"];
 
             foreach (var start in starts)
             {
@@ -379,6 +380,13 @@ public class TestMe
             results.Add("Inform");
             results.Add("Informs");
             results.Add("Informing");
+
+            results.Add("Send");
+            results.Add("Sending");
+            results.Add("Sent");
+            results.Add("send");
+            results.Add("sending");
+            results.Add("sent");
 
             return results;
         }
