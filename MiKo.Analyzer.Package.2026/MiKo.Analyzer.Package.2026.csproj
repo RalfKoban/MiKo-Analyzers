@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MiKo.Analyzer.2026\MiKo.Analyzer.2026.csproj" />
-    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2026\MiKo.Analyzer.Codefixes.2026.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2026\MiKo.Analyzer.CodeFixes.2026.csproj" />
   </ItemGroup>  
 
   <ItemGroup>
