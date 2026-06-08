@@ -225,6 +225,23 @@ namespace Bla
 }
 ");
 
+        [TestCase("DoStuffAsync_runs_before_DoOtherStuffAsync_gets_the_chance_to_run")]
+        [TestCase("DoStuffAsync_runs_before_DoOtherStuffAsync")]
+        public void No_issue_is_reported_for_test_method_(string methodName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int " + methodName.ToUpperCaseAt(0) + @"()
+        {
+            return 42;
+        }
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_method_with_upper_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
 using System;
