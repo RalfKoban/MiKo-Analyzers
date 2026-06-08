@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var linqCall = name.GetName();
 
-                if (linqCall == nameof(Enumerable.Empty))
+                if (linqCall is nameof(Enumerable.Empty))
                 {
                     // Do not report 'Empty' as violation as the field behind never changes
                     continue;

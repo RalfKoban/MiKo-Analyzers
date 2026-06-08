@@ -27,8 +27,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 switch (child)
                 {
-                    case GenericNameSyntax g when g.GetName() == nameof(IEnumerable):
-                    case IdentifierNameSyntax i when i.GetName() == nameof(IEnumerable):
+                    case GenericNameSyntax g when g.GetName() is nameof(IEnumerable):
+                    case IdentifierNameSyntax i when i.GetName() is nameof(IEnumerable):
                         return true;
                 }
             }

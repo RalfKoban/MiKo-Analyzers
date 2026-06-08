@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (parameters.Length)
             {
                 case 0:
-                case 1 when symbol.Name == nameof(IDisposable.Dispose) && parameters[0].Name is "disposing":
+                case 1 when symbol.Name is nameof(IDisposable.Dispose) && parameters[0].Name is "disposing":
                 case 2 when symbol.HasDependencyObjectParameter():
                     return Array.Empty<Diagnostic>();
             }

@@ -2148,7 +2148,7 @@ namespace MiKoSolutions.Analyzers
 
             var s = value.ToString();
 
-            return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
+            return s is nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
         }
 
         /// <summary>
@@ -2199,7 +2199,7 @@ namespace MiKoSolutions.Analyzers
 
             var s = value.ToString();
 
-            return s == nameof(StreamingContext) || s == TypeNames.StreamingContext;
+            return s is nameof(StreamingContext) || s == TypeNames.StreamingContext;
         }
 
         /// <summary>
@@ -2337,7 +2337,7 @@ namespace MiKoSolutions.Analyzers
                                                                                    && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
                                                                                    && maes.Expression is TypeSyntax invokedType
                                                                                    && invokedType.IsString()
-                                                                                   && maes.GetName() == nameof(string.Format);
+                                                                                   && maes.GetName() is nameof(string.Format);
 
         /// <summary>
         /// Determines whether an argument syntax represents a <see cref="string"/> literal.
@@ -2666,7 +2666,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the return statement returns a completed task; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.CompletedTask);
+        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() is nameof(Task) && maes.GetName() is nameof(Task.CompletedTask);
 
         /// <summary>
         /// Determines whether an if statement returns immediately.
