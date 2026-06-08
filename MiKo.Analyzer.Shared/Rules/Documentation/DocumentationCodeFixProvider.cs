@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                rentedArray[resultIndex] = term;
+                rentedArray[resultIndex] = StringCache.Intern(term);
                 resultIndex++;
             }
 
