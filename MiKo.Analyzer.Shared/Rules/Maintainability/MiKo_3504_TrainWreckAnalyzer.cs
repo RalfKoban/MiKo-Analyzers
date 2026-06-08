@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                              SyntaxKind.RightShiftAssignmentExpression,
                                                                              SyntaxKind.SimpleAssignmentExpression,
                                                                              SyntaxKind.SubtractAssignmentExpression,
-#if VS2022
+#if VS2022 || VS2026
                                                                              SyntaxKind.UnsignedRightShiftAssignmentExpression,
 #endif
                                                                          };
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                          SyntaxKind.NotEqualsExpression,
                                                                          SyntaxKind.RightShiftExpression,
                                                                          SyntaxKind.SubtractExpression,
-#if VS2022
+#if VS2022 || VS2026
                                                                          SyntaxKind.UnsignedRightShiftExpression,
 #endif
                                                                      };

@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (syntax.Kind())
                 {
                     case SyntaxKind.StringLiteralExpression:
-#if VS2022
+#if VS2022 || VS2026
                     case SyntaxKind.Utf8StringLiteralExpression:
 #endif
                     {
