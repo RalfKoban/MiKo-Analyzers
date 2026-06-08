@@ -920,9 +920,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         var afterIndex = index + Async.Length;
 
-                        if (afterIndex < s.Length && s[afterIndex].IsUpperCaseOrNumber())
+                        if (afterIndex < s.Length)
                         {
-                            sb.Remove(index, Async.Length);
+                            var nextCharacter = s[afterIndex];
+
+                            if (nextCharacter is Constants.Underscore)
+                            {
+                                sb.Without(Async + Constants.Underscore);
+                            }
+                            else if (nextCharacter.IsUpperCaseOrNumber())
+                            {
+                                sb.Remove(index, Async.Length);
+                            }
                         }
                     }
                 }
