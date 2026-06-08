@@ -56,6 +56,37 @@ public class TestMe
         [TestCase("void")]
         [TestCase("Task")]
         [TestCase("Task<int>")]
+        public void No_issue_is_reported_for_async_test_method_without_Asynchronously_in_summary_(string returnType) => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    [Test]
+    public async " + returnType + @" DoSomething() { }
+}
+");
+
+        [TestCase("Task")]
+        [TestCase("Task<int>")]
+        public void No_issue_is_reported_for_Task_returning_test_method_without_Asynchronously_in_summary_(string returnType) => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    [Test]
+    public " + returnType + @" DoSomething() { }
+}
+");
+
+        [TestCase("void")]
+        [TestCase("Task")]
+        [TestCase("Task<int>")]
         public void An_issue_is_reported_for_async_method_without_Asynchronously_in_summary_(string returnType) => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
