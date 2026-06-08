@@ -3,7 +3,7 @@
 # Semantic Versioning http://semver.org/
 version: 0.0.{build}
 
-image: Visual Studio 2022
+image: Visual Studio 2026
 
 # branches to build
 branches:
@@ -15,7 +15,7 @@ init:
 - git config --global core.autocrlf true
 
 # environment:
-#    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/3.13/NUnit.Console-3.13.0.zip
+#    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/3.22.0/NUnit.Console-3.22.0.zip
 
 install:
   - choco install gitversion.portable -pre -y
@@ -65,7 +65,7 @@ configuration:
   - Release
 
 test_script:
-  - '"%PROGRAMFILES%\dotnet\dotnet.exe" test C:\projects\MiKo.Analyzers\MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj --configuration Release --no-build --output C:\Projects\MiKo.Analyzers\MiKo.Analyzer.Tests\bin\net9.0'
+  - '"%PROGRAMFILES%\dotnet\dotnet.exe" test C:\projects\MiKo.Analyzers\MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj --configuration Release --no-build --output C:\Projects\MiKo.Analyzers\MiKo.Analyzer.Tests\bin\net10.0'
 #  - '%USERPROFILE%\.nuget\packages\OpenCover\4.7.1221\tools\OpenCover.Console.exe -register:user -target:"%PROGRAMFILES%\dotnet\dotnet.exe" -targetargs:"test C:\projects\MiKo.Analyzers\MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj --configuration Release --no-build --output C:\Projects\MiKo.Analyzers\MiKo.Analyzer.Tests\bin\net8.0 " -returntargetcode -filter:"+[MiKo*]* -[*Test*]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -output:"C:\Projects\MiKoAnalyzers_coverage.xml" '
 
 # Codecov Flags (https://docs.codecov.io/v4.3.6/docs/flags)
