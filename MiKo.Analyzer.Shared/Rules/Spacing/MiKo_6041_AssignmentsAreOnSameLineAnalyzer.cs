@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 // arrays and collections spanning multiple lines are allowed
                 case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
                     return true;
-#if  VS2022
+#if VS2022 || VS2026
                 case CollectionExpressionSyntax expression when expression.OpenBracketToken.IsOnSameLineAs(expression.CloseBracketToken) is false:
                     return true;
 #endif
