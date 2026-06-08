@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Name == nameof(IDisposable.Dispose);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Name is nameof(IDisposable.Dispose);
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,

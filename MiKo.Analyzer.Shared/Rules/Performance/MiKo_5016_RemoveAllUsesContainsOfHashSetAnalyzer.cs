@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 }
 
                 // inspect for 'Contains' inside lambda or method group
-                foreach (var maes in node.Parent.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.GetName() == nameof(Enumerable.Contains)))
+                foreach (var maes in node.Parent.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.GetName() is nameof(Enumerable.Contains)))
                 {
                     if (semanticModel is null)
                     {

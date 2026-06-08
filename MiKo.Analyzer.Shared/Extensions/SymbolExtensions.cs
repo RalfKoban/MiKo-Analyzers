@@ -2611,7 +2611,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type is a <see cref="Guid"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Guid);
+        internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name is nameof(Guid);
 
         /// <summary>
         /// Determines whether a type is the <c>System.ComponentModel.ICollectionView</c> interface.
@@ -2913,7 +2913,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var ns = method.ContainingNamespace;
 
-                    if (ns.Name == nameof(System.Linq) && ns.ContainingNamespace.Name == nameof(System))
+                    if (ns.Name is nameof(System.Linq) && ns.ContainingNamespace.Name is nameof(System))
                     {
                         return true;
                     }
@@ -3180,7 +3180,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the parameter is a <see cref="SerializationInfo"/> parameter; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsSerializationInfoParameter(this IParameterSymbol value) => value.Type.Name == nameof(SerializationInfo);
+        internal static bool IsSerializationInfoParameter(this IParameterSymbol value) => value.Type.Name is nameof(SerializationInfo);
 
         /// <summary>
         /// Determines whether a method is a special accessor.
@@ -3217,7 +3217,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the parameter is a <see cref="StreamingContext"/> parameter; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name == nameof(StreamingContext);
+        internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name is nameof(StreamingContext);
 
         /// <summary>
         /// Determines whether a type is <see cref="string"/>.
@@ -3241,7 +3241,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type is <see cref="System.Threading.Tasks.Task"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
+        internal static bool IsTask(this ITypeSymbol value) => value?.Name is nameof(Task);
 
         /// <summary>
         /// Determines whether a method is an assembly-wide test setup method.

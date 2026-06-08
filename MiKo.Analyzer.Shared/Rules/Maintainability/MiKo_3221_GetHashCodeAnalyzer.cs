@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsApplicable(Compilation compilation) => compilation.GetTypeByMetadataName("System." + HashCode) != null;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride && symbol.Name == nameof(GetHashCode);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride && symbol.Name is nameof(GetHashCode);
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

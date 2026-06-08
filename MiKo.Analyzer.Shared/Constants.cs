@@ -1650,13 +1650,13 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              StringComparer.Ordinal);
 
             internal static readonly string[] IntentPrefixes =
-                                                              {
-                                                                  "should",
-                                                                  "shall",
-                                                                  "will",
-                                                                  "would",
-                                                                  "could",
-                                                              };
+                                                               {
+                                                                   "should",
+                                                                   "shall",
+                                                                   "will",
+                                                                   "would",
+                                                                   "could",
+                                                               };
         }
 
         internal static class AnalyzerCodeFixSharedData

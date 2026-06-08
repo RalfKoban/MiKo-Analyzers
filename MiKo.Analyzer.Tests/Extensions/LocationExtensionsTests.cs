@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void GetSurroundingWord_returns_correct_word_when_location_is_beyond_200_characters_([Values(0, 19, 20, 40)] int repeatCount)
+        public static void GetSurroundingWord_returns_correct_word_when_location_is_beyond_200_characters_([Values(0, 19, 20, 40)] in int repeatCount)
         {
             const string Word = "SomeWord?param=value";
 
