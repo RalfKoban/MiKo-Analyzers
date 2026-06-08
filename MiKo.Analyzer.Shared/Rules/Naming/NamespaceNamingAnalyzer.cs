@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.NamespaceDeclaration);
-#if VS2022
+#if VS2022 || VS2026
             context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.FileScopedNamespaceDeclaration);
 #endif
         }
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected abstract IReadOnlyList<Diagnostic> AnalyzeNamespaceName(in ReadOnlySpan<SyntaxToken> namespaceNames);
 
         private static ReadOnlySpan<SyntaxToken> CollectNames(
-#if VS2022
+#if VS2022 || VS2026
             BaseNamespaceDeclarationSyntax node,
 #else
             NamespaceDeclarationSyntax node,
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private void AnalyzeNamespaceDeclaration(SyntaxNodeAnalysisContext context)
         {
-#if VS2022
+#if VS2022 || VS2026
             var node = (BaseNamespaceDeclarationSyntax)context.Node;
 #else
             var node = (NamespaceDeclarationSyntax)context.Node;
