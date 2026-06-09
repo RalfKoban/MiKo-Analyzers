@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules
@@ -196,168 +195,6 @@ namespace MiKoSolutions.Analyzers.Rules
             }
 
             context.RegisterCompilationStartAction(CompilationStartAction);
-        }
-
-        /// <summary>
-        /// Creates a location from a syntax trivia list.
-        /// </summary>
-        /// <param name="trivia">
-        /// The syntax trivia list.
-        /// </param>
-        /// <returns>
-        /// A location that spans the entire trivia list, or <see cref="Location.None"/> if the list is empty.
-        /// </returns>
-        protected static Location CreateLocation(in SyntaxTriviaList trivia)
-        {
-            if (trivia.Count > 0)
-            {
-                var span = trivia.FullSpan;
-
-                return CreateLocation(trivia[0].SyntaxTree, span.Start, span.End);
-            }
-
-            return Location.None;
-        }
-
-        /// <summary>
-        /// Creates a location from a syntax node with specified bounds.
-        /// </summary>
-        /// <param name="node">
-        /// The syntax node.
-        /// </param>
-        /// <param name="start">
-        /// The start position of the location.
-        /// </param>
-        /// <param name="end">
-        /// The end position of the location.
-        /// </param>
-        /// <returns>
-        /// A location that spans from the start to the end position.
-        /// </returns>
-        protected static Location CreateLocation(SyntaxNode node, in int start, in int end) => CreateLocation(node.SyntaxTree, start, end);
-
-        /// <summary>
-        /// Creates a location from a syntax token with specified bounds.
-        /// </summary>
-        /// <param name="token">
-        /// The syntax token.
-        /// </param>
-        /// <param name="start">
-        /// The start position of the location.
-        /// </param>
-        /// <param name="end">
-        /// The end position of the location.
-        /// </param>
-        /// <returns>
-        /// A location that spans from the start to the end position.
-        /// </returns>
-        protected static Location CreateLocation(in SyntaxToken token, in int start, in int end) => CreateLocation(token.SyntaxTree, start, end);
-
-        /// <summary>
-        /// Creates a location from a syntax tree with specified bounds.
-        /// </summary>
-        /// <param name="syntaxTree">
-        /// The syntax tree.
-        /// </param>
-        /// <param name="start">
-        /// The start position of the location.
-        /// </param>
-        /// <param name="end">
-        /// The end position of the location.
-        /// </param>
-        /// <returns>
-        /// A location that spans from the start to the end position.
-        /// </returns>
-        protected static Location CreateLocation(SyntaxTree syntaxTree, in int start, in int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
-
-        /// <summary>
-        /// Creates a location for a character within a syntax tree.
-        /// </summary>
-        /// <param name="value">
-        /// The character value.
-        /// </param>
-        /// <param name="syntaxTree">
-        /// The syntax tree.
-        /// </param>
-        /// <param name="spanStart">
-        /// The start position of the containing span.
-        /// </param>
-        /// <param name="position">
-        /// The position of the character relative to the span start, or <c>-1</c> if not found.
-        /// </param>
-        /// <param name="startOffset">
-        /// The offset to apply to the start position.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <param name="endOffset">
-        /// The offset to apply to the end position.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// A location for the character, or <see langword="null"/> if the position is <c>-1</c> or the calculated bounds are invalid.
-        /// </returns>
-        protected static Location CreateLocation(in char value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
-        {
-            if (position is -1)
-            {
-                return null;
-            }
-
-            var start = spanStart + position + startOffset; // find start position for underlining
-            var end = start + sizeof(char) - startOffset - endOffset; // find end position
-
-            if (end < start)
-            {
-                // seems we did not find a proper location here
-                return null;
-            }
-
-            return CreateLocation(syntaxTree, start, end);
-        }
-
-        /// <summary>
-        /// Creates a location for a <see cref="string"/> within a syntax tree.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> value.
-        /// </param>
-        /// <param name="syntaxTree">
-        /// The syntax tree.
-        /// </param>
-        /// <param name="spanStart">
-        /// The start position of the containing span.
-        /// </param>
-        /// <param name="position">
-        /// The position of the <see cref="string"/> relative to the span start, or <c>-1</c> if not found.
-        /// </param>
-        /// <param name="startOffset">
-        /// The offset to apply to the start position.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <param name="endOffset">
-        /// The offset to apply to the end position.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// A location for the <see cref="string"/>, or <see langword="null"/> if the position is <c>-1</c> or the calculated bounds are invalid.
-        /// </returns>
-        protected static Location CreateLocation(string value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
-        {
-            if (position is -1)
-            {
-                return null;
-            }
-
-            var start = spanStart + position + startOffset; // find start position for underlining
-            var end = start + value.Length - startOffset - endOffset; // find end position
-
-            if (end < start)
-            {
-                // seems we did not find a proper location here
-                return null;
-            }
-
-            return CreateLocation(syntaxTree, start, end);
         }
 
         /// <summary>
@@ -696,7 +533,7 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue(CastExpressionSyntax cast)
         {
             // underline only the cast itself, not the complete expression
-            var location = CreateLocation(cast, cast.OpenParenToken.SpanStart, cast.CloseParenToken.Span.End);
+            var location = cast.GetLocation(cast.OpenParenToken.SpanStart, cast.CloseParenToken.Span.End);
 
             return Issue(location);
         }
@@ -1337,7 +1174,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// <returns>
         /// A diagnostic issue for the syntax trivia list.
         /// </returns>
-        protected Diagnostic Issue(in SyntaxTriviaList trivia, params Pair[] properties) => CreateIssue(CreateLocation(trivia), properties);
+        protected Diagnostic Issue(in SyntaxTriviaList trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties);
 
         /// <summary>
         /// Creates a diagnostic issue for a location with additional properties.
