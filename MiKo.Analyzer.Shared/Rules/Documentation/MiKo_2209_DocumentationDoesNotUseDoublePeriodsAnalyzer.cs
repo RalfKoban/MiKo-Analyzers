@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var i = 0; i < textTokensCount; i++)
             {
-                var locations = GetAllLocations(textTokens[i], Dots, _ => AllowedChars.Contains(_) is false); // we want to underline the first and last char
+                var locations = textTokens[i].GetAllLocations(Dots, _ => AllowedChars.Contains(_) is false); // we want to underline the first and last char
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)
