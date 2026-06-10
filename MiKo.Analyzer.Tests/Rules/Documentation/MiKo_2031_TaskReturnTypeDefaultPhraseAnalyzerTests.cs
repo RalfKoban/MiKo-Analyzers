@@ -215,6 +215,7 @@ public class TestMe
         [TestCase(@"A <see cref=""Task{TResult}""/> that represents the asynchronous operation.", "TODO")]
         [TestCase(@"A <see cref=""Task{TResult}""/> that represents the operation.", "TODO")]
         [TestCase(@"A <see cref=""Task{TResult}""/> which contains something.", "something.")]
+        [TestCase(@"A <see cref=""Task{T}""/> whose result is the value returned by <paramref name=""callback""/>.", @"the value returned by <paramref name=""callback""/>.")]
         [TestCase("A result containing something.", "something.")]
         [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.", @"a result describing something, such as <see cref=""string.Empty""/>.")]
         [TestCase("A result that contains something.", "something.")]
