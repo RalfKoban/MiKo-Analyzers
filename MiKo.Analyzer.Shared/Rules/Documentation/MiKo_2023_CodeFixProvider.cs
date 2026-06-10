@@ -145,25 +145,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var data = FindMatchingReplacementMapKeys(text);
 
-                    var shouldBeMatch = ShouldBeRegex.Match(textTrimmed);
-
-                    if (shouldBeMatch.Success)
+                    try
                     {
-                        var shouldBeText = shouldBeMatch.Value;
-                        var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(shouldBeText.ThirdWord()) + Constants.SingleSpace;
+                        var shouldBeMatch = ShouldBeRegex.Match(textTrimmed);
 
-                        // re-phrase the text to fix it later on
-                        var updatedText = textTrimmed.AsCachedBuilder()
-                                                     .ReplaceAllWithProbe(data.Map)
-                                                     .Without(Constants.SingleSpace + shouldBeText)
-                                                     .TrimmedStart()
-                                                     .WithoutStarting(Conditionals, StringComparison.OrdinalIgnoreCase)
-                                                     .TrimmedStart()
-                                                     .Insert(0, newTextStart)
-                                                     .ToStringAndRelease();
+                        if (shouldBeMatch.Success)
+                        {
+                            var shouldBeText = shouldBeMatch.Value;
+                            var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(shouldBeText.ThirdWord()) + Constants.SingleSpace;
 
-                        // do a second round with the updated text, to fix all the other stuff
-                        return FixText(comment.WithContent(XmlText(updatedText)));
+                            // re-phrase the text to fix it later on
+                            var updatedText = textTrimmed.AsCachedBuilder()
+                                                         .ReplaceAllWithProbe(data.Map)
+                                                         .Without(Constants.SingleSpace + shouldBeText)
+                                                         .TrimmedStart()
+                                                         .WithoutStarting(Conditionals, StringComparison.OrdinalIgnoreCase)
+                                                         .TrimmedStart()
+                                                         .Insert(0, newTextStart)
+                                                         .ToStringAndRelease();
+
+                            // do a second round with the updated text, to fix all the other stuff
+                            return FixText(comment.WithContent(XmlText(updatedText)));
+                        }
+                    }
+                    catch (RegexMatchTimeoutException)
+                    {
+                        // we were unable to detect within time, so we assume that the text was not part of it and fall through
                     }
 
                     // determine whether we have a comment like:
