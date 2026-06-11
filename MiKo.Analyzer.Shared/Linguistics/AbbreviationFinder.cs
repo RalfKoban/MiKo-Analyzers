@@ -815,6 +815,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
+            if (value.Length < 2)
+            {
+                // we cannot find abbreviations here
+                return ReadOnlySpan<Pair>.Empty;
+            }
+
             if (value.EqualsAny(AllowedNames, StringComparison.OrdinalIgnoreCase))
             {
                 return ReadOnlySpan<Pair>.Empty;
