@@ -243,6 +243,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("vm", "viewModel"),
                                                       new Pair("vms", "viewModels"),
                                                       new Pair("vol", "volume"),
+                                                      new Pair("warn", "warning"),
                                                   };
 
         private static readonly Pair[] OnlyMidTerms =
@@ -613,6 +614,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("arametereter", "arameter"), // 'param' within 'parameter'
                                                       new Pair("arametermeter", "arameter"), // 'para' within 'parameter'
                                                       new Pair("ariableiable", "ariable"), // 'var' within 'variable'
+                                                      new Pair("arninging", "arning"), // 'warn' within 'warning'
                                                       new Pair("asynchronization", "async"), // 'sync' within 'asynchronization'
                                                       new Pair("ationate", "ate"), // 'reloc' within 'relocate'
                                                       new Pair("ationati", "ati"), // 'reloc' within 'relocation' / 'relocating'

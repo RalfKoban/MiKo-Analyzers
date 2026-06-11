@@ -239,6 +239,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("vm", "viewModel"),
                                                       new("vms", "viewModels"),
                                                       new("vol", "volume"),
+                                                      new("warn", "warning"),
                                                   ];
 
         private static readonly Pair[] UpperCasePrefixes =
@@ -492,6 +493,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                        new("Vms", "ViewModels"),
                                                        new("VMs", "ViewModels"),
                                                        new("Vol", "Volume"),
+                                                       //// new("Warn", "Warning"), // we want to allow 'Warn' as method name
                                                    ];
 
         private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot" or "Seq"))
