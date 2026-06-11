@@ -239,18 +239,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("vm", "viewModel"),
                                                       new("vms", "viewModels"),
                                                       new("vol", "volume"),
+                                                      new("warn", "warning"),
                                                   ];
-
-        private static readonly Pair[] UpperCasePrefixes =
-                                                           [
-                                                               new("Auth", "Authenticate"),
-                                                               new("Calc", "Calculate"),
-                                                               new("Calib", "Calibrate"),
-                                                               new("Recalc", "Recalculate"),
-                                                               new("Recalib", "Recalibrate"),
-                                                               new("Reloc", "Relocate"),
-                                                               new("Sync", "Synchronize"),
-                                                           ];
 
         private static readonly Pair[] Postfixes =
                                                    [
@@ -492,14 +482,29 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                        new("Vms", "ViewModels"),
                                                        new("VMs", "ViewModels"),
                                                        new("Vol", "Volume"),
+                                                       new("Warn", "Warning"),
                                                    ];
 
         private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot" or "Seq"))
                                                                .ConcatenatedWith(new Pair("Mod", "Modified"), new Pair("Prot", "Protected"),  new Pair("Seq", "Sequential"))];
 
-        private static readonly Pair[] StandalonePrefixes = [.. Prefixes.Concat(UpperCasePrefixes).Where(_ => _.Key is not ("obj" or "args"))];
+        private static readonly Pair[] SpecialUpperCasePrefixes =
+                                                                  [
+                                                                      new("Auth", "Authenticate"),
+                                                                      new("Calc", "Calculate"),
+                                                                      new("Calib", "Calibrate"),
+                                                                      new("Recalc", "Recalculate"),
+                                                                      new("Recalib", "Recalibrate"),
+                                                                      new("Reloc", "Relocate"),
+                                                                      new("Sync", "Synchronize"),
+                                                                  ];
 
-        private static readonly Pair[] StandalonePostfixes = [.. Postfixes.Where(_ => _.Key is not ("Obj" or "Args")).Where(_ => UpperCasePrefixes.Exists(__ => _.Key == __.Key) is false)];
+        private static readonly Pair[] UpperCasePrefixes = MidTerms.Where(_ => SpecialUpperCasePrefixes.Exists(__ => _.Key == __.Key) is false)
+                                                                   .Concat(SpecialUpperCasePrefixes)
+                                                                   .Where(_ => _.Key is not "Warn")
+                                                                   .OrderDescendingByLengthAndText(_ => _.Key);
+
+        private static readonly Pair[] CompleteTerms = [.. Prefixes.Concat(UpperCasePrefixes).Where(_ => _.Key is not ("obj" or "args" or "Obj" or "Args"))];
 
         [Test]
         public static void Finds_prefix_abbreviation_in_([ValueSource(nameof(Prefixes))] in Pair prefix)
@@ -558,19 +563,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         [Test]
-        public static void Finds_standalone_prefix_abbreviation_and_fixes_them_in_([ValueSource(nameof(StandalonePrefixes))] in Pair prefix)
+        public static void Finds_standalone_abbreviations_and_fixes_them_in_([ValueSource(nameof(CompleteTerms))] in Pair completeTerm)
         {
-            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(prefix.Key);
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(completeTerm.Key);
 
-            Assert.That(replacement, Is.EqualTo(prefix.Value));
-        }
-
-        [Test]
-        public static void Finds_standalone_postfix_abbreviation_and_fixes_them_in_([ValueSource(nameof(StandalonePostfixes))] in Pair postfix)
-        {
-            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(postfix.Key);
-
-            Assert.That(replacement, Is.EqualTo(postfix.Value));
+            Assert.That(replacement, Is.EqualTo(completeTerm.Value));
         }
 
         [TestCase("sepaMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
@@ -627,6 +624,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("TABLE")]
         [TestCase("USEFUL")]
         [TestCase("VARIABLE")]
+        [TestCase("Warn")]
+        [TestCase("WarnFormat")]
         public static void Ignores_(string value) => Assert.That(AbbreviationFinder.FindAndReplaceAllAbbreviations(value), Is.EqualTo(value));
     }
 }

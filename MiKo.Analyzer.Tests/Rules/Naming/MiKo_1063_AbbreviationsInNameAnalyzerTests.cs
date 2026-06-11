@@ -762,6 +762,7 @@ namespace Bla
         [TestCase("vert", "vertical", "vertical")]
         [TestCase("vert", "vertical", "convert")]
         [TestCase("vol", "volume", "volume")]
+        [TestCase("warn", "warning", "warning")]
         public void Code_gets_fixed_for_method_by_expanding_abbreviation_(string originalName, string fixedName1, string fixedName2)
         {
             const string Template = @"
