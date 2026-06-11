@@ -617,6 +617,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                .Except(UpperCasePrefixes, IdenticalKeyComparer.Instance).Concat(UpperCasePrefixes)
                                                                .OrderDescendingByLengthAndText(_ => _.Key);
 
+        private static readonly int CompleteTermsMaximumLength = CompleteTerms.Max(_ => _.Key.Length);
+
         private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviationsCache = new ConcurrentDictionary<string, Pair[]>(StringComparer.Ordinal);
 
         private static readonly ConcurrentDictionary<string, string> AlreadyReplacedAbbreviationsCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
@@ -973,22 +975,27 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </returns>
         private static Pair[] FindCore(ReadOnlySpan<char> textSpan)
         {
-            if (textSpan.Length <= 0)
+            // only investigate if we have more than 1 character to inspect, as otherwise we do not have any abbreviation
+            if (textSpan.Length <= 1)
             {
                 return Array.Empty<Pair>();
             }
 
             HashSet<Pair> results = null;
 
-            foreach (var pair in CompleteTerms)
+            // skip loop if the text exceeds the maximum length of all complete terms
+            if (textSpan.Length <= CompleteTermsMaximumLength)
             {
-                var keySpan = pair.Key.AsSpan();
-
-                if (CompleteTermHasIssue(keySpan, textSpan))
+                foreach (var pair in CompleteTerms)
                 {
-                    AddToResults(ref results, pair);
+                    var keySpan = pair.Key.AsSpan();
 
-                    return results?.ToArray() ?? Array.Empty<Pair>(); // does not make sense to look further
+                    if (CompleteTermHasIssue(keySpan, textSpan))
+                    {
+                        AddToResults(ref results, pair);
+
+                        return results?.ToArray() ?? Array.Empty<Pair>(); // does not make sense to look further
+                    }
                 }
             }
 
@@ -1013,13 +1020,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
             }
 
-            //// TODO RKN: replace prefixes to not find them again as middle terms or whatever?
             if (textSpan.Length > 1)
             {
                 textSpan = textSpan.Slice(1); // move text span by 1 character to ignore the midterms/postfixes that are also part of the prefixes
             }
 
-            if (textSpan.Length > 0)
+            // only investigate if we have more than 1 character left, as otherwise we do not have any abbreviation
+            if (textSpan.Length > 1)
             {
                 // we only have to search for postfixes if there is any upper case character
                 var searchForPostfixes = textSpan.AnyUpper();
