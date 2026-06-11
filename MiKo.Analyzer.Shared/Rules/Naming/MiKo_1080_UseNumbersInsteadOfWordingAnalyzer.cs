@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "Cone",
                                                           "done",
                                                           "Done",
+                                                          "eLeven", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
                                                           "etwork", // 'network'
                                                           "ETWORK",
                                                           "everyone",
@@ -72,7 +73,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "ione",
                                                           "ionE",
                                                           "IonE",
-                                                          "late", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
                                                           "lone",
                                                           "Lone",
                                                           "mone",
@@ -84,6 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "NoOne",
                                                           "onE", // 'SetupNonExistentDevice'
                                                           "OnE",
+                                                          "oNe", // 'ProNet'
                                                           "oneTime",
                                                           "OneTime",
                                                           "Ones",
