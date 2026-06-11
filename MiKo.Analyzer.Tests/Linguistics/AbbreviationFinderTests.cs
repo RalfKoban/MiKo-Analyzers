@@ -493,7 +493,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                        new("Vms", "ViewModels"),
                                                        new("VMs", "ViewModels"),
                                                        new("Vol", "Volume"),
-                                                       //// new("Warn", "Warning"), // we want to allow 'Warn' as method name
+                                                       new("Warn", "Warning"),
                                                    ];
 
         private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot" or "Seq"))
@@ -570,9 +570,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [Test]
         public static void Finds_standalone_postfix_abbreviation_and_fixes_them_in_([ValueSource(nameof(StandalonePostfixes))] in Pair postfix)
         {
-            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations(postfix.Key);
+            var replacement = AbbreviationFinder.FindAndReplaceAllAbbreviations("My" + postfix.Key); // TODO RKN: Is this really a postfix? Or isn't it a prefix?
 
-            Assert.That(replacement, Is.EqualTo(postfix.Value));
+            Assert.That(replacement, Is.EqualTo("My" + postfix.Value));
         }
 
         [TestCase("sepaMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
@@ -629,6 +629,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("TABLE")]
         [TestCase("USEFUL")]
         [TestCase("VARIABLE")]
+        [TestCase("Warn")]
+        [TestCase("WarnFormat")]
         public static void Ignores_(string value) => Assert.That(AbbreviationFinder.FindAndReplaceAllAbbreviations(value), Is.EqualTo(value));
     }
 }
