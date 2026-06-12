@@ -27,7 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var mappedData = MappedData.Value;
 
             return text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAn, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysC, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysD, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysF, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysI, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysP, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysR, StringComparison.OrdinalIgnoreCase)
                 || text.StartsWithAny(mappedData.TypeReplacementMapKeysThe, StringComparison.OrdinalIgnoreCase)
                 || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
                 || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase)
@@ -103,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             XmlElementSyntax updated;
 
-            //// TODO RKN: Add check about starting with 'A', 'T', 'C' or 'D'
+            // TODO RKN: Move the detection into a separate method and only return the keys and replacement map to simplify this method
             var startText = textTokens[0].ValueText.AsSpan().TrimStart();
 
             switch (startText[0])
@@ -111,7 +117,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case 'A':
                 case 'a':
                 {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
+                    if (startText.Length > 1 && startText[1] is Constants.Space)
+                    {
+                        updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
+                    }
+                    else
+                    {
+                        updated = Comment(comment, mappedData.TypeReplacementMapKeysAn, mappedData.TypeReplacementMapAn);
+                    }
 
                     if (ReferenceEquals(updated, comment) is false)
                     {
@@ -124,10 +137,78 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case 'C':
                 case 'c':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysC, mappedData.TypeReplacementMapC);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
+
                 case 'D':
                 case 'd':
                 {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysCD, mappedData.TypeReplacementMapCD);
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysD, mappedData.TypeReplacementMapD);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
+
+                case 'F':
+                case 'f':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysF, mappedData.TypeReplacementMapF);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
+
+                case 'I':
+                case 'i':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysI, mappedData.TypeReplacementMapI);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
+
+                case 'P':
+                case 'p':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysP, mappedData.TypeReplacementMapP);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
+
+                case 'R':
+                case 'r':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysR, mappedData.TypeReplacementMapR);
 
                     if (ReferenceEquals(updated, comment) is false)
                     {
@@ -141,15 +222,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case 'T':
                 case 't':
                 {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
-
-                    if (ReferenceEquals(updated, comment) is false)
+                    if (startText.Length > 3 && (startText[2] is 'e' || startText[2] is 'E'))
                     {
-                        // has been replaced, so nothing more to do
-                        return updated;
+                        updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
                     }
-
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+                    else
+                    {
+                        updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+                    }
 
                     if (ReferenceEquals(updated, comment) is false)
                     {
@@ -209,8 +289,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning disable SA1401 // Fields should be private
             public readonly Pair[] TypeReplacementMapA;
             public readonly string[] TypeReplacementMapKeysA;
-            public readonly Pair[] TypeReplacementMapCD;
-            public readonly string[] TypeReplacementMapKeysCD;
+            public readonly Pair[] TypeReplacementMapAn;
+            public readonly string[] TypeReplacementMapKeysAn;
+            public readonly Pair[] TypeReplacementMapC;
+            public readonly string[] TypeReplacementMapKeysC;
+            public readonly Pair[] TypeReplacementMapD;
+            public readonly string[] TypeReplacementMapKeysD;
+            public readonly Pair[] TypeReplacementMapF;
+            public readonly string[] TypeReplacementMapKeysF;
+            public readonly Pair[] TypeReplacementMapI;
+            public readonly string[] TypeReplacementMapKeysI;
+            public readonly Pair[] TypeReplacementMapP;
+            public readonly string[] TypeReplacementMapKeysP;
+            public readonly Pair[] TypeReplacementMapR;
+            public readonly string[] TypeReplacementMapKeysR;
             public readonly Pair[] TypeReplacementMapThe;
             public readonly string[] TypeReplacementMapKeysThe;
             public readonly Pair[] TypeReplacementMapThis;
@@ -232,11 +324,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 //// Array.Sort(typeKeys, AscendingStringComparer.Default);
 
-                var typeKeysStartingWithA = new List<string>(57228); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithCD = new List<string>(30362); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithA = new List<string>(45138); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAn = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithC = new List<string>(22396); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithD = new List<string>(7966); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithF = new List<string>(17016); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithI = new List<string>(9934); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithP = new List<string>(9046); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithR = new List<string>(9076); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithThe = new List<string>(54490); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithThis = new List<string>(16660); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysOther = new List<string>(47532); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysOther = new List<string>(2460); // TODO RKN: Adjust number as soon as there are other texts
 
                 for (var index = 0; index < typeKeysLength; index++)
                 {
@@ -246,24 +344,57 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         case 'A':
                         case 'a':
-                            typeKeysStartingWithA.Add(typeKey);
+                        {
+                            var list = typeKey[1] is 'n' ? typeKeysStartingWithAn : typeKeysStartingWithA;
+                            list.Add(typeKey);
+
+                            break;
+                        }
+
+                        case 'C':
+                        case 'c':
+                            typeKeysStartingWithC.Add(typeKey);
 
                             break;
 
-                        case 'C':
                         case 'D':
-                        case 'c':
                         case 'd':
-                            typeKeysStartingWithCD.Add(typeKey);
+                            typeKeysStartingWithD.Add(typeKey);
+
+                            break;
+
+                        case 'F':
+                        case 'f':
+                            typeKeysStartingWithF.Add(typeKey);
+
+                            break;
+
+                        case 'I':
+                        case 'i':
+                            typeKeysStartingWithI.Add(typeKey);
+
+                            break;
+
+                        case 'P':
+                        case 'p':
+                            typeKeysStartingWithP.Add(typeKey);
+
+                            break;
+
+                        case 'R':
+                        case 'r':
+                            typeKeysStartingWithR.Add(typeKey);
 
                             break;
 
                         case 'T':
                         case 't':
+                        {
                             var list = typeKey[2] is 'e' ? typeKeysStartingWithThe : typeKeysStartingWithThis;
                             list.Add(typeKey);
 
                             break;
+                        }
 
                         default:
                             typeKeysOther.Add(typeKey);
@@ -273,7 +404,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 typeKeysStartingWithA.Sort(AscendingStringComparer.Default);
-                typeKeysStartingWithCD.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithAn.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithC.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithD.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithF.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithI.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithP.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithR.Sort(AscendingStringComparer.Default);
                 typeKeysStartingWithThe.Sort(AscendingStringComparer.Default);
                 typeKeysStartingWithThis.Sort(AscendingStringComparer.Default);
                 typeKeysOther.Sort(AscendingStringComparer.Default);
@@ -281,8 +418,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 TypeReplacementMapA = ToArray(typeKeysStartingWithA);
                 TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysStartingWithA);
 
-                TypeReplacementMapCD = ToArray(typeKeysStartingWithCD);
-                TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysStartingWithCD);
+                TypeReplacementMapAn = ToArray(typeKeysStartingWithAn);
+                TypeReplacementMapKeysAn = GetTermsForQuickLookup(typeKeysStartingWithAn);
+
+                TypeReplacementMapC = ToArray(typeKeysStartingWithC);
+                TypeReplacementMapKeysC = GetTermsForQuickLookup(typeKeysStartingWithC);
+
+                TypeReplacementMapD = ToArray(typeKeysStartingWithD);
+                TypeReplacementMapKeysD = GetTermsForQuickLookup(typeKeysStartingWithD);
+
+                TypeReplacementMapF = ToArray(typeKeysStartingWithF);
+                TypeReplacementMapKeysF = GetTermsForQuickLookup(typeKeysStartingWithF);
+
+                TypeReplacementMapI = ToArray(typeKeysStartingWithI);
+                TypeReplacementMapKeysI = GetTermsForQuickLookup(typeKeysStartingWithI);
+
+                TypeReplacementMapP = ToArray(typeKeysStartingWithP);
+                TypeReplacementMapKeysP = GetTermsForQuickLookup(typeKeysStartingWithP);
+
+                TypeReplacementMapR = ToArray(typeKeysStartingWithR);
+                TypeReplacementMapKeysR = GetTermsForQuickLookup(typeKeysStartingWithR);
 
                 TypeReplacementMapThe = ToArray(typeKeysStartingWithThe);
                 TypeReplacementMapKeysThe = GetTermsForQuickLookup(typeKeysStartingWithThe);
