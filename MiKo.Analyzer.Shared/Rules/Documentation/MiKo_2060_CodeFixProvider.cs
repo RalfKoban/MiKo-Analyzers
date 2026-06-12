@@ -109,135 +109,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             XmlElementSyntax updated;
 
-            // TODO RKN: Move the detection into a separate method and only return the keys and replacement map to simplify this method
             var startText = textTokens[0].ValueText.AsSpan().TrimStart();
 
-            switch (startText[0])
+            var mapping = GetApplicableMapping(startText, mappedData);
+
+            if (mapping != default)
             {
-                case 'A':
-                case 'a':
+                updated = Comment(comment, mapping.Keys, mapping.Map);
+
+                if (ReferenceEquals(updated, comment) is false)
                 {
-                    if (startText.Length > 1 && startText[1] is Constants.Space)
-                    {
-                        updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
-                    }
-                    else
-                    {
-                        updated = Comment(comment, mappedData.TypeReplacementMapKeysAn, mappedData.TypeReplacementMapAn);
-                    }
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'C':
-                case 'c':
-                {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysC, mappedData.TypeReplacementMapC);
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'D':
-                case 'd':
-                {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysD, mappedData.TypeReplacementMapD);
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'F':
-                case 'f':
-                {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysF, mappedData.TypeReplacementMapF);
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'I':
-                case 'i':
-                {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysI, mappedData.TypeReplacementMapI);
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'P':
-                case 'p':
-                {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysP, mappedData.TypeReplacementMapP);
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'R':
-                case 'r':
-                {
-                    updated = Comment(comment, mappedData.TypeReplacementMapKeysR, mappedData.TypeReplacementMapR);
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
-                }
-
-                case 'T':
-                case 't':
-                {
-                    if (startText.Length > 3 && (startText[2] is 'e' || startText[2] is 'E'))
-                    {
-                        updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
-                    }
-                    else
-                    {
-                        updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
-                    }
-
-                    if (ReferenceEquals(updated, comment) is false)
-                    {
-                        // has been replaced, so nothing more to do
-                        return updated;
-                    }
-
-                    break;
+                    // has been replaced, so nothing more to do
+                    return updated;
                 }
             }
 
@@ -250,6 +133,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return comment;
+        }
+
+        private static (string[] Keys, Pair[] Map) GetApplicableMapping(in ReadOnlySpan<char> startText, MapData mappedData)
+        {
+            switch (startText[0])
+            {
+                case 'A':
+                case 'a':
+                    return startText.Length > 1 && startText[1] is Constants.Space
+                           ? (mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA)
+                           : (mappedData.TypeReplacementMapKeysAn, mappedData.TypeReplacementMapAn);
+
+                case 'C':
+                case 'c':
+                    return (mappedData.TypeReplacementMapKeysC, mappedData.TypeReplacementMapC);
+
+                case 'D':
+                case 'd':
+                    return (mappedData.TypeReplacementMapKeysD, mappedData.TypeReplacementMapD);
+
+                case 'F':
+                case 'f':
+                    return (mappedData.TypeReplacementMapKeysF, mappedData.TypeReplacementMapF);
+
+                case 'I':
+                case 'i':
+                    return (mappedData.TypeReplacementMapKeysI, mappedData.TypeReplacementMapI);
+
+                case 'P':
+                case 'p':
+                    return (mappedData.TypeReplacementMapKeysP, mappedData.TypeReplacementMapP);
+
+                case 'R':
+                case 'r':
+                    return (mappedData.TypeReplacementMapKeysR, mappedData.TypeReplacementMapR);
+
+                case 'T':
+                case 't':
+                    return startText.Length > 3 && (startText[2] is 'e' || startText[2] is 'E')
+                           ? (mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe)
+                           : (mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+
+                default:
+                    return default;
+            }
         }
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
