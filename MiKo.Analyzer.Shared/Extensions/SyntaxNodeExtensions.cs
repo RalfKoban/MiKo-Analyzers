@@ -1464,19 +1464,30 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsEventRegistration(this AssignmentExpressionSyntax value, SemanticModel semanticModel)
         {
-            if (value.Right is IdentifierNameSyntax)
+            switch (value.Right)
             {
-                switch (value.Left)
+                case IdentifierNameSyntax _:
+                case InvocationExpressionSyntax i when i.GetIdentifierName() is "Raise" && i.GetName().StartsWith("Event", StringComparison.Ordinal):
+                    return IsEventSymbol(value.Left);
+
+                default:
+                    return false;
+            }
+
+            bool IsEventSymbol(SyntaxNode valueLeft)
+            {
+                switch (valueLeft)
                 {
                     case MemberAccessExpressionSyntax maes:
                         return maes.GetSymbol(semanticModel) is IEventSymbol;
 
                     case IdentifierNameSyntax identifier:
                         return identifier.GetSymbol(semanticModel) is IEventSymbol;
+
+                    default:
+                        return false;
                 }
             }
-
-            return false;
         }
 
         /// <summary>
