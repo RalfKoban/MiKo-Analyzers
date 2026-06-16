@@ -265,6 +265,43 @@ namespace Bla
         }
 
         [Test]
+        public void Code_gets_fixed_for_test_method_with_TestCase_and_Test_attribute_as_different_attribute_lists_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCase(42)][Test]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCase(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_test_method_with_fully_named_Test_and_TestCase_attribute_as_different_attribute_lists_on_same_line()
         {
             const string OriginalCode = @"
@@ -278,6 +315,43 @@ namespace Bla
     public class TestMe
     {
         [TestAttribute][TestCaseAttribute(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCaseAttribute(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_fully_named_TestCase_and_Test_attribute_as_different_attribute_lists_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCaseAttribute(42)][TestAttribute]
         public void DoSomething(int i) { }
     }
 }

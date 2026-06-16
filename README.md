@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 560 rules that are currently provided by the analyzer.
+The following tables list all the 561 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -466,6 +466,7 @@ The following tables list all the 560 rules that are currently provided by the a
 |[MiKo_3123](/Documentation/MiKo_3123.md)|Do not catch exceptions in test methods|&#x2713;|&#x2713;|
 |[MiKo_3124](/Documentation/MiKo_3124.md)|Do not use assertions in finally blocks in test methods|&#x2713;|&#x2713;|
 |[MiKo_3125](/Documentation/MiKo_3125.md)|NUnit tests should not have both [Test] and [TestCase] applied|&#x2713;|&#x2713;|
+|[MiKo_3126](/Documentation/MiKo_3126.md)|Theories should not have test attributes applied|&#x2713;|&#x2713;|
 |[MiKo_3201](/Documentation/MiKo_3201.md)|Invert if statements in short methods|&#x2713;|&#x2713;|
 |[MiKo_3202](/Documentation/MiKo_3202.md)|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |[MiKo_3203](/Documentation/MiKo_3203.md)|Invert if-continue statements when followed by single line|&#x2713;|&#x2713;|

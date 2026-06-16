@@ -12,12 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3125";
 
-        private const string TestAttributeDefault = "Test";
-        private const string TestAttributeFullName = "TestAttribute";
-
-        private const string TestCaseAttributeDefault = "TestCase";
-        private const string TestCaseAttributeFullName = "TestCaseAttribute";
-
         public MiKo_3125_TestMethodsDoNotHaveBothTestAndTestCaseAttributeAnalyzer() : base(Id)
         {
         }
@@ -36,22 +30,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var attributeNames = attributes.ToHashSet(_ => _.AttributeClass?.Name);
 
-                if (attributeNames.Contains(TestAttributeDefault) || attributeNames.Contains(TestAttributeFullName))
+                if (attributeNames.Contains(Constants.Names.TestAttributeFullName) && attributeNames.Contains(Constants.Names.TestCaseAttributeFullName))
                 {
-                    if (attributeNames.Contains(TestCaseAttributeDefault) || attributeNames.Contains(TestCaseAttributeFullName))
+                    var method = symbol.GetSyntax<MethodDeclarationSyntax>();
+
+                    foreach (var attributeList in method.AttributeLists)
                     {
-                        var method = symbol.GetSyntax<MethodDeclarationSyntax>();
-
-                        foreach (var attributeList in method.AttributeLists)
+                        foreach (var attribute in attributeList.Attributes)
                         {
-                            foreach (var attribute in attributeList.Attributes)
-                            {
-                                var attributeName = attribute.Name;
+                            var attributeName = attribute.Name;
 
-                                if (IsTest(attributeName))
-                                {
-                                    return new[] { Issue(attributeName) };
-                                }
+                            if (IsTest(attributeName))
+                            {
+                                return new[] { Issue(attributeName) };
                             }
                         }
                     }
@@ -63,6 +54,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTest(NameSyntax name) => IsTest(name.GetName());
 
-        private static bool IsTest(string name) => name is TestAttributeDefault || name is TestAttributeFullName;
+        private static bool IsTest(string name) => name is Constants.Names.TestAttribute || name is Constants.Names.TestAttributeFullName;
     }
 }
