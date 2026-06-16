@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var token = textTokens[index];
 
-                var locations = GetAllLocations(token, Phrase, StringComparison.OrdinalIgnoreCase);
+                var locations = token.GetAllLocations(Phrase, StringComparison.OrdinalIgnoreCase);
                 var locationsCount = locations.Count;
 
                 if (locationsCount is 0)

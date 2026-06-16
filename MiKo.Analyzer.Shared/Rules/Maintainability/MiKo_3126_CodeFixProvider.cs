@@ -1,0 +1,13 @@
+﻿using System.Composition;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
+
+namespace MiKoSolutions.Analyzers.Rules.Maintainability
+{
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3126_CodeFixProvider)), Shared]
+    public sealed class MiKo_3126_CodeFixProvider : AttributeSyntaxCodeFixProvider
+    {
+        public override string FixableDiagnosticId => "MiKo_3126";
+    }
+}

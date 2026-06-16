@@ -189,6 +189,7 @@ namespace MiKoSolutions.Analyzers
             List<T> results = null;
 
 //// ncrunch: no coverage start
+
             if (value.IsKind(kind))
             {
                 results = new List<T>(8) { (T)value }; // avoid resizing most times
@@ -208,6 +209,7 @@ namespace MiKoSolutions.Analyzers
 
                 results.Add((T)node);
             }
+
 //// ncrunch: no coverage end
 
             return (IReadOnlyList<T>)results ?? Array.Empty<T>();

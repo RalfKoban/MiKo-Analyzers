@@ -195,7 +195,7 @@ namespace TestHelper
                 return [];
             }
 
-            return diagnostics.Count == 1
+            return diagnostics.Count is 1
                    ? [diagnostics[0]]
                    : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }

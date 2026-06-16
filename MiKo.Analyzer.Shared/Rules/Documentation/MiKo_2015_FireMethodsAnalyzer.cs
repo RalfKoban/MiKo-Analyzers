@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             for (var i = 0; i < textTokensCount; i++)
             {
                 var textToken = textTokens[i];
-                var locations = GetAllLocations(textToken, ForbiddenPhrases, StringComparison.OrdinalIgnoreCase, 1, 1);
+                var locations = textToken.GetAllLocations(ForbiddenPhrases, StringComparison.OrdinalIgnoreCase, 1, 1);
                 var locationsCount = locations.Count;
 
                 if (locationsCount is 0)
@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 issues = new List<Diagnostic>(1);
                             }
 
-                            var location = GetFirstLocation(textToken, forbiddenWord, StringComparison.OrdinalIgnoreCase);
+                            var location = textToken.GetFirstLocation(forbiddenWord, StringComparison.OrdinalIgnoreCase);
 
                             issues.Add(Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule));
 

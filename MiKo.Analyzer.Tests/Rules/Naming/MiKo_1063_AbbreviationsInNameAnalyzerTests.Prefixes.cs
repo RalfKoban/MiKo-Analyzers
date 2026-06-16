@@ -78,7 +78,8 @@ namespace Bla
     {
         public static extern int " + part + @"DoSomething();
     }
-}");
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_parameters_of_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
@@ -90,7 +91,8 @@ namespace Bla
     {
         public static extern int DoSomething(int " + part + @"Parameter);
     }
-}");
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_parameters_of_implemented_interfaces_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
@@ -111,7 +113,8 @@ namespace Bla
     {
         public int DoSomething(int " + part + @"Parameter) => 42;
     }
-}");
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_parameters_of_implemented_interfaces_on_abstract_class_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
@@ -132,7 +135,8 @@ namespace Bla
     {
         public abstract int DoSomething(int " + part + @"Parameter);
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_local_variable_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -148,7 +152,8 @@ namespace Bla
             return " + prefix + @"Variable;
         }
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_local_foreach_variable_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -166,7 +171,8 @@ namespace Bla
             }
         }
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_field_with_prefix_([Values("", "_", "m_", "s_", "t_")] string fieldMarker, [ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -177,19 +183,6 @@ namespace Bla
     public class TestMe
     {
         private int " + fieldMarker + prefix + @"Field = 42;
-    }
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_enum_member_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public enum TestMe
-    {
-        None = 0,
-        " + prefix.ToUpperCaseAt(0) + @"_Something = 1,
     }
 }
 ");
@@ -204,7 +197,8 @@ namespace Bla
     {
         public int " + prefix + @"Property { get; set; }
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_event_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -216,7 +210,8 @@ namespace Bla
     {
         public event EventHandler " + prefix + @"Event { get; set; }
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_parameter_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -228,7 +223,8 @@ namespace Bla
     {
         public void DoSomething(int " + prefix + @"Parameter) { }
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_local_out_variable_in_try_parse_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -243,7 +239,8 @@ namespace Bla
             return int.TryParse(""42"", out var " + prefix + @"Variable) ? " + prefix + @"Variable : 0;
         }
     }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_method_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -255,7 +252,81 @@ namespace Bla
     {
         public void " + prefix + @"Method() { }
     }
-}");
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class " + prefix + @"Class
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_namespace_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace " + prefix + @"Namespace
+{
+    public class TestMe
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_namespace_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace " + prefix.ToUpperCaseAt(0) + @"Namespace
+{
+    public class TestMe
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_enum_member_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public enum TestMe
+    {
+        None = 0,
+        " + prefix.ToUpperCaseAt(0) + @"_Something = 1,
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int " + prefix.ToUpperCaseAt(0) + @"Property { get; set; }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_event_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public event EventHandler " + prefix.ToUpperCaseAt(0) + @"Event { get; set; }
+    }
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_method_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -267,17 +338,8 @@ namespace Bla
     {
         public void " + prefix.ToUpperCaseAt(0) + @"Method() { }
     }
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_class_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class " + prefix + @"Class
-    { }
-}");
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_class_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
@@ -287,17 +349,8 @@ namespace Bla
 {
     public class " + prefix.ToUpperCaseAt(0) + @"Class
     { }
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_namespace_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
-using System;
-
-namespace " + prefix + @"Namespace
-{
-    public class TestMe
-    { }
-}");
+}
+");
 
         [TestCase("seq", "sequential")]
         [TestCase("attr", "attribute")]

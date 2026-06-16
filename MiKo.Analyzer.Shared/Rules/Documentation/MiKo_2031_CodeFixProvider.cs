@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  "which contains",
                                                                  "that represents the operation.",
                                                                  "that represents the asynchronous operation.",
+                                                                 "whose result is ",
                                                              };
 
         private static readonly string[] TextParts = CreateTextParts().OrderDescendingByLengthAndText();

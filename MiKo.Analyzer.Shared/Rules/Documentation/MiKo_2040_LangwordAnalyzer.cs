@@ -233,7 +233,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     const int StartOffset = 1; // we do not want to underline the first char
                     const int EndOffset = 1; // we do not want to underline the last char
 
-                    var allLocations = GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                    var allLocations = textToken.GetAllLocations(wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
                     var allLocationsCount = allLocations.Count;
 
                     if (allLocationsCount > 0)
@@ -259,7 +259,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     const int StartOffset = 0;
                     const int EndOffset = 1; // we do not want to underline the last char
 
-                    var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                    var location = textToken.GetFirstLocation(wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
 
                     if (location != null && alreadyFoundLocations.Add(location))
                     {
@@ -276,7 +276,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     const int StartOffset = 1; // we do not want to underline the first char
                     const int EndOffset = 0;
 
-                    var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                    var location = textToken.GetLastLocation(wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
 
                     if (location != null && alreadyFoundLocations.Add(location))
                     {

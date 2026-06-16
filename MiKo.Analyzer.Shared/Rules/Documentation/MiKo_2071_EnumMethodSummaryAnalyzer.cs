@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                var locations = GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset);
+                var locations = token.GetAllLocations(BooleanPhrases, StringComparison.Ordinal, Offset, Offset);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

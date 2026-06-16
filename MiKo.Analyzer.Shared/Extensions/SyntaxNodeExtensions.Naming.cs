@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers
         internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
         /// <summary>
-        /// Gets the identifier name from the specified <see cref="InvocationExpressionSyntax"/>.
+        /// Gets the identifier name from the specified <see cref="InvocationExpressionSyntax"/>, such as "Raise" in <c>Raise.Event()</c>.
         /// </summary>
         /// <param name="value">
         /// The invocation expression syntax.

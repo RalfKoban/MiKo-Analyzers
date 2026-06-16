@@ -422,7 +422,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private void AnalyzeForPhrases(List<Diagnostic> issues, in SyntaxToken token, in ReadOnlySpan<string> phrases, string replacement, in StringComparison comparison = StringComparison.Ordinal)
         {
-            var locations = GetAllLocations(token, phrases, comparison);
+            var locations = token.GetAllLocations(phrases, comparison);
 
             if (locations.Count > 0)
             {
@@ -432,7 +432,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private void AnalyzeForPhrases(List<Diagnostic> issues, in SyntaxToken token, string phrase, string replacement, in StringComparison comparison = StringComparison.Ordinal)
         {
-            var locations = GetAllLocations(token, phrase, comparison);
+            var locations = token.GetAllLocations(phrase, comparison);
 
             if (locations.Count > 0)
             {

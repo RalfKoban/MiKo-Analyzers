@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
                                                             && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                            && m.GetName() == nameof(ToString);
+                                                            && m.GetName() is nameof(ToString);
 
         private static InvocationExpressionSyntax GuidParse(ExpressionSyntax literal) => Invocation(nameof(System.Guid), nameof(System.Guid.Parse), Argument(literal));
 

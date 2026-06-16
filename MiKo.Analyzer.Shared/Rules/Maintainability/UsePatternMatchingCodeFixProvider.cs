@@ -19,19 +19,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = syntax;
-
-            if (syntax is BinaryExpressionSyntax binary)
+            switch (syntax)
             {
-                updatedSyntax = GetUpdatedSyntax(binary);
-            }
+                case BinaryExpressionSyntax binary:
+                    return Task.FromResult<SyntaxNode>(GetUpdatedSyntax(binary));
 
-            if (syntax is IsPatternExpressionSyntax pattern)
-            {
-                updatedSyntax = GetUpdatedPatternSyntax(pattern);
-            }
+                case IsPatternExpressionSyntax pattern:
+                    return Task.FromResult<SyntaxNode>(GetUpdatedPatternSyntax(pattern));
 
-            return Task.FromResult(updatedSyntax);
+                default:
+                    return Task.FromResult(syntax);
+            }
         }
 
         protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(IsPatternExpressionSyntax pattern) => pattern;
@@ -48,6 +46,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (operand is LiteralExpressionSyntax)
             {
                 return true; // literal is on wrong side, so swap sides
+            }
+
+            // we probably have a 'nameof'
+            if (expression is InvocationExpressionSyntax right && right.IsNameOf())
+            {
+                return false; // we are already on the correct sides
+            }
+
+            if (operand is InvocationExpressionSyntax left && left.IsNameOf())
+            {
+                return true; // enum is on wrong side, so swap sides
             }
 
             if (expression is PrefixUnaryExpressionSyntax)
@@ -67,17 +76,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             if (operand is MemberAccessExpressionSyntax)
-            {
-                return true; // enum is on wrong side, so swap sides
-            }
-
-            // we probably have a 'nameof'
-            if (expression is InvocationExpressionSyntax right && right.IsNameOf())
-            {
-                return false; // we are already on the correct sides
-            }
-
-            if (operand is InvocationExpressionSyntax left && left.IsNameOf())
             {
                 return true; // enum is on wrong side, so swap sides
             }

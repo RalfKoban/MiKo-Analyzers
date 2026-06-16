@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var parameter = parameters[index];
 
                 var expected = count is 1
-                               ? symbol.Name == nameof(Equals) ? "other" : "e"
+                               ? symbol.Name is nameof(Equals) ? "other" : "e"
                                : GetNameForIndex(index);
 
                 if (parameter.Name != expected)
@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (applicableParameters.Count is 1)
             {
-                return method.Name == nameof(Equals) ? "other" : "e";
+                return method.Name is nameof(Equals) ? "other" : "e";
             }
 
             return GetNameForIndex(applicableParameters.IndexOf(symbol));
