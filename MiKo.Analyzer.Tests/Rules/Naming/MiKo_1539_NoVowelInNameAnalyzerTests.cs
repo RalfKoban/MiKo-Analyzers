@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCaseSource(nameof(UpperCaseVowels))]
         [TestCaseSource(nameof(UpperCaseConstants))]
         [TestCase(Constants.Underscore)]
-        public void No_issue_is_reported_for_local_variable_named_(char c) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_variable_named_(in char c) => No_issue_is_reported_for(@"
 public class TestMe
     {
         public void DoSomething()
@@ -47,8 +47,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_local_variable_named_(
-                                                               [ValueSource(nameof(LowerCaseVowels))] char c1,
-                                                               [ValueSource(nameof(LowerCaseConstants))] char c2)
+                                                               [ValueSource(nameof(LowerCaseVowels))] in char c1,
+                                                               [ValueSource(nameof(LowerCaseConstants))] in char c2)
             => No_issue_is_reported_for(@"
 public class TestMe
     {
@@ -93,8 +93,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_local_variable_named_(
-                                                               [ValueSource(nameof(LowerCaseConstants))] char c1,
-                                                               [ValueSource(nameof(LowerCaseConstants))] char c2)
+                                                               [ValueSource(nameof(LowerCaseConstants))] in char c1,
+                                                               [ValueSource(nameof(LowerCaseConstants))] in char c2)
             => An_issue_is_reported_for(@"
 public class TestMe
     {

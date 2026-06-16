@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (value.IsNumber())
                         {
-                            var locations = GetAllLocations(token, value);
+                            var locations = token.GetAllLocations(value);
 
                             if (issues is null)
                             {

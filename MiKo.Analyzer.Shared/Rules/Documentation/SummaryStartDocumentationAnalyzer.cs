@@ -130,12 +130,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             if (AnalyzeTextStart(symbol, valueText, out var problematicText, out var comparison))
                             {
                                 // it's no valid text, so we have an issue
-                                var position = valueText.IndexOf(problematicText, comparison);
-
-                                var start = token.SpanStart + position; // find start position for underlining
+                                var start = valueText.IndexOf(problematicText, comparison);
                                 var end = start + problematicText.Length; // find end position for underlining
 
-                                var location = CreateLocation(token, start, end);
+                                var location = token.GetLocationWithOffset(start, end);
 
                                 return TextStartIssue(symbol, location);
                             }

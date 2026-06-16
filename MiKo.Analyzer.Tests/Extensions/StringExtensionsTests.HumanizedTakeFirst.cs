@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("hello   ", 5, ExpectedResult = "hello")]
         [TestCase("hello   ", 3, ExpectedResult = "hel...")]
         [TestCase("hi  there", 4, ExpectedResult = "hi...")]
-        public static string HumanizedTakeFirst_string_returns_correct_result_(string value, int maximum) => value.HumanizedTakeFirst(maximum);
+        public static string HumanizedTakeFirst_string_returns_correct_result_(string value, in int maximum) => value.HumanizedTakeFirst(maximum);
 
         [TestCase("", 10, ExpectedResult = "")]
         [TestCase("hello", 10, ExpectedResult = "hello")]
@@ -31,6 +31,6 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("hello   ", 5, ExpectedResult = "hello")]
         [TestCase("hello   ", 3, ExpectedResult = "hel...")]
         [TestCase("hi  there", 4, ExpectedResult = "hi...")]
-        public static string HumanizedTakeFirst_ReadOnlySpan_returns_correct_result_(string value, int maximum) => ((System.ReadOnlySpan<char>)value).HumanizedTakeFirst(maximum);
+        public static string HumanizedTakeFirst_ReadOnlySpan_returns_correct_result_(string value, in int maximum) => ((System.ReadOnlySpan<char>)value).HumanizedTakeFirst(maximum);
     }
 }

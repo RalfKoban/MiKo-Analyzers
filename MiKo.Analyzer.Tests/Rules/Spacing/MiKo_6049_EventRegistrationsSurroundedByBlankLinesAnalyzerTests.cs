@@ -743,6 +743,96 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_NSubstitute_Raise_Event()
+        {
+            const string OriginalCode = @"
+using System;
+using NSubstitute;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public void DoSomething(EventProvider provider)
+    {
+        provider.MyEvent += Raise.Event();
+        DoSomething(provider);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using NSubstitute;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public void DoSomething(EventProvider provider)
+    {
+        provider.MyEvent += Raise.Event();
+
+        DoSomething(provider);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NSubstitute_Raise_EventWith()
+        {
+            const string OriginalCode = @"
+using System;
+using NSubstitute;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public void DoSomething(EventProvider provider)
+    {
+        provider.MyEvent += Raise.EventWith(new object(), new EventArgs());
+        DoSomething(provider);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using NSubstitute;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public void DoSomething(EventProvider provider)
+    {
+        provider.MyEvent += Raise.EventWith(new object(), new EventArgs());
+
+        DoSomething(provider);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6049_EventRegistrationsSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6049_EventRegistrationsSurroundedByBlankLinesAnalyzer();

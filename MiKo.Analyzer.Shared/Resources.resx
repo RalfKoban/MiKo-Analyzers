@@ -5061,6 +5061,36 @@ This ensures precision in your tests and maintains clear expectations.</value>
   <data name="MiKo_3124_Title" xml:space="preserve">
     <value>Do not use assertions in finally blocks in test methods</value>
   </data>
+  <data name="MiKo_3125_CodeFixTitle" xml:space="preserve">
+    <value>Remove [Test] from parameterized test</value>
+  </data>
+  <data name="MiKo_3125_Description" xml:space="preserve">
+    <value>Avoid marking a test method with both [Test] and [TestCase] at the same time.
+
+While [Test] marks a simple, non-parameterized test and [TestCase] marks a parameterized test, NUnit allows combining them without generating extra test cases.
+Use either [Test] or [TestCase] to keep tests clear and easy to understand.</value>
+  </data>
+  <data name="MiKo_3125_MessageFormat" xml:space="preserve">
+    <value>Remove [Test] from parameterized test</value>
+  </data>
+  <data name="MiKo_3125_Title" xml:space="preserve">
+    <value>NUnit tests should not have both [Test] and [TestCase] applied</value>
+  </data>
+  <data name="MiKo_3126_CodeFixTitle" xml:space="preserve">
+    <value>Only keep [Theory]</value>
+  </data>
+  <data name="MiKo_3126_Description" xml:space="preserve">
+    <value>Avoid marking a test method also with [Theory].
+
+While tests are example-based with specific inputs and expected outputs, [Theory] makes a general statement that holds true for all inputs satisfying certain assumptions, making it a fundamentally different kind of test.
+Use either a test attribute or [Theory] to keep the intent of each test method clear and easy to understand.</value>
+  </data>
+  <data name="MiKo_3126_MessageFormat" xml:space="preserve">
+    <value>Only keep [Theory]</value>
+  </data>
+  <data name="MiKo_3126_Title" xml:space="preserve">
+    <value>Theories should not have test attributes applied</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

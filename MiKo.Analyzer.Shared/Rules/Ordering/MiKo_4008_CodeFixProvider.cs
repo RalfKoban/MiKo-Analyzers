@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         protected override Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(syntax);
-            var method = modifiedType.ChildNodes<MethodDeclarationSyntax>().Last(_ => _.GetName() == nameof(Equals) && _.Modifiers.Any(SyntaxKind.PublicKeyword));
+            var method = modifiedType.ChildNodes<MethodDeclarationSyntax>().Last(_ => _.GetName() is nameof(Equals) && _.Modifiers.Any(SyntaxKind.PublicKeyword));
 
             // place after equals method
             var result = modifiedType.InsertNodeAfter(method, syntax);

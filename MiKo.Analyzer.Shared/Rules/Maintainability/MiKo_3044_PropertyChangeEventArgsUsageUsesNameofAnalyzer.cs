@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = expression.GetName();
 
-            return name == nameof(Equals);
+            return name is nameof(Equals);
         }
 
         private static bool IsPropertyName(InvocationExpressionSyntax expression)
