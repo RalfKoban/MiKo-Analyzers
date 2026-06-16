@@ -1927,22 +1927,27 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private bool ReferencesTestAssemblies(Compilation compilation)
         {
-            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestAttribute") != null)
+            if (compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TestAttributeFullName) != null)
             {
                 return SupportsNUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestCaseAttribute") != null)
+            if (compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TestCaseAttributeFullName) != null)
             {
                 return SupportsNUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
+            if (compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TheoryAttributeFullName) != null)
+            {
+                return SupportsNUnit;
+            }
+
+            if (compilation.GetTypeByMetadataName("Xunit." + Constants.Names.FactAttributeFullName) != null)
             {
                 return SupportsXUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("Xunit.TheoryAttribute") != null)
+            if (compilation.GetTypeByMetadataName("Xunit." + Constants.Names.TheoryAttributeFullName) != null)
             {
                 return SupportsXUnit;
             }

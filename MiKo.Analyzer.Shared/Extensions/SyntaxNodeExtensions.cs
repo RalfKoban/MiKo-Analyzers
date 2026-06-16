@@ -3039,8 +3039,21 @@ namespace MiKoSolutions.Analyzers
                 case DocumentationCommentTriviaSyntax _:
                     return value.RemoveNode(node, SyntaxRemoveOptions.AddElasticMarker);
 
-                case AttributeListSyntax a when a.IsOnSameLineAs(a.NextSibling()):
-                    return value.RemoveNode(node, SyntaxRemoveOptions.KeepLeadingTrivia);
+                case AttributeListSyntax a:
+                {
+                    var options = SyntaxRemoveOptions.KeepNoTrivia;
+
+                    if (a.NextSibling() is AttributeListSyntax next && a.IsOnSameLineAs(next))
+                    {
+                        options = SyntaxRemoveOptions.KeepLeadingTrivia;
+                    }
+                    else if (a.PreviousSibling() is AttributeListSyntax previous && a.IsOnSameLineAs(previous))
+                    {
+                        options = SyntaxRemoveOptions.KeepTrailingTrivia;
+                    }
+
+                    return value.RemoveNode(node, options);
+                }
 
                 default:
                     return value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);

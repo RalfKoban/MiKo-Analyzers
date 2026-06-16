@@ -8,15 +8,23 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3125_TestMethodsDoNotHaveBothTestAndTestCaseAttributeAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3126_TheoryMethodsDoNotHaveTestAttributeAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3125";
+        public const string Id = "MiKo_3126";
 
-        public MiKo_3125_TestMethodsDoNotHaveBothTestAndTestCaseAttributeAnalyzer() : base(Id)
+        private static readonly HashSet<string> TestAttributeNames = new HashSet<string>
+                                                                         {
+                                                                             Constants.Names.TestAttribute,
+                                                                             Constants.Names.TestAttributeFullName,
+                                                                             Constants.Names.TestCaseAttribute,
+                                                                             Constants.Names.TestCaseAttributeFullName,
+                                                                             Constants.Names.FactAttribute,
+                                                                             Constants.Names.FactAttributeFullName,
+                                                                         };
+
+        public MiKo_3126_TheoryMethodsDoNotHaveTestAttributeAnalyzer() : base(Id)
         {
         }
-
-        protected override DiagnosticSeverity Severity => DiagnosticSeverity.Info; // as both are allowed by NUnit, this is more an information than a warning
 
         protected override bool IsUnitTestAnalyzer => true;
 
@@ -30,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var attributeNames = attributes.ToHashSet(_ => _.AttributeClass?.Name);
 
-                if (attributeNames.Contains(Constants.Names.TestAttributeFullName) && attributeNames.Contains(Constants.Names.TestCaseAttributeFullName))
+                if (attributeNames.Contains(Constants.Names.TheoryAttributeFullName) && attributeNames.Overlaps(TestAttributeNames))
                 {
                     var method = symbol.GetSyntax<MethodDeclarationSyntax>();
 
@@ -54,6 +62,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTest(NameSyntax name) => IsTest(name.GetName());
 
-        private static bool IsTest(string name) => name is Constants.Names.TestAttribute || name is Constants.Names.TestAttributeFullName;
+        private static bool IsTest(string name) => TestAttributeNames.Contains(name);
     }
 }

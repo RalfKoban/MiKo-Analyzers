@@ -2,10 +2,10 @@
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 
-// ReSharper disable once CheckNamespace : Fake for Xunit Fact
+// ReSharper disable once CheckNamespace : Fake for Xunit Theory
 namespace Xunit
 {
-    public class FactAttribute : Attribute
+    public class TheoryAttribute : Attribute
     {
     }
 }
