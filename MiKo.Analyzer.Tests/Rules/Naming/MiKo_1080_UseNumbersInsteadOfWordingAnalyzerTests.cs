@@ -55,6 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "OnExit",
                                                             "oxone",
                                                             "phone",
+                                                            "ProNet", // actually 'ProfiNet', but developers used 'pro' here as abbreviation
+                                                            "proNet", // actually 'profiNet', but developers used 'pro' here as abbreviation
+                                                            "synchroNew", // 'oNe' here is no number
                                                             "seconds",
                                                             "Seconds",
                                                             "SetupNonExistentDevice",

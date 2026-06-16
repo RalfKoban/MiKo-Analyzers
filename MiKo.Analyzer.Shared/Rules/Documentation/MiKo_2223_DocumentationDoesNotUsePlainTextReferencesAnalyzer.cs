@@ -360,13 +360,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return words?.ToArray() ?? Array.Empty<string>();
         }
 
-        private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
-        {
-            var spanStart = token.SpanStart;
-
-            return Analyzer.CreateLocation(token, spanStart + offsetStart, spanStart + offsetEnd);
-        }
-
         private IEnumerable<Diagnostic> AnalyzeComment(in SyntaxToken tokenText, string text) => Enumerable.Empty<Diagnostic>()
                                                                                                            .Concat(AnalyzeCommentForStringEmptyTexts(tokenText, text)) // run over the string.Empty texts here before all others, to get the correct text as replacement text in the message
                                                                                                            .Concat(AnalyzeCommentForCompoundWords(tokenText, text))
@@ -382,7 +375,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (index != -1)
                 {
                     // we found a special text, so report that
-                    var location = CreateLocation(token, index, index + stringEmpty.Length);
+                    var location = token.GetLocationWithOffset(index, index + stringEmpty.Length);
 
                     yield return Issue("String.Empty", location, CreateReplacementProposal(stringEmpty, "String.Empty")); // we use the side effect here that the name is the argument zero and gets used in the issue's message
                 }
@@ -433,7 +426,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                         // we found a compound word, so report that
-                        var location = CreateLocation(token, start, end);
+                        var location = token.GetLocationWithOffset(start, end);
                         var compoundWord = trimmed.ToString();
 
                         yield return Issue(location, CreateReplacementProposal(compoundWord, compoundWord));
@@ -469,12 +462,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
-                var locations = GetAllLocations(token, word.WithDelimiters(), startOffset: startOffset + 1, endOffset: 1);
+                var locations = token.GetAllLocations(word.WithDelimiters(), startOffset: startOffset + 1, endOffset: 1);
 
                 if (locations.Count is 0)
                 {
                     // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
-                    var lastLocation = GetLastLocation(token, word, startOffset: startOffset);
+                    var lastLocation = token.GetLastLocation(word, startOffset: startOffset);
 
                     if (lastLocation != null)
                     {

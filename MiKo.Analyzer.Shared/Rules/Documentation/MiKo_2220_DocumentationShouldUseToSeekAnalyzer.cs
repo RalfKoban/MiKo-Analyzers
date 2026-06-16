@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                var locations = GetAllLocations(textTokens[i], FindTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset);
+                var locations = textTokens[i].GetAllLocations(FindTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

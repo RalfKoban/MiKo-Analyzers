@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var expression in method.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
                 {
-                    if (expression.Name.GetName() == nameof(GetHashCode))
+                    if (expression.Name.GetName() is nameof(GetHashCode))
                     {
                         switch (expression.Expression)
                         {

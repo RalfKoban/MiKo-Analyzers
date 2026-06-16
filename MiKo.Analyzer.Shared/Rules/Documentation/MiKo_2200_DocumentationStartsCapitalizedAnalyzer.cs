@@ -76,12 +76,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     // find the starting character, but ignore white-spaces
-                    var start = token.SpanStart + (text.Length - trimmedText.Length);
+                    var start = text.Length - trimmedText.Length;
+                    var end = start + 1; // we want to underline only the first character
 
-                    // we want to underline only the first character
-                    var end = start + 1;
-
-                    var location = CreateLocation(token, start, end);
+                    var location = token.GetLocationWithOffset(start, end);
 
                     return Issue(location, xmlTag);
                 }

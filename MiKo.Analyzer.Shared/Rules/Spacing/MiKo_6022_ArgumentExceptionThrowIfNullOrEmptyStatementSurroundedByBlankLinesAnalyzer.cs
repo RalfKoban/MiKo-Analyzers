@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected override bool IsApplicable(Compilation compilation) => compilation.GetTypeByMetadataName("System.ArgumentException") != null;
 
         // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
-        protected override bool IsCall(ITypeSymbol type) => type?.Name == nameof(ArgumentException);
+        protected override bool IsCall(ITypeSymbol type) => type?.Name is nameof(ArgumentException);
 
         protected override bool IsCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetName() is "ThrowIfNullOrEmpty" && base.IsCall(syntax, semanticModel);
 

@@ -246,7 +246,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var isBool = property.Type.IsBoolean();
             var isAsync = property.IsAsync();
 
-            if (property.Type is GenericNameSyntax g && g.Identifier.ValueText == nameof(Task))
+            if (property.Type is GenericNameSyntax g && g.Identifier.ValueText is nameof(Task))
             {
                 var arguments = g.TypeArgumentList.Arguments;
 
@@ -269,7 +269,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var isBool = method.ReturnType.IsBoolean();
             var isAsync = method.IsAsync();
 
-            if (method.ReturnType is GenericNameSyntax g && g.Identifier.ValueText == nameof(Task))
+            if (method.ReturnType is GenericNameSyntax g && g.Identifier.ValueText is nameof(Task))
             {
                 var arguments = g.TypeArgumentList.Arguments;
 

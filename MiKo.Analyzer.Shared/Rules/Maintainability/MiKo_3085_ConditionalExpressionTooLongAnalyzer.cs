@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
                     return SimpleMemberAccessCannotBeShortened(m);
 
-                case IdentifierNameSyntax n when n.GetName() == nameof(GetHashCode):
+                case IdentifierNameSyntax n when n.GetName() is nameof(GetHashCode):
                     return true; // we assume that any GetHashCode invocation cannot be shortened anymore
 
                 default:

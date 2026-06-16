@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.AncestorsWithinDocumentation<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName())))
                                          .SelectMany(_ => _.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken)))
             {
-                var locations = GetAllLocations(token, Terms);
+                var locations = token.GetAllLocations(Terms);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

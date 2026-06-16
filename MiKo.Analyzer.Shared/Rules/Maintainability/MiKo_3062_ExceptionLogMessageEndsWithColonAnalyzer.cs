@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var end = node.Span.End;
             var start = Math.Max(node.SpanStart, end - 2); // we want to underline the last 2 characters
-            var location = CreateLocation(node, start, end);
+            var location = node.GetLocation(start, end);
 
             return Issue(location);
         }
@@ -142,7 +142,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var end = token.Span.End;
             var start = Math.Max(token.SpanStart, end - 2); // we want to underline the last 2 characters
-            var location = CreateLocation(token, start, end);
+            var location = token.GetLocation(start, end);
 
             return Issue(location);
         }

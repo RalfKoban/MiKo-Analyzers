@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IReadOnlyList<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia)
         {
-            var locations = GetAllLocations(trivia, Constants.Comments.NotContractionPhrase, StringComparison.OrdinalIgnoreCase);
+            var locations = trivia.GetAllLocations(Constants.Comments.NotContractionPhrase, StringComparison.OrdinalIgnoreCase);
 
             var count = locations.Count;
 

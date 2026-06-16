@@ -141,10 +141,10 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCaseSource(nameof(LowerCaseCharacters))]
         [TestCaseSource(nameof(SentenceParts))]
         [TestCaseSource(nameof(WhiteSpaces))]
-        public static void IsNumber_char_is_false_for_(char value) => Assert.That(value.IsNumber(), Is.False);
+        public static void IsNumber_char_is_false_for_(in char value) => Assert.That(value.IsNumber(), Is.False);
 
         [Test]
-        public static void IsNumber_char_is_true_for_([ValueSource(nameof(Numbers))] char value) => Assert.That(value.IsNumber());
+        public static void IsNumber_char_is_true_for_([ValueSource(nameof(Numbers))] in char value) => Assert.That(value.IsNumber());
 
         [TestCase(" ")]
         [TestCase("")]
