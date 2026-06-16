@@ -109,6 +109,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] Prefixes =
                                                   {
+                                                      new Pair("adpt", "adapter"),
                                                       new Pair("alt", "alternative"),
                                                       new Pair("app", "application"),
                                                       new Pair("appl", "application"),
@@ -221,6 +222,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
                                                       new Pair("init", "initialize"),
+                                                      new Pair("inp", "input"),
                                                       new Pair("interv", "interval"),
                                                       new Pair("intf", "interface"),
                                                       new Pair("intfc", "interface"),
@@ -260,6 +262,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ops", "operations"),
                                                       new Pair("opt", "option"),
                                                       new Pair("opts", "options"),
+                                                      new Pair("outp", "output"),
                                                       new Pair("para", "parameter"),
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
@@ -313,6 +316,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("std", "standard"),
                                                       new Pair("str", "string"),
                                                       new Pair("sts", "status"),
+                                                      new Pair("succ", "success"),
                                                       new Pair("svc", "service"),
                                                       new Pair("svr", "server"),
                                                       new Pair("syn", "syntax"),
@@ -343,6 +347,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] OnlyMidTerms =
                                                       {
+                                                          new Pair("Adpt", "Adapter"),
                                                           new Pair("Alt", "Alternative"),
                                                           new Pair("App", "Application"),
                                                           new Pair("Appl", "Application"),
@@ -464,6 +469,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
                                                           new Pair("Init", "Initialize"),
+                                                          new Pair("Inp", "Input"),
                                                           new Pair("Interv", "Interval"),
                                                           new Pair("Intf", "Interface"),
                                                           new Pair("Intfc", "Interface"),
@@ -502,6 +508,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ops", "Operations"),
                                                           new Pair("Opt", "Option"),
                                                           new Pair("Opts", "Options"),
+                                                          new Pair("Outp", "Output"),
                                                           new Pair("Para", "Parameter"),
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
@@ -555,6 +562,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Std", "Standard"),
                                                           new Pair("Str", "String"),
                                                           new Pair("Sts", "Status"),
+                                                          new Pair("Succ", "Success"),
                                                           new Pair("Svc", "Service"),
                                                           new Pair("Svr", "Server"),
                                                           new Pair("Syn", "Syntax"),
