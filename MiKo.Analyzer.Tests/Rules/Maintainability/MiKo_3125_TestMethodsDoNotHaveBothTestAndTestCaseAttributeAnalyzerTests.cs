@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -183,6 +181,118 @@ namespace Bla
     public class TestMe
     {
         [TestCase(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_fully_named_Test_and_TestCase_attribute_as_different_attribute_lists()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestAttribute]
+        [TestCaseAttribute(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCaseAttribute(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Test_and_TestCase_attribute_as_different_attribute_lists_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test][TestCase(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCase(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_fully_named_Test_and_TestCase_attribute_as_different_attribute_lists_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestAttribute][TestCaseAttribute(42)]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCaseAttribute(42)]
         public void DoSomething(int i) { }
     }
 }

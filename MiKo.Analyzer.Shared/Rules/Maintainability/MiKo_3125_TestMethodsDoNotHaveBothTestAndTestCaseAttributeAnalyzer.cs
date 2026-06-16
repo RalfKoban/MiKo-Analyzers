@@ -63,6 +63,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTest(NameSyntax name) => IsTest(name.GetName());
 
-        private static bool IsTest(string name) => name is TestAttributeDefault || name is TestCaseAttributeFullName;
+        private static bool IsTest(string name) => name is TestAttributeDefault || name is TestAttributeFullName;
     }
 }
