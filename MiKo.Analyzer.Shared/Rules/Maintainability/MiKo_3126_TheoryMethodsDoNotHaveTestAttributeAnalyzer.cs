@@ -38,22 +38,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var attributeNames = attributes.ToHashSet(_ => _.AttributeClass?.Name);
 
-                if (attributeNames.Contains(Constants.Names.TheoryAttributeFullName))
+                if (attributeNames.Contains(Constants.Names.TheoryAttributeFullName) && attributeNames.Overlaps(TestAttributeNames))
                 {
-                    if (attributeNames.Except(Constants.Names.TheoryAttributeFullName).IsProperSubsetOf(TestAttributeNames))
+                    var method = symbol.GetSyntax<MethodDeclarationSyntax>();
+
+                    foreach (var attributeList in method.AttributeLists)
                     {
-                        var method = symbol.GetSyntax<MethodDeclarationSyntax>();
-
-                        foreach (var attributeList in method.AttributeLists)
+                        foreach (var attribute in attributeList.Attributes)
                         {
-                            foreach (var attribute in attributeList.Attributes)
-                            {
-                                var attributeName = attribute.Name;
+                            var attributeName = attribute.Name;
 
-                                if (IsTest(attributeName))
-                                {
-                                    return new[] { Issue(attributeName) };
-                                }
+                            if (IsTest(attributeName))
+                            {
+                                return new[] { Issue(attributeName) };
                             }
                         }
                     }

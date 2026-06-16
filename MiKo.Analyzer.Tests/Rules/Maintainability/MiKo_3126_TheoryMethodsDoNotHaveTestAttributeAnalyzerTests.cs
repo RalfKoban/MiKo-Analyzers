@@ -1210,6 +1210,274 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void An_issue_is_reported_for_test_method_with_Theory_and_Test_attribute_as_different_attribute_lists_when_Category_attribute_is_also_present() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Test]
+        [Category(""x"")]
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_method_with_Theory_and_TestCase_attribute_as_different_attribute_lists_when_Category_attribute_is_also_present() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [TestCase(42)]
+        [Category(""x"")]
+        public void DoSomething(int i) { }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Theory_and_Test_attribute_as_different_attribute_lists_when_Category_attribute_is_also_present_in_separate_list()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Test]
+        [Category(""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Category(""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Theory_and_TestCase_attribute_as_different_attribute_lists_when_Category_attribute_is_also_present_in_separate_list()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [TestCase(42)]
+        [Category(""x"")]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Category(""x"")]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Theory_and_Test_attribute_in_same_attribute_list_as_Category()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Test, Category(""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Category(""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Theory_and_TestCase_attribute_in_same_attribute_list_as_Category()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [TestCase(42), Category(""x"")]
+        public void DoSomething(int i) { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory]
+        [Category(""x"")]
+        public void DoSomething(int i) { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Theory_and_Category_in_same_attribute_list_and_Test_as_separate_attribute_list()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory, Category(""x"")]
+        [Test]
+        public void DoSomething() { }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Theory, Category(""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_Theory_and_Fact_attribute_as_different_attribute_lists_when_Trait_attribute_is_also_present_in_separate_list()
+        {
+            const string OriginalCode = @"
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Theory]
+        [Fact]
+        [Trait(""Category"", ""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+            const string FixedCode = @"
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Theory]
+        [Trait(""Category"", ""x"")]
+        public void DoSomething() { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3126_TheoryMethodsDoNotHaveTestAttributeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3126_TheoryMethodsDoNotHaveTestAttributeAnalyzer();
