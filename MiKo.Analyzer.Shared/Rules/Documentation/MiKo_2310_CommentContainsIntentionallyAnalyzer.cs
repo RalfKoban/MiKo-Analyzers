@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     foreach (var t in trivia)
                     {
-                        var locations = GetAllLocations(t, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase);
+                        var locations = t.GetAllLocations(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase);
 
                         for (int index = 0, locationsCount = locations.Count; index < locationsCount; index++)
                         {

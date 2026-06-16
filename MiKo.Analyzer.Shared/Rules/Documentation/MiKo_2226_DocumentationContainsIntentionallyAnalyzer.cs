@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var locations = GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase);
+                var locations = token.GetAllLocations(Phrases, StringComparison.OrdinalIgnoreCase);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

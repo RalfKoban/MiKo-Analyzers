@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var locations = GetAllLocations(token, Phrases);
+                var locations = token.GetAllLocations(Phrases);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

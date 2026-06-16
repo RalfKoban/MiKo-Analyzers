@@ -246,6 +246,38 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_nameof_on_property()
+        {
+            const string OriginalCode = @"
+public record Dto
+{
+    public string Name { get; set; }
+    public string Other { get; set; }
+}
+
+public class TestMe
+{
+    public bool DoSomething(Dto dto) => dto.Name == nameof(System.Linq) && dto.Other == nameof(System);
+}
+";
+
+            const string FixedCode = @"
+public record Dto
+{
+    public string Name { get; set; }
+    public string Other { get; set; }
+}
+
+public class TestMe
+{
+    public bool DoSomething(Dto dto) => dto.Name is nameof(System.Linq) && dto.Other is nameof(System);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3227_UsePatternMatchingForLiteralEqualsExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3227_UsePatternMatchingForLiteralEqualsExpressionAnalyzer();

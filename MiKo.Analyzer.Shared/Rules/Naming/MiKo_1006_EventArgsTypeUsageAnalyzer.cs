@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var eventName = identifier.ValueText;
 
-            if (eventName == nameof(ICommand.CanExecuteChanged) && typeName == nameof(EventHandler))
+            if (eventName is nameof(ICommand.CanExecuteChanged) && typeName is nameof(EventHandler))
             {
                 return null; // ignore event that we cannot change anymore
             }

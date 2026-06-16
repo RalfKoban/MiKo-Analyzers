@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                foreach (var location in token.GetAllLocations(Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
                     var text = location.GetText().ToLowerCase();
 

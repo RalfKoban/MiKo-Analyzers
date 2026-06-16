@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 var fixedName = AbbreviationFinder.FindAndReplaceAllAbbreviations(name);
-                var nameSpan = type.IsKind(SyntaxKind.InterfaceDeclaration) && fixedName[0] == 'I'
+                var nameSpan = type.IsKind(SyntaxKind.InterfaceDeclaration) && fixedName[0] is 'I'
                                ? fixedName.AsSpan(1) // do not use the leading 'I' of interfaces
                                : fixedName.AsSpan();
 

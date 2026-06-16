@@ -31,11 +31,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static ReadOnlySpan<SyntaxToken> CollectNames(
 #if VS2022 || VS2026
-            BaseNamespaceDeclarationSyntax node,
+                                                          BaseNamespaceDeclarationSyntax node,
 #else
-            NamespaceDeclarationSyntax node,
+                                                          NamespaceDeclarationSyntax node,
 #endif
-            SyntaxToken[] rentedArray)
+                                                          SyntaxToken[] rentedArray)
         {
             switch (node.Name)
             {

@@ -1358,7 +1358,7 @@ public class TestMe
                                 continue;
                             }
 
-                            if (shortStartingPhrase.StartsWith("an ", StringComparison.Ordinal) && shortStartingPhrase[3] != 'a' && shortStartingPhrase[3] != 'i')
+                            if (shortStartingPhrase.StartsWith("an ", StringComparison.Ordinal) && shortStartingPhrase[3] is not 'a' && shortStartingPhrase[3] is not 'i')
                             {
                                 // do not test "an dictionary" or "an hashset", to limit tests
                                 continue;

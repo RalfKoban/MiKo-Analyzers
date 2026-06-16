@@ -1464,19 +1464,30 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsEventRegistration(this AssignmentExpressionSyntax value, SemanticModel semanticModel)
         {
-            if (value.Right is IdentifierNameSyntax)
+            switch (value.Right)
             {
-                switch (value.Left)
+                case IdentifierNameSyntax _:
+                case InvocationExpressionSyntax i when i.GetIdentifierName() is "Raise" && i.GetName().StartsWith("Event", StringComparison.Ordinal):
+                    return IsEventSymbol(value.Left);
+
+                default:
+                    return false;
+            }
+
+            bool IsEventSymbol(SyntaxNode valueLeft)
+            {
+                switch (valueLeft)
                 {
                     case MemberAccessExpressionSyntax maes:
                         return maes.GetSymbol(semanticModel) is IEventSymbol;
 
                     case IdentifierNameSyntax identifier:
                         return identifier.GetSymbol(semanticModel) is IEventSymbol;
+
+                    default:
+                        return false;
                 }
             }
-
-            return false;
         }
 
         /// <summary>
@@ -2148,7 +2159,7 @@ namespace MiKoSolutions.Analyzers
 
             var s = value.ToString();
 
-            return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
+            return s is nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
         }
 
         /// <summary>
@@ -2199,7 +2210,7 @@ namespace MiKoSolutions.Analyzers
 
             var s = value.ToString();
 
-            return s == nameof(StreamingContext) || s == TypeNames.StreamingContext;
+            return s is nameof(StreamingContext) || s == TypeNames.StreamingContext;
         }
 
         /// <summary>
@@ -2337,7 +2348,7 @@ namespace MiKoSolutions.Analyzers
                                                                                    && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
                                                                                    && maes.Expression is TypeSyntax invokedType
                                                                                    && invokedType.IsString()
-                                                                                   && maes.GetName() == nameof(string.Format);
+                                                                                   && maes.GetName() is nameof(string.Format);
 
         /// <summary>
         /// Determines whether an argument syntax represents a <see cref="string"/> literal.
@@ -2666,7 +2677,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the return statement returns a completed task; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.CompletedTask);
+        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() is nameof(Task) && maes.GetName() is nameof(Task.CompletedTask);
 
         /// <summary>
         /// Determines whether an if statement returns immediately.
@@ -3023,11 +3034,30 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
-            var removeOptions = node is DocumentationCommentTriviaSyntax
-                                ? SyntaxRemoveOptions.AddElasticMarker
-                                : SyntaxRemoveOptions.KeepNoTrivia;
+            switch (node)
+            {
+                case DocumentationCommentTriviaSyntax _:
+                    return value.RemoveNode(node, SyntaxRemoveOptions.AddElasticMarker);
 
-            return value.RemoveNode(node, removeOptions);
+                case AttributeListSyntax a:
+                {
+                    var options = SyntaxRemoveOptions.KeepNoTrivia;
+
+                    if (a.NextSibling() is AttributeListSyntax next && a.IsOnSameLineAs(next))
+                    {
+                        options = SyntaxRemoveOptions.KeepLeadingTrivia;
+                    }
+                    else if (a.PreviousSibling() is AttributeListSyntax previous && a.IsOnSameLineAs(previous))
+                    {
+                        options = SyntaxRemoveOptions.KeepTrailingTrivia;
+                    }
+
+                    return value.RemoveNode(node, options);
+                }
+
+                default:
+                    return value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+            }
         }
 
         /// <summary>

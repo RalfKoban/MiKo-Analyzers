@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             foreach (var accessibility in Accessibilities)
             {
                 var methods = ordinaryMethods.Where(_ => _.DeclaredAccessibility == accessibility).ToList();
-                var disposeMethods = methods.Where(_ => _.Name == nameof(IDisposable.Dispose)).ToList();
+                var disposeMethods = methods.Where(_ => _.Name is nameof(IDisposable.Dispose)).ToList();
 
                 if (accessibility is Accessibility.Public && disposeMethods.Count is 0)
                 {

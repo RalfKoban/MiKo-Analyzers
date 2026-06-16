@@ -469,7 +469,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     type = type.BaseType;
                 }
             }
-            while (fieldInfo is null && type != null);
+            while (fieldInfo is null && type is not null);
 
             return fieldInfo?.GetValue(analyzer) as DiagnosticDescriptor;
         }

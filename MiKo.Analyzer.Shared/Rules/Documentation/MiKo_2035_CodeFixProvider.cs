@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // it's either a task or a generic collection
             var returnTypeValue = returnType.Identifier.ValueText;
 
-            if (returnTypeValue == nameof(Task))
+            if (returnTypeValue is nameof(Task))
             {
                 // it is a task, so inspect the typ argument to check if it is an array type
                 var middlePart = GetGenericCommentMiddlePart(returnType);

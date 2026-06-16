@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsAsyncTaskBased();
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsAsyncTaskBased() && method.IsTestMethod() is false;
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Phrase);
 
