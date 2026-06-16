@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var i = 0; i < textTokensCount; i++)
             {
-                var locations = GetAllLocations(textTokens[i], Constants.Comments.WhichIsToTerms, StringComparison.OrdinalIgnoreCase);
+                var locations = textTokens[i].GetAllLocations(Constants.Comments.WhichIsToTerms, StringComparison.OrdinalIgnoreCase);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

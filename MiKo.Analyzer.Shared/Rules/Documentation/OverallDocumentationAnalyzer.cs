@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IReadOnlyList<Diagnostic> AnalyzeForSpecialPhrase(in SyntaxToken syntaxToken, string startingPhrase, Func<string, string> replacementCallback)
         {
-            var locations = GetAllLocations(syntaxToken, startingPhrase);
+            var locations = syntaxToken.GetAllLocations(startingPhrase);
 
             if (locations.Count > 0)
             {
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                            ? adjective.ConcatenatedWith(Constants.Space, replacement.ToLowerCaseAt(0))
                                            : replacement;
 
-                    var finalLocation = CreateLocation(token, start, end);
+                    var finalLocation = token.GetLocation(start, end);
 
                     issues.Add(Issue(finalLocation, finalReplacement));
                 }
@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                var locations = GetAllLocations(syntaxToken, termsForAllLocations, comparison, Offset, Offset);
+                var locations = syntaxToken.GetAllLocations(termsForAllLocations, comparison, Offset, Offset);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)
@@ -152,8 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             results = new List<Diagnostic>(1);
                         }
 
-                        var offset = syntaxToken.SpanStart;
-                        var end = offset + tokenText.Length;
+                        var end = tokenText.Length;
                         var start = end - trimmedTerm.Length;
 
                         if (trimmedTerm.StartsWith(Constants.Space))
@@ -161,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             start += Offset; // we do not want to underline the first char
                         }
 
-                        var location = CreateLocation(syntaxToken, start, end);
+                        var location = syntaxToken.GetLocationWithOffset(start, end);
                         var issue = IssueLocal(location);
 
                         results.Add(issue);

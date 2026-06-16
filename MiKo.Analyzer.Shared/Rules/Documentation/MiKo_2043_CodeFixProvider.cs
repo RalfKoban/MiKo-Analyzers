@@ -66,11 +66,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Delegate used for", string.Empty);
 
             var delegateTexts = new[]
-                                {
-                                    "delegate", "a delegate", "the delegate",
-                                    "delegate signature", "a delegate signature", "the delegate signature",
-                                    "delegate type", "a delegate type", "the delegate type",
-                                };
+                                    {
+                                        "delegate", "a delegate", "the delegate",
+                                        "delegate signature", "a delegate signature", "the delegate signature",
+                                        "delegate type", "a delegate type", "the delegate type",
+                                    };
 
             foreach (var delegateText in delegateTexts)
             {

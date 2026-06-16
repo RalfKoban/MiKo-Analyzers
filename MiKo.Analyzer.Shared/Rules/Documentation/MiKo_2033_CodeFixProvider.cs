@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax NonGenericComment(XmlElementSyntax comment, string memberName)
         {
-            if (memberName == nameof(ToString))
+            if (memberName is nameof(ToString))
             {
                 return Comment(comment, "A ", SeeCref("string"), " that represents the current object.");
             }

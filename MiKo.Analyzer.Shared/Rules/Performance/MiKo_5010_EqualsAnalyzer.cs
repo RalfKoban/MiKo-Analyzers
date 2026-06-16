@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var node = (InvocationExpressionSyntax)context.Node;
 
             // shortcut to not analyze each single invocation node
-            if (node.Expression.GetName() == nameof(object.Equals))
+            if (node.Expression.GetName() is nameof(object.Equals))
             {
                 var issue = AnalyzeEqualsInvocation(node, context.ContainingSymbol, context.SemanticModel);
 

@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             for (var i = 0; i < allIndicesLength; i++)
                             {
-                                yield return Issue(CreateLocation(value, syntaxTree, token.SpanStart, allIndices[i]));
+                                yield return Issue(value.GetLocation(syntaxTree, token.SpanStart, allIndices[i]));
                             }
                         }
                     }
