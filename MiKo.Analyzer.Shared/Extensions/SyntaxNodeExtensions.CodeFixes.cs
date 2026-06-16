@@ -615,15 +615,15 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsSeeCrefTaskResult(this SyntaxNode value) => value.IsSeeCref("Task<TResult>", nameof(Task<object>.Result));
 
         /// <summary>
-        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> XML element.
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task"/&gt;</c>, a <c>&lt;see cref="Task{T}"/&gt;</c> or a <c>&lt;see cref="Task{TResult}"/&gt;</c> XML element.
         /// </summary>
         /// <param name="value">
         /// The syntax node to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the node is a <c>&lt;see cref="Task"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> element; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="Task"/&gt;</c>, <c>&lt;see cref="Task{T}"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> element; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsSeeCrefTask(this SyntaxNode value) => value.IsSeeCref("Task") || value.IsSeeCref("Task<TResult>");
+        internal static bool IsSeeCrefTask(this SyntaxNode value) => value.IsSeeCref("Task") || value.IsSeeCref("Task<TResult>") || value.IsSeeCref("Task<T>");
 
         /// <summary>
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <see cref="string"/> creation expression.

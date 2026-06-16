@@ -28,9 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private IEnumerable<Diagnostic> AnalyzeMethods(List<IMethodSymbol> methods)
         {
-            var potentialCorrectPositions = methods.Where(_ => _.Name == nameof(Equals)).ToHashSet(_ => methods.IndexOf(_) + 1);
+            var potentialCorrectPositions = methods.Where(_ => _.Name is nameof(Equals)).ToHashSet(_ => methods.IndexOf(_) + 1);
 
-            var getHashCodeMethod = methods.FindLast(_ => _.Name == nameof(GetHashCode));
+            var getHashCodeMethod = methods.FindLast(_ => _.Name is nameof(GetHashCode));
             var currentPosition = methods.IndexOf(getHashCodeMethod);
 
             if (potentialCorrectPositions.Contains(currentPosition) is false)

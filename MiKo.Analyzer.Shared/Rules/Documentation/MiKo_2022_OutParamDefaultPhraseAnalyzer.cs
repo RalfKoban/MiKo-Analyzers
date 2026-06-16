@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var contents = parameterComment.Content;
 
             return contents.Count > 0
-                   ? GetFirstTextIssueLocation(contents)
+                   ? contents.GetFirstTextIssueLocation()
                    : base.GetIssueLocation(parameterComment);
         }
 

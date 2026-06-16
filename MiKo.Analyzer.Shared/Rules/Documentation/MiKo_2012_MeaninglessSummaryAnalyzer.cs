@@ -208,7 +208,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // let's find the phrase in the summary XML to report the issue at the correct location
                 foreach (var textToken in summaryXml.GetXmlTextTokens())
                 {
-                    var location = GetFirstLocation(textToken, phrase, startOffset: startOffset, endOffset: endOffset);
+                    var location = textToken.GetFirstLocation(phrase, startOffset: startOffset, endOffset: endOffset);
 
                     if (location is null)
                     {

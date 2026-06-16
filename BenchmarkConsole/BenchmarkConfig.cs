@@ -14,6 +14,7 @@ namespace BenchmarkConsole
             AddJob(Job.Default.WithToolchain(CsProjCoreToolchain.NetCoreApp31));
             AddJob(Job.Default.WithToolchain(CsProjCoreToolchain.NetCoreApp80));
             AddJob(Job.Default.WithToolchain(CsProjCoreToolchain.NetCoreApp90));
+            AddJob(Job.Default.WithToolchain(CsProjCoreToolchain.NetCoreApp10_0));
             AddJob(Job.Default.WithToolchain(CsProjClassicNetToolchain.Net462));
             AddJob(Job.Default.WithToolchain(CsProjClassicNetToolchain.Net472));
             AddJob(Job.Default.WithToolchain(CsProjClassicNetToolchain.Net48));

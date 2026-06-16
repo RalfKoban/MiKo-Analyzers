@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
              && literal.Parent is ArgumentSyntax argument
              && argument.Parent is ArgumentListSyntax list
              && list.Parent is InvocationExpressionSyntax invocation
-             && invocation.Expression.GetName() == nameof(string.Intern))
+             && invocation.Expression.GetName() is nameof(string.Intern))
             {
                 ReportDiagnostics(context, Issue(invocation));
             }

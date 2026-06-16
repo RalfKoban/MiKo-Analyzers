@@ -340,7 +340,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var a0 = arguments[0];
                         var a1 = arguments[1];
 
-                        if (a0.Expression is TypeOfExpressionSyntax t0 && a1.Expression is InvocationExpressionSyntax i1 && i1.GetName() == nameof(GetType) && i1.GetIdentifierName() == exceptionIdentifier)
+                        if (a0.Expression is TypeOfExpressionSyntax t0 && a1.Expression is InvocationExpressionSyntax i1 && i1.GetName() is nameof(GetType) && i1.GetIdentifierName() == exceptionIdentifier)
                         {
                             // !!! Side effect !!! : remove first assert as we handled that already
                             exceptionSpecificAsserts.Remove(assert);
@@ -350,7 +350,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         }
 
                         // maybe arguments are switched
-                        if (a1.Expression is TypeOfExpressionSyntax t1 && a0.Expression is InvocationExpressionSyntax i0 && i0.GetName() == nameof(GetType) && i0.GetIdentifierName() == exceptionIdentifier)
+                        if (a1.Expression is TypeOfExpressionSyntax t1 && a0.Expression is InvocationExpressionSyntax i0 && i0.GetName() is nameof(GetType) && i0.GetIdentifierName() == exceptionIdentifier)
                         {
                             // !!! Side effect !!! : remove first assert as we handled that already
                             exceptionSpecificAsserts.Remove(assert);

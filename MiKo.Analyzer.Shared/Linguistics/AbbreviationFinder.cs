@@ -12,8 +12,104 @@ namespace MiKoSolutions.Analyzers.Linguistics
     /// </summary>
     internal static class AbbreviationFinder
     {
+        private static readonly string[] AllowedPrefixTerms =
+                                                              {
+                                                                  "Warn",
+                                                              };
+
+        private static readonly string[] AllowedPostfixTerms =
+                                                               {
+                                                                   "cept", // accept
+                                                                   "cepts", // accepts
+                                                                   "crypt", // decrypt/encrypt
+                                                                   "dopt", // adopt
+                                                                   "dopts", // adopts
+                                                                   "enum",
+                                                                   "ires",
+                                                                   "idst", // midst
+                                                                   "ixtures",
+                                                                   "kept",
+                                                                   "Kept",
+                                                                   "mpt", // prompt
+                                                                   "mpts", // attempts
+                                                                   "cript", // script
+                                                                   "cripts", // scripts
+                                                                   "rupt",
+                                                                   "rupts",
+                                                                   "ures",
+                                                                   "wares",
+                                                               };
+
+        private static readonly string[] AllowedParts =
+                                                        {
+                                                            "Dtm",
+                                                            "DTM",
+                                                            "Enumerable",
+                                                            "Enumeration",
+                                                            "Enum", // must be after the others so that those get properly replaced
+                                                            nameof(EventArgs),
+                                                            "ever",
+                                                            "Ever",
+                                                            "Identifiable",
+                                                            "Identification",
+                                                            "Identifier",
+                                                            "Identity",
+                                                            "Identities",
+                                                            "next",
+                                                            "Next",
+                                                            "oAuth",
+                                                            "OAuth",
+                                                            "Over", // 'ver'
+                                                            "salt",
+                                                            "Salt",
+                                                            "text",
+                                                            "Text",
+                                                            "topLevel",
+                                                            "toplevel",
+                                                            "topMost",
+                                                            "topmost",
+                                                            "TopLevel",
+                                                            "Toplevel",
+                                                            "TopMost",
+                                                            "Topmost",
+                                                            "MEF",
+
+                                                            // languages
+                                                            "lvLV",
+                                                            "LvLV",
+                                                            "ptBR",
+                                                            "PtBR",
+                                                            "ptPT",
+                                                            "PtPT",
+                                                            "ABLE", // BL
+                                                            "IBLE", // BL
+                                                            "BLUE", // BL
+                                                            "CLIC", // CLI
+                                                            "LEFT", // EF
+                                                            "DOUBLE", // BL
+                                                            "REFRESH", // EF
+                                                            "REFER", // EF
+                                                            "REFACTOR", // EF
+                                                            "REFRIGERATOR", // EF
+                                                            "BLOCK", // BL
+                                                            "DEFAULT", // EF
+                                                            "USEFUL", // EF
+                                                        };
+
+        private static readonly string[] AllowedNames =
+                                                        {
+                                                            "args",
+                                                            "obj",
+                                                            "next",
+                                                            "cref",
+                                                            "href",
+                                                            "hwnd",
+                                                            nameof(EventArgs),
+                                                        };
+
         private static readonly Pair[] Prefixes =
                                                   {
+                                                      new Pair("adpt", "adapter"),
                                                       new Pair("alt", "alternative"),
                                                       new Pair("app", "application"),
                                                       new Pair("appl", "application"),
@@ -126,6 +222,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
                                                       new Pair("init", "initialize"),
+                                                      new Pair("inp", "input"),
                                                       new Pair("interv", "interval"),
                                                       new Pair("intf", "interface"),
                                                       new Pair("intfc", "interface"),
@@ -165,6 +262,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ops", "operations"),
                                                       new Pair("opt", "option"),
                                                       new Pair("opts", "options"),
+                                                      new Pair("outp", "output"),
                                                       new Pair("para", "parameter"),
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
@@ -218,6 +316,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("std", "standard"),
                                                       new Pair("str", "string"),
                                                       new Pair("sts", "status"),
+                                                      new Pair("succ", "success"),
                                                       new Pair("svc", "service"),
                                                       new Pair("svr", "server"),
                                                       new Pair("syn", "syntax"),
@@ -243,10 +342,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("vm", "viewModel"),
                                                       new Pair("vms", "viewModels"),
                                                       new Pair("vol", "volume"),
+                                                      new Pair("warn", "warning"),
                                                   };
 
         private static readonly Pair[] OnlyMidTerms =
                                                       {
+                                                          new Pair("Adpt", "Adapter"),
                                                           new Pair("Alt", "Alternative"),
                                                           new Pair("App", "Application"),
                                                           new Pair("Appl", "Application"),
@@ -368,6 +469,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
                                                           new Pair("Init", "Initialize"),
+                                                          new Pair("Inp", "Input"),
                                                           new Pair("Interv", "Interval"),
                                                           new Pair("Intf", "Interface"),
                                                           new Pair("Intfc", "Interface"),
@@ -406,6 +508,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ops", "Operations"),
                                                           new Pair("Opt", "Option"),
                                                           new Pair("Opts", "Options"),
+                                                          new Pair("Outp", "Output"),
                                                           new Pair("Para", "Parameter"),
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
@@ -459,6 +562,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Std", "Standard"),
                                                           new Pair("Str", "String"),
                                                           new Pair("Sts", "Status"),
+                                                          new Pair("Succ", "Success"),
                                                           new Pair("Svc", "Service"),
                                                           new Pair("Svr", "Server"),
                                                           new Pair("Syn", "Syntax"),
@@ -485,119 +589,43 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Vms", "ViewModels"),
                                                           new Pair("VMs", "ViewModels"),
                                                           new Pair("Vol", "Volume"),
+                                                          new Pair("Warn", "Warning"),
                                                       };
 
-        private static readonly Pair[] UpperCasePrefixes =
-                                                           {
-                                                               new Pair("Auth", "Authenticate"),
-                                                               new Pair("Calc", "Calculate"),
-                                                               new Pair("Calib", "Calibrate"),
-                                                               new Pair("Recalc", "Recalculate"),
-                                                               new Pair("Recalib", "Recalibrate"),
-                                                               new Pair("Reloc", "Relocate"),
-                                                               new Pair("Sync", "Synchronize"),
-                                                           };
+        private static readonly Pair[] SpecialUpperCasePrefixes =
+                                                                  {
+                                                                      new Pair("Auth", "Authenticate"),
+                                                                      new Pair("Calc", "Calculate"),
+                                                                      new Pair("Calib", "Calibrate"),
+                                                                      new Pair("Recalc", "Recalculate"),
+                                                                      new Pair("Recalib", "Recalibrate"),
+                                                                      new Pair("Reloc", "Relocate"),
+                                                                      new Pair("Sync", "Synchronize"),
+                                                                  };
+
+        private static readonly Pair[] UpperCasePrefixes = OnlyMidTerms.Except(SpecialUpperCasePrefixes, IdenticalKeyComparer.Instance)
+                                                                       .Concat(SpecialUpperCasePrefixes)
+                                                                       .OrderBy(_ => _.Key)
+                                                                       .ToArray();
 
         private static readonly Pair[] MidTerms = OnlyMidTerms.Concat(Prefixes).ToArray();
 
-        private static readonly Pair[] OnlyPostFixes =
+        private static readonly Pair[] OnlyPostfixes =
                                                        {
                                                            new Pair("Mod", "Modification"),
                                                            new Pair("Prot", "Protection"),
                                                            new Pair("Seq", "Sequence"),
                                                        };
 
-        private static readonly Pair[] Postfixes = OnlyMidTerms.Except(OnlyPostFixes, IdenticalKeyComparer.Instance).Concat(OnlyPostFixes).OrderBy(_ => _.Key).ToArray();
+        private static readonly Pair[] Postfixes = OnlyMidTerms.Except(OnlyPostfixes, IdenticalKeyComparer.Instance).Concat(OnlyPostfixes)
+                                                               .OrderBy(_ => _.Key)
+                                                               .ToArray();
 
-        private static readonly string[] AllowedPostFixTerms =
-                                                               {
-                                                                   "cept", // accept
-                                                                   "cepts", // accepts
-                                                                   "crypt", // decrypt/encrypt
-                                                                   "dopt", // adopt
-                                                                   "dopts", // adopts
-                                                                   "enum",
-                                                                   "ires",
-                                                                   "idst", // midst
-                                                                   "ixtures",
-                                                                   "kept",
-                                                                   "Kept",
-                                                                   "mpt", // prompt
-                                                                   "mpts", // attempts
-                                                                   "cript", // script
-                                                                   "cripts", // scripts
-                                                                   "rupt",
-                                                                   "rupts",
-                                                                   "ures",
-                                                                   "wares",
-                                                               };
+        private static readonly Pair[] CompleteTerms = Prefixes.Concat(Postfixes)
+                                                               .Except(UpperCasePrefixes, IdenticalKeyComparer.Instance).Concat(UpperCasePrefixes)
+                                                               .OrderDescendingByLengthAndText(_ => _.Key);
 
-        private static readonly string[] AllowedParts =
-                                                        {
-                                                            "Dtm",
-                                                            "DTM",
-                                                            "Enumerable",
-                                                            "Enumeration",
-                                                            "Enum", // must be after the others so that those get properly replaced
-                                                            nameof(EventArgs),
-                                                            "ever",
-                                                            "Ever",
-                                                            "Identifiable",
-                                                            "Identification",
-                                                            "Identifier",
-                                                            "Identity",
-                                                            "Identities",
-                                                            "next",
-                                                            "Next",
-                                                            "oAuth",
-                                                            "OAuth",
-                                                            "Over", // 'ver'
-                                                            "salt",
-                                                            "Salt",
-                                                            "text",
-                                                            "Text",
-                                                            "topLevel",
-                                                            "toplevel",
-                                                            "topMost",
-                                                            "topmost",
-                                                            "TopLevel",
-                                                            "Toplevel",
-                                                            "TopMost",
-                                                            "Topmost",
-                                                            "MEF",
-
-                                                            // languages
-                                                            "lvLV",
-                                                            "LvLV",
-                                                            "ptBR",
-                                                            "PtBR",
-                                                            "ptPT",
-                                                            "PtPT",
-                                                            "ABLE", // BL
-                                                            "IBLE", // BL
-                                                            "BLUE", // BL
-                                                            "CLIC", // CLI
-                                                            "LEFT", // EF
-                                                            "DOUBLE", // BL
-                                                            "REFRESH", // EF
-                                                            "REFER", // EF
-                                                            "REFACTOR", // EF
-                                                            "REFRIGERATOR", // EF
-                                                            "BLOCK", // BL
-                                                            "DEFAULT", // EF
-                                                            "USEFUL", // EF
-                                                        };
-
-        private static readonly string[] AllowedNames =
-                                                        {
-                                                            "args",
-                                                            "obj",
-                                                            "next",
-                                                            "cref",
-                                                            "href",
-                                                            "hwnd",
-                                                            nameof(EventArgs),
-                                                        };
+        private static readonly int CompleteTermsMaximumLength = CompleteTerms.Max(_ => _.Key.Length);
 
         private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviationsCache = new ConcurrentDictionary<string, Pair[]>(StringComparer.Ordinal);
 
@@ -613,6 +641,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("arametereter", "arameter"), // 'param' within 'parameter'
                                                       new Pair("arametermeter", "arameter"), // 'para' within 'parameter'
                                                       new Pair("ariableiable", "ariable"), // 'var' within 'variable'
+                                                      new Pair("arninging", "arning"), // 'warn' within 'warning'
                                                       new Pair("asynchronization", "async"), // 'sync' within 'asynchronization'
                                                       new Pair("ationate", "ate"), // 'reloc' within 'relocate'
                                                       new Pair("ationati", "ati"), // 'reloc' within 'relocation' / 'relocating'
@@ -794,6 +823,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
+            if (value.Length < 2)
+            {
+                // we cannot find abbreviations here
+                return ReadOnlySpan<Pair>.Empty;
+            }
+
             if (value.EqualsAny(AllowedNames, StringComparison.OrdinalIgnoreCase))
             {
                 return ReadOnlySpan<Pair>.Empty;
@@ -920,9 +955,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         var afterIndex = index + Async.Length;
 
-                        if (afterIndex < s.Length && s[afterIndex].IsUpperCaseOrNumber())
+                        if (afterIndex < s.Length)
                         {
-                            sb.Remove(index, Async.Length);
+                            var nextCharacter = s[afterIndex];
+
+                            if (nextCharacter is Constants.Underscore)
+                            {
+                                sb.Without(Async + Constants.Underscore);
+                            }
+                            else if (nextCharacter.IsUpperCaseOrNumber())
+                            {
+                                sb.Remove(index, Async.Length);
+                            }
                         }
                     }
                 }
@@ -943,82 +987,91 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <returns>
         /// An array of all found abbreviations as pairs of abbreviated and full terms, or an empty array if no abbreviations are found.
         /// </returns>
-        private static Pair[] FindCore(in ReadOnlySpan<char> textSpan)
+        private static Pair[] FindCore(ReadOnlySpan<char> textSpan)
         {
+            // only investigate if we have more than 1 character to inspect, as otherwise we do not have any abbreviation
+            if (textSpan.Length <= 1)
+            {
+                return Array.Empty<Pair>();
+            }
+
             HashSet<Pair> results = null;
 
-            var searchForPostfixes = true;
-
-            if (textSpan.Length > 0)
+            // skip loop if the text exceeds the maximum length of all complete terms
+            if (textSpan.Length <= CompleteTermsMaximumLength)
             {
-                Pair[] prefixes = Array.Empty<Pair>();
-
-                if (textSpan[0].IsLowerCaseLetter())
+                foreach (var pair in CompleteTerms)
                 {
-                    prefixes = Prefixes;
-                }
-                else if (textSpan[0].IsUpperCaseLetter())
-                {
-                    prefixes = UpperCasePrefixes;
-                }
-
-                for (int index = 0, prefixesLength = prefixes.Length; index < prefixesLength; index++)
-                {
-                    var pair = prefixes[index];
-
                     var keySpan = pair.Key.AsSpan();
-
-                    if (PrefixHasIssue(keySpan, textSpan))
-                    {
-                        AddToResults(ref results, pair);
-
-                        break; // does not make sense to look further
-                    }
 
                     if (CompleteTermHasIssue(keySpan, textSpan))
                     {
                         AddToResults(ref results, pair);
 
-                        break; // does not make sense to look further
-                    }
-                }
-
-                // we only have to search for postfixes if there is any upper case character
-                searchForPostfixes = textSpan.AnyUpper();
-            }
-
-            //// TODO RKN: replace prefixes to not find them again as middle terms or whatever?
-
-            if (searchForPostfixes)
-            {
-                for (int index = 0, postfixesLength = Postfixes.Length; index < postfixesLength; index++)
-                {
-                    var pair = Postfixes[index];
-
-                    if (PostFixHasIssue(pair.Key.AsSpan(), textSpan))
-                    {
-                        AddToResults(ref results, pair);
-
-                        break; // does not make sense to look further
+                        return results?.ToArray() ?? Array.Empty<Pair>(); // does not make sense to look further
                     }
                 }
             }
 
-            for (int index = 0, midTermsLength = MidTerms.Length; index < midTermsLength; index++)
+            Pair[] prefixes = Array.Empty<Pair>();
+
+            if (textSpan[0].IsLowerCaseLetter())
             {
-                var pair = MidTerms[index];
+                prefixes = Prefixes;
+            }
+            else if (textSpan[0].IsUpperCaseLetter())
+            {
+                prefixes = UpperCasePrefixes;
+            }
 
-                var key = pair.Key.AsSpan();
-
-                // do a quick check on the hot path, as most times (~99.8%) there is no issue
-                if (textSpan.Contains(key, StringComparison.Ordinal) is false)
-                {
-                    continue;
-                }
-
-                if (MidTermHasIssue(key, textSpan))
+            foreach (var pair in prefixes)
+            {
+                if (PrefixHasIssue(pair.Key.AsSpan(), textSpan))
                 {
                     AddToResults(ref results, pair);
+
+                    break; // does not make sense to look further
+                }
+            }
+
+            if (textSpan.Length > 1)
+            {
+                textSpan = textSpan.Slice(1); // move text span by 1 character to ignore the midterms/postfixes that are also part of the prefixes
+            }
+
+            // only investigate if we have more than 1 character left, as otherwise we do not have any abbreviation
+            if (textSpan.Length > 1)
+            {
+                // we only have to search for postfixes if there is any upper case character
+                var searchForPostfixes = textSpan.AnyUpper();
+
+                if (searchForPostfixes)
+                {
+                    foreach (var pair in Postfixes)
+                    {
+                        if (PostfixHasIssue(pair.Key.AsSpan(), textSpan))
+                        {
+                            AddToResults(ref results, pair);
+
+                            break; // does not make sense to look further
+                        }
+                    }
+                }
+
+                foreach (var pair in MidTerms)
+                {
+                    var key = pair.Key.AsSpan();
+
+                    // do a quick check on the hot path, as most times (~99.8%) there is no issue
+                    if (textSpan.Contains(key, StringComparison.Ordinal) is false)
+                    {
+                        continue;
+                    }
+
+                    if (MidTermHasIssue(key, textSpan))
+                    {
+                        AddToResults(ref results, pair);
+                    }
                 }
             }
 
@@ -1062,7 +1115,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <see langword="true"/> if the key exactly matches the text; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool CompleteTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => key.SequenceEqual(value);
+        private static bool CompleteTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => key.SequenceEqual(value) && value.EqualsAny(AllowedPrefixTerms) is false;
 
         /// <summary>
         /// Determines whether the specified key represents an abbreviation at the beginning of the text.
@@ -1083,7 +1136,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (value.Length > keyLength)
             {
-                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key))
+                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key) && value.StartsWithAny(AllowedPrefixTerms) is false)
                 {
                     return true;
                 }
@@ -1105,7 +1158,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <see langword="true"/> if the text ends with the key and is not part of an allowed postfix term; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool PostFixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms) is false;
+        private static bool PostfixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostfixTerms) is false;
 
         /// <summary>
         /// Determines whether the specified key represents an abbreviation in the middle of the text.
