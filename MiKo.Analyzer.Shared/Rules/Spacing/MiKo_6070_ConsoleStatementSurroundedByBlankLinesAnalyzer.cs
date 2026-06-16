@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected override bool IsApplicable(Compilation compilation) => compilation.GetTypeByMetadataName(nameof(System) + "." + nameof(Console)) != null;
 
         // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
-        protected override bool IsCall(ITypeSymbol type) => type?.Name == nameof(Console) && type.ContainingNamespace.Name == nameof(System);
+        protected override bool IsCall(ITypeSymbol type) => type?.Name is nameof(Console) && type.ContainingNamespace.Name is nameof(System);
     }
 }

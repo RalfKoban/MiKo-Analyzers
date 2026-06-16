@@ -32,9 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var index = 0; index < textTokensCount; index++)
             {
-                var token = textTokens[index];
-
-                var allLocations = GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase);
+                var allLocations = textTokens[index].GetAllLocations(Phrases, StringComparison.OrdinalIgnoreCase);
                 var allLocationsCount = allLocations.Count;
 
                 if (allLocationsCount > 0)

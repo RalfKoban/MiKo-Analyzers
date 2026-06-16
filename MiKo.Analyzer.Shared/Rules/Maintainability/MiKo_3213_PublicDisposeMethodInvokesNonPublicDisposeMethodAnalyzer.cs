@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnsVoid
                                                                    && symbol.Parameters.Length is 0
-                                                                   && symbol.Name == nameof(IDisposable.Dispose)
+                                                                   && symbol.Name is nameof(IDisposable.Dispose)
                                                                    && symbol.ContainingType.GetMembers(nameof(IDisposable.Dispose)).Length > 1;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (arguments.Count is 1 && arguments[0].Expression?.IsKind(SyntaxKind.ThisExpression) is true && invocation.GetIdentifierName() == nameof(GC) && invocation.GetName() == nameof(GC.SuppressFinalize))
+                if (arguments.Count is 1 && arguments[0].Expression?.IsKind(SyntaxKind.ThisExpression) is true && invocation.GetIdentifierName() is nameof(GC) && invocation.GetName() is nameof(GC.SuppressFinalize))
                 {
                     return true;
                 }
@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (arguments.Count is 1 && arguments[0].Expression?.IsKind(SyntaxKind.TrueLiteralExpression) is true && invocation.GetName() == nameof(IDisposable.Dispose))
+                if (arguments.Count is 1 && arguments[0].Expression?.IsKind(SyntaxKind.TrueLiteralExpression) is true && invocation.GetName() is nameof(IDisposable.Dispose))
                 {
                     return true;
                 }

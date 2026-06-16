@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case "SuppressMessage":
                     case nameof(SuppressMessageAttribute):
                     {
-                        if (argument.NameEquals.GetName() == nameof(SuppressMessageAttribute.Justification) && argument.Expression is LiteralExpressionSyntax literal)
+                        if (argument.NameEquals.GetName() is nameof(SuppressMessageAttribute.Justification) && argument.Expression is LiteralExpressionSyntax literal)
                         {
                             var justification = literal.Token.ValueText.AsSpan().Trim(BadJustificationGapFillers.AsSpan());
 

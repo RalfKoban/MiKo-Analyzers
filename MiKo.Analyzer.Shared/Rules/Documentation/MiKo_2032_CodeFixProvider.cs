@@ -300,7 +300,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             nodes = nodes.WithStartText(startingPhrase) // keep starting text and ensure that first character of original text is now lower-case
-                         .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
+                         .ReplaceText(OrIfReplacementPhrase, OrIfPhrase)
+                         .ReplaceText(" if when ", " if ");
 
             // clean up comment and remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)

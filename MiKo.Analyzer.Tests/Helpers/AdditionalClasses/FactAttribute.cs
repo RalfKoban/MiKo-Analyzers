@@ -2,7 +2,7 @@
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 
-// ReSharper disable once CheckNamespace : Fake for Xunit Assert
+// ReSharper disable once CheckNamespace : Fake for Xunit Fact
 namespace Xunit
 {
     public class FactAttribute : Attribute

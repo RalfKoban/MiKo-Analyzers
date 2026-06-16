@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var symbolName = symbol.Name;
 
             return symbol.GetSyntax()
-                         .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Expression.GetName() == nameof(Guid) && _.GetName() == nameof(Guid.NewGuid))
+                         .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Expression.GetName() is nameof(Guid) && _.GetName() is nameof(Guid.NewGuid))
                          .Select(_ => Issue(symbolName, _));
         }
     }

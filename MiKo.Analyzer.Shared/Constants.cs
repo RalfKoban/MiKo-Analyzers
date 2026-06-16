@@ -1267,6 +1267,18 @@ namespace MiKoSolutions.Analyzers
             internal const string IValueConverter = "IValueConverter";
             internal const string IValueConverterFullName = "System.Windows.Data.IValueConverter";
 
+            internal const string FactAttribute = "Fact";
+            internal const string FactAttributeFullName = "FactAttribute";
+
+            internal const string TestAttribute = "Test";
+            internal const string TestAttributeFullName = "TestAttribute";
+
+            internal const string TestCaseAttribute = "TestCase";
+            internal const string TestCaseAttributeFullName = "TestCaseAttribute";
+
+            internal const string TheoryAttribute = "Theory";
+            internal const string TheoryAttributeFullName = "TheoryAttribute";
+
             internal static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
             internal static readonly ISet<string> FlagsAttributeNames = new HashSet<string>
@@ -1291,16 +1303,16 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly ISet<string> TestMethodAttributeNames = new HashSet<string>
                                                                                  {
-                                                                                     "Test",
-                                                                                     "TestAttribute",
-                                                                                     "TestCase",
-                                                                                     "TestCaseAttribute",
+                                                                                     TestAttribute,
+                                                                                     TestAttributeFullName,
+                                                                                     TestCaseAttribute,
+                                                                                     TestCaseAttributeFullName,
                                                                                      "TestCaseSource",
                                                                                      "TestCaseSourceAttribute",
-                                                                                     "Theory",
-                                                                                     "TheoryAttribute",
-                                                                                     "Fact",
-                                                                                     "FactAttribute",
+                                                                                     TheoryAttribute,
+                                                                                     TheoryAttributeFullName,
+                                                                                     FactAttribute,
+                                                                                     FactAttributeFullName,
                                                                                      "TestMethod",
                                                                                      "TestMethodAttribute",
                                                                                  };
@@ -1650,13 +1662,13 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              StringComparer.Ordinal);
 
             internal static readonly string[] IntentPrefixes =
-                                                              {
-                                                                  "should",
-                                                                  "shall",
-                                                                  "will",
-                                                                  "would",
-                                                                  "could",
-                                                              };
+                                                               {
+                                                                   "should",
+                                                                   "shall",
+                                                                   "will",
+                                                                   "would",
+                                                                   "could",
+                                                               };
         }
 
         internal static class AnalyzerCodeFixSharedData

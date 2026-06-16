@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (node)
                 {
-                    case MemberAccessExpressionSyntax maes when maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.Run):
+                    case MemberAccessExpressionSyntax maes when maes.Expression.GetName() is nameof(Task) && maes.GetName() is nameof(Task.Run):
                         taskRunExpressions.Add(maes);
 
                         break;
