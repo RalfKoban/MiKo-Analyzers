@@ -3034,11 +3034,17 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
-            var removeOptions = node is DocumentationCommentTriviaSyntax
-                                ? SyntaxRemoveOptions.AddElasticMarker
-                                : SyntaxRemoveOptions.KeepNoTrivia;
+            switch (node)
+            {
+                case DocumentationCommentTriviaSyntax _:
+                    return value.RemoveNode(node, SyntaxRemoveOptions.AddElasticMarker);
 
-            return value.RemoveNode(node, removeOptions);
+                case AttributeListSyntax a when a.IsOnSameLineAs(a.NextSibling()):
+                    return value.RemoveNode(node, SyntaxRemoveOptions.KeepLeadingTrivia);
+
+                default:
+                    return value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+            }
         }
 
         /// <summary>

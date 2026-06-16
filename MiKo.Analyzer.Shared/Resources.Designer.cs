@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -14451,6 +14451,45 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3124_Title {
             get {
                 return ResourceManager.GetString("MiKo_3124_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove [Test] from parameterized test.
+        /// </summary>
+        internal static string MiKo_3125_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3125_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid marking a test method with both [Test] and [TestCase] at the same time.
+        ///
+        ///While [Test] marks a simple, non-parameterized test and [TestCase] marks a parameterized test, NUnit allows combining them without generating extra test cases.
+        ///Use either [Test] or [TestCase] to keep tests clear and easy to understand..
+        /// </summary>
+        internal static string MiKo_3125_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3125_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove [Test] from parameterized test.
+        /// </summary>
+        internal static string MiKo_3125_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3125_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NUnit tests should not have both [Test] and [TestCase] applied.
+        /// </summary>
+        internal static string MiKo_3125_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3125_Title", resourceCulture);
             }
         }
         
