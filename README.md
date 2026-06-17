@@ -420,7 +420,7 @@ The following tables list all the 561 rules that are currently provided by the a
 |[MiKo_3077](/Documentation/MiKo_3077.md)|Provide default values for Enum-returning properties|&#x2713;|&#x2713;|
 |[MiKo_3078](/Documentation/MiKo_3078.md)|Provide default values for enum members|&#x2713;|&#x2713;|
 |[MiKo_3079](/Documentation/MiKo_3079.md)|Write HResults in hexadecimal|&#x2713;|&#x2713;|
-|[MiKo_3080](/Documentation/MiKo_3080.md)|Use 'switch ... return' instead of 'switch ... break' for variable assignments|&#x2713;|\-|
+|[MiKo_3080](/Documentation/MiKo_3080.md)|Use 'switch ... return' instead of 'switch ... break' for assignments|&#x2713;|\-|
 |[MiKo_3081](/Documentation/MiKo_3081.md)|Use pattern matching instead of logical NOT conditions|&#x2713;|&#x2713;|
 |[MiKo_3082](/Documentation/MiKo_3082.md)|Use pattern matching instead of comparing with 'true' or 'false'|&#x2713;|&#x2713;|
 |[MiKo_3083](/Documentation/MiKo_3083.md)|Use pattern matching for null checks|&#x2713;|&#x2713;|

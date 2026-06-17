@@ -285,6 +285,52 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_switch_that_determines_single_condition_and_keeps_information_in_same_out_property() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoStuff(StringComparison value, out bool ordinal)
+    {
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                ordinal = true;
+                break;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_determines_single_condition_and_keeps_information_in_same_field() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private bool ordinal;
+
+    public void DoStuff(StringComparison value)
+    {
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                ordinal = true;
+                break;
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer();

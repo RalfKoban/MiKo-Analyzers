@@ -13026,8 +13026,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using switch statements to assign variables within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
-        ///Let each section of the switch return values directly, instead of assigning them to a shared variable and using break statements.
+        ///   Looks up a localized string similar to Using switch statements to assign values within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
+        ///Let each section of the switch return values directly, instead of assigning them to a shared variable, field, or parameter and using break statements.
         ///This approach enhances clarity and maintainability..
         /// </summary>
         internal static string MiKo_3080_Description {
@@ -13046,7 +13046,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;switch ... return&apos; instead of &apos;switch ... break&apos; for variable assignments.
+        ///   Looks up a localized string similar to Use &apos;switch ... return&apos; instead of &apos;switch ... break&apos; for assignments.
         /// </summary>
         internal static string MiKo_3080_Title {
             get {
@@ -14490,6 +14490,45 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3125_Title {
             get {
                 return ResourceManager.GetString("MiKo_3125_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only keep [Theory].
+        /// </summary>
+        internal static string MiKo_3126_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3126_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid marking a test method also with [Theory].
+        ///
+        ///While tests are example-based with specific inputs and expected outputs, [Theory] makes a general statement that holds true for all inputs satisfying certain assumptions, making it a fundamentally different kind of test.
+        ///Use either a test attribute or [Theory] to keep the intent of each test method clear and easy to understand..
+        /// </summary>
+        internal static string MiKo_3126_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3126_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only keep [Theory].
+        /// </summary>
+        internal static string MiKo_3126_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3126_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theories should not have test attributes applied.
+        /// </summary>
+        internal static string MiKo_3126_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3126_Title", resourceCulture);
             }
         }
         
