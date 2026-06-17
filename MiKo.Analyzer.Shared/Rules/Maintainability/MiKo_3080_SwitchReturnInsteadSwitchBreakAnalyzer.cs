@@ -51,7 +51,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            return HasIssueWithVariable(switchStatement, usedIdentifiers) || HasIssueWithField(switchStatement, usedIdentifiers) || HasIssueWithParameter(switchStatement, usedIdentifiers);
+            return HasIssueWithVariable(switchStatement, usedIdentifiers)
+                || HasIssueWithProperty(switchStatement, usedIdentifiers)
+                || HasIssueWithField(switchStatement, usedIdentifiers)
+                || HasIssueWithParameter(switchStatement, usedIdentifiers);
         }
 
         private static bool HasIssue(IReadOnlyList<HashSet<string>> usedIdentifiers, HashSet<string> identifiers)
@@ -103,6 +106,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var fieldNames = type.ChildNodes<BaseFieldDeclarationSyntax>().SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
+
+            return HasIssue(usedIdentifiers, fieldNames);
+        }
+
+        private static bool HasIssueWithProperty(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
+        {
+            var type = switchStatement.FirstAncestor<BaseTypeDeclarationSyntax>();
+
+            if (type is null)
+            {
+                // may be used in global context
+                return false;
+            }
+
+            var fieldNames = type.ChildNodes<BasePropertyDeclarationSyntax>().ToHashSet(_ => _.GetName());
 
             return HasIssue(usedIdentifiers, fieldNames);
         }

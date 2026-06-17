@@ -4575,9 +4575,9 @@ This approach ensures stability and clarity, keeping the Enum's behavior consist
     <value>Write HResults in hexadecimal</value>
   </data>
   <data name="MiKo_3080_Description" xml:space="preserve">
-    <value>Using switch statements to assign values within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
-Let each section of the switch return values directly, instead of assigning them to a shared variable, field, or parameter and using break statements.
-This approach enhances clarity and maintainability.</value>
+    <value>Using switch statements to assign values within methods increases complexity and reduces readability. Simplify this by moving the switch statement into its own method.
+Let each section of the switch return values directly, instead of assigning them to a shared variable, field, property, or parameter and using break statements.
+This makes the code easier to read and change later.</value>
   </data>
   <data name="MiKo_3080_MessageFormat" xml:space="preserve">
     <value>Place switch statement in separate method and return value within case blocks</value>
