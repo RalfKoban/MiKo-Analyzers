@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -158,6 +161,27 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_switch_in_top_level_statement_that_assigns_to_variable() => No_issue_is_reported_for(@"
+using System;
+
+object result;
+var value = StringComparison.Ordinal;
+
+switch (value)
+{
+    case StringComparison.Ordinal:
+        result = new object();
+        break;
+
+    case StringComparison.OrdinalIgnoreCase:
+        result = new object();
+        break;
+}
+", languageVersion: LanguageVersion.CSharp9);
+
         [Test]
         public void An_issue_is_reported_for_factory_that_assigns_return_value_to_variable_instead_of_returning_it_directly() => An_issue_is_reported_for(@"
 using System;
@@ -188,7 +212,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_factory_that_assigns_return_value_to_variable_inside_block_nstead_of_returning_it_directly() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_factory_that_assigns_return_value_to_variable_inside_block_instead_of_returning_it_directly() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -284,6 +308,130 @@ public class TestMe
     }
 }
 ");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_determines_single_condition_and_keeps_information_in_same_out_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoStuff(StringComparison value, out bool ordinal)
+    {
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                ordinal = true;
+                break;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_determines_single_condition_and_keeps_information_in_same_field() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private bool ordinal;
+
+    public void DoStuff(StringComparison value)
+    {
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                ordinal = true;
+                break;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_assigns_to_field_when_method_also_has_local_variable() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private bool ordinal;
+
+    public void DoStuff(StringComparison value)
+    {
+        var x = 42;
+
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                ordinal = true;
+                break;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_assigns_to_out_parameter_when_method_also_has_local_variable() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoStuff(StringComparison value, out bool ordinal)
+    {
+        var x = 42;
+
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                ordinal = true;
+                break;
+        }
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_switch_in_top_level_statement_that_assigns_to_variable_inside_local_function() => An_issue_is_reported_for(@"
+using System;
+
+object DoCreate(StringComparison value)
+{
+    object result;
+
+    switch (value)
+    {
+        case StringComparison.Ordinal:
+            result = new object();
+            break;
+
+        case StringComparison.OrdinalIgnoreCase:
+            result = new object();
+            break;
+
+        default:
+            throw new NotSupportedException();
+    }
+
+    return result;
+}
+", languageVersion: LanguageVersion.CSharp9);
 
         protected override string GetDiagnosticId() => MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer.Id;
 
