@@ -13026,9 +13026,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using switch statements to assign values within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
-        ///Let each section of the switch return values directly, instead of assigning them to a shared variable, field, or parameter and using break statements.
-        ///This approach enhances clarity and maintainability..
+        ///   Looks up a localized string similar to Using switch statements to assign values within methods increases complexity and reduces readability. Simplify this by moving the switch statement into its own method.
+        ///Let each section of the switch return values directly, instead of assigning them to a shared variable, field, property, or parameter and using break statements.
+        ///This makes the code easier to read and change later..
         /// </summary>
         internal static string MiKo_3080_Description {
             get {
