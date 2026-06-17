@@ -120,9 +120,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            var fieldNames = type.ChildNodes<BasePropertyDeclarationSyntax>().ToHashSet(_ => _.GetName());
+            var propertyNames = type.ChildNodes<BasePropertyDeclarationSyntax>().ToHashSet(_ => _.GetName());
 
-            return HasIssue(usedIdentifiers, fieldNames);
+            return HasIssue(usedIdentifiers, propertyNames);
         }
 
         private static bool HasIssueWithVariable(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
