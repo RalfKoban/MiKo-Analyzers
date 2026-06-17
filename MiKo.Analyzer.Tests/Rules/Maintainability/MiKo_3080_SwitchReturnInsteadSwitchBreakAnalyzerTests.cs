@@ -356,6 +356,33 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_switch_that_determines_single_condition_and_keeps_information_in_same_property_of_base_class() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMeBase
+{
+    public bool Ordinal { get; set; }
+}
+
+public class TestMe : TestMeBase
+{
+    public void DoStuff(StringComparison value)
+    {
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                Ordinal = true;
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                Ordinal = true;
+                break;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_switch_that_determines_single_condition_and_keeps_information_in_same_field() => An_issue_is_reported_for(@"
 using System;
 

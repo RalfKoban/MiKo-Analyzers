@@ -36,14 +36,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool HasIssue(SwitchStatementSyntax switchStatement)
+        private static bool HasIssue(SwitchStatementSyntax switchStatement, ISymbol symbol)
         {
             if (switchStatement.DescendantNodes<ReturnStatementSyntax>().Any())
             {
                 return false;
             }
 
-            var usedIdentifiers = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).ToList();
+            var usedIdentifiers = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).Where(_ => _.Count > 0).ToList();
 
             if (usedIdentifiers.Count is 0)
             {
@@ -51,10 +51,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            return HasIssueWithVariable(switchStatement, usedIdentifiers)
-                || HasIssueWithProperty(switchStatement, usedIdentifiers)
-                || HasIssueWithField(switchStatement, usedIdentifiers)
-                || HasIssueWithParameter(switchStatement, usedIdentifiers);
+            return HasIssueWithVariable(usedIdentifiers, switchStatement)
+                || HasIssueWithProperty(usedIdentifiers, symbol)
+                || HasIssueWithField(usedIdentifiers, symbol)
+                || HasIssueWithParameter(usedIdentifiers, symbol);
         }
 
         private static bool HasIssue(IReadOnlyList<HashSet<string>> usedIdentifiers, HashSet<string> identifiers)
@@ -80,52 +80,46 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return identifierUsages.Count != 0;
         }
 
-        private static bool HasIssueWithParameter(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
+        private static bool HasIssueWithParameter(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
         {
-            var method = switchStatement.FirstAncestor<BaseMethodDeclarationSyntax>();
-
-            if (method is null)
+            if (symbol is IMethodSymbol method)
             {
-                // may be used in global context
-                return false;
+                var parameterNames = method.Parameters.Where(_ => _.RefKind is RefKind.Out || _.RefKind is RefKind.Ref).ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, parameterNames);
             }
 
-            var parameterNames = method.ParameterList.Parameters.ToHashSet(_ => _.GetName());
-
-            return HasIssue(usedIdentifiers, parameterNames);
+            // may be used in global context
+            return false;
         }
 
-        private static bool HasIssueWithField(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
+        private static bool HasIssueWithField(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
         {
-            var type = switchStatement.FirstAncestor<BaseTypeDeclarationSyntax>();
-
-            if (type is null)
+            if (symbol is IMethodSymbol method)
             {
-                // may be used in global context
-                return false;
+                var fieldNames = method.ContainingType.GetFields().Where(_ => _.IsConst is false).ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, fieldNames);
             }
 
-            var fieldNames = type.ChildNodes<BaseFieldDeclarationSyntax>().SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
-
-            return HasIssue(usedIdentifiers, fieldNames);
+            // may be used in global context
+            return false;
         }
 
-        private static bool HasIssueWithProperty(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
+        private static bool HasIssueWithProperty(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
         {
-            var type = switchStatement.FirstAncestor<BaseTypeDeclarationSyntax>();
-
-            if (type is null)
+            if (symbol is IMethodSymbol method)
             {
-                // may be used in global context
-                return false;
+                var propertyNames = method.ContainingType.GetPropertiesIncludingInherited().ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, propertyNames);
             }
 
-            var propertyNames = type.ChildNodes<BasePropertyDeclarationSyntax>().ToHashSet(_ => _.GetName());
-
-            return HasIssue(usedIdentifiers, propertyNames);
+            // may be used in global context
+            return false;
         }
 
-        private static bool HasIssueWithVariable(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
+        private static bool HasIssueWithVariable(IReadOnlyList<HashSet<string>> usedIdentifiers, SwitchStatementSyntax switchStatement)
         {
             var variableNames = GetVariableNamesUntilHere(switchStatement).ToHashSet();
 
@@ -159,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var switchStatement = (SwitchStatementSyntax)context.Node;
 
-            if (HasIssue(switchStatement))
+            if (HasIssue(switchStatement, context.ContainingSymbol))
             {
                 // keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recursive calls
                 if (switchStatement.AncestorsWithinMethods<WhileStatementSyntax>().None())
