@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // keep those that are used on multiple cases
-            var identifierUsages = usedIdentifiers[0];
+            var identifierUsages = usedIdentifiers[0].ToHashSet();
 
             if (usedIdentifiers.Count > 1)
             {
@@ -81,6 +81,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var method = switchStatement.FirstAncestor<BaseMethodDeclarationSyntax>();
 
+            if (method is null)
+            {
+                // may be used in global context
+                return false;
+            }
+
             var parameterNames = method.ParameterList.Parameters.ToHashSet(_ => _.GetName());
 
             return HasIssue(usedIdentifiers, parameterNames);
@@ -89,6 +95,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static bool HasIssueWithField(SwitchStatementSyntax switchStatement, IReadOnlyList<HashSet<string>> usedIdentifiers)
         {
             var type = switchStatement.FirstAncestor<BaseTypeDeclarationSyntax>();
+
+            if (type is null)
+            {
+                // may be used in global context
+                return false;
+            }
+
             var fieldNames = type.ChildNodes<BaseFieldDeclarationSyntax>().SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
 
             return HasIssue(usedIdentifiers, fieldNames);
