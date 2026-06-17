@@ -183,6 +183,61 @@ switch (value)
 ", languageVersion: LanguageVersion.CSharp9);
 
         [Test]
+        public void No_issue_is_reported_for_switch_that_assigns_to_variable_in_only_one_of_multiple_sections() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public object Create(StringComparison value)
+    {
+        object result = null;
+
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                result = new object();
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_switch_that_assigns_in_none_of_multiple_sections() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public object Create(StringComparison value)
+    {
+        object result = null;
+
+        switch (value)
+        {
+            case StringComparison.Ordinal:
+                break;
+
+            case StringComparison.OrdinalIgnoreCase:
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_factory_that_assigns_return_value_to_variable_instead_of_returning_it_directly() => An_issue_is_reported_for(@"
 using System;
 

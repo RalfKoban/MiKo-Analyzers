@@ -22,18 +22,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
 
-        private static bool IsNoDeclarationCore(SyntaxNode node)
+        private static IEnumerable<string> GetAssignmentIdentifierCandidates(SyntaxNode node)
         {
-            switch (node.RawKind)
-            {
-                case (int)SyntaxKind.MethodDeclaration:
-                case (int)SyntaxKind.ConstructorDeclaration:
-                case (int)SyntaxKind.IndexerDeclaration:
-                    return false;
+            var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
+                                 .Select(_ => _.FirstChild<IdentifierNameSyntax>())
+                                 .WhereNotNull()
+                                 .Select(_ => _.GetName());
 
-                default:
-                    return true;
-            }
+            return candidates;
+        }
+
+        private static IEnumerable<string> GetVariableNamesUntilHere(SwitchStatementSyntax switchStatement)
+        {
+            return switchStatement.Ancestors()
+                                  .TakeWhile(IsNoDeclaration)
+                                  .SelectMany(_ => GetVariableNames(_, switchStatement));
+
+            IEnumerable<string> GetVariableNames(SyntaxNode node, SyntaxNode stopNode) => node.ChildNodes()
+                                                                                              .TakeWhile(_ => _ != stopNode)
+                                                                                              .OfType<LocalDeclarationStatementSyntax>()
+                                                                                              .SelectMany(_ => _.Declaration.Variables)
+                                                                                              .Select(_ => _.GetName());
         }
 
         private static bool HasIssue(SwitchStatementSyntax switchStatement, ISymbol symbol)
@@ -43,9 +52,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            var usedIdentifiers = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).Where(_ => _.Count > 0).ToList();
+            var usedIdentifiers = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).ToList();
 
-            if (usedIdentifiers.Count is 0)
+            if (usedIdentifiers.All(_ => _.Count is 0))
             {
                 // for whatever reason we do not have any identifiers, so we do not have an issue here
                 return false;
@@ -80,19 +89,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return identifierUsages.Count != 0;
         }
 
-        private static bool HasIssueWithParameter(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
-        {
-            if (symbol is IMethodSymbol method)
-            {
-                var parameterNames = method.Parameters.Where(_ => _.RefKind is RefKind.Out || _.RefKind is RefKind.Ref).ToHashSet(_ => _.Name);
-
-                return HasIssue(usedIdentifiers, parameterNames);
-            }
-
-            // may be used in global context
-            return false;
-        }
-
         private static bool HasIssueWithField(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
         {
             if (symbol is IMethodSymbol method)
@@ -100,6 +96,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var fieldNames = method.ContainingType.GetFields().Where(_ => _.IsConst is false).ToHashSet(_ => _.Name);
 
                 return HasIssue(usedIdentifiers, fieldNames);
+            }
+
+            // may be used in global context
+            return false;
+        }
+
+        private static bool HasIssueWithParameter(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol method)
+            {
+                var parameterNames = method.Parameters.Where(_ => _.RefKind is RefKind.Out || _.RefKind is RefKind.Ref).ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, parameterNames);
             }
 
             // may be used in global context
@@ -126,27 +135,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return HasIssue(usedIdentifiers, variableNames);
         }
 
-        private static IEnumerable<string> GetVariableNamesUntilHere(SwitchStatementSyntax switchStatement)
+        private static bool IsNoDeclarationCore(SyntaxNode node)
         {
-            return switchStatement.Ancestors()
-                                  .TakeWhile(IsNoDeclaration)
-                                  .SelectMany(_ => GetVariableNames(_, switchStatement));
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.MethodDeclaration:
+                case (int)SyntaxKind.ConstructorDeclaration:
+                case (int)SyntaxKind.IndexerDeclaration:
+                    return false;
 
-            IEnumerable<string> GetVariableNames(SyntaxNode node, SyntaxNode stopNode) => node.ChildNodes()
-                                                                                              .TakeWhile(_ => _ != stopNode)
-                                                                                              .OfType<LocalDeclarationStatementSyntax>()
-                                                                                              .SelectMany(_ => _.Declaration.Variables)
-                                                                                              .Select(_ => _.GetName());
-        }
-
-        private static IEnumerable<string> GetAssignmentIdentifierCandidates(SyntaxNode node)
-        {
-            var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
-                                 .Select(_ => _.FirstChild<IdentifierNameSyntax>())
-                                 .WhereNotNull()
-                                 .Select(_ => _.GetName());
-
-            return candidates;
+                default:
+                    return true;
+            }
         }
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)

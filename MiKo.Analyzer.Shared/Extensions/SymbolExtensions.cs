@@ -825,13 +825,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all methods of a type.
+        /// Gets all methods of a type that can be referenced by name.
         /// </summary>
         /// <param name="value">
         /// The type whose methods are wanted.
         /// </param>
         /// <returns>
-        /// A collection of methods.
+        /// A collection of methods (that can be referenced by name).
         /// </returns>
         internal static IEnumerable<IMethodSymbol> GetMethodsIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IMethodSymbol>();
 
