@@ -21,16 +21,16 @@ public class TestMe
 }
 ");
 
-        [TestCase("_")]
-        [TestCase("__")]
-        [TestCase("___")]
-        [TestCase("____")]
-        [TestCase("_0")]
-        [TestCase("_1")]
-        [TestCase("_2")]
-        [TestCase("_3")]
-        [TestCase("_4")]
-        [TestCase("_5")]
+        [TestCase("ˍ")]
+        [TestCase("ˍˍ")]
+        [TestCase("ˍˍˍ")]
+        [TestCase("ˍˍˍˍ")]
+        [TestCase("ˍ0")]
+        [TestCase("ˍ1")]
+        [TestCase("ˍ2")]
+        [TestCase("ˍ3")]
+        [TestCase("ˍ4")]
+        [TestCase("ˍ5")]
         [TestCase("failed")] // result to indicate an error in ASP .NET Core
         public void No_issue_is_reported_for_correctly_named_simple_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
@@ -49,16 +49,16 @@ public class TestMe
 }
 ");
 
-        [TestCase("_")]
-        [TestCase("__")]
-        [TestCase("___")]
-        [TestCase("____")]
-        [TestCase("_0")]
-        [TestCase("_1")]
-        [TestCase("_2")]
-        [TestCase("_3")]
-        [TestCase("_4")]
-        [TestCase("_5")]
+        [TestCase("ˍ")]
+        [TestCase("ˍˍ")]
+        [TestCase("ˍˍˍ")]
+        [TestCase("ˍˍˍˍ")]
+        [TestCase("ˍ0")]
+        [TestCase("ˍ1")]
+        [TestCase("ˍ2")]
+        [TestCase("ˍ3")]
+        [TestCase("ˍ4")]
+        [TestCase("ˍ5")]
         [TestCase("failed")] // result to indicate an error in ASP .NET Core
         public void No_issue_is_reported_for_correctly_named_parenthesized_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
@@ -145,7 +145,7 @@ public class TestMe
         public void Code_gets_fixed_(string template)
         {
             var originalCode = template.Replace("#1#", "item").Replace("#2#", "c");
-            var fixedCode = template.Replace("#1#", "_").Replace("#2#", "__");
+            var fixedCode = template.Replace("#1#", "ˍ").Replace("#2#", "ˍˍ");
 
             VerifyCSharpFix(originalCode, fixedCode);
         }
