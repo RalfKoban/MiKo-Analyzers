@@ -1355,7 +1355,8 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name) || attributeNames.Contains(_.AttributeClass?.FullyQualifiedName()));
+            // the sets do not contain fully qualified names, so we check for names only to save time
+            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
         }
 
         /// <summary>
