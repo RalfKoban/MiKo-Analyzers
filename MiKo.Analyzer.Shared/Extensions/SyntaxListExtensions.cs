@@ -412,38 +412,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified phrase replaced with the specified replacement.
-        /// </summary>
-        /// <param name="source">
-        /// The list in which to replace text.
-        /// </param>
-        /// <param name="phrase">
-        /// The phrase to be replaced.
-        /// </param>
-        /// <param name="replacement">
-        /// The text that replaces all occurrences of the phrase.
-        /// </param>
-        /// <returns>
-        /// A collection of XML node syntaxes with all occurrences of the phrase replaced with the replacement.
-        /// </returns>
-        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, string phrase, string replacement) => source.ReplaceText(new[] { phrase }, replacement);
-
-        /// <summary>
         /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified phrases replaced with the specified replacement.
         /// </summary>
         /// <param name="source">
         /// The list in which to replace text.
         /// </param>
-        /// <param name="phrases">
-        /// The phrases to be replaced.
-        /// </param>
-        /// <param name="replacement">
-        /// The text that replaces all occurrences of the phrases.
+        /// <param name="replacementPhrases">
+        /// The phrases to be replaced where the <see cref="Pair.Key"/> is the phrase to replace and the <see cref="Pair.Value"/> is the text to replace with.
         /// </param>
         /// <returns>
         /// A collection of XML node syntaxes with all occurrences of the phrases replaced with the replacement.
         /// </returns>
-        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<Pair> replacementPhrases)
         {
             var count = source.Count;
 
@@ -460,7 +440,14 @@ namespace MiKoSolutions.Analyzers
 
                 if (value is XmlTextSyntax text)
                 {
-                    result[index] = text.ReplaceText(phrases, replacement);
+                    XmlTextSyntax replacedText = text;
+
+                    foreach (var pair in replacementPhrases)
+                    {
+                        replacedText = replacedText.ReplaceText(pair.Key, pair.Value);
+                    }
+
+                    result[index] = replacedText;
                 }
             }
 
@@ -878,7 +865,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of XML node syntaxes with the start texts removed from the first element, or the original list if no such text is present.
         /// </returns>
-        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> startTexts)
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, IEnumerable<string> startTexts)
         {
             if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
             {

@@ -411,6 +411,86 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("True, if the button is enabled, False if the button is disabled.", """<see langword="true"/> if the button is enabled; otherwise, <see langword="false"/>.""")]
+        public void Code_gets_fixed_for_Boolean_method_with_repeated_phrase_(string originalComment, string fixedComment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + originalComment + @"</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// " + fixedComment + @"
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase(
+              "If the Velocity options are available the value is true.",
+              "If the Velocity options are not available the value is false.",
+              """<see langword="true"/> if the Velocity options are available; otherwise, <see langword="false"/>.""")]
+        [TestCase(
+              "If the button to delete State Machine is available to the user the value is True.",
+              "If the button to delete State Machine is not available to the user the value is False.",
+              """<see langword="true"/> if the button to delete State Machine is available to the user; otherwise, <see langword="false"/>.""")]
+        [TestCase(
+              "If the dialog exists at call time, the value is True.",
+              "If the dialog does not exist at call time, the value is False.",
+              """<see langword="true"/> if the dialog exists at call time; otherwise, <see langword="false"/>.""")]
+        public void Code_gets_fixed_for_Boolean_method_with_repeated_par_phrase_(string originalComment1, string originalComment2, string fixedComment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <para>" + originalComment1 + @"</para>
+    /// <para>" + originalComment2 + @"</para>
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <para>
+    /// " + fixedComment + @"
+    /// </para>
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         [TestCase(@"<see langword=""false""/> in any other case.")]
         [TestCase(@"<see langword=""false""/> in any other cases.")]
         [TestCase(@"<see langword=""false""/> in any of the other cases.")]
