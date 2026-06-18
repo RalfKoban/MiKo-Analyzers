@@ -455,7 +455,7 @@ public class TestMe
               "If the dialog exists at call time, the value is True.",
               "If the dialog does not exist at call time, the value is False.",
               """<see langword="true"/> if the dialog exists at call time; otherwise, <see langword="false"/>.""")]
-        public void Code_gets_fixed_for_Boolean_method_with_repeated_par_phrase_(string originalComment1, string originalComment2, string fixedComment)
+        public void Code_gets_fixed_for_Boolean_method_with_repeated_para_phrase_(string originalComment1, string originalComment2, string fixedComment)
         {
             var originalCode = @"
 using System;

@@ -412,13 +412,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified phrases replaced with the specified replacement.
+        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified phrases replaced with the specified replacements.
         /// </summary>
         /// <param name="source">
         /// The list in which to replace text.
         /// </param>
         /// <param name="replacementPhrases">
-        /// The phrases to be replaced where the <see cref="Pair.Key"/> is the phrase to replace and the <see cref="Pair.Value"/> is the text to replace with.
+        /// The phrases to be replaced, where the <see cref="Pair.Key"/> is the phrase to replace and the <see cref="Pair.Value"/> is the text to replace with.
         /// </param>
         /// <returns>
         /// A collection of XML node syntaxes with all occurrences of the phrases replaced with the replacement.
