@@ -187,7 +187,11 @@ namespace MiKoSolutions.Analyzers.Rules
             m_analyzeParameterCallback = m_analyzeParameterCallback ?? AnalyzeParameter;
             m_analyzeParameterContextCallback = m_analyzeParameterContextCallback ?? AnalyzeParameter;
 
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+            // Performance-Note:
+            // For performance reasons we let the analyzer report any diagnostics found in generated code, but we do not let it analyze the code.
+            // This avoids a costly 'AnalyzerDriver.IsInGeneratedCode' call (for large files not correctly marked as generated code) that otherwise would consume most of the time when reporting any diagnostics,
+            // although we would not let the generated code get analyzed via 'GeneratedCodeAnalysisFlags.None' at all.
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.ReportDiagnostics);
 
             if (CanRunConcurrently)
             {
