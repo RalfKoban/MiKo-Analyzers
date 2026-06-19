@@ -36,25 +36,42 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var issues = AnalyzePropertyDeclaration(property, context.SemanticModel);
 
-                ReportDiagnostics(context, issues);
+                if (issues.Length > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzePropertyDeclaration(PropertyDeclarationSyntax property, SemanticModel semanticModel)
+        private Diagnostic[] AnalyzePropertyDeclaration(PropertyDeclarationSyntax property, SemanticModel semanticModel)
         {
             var propertyName = property.GetName();
 
-            return Array.Empty<Diagnostic>()
-                        .Concat(AnalyzeProperty(property.ExpressionBody, propertyName, semanticModel))
-                        .Concat(AnalyzeProperty(property.GetGetter(), propertyName, semanticModel))
-                        .Concat(AnalyzeProperty(property.GetSetter(), propertyName, semanticModel));
+            List<Diagnostic> issues = null; // per default we do not have some, so avoid lots of useless object creations
+
+            if (property.ExpressionBody is ArrowExpressionClauseSyntax body)
+            {
+                AnalyzeProperty(body, propertyName, semanticModel, ref issues);
+            }
+
+            if (property.GetGetter() is AccessorDeclarationSyntax getter)
+            {
+                AnalyzeProperty(getter.Body ?? (SyntaxNode)getter.ExpressionBody, propertyName, semanticModel, ref issues);
+            }
+
+            if (property.GetSetter() is AccessorDeclarationSyntax setter)
+            {
+                AnalyzeProperty(setter.Body ?? (SyntaxNode)setter.ExpressionBody, propertyName, semanticModel, ref issues);
+            }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeProperty(SyntaxNode node, string propertyName, SemanticModel semanticModel)
+        private void AnalyzeProperty(SyntaxNode node, string propertyName, SemanticModel semanticModel, ref List<Diagnostic> issues)
         {
             if (node is null)
             {
-                yield break;
+                return;
             }
 
             foreach (var linq in node.LinqExtensionMethods(semanticModel))
@@ -74,12 +91,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                yield return Issue(propertyName, name.Identifier, linqCall);
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(Issue(propertyName, name.Identifier, linqCall));
             }
 
             foreach (var yieldKeyword in node.DescendantTokens(SyntaxKind.YieldKeyword))
             {
-                yield return Issue(propertyName, yieldKeyword, yieldKeyword.ValueText);
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(Issue(propertyName, yieldKeyword, yieldKeyword.ValueText));
             }
         }
     }
