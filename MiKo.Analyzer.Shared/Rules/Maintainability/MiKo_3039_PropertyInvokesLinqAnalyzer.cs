@@ -54,14 +54,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 AnalyzeProperty(body, propertyName, semanticModel, ref issues);
             }
 
-            if (property.GetGetter() is AccessorDeclarationSyntax getter)
+            if (property.GetGetter() is AccessorDeclarationSyntax getter && (getter.Body ?? (SyntaxNode)getter.ExpressionBody) is SyntaxNode getterBody)
             {
-                AnalyzeProperty(getter.Body ?? (SyntaxNode)getter.ExpressionBody, propertyName, semanticModel, ref issues);
+                AnalyzeProperty(getterBody, propertyName, semanticModel, ref issues);
             }
 
-            if (property.GetSetter() is AccessorDeclarationSyntax setter)
+            if (property.GetSetter() is AccessorDeclarationSyntax setter && (setter.Body ?? (SyntaxNode)setter.ExpressionBody) is SyntaxNode setterBody)
             {
-                AnalyzeProperty(setter.Body ?? (SyntaxNode)setter.ExpressionBody, propertyName, semanticModel, ref issues);
+                AnalyzeProperty(setterBody, propertyName, semanticModel, ref issues);
             }
 
             return issues?.ToArray() ?? Array.Empty<Diagnostic>();
