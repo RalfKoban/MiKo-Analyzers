@@ -71,7 +71,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var issues = Analyze(context, method, methodBody, methodSymbol);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private void AnalyzeConstructor(SyntaxNodeAnalysisContext context)
@@ -101,25 +104,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var issues = Analyze(context, method, methodBody, methodSymbol);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode method, SyntaxNode methodBody, IMethodSymbol methodSymbol)
+        private Diagnostic[] Analyze(SyntaxNodeAnalysisContext context, SyntaxNode method, SyntaxNode methodBody, IMethodSymbol methodSymbol)
         {
             var comments = method.GetDocumentationCommentTriviaSyntax();
             var commentsLength = comments.Length;
 
             if (commentsLength <= 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
             if (used.Count <= 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
+
+            List<Diagnostic> issues = null;
 
             var parameters = methodSymbol.Parameters;
 
@@ -141,11 +149,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (parameterComment.GetTextTrimmed().EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
                         {
-                            yield return Issue(parameterName, parameterComment.GetContentsLocation());
+                            if (issues is null)
+                            {
+                                issues = new List<Diagnostic>(1);
+                            }
+
+                            issues.Add(Issue(parameterName, parameterComment.GetContentsLocation()));
                         }
                     }
                 }
             }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }
