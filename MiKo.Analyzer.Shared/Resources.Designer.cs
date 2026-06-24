@@ -18961,6 +18961,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align expression relative to opening brace.
+        /// </summary>
+        internal static string MiKo_6069_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6069_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when object initializer expressions are placed consistently relative to the opening brace. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6069_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6069_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align expression relative to opening brace.
+        /// </summary>
+        internal static string MiKo_6069_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6069_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align object initializer expressions relative to opening brace.
+        /// </summary>
+        internal static string MiKo_6069_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6069_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6070_CodeFixTitle {

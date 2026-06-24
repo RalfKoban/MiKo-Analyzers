@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 561 rules that are currently provided by the analyzer.
+The following tables list all the 562 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -609,6 +609,7 @@ The following tables list all the 561 rules that are currently provided by the a
 |[MiKo_6066](/Documentation/MiKo_6066.md)|Indent rather than outdent collection expression elements|&#x2713;|&#x2713;|
 |[MiKo_6067](/Documentation/MiKo_6067.md)|Place ternary operators on same lines as their respective expressions|&#x2713;|&#x2713;|
 |[MiKo_6068](/Documentation/MiKo_6068.md)|Place property patterns inside 'if' conditions on same line|&#x2713;|&#x2713;|
+|[MiKo_6069](/Documentation/MiKo_6069.md)|Align object initializer expressions relative to opening brace|&#x2713;|&#x2713;|
 |[MiKo_6070](/Documentation/MiKo_6070.md)|Surround Console statements with blank lines|&#x2713;|&#x2713;|
 |[MiKo_6071](/Documentation/MiKo_6071.md)|Surround local using statements with blank lines|&#x2713;|&#x2713;|
 |[MiKo_6072](/Documentation/MiKo_6072.md)|Surround base class calls with blank lines|&#x2713;|&#x2713;|

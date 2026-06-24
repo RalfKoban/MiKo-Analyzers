@@ -6579,6 +6579,18 @@ This style avoids dangling operators, aligns with common C# style guides and too
   <data name="MiKo_6068_Title" xml:space="preserve">
     <value>Place property patterns inside 'if' conditions on same line</value>
   </data>
+  <data name="MiKo_6069_CodeFixTitle" xml:space="preserve">
+    <value>Align expression relative to opening brace</value>
+  </data>
+  <data name="MiKo_6069_Description" xml:space="preserve">
+    <value>Code readability improves when object initializer expressions are placed consistently relative to the opening brace. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6069_MessageFormat" xml:space="preserve">
+    <value>Align expression relative to opening brace</value>
+  </data>
+  <data name="MiKo_6069_Title" xml:space="preserve">
+    <value>Align object initializer expressions relative to opening brace</value>
+  </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
