@@ -17,7 +17,19 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe { Number = 42 };
+    public static TestMe Create() => new TestMe { Number = 42 };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_initializer_expression_on_same_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int Name { get; set; }
+
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe { Number = 42, Name = ""some name"" };
 }
 ");
 
@@ -27,10 +39,26 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                      Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                         };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_initializer_expression_on_other_line_but_indented() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int Name { get; set; }
+
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                             Name = ""some name"",
+                                         };
 }
 ");
 
@@ -40,10 +68,10 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                          Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                                 Number = 42,
+                                         };
 }
 ");
 
@@ -53,10 +81,10 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                  Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                         Number = 42,
+                                         };
 }
 ");
 
@@ -68,10 +96,10 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                          Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                    Number = 42,
+                                         };
 }
 ";
 
@@ -80,10 +108,40 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                      Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                         };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_initializer_expression_on_other_line_but_indented()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe
+                                         {
+                                                 Number = 42,
+                                         };
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                         };
 }
 ";
 
@@ -98,10 +156,10 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                  Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                         Number = 42,
+                                         };
 }
 ";
 
@@ -110,10 +168,10 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                      Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                         };
 }
 ";
 
@@ -130,11 +188,11 @@ public class TestMe
 
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                        Name = ""my name"",
-                                  Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                               Name = ""my name"",
+                                         Number = 42,
+                                         };
 }
 ";
 
@@ -145,11 +203,11 @@ public class TestMe
 
     public int Number { get; set; }
 
-    public static Create() => new TestMe
-                                  {
-                                      Name = ""my name"",
-                                      Number = 42,
-                                  };
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Name = ""my name"",
+                                             Number = 42,
+                                         };
 }
 ";
 
@@ -164,7 +222,7 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe {Number = 42 };
+    public static TestMe Create() => new TestMe {Number = 42 };
 }
 ";
 
@@ -173,7 +231,7 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe { Number = 42 };
+    public static TestMe Create() => new TestMe { Number = 42 };
 }
 ";
 
@@ -188,7 +246,7 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe {   Number = 42 };
+    public static TestMe Create() => new TestMe {   Number = 42 };
 }
 ";
 
@@ -197,7 +255,31 @@ public class TestMe
 {
     public int Number { get; set; }
 
-    public static Create() => new TestMe { Number = 42 };
+    public static TestMe Create() => new TestMe { Number = 42 };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_initializer_expression_on_same_line_but_on_position_more_than_1_character_behind_open_brace_with_comment()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe {   /*comment*/ Number = 42 };
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe { /*comment*/ Number = 42 };
 }
 ";
 
@@ -214,7 +296,7 @@ public class TestMe
 
     public int Number { get; set; }
 
-    public static Create() => new TestMe {   Number = 42,      Name = ""some name"" };
+    public static TestMe Create() => new TestMe {   Number = 42,   /*comment*/   Name = ""some name"" };
 }
 ";
 
@@ -225,7 +307,35 @@ public class TestMe
 
     public int Number { get; set; }
 
-    public static Create() => new TestMe { Number = 42, Name = ""some name"" };
+    public static TestMe Create() => new TestMe { Number = 42, /*comment*/ Name = ""some name"" };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_initializer_expressions_on_same_line_but_with_additional_spaces_with_comment()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int Name { get; set; }
+
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe {   Number = 42,      Name = ""some name"" };
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int Name { get; set; }
+
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe { Number = 42, Name = ""some name"" };
 }
 ";
 
@@ -242,7 +352,7 @@ public class TestMe
 
     public int Number { get; set; }
 
-    public static Create() => new TestMe {Number = 42,Name = ""some name"" };
+    public static TestMe Create() => new TestMe {Number = 42,Name = ""some name"" };
 }
 ";
 
@@ -253,7 +363,7 @@ public class TestMe
 
     public int Number { get; set; }
 
-    public static Create() => new TestMe { Number = 42, Name = ""some name"" };
+    public static TestMe Create() => new TestMe { Number = 42, Name = ""some name"" };
 }
 ";
 

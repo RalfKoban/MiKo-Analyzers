@@ -68,7 +68,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         else
                         {
                             // calculate for consecutive expressions
-                            spaces = AcceptedSpacesOnSameLine;
+                            var separator = expressions.GetSeparator(index - 1);
+
+                            if (expression.GetPositionWithinStartLine() != separator.GetPositionWithinEndLine() + AcceptedSpacesOnSameLine)
+                            {
+                                spaces = AcceptedSpacesOnSameLine;
+                            }
                         }
                     }
                     else

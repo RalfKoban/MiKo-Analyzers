@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var spaces = GetProposedSpaces(issue);
 
-                return expression.WithoutLeadingTrivia().WithLeadingSpaces(spaces);
+                return expression.WithLeadingSpaces(spaces);
             }
 
             return syntax;
@@ -57,33 +57,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     switch (index)
                     {
                         case -1: // should never happen as the syntax should be part of the initializer
-                            break;
+                            return root;
 
                         case 0:
-                        {
-                            // ensure that the open brace token has no trailing trivia
-                            if (openBraceToken.HasTrailingTrivia)
-                            {
-                                return root.ReplaceNode(initializer, initializer.WithOpenBraceToken(openBraceToken.WithoutTrailingTrivia()));
-                            }
-
-                            break;
-                        }
+                            return GetUpdatedSyntaxRoot(root, openBraceToken);
 
                         default:
-                        {
-                            var separator = expressions.GetSeparator(index - 1);
-
-                            // ensure that the separator token has no trailing trivia
-                            if (separator.HasTrailingTrivia)
-                            {
-                                return root.ReplaceToken(separator, separator.WithoutTrailingTrivia());
-                            }
-
-                            break;
-                        }
+                            return GetUpdatedSyntaxRoot(root, expressions.GetSeparator(index - 1));
                     }
                 }
+            }
+
+            return root;
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, in SyntaxToken token)
+        {
+            if (token.HasTrailingTrivia)
+            {
+                // ensure that the token has no trailing trivia
+                var updatedToken = token.WithoutTrailingTrivia();
+
+                if (token.HasTrailingComment())
+                {
+                    updatedToken = updatedToken.WithTrailingSpace()
+                                               .WithAdditionalTrailingTrivia(token.TrailingTrivia.Where(_ => _.IsComment()));
+                }
+
+                return root.ReplaceToken(token, updatedToken);
             }
 
             return root;
