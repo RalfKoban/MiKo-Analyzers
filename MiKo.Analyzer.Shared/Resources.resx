@@ -6183,16 +6183,16 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Place open parenthesis on same line(s) as invoked methods</value>
   </data>
   <data name="MiKo_6036_CodeFixTitle" xml:space="preserve">
-    <value>Align block directly below arrow</value>
+    <value>Align lambda block brace with arrow</value>
   </data>
   <data name="MiKo_6036_Description" xml:space="preserve">
     <value>To easily distinguish lambda blocks from other code blocks, position them either in line with or directly below the corresponding arrow. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6036_MessageFormat" xml:space="preserve">
-    <value>Align lambda block directly below arrow</value>
+    <value>Align lambda block brace with arrow</value>
   </data>
   <data name="MiKo_6036_Title" xml:space="preserve">
-    <value>Place lambda blocks directly below the corresponding arrow(s)</value>
+    <value>Align lambda block braces with the corresponding arrow(s)</value>
   </data>
   <data name="MiKo_6037_CodeFixTitle" xml:space="preserve">
     <value>Place argument on same line as invocation</value>
@@ -6495,16 +6495,16 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Place switch expression arms on same line</value>
   </data>
   <data name="MiKo_6062_CodeFixTitle" xml:space="preserve">
-    <value>Align expression right beside open brace</value>
+    <value>Align expression relative to opening brace</value>
   </data>
   <data name="MiKo_6062_Description" xml:space="preserve">
-    <value>Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow.</value>
+    <value>Code readability improves when expressions within complex initializer expressions are placed consistently relative to the opening brace. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6062_MessageFormat" xml:space="preserve">
-    <value>Align expression right beside open brace</value>
+    <value>Align expression relative to opening brace</value>
   </data>
   <data name="MiKo_6062_Title" xml:space="preserve">
-    <value>Place expressions within complex initializer expressions beside open brace</value>
+    <value>Align expressions within complex initializer expressions relative to opening brace</value>
   </data>
   <data name="MiKo_6063_CodeFixTitle" xml:space="preserve">
     <value>Place invocation on same line</value>
