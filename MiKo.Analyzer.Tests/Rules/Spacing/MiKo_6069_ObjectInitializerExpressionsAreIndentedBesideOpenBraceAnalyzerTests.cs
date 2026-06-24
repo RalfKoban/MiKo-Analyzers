@@ -25,7 +25,7 @@ public class TestMe
         public void No_issue_is_reported_for_multiple_initializer_expression_on_same_line() => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -50,7 +50,7 @@ public class TestMe
         public void No_issue_is_reported_for_multiple_initializer_expression_on_other_line_but_indented() => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -184,7 +184,7 @@ public class TestMe
             const string OriginalCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -199,7 +199,7 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -292,7 +292,7 @@ public class TestMe
             const string OriginalCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -303,7 +303,7 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -320,7 +320,7 @@ public class TestMe
             const string OriginalCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -331,7 +331,7 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -348,7 +348,7 @@ public class TestMe
             const string OriginalCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
@@ -359,7 +359,7 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Number { get; set; }
 
