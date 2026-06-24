@@ -34,6 +34,28 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_initializer_expression_on_same_line_with_comment_before_first_expression() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe { /*comment*/ Number = 42 };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_initializer_expressions_on_same_line_with_comment_before_subsequent_expression() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public int Number { get; set; }
+
+    public static TestMe Create() => new TestMe { Number = 42, /*comment*/ Name = ""some name"" };
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_initializer_expression_on_other_line_but_indented() => No_issue_is_reported_for(@"
 public class TestMe
 {

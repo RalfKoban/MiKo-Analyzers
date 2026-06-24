@@ -52,25 +52,26 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 for (var index = 0; index < count; index++)
                 {
                     var expression = expressions[index];
-                    var expressionPosition = expression.GetStartPosition();
-                    var expressionPositionCharacter = expressionPosition.Character;
                     var spaces = 0;
 
                     if (onSameLine)
                     {
-                        if (index is 0)
+                        var token = index is 0
+                                    ? openBraceToken
+                                    : expressions.GetSeparator(index - 1); // calculate for consecutive expressions
+
+                        var trailingTrivia = token.TrailingTrivia;
+
+                        if (trailingTrivia.Count is 0)
                         {
-                            if (expression.GetPositionWithinStartLine() != openBraceToken.GetPositionWithinEndLine() + AcceptedSpacesOnSameLine)
+                            if (expression.GetPositionWithinStartLine() != token.GetPositionWithinEndLine() + AcceptedSpacesOnSameLine)
                             {
                                 spaces = AcceptedSpacesOnSameLine;
                             }
                         }
                         else
                         {
-                            // calculate for consecutive expressions
-                            var separator = expressions.GetSeparator(index - 1);
-
-                            if (expression.GetPositionWithinStartLine() != separator.GetPositionWithinEndLine() + AcceptedSpacesOnSameLine)
+                            if (trailingTrivia.Any(_ => _.Span.Length != AcceptedSpacesOnSameLine && _.IsWhiteSpace()))
                             {
                                 spaces = AcceptedSpacesOnSameLine;
                             }
@@ -78,11 +79,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     }
                     else
                     {
+                        var expressionPosition = expression.GetStartPosition();
+
                         if (expressionPosition.Line > openBracePosition.Line)
                         {
                             var expectedPosition = openBracePosition.Character + Constants.Indentation;
 
-                            if (expressionPositionCharacter != expectedPosition)
+                            if (expressionPosition.Character != expectedPosition)
                             {
                                 spaces = expectedPosition;
                             }
