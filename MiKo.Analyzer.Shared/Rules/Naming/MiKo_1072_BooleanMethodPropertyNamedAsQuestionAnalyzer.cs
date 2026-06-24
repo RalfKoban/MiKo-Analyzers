@@ -77,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WellKnownPostfixes =
                                                               {
+                                                                  "As",
                                                                   "Child",
                                                                   "Code",
                                                                   "Line",
