@@ -6496,16 +6496,17 @@ This makes the code clearer and easier to follow.</value>
     <value>Place switch expression arms on same line</value>
   </data>
   <data name="MiKo_6062_CodeFixTitle" xml:space="preserve">
-    <value>Align expression relative to opening brace</value>
+    <value>Indent values beside the opening brace</value>
   </data>
   <data name="MiKo_6062_Description" xml:space="preserve">
-    <value>Code readability improves when expressions within complex initializer expressions are placed consistently relative to the opening brace. This makes the code clearer and easier to follow.</value>
+    <value>Code readability improves when values inside element initializers are placed consistently, either on the same line as the opening brace or indented to that position on a new line.
+This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6062_MessageFormat" xml:space="preserve">
-    <value>Align expression relative to opening brace</value>
+    <value>Indent values beside the opening brace</value>
   </data>
   <data name="MiKo_6062_Title" xml:space="preserve">
-    <value>Align expressions within complex initializer expressions relative to opening brace</value>
+    <value>Indent values in element initializers correctly</value>
   </data>
   <data name="MiKo_6063_CodeFixTitle" xml:space="preserve">
     <value>Place invocation on same line</value>

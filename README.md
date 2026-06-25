@@ -602,7 +602,7 @@ The following tables list all the 562 rules that are currently provided by the a
 |[MiKo_6059](/Documentation/MiKo_6059.md)|Position multi-line conditions outdented below associated calls|&#x2713;|&#x2713;|
 |[MiKo_6060](/Documentation/MiKo_6060.md)|Place switch case labels on same line|&#x2713;|&#x2713;|
 |[MiKo_6061](/Documentation/MiKo_6061.md)|Place switch expression arms on same line|&#x2713;|&#x2713;|
-|[MiKo_6062](/Documentation/MiKo_6062.md)|Align expressions within complex initializer expressions relative to opening brace|&#x2713;|&#x2713;|
+|[MiKo_6062](/Documentation/MiKo_6062.md)|Indent values in element initializers correctly|&#x2713;|&#x2713;|
 |[MiKo_6063](/Documentation/MiKo_6063.md)|Place invocations on same line|&#x2713;|&#x2713;|
 |[MiKo_6064](/Documentation/MiKo_6064.md)|Place identifier invocations on same line|&#x2713;|&#x2713;|
 |[MiKo_6065](/Documentation/MiKo_6065.md)|Indent rather than outdent consecutive invocations spanning multiple lines|&#x2713;|&#x2713;|

@@ -18709,7 +18709,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align expression relative to opening brace.
+        ///   Looks up a localized string similar to Indent values beside the opening brace.
         /// </summary>
         internal static string MiKo_6062_CodeFixTitle {
             get {
@@ -18718,7 +18718,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code readability improves when expressions within complex initializer expressions are placed consistently relative to the opening brace. This makes the code clearer and easier to follow..
+        ///   Looks up a localized string similar to Code readability improves when values inside element initializers are placed consistently, either on the same line as the opening brace or indented to that position on a new line.
+        ///This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6062_Description {
             get {
@@ -18727,7 +18728,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align expression relative to opening brace.
+        ///   Looks up a localized string similar to Indent values beside the opening brace.
         /// </summary>
         internal static string MiKo_6062_MessageFormat {
             get {
@@ -18736,7 +18737,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align expressions within complex initializer expressions relative to opening brace.
+        ///   Looks up a localized string similar to Indent values in element initializers correctly.
         /// </summary>
         internal static string MiKo_6062_Title {
             get {
