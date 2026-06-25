@@ -576,7 +576,7 @@ The following tables list all the 562 rules that are currently provided by the a
 |[MiKo_6033](/Documentation/MiKo_6033.md)|Place braces of blocks below case sections directly below the corresponding case keyword|&#x2713;|&#x2713;|
 |[MiKo_6034](/Documentation/MiKo_6034.md)|Place dots on same line(s) as invoked members|&#x2713;|&#x2713;|
 |[MiKo_6035](/Documentation/MiKo_6035.md)|Place open parenthesis on same line(s) as invoked methods|&#x2713;|&#x2713;|
-|[MiKo_6036](/Documentation/MiKo_6036.md)|Place lambda blocks directly below the corresponding arrow(s)|&#x2713;|&#x2713;|
+|[MiKo_6036](/Documentation/MiKo_6036.md)|Align lambda blocks with the corresponding arrow(s)|&#x2713;|&#x2713;|
 |[MiKo_6037](/Documentation/MiKo_6037.md)|Place single arguments on same line(s) as invoked methods|&#x2713;|&#x2713;|
 |[MiKo_6038](/Documentation/MiKo_6038.md)|Place casts on same line(s)|&#x2713;|&#x2713;|
 |[MiKo_6039](/Documentation/MiKo_6039.md)|Place return values on same line(s) as return keywords|&#x2713;|&#x2713;|
@@ -602,7 +602,7 @@ The following tables list all the 562 rules that are currently provided by the a
 |[MiKo_6059](/Documentation/MiKo_6059.md)|Position multi-line conditions outdented below associated calls|&#x2713;|&#x2713;|
 |[MiKo_6060](/Documentation/MiKo_6060.md)|Place switch case labels on same line|&#x2713;|&#x2713;|
 |[MiKo_6061](/Documentation/MiKo_6061.md)|Place switch expression arms on same line|&#x2713;|&#x2713;|
-|[MiKo_6062](/Documentation/MiKo_6062.md)|Place expressions within complex initializer expressions beside open brace|&#x2713;|&#x2713;|
+|[MiKo_6062](/Documentation/MiKo_6062.md)|Indent values in element initializers correctly|&#x2713;|&#x2713;|
 |[MiKo_6063](/Documentation/MiKo_6063.md)|Place invocations on same line|&#x2713;|&#x2713;|
 |[MiKo_6064](/Documentation/MiKo_6064.md)|Place identifier invocations on same line|&#x2713;|&#x2713;|
 |[MiKo_6065](/Documentation/MiKo_6065.md)|Indent rather than outdent consecutive invocations spanning multiple lines|&#x2713;|&#x2713;|
