@@ -24,14 +24,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string OrNotPhrase = " or not";
         private const string OtherwiseReplacement = "; otherwise, ";
 
-        private const string StartWithArticleA = "A ";
-        private const string StartWithArticleAn = "An ";
-        private const string StartWithArticleThe = "The ";
-        private const string StartWithArticleLowerCaseA = "a ";
-        private const string StartWithArticleLowerCaseAn = "an ";
-        private const string StartWithArticleLowerCaseThe = "the ";
-        private const string StartWithParenthesis = "(";
-
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string StartPhraseParts0 = StartPhraseParts[0];
         private static readonly string StartPhraseParts1 = StartPhraseParts[1];
@@ -43,15 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
         private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 250.Milliseconds());
-
-        private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
-                                                                                             StartWithArticleA,
-                                                                                             StartWithArticleAn,
-                                                                                             StartWithArticleThe,
-                                                                                             StartWithArticleLowerCaseA,
-                                                                                             StartWithArticleLowerCaseAn,
-                                                                                             StartWithArticleLowerCaseThe,
-                                                                                             StartWithParenthesis);
 
         private static readonly Pair OtherwisePair = new Pair(". Otherwise", "; otherwise");
 
@@ -345,37 +328,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.Length > 0)
             {
-                if (text.StartsWith(StartWithArticleA))
+                if (text.StartsWith(MapData.StartWithArticleA))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForA, data.ReplacementMapKeysForA, data.UniqueReplacementMapKeysForA);
                 }
 
-                if (text.StartsWith(StartWithArticleAn))
+                if (text.StartsWith(MapData.StartWithArticleAn))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForAn, data.ReplacementMapKeysForAn, data.UniqueReplacementMapKeysForAn);
                 }
 
-                if (text.StartsWith(StartWithArticleThe))
+                if (text.StartsWith(MapData.StartWithArticleThe))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForThe, data.ReplacementMapKeysForThe, data.UniqueReplacementMapKeysForThe);
                 }
 
-                if (text.StartsWith(StartWithParenthesis))
+                if (text.StartsWith(MapData.StartWithParenthesis))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForParenthesis, data.ReplacementMapKeysForParenthesis, data.UniqueReplacementMapKeysForParenthesis);
                 }
 
-                if (text.StartsWith(StartWithArticleLowerCaseA))
+                if (text.StartsWith(MapData.StartWithArticleLowerCaseA))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForLowerCaseA, data.ReplacementMapKeysForLowerCaseA, data.UniqueReplacementMapKeysForA);
                 }
 
-                if (text.StartsWith(StartWithArticleLowerCaseAn))
+                if (text.StartsWith(MapData.StartWithArticleLowerCaseAn))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForLowerCaseAn, data.ReplacementMapKeysForLowerCaseAn, data.UniqueReplacementMapKeysForAn);
                 }
 
-                if (text.StartsWith(StartWithArticleLowerCaseThe))
+                if (text.StartsWith(MapData.StartWithArticleLowerCaseThe))
                 {
                     return new ConcreteMapInfo(data.ReplacementMapForLowerCaseThe, data.ReplacementMapKeysForLowerCaseThe, data.UniqueReplacementMapKeysForThe);
                 }
@@ -402,6 +385,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+            public const string StartWithArticleA = "A ";
+            public const string StartWithArticleAn = "An ";
+            public const string StartWithArticleThe = "The ";
+            public const string StartWithArticleLowerCaseA = "a ";
+            public const string StartWithArticleLowerCaseAn = "an ";
+            public const string StartWithArticleLowerCaseThe = "the ";
+            public const string StartWithParenthesis = "(";
+
 #pragma warning disable SA1401 // Fields should be private
             public readonly Pair[] ReplacementMapForA;
             public readonly Pair[] ReplacementMapForAn;
@@ -422,6 +413,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             public readonly string[] UniqueReplacementMapKeysForParenthesis;
             public readonly string[] UniqueReplacementMapKeysForOthers;
 #pragma warning restore SA1401 // Fields should be private
+
+            private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
+                                                                                                 StartWithArticleA,
+                                                                                                 StartWithArticleAn,
+                                                                                                 StartWithArticleThe,
+                                                                                                 StartWithArticleLowerCaseA,
+                                                                                                 StartWithArticleLowerCaseAn,
+                                                                                                 StartWithArticleLowerCaseThe,
+                                                                                                 StartWithParenthesis);
 
             public MapData()
             {
@@ -557,6 +557,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ReplacementMapKeysForThe = GetTermsForQuickLookup(UniqueReplacementMapKeysForThe);
                 ReplacementMapKeysForParenthesis = GetTermsForQuickLookup(UniqueReplacementMapKeysForParenthesis);
                 ReplacementMapKeysForOthers = GetTermsForQuickLookup(UniqueReplacementMapKeysForOthers);
+
+                return;
 
                 string[] ToKeyArray(ReadOnlySpan<string> keys, string text)
                 {
