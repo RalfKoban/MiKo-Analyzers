@@ -58,26 +58,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ConstructorPhrases =
                                                               {
-                                                                  "copy constructor",
-                                                                  "copy Constructor",
-                                                                  "Copy constructor",
+                                                                  "Copy C-tor",
                                                                   "Copy Constructor",
-                                                                  "copy ctor",
-                                                                  "copy Ctor",
-                                                                  "Copy ctor",
                                                                   "Copy Ctor",
-                                                                  "default constructor",
-                                                                  "default Constructor",
-                                                                  "Default constructor",
+                                                                  "Copy D-tor", // typo
+                                                                  "Copy c-tor",
+                                                                  "Copy constructor",
+                                                                  "Copy ctor",
+                                                                  "Copy d-tor", // typo
+                                                                  "Default C-tor",
                                                                   "Default Constructor",
-                                                                  "default ctor",
-                                                                  "default Ctor",
-                                                                  "Default ctor",
                                                                   "Default Ctor",
+                                                                  "Default D-tor", // typo
+                                                                  "Default Dtor", // typo
+                                                                  "Default c-tor",
+                                                                  "Default constructor",
+                                                                  "Default ctor",
+                                                                  "Default d-tor", // typo
+                                                                  "Default dtor", // typo
+                                                                  "copy C-tor",
+                                                                  "copy Constructor",
+                                                                  "copy Ctor",
+                                                                  "copy D-tor", // typo
+                                                                  "copy c-tor",
+                                                                  "copy constructor",
+                                                                  "copy ctor",
+                                                                  "copy d-tor", // typo
+                                                                  "default C-tor",
+                                                                  "default Constructor",
+                                                                  "default Ctor",
+                                                                  "default D-tor", // typo
+                                                                  "default Dtor", // typo
+                                                                  "default c-tor",
+                                                                  "default constructor",
+                                                                  "default ctor",
+                                                                  "default d-tor", // typo
+                                                                  "default dtor", // typo
                                                                   "Constructor",
                                                                   "constructor",
                                                                   "Ctor",
                                                                   "ctor",
+                                                                  "Dtor", // typo
+                                                                  "dtor", // typo
+                                                                  "C-tor",
+                                                                  "c-tor",
+                                                                  "D-tor", // typo
+                                                                  "d-tor", // typo
                                                               };
 
         private static readonly Pair[] CallbackReplacements = new[]

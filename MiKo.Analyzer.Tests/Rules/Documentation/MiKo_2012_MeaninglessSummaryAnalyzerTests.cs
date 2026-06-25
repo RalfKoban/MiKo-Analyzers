@@ -1769,6 +1769,9 @@ public class TestMe
                                  "Component",
                                  "Constructor",
                                  "Ctor",
+                                 "C-tor",
+                                 "Dtor",
+                                 "D-tor", // typo
                                  "Delegate",
                                  "Creator",
                                  "Entity",
