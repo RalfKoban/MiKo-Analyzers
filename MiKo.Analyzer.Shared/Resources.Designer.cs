@@ -17772,7 +17772,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align lambda block brace with arrow.
+        ///   Looks up a localized string similar to Align lambda block with arrow.
         /// </summary>
         internal static string MiKo_6036_CodeFixTitle {
             get {
@@ -17781,7 +17781,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To easily distinguish lambda blocks from other code blocks, position them either in line with or directly below the corresponding arrow. This makes the code clearer and easier to follow..
+        ///   Looks up a localized string similar to Lambda blocks are easier to distinguish from other code blocks when placed either on the same line as the arrow or directly below it.
+        ///This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6036_Description {
             get {
@@ -17790,7 +17791,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align lambda block brace with arrow.
+        ///   Looks up a localized string similar to Align lambda block with arrow.
         /// </summary>
         internal static string MiKo_6036_MessageFormat {
             get {
@@ -17799,7 +17800,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align lambda block braces with the corresponding arrow(s).
+        ///   Looks up a localized string similar to Align lambda blocks with the corresponding arrow(s).
         /// </summary>
         internal static string MiKo_6036_Title {
             get {
