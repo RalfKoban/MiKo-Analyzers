@@ -22,6 +22,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
 
+#if !NCRUNCH
+
+        [OneTimeTearDown]
+        public static void CleanupTestEnvironment() => System.GC.Collect();
+
+#endif
+
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
 using System;
