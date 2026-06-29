@@ -311,7 +311,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                            .Select(_ => new Pair(_))
                                                                            .OrderDescendingByLengthAndText(_ => _.Key);
 
-                ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.ToArray(_ => _.Key));
+                ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap, quickLookupMode: QuickLookupMode.Contains);
 
                 ByteArrayReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith(
                                                                                                   "A array of byte containing ",
@@ -343,7 +343,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     .Select(_ => new Pair(_))
                                                                                     .OrderDescendingByLengthAndText(_ => _.Key);
 
-                ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap.ToArray(_ => _.Key));
+                ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap, quickLookupMode: QuickLookupMode.Contains);
 
                 ByteArrayContinueTexts = new[]
                                              {

@@ -15,6 +15,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
         /// <summary>
+        /// Defines values that specify how to do a quick lookup.
+        /// </summary>
+        protected enum QuickLookupMode
+        {
+            /// <summary>
+            /// A term has to start with another term.
+            /// </summary>
+            StartsWith = 0,
+
+            /// <summary>
+            /// A term has to contain another term.
+            /// </summary>
+            Contains = 1,
+        }
+
+        /// <summary>
         /// Gets the starting phrase proposal from the specified diagnostic issue.
         /// </summary>
         /// <param name="issue">
@@ -50,40 +66,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
-//// ncrunch: rdi off
-//// ncrunch: no coverage start
+        //// ncrunch: rdi off
+        //// ncrunch: no coverage start
 
         /// <summary>
-        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// Creates an optimized array of terms for quick lookup by removing terms that are already covered by a shorter term according to the specified lookup mode.
         /// </summary>
         /// <param name="pairs">
-        /// The collection of terms to optimize.
+        /// The collection of key-value pairs whose keys, after trimming, are used as the terms to optimize.
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the comparison rules to use.
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
+        /// <param name="quickLookupMode">
+        /// One of the enumeration members that specifies the mode to use for the lookup.
+        /// The default is <see cref="QuickLookupMode.StartsWith"/>.
+        /// </param>
         /// <returns>
-        /// An array of terms where no term is a prefix of another term, ordered by specificity.
+        /// An array of terms, ordered by ascending length, where no term is covered by another shorter term according to the specified lookup mode.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// This optimization reduces the number of comparisons needed during text replacement operations by ensuring that longer, more specific terms are checked without being shadowed by their prefixes.
-        /// For example, if input contains ["get", "getter"], only "getter" is returned since "get" is a prefix.
+        /// This optimization reduces the number of comparisons needed during text replacement operations:
+        /// <list type="bullet">
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.StartsWith"/> mode, a term is discarded if it starts with a shorter term already in the result.
+        /// </description></item>
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.Contains"/> mode, a term is discarded if it contains a shorter term already in the result.
+        /// </description></item>
+        /// </list>
+        /// For example, if input contains ["get", "getter"], only "get" is returned in either mode.
         /// </para>
         /// <para>
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in QuickLookupMode quickLookupMode = QuickLookupMode.StartsWith)
         {
             var terms = pairs.ToArray(_ => _.Key.Trim());
 
-            return GetTermsForQuickLookup(terms, comparison);
+            return GetTermsForQuickLookup(terms, comparison, quickLookupMode);
         }
 
         /// <summary>
-        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// Creates an optimized array of terms for quick lookup by removing terms that are already covered by a shorter term according to the specified lookup mode.
         /// </summary>
         /// <param name="terms">
         /// The collection of terms to optimize.
@@ -92,19 +120,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// One of the enumeration members that specifies the comparison rules to use.
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
+        /// <param name="quickLookupMode">
+        /// One of the enumeration members that specifies the mode to use for the lookup.
+        /// The default is <see cref="QuickLookupMode.StartsWith"/>.
+        /// </param>
         /// <returns>
-        /// An array of terms where no term is a prefix of another term, ordered by specificity.
+        /// An array of terms, ordered by ascending length, where no term is covered by another shorter term according to the specified lookup mode.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// This optimization reduces the number of comparisons needed during text replacement operations by ensuring that longer, more specific terms are checked without being shadowed by their prefixes.
-        /// For example, if input contains ["get", "getter"], only "getter" is returned since "get" is a prefix.
+        /// This optimization reduces the number of comparisons needed during text replacement operations:
+        /// <list type="bullet">
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.StartsWith"/> mode, a term is discarded if it starts with a shorter term already in the result.
+        /// </description></item>
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.Contains"/> mode, a term is discarded if it contains a shorter term already in the result.
+        /// </description></item>
+        /// </list>
+        /// For example, if input contains ["get", "getter"], only "get" is returned in either mode.
         /// </para>
         /// <para>
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in QuickLookupMode quickLookupMode = QuickLookupMode.StartsWith)
         {
             var pool = ArrayPool<string>.Shared;
 
@@ -117,15 +157,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in terms.OrderBy(_ => _.Length))
             {
-                var span = term.AsSpan();
-
                 found = false;
 
-                for (var index = 0; index < resultIndex; index++)
+                switch (quickLookupMode)
                 {
-                    if (span.StartsWith(rentedArray[index].AsSpan(), comparison))
+                    case QuickLookupMode.StartsWith:
                     {
-                        found = true;
+                        var span = term.AsSpan();
+
+                        for (var index = 0; index < resultIndex; index++)
+                        {
+                            if (span.StartsWith(rentedArray[index].AsSpan(), comparison))
+                            {
+                                found = true;
+
+                                break;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case QuickLookupMode.Contains:
+                    {
+                        for (var index = 0; index < resultIndex; index++)
+                        {
+                            if (term.Contains(rentedArray[index], comparison))
+                            {
+                                found = true;
+
+                                break;
+                            }
+                        }
 
                         break;
                     }
@@ -311,7 +374,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The syntax node to update.
         /// </param>
         /// <param name="lookupTerms">
-        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(Pair[],in StringComparison)"/> to optimize this array.
+        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(Pair[],in StringComparison, in QuickLookupMode)"/> to optimize this array.
         /// </param>
         /// <param name="replacementMap">
         /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
