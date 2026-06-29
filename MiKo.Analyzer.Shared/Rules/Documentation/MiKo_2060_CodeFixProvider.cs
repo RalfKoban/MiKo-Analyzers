@@ -464,7 +464,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            private static IEnumerable<string> CreateTypeReplacementMapKeys()
+            private static HashSet<string> CreateTypeReplacementMapKeys()
             {
                 var allPhrases = CreateAllPhrases();
                 var allContinuations = new HashSet<string>();
