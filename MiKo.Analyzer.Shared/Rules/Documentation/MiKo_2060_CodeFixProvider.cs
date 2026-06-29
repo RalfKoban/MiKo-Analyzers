@@ -302,21 +302,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var typeKeys = CreateTypeReplacementMapKeys();
 
                 var typeKeysStartingWithAc = new List<string>(16032); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAf = new List<string>(17016); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAi = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAf = new List<string>(16996); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAi = new List<string>(12070); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithAx = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAn = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithC = new List<string>(22396); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithD = new List<string>(7966); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithF = new List<string>(17016); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithI = new List<string>(9934); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithP = new List<string>(9046); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithR = new List<string>(9076); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAn = new List<string>(12070); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithC = new List<string>(22386); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithD = new List<string>(7926); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithF = new List<string>(16996); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithI = new List<string>(9914); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithP = new List<string>(9006); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithR = new List<string>(9036); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithTheC = new List<string>(21376); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheF = new List<string>(21024); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheI = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheF = new List<string>(21004); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheI = new List<string>(12070); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithTheX = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithThis = new List<string>(16660); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithThis = new List<string>(16640); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysOther = new List<string>(2460); // TODO RKN: Adjust number as soon as there are other texts
 
                 foreach (var typeKey in typeKeys)
@@ -359,10 +359,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 MethodReplacementMap = methodReplacementMap;
-                MethodReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
+                MethodReplacementMapKeys = GetTermsForQuickLookup(methodKeys, quickLookupMode: QuickLookupMode.Contains);
 
                 InstancesReplacementMap = instancesReplacementMap;
-                InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
+                InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys, quickLookupMode: QuickLookupMode.Contains);
 
                 CleanupReplacementMap = new[]
                                             {
@@ -460,11 +460,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         map[i] = new Pair(keys[i]);
                     }
 
-                    mapKeys = GetTermsForQuickLookup(keys);
+                    mapKeys = GetTermsForQuickLookup(keys, quickLookupMode: QuickLookupMode.Contains);
                 }
             }
 
-            private static string[] CreateTypeReplacementMapKeys()
+            private static IEnumerable<string> CreateTypeReplacementMapKeys()
             {
                 var allPhrases = CreateAllPhrases();
                 var allContinuations = new HashSet<string>();
@@ -496,11 +496,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                            "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
                                            "ies that provides", "ies which provides",
                                            "roviding provid", "rovides provid", "rovide provid",
+                                           "ass a ", "ass an ", "ass the ", "actory a ", "actory an ", "actory the ",
                                        };
 
                 results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
 
-                return results.ToArray();
+                return results;
             }
 
             private static string[] CreateMethodReplacementMapKeys()
