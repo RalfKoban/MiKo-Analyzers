@@ -301,23 +301,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
 
-                var typeKeysStartingWithAc = new List<string>(13116); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAf = new List<string>(12026); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAi = new List<string>(12036); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAc = new List<string>(10968); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAf = new List<string>(10488); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAi = new List<string>(11212); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithAx = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAn = new List<string>(12036); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithC = new List<string>(18496); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithD = new List<string>(7677); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithF = new List<string>(12026); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithI = new List<string>(9884); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithP = new List<string>(7902); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithR = new List<string>(8787); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheC = new List<string>(17488); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheF = new List<string>(15305); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheI = new List<string>(12036); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAn = new List<string>(11212); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithC = new List<string>(15558); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithD = new List<string>(7093); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithF = new List<string>(10488); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithI = new List<string>(9208); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithP = new List<string>(7273); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithR = new List<string>(8172); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheC = new List<string>(14624); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheF = new List<string>(13230); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheI = new List<string>(11212); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithTheX = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithThis = new List<string>(14206); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysOther = new List<string>(838); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithThis = new List<string>(12192); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysOther = new List<string>(822); // TODO RKN: Adjust number as soon as there are other texts
 
                 foreach (var typeKey in typeKeys)
                 {
@@ -494,14 +494,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                            "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
                                            "ies that provides", "ies which provides",
                                            "roviding provid", "rovides provid", "rovide provid", "rovides the factory provid", "rovides the factory class provid", "rovides which", "rovides that", "to provide to", "rovides to provid",
+                                           "rovides builds", "rovides constructs", "rovides creates",
+                                           "to provide builds", "to provide constructs", "to provide creates",
                                            "rovides to instance", "that provides to", "which provides to", "Provides to ",
+                                           "methods to provide methods", "methods provides",
                                            "ass a ", "ass an ", "ass the ", "actory a ", "actory an ", "actory the ",
                                            "Used that ", "Used which ", "Used builds", "Used creates", "Used constructs", "Used provides",
                                            "Uses that ", "Uses which ", "Uses builds", "Uses creates", "Uses constructs", "Uses provides",
                                            "pattern a",
                                            "nterface new", "nterface to new", "s to new",
-                                           "ethods to instance of",
-
+                                           "ethods to instance of", "ethods to provide factory methods",
+                                           "actory builds", "actories builds", "ethods builds", "pattern builds", "nterface builds", "lass builds",
+                                           "actory constructs", "actories constructs", "ethods constructs", "pattern constructs", "nterface constructs", "lass constructs",
+                                           "actory creates", "actories creates", "ethods creates", "pattern creates", "nterface creates", "lass creates",
+                                           "that instance", "which instance",
+                                           "that a instance", "to a instance", "which a instance",
+                                           "that an instance", "to an instance", "which an instance",
+                                           "that the instance", "to the instance", "which the instance",
+                                           "that new", "to new", "which new",
+                                           "that a new", "to a new", "which a new",
+                                           "that an new", "to an new", "which an new",
+                                           "that the new", "to the new", "which the new",
                                            //// accept phrases such as "to provide that/which is/are" as they are unusual but valid texts
                                        };
 

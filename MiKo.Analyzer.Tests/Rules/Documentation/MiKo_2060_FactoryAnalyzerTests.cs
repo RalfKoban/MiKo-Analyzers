@@ -782,6 +782,22 @@ internal interface IFactory
                                           "for the constructing",
                                           "for the creating",
                                           "for the providing",
+                                          "actory builds",
+                                          "pattern builds",
+                                          "lass builds",
+                                          "nterface builds",
+                                          "actory constructs",
+                                          "pattern constructs",
+                                          "lass constructs",
+                                          "nterface constructs",
+                                          "actory creates",
+                                          "pattern creates",
+                                          "lass creates",
+                                          "nterface creates",
+                                          "actory provides",
+                                          "pattern provides",
+                                          "lass provides",
+                                          "nterface provides",
                                       ];
 
             results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
