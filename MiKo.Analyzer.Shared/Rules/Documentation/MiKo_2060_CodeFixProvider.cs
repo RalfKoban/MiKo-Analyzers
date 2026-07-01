@@ -301,22 +301,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
 
-                var typeKeysStartingWithAc = new List<string>(16008); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAf = new List<string>(16974); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAc = new List<string>(13116); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAf = new List<string>(12026); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithAi = new List<string>(12036); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithAx = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithAn = new List<string>(12036); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithC = new List<string>(22352); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithD = new List<string>(7918); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithF = new List<string>(16974); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithC = new List<string>(18496); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithD = new List<string>(7677); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithF = new List<string>(12026); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithI = new List<string>(9884); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithP = new List<string>(8936); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithR = new List<string>(9028); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheC = new List<string>(21344); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheF = new List<string>(20976); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithP = new List<string>(7902); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithR = new List<string>(8787); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheC = new List<string>(17488); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheF = new List<string>(15305); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithTheI = new List<string>(12036); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithTheX = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithThis = new List<string>(16616); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithThis = new List<string>(14206); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysOther = new List<string>(838); // TODO RKN: Adjust number as soon as there are other texts
 
                 foreach (var typeKey in typeKeys)
@@ -488,19 +488,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var strangeTexts = new[]
                                        {
-                                           "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are",
+                                           "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are", "methods that is", "methods which is",
                                            "es that is capable", "es which is capable", "es that is able", "es which is able",
                                            "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
                                            "y that are capable", "y which are capable", "y that are able", "y which are able",
                                            "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
                                            "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
                                            "ies that provides", "ies which provides",
-                                           "roviding provid", "rovides provid", "rovide provid", "rovides the factory provid", "rovides the factory class provid",
+                                           "roviding provid", "rovides provid", "rovide provid", "rovides the factory provid", "rovides the factory class provid", "rovides which", "rovides that", "to provide to", "rovides to provid",
+                                           "rovides to instance", "that provides to", "which provides to", "Provides to ",
                                            "ass a ", "ass an ", "ass the ", "actory a ", "actory an ", "actory the ",
                                            "Used that ", "Used which ", "Used builds", "Used creates", "Used constructs", "Used provides",
                                            "Uses that ", "Uses which ", "Uses builds", "Uses creates", "Uses constructs", "Uses provides",
                                            "pattern a",
                                            "nterface new", "nterface to new", "s to new",
+                                           "ethods to instance of",
+
+                                           //// accept phrases such as "to provide that/which is/are" as they are unusual but valid texts
                                        };
 
                 results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
