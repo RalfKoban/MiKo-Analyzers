@@ -345,8 +345,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var methodKeys = CreateMethodReplacementMapKeys();
                 var methodKeysLength = methodKeys.Length;
 
-                Array.Sort(methodKeys, AscendingStringComparer.Default);
-
                 var methodReplacementMap = new Pair[methodKeysLength];
                 var instancesReplacementMap = new Pair[methodKeysLength];
 
@@ -643,7 +641,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                return results.ToArray();
+                var result = results.ToArray();
+
+                Array.Sort(result, AscendingStringComparer.Default);
+
+                return result;
             }
 
             private static HashSet<string> CreateAllPhrases()
