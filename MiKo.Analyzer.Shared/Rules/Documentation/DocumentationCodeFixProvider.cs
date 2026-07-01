@@ -402,6 +402,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return syntax;
             }
 
+            if (textMap.Count is 1)
+            {
+                var onlyPair = textMap.First();
+
+                return syntax.ReplaceNode(onlyPair.Key, onlyPair.Value);
+            }
+
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
 //// ncrunch: no coverage start
@@ -435,8 +442,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var text in syntax.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText))
                 {
-                    Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
-
                     // replace token in text
                     var textTokens = text.TextTokens;
 
@@ -472,31 +477,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 continue;
                             }
 
-                            var newToken = token.WithText(replacedText);
-
-                            if (tokenMap is null)
+                            if (result is null)
                             {
-                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>(1);
+                                result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
                             }
 
-                            tokenMap.Add(token, newToken);
+                            result.Add(text, text.ReplaceToken(token, token.WithText(replacedText)));
+
+                            // no need to loop further over the tokens
+                            break;
                         }
                     }
-
-                    if (tokenMap is null)
-                    {
-                        // nothing found, so nothing to replace
-                        continue;
-                    }
-
-                    if (result is null)
-                    {
-                        result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
-                    }
-
-                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
-
-                    result.Add(text, newText);
                 }
 
                 return result;
