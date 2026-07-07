@@ -56,36 +56,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] UsedToPhrases = CreateUsedToPhrases().ToArray();
 
-        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2012_Replace", CreateReplacementMap(), _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap, Comparison);
-
-        private static readonly Pair[] EmptyReplacementsMap =
-                                                              {
-                                                                  new Pair("Called to "),
-                                                              };
-
-        private static readonly string[] EmptyReplacementsMapKeys = GetTermsForQuickLookup(EmptyReplacementsMap);
+        private static readonly ReplacementMap EmptyReplacementsMap = new ReplacementMap("MiKo_2012_Empty", new[] { new Pair("Called to ") }, _ => GetTermsForQuickLookup(_));
 
         private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Distinct()
                                                                                                     .Except(new[] { "Gets or sets a value ", "Gets or sets ", "Gets a value ", "Sets a value ", "gets a value ", "sets a value " })
                                                                                                     .OrderDescendingByLengthAndText();
 
-        private static readonly Pair[] PreparationMap =
-                                                        {
-                                                            new Pair(Constants.Comments.SealedClassPhrase, "##SEALED##"),
-                                                            new Pair(Constants.Comments.FieldIsReadOnly, "##READONLY##"),
-                                                        };
+        private static readonly ReplacementMap PreparationMap = new ReplacementMap(
+                                                                               "MiKo_2012_Replacement",
+                                                                               new[]
+                                                                                   {
+                                                                                       new Pair(Constants.Comments.SealedClassPhrase, "##SEALED##"),
+                                                                                       new Pair(Constants.Comments.FieldIsReadOnly, "##READONLY##"),
+                                                                                   },
+                                                                               _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] PreparationMapKeys = GetTermsForQuickLookup(PreparationMap);
-
-        private static readonly Pair[] CleanupMap =
-                                                    {
-                                                        new Pair("##SEALED##", Constants.Comments.SealedClassPhrase),
-                                                        new Pair("##READONLY##", Constants.Comments.FieldIsReadOnly),
-                                                    };
-
-        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
+        private static readonly ReplacementMap CleanupMap = new ReplacementMap(
+                                                                           "MiKo_2012_Cleanup",
+                                                                           new[]
+                                                                               {
+                                                                                   new Pair("##SEALED##", Constants.Comments.SealedClassPhrase),
+                                                                                   new Pair("##READONLY##", Constants.Comments.FieldIsReadOnly),
+                                                                               },
+                                                                           _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -119,9 +114,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment, in FirstWordAdjustment startAdjustment)
         {
-            var preparedComment = Comment(comment, PreparationMapKeys, PreparationMap);
-            var updatedComment = Comment(preparedComment, ReplacementMapKeys, ReplacementMap, startAdjustment);
-            var cleanedComment = Comment(updatedComment, CleanupMapKeys, CleanupMap);
+            var preparedComment = Comment(comment, PreparationMap);
+            var updatedComment = Comment(preparedComment, ReplacementMap, startAdjustment);
+            var cleanedComment = Comment(updatedComment, CleanupMap);
 
             return cleanedComment;
         }
@@ -153,9 +148,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Comment(comment, XmlText($"Represents {article}{continuation}."));
             }
 
-            if (text.StartsWithAny(EmptyReplacementsMapKeys))
+            if (text.StartsWithAny(EmptyReplacementsMap.Keys))
             {
-                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
+                return Comment(comment, EmptyReplacementsMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
             }
 
             if (text.StartsWith("Called"))
@@ -173,11 +168,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
         {
-            if (text.ContainsAny(ReplacementMapKeys, Comparison))
+            if (text.ContainsAny(ReplacementMap.Keys, Comparison))
             {
                 var adjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace;
 
-                if (text.StartsWithAny(ReplacementMapKeys, Comparison))
+                if (text.StartsWithAny(ReplacementMap.Keys, Comparison))
                 {
                     adjustment |= FirstWordAdjustment.MakeThirdPersonSingular;
                 }

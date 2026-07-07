@@ -49,6 +49,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Pluralizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Verbalizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReplacementMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\CommentCodeFixProvider.cs" />
@@ -486,6 +487,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringBuilderCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Triple.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeNames.cs" />
   </ItemGroup>
   <ItemGroup>

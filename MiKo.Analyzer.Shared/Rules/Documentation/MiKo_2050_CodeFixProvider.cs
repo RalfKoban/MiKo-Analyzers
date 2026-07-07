@@ -16,16 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly Pair[] TypeReplacementMap = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).OrderDescendingByLengthAndText().ToArray(_ => new Pair(_));
+        private static readonly ReplacementMap TypeReplacementMap = new ReplacementMap(
+                                                                                   "MiKo_2050_Replace",
+                                                                                   CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).OrderDescendingByLengthAndText().ToArray(_ => new Pair(_)),
+                                                                                   _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] TypeReplacementMapKeys = GetTermsForQuickLookup(TypeReplacementMap);
-
-        private static readonly Pair[] TypeCleanupMap =
-                                                        {
-                                                            new Pair("when during", "when an error occurs during"),
-                                                        };
-
-        private static readonly string[] TypeCleanupMapKeys = GetTermsForQuickLookup(TypeCleanupMap);
+        private static readonly ReplacementMap TypeCleanupMap = new ReplacementMap("MiKo_2050_Cleanup", new[] { new Pair("when during", "when an error occurs during") }, _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -65,9 +61,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var summary = summaries[0];
 
-                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
+                var preparedSummary = Comment(summary, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
                 var newSummary = CommentStartingWith(preparedSummary, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
-                var updatedSummary = Comment(newSummary, TypeCleanupMapKeys, TypeCleanupMap);
+                var updatedSummary = Comment(newSummary, TypeCleanupMap);
 
                 return comment.ReplaceNode(summary, updatedSummary);
             }

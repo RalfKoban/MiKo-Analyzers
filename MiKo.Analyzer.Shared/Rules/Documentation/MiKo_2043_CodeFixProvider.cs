@@ -15,14 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2043_CodeFixProvider)), Shared]
     public sealed class MiKo_2043_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly Pair[] PreparationMap = CreatePreparationMap().OrderDescendingByLengthAndText(_ => _.Key);
+        private static readonly ReplacementMap PreparationMap = new ReplacementMap(
+                                                                               "MiKo_2043_Prepare",
+                                                                               CreatePreparationMap().OrderDescendingByLengthAndText(_ => _.Key),
+                                                                               _ => _.ToArray(__ => __.Key));
 
-        private static readonly string[] PreparationMapPhrases = PreparationMap.ToArray(_ => _.Key);
-
-        private static readonly Pair[] CleanUpMap = CreateCleanUpMap().Select(_ => new Pair(Constants.Comments.DelegateSummaryStartingPhrase + _.Key, Constants.Comments.DelegateSummaryStartingPhrase + _.Value))
-                                                                      .OrderDescendingByLengthAndText(_ => _.Key);
-
-        private static readonly string[] CleanUpPhrases = CleanUpMap.ToArray(_ => _.Key);
+        private static readonly ReplacementMap CleanUpMap = new ReplacementMap(
+                                                                           "MiKo_2043_Cleanup",
+                                                                           CreateCleanUpMap().Select(_ => new Pair(Constants.Comments.DelegateSummaryStartingPhrase + _.Key, Constants.Comments.DelegateSummaryStartingPhrase + _.Value))
+                                                                                             .OrderDescendingByLengthAndText(_ => _.Key),
+                                                                           _ => _.ToArray(__ => __.Key));
 
         public override string FixableDiagnosticId => "MiKo_2043";
 
@@ -40,11 +42,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // fix if delegate only contains it's name followed by " delegate" (e.g. "MyDelegate delegate") and nothing else
                 var lookupTerm = d.GetName() + " delegate";
 
-                var preparedComment1 = Comment(comment, new[] { lookupTerm }, new[] { new Pair(lookupTerm, Constants.Comments.DelegateSummaryStartingPhrase + Constants.TODO) });
+                var preparedComment1 = Comment(comment, new ReplacementMap("MiKo_2043_Temp", new[] { new Pair(lookupTerm, Constants.Comments.DelegateSummaryStartingPhrase + Constants.TODO) }, new[] { lookupTerm }));
 
                 if (ReferenceEquals(preparedComment1, comment))
                 {
-                    preparedComment1 = Comment(comment, PreparationMapPhrases, PreparationMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
+                    preparedComment1 = Comment(comment, PreparationMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
                 }
                 else
                 {
@@ -52,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 var preparedComment2 = CommentStartingWith(preparedComment1, Constants.Comments.DelegateSummaryStartingPhrase);
-                var fixedComment = Comment(preparedComment2, CleanUpPhrases, CleanUpMap);
+                var fixedComment = Comment(preparedComment2, CleanUpMap);
 
                 return fixedComment;
             }

@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             map[2] = new Pair("whether that", "whether");
             map[3] = new Pair("whether whether", "whether");
 
-            return Comment(comment, new[] { firstWord }, map);
+            return Comment(comment, new ReplacementMap("MiKo_2018", map, new[] { firstWord }));
         }
     }
 }

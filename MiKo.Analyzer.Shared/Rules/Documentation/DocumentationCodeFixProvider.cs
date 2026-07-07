@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
+        private static readonly ConcurrentDictionary<Triple, string> OriginalToReplacementMap = new ConcurrentDictionary<Triple, string>();
+
         /// <summary>
         /// Defines values that specify how to do a quick lookup.
         /// </summary>
@@ -66,8 +69,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
-        //// ncrunch: rdi off
-        //// ncrunch: no coverage start
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
 
         /// <summary>
         /// Creates an optimized array of terms for quick lookup by removing terms that are already covered by a shorter term according to the specified lookup mode.
@@ -344,9 +347,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="syntax">
         /// The XML element to update.
         /// </param>
-        /// <param name="lookupTerms">
-        /// The terms to search for in the comment text.
-        /// </param>
         /// <param name="replacementMap">
         /// The map of terms to their replacements.
         /// </param>
@@ -357,9 +357,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <returns>
         /// The XML comment element with replaced text and combined text nodes.
         /// </returns>
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> lookupTerms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, ReplacementMap replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace)
         {
-            var result = Comment<XmlElementSyntax>(syntax, lookupTerms, replacementMap, firstWordAdjustment);
+            var result = Comment<XmlElementSyntax>(syntax, replacementMap, firstWordAdjustment);
 
             return CombineTexts(result);
         }
@@ -372,9 +372,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </typeparam>
         /// <param name="syntax">
         /// The syntax node to update.
-        /// </param>
-        /// <param name="lookupTerms">
-        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(Pair[],in StringComparison, in QuickLookupMode)"/> to optimize this array.
         /// </param>
         /// <param name="replacementMap">
         /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
@@ -390,8 +387,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// This is the core text replacement method that performs pattern matching and substitution across all XML text nodes within the syntax tree.
         /// It performs a deep search through all <see cref="XmlTextSyntax"/> descendants and replaces matching phrases while respecting the minimum length optimization for performance.
         /// </remarks>
-        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> lookupTerms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, ReplacementMap replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
+            var lookupTerms = replacementMap.Keys;
             var minimumLength = MinimumLength(lookupTerms);
 
             var textMap = CreateReplacementTextMap(minimumLength, lookupTerms, replacementMap, firstWordAdjustment);
@@ -436,7 +434,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return minimum;
             }
 
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> lookupPhrases, in ReadOnlySpan<Pair> map, in FirstWordAdjustment adjustment)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> lookupPhrases, ReplacementMap map, FirstWordAdjustment adjustment)
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
@@ -464,27 +462,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                         // the lookup-phrases are mostly upper-case, so compare ignoring case here
-                        if (originalText.ContainsAny(lookupPhrases, StringComparison.OrdinalIgnoreCase))
+                        var replaced = false;
+
+                        foreach (var lookupPhrase in lookupPhrases)
                         {
-                            var replacedText = originalText.AsCachedBuilder()
-                                                           .ReplaceAllWithProbe(map)
-                                                           .AdjustFirstWord(adjustment)
-                                                           .ToStringAndRelease();
-
-                            if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
+                            if (originalText.Contains(lookupPhrase, StringComparison.OrdinalIgnoreCase))
                             {
-                                // replacement with itself does not make any sense
-                                continue;
+                                var replacedText = OriginalToReplacementMap.GetOrAdd(
+                                                                                 new Triple(map.Id, lookupPhrase, originalText),
+                                                                                 _ => _.C.AsCachedBuilder().ReplaceAllWithProbe(map).AdjustFirstWord(adjustment).ToStringAndRelease());
+
+                                if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
+                                {
+                                    // replacement with itself does not make any sense
+                                    continue;
+                                }
+
+                                if (result is null)
+                                {
+                                    result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
+                                }
+
+                                result.Add(text, text.ReplaceToken(token, token.WithText(replacedText)));
+
+                                replaced = true;
+
+                                // no need to loop further over the tokens
+                                break;
                             }
+                        }
 
-                            if (result is null)
-                            {
-                                result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
-                            }
-
-                            result.Add(text, text.ReplaceToken(token, token.WithText(replacedText)));
-
-                            // no need to loop further over the tokens
+                        if (replaced)
+                        {
                             break;
                         }
                     }

@@ -26,24 +26,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return text.StartsWithAny(mappedData.TypeReplacementMapKeysAc, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAf, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAi, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAn, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAx, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysC, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysD, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysF, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysI, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysP, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysR, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheC, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheF, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheI, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheX, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
+            return text.StartsWithAny(mappedData.TypeReplacementMapAc.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapAf.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapAi.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapAn.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapAx.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapC.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapD.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapF.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapI.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapP.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapR.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapTheC.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapTheF.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapTheI.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapTheX.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapThis.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapOthers.Keys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.InstancesReplacementMap.Keys, StringComparison.OrdinalIgnoreCase);
         }
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (preparedComment == summary)
                             {
-                                preparedComment = Comment(summary, mappedData.InstancesReplacementMapKeys, mappedData.InstancesReplacementMap);
+                                preparedComment = Comment(summary, mappedData.InstancesReplacementMap);
                             }
 
                             var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
@@ -117,11 +117,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startText = textTokens[0].ValueText.AsSpan().TrimStart();
 
-            var mapping = GetApplicableMapping(startText, mappedData);
+            var map = GetApplicableMap(startText, mappedData);
 
-            if (mapping != default)
+            if (map != null)
             {
-                updated = Comment(comment, mapping.Keys, mapping.Map);
+                updated = Comment(comment, map);
 
                 if (ReferenceEquals(updated, comment) is false)
                 {
@@ -130,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysOthers, mappedData.TypeReplacementMapOthers);
+            updated = Comment(comment, mappedData.TypeReplacementMapOthers);
 
             if (ReferenceEquals(updated, comment) is false)
             {
@@ -141,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        private static (string[] Keys, Pair[] Map) GetApplicableMapping(in ReadOnlySpan<char> startText, MapData mappedData)
+        private static ReplacementMap GetApplicableMap(in ReadOnlySpan<char> startText, MapData mappedData)
         {
             switch (startText[0])
             {
@@ -154,44 +154,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             case 'c':
                             case 'C':
-                                return (mappedData.TypeReplacementMapKeysAc, mappedData.TypeReplacementMapAc);
+                                return mappedData.TypeReplacementMapAc;
                             case 'f':
                             case 'F':
-                                return (mappedData.TypeReplacementMapKeysAf, mappedData.TypeReplacementMapAf);
+                                return mappedData.TypeReplacementMapAf;
                             case 'i':
                             case 'I':
-                                return (mappedData.TypeReplacementMapKeysAi, mappedData.TypeReplacementMapAi);
+                                return mappedData.TypeReplacementMapAi;
                             default:
-                                return (mappedData.TypeReplacementMapKeysAx, mappedData.TypeReplacementMapAx);
+                                return mappedData.TypeReplacementMapAx;
                         }
                     }
 
-                    return (mappedData.TypeReplacementMapKeysAn, mappedData.TypeReplacementMapAn);
+                    return mappedData.TypeReplacementMapAn;
                 }
 
                 case 'C':
                 case 'c':
-                    return (mappedData.TypeReplacementMapKeysC, mappedData.TypeReplacementMapC);
+                    return mappedData.TypeReplacementMapC;
 
                 case 'D':
                 case 'd':
-                    return (mappedData.TypeReplacementMapKeysD, mappedData.TypeReplacementMapD);
+                    return mappedData.TypeReplacementMapD;
 
                 case 'F':
                 case 'f':
-                    return (mappedData.TypeReplacementMapKeysF, mappedData.TypeReplacementMapF);
+                    return mappedData.TypeReplacementMapF;
 
                 case 'I':
                 case 'i':
-                    return (mappedData.TypeReplacementMapKeysI, mappedData.TypeReplacementMapI);
+                    return mappedData.TypeReplacementMapI;
 
                 case 'P':
                 case 'p':
-                    return (mappedData.TypeReplacementMapKeysP, mappedData.TypeReplacementMapP);
+                    return mappedData.TypeReplacementMapP;
 
                 case 'R':
                 case 'r':
-                    return (mappedData.TypeReplacementMapKeysR, mappedData.TypeReplacementMapR);
+                    return mappedData.TypeReplacementMapR;
 
                 case 'T':
                 case 't':
@@ -201,22 +201,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             case 'c':
                             case 'C':
-                                return (mappedData.TypeReplacementMapKeysTheC, mappedData.TypeReplacementMapTheC);
+                                return mappedData.TypeReplacementMapTheC;
                             case 'f':
                             case 'F':
-                                return (mappedData.TypeReplacementMapKeysTheF, mappedData.TypeReplacementMapTheF);
+                                return mappedData.TypeReplacementMapTheF;
                             case 'i':
                             case 'I':
-                                return (mappedData.TypeReplacementMapKeysTheI, mappedData.TypeReplacementMapTheI);
+                                return mappedData.TypeReplacementMapTheI;
                             default:
-                                return (mappedData.TypeReplacementMapKeysTheX, mappedData.TypeReplacementMapTheX);
+                                return mappedData.TypeReplacementMapTheX;
                         }
                     }
 
-                    return (mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+                    return mappedData.TypeReplacementMapThis;
 
                 default:
-                    return default;
+                    return null;
             }
         }
 
@@ -224,7 +224,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            var preparedComment = Comment(comment, mappedData.MethodReplacementMapKeys, mappedData.MethodReplacementMap);
+            var preparedComment = Comment(comment, mappedData.MethodReplacementMap);
 
             var content = preparedComment.Content;
 
@@ -246,7 +246,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return Comment(comment, mappedData.CleanupReplacementMapKeys, mappedData.CleanupReplacementMap);
+            return Comment(comment, mappedData.CleanupReplacementMap);
         }
 
 //// ncrunch: rdi off
@@ -255,46 +255,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private sealed class MapData
         {
 #pragma warning disable SA1401 // Fields should be private
-            public readonly Pair[] TypeReplacementMapAc;
-            public readonly string[] TypeReplacementMapKeysAc;
-            public readonly Pair[] TypeReplacementMapAf;
-            public readonly string[] TypeReplacementMapKeysAf;
-            public readonly Pair[] TypeReplacementMapAi;
-            public readonly string[] TypeReplacementMapKeysAi;
-            public readonly Pair[] TypeReplacementMapAx;
-            public readonly string[] TypeReplacementMapKeysAx;
-            public readonly Pair[] TypeReplacementMapAn;
-            public readonly string[] TypeReplacementMapKeysAn;
-            public readonly Pair[] TypeReplacementMapC;
-            public readonly string[] TypeReplacementMapKeysC;
-            public readonly Pair[] TypeReplacementMapD;
-            public readonly string[] TypeReplacementMapKeysD;
-            public readonly Pair[] TypeReplacementMapF;
-            public readonly string[] TypeReplacementMapKeysF;
-            public readonly Pair[] TypeReplacementMapI;
-            public readonly string[] TypeReplacementMapKeysI;
-            public readonly Pair[] TypeReplacementMapP;
-            public readonly string[] TypeReplacementMapKeysP;
-            public readonly Pair[] TypeReplacementMapR;
-            public readonly string[] TypeReplacementMapKeysR;
-            public readonly Pair[] TypeReplacementMapTheC;
-            public readonly string[] TypeReplacementMapKeysTheC;
-            public readonly Pair[] TypeReplacementMapTheF;
-            public readonly string[] TypeReplacementMapKeysTheF;
-            public readonly Pair[] TypeReplacementMapTheI;
-            public readonly string[] TypeReplacementMapKeysTheI;
-            public readonly Pair[] TypeReplacementMapTheX;
-            public readonly string[] TypeReplacementMapKeysTheX;
-            public readonly Pair[] TypeReplacementMapThis;
-            public readonly string[] TypeReplacementMapKeysThis;
-            public readonly Pair[] TypeReplacementMapOthers;
-            public readonly string[] TypeReplacementMapKeysOthers;
-            public readonly Pair[] MethodReplacementMap;
-            public readonly string[] MethodReplacementMapKeys;
-            public readonly Pair[] InstancesReplacementMap;
-            public readonly string[] InstancesReplacementMapKeys;
-            public readonly Pair[] CleanupReplacementMap;
-            public readonly string[] CleanupReplacementMapKeys;
+            public readonly ReplacementMap TypeReplacementMapAc;
+            public readonly ReplacementMap TypeReplacementMapAf;
+            public readonly ReplacementMap TypeReplacementMapAi;
+            public readonly ReplacementMap TypeReplacementMapAx;
+            public readonly ReplacementMap TypeReplacementMapAn;
+            public readonly ReplacementMap TypeReplacementMapC;
+            public readonly ReplacementMap TypeReplacementMapD;
+            public readonly ReplacementMap TypeReplacementMapF;
+            public readonly ReplacementMap TypeReplacementMapI;
+            public readonly ReplacementMap TypeReplacementMapP;
+            public readonly ReplacementMap TypeReplacementMapR;
+            public readonly ReplacementMap TypeReplacementMapTheC;
+            public readonly ReplacementMap TypeReplacementMapTheF;
+            public readonly ReplacementMap TypeReplacementMapTheI;
+            public readonly ReplacementMap TypeReplacementMapTheX;
+            public readonly ReplacementMap TypeReplacementMapThis;
+            public readonly ReplacementMap TypeReplacementMapOthers;
+            public readonly ReplacementMap MethodReplacementMap;
+            public readonly ReplacementMap InstancesReplacementMap;
+            public readonly ReplacementMap CleanupReplacementMap;
 #pragma warning restore SA1401 // Fields should be private
 
             public MapData()
@@ -324,23 +304,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     GetDestinationList(typeKey.AsSpan()).Add(typeKey);
                 }
 
-                Initialize(typeKeysStartingWithAc, out TypeReplacementMapAc, out TypeReplacementMapKeysAc);
-                Initialize(typeKeysStartingWithAf, out TypeReplacementMapAf, out TypeReplacementMapKeysAf);
-                Initialize(typeKeysStartingWithAi, out TypeReplacementMapAi, out TypeReplacementMapKeysAi);
-                Initialize(typeKeysStartingWithAx, out TypeReplacementMapAx, out TypeReplacementMapKeysAx);
-                Initialize(typeKeysStartingWithAn, out TypeReplacementMapAn, out TypeReplacementMapKeysAn);
-                Initialize(typeKeysStartingWithC, out TypeReplacementMapC, out TypeReplacementMapKeysC);
-                Initialize(typeKeysStartingWithD, out TypeReplacementMapD, out TypeReplacementMapKeysD);
-                Initialize(typeKeysStartingWithF, out TypeReplacementMapF, out TypeReplacementMapKeysF);
-                Initialize(typeKeysStartingWithI, out TypeReplacementMapI, out TypeReplacementMapKeysI);
-                Initialize(typeKeysStartingWithP, out TypeReplacementMapP, out TypeReplacementMapKeysP);
-                Initialize(typeKeysStartingWithR, out TypeReplacementMapR, out TypeReplacementMapKeysR);
-                Initialize(typeKeysStartingWithTheC, out TypeReplacementMapTheC, out TypeReplacementMapKeysTheC);
-                Initialize(typeKeysStartingWithTheF, out TypeReplacementMapTheF, out TypeReplacementMapKeysTheF);
-                Initialize(typeKeysStartingWithTheI, out TypeReplacementMapTheI, out TypeReplacementMapKeysTheI);
-                Initialize(typeKeysStartingWithTheX, out TypeReplacementMapTheX, out TypeReplacementMapKeysTheX);
-                Initialize(typeKeysStartingWithThis, out TypeReplacementMapThis, out TypeReplacementMapKeysThis);
-                Initialize(typeKeysOther, out TypeReplacementMapOthers, out TypeReplacementMapKeysOthers);
+                Initialize("MiKo_2060_A_c", typeKeysStartingWithAc, out TypeReplacementMapAc);
+                Initialize("MiKo_2060_A_f", typeKeysStartingWithAf, out TypeReplacementMapAf);
+                Initialize("MiKo_2060_A_i", typeKeysStartingWithAi, out TypeReplacementMapAi);
+                Initialize("MiKo_2060_A_", typeKeysStartingWithAx, out TypeReplacementMapAx);
+                Initialize("MiKo_2060_An_", typeKeysStartingWithAn, out TypeReplacementMapAn);
+                Initialize("MiKo_2060_C", typeKeysStartingWithC, out TypeReplacementMapC);
+                Initialize("MiKo_2060_D", typeKeysStartingWithD, out TypeReplacementMapD);
+                Initialize("MiKo_2060_F", typeKeysStartingWithF, out TypeReplacementMapF);
+                Initialize("MiKo_2060_I", typeKeysStartingWithI, out TypeReplacementMapI);
+                Initialize("MiKo_2060_P", typeKeysStartingWithP, out TypeReplacementMapP);
+                Initialize("MiKo_2060_R", typeKeysStartingWithR, out TypeReplacementMapR);
+                Initialize("MiKo_2060_The_c", typeKeysStartingWithTheC, out TypeReplacementMapTheC);
+                Initialize("MiKo_2060_The_f", typeKeysStartingWithTheF, out TypeReplacementMapTheF);
+                Initialize("MiKo_2060_The_i", typeKeysStartingWithTheI, out TypeReplacementMapTheI);
+                Initialize("MiKo_2060_The_", typeKeysStartingWithTheX, out TypeReplacementMapTheX);
+                Initialize("MiKo_2060_This_", typeKeysStartingWithThis, out TypeReplacementMapThis);
+                Initialize("MiKo_2060_Other", typeKeysOther, out TypeReplacementMapOthers);
 
                 var methodKeys = CreateMethodReplacementMapKeys();
                 var methodKeysLength = methodKeys.Length;
@@ -356,27 +336,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     instancesReplacementMap[i] = new Pair(key, "instances of the ");
                 }
 
-                MethodReplacementMap = methodReplacementMap;
-                MethodReplacementMapKeys = GetTermsForQuickLookup(methodKeys, quickLookupMode: QuickLookupMode.Contains);
+                MethodReplacementMap = new ReplacementMap("MiKo_2060_methods", methodReplacementMap, _ => GetTermsForQuickLookup(_, quickLookupMode: QuickLookupMode.Contains));
+                InstancesReplacementMap = new ReplacementMap("MiKo_2060_instances", instancesReplacementMap, _ => GetTermsForQuickLookup(_, quickLookupMode: QuickLookupMode.Contains));
 
-                InstancesReplacementMap = instancesReplacementMap;
-                InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys, quickLookupMode: QuickLookupMode.Contains);
-
-                CleanupReplacementMap = new[]
-                                            {
-                                                new Pair("classes", "types"),
-                                                new Pair("class", "type"),
-                                                new Pair("typeifi", "classifi"), // fix typo when 'class' in 'classification' or 'classified' gets changed into 'type'
-                                                new Pair(" based on ", " default values for "),
-                                                new Pair(" with for ", " with "),
-                                                new Pair(" with with ", " with "),
-                                                new Pair(" type with type.", " type with default values."),
-                                                new Pair(" type with that ", " type with default values that "),
-                                                new Pair(" type with which ", " type with default values which "),
-                                                new Pair(" creating creates ", " creating "),
-                                                new Pair(" creating create ", " creating "),
-                                            };
-                CleanupReplacementMapKeys = CleanupReplacementMap.ToArray(_ => _.Key);
+                CleanupReplacementMap = new ReplacementMap(
+                                                       "MiKo_2060_Cleanup",
+                                                       new[]
+                                                           {
+                                                               new Pair("classes", "types"),
+                                                               new Pair("class", "type"),
+                                                               new Pair("typeifi", "classifi"), // fix typo when 'class' in 'classification' or 'classified' gets changed into 'type'
+                                                               new Pair(" based on ", " default values for "),
+                                                               new Pair(" with for ", " with "),
+                                                               new Pair(" with with ", " with "),
+                                                               new Pair(" type with type.", " type with default values."),
+                                                               new Pair(" type with that ", " type with default values that "),
+                                                               new Pair(" type with which ", " type with default values which "),
+                                                               new Pair(" creating creates ", " creating "),
+                                                               new Pair(" creating create ", " creating "),
+                                                           },
+                                                       _ => _.ToArray(__ => __.Key));
 
                 return;
 
@@ -428,7 +407,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'T':
                         case 't':
                         {
-                            if (typeKey[2] == 'i')
+                            if (typeKey[2] is 'i')
                             {
                                 return typeKeysStartingWithThis;
                             }
@@ -447,18 +426,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                void Initialize(List<string> keys, out Pair[] map, out string[] mapKeys)
+                void Initialize(string id, List<string> keys, out ReplacementMap map)
                 {
                     keys.Sort(AscendingStringComparer.Default);
 
-                    map = new Pair[keys.Count];
+                    var pairs = new Pair[keys.Count];
 
                     for (var i = keys.Count - 1; i >= 0; i--)
                     {
-                        map[i] = new Pair(keys[i]);
+                        pairs[i] = new Pair(keys[i]);
                     }
 
-                    mapKeys = GetTermsForQuickLookup(keys, quickLookupMode: QuickLookupMode.Contains);
+                    map = new ReplacementMap(id, pairs, _ => GetTermsForQuickLookup(_, quickLookupMode: QuickLookupMode.Contains));
                 }
             }
 

@@ -307,6 +307,20 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The original text.
         /// </param>
+        /// <param name="map">
+        /// The key-value pairs for replacement.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
+        /// </returns>
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, ReplacementMap map) => value.ReplaceAllWithProbe(map.Pairs);
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
         /// <param name="replacementPairs">
         /// The key-value pairs for replacement.
         /// </param>

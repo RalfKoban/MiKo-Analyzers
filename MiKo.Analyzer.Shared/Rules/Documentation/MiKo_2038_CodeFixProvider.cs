@@ -19,32 +19,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] CommandStartingPhrases = CreateCommandStartingPhrases().Except(Constants.Comments.CommandSummaryStartingPhrase).ToArray();
 
-        private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries(CommandStartingPhrases).OrderDescendingByLengthAndText(_ => _.Key);
+        private static readonly ReplacementMap CommandReplacementMap = new ReplacementMap("MiKo_2038_Replace", CreateCommandReplacementMapEntries(CommandStartingPhrases).OrderDescendingByLengthAndText(_ => _.Key), _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] CommandReplacementMapKeys = GetTermsForQuickLookup(CommandReplacementMap);
-
-        private static readonly Pair[] CleanupMap =
-                                                    {
-                                                        new Pair(" commands for ", Constants.SingleSpace),
-                                                        new Pair(" command for ", Constants.SingleSpace),
-                                                        new Pair(" can in ", " can be used in "),
-                                                        new Pair(" can with ", " can be used with "),
-                                                        new Pair(" can wrapper for ", " can wrap "),
-                                                        new Pair(" can be needed for ", " can support "),
-                                                        new Pair(" can need for ", " can support "),
-                                                        new Pair(" can a ", " can "),
-                                                        new Pair(" can an ", " can "),
-                                                        new Pair(" can the ", " can "),
-                                                        new Pair(" can extend of ", " can extend "),
-                                                        new Pair(" export and in ", " in "),
-                                                        new Pair(" in context menu usable extension of ", " be used within a context menu of "),
-                                                        new Pair(" in context menu useable extension of ", " be used within a context menu of "),
-                                                        new Pair(" in context-menu usable extension of ", " be used within a context menu of "),
-                                                        new Pair(" in context-menu useable extension of ", " be used within a context menu of "),
-                                                        new Pair(" can be used be used ", " can be used "),
-                                                    };
-
-        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
+        private static readonly ReplacementMap CleanupMap = new ReplacementMap(
+                                                                           "MiKo_2038_Cleanup",
+                                                                           new[]
+                                                                               {
+                                                                                   new Pair(" commands for ", Constants.SingleSpace),
+                                                                                   new Pair(" command for ", Constants.SingleSpace),
+                                                                                   new Pair(" can in ", " can be used in "),
+                                                                                   new Pair(" can with ", " can be used with "),
+                                                                                   new Pair(" can wrapper for ", " can wrap "),
+                                                                                   new Pair(" can be needed for ", " can support "),
+                                                                                   new Pair(" can need for ", " can support "),
+                                                                                   new Pair(" can a ", " can "),
+                                                                                   new Pair(" can an ", " can "),
+                                                                                   new Pair(" can the ", " can "),
+                                                                                   new Pair(" can extend of ", " can extend "),
+                                                                                   new Pair(" export and in ", " in "),
+                                                                                   new Pair(" in context menu usable extension of ", " be used within a context menu of "),
+                                                                                   new Pair(" in context menu useable extension of ", " be used within a context menu of "),
+                                                                                   new Pair(" in context-menu usable extension of ", " be used within a context menu of "),
+                                                                                   new Pair(" in context-menu useable extension of ", " be used within a context menu of "),
+                                                                                   new Pair(" can be used be used ", " can be used "),
+                                                                               },
+                                                                           _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -56,9 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax is XmlElementSyntax element)
             {
-                var preparedComment = Comment(element, CommandReplacementMapKeys, CommandReplacementMap, FirstWordAdjustment.StartLowerCase);
+                var preparedComment = Comment(element, CommandReplacementMap, FirstWordAdjustment.StartLowerCase);
                 var updatedComment = CommentStartingWith(preparedComment, Constants.Comments.CommandSummaryStartingPhrase, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeInfinite);
-                var cleanedComment = Comment(updatedComment, CleanupMapKeys, CleanupMap);
+                var cleanedComment = Comment(updatedComment, CleanupMap);
 
                 return cleanedComment;
             }

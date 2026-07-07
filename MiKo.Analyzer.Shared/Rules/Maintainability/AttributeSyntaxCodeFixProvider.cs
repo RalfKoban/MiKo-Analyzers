@@ -29,8 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (syntax is AttributeSyntax)
             {
                 var nodeToRemove = syntax.Parent is AttributeListSyntax attributeList && attributeList.Attributes.Count is 1
-                                       ? attributeList
-                                       : syntax;
+                                   ? attributeList
+                                   : syntax;
 
                 return root.Without(nodeToRemove);
             }

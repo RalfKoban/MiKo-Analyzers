@@ -17,13 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Pair[] ReplacementMap = CreatePhrases().OrderDescendingByLengthAndText(_ => _.Key);
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
-
-        private static readonly Pair[] CleanUpMap = CreateCleanupPhrases().OrderDescendingByLengthAndText(_ => _.Key);
-
-        private static readonly string[] CleanUpMapKeys = GetTermsForQuickLookup(CleanUpMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2001_Replace", CreatePhrases().OrderDescendingByLengthAndText(_ => _.Key), _ => GetTermsForQuickLookup(_));
+        private static readonly ReplacementMap CleanUpMap = new ReplacementMap("MiKo_2001_Cleanup", CreateCleanupPhrases().OrderDescendingByLengthAndText(_ => _.Key), _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -38,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax syntax)
         {
-            var preparedComment = Comment(syntax, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
+            var preparedComment = Comment(syntax, ReplacementMap, FirstWordAdjustment.StartLowerCase);
             var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.EventSummaryStartingPhrase);
-            var cleanedComment = Comment(fixedComment, CleanUpMapKeys, CleanUpMap);
+            var cleanedComment = Comment(fixedComment, CleanUpMap);
 
             return cleanedComment;
         }
