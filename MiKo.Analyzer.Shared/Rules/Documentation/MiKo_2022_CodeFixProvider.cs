@@ -13,9 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Pair[] ReplacementMap = CreatePhrases().ToArray(_ => new Pair(_));
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2022", CreatePhrases().ToArray(_ => new Pair(_)), _ => GetTermsForQuickLookup(_));
 
         public override string FixableDiagnosticId => "MiKo_2022";
 
@@ -50,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap);
 
 //// ncrunch: rdi off
 

@@ -35,13 +35,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var data = MappedData.Value;
 
-            var preparedComment = Comment(comment, data.PreparationMapKeys, data.PreparationMap);
-            var preparedComment1 = Comment(preparedComment, data.TypeGuidReplacementMapKeys, data.TypeGuidReplacementMap);
-            var preparedComment2 = Comment(preparedComment1, data.ReplacementMapKeys, data.ReplacementMap);
+            var preparedComment = Comment(comment, data.PreparationMap);
+            var preparedComment1 = Comment(preparedComment, data.TypeGuidReplacementMap);
+            var preparedComment2 = Comment(preparedComment1, data.ReplacementMap);
 
             var fixedComment = CommentStartingWith(preparedComment2, phrase);
 
-            return Comment(fixedComment, data.CleanupMapKeys, data.CleanupMap);
+            return Comment(fixedComment, data.CleanupMap);
         }
 
 //// ncrunch: rdi off
@@ -50,84 +50,83 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private sealed class MapData
         {
 #pragma warning disable SA1401 // Fields should be private
-            public readonly Pair[] ReplacementMap;
-            public readonly string[] ReplacementMapKeys;
-            public readonly string[] TypeGuidReplacementMapKeys;
-            public readonly Pair[] TypeGuidReplacementMap;
-            public readonly string[] PreparationMapKeys;
-            public readonly Pair[] PreparationMap;
-            public readonly string[] CleanupMapKeys;
-            public readonly Pair[] CleanupMap;
+            public readonly ReplacementMap ReplacementMap;
+            public readonly ReplacementMap TypeGuidReplacementMap;
+            public readonly ReplacementMap PreparationMap;
+            public readonly ReplacementMap CleanupMap;
 #pragma warning restore SA1401 // Fields should be private
 
 #pragma warning disable CA1861
             public MapData()
             {
-                ReplacementMap = CreateReplacementMapPairs().OrderDescendingByLengthAndText(_ => _.Key) // get longest items first as shorter items may be part of the longer ones and would cause problems
-                                                            .Concat(new[] { new Pair("Factory ", "a factory ") })
-                                                            .ToArray();
+                ReplacementMap = new ReplacementMap(
+                                                "MiKo_2080_Replace",
+                                                CreateReplacementMapPairs().OrderDescendingByLengthAndText(_ => _.Key) // get longest items first as shorter items may be part of the longer ones and would cause problems
+                                                                           .Concat(new[] { new Pair("Factory ", "a factory ") })
+                                                                           .ToArray(),
+                                                _ => GetTermsForQuickLookup(_.ToArray(__ => __.Key)));
 
-                var keys = ReplacementMap.ToArray(_ => _.Key);
+                var typeGuidReplacementMapKeys = new[]
+                                                     {
+                                                         "A Type GUID for ",
+                                                         "A Type GUID of ",
+                                                         "A Type Guid for ",
+                                                         "A Type Guid of ",
+                                                         "A TypeGuid for ",
+                                                         "A TypeGuid of ",
+                                                         "The Type GUID for ",
+                                                         "The Type GUID of ",
+                                                         "The Type Guid for ",
+                                                         "The Type Guid of ",
+                                                         "The TypeGuid for ",
+                                                         "The TypeGuid of ",
+                                                         "Type GUID for ",
+                                                         "Type GUID of ",
+                                                         "Type Guid for ",
+                                                         "Type Guid of ",
+                                                         "TypeGuid for ",
+                                                         "TypeGuid of ",
+                                                         "TypeGuids for ", // typo
+                                                         "TypeGuids of ", // typo
+                                                     };
 
-                ReplacementMapKeys = GetTermsForQuickLookup(keys);
+                TypeGuidReplacementMap = new ReplacementMap(
+                                                        "MiKo_2080_TypeGuid",
+                                                        typeGuidReplacementMapKeys.Select(_ => new Pair(_, "The unique identifier for the type of "))
+                                                                                  .OrderDescendingByLengthAndText(_ => _.Key),
+                                                        typeGuidReplacementMapKeys.ToArray(AscendingStringComparer.Default));
 
-                TypeGuidReplacementMapKeys = new[]
-                                                 {
-                                                     "A Type GUID for ",
-                                                     "A Type GUID of ",
-                                                     "A Type Guid for ",
-                                                     "A Type Guid of ",
-                                                     "A TypeGuid for ",
-                                                     "A TypeGuid of ",
-                                                     "The Type GUID for ",
-                                                     "The Type GUID of ",
-                                                     "The Type Guid for ",
-                                                     "The Type Guid of ",
-                                                     "The TypeGuid for ",
-                                                     "The TypeGuid of ",
-                                                     "Type GUID for ",
-                                                     "Type GUID of ",
-                                                     "Type Guid for ",
-                                                     "Type Guid of ",
-                                                     "TypeGuid for ",
-                                                     "TypeGuid of ",
-                                                     "TypeGuids for ", // typo
-                                                     "TypeGuids of ", // typo
-                                                 }.ToArray(AscendingStringComparer.Default);
+                PreparationMap = new ReplacementMap(
+                                                "MiKo_2080_Prepare",
+                                                new[]
+                                                    {
+                                                        new Pair("uperset", "#1#"), // prepare 'superset' as the 'set' would get replaced
+                                                        new Pair("uper-set", "#2#"), // prepare 'super-set' as the 'set' would get replaced
+                                                        new Pair("ubset", "#3#"), // prepare 'subset' as the 'set' would get replaced
+                                                        new Pair("ub-set", "#4#"), // prepare 'sub-set' as the 'set' would get replaced
+                                                    },
+                                                _ => _.ToArray(__ => __.Key));
 
-                TypeGuidReplacementMap = TypeGuidReplacementMapKeys.Select(_ => new Pair(_, "The unique identifier for the type of "))
-                                                                   .OrderDescendingByLengthAndText(_ => _.Key);
-
-                PreparationMap = new[]
-                                     {
-                                         new Pair("uperset", "#1#"), // prepare 'superset' as the 'set' would get replaced
-                                         new Pair("uper-set", "#2#"), // prepare 'super-set' as the 'set' would get replaced
-                                         new Pair("ubset", "#3#"), // prepare 'subset' as the 'set' would get replaced
-                                         new Pair("ub-set", "#4#"), // prepare 'sub-set' as the 'set' would get replaced
-                                     };
-
-                PreparationMapKeys = PreparationMap.ToArray(_ => _.Key);
-
-                CleanupMap = new[]
-                                 {
-                                     new Pair("#1#", "uperset"), // restore 'superset' as the 'set' would get replaced
-                                     new Pair("#2#", "uper-set"), // restore 'super-set' as the 'set' would get replaced
-                                     new Pair("#3#", "ubset"), // restore 'subset' as the 'set' would get replaced
-                                     new Pair("#4#", "ub-set"), // restore 'sub-set' as the 'set' would get replaced
-
-                                     new Pair(" a the ", " the "),
-                                     new Pair(" an the ", " the "),
-                                     new Pair(" the the ", " the "),
-                                     new Pair("The a ", "The "),
-                                     new Pair("The an ", "The "),
-                                     new Pair("The the ", "The "),
-                                     new Pair(" from from ", " from "),
-                                     new Pair(" whether if ", " whether "),
-                                     new Pair(" whether when ", " whether "),
-                                     new Pair(" whether whether ", " whether "),
-                                 };
-
-                CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
+                CleanupMap = new ReplacementMap(
+                                            "MiKo_2080_Cleanup",
+                                            new[]
+                                                {
+                                                    new Pair("#1#", "uperset"), // restore 'superset' as the 'set' would get replaced
+                                                    new Pair("#2#", "uper-set"), // restore 'super-set' as the 'set' would get replaced
+                                                    new Pair("#3#", "ubset"), // restore 'subset' as the 'set' would get replaced
+                                                    new Pair("#4#", "ub-set"), // restore 'sub-set' as the 'set' would get replaced
+                                                    new Pair(" a the ", " the "),
+                                                    new Pair(" an the ", " the "),
+                                                    new Pair(" the the ", " the "),
+                                                    new Pair("The a ", "The "),
+                                                    new Pair("The an ", "The "),
+                                                    new Pair("The the ", "The "),
+                                                    new Pair(" from from ", " from "),
+                                                    new Pair(" whether if ", " whether "),
+                                                    new Pair(" whether when ", " whether "),
+                                                    new Pair(" whether whether ", " whether "),
+                                                },
+                                            _ => _.ToArray(__ => __.Key));
             }
 #pragma warning restore CA1861
 

@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private Diagnostic[] Analyze(SyntaxNodeAnalysisContext context, SyntaxNode method, SyntaxNode methodBody, IMethodSymbol methodSymbol)
+        private Diagnostic[] Analyze(in SyntaxNodeAnalysisContext context, SyntaxNode method, SyntaxNode methodBody, IMethodSymbol methodSymbol)
         {
             var comments = method.GetDocumentationCommentTriviaSyntax();
             var commentsLength = comments.Length;

@@ -12,37 +12,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2024_CodeFixProvider)), Shared]
     public sealed class MiKo_2024_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        private static readonly Pair[] FlagsReplacementMap = CreateFlagsReplacementMapKeys().Select(_ => new Pair(_))
-                                                                                            .Concat(new[]
-                                                                                                        {
-                                                                                                            new Pair("Enum for", "specifies"),
-                                                                                                            new Pair("Enum indicating", "indicates"),
-                                                                                                            new Pair("enum indicating", "indicates"),
-                                                                                                            new Pair("Indicator for", "indicates"),
-                                                                                                            new Pair("Value indicating", "indicates"),
-                                                                                                            new Pair("value indicating", "indicates"),
-                                                                                                            new Pair("Value for", "specifies"),
-                                                                                                        })
-                                                                                            .ToArray();
+        private static readonly ReplacementMap FlagsReplacementMap = new ReplacementMap(
+                                                                                    "MiKo_2024_FlagsReplace",
+                                                                                    CreateFlagsReplacementMapKeys().Select(_ => new Pair(_))
+                                                                                                                   .Concat(new[]
+                                                                                                                               {
+                                                                                                                                   new Pair("Enum for", "specifies"),
+                                                                                                                                   new Pair("Enum indicating", "indicates"),
+                                                                                                                                   new Pair("enum indicating", "indicates"),
+                                                                                                                                   new Pair("Indicator for", "indicates"),
+                                                                                                                                   new Pair("Value indicating", "indicates"),
+                                                                                                                                   new Pair("value indicating", "indicates"),
+                                                                                                                                   new Pair("Value for", "specifies"),
+                                                                                                                               })
+                                                                                                                   .ToArray(),
+                                                                                    _ => _.ToArray(__ => __.Key));
 
-        private static readonly string[] FlagsReplacementMapKeys = FlagsReplacementMap.ToArray(_ => _.Key);
+        private static readonly ReplacementMap FlagsCleanupMap = new ReplacementMap(
+                                                                                "MiKo_2024_FlagsCleanup",
+                                                                                new[]
+                                                                                    {
+                                                                                        new Pair("umeration values that a ", "umeration members that specifies a "),
+                                                                                        new Pair("umeration values that an ", "umeration members that specifies an "),
+                                                                                        new Pair("umeration values that the ", "umeration members that specifies the "),
+                                                                                        new Pair("umeration members that a ", "umeration members that specifies a "),
+                                                                                        new Pair("umeration members that an ", "umeration members that specifies an "),
+                                                                                        new Pair("umeration members that the ", "umeration members that specifies the "),
+                                                                                        new Pair(" that toes ", " that specifies the value to "),
+                                                                                    },
+                                                                                _ => GetTermsForQuickLookup(_));
 
-        private static readonly Pair[] FlagsCleanupMap =
-                                                         {
-                                                             new Pair("umeration values that a ", "umeration members that specifies a "),
-                                                             new Pair("umeration values that an ", "umeration members that specifies an "),
-                                                             new Pair("umeration values that the ", "umeration members that specifies the "),
-                                                             new Pair("umeration members that a ", "umeration members that specifies a "),
-                                                             new Pair("umeration members that an ", "umeration members that specifies an "),
-                                                             new Pair("umeration members that the ", "umeration members that specifies the "),
-                                                             new Pair(" that toes ", " that specifies the value to "),
-                                                         };
-
-        private static readonly string[] FlagsCleanupMapKeys = GetTermsForQuickLookup(FlagsCleanupMap);
-
-        private static readonly Pair[] ReplacementMap = CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray(_ => new Pair(_));
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2024_Replace", CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray(_ => new Pair(_)), _ => GetTermsForQuickLookup(_));
 
         public override string FixableDiagnosticId => "MiKo_2024";
 
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var preparedComment = PrepareComment(comment, issue);
             var updatedComment = CommentStartingWith(preparedComment, phrase);
 
-            return Comment(updatedComment, FlagsCleanupMapKeys, FlagsCleanupMap);
+            return Comment(updatedComment, FlagsCleanupMap);
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment, Diagnostic issue)
@@ -63,10 +63,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // TODO RKN: Update comment base on whether we have a Flags enum or not (defined as part of the properties of the reported issue)
             if (isFlagged)
             {
-                return Comment(comment, FlagsReplacementMapKeys, FlagsReplacementMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular);
+                return Comment(comment, FlagsReplacementMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular);
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
+            return Comment(comment, ReplacementMap, FirstWordAdjustment.StartLowerCase);
         }
 
         private static string[] CreateReplacementMapKeys() => new[]
