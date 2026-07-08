@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -28,14 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2043";
 
-        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
-        {
-            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+        internal static bool CanFix(in ReadOnlySpan<char> text) => text.StartsWithAny(PreparationMap.Keys, StringComparison.OrdinalIgnoreCase);
 
-            return Task.FromResult(updatedSyntax);
-        }
-
-        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment)
+        internal static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment)
         {
             if (comment.GetEnclosingSyntaxNode() is DelegateDeclarationSyntax d)
             {
@@ -62,10 +58,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
         private static IEnumerable<Pair> CreatePreparationMap()
         {
-            yield return new Pair("Delegate used to", string.Empty);
+            yield return new Pair("A delegate for", string.Empty);
+            yield return new Pair("A delegate to", string.Empty);
+            yield return new Pair("A delegate used for", string.Empty);
+            yield return new Pair("A delegate used to", string.Empty);
+            yield return new Pair("A delegate", string.Empty);
             yield return new Pair("Delegate used for", string.Empty);
+            yield return new Pair("Delegate used to", string.Empty);
+            yield return new Pair("Delegate", string.Empty);
+            yield return new Pair("The delegate for", string.Empty);
+            yield return new Pair("The delegate to", string.Empty);
+            yield return new Pair("The delegate used for", string.Empty);
+            yield return new Pair("The delegate used to", string.Empty);
+            yield return new Pair("The delegate", string.Empty);
+            yield return new Pair("This delegate", string.Empty);
 
             var delegateTexts = new[]
                                     {
@@ -79,11 +94,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return new Pair("Declare " + delegateText + " for", string.Empty);
                 yield return new Pair("Declares " + delegateText + " for", string.Empty);
             }
+
+            yield return new Pair("Delegate in which the application ");
+
+            yield return new Pair("Delegate for", "handles callbacks for");
+            yield return new Pair("delegate for", "handles callbacks for");
+            yield return new Pair("Delegate to", "handles callbacks for");
+            yield return new Pair("delegate to", "handles callbacks for");
         }
 
         private static IEnumerable<Pair> CreateCleanUpMap()
         {
-            var callbackPrefixes = new[] { "callback", "call-back", "call-Back", "callbacks", "call-backs", "call-Backs" };
+            var callbackPrefixes = new[] { "callback", "call-back", "call-Back", "callbacks", "call-backs", "call-Backs", "call back", };
             var notifyVariants = new[] { " to notify ", " to notfy " /* typo */ };
 
             foreach (var prefix in callbackPrefixes)
@@ -113,6 +135,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
             }
+
+            yield return new Pair("thats is the signature for the ", "has the same signature as the ");
+            yield return new Pair("thats is the signature of the ", "has the same signature as the ");
+            yield return new Pair("thats is the signature for ", "has the same signature as the ");
+            yield return new Pair("thats is the signature of ", "has the same signature as the ");
+
+            yield return new Pair("that's the signature for the ", "has the same signature as the ");
+            yield return new Pair("that's the signature of the ", "has the same signature as the ");
+            yield return new Pair("that's the signature for ", "has the same signature as the ");
+            yield return new Pair("that's the signature of ", "has the same signature as the ");
+
+            yield return new Pair("whiches is the signature for the ", "has the same signature as the ");
+            yield return new Pair("whiches is the signature of the ", "has the same signature as the ");
+            yield return new Pair("whiches is the signature for ", "has the same signature as the ");
+            yield return new Pair("whiches is the signature of ", "has the same signature as the ");
+
+            yield return new Pair("is the signature for the ", "has the same signature as the ");
+            yield return new Pair("is the signature of the ", "has the same signature as the ");
+            yield return new Pair("is the signature for ", "has the same signature as the ");
+            yield return new Pair("is the signature of ", "has the same signature as the ");
 
             yield return new Pair("represents the getter of the ", "gets the ");
             yield return new Pair("represents the getter of ", "gets the ");
@@ -150,12 +192,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("builder method that ", string.Empty);
             yield return new Pair("builder method which ", string.Empty);
 
-            yield return new Pair("delegate for the callback by which the application gives", "provides");
-            yield return new Pair("delegate for the callback by which the application informs", "notifies");
-            yield return new Pair("delegate for the callback by which the application tells", "notifies");
-            yield return new Pair("delegate for", "handles callbacks for");
-            yield return new Pair("delegate in which the application ", string.Empty);
-            yield return new Pair("delegate to handle ", "handles ");
+            yield return new Pair("handles callbacks for the callback by which the application gives", "provides"); // typo
+            yield return new Pair("handles callbacks for the callback by which the application informs", "notifies"); // typo
+            yield return new Pair("handles callbacks for the callback by which the application tells", "notifies"); // typo
+
+            yield return new Pair("handles callbacks for handle ", "handles ");
 
             yield return new Pair(Constants.Comments.DelegateSummaryStartingPhrase.ToLowerCaseAt(0), string.Empty);
 
@@ -163,6 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("application-defined callback function used with the", "handles callbacks for");
 
             yield return new Pair("describes a function that is called", "is called");
+            yield return new Pair("describes a function that's called", "is called");
             yield return new Pair("describes a function which is called", "is called");
         }
     }

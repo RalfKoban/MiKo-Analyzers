@@ -52,6 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         SyntaxKind.EventDeclaration,
                                                                         SyntaxKind.EventFieldDeclaration,
                                                                         SyntaxKind.FieldDeclaration,
+                                                                        SyntaxKind.DelegateDeclaration,
                                                                     };
 
         private static readonly string[] UsedToPhrases = CreateUsedToPhrases().ToArray();
@@ -210,6 +211,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (MiKo_2039_CodeFixProvider.CanFix(text))
             {
                 return MiKo_2039_CodeFixProvider.GetUpdatedSyntax(comment);
+            }
+
+            if (MiKo_2043_CodeFixProvider.CanFix(text))
+            {
+                return MiKo_2043_CodeFixProvider.GetUpdatedSyntax(comment);
             }
 
             foreach (var phrase in UsedToPhrases)
@@ -509,6 +515,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // event arguments
             yield return new Pair("Event argument for ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event argument that's used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
             yield return new Pair("Event argument that is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
             yield return new Pair("Event argument that provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
             yield return new Pair("Event argument which is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
@@ -519,6 +526,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // events
             yield return new Pair("Event is fired ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event that's published ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event that's published, ", Constants.Comments.EventSummaryStartingPhrase);
             yield return new Pair("Event that is published ", Constants.Comments.EventSummaryStartingPhrase);
             yield return new Pair("Event that is published, ", Constants.Comments.EventSummaryStartingPhrase);
             yield return new Pair("Event which is published ", Constants.Comments.EventSummaryStartingPhrase);
@@ -658,6 +667,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("A View Model of ", "Represents the view model of ");
             yield return new Pair("A View model representing ", "Represents the view model of ");
             yield return new Pair("A View Model representing ", "Represents the view model of ");
+            yield return new Pair("A view model that's needed to ");
             yield return new Pair("A view model that is needed to ");
             yield return new Pair("A View model that represents ", "Represents the view model of ");
             yield return new Pair("A View Model that represents ", "Represents the view model of ");
@@ -665,6 +675,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("A ViewModel for ", "Represents the view model of ");
             yield return new Pair("A ViewModel of ", "Represents the view model of ");
             yield return new Pair("A ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("A ViewModel that's needed to ");
             yield return new Pair("A ViewModel that is needed to ");
             yield return new Pair("A ViewModel that represents ", "Represents the view model of ");
             yield return new Pair("A ViewModel which is needed to ");
@@ -674,6 +685,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("The View Model of ", "Represents the view model of ");
             yield return new Pair("The View model representing ", "Represents the view model of ");
             yield return new Pair("The View Model representing ", "Represents the view model of ");
+            yield return new Pair("The view model that's needed to ");
             yield return new Pair("The view model that is needed to ");
             yield return new Pair("The View model that represents ", "Represents the view model of ");
             yield return new Pair("The View Model that represents ", "Represents the view model of ");
@@ -681,6 +693,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("The ViewModel for ", "Represents the view model of ");
             yield return new Pair("The ViewModel of ", "Represents the view model of ");
             yield return new Pair("The ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("The ViewModel that's needed to ");
             yield return new Pair("The ViewModel that is needed to ");
             yield return new Pair("The ViewModel that represents ", "Represents the view model of ");
             yield return new Pair("The ViewModel which is needed to ");
@@ -694,6 +707,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("View Model of ", "Represents the view model of ");
             yield return new Pair("View model representing ", "Represents the view model of ");
             yield return new Pair("View Model representing ", "Represents the view model of ");
+            yield return new Pair("View model that's needed to ");
             yield return new Pair("View model that is needed to ");
             yield return new Pair("View model that represents ", "Represents the view model of ");
             yield return new Pair("View Model that represents ", "Represents the view model of ");
@@ -702,6 +716,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("ViewModel needed to ");
             yield return new Pair("ViewModel of ", "Represents the view model of ");
             yield return new Pair("ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("ViewModel that's needed to ");
             yield return new Pair("ViewModel that is needed to ");
             yield return new Pair("ViewModel that represents ", "Represents the view model of ");
             yield return new Pair("ViewModel which is needed to ");
@@ -775,8 +790,67 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             yield return new Pair("This control ");
             yield return new Pair("This control will ");
+            yield return new Pair("This control is a ", "Represents a ");
+            yield return new Pair("This control is an ", "Represents an ");
+
             yield return new Pair("This Control ");
             yield return new Pair("This Control will ");
+            yield return new Pair("This Control is a ", "Represents a ");
+            yield return new Pair("This Control is an ", "Represents an ");
+
+            yield return new Pair("This user control ");
+            yield return new Pair("This user control will ");
+            yield return new Pair("This user control is a ", "Represents a ");
+            yield return new Pair("This user control is an ", "Represents an ");
+            yield return new Pair("This user Control ");
+            yield return new Pair("This user Control will ");
+            yield return new Pair("This user Control is a ", "Represents a ");
+            yield return new Pair("This user Control is an ", "Represents an ");
+
+            yield return new Pair("This User control ");
+            yield return new Pair("This User control will ");
+            yield return new Pair("This User control is a ", "Represents a ");
+            yield return new Pair("This User control is an ", "Represents an ");
+            yield return new Pair("This User Control ");
+            yield return new Pair("This User Control will ");
+            yield return new Pair("This User Control is a ", "Represents a ");
+            yield return new Pair("This User Control is an ", "Represents an ");
+
+            yield return new Pair("This user-control ");
+            yield return new Pair("This user-control will ");
+            yield return new Pair("This user-control is a ", "Represents a ");
+            yield return new Pair("This user-control is an ", "Represents an ");
+            yield return new Pair("This user-Control ");
+            yield return new Pair("This user-Control will ");
+            yield return new Pair("This user-Control is a ", "Represents a ");
+            yield return new Pair("This user-Control is an ", "Represents an ");
+
+            yield return new Pair("This User-control ");
+            yield return new Pair("This User-control will ");
+            yield return new Pair("This User-control is a ", "Represents a ");
+            yield return new Pair("This User-control is an ", "Represents an ");
+            yield return new Pair("This User-Control ");
+            yield return new Pair("This User-Control will ");
+            yield return new Pair("This User-Control is a ", "Represents a ");
+            yield return new Pair("This User-Control is an ", "Represents an ");
+
+            yield return new Pair("This usercontrol ");
+            yield return new Pair("This usercontrol will ");
+            yield return new Pair("This usercontrol is a ", "Represents a "); // typo in real-life scenario
+            yield return new Pair("This usercontrol is an ", "Represents an "); // typo in real-life scenario
+            yield return new Pair("This userControl ");
+            yield return new Pair("This userControl will ");
+            yield return new Pair("This userControl is a ", "Represents a ");
+            yield return new Pair("This userControl is an ", "Represents an ");
+
+            yield return new Pair("This Usercontrol ");
+            yield return new Pair("This Usercontrol will ");
+            yield return new Pair("This Usercontrol is a ", "Represents a "); // typo in real-life scenario
+            yield return new Pair("This Usercontrol is an ", "Represents an "); // typo in real-life scenario
+            yield return new Pair("This UserControl ");
+            yield return new Pair("This UserControl will ");
+            yield return new Pair("This UserControl is a ", "Represents a ");
+            yield return new Pair("This UserControl is an ", "Represents an ");
 
             yield return new Pair("This handler ");
             yield return new Pair("This Handler ");
@@ -943,6 +1017,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var beginning = beginnings[beginningIndex];
 
+                yield return new Pair(beginning + " that's used as helper for ", Provides);
+                yield return new Pair(beginning + " that's used as helper class for ", Provides);
+                yield return new Pair(beginning + " that's used as a helper for ", Provides);
+                yield return new Pair(beginning + " that's used as a helper class for ", Provides);
                 yield return new Pair(beginning + " that is used as helper for ", Provides);
                 yield return new Pair(beginning + " that is used as helper class for ", Provides);
                 yield return new Pair(beginning + " that is used as a helper for ", Provides);
@@ -994,10 +1072,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return new Pair(beginning + " specialized in ");
                 yield return new Pair(beginning + " used for checking ", "Determines ");
                 yield return new Pair(beginning + " used for ");
+                yield return new Pair(beginning + " is required to ");
 
                 yield return new Pair(" used to ", " to ");
                 yield return new Pair(" able to ", " to ");
                 yield return new Pair(" capable to ", " to ");
+                yield return new Pair(" used for ", " for ");
             }
         }
 
@@ -1015,6 +1095,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return string.Concat(subject, " able to ");
                 yield return string.Concat(subject, " capable to ");
 
+                yield return string.Concat(subject, "'s used to ");
+                yield return string.Concat(subject, "'s able to ");
+                yield return string.Concat(subject, "'s capable to ");
+
                 foreach (var conditional in conditionals)
                 {
                     yield return string.Concat(subject, Constants.SingleSpace, conditional, " used to ");
@@ -1025,7 +1109,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var conjunction in conjunctions)
                 {
-                    var beginning = string.Concat(subject, Constants.SingleSpace, conjunction, Constants.SingleSpace);
+                    var beginningWithoutSpace = string.Concat(subject, Constants.SingleSpace, conjunction);
+                    var beginning = string.Concat(beginningWithoutSpace, Constants.SingleSpace);
 
                     yield return string.Concat(beginning, "allows to ");
 
@@ -1035,6 +1120,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         yield return string.Concat(beginning, conditional, " able to ");
                         yield return string.Concat(beginning, conditional, " capable to ");
                     }
+
+                    yield return string.Concat(beginningWithoutSpace, "'s used to ");
+                    yield return string.Concat(beginningWithoutSpace, "'s able to ");
+                    yield return string.Concat(beginningWithoutSpace, "'s capable to ");
                 }
             }
 

@@ -292,6 +292,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     keys.Add(begin + " holds ");
                     keys.Add(begin + " holding ");
                     keys.Add(begin + " is holding ");
+                    keys.Add(begin + " that's holding ");
                     keys.Add(begin + " that is holding ");
                     keys.Add(begin + " which is holding ");
 
@@ -300,6 +301,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     keys.Add(begin + " contains ");
                     keys.Add(begin + " containing ");
                     keys.Add(begin + " is containing ");
+                    keys.Add(begin + " that's containing ");
                     keys.Add(begin + " that is containing ");
                     keys.Add(begin + " which is containing ");
 
@@ -308,6 +310,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     keys.Add(begin + " remembers ");
                     keys.Add(begin + " remembering ");
                     keys.Add(begin + " is remembering ");
+                    keys.Add(begin + " that's remembering ");
                     keys.Add(begin + " that is remembering ");
                     keys.Add(begin + " which is remembering ");
 
@@ -316,6 +319,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     keys.Add(begin + " stores ");
                     keys.Add(begin + " storing ");
                     keys.Add(begin + " is storing ");
+                    keys.Add(begin + " that's storing ");
                     keys.Add(begin + " that is storing ");
                     keys.Add(begin + " which is storing ");
                 }

@@ -390,6 +390,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static T Comment<T>(T syntax, ReplacementMap replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
             var lookupTerms = replacementMap.Keys;
+
+            if (lookupTerms.Length is 0)
+            {
+                // nothing to replace
+                return syntax;
+            }
+
             var minimumLength = MinimumLength(lookupTerms);
 
             var textMap = CreateReplacementTextMap(minimumLength, lookupTerms, replacementMap, firstWordAdjustment);

@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             string[] keys =
                             {
+                                "Callback that's called by the ",
                                 "Callback that is called by the ",
                                 "Called by ",
                                 "Called by the ",
