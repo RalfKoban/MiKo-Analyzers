@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_documentation_([Values("that is used in", "which is used in", "available to", "unavailable to")] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_documentation_([Values("that's used in", "that is used in", "which is used in", "available to", "unavailable to")] string phrase) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -528,6 +528,9 @@ public class TestMe
         [TestCase("Command for", "Represents a command that can")]
         [TestCase("Command to", "Represents a command that can")]
         [TestCase("command to", "Represents a command that can")]
+        [TestCase("This command is invoked to do", "Represents a command that can be invoked to do")]
+        [TestCase("This command can be invoked to do", "Represents a command that can be invoked to do")]
+        [TestCase("This command must be invoked to do", "Represents a command that can be invoked to do")]
         public void Code_gets_fixed_for_command_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -733,6 +736,7 @@ public class TestMe
         [TestCase("The class might be used to")]
         [TestCase("The class shall be used to")]
         [TestCase("The class should be used to")]
+        [TestCase("The class that's used to")]
         [TestCase("The class that is used to")]
         [TestCase("The class will be used to")]
         [TestCase("The class would be used to")]
@@ -774,6 +778,10 @@ public class TestMe
         [TestCase("A call-back that is used as a helper for", "Provides")]
         [TestCase("A Callback that is used as a helper for", "Provides")]
         [TestCase("A Call-back that is used as a helper for", "Provides")]
+        [TestCase("A callback that's used as a helper for", "Provides")]
+        [TestCase("A call-back that's used as a helper for", "Provides")]
+        [TestCase("A Callback that's used as a helper for", "Provides")]
+        [TestCase("A Call-back that's used as a helper for", "Provides")]
         [TestCase("A class that adopts", "Adopts")]
         [TestCase("A interface that adopts", "Adopts")]
         [TestCase("Able to render", "Renders")]
@@ -948,18 +956,71 @@ public class TestMe
         [TestCase("This class adopts", "Adopts")]
         [TestCase("This class extends", "Extends")]
         [TestCase("This class is used for stuff", "Performs stuff")]
+        [TestCase("This class is required to implement stuff", "Implements stuff")]
         [TestCase("This class offers", "Provides")]
         [TestCase("This class provides", "Provides")]
-        [TestCase("This control displays", "Displays")]
-        [TestCase("This Control displays", "Displays")]
-        [TestCase("This control will display", "Displays")]
-        [TestCase("This Control will display", "Displays")]
         [TestCase("This handler handles", "Handles")]
         [TestCase("This Handler handles", "Handles")]
         [TestCase("This handler will handle", "Handles")]
         [TestCase("This Handler will handle", "Handles")]
         [TestCase("This interface offers", "Provides")]
         [TestCase("This interface represents", "Represents")]
+        [TestCase("This control is a", "Represents a")]
+        [TestCase("This control is an", "Represents an")]
+        [TestCase("This Control is a", "Represents a")]
+        [TestCase("This Control is an", "Represents an")]
+        [TestCase("This control displays", "Displays")]
+        [TestCase("This Control displays", "Displays")]
+        [TestCase("This control will display", "Displays")]
+        [TestCase("This Control will display", "Displays")]
+        [TestCase("This User Control displays", "Displays")]
+        [TestCase("This User control displays", "Displays")]
+        [TestCase("This user Control displays", "Displays")]
+        [TestCase("This user control displays", "Displays")]
+        [TestCase("This User Control is a", "Represents a")]
+        [TestCase("This user Control is a", "Represents a")]
+        [TestCase("This user control is a", "Represents a")]
+        [TestCase("This User control is a", "Represents a")]
+        [TestCase("This User Control is an", "Represents an")]
+        [TestCase("This user control is an", "Represents an")]
+        [TestCase("This User control is an", "Represents an")]
+        [TestCase("This user Control is an", "Represents an")]
+        [TestCase("This User Control will display", "Displays")]
+        [TestCase("This User control will display", "Displays")]
+        [TestCase("This user control will display", "Displays")]
+        [TestCase("This user Control will display", "Displays")]
+        [TestCase("This User-Control displays", "Displays")]
+        [TestCase("This User-control displays", "Displays")]
+        [TestCase("This user-Control displays", "Displays")]
+        [TestCase("This user-control displays", "Displays")]
+        [TestCase("This User-Control is a", "Represents a")]
+        [TestCase("This User-control is a", "Represents a")]
+        [TestCase("This user-Control is a", "Represents a")]
+        [TestCase("This user-control is a", "Represents a")]
+        [TestCase("This User-Control is an", "Represents an")]
+        [TestCase("This User-control is an", "Represents an")]
+        [TestCase("This user-Control is an", "Represents an")]
+        [TestCase("This user-control is an", "Represents an")]
+        [TestCase("This User-Control will display", "Displays")]
+        [TestCase("This User-control will display", "Displays")]
+        [TestCase("This user-Control will display", "Displays")]
+        [TestCase("This user-control will display", "Displays")]
+        [TestCase("This UserControl displays", "Displays")]
+        [TestCase("This Usercontrol displays", "Displays")]
+        [TestCase("This userControl displays", "Displays")]
+        [TestCase("This usercontrol displays", "Displays")]
+        [TestCase("This UserControl is a", "Represents a")]
+        [TestCase("This Usercontrol is a", "Represents a")]
+        [TestCase("This userControl is a", "Represents a")]
+        [TestCase("This usercontrol is a", "Represents a")]
+        [TestCase("This userControl is an", "Represents an")]
+        [TestCase("This UserControl is an", "Represents an")]
+        [TestCase("This Usercontrol is an", "Represents an")]
+        [TestCase("This usercontrol is an", "Represents an")]
+        [TestCase("This Usercontrol will display", "Displays")]
+        [TestCase("This UserControl will display", "Displays")]
+        [TestCase("This userControl will display", "Displays")]
+        [TestCase("This usercontrol will display", "Displays")]
         public void Code_gets_fixed_for_class_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -985,6 +1046,19 @@ public class TestMe
 public class TestMe
 {
 }
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("This delegate is the signature of", "Encapsulates a method that has the same signature as the")]
+        public void Code_gets_fixed_for_delegate_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <summary>
+/// ### something.
+/// </summary>
+public delegate void TestMe();
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
@@ -1043,6 +1117,7 @@ public class TestMe
 
         [TestCase("A interface to")]
         [TestCase("An interface to")]
+        [TestCase("A interface that's used to")]
         [TestCase("A interface that is used to")]
         [TestCase("An interface that is used to")]
         [TestCase("An interface that can be used to")]
@@ -1371,6 +1446,7 @@ public class TestMe
         [TestCase("The", "Gets or sets the")]
         [TestCase("All", "Gets or sets all")]
         [TestCase("Property for", "Gets or sets")]
+        [TestCase("Gets or sets the keys used for searching", "Gets or sets the keys for searching")]
         public void Code_gets_fixed_for_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1730,6 +1806,7 @@ public class TestMe
         [TestCase("The Method will be called to do", "Gets called to do")]
         [TestCase("The Method is called by the operator to do", "Gets called by the operator to do")]
         [TestCase("This will build", "Builds")]
+        [TestCase("Provides the keys used for searching", "Provides the keys for searching")]
         public void Code_gets_fixed_for_method_text_(string originalComment, string fixedComment)
         {
             const string Template = @"

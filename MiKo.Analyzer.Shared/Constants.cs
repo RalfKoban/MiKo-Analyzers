@@ -584,6 +584,9 @@ namespace MiKoSolutions.Analyzers
                                                                       "that is called",
                                                                       "that is capable",
                                                                       "that is used",
+                                                                      "that's called",
+                                                                      "that's capable",
+                                                                      "that's used",
                                                                       "that can be used",
                                                                       "that could be used",
                                                                       "that may be used",
@@ -1140,6 +1143,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] WhichIsToTerms =
                                                                {
+                                                                   ", that's to have to ",
+                                                                   ", that's to ",
+                                                                   " that's to have to ",
+                                                                   " that's to ",
                                                                    ", that is to have to ",
                                                                    ", that is to ",
                                                                    " that is to have to ",

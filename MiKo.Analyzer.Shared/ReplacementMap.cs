@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers
         {
             Id = id;
             Pairs = pairs;
-            Keys = keysSelector(pairs);
+            Keys = pairs.Length > 0 ? keysSelector(pairs) : Array.Empty<string>();
         }
 
         /// <summary>

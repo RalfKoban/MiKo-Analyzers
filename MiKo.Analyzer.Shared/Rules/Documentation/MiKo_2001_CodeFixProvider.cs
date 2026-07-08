@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var adverbs = new[]
                               {
                                   string.Empty,
-                                  "is ", "that is ", "which is ",
+                                  "is ", "that's ", "that is ", "which is ",
                                   "can be ", "that can be ", "which can be ",
                                   "could be ", "that could be ", "which could be ",
                                   "shall be ", "that shall be ", "which shall be ",
