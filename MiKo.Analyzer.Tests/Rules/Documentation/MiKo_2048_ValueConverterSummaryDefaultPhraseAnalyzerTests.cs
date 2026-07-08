@@ -80,7 +80,9 @@ public class TestMe : IValueConverter
 ");
 
         [TestCase("Something.", "Represents a converter that converts something.")]
+        [TestCase("convert something.", "Represents a converter that converts something.")]
         [TestCase("Convert something.", "Represents a converter that converts something.")]
+        [TestCase("converts something.", "Represents a converter that converts something.")]
         [TestCase("Converts something.", "Represents a converter that converts something.")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {

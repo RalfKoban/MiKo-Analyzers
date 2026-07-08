@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,6 +50,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Converts ");
         }
 
-        private static IEnumerable<Pair> CreateCleanupPhrases() => Enumerable.Empty<Pair>();
+        private static IEnumerable<Pair> CreateCleanupPhrases()
+        {
+            yield return new Pair(" converts convert ", " converts ");
+            yield return new Pair(" converts converts ", " converts ");
+        }
     }
 }
