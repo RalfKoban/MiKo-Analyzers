@@ -109,6 +109,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] Prefixes =
                                                   {
+                                                      new Pair("adp", "adapter"),
                                                       new Pair("adpt", "adapter"),
                                                       new Pair("alt", "alternative"),
                                                       new Pair("app", "application"),
@@ -347,6 +348,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] OnlyMidTerms =
                                                       {
+                                                          new Pair("Adp", "Adapter"),
                                                           new Pair("Adpt", "Adapter"),
                                                           new Pair("Alt", "Alternative"),
                                                           new Pair("App", "Application"),
