@@ -510,6 +510,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Converter",
                                                                               "Creator",
                                                                               "Ctor",
+                                                                              "C'tor",
                                                                               "C-tor",
                                                                               "Default impl ",
                                                                               "Default implementation for ",
@@ -524,6 +525,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Delegate",
                                                                               "Does implement ",
                                                                               "Dtor", // typo
+                                                                              "D'tor", // typo
                                                                               "D-tor", // typo
                                                                               Entity,
                                                                               "Event",

@@ -1847,8 +1847,10 @@ public class TestMe
                                  "Constructor",
                                  "Ctor",
                                  "C-tor",
+                                 "C'tor",
                                  "Dtor",
                                  "D-tor", // typo
+                                 "D'tor", // typo
                                  "Delegate",
                                  "Creator",
                                  "Entity",
