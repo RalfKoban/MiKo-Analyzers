@@ -1376,41 +1376,33 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if any of the phrases are found; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool ContainsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        public static bool ContainsAny(this in ReadOnlySpan<char> value, IEnumerable<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
+            if (comparison is StringComparison.Ordinal)
+            {
+                return ContainsAnyOrdinal(value, phrases);
+            }
+
             if (value.Length > 0)
             {
-                var ordinalComparison = comparison is StringComparison.Ordinal;
-
                 string valueString = null;
 
-                for (int index = 0, length = phrases.Length; index < length; index++)
+                foreach (var phrase in phrases)
                 {
-                    var phrase = phrases[index];
                     var phraseSpan = phrase.AsSpan();
 
                     if (QuickContainsSubstringProbe(value, phraseSpan, comparison))
                     {
-                        if (ordinalComparison)
+                        // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
+                        // to avoid that, we cache the string representation of the value and reuse it for all phrases
+                        if (valueString is null)
                         {
-                            if (value.Contains(phraseSpan))
-                            {
-                                return true;
-                            }
+                            valueString = value.ToString();
                         }
-                        else
-                        {
-                            // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
-                            // to avoid that, we cache the string representation of the value and reuse it for all phrases
-                            if (valueString is null)
-                            {
-                                valueString = value.ToString();
-                            }
 
-                            if (valueString.Contains(phrase, comparison))
-                            {
-                                return true;
-                            }
+                        if (valueString.Contains(phrase, comparison))
+                        {
+                            return true;
                         }
                     }
                 }
@@ -1435,19 +1427,17 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if any of the phrases are found; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        public static bool ContainsAny(this string value, IEnumerable<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (comparison is StringComparison.Ordinal)
             {
-                return ContainsAny(value.AsSpan(), phrases);
+                return ContainsAnyOrdinal(value.AsSpan(), phrases);
             }
 
             var span = value.AsSpan();
 
-            for (int index = 0, length = phrases.Length; index < length; index++)
+            foreach (var phrase in phrases)
             {
-                var phrase = phrases[index];
-
                 if (QuickContainsSubstringProbe(span, phrase.AsSpan(), comparison))
                 {
                     if (value.Contains(phrase, comparison))
@@ -3430,6 +3420,38 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the span starts with any of the prefixes; otherwise, <see langword="false"/>.
         /// </returns>
+        public static bool StartsWithAny(this in ReadOnlySpan<char> value, IEnumerable<string> prefixes, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (value.Length > 0)
+            {
+                foreach (var prefix in prefixes)
+                {
+                    if (value.StartsWith(prefix, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the span of characters starts with any of the specified prefixes.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to check.
+        /// </param>
+        /// <param name="prefixes">
+        /// The prefixes to seek.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the span starts with any of the prefixes; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool StartsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> prefixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.Length > 0)
@@ -4189,6 +4211,40 @@ namespace MiKoSolutions.Analyzers
             }
 
             return indices ?? Array.Empty<int>();
+        }
+
+        /// <summary>
+        /// Determines whether the <see cref="string"/> contains any of the specified phrases using <see cref="StringComparison.Ordinal"/> as comparison method.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to search in.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to seek.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if any of the phrases are found; otherwise, <see langword="false"/>.
+        /// </returns>
+        private static bool ContainsAnyOrdinal(ReadOnlySpan<char> value, IEnumerable<string> phrases)
+        {
+            if (value.Length > 0)
+            {
+                foreach (var phrase in phrases)
+                {
+                    var phraseSpan = phrase.AsSpan();
+
+                    if (QuickContainsSubstringProbe(value, phraseSpan, StringComparison.Ordinal))
+                    {
+                        // Performance-Note: This is a hot-path, so we do not use our extension method 'Contains' here, but instead we call it directly to avoid the cost of calling out method
+                        if (value.IndexOf(phraseSpan) >= 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
