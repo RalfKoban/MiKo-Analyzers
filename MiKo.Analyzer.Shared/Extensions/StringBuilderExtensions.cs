@@ -1311,18 +1311,18 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         private static int QuickSubstringProbe(in ReadOnlySpan<char> source, in ReadOnlySpan<char> substring)
         {
+            if (substring.Length is 0)
+            {
+                // cannot be part in the replacement as the substring is zero
+                return -1;
+            }
+
             var delta = source.Length - substring.Length;
 
             if (delta < 0)
             {
                 // cannot be part in the replacement as the substring is too long to fit within the source
                 return -1;
-            }
-
-            if (substring.Length < QuickSubstringProbeLengthThreshold)
-            {
-                // can be part in the replacement as the substring is small enough to fit within the source
-                return 0;
             }
 
             var startChar = substring[0];
@@ -1339,6 +1339,13 @@ namespace MiKoSolutions.Analyzers
             if (startIndex < 0)
             {
                 return -1;
+            }
+
+            // Performance-Note:
+            // - fast-exit: if the substring is below the threshold, it is short enough to still fit inside the source
+            if (substring.Length < QuickSubstringProbeLengthThreshold)
+            {
+                return startIndex;
             }
 
             var lastIndex = substring.Length - 1;

@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IReadOnlyList<Diagnostic> AnalyzeComment(
                                                        DocumentationCommentTriviaSyntax comment,
-                                                       in ReadOnlySpan<string> termsForText,
+                                                       IEnumerable<string> termsForText,
                                                        in ReadOnlySpan<string> termsForAllLocations,
                                                        string replacement = "",
                                                        in StringComparison comparison = StringComparison.OrdinalIgnoreCase,
