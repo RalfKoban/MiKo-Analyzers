@@ -1446,6 +1446,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type has generic type arguments; otherwise, <see langword="false"/>.
         /// </returns>
+        /// <seealso cref="GetGenericArgumentsAsTs(ITypeSymbol)"/>
+        /// <seealso cref="GetGenericArgumentsAsTs(INamedTypeSymbol)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasGenericTypeArguments(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
