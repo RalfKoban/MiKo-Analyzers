@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -26,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #if !NCRUNCH
 
         [OneTimeTearDown]
-        public static void CleanupTestEnvironment() => System.GC.Collect();
+        public static void CleanupTestEnvironment() => GC.Collect();
 
 #endif
 
@@ -862,9 +863,9 @@ internal interface IFactory
                                          "y that are capable",
                                          "y which are able",
                                          "y which are capable",
-                                     };
+                                     }.OrderDescendingByLengthAndText();
 
-            results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
+            results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
 
             results.Add("Implementations create");
             results.Add("Implementations construct");
@@ -971,7 +972,7 @@ internal interface IFactory
                                           "Function gets ", "Method gets ",
                                       ];
 
-            results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
+            results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
 
             return results;
         }

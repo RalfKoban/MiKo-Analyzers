@@ -751,7 +751,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               "es that returns ", "ethods that returns ", "es which returns ", "ethods which returns ",
                                               //// accept phrases such as "to provide that/which is/are" as they are unusual but valid texts
                                           };
-                var strangeTexts = new HashSet<string>(rawStrangeTexts);
+                var strangeTextsSet = new HashSet<string>(rawStrangeTexts);
 
                 foreach (var raw in rawStrangeTexts)
                 {
@@ -763,11 +763,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                           .Replace("ethod", "unction")
                                           .ToStringAndRelease();
 
-                        strangeTexts.Add(function);
+                        strangeTextsSet.Add(function);
                     }
                 }
 
-                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
+                var strangeTexts = strangeTextsSet.OrderDescendingByLengthAndText();
+
+                results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeTexts));
 
                 return results;
             }
@@ -971,7 +973,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                            "Function gets ", "Method gets ",
                                        };
 
-                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
+                results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeTexts));
 
                 return results;
             }
