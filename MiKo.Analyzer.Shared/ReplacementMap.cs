@@ -1,5 +1,7 @@
 ﻿using System;
 
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>

@@ -350,9 +350,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax CleanupComment(XmlElementSyntax comment) => Comment(comment, MappedData.Value.CleanupReplacementMap);
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 //// ncrunch: no coverage start
-
         private sealed class MapData
         {
 #pragma warning disable SA1401 // Fields should be private
@@ -692,86 +691,116 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static HashSet<string> CreateTypeReplacementMapKeys()
             {
-                var allPhrases = CreateAllPhrases();
-                var allContinuations = GetAllContinuations();
+                var strangeTexts = StrangeTexts().AsSpan();
+                var allPhrases = CreateAllPhrases().OrderDescendingByLengthAndText().AsSpan();
+                var allContinuations = GetAllContinuations().OrderDescendingByLengthAndText().AsSpan();
 
                 var results = new HashSet<string> // avoid duplicates
-                                  {
-                                      "Implementations construct ",
-                                      "Implementations create ",
-                                      "Implementations build ",
-                                      "Implementations provide ",
-                                  };
+                              {
+                                  "Implementations construct ",
+                                  "Implementations create ",
+                                  "Implementations build ",
+                                  "Implementations provide ",
+                              };
 
-                foreach (var phrase in allPhrases)
+                unsafe
                 {
-                    foreach (var continuation in allContinuations)
+                    var buffer = stackalloc char[128];
+
+                    var allContinuationsLength = allContinuations.Length;
+                    int allPhrasesLength = allPhrases.Length;
+
+                    for (var i = 0; i < allPhrasesLength; i++)
                     {
-                        results.Add(phrase + continuation);
+                        var phrase = allPhrases[i].AsSpan();
+
+                        for (var ci = 0; ci < allContinuationsLength; ci++)
+                        {
+                            var continuation = allContinuations[ci].AsSpan();
+
+                            var phraseLength = phrase.Length;
+                            var continuationLength = continuation.Length;
+                            var totalLength = phraseLength + continuationLength;
+
+                            var bufferSpan = new Span<char>(buffer, totalLength);
+
+                            phrase.CopyTo(bufferSpan);
+                            continuation.CopyTo(bufferSpan.Slice(phraseLength));
+
+                            if (((ReadOnlySpan<char>)bufferSpan).ContainsAnyOrdinal(strangeTexts))
+                            {
+                                continue;
+                            }
+
+                            results.Add(new string(buffer, 0, totalLength));
+                        }
                     }
                 }
-
-                var rawStrangeTexts = new[]
-                                          {
-                                              "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are", "methods that is", "methods which is",
-                                              "es that is capable", "es which is capable", "es that is able", "es which is able",
-                                              "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
-                                              "y that are capable", "y which are capable", "y that are able", "y which are able",
-                                              "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
-                                              "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
-                                              "ies that provides", "ies which provides",
-                                              "roviding provid", "rovides provid", "rovide provid", "rovides the factory provid", "rovides the factory class provid", "rovides which", "rovides that", "to provide to", "rovides to provid",
-                                              "rovides builds", "rovides constructs", "rovides creates",
-                                              "to provide builds", "to provide constructs", "to provide creates",
-                                              "rovides to instance", "that provides to", "which provides to", "Provides to ",
-                                              "methods to provide methods", "methods provides",
-                                              "ass a ", "ass an ", "ass the ", "actory a ", "actory an ", "actory the ",
-                                              "Used that ", "Used which ", "Used builds", "Used creates", "Used constructs", "Used provides",
-                                              "Uses that ", "Uses which ", "Uses builds", "Uses creates", "Uses constructs", "Uses provides",
-                                              "pattern a",
-                                              "nterface new", "nterface to new", "s to new",
-                                              "ethods to instance of", "ethods to provide factory methods",
-                                              "actory builds", "actories builds", "ethods builds", "pattern builds", "nterface builds", "lass builds",
-                                              "actory constructs", "actories constructs", "ethods constructs", "pattern constructs", "nterface constructs", "lass constructs",
-                                              "actory creates", "actories creates", "ethods creates", "pattern creates", "nterface creates", "lass creates",
-                                              "that instance", "which instance",
-                                              "that a instance", "to a instance", "which a instance",
-                                              "that an instance", "to an instance", "which an instance",
-                                              "that the instance", "to the instance", "which the instance",
-                                              "that new", "to new", "which new",
-                                              "that a new", "to a new", "which a new",
-                                              "that an new", "to an new", "which an new",
-                                              "that the new", "to the new", "which the new",
-                                              "es that's ", "ethods that's ",
-                                              "es that builds ", "ethods that builds ", "es which builds ", "ethods which builds ",
-                                              "es that constructs ", "ethods that constructs ", "es which constructs ", "ethods which constructs ",
-                                              "es that creates ", "ethods that creates ", "es which creates ", "ethods which creates ",
-                                              "es that gets ", "ethods that gets ", "es which gets ", "ethods which gets ",
-                                              "es that provides ", "ethods that provides ", "es which provides ", "ethods which provides ",
-                                              "es that returns ", "ethods that returns ", "es which returns ", "ethods which returns ",
-                                              //// accept phrases such as "to provide that/which is/are" as they are unusual but valid texts
-                                          };
-                var strangeTextsSet = new HashSet<string>(rawStrangeTexts);
-
-                foreach (var raw in rawStrangeTexts)
-                {
-                    if (raw.AsSpan().Contains("ethod".AsSpan()))
-                    {
-                        var function = raw.AsCachedBuilder()
-                                          .Replace("method", "function")
-                                          .Replace("Method", "Function")
-                                          .Replace("ethod", "unction")
-                                          .ToStringAndRelease();
-
-                        strangeTextsSet.Add(function);
-                    }
-                }
-
-                var strangeTexts = strangeTextsSet.OrderDescendingByLengthAndText();
-
-                results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeTexts));
 
                 return results;
+
+                string[] StrangeTexts()
+                {
+                    var rawStrangeTexts = new[]
+                                              {
+                                                  "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are", "methods that is", "methods which is",
+                                                  "es that is capable", "es which is capable", "es that is able", "es which is able",
+                                                  "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
+                                                  "y that are capable", "y which are capable", "y that are able", "y which are able",
+                                                  "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
+                                                  "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
+                                                  "ies that provides", "ies which provides",
+                                                  "roviding provid", "rovides provid", "rovide provid", "rovides the factory provid", "rovides the factory class provid", "rovides which", "rovides that", "to provide to", "rovides to provid",
+                                                  "rovides builds", "rovides constructs", "rovides creates",
+                                                  "to provide builds", "to provide constructs", "to provide creates",
+                                                  "rovides to instance", "that provides to", "which provides to", "Provides to ",
+                                                  "methods to provide methods", "methods provides",
+                                                  "ass a ", "ass an ", "ass the ", "actory a ", "actory an ", "actory the ",
+                                                  "Used that ", "Used which ", "Used builds", "Used creates", "Used constructs", "Used provides",
+                                                  "Uses that ", "Uses which ", "Uses builds", "Uses creates", "Uses constructs", "Uses provides",
+                                                  "pattern a",
+                                                  "nterface new", "nterface to new", "s to new",
+                                                  "ethods to instance of", "ethods to provide factory methods",
+                                                  "actory builds", "actories builds", "ethods builds", "pattern builds", "nterface builds", "lass builds",
+                                                  "actory constructs", "actories constructs", "ethods constructs", "pattern constructs", "nterface constructs", "lass constructs",
+                                                  "actory creates", "actories creates", "ethods creates", "pattern creates", "nterface creates", "lass creates",
+                                                  "that instance", "which instance",
+                                                  "that a instance", "to a instance", "which a instance",
+                                                  "that an instance", "to an instance", "which an instance",
+                                                  "that the instance", "to the instance", "which the instance",
+                                                  "that new", "to new", "which new",
+                                                  "that a new", "to a new", "which a new",
+                                                  "that an new", "to an new", "which an new",
+                                                  "that the new", "to the new", "which the new",
+                                                  "es that's ", "ethods that's ",
+                                                  "es that builds ", "ethods that builds ", "es which builds ", "ethods which builds ",
+                                                  "es that constructs ", "ethods that constructs ", "es which constructs ", "ethods which constructs ",
+                                                  "es that creates ", "ethods that creates ", "es which creates ", "ethods which creates ",
+                                                  "es that gets ", "ethods that gets ", "es which gets ", "ethods which gets ",
+                                                  "es that provides ", "ethods that provides ", "es which provides ", "ethods which provides ",
+                                                  "es that returns ", "ethods that returns ", "es which returns ", "ethods which returns ",
+                                                  //// accept phrases such as "to provide that/which is/are" as they are unusual but valid texts
+                                              };
+                    var strangeTextsSet = new HashSet<string>(rawStrangeTexts);
+
+                    var methodSpan = "ethod".AsSpan();
+
+                    foreach (var raw in rawStrangeTexts)
+                    {
+                        if (raw.AsSpan().Contains(methodSpan))
+                        {
+                            var function = raw.AsCachedBuilder()
+                                              .Replace("method", "function")
+                                              .Replace("Method", "Function")
+                                              .Replace("ethod", "unction")
+                                              .ToStringAndRelease();
+
+                            strangeTextsSet.Add(function);
+                        }
+                    }
+
+                    return strangeTextsSet.ToArray();
+                }
             }
 
             private static HashSet<string> CreateMethodReplacementMapKeys()
