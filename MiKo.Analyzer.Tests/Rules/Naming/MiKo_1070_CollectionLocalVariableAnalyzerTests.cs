@@ -93,8 +93,11 @@ public class TestMe
         [TestCase("object item")]
         [TestCase("string value")]
         [TestCase("string myValue")]
+        [TestCase("Dictionary<string,int> requiredValuesByFeatureId")]
+        [TestCase("IReadOnlyDictionary<string,int> requiredValuesByFeatureId")]
         public void No_issue_is_reported_for_variable_(string variable) => No_issue_is_reported_for(@"
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 

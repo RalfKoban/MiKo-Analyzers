@@ -43,7 +43,11 @@ public class TestMe
         [TestCase("string[] myBatch")]
         [TestCase("string[] cache")]
         [TestCase("string[] batch")]
+        [TestCase("Dictionary<string,int> requiredValuesByFeatureId")]
+        [TestCase("IReadOnlyDictionary<string,int> requiredValuesByFeatureId")]
         public void No_issue_is_reported_for_field_(string field) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
