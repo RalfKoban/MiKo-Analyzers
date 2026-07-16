@@ -438,15 +438,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var methodKeys = CreateMethodReplacementMapKeys();
 
-                var methodKeysStartingWithA = new List<string>(12128); // TODO RKN: Adjust number as soon as there are other texts
-                var methodKeysStartingWithThe = new List<string>(12472); // TODO RKN: Adjust number as soon as there are other texts
-                var methodKeysStartingWithThis = new List<string>(12472); // TODO RKN: Adjust number as soon as there are other texts
-                var methodKeysOther = new List<string>(15936); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysStartingWithA = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysStartingWithThe = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysStartingWithThis = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysOther = new List<string>(18991); // TODO RKN: Adjust number as soon as there are other texts
 
-                var functionKeysStartingWithA = new List<string>(12128); // TODO RKN: Adjust number as soon as there are other texts
-                var functionKeysStartingWithThe = new List<string>(12472); // TODO RKN: Adjust number as soon as there are other texts
-                var functionKeysStartingWithThis = new List<string>(12472); // TODO RKN: Adjust number as soon as there are other texts
-                var functionKeysOther = new List<string>(12128); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysStartingWithA = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysStartingWithThe = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysStartingWithThis = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysOther = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
 
                 var endingsToSkip = new[] { "instance of a ", "instance of an ", "instances of a ", "instances of an " };
 
@@ -465,15 +465,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Initialize("MiKo_2060_Functions_This", functionKeysStartingWithThis, out FunctionReplacementMapThis);
                 Initialize("MiKo_2060_Functions_Other", functionKeysOther, out FunctionReplacementMapOthers);
 
-                var instancesKeysStartingWithA = new List<string>(21004); // TODO RKN: Adjust number as soon as there are other texts
-                var instancesKeysStartingWithThe = new List<string>(21600); // TODO RKN: Adjust number as soon as there are other texts
-                var instancesKeysStartingWithThis = new List<string>(21600); // TODO RKN: Adjust number as soon as there are other texts
-                var instancesKeysOther = new List<string>(27598); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysStartingWithA = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysStartingWithThe = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysStartingWithThis = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysOther = new List<string>(32207); // TODO RKN: Adjust number as soon as there are other texts
 
-                var instancesFunctionKeysStartingWithA = new List<string>(21004); // TODO RKN: Adjust number as soon as there are other texts
-                var instancesFunctionKeysStartingWithThe = new List<string>(21600); // TODO RKN: Adjust number as soon as there are other texts
-                var instancesFunctionKeysStartingWithThis = new List<string>(21600); // TODO RKN: Adjust number as soon as there are other texts
-                var instancesFunctionKeysOther = new List<string>(21004); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysStartingWithA = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysStartingWithThe = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysStartingWithThis = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysOther = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
 
                 foreach (var key in methodKeys)
                 {
@@ -692,8 +692,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static HashSet<string> CreateTypeReplacementMapKeys()
             {
                 var strangeTexts = StrangeTexts().AsSpan();
-                var allPhrases = CreateAllPhrases().OrderDescendingByLengthAndText().AsSpan();
-                var allContinuations = GetAllContinuations().OrderDescendingByLengthAndText().AsSpan();
+                var allPhrases = AllPhrases().OrderDescendingByLengthAndText().AsSpan();
+                var allContinuations = AllContinuations().OrderDescendingByLengthAndText().AsSpan();
 
                 var results = new HashSet<string> // avoid duplicates
                               {
@@ -801,215 +801,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     return strangeTextsSet.ToArray();
                 }
-            }
 
-            private static HashSet<string> CreateMethodReplacementMapKeys()
-            {
-                var subjects = new[]
-                                   {
-                                       "A factory method",
-                                       "A method",
-                                       "Factory method",
-                                       "Method",
-                                       "The factory method",
-                                       "The method",
-                                       "This factory method",
-                                       "This method",
-                                   };
-
-                var startingPhrases = new List<string>((5 * 6 * subjects.Length) + (2 * 6));
-
-                foreach (var subject in subjects)
+                HashSet<string> AllPhrases()
                 {
-                    startingPhrases.Add(subject + " builds ");
-                    startingPhrases.Add(subject + " constructs ");
-                    startingPhrases.Add(subject + " creates ");
-                    startingPhrases.Add(subject + " gets ");
-                    startingPhrases.Add(subject + " returns ");
-                    startingPhrases.Add(subject + " initializes ");
-
-                    startingPhrases.Add(subject + " for building ");
-                    startingPhrases.Add(subject + " for constructing ");
-                    startingPhrases.Add(subject + " for creating ");
-                    startingPhrases.Add(subject + " for getting ");
-                    startingPhrases.Add(subject + " for returning ");
-                    startingPhrases.Add(subject + " for initializing ");
-
-                    startingPhrases.Add(subject + " that builds ");
-                    startingPhrases.Add(subject + " that constructs ");
-                    startingPhrases.Add(subject + " that creates ");
-                    startingPhrases.Add(subject + " that gets ");
-                    startingPhrases.Add(subject + " that returns ");
-                    startingPhrases.Add(subject + " that initializes ");
-
-                    startingPhrases.Add(subject + " which builds ");
-                    startingPhrases.Add(subject + " which constructs ");
-                    startingPhrases.Add(subject + " which creates ");
-                    startingPhrases.Add(subject + " which gets ");
-                    startingPhrases.Add(subject + " which returns ");
-                    startingPhrases.Add(subject + " which initializes ");
-
-                    startingPhrases.Add(subject + " building ");
-                    startingPhrases.Add(subject + " constructing ");
-                    startingPhrases.Add(subject + " creating ");
-                    startingPhrases.Add(subject + " getting ");
-                    startingPhrases.Add(subject + " returning ");
-                    startingPhrases.Add(subject + " initializing ");
-                }
-
-                startingPhrases.Add("Used for building ");
-                startingPhrases.Add("Used for constructing ");
-                startingPhrases.Add("Used for creating ");
-                startingPhrases.Add("Used for getting ");
-                startingPhrases.Add("Used for returning ");
-                startingPhrases.Add("Used for initializing ");
-
-                startingPhrases.Add("Used to build ");
-                startingPhrases.Add("Used to construct ");
-                startingPhrases.Add("Used to create ");
-                startingPhrases.Add("Used to get ");
-                startingPhrases.Add("Used to return ");
-                startingPhrases.Add("Used to initialize ");
-
-                // avoid duplicates
-                var results = new HashSet<string>();
-
-                foreach (var phrase in startingPhrases.Concat(startingPhrases.Select(_ => _.AsCachedBuilder().Replace("s ", " ").Replace("Thi ", "This ").ToStringAndRelease())))
-                {
-                    results.Add(phrase);
-                    results.Add(phrase.Replace("method", "function"));
-                    results.Add(phrase.Replace("Method", "Function"));
-                }
-
-                results.Add("Create");
-                results.Add("Creates");
-                results.Add("Creating");
-                results.Add("Construct");
-                results.Add("Constructs");
-                results.Add("Constructing");
-                results.Add("Return");
-                results.Add("Returns");
-                results.Add("Returning");
-                results.Add("Get");
-                results.Add("Gets");
-                results.Add("Getting");
-                results.Add("Initialize");
-                results.Add("Initializes");
-                results.Add("Initializing");
-
-                var startingWords = results.ToArray();
-
-                var continuations = new[]
-                                        {
-                                            string.Empty,
-                                            " and initialize",
-                                            " and initializes",
-                                            " and initializing",
-                                            " and provide",
-                                            " and provides",
-                                            " and providing",
-                                            " and return",
-                                            " and returns",
-                                            " and returning",
-                                            " and set up",
-                                            " and sets up",
-                                            " and setting up",
-                                        };
-
-                var startingWordsLength = startingWords.Length;
-                var continuationsLength = continuations.Length;
-
-                for (var wordIndex = 0; wordIndex < startingWordsLength; wordIndex++)
-                {
-                    var word = startingWords[wordIndex].Trim();
-
-                    for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
-                    {
-                        var continuation = continuations[continuationsIndex];
-                        var start = word + continuation; // TODO RKN: Change string creation
-
-                        //// results.Add(start + " an new instances of the "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " an new instances of an "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " an new instances of a "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " an new instances of "); // currently ignored as this contains typos which we did not see in the wild
-                        results.Add(start + " an new instance of the ");
-                        results.Add(start + " an new instance of an ");
-                        results.Add(start + " an new instance of a ");
-                        results.Add(start + " an new instance of ");
-                        //// results.Add(start + " an instances of the "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " an instances of an "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " an instances of a "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " an instances of "); // currently ignored as this contains typos which we did not see in the wild
-                        results.Add(start + " an instance of the ");
-                        results.Add(start + " an instance of an ");
-                        results.Add(start + " an instance of a ");
-                        results.Add(start + " an instance of ");
-                        results.Add(start + " an ");
-                        results.Add(start + " a factory ");
-                        //// results.Add(start + " a new instances of the "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " a new instances of an "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " a new instances of a "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " a new instances of "); // currently ignored as this contains typos which we did not see in the wild
-                        results.Add(start + " a new instance of the ");
-                        results.Add(start + " a new instance of an ");
-                        results.Add(start + " a new instance of a ");
-                        results.Add(start + " a new instance of ");
-                        //// results.Add(start + " a instances of the "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " a instances of an "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " a instances of a "); // currently ignored as this contains typos which we did not see in the wild
-                        //// results.Add(start + " a instances of "); // currently ignored as this contains typos which we did not see in the wild
-                        results.Add(start + " a instance of the ");
-                        results.Add(start + " a instance of an ");
-                        results.Add(start + " a instance of a ");
-                        results.Add(start + " a instance of ");
-                        results.Add(start + " a new ");
-                        results.Add(start + " a ");
-                        results.Add(start + " the instance of the ");
-                        results.Add(start + " the instance of an ");
-                        results.Add(start + " the instance of a ");
-                        results.Add(start + " the instance of ");
-                        results.Add(start + " the new ");
-                        results.Add(start + " the ");
-                        results.Add(start + " instances of the ");
-                        results.Add(start + " instances of an ");
-                        results.Add(start + " instances of a ");
-                        results.Add(start + " instances of ");
-                        results.Add(start + " new instances of the ");
-                        results.Add(start + " new instances of an ");
-                        results.Add(start + " new instances of a ");
-                        results.Add(start + " new instances of ");
-                    }
-                }
-
-                var strangeTexts = new[]
-                                       {
-                                           " a factory",
-                                           "ize and init", "izes and init", "izing and init",
-                                           "urn and ret", "urns and ret", "urning and ret",
-                                           "ing and initialize ", "ing and provide ", "ing and return ", "ing and set ",
-                                           "ing and initializes", "ing and provides", "ing and returns", "ing and sets",
-                                           "s and initializing", "s and providing", "s and returning", "s and setting",
-                                           "unction build ", "ethod build ",
-                                           "unction construct ", "ethod construct ",
-                                           "unction create ", "ethod create ",
-                                           "unction get ", "ethod get ",
-                                           "unction initialize ", "ethod initialize ",
-                                           "unction return ", "ethod return ",
-                                           "onstruct and ",
-                                           "A function gets ", "A method gets ",
-                                           "A factory function gets ", "A factory method gets ",
-                                           "Factory function gets ", "Factory method gets ",
-                                           "Function gets ", "Method gets ",
-                                       };
-
-                results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeTexts));
-
-                return results;
-            }
-
-            private static HashSet<string> CreateAllPhrases()
-            {
-                var phrases = new[]
+                    var phrases = new[]
                                   {
                                       "A class containing factory methods",
                                       "A class containing methods",
@@ -1141,22 +936,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "Uses", // typo in 'Used'
                                   };
 
-                var results = new HashSet<string>(phrases);
+                    var set = new HashSet<string>(phrases);
 
-                foreach (var phrase in phrases)
-                {
-                    results.Add(phrase.Replace("actory", "actory class"));
-                    results.Add(phrase.Replace("method", "function"));
+                    foreach (var phrase in phrases)
+                    {
+                        set.Add(phrase.Replace("actory", "actory class"));
+                        set.Add(phrase.Replace("method", "function"));
+                    }
+
+                    return set;
                 }
 
-                return results;
-            }
+                HashSet<string> AllContinuations()
+                {
+                    var set = new HashSet<string>();
 
-            private static HashSet<string> GetAllContinuations()
-            {
-                var set = new HashSet<string>();
-
-                var continuations = new[]
+                    var continuations = new[]
                                         {
                                             string.Empty,
                                             "a ",
@@ -1180,128 +975,359 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             "the new instances of the ",
                                         };
 
-                for (int index = 0, continuationsLength = continuations.Length; index < continuationsLength; index++)
+                    for (int index = 0, continuationsLength = continuations.Length; index < continuationsLength; index++)
+                    {
+                        var continuation = continuations[index];
+
+                        set.Add(" that can build " + continuation);
+                        set.Add(" that build " + continuation);
+                        set.Add(" that builds " + continuation);
+                        set.Add(" that can construct " + continuation);
+                        set.Add(" that construct " + continuation);
+                        set.Add(" that constructs " + continuation);
+                        set.Add(" that can create " + continuation);
+                        set.Add(" that create " + continuation);
+                        set.Add(" that creates " + continuation);
+                        set.Add(" that can provide " + continuation);
+                        set.Add(" that provide " + continuation);
+                        set.Add(" that provides " + continuation);
+                        set.Add(" that can return " + continuation);
+                        set.Add(" that return " + continuation);
+                        set.Add(" that returns " + continuation);
+                        set.Add(" that " + continuation);
+
+                        set.Add(" which can build " + continuation);
+                        set.Add(" which build " + continuation);
+                        set.Add(" which builds " + continuation);
+                        set.Add(" which can construct " + continuation);
+                        set.Add(" which construct " + continuation);
+                        set.Add(" which constructs " + continuation);
+                        set.Add(" which can create " + continuation);
+                        set.Add(" which create " + continuation);
+                        set.Add(" which creates " + continuation);
+                        set.Add(" which can provide " + continuation);
+                        set.Add(" which provide " + continuation);
+                        set.Add(" which provides " + continuation);
+                        set.Add(" which can return " + continuation);
+                        set.Add(" which return " + continuation);
+                        set.Add(" which returns " + continuation);
+                        set.Add(" which " + continuation);
+
+                        set.Add(" for building of " + continuation);
+                        set.Add(" for building " + continuation);
+                        set.Add(" for the building of " + continuation);
+                        set.Add(" for constructing " + continuation);
+                        set.Add(" for construction of " + continuation);
+                        set.Add(" for the construction of " + continuation);
+                        set.Add(" for creating " + continuation);
+                        set.Add(" for creation of " + continuation);
+                        set.Add(" for the creation of " + continuation);
+                        set.Add(" for providing of " + continuation);
+                        set.Add(" for providing " + continuation);
+                        set.Add(" for returning of " + continuation);
+                        set.Add(" for returning " + continuation);
+                        set.Add(" for " + continuation);
+
+                        set.Add(" building " + continuation);
+                        set.Add(" builds " + continuation);
+                        set.Add(" constructing " + continuation);
+                        set.Add(" constructs " + continuation);
+                        set.Add(" creating " + continuation);
+                        set.Add(" creates " + continuation);
+                        set.Add(" providing " + continuation);
+                        set.Add(" provides " + continuation);
+                        set.Add(" returning " + continuation);
+                        set.Add(" returns " + continuation);
+
+                        set.Add(" that's able to build " + continuation);
+                        set.Add(" that is able to build " + continuation);
+                        set.Add(" which is able to build " + continuation);
+                        set.Add(" that's capable to build " + continuation);
+                        set.Add(" that is capable to build " + continuation);
+                        set.Add(" which is capable to build " + continuation);
+                        set.Add(" that's able to construct " + continuation);
+                        set.Add(" that is able to construct " + continuation);
+                        set.Add(" which is able to construct " + continuation);
+                        set.Add(" that's capable to construct " + continuation);
+                        set.Add(" that is capable to construct " + continuation);
+                        set.Add(" which is capable to construct " + continuation);
+                        set.Add(" that is able to create " + continuation);
+                        set.Add(" that's able to create " + continuation);
+                        set.Add(" which is able to create " + continuation);
+                        set.Add(" that's capable to create " + continuation);
+                        set.Add(" that is capable to create " + continuation);
+                        set.Add(" which is capable to create " + continuation);
+                        set.Add(" that's able to provide " + continuation);
+                        set.Add(" that is able to provide " + continuation);
+                        set.Add(" which is able to provide " + continuation);
+                        set.Add(" that's capable to provide " + continuation);
+                        set.Add(" that is capable to provide " + continuation);
+                        set.Add(" which is capable to provide " + continuation);
+
+                        set.Add(" that are able to build " + continuation);
+                        set.Add(" which are able to build " + continuation);
+                        set.Add(" that are capable to build " + continuation);
+                        set.Add(" which are capable to build " + continuation);
+                        set.Add(" that are able to construct " + continuation);
+                        set.Add(" which are able to construct " + continuation);
+                        set.Add(" that are capable to construct " + continuation);
+                        set.Add(" which are capable to construct " + continuation);
+                        set.Add(" that are able to create " + continuation);
+                        set.Add(" which are able to create " + continuation);
+                        set.Add(" that are capable to create " + continuation);
+                        set.Add(" which are capable to create " + continuation);
+                        set.Add(" that are able to provide " + continuation);
+                        set.Add(" which are able to provide " + continuation);
+                        set.Add(" that are capable to provide " + continuation);
+                        set.Add(" which are capable to provide " + continuation);
+
+                        set.Add(" to build " + continuation);
+                        set.Add(" to construct " + continuation);
+                        set.Add(" to create " + continuation);
+                        set.Add(" to provide factory methods to build " + continuation);
+                        set.Add(" to provide factory methods to construct " + continuation);
+                        set.Add(" to provide factory methods to create " + continuation);
+                        set.Add(" to provide methods to build " + continuation);
+                        set.Add(" to provide methods to construct " + continuation);
+                        set.Add(" to provide methods to create " + continuation);
+                        set.Add(" to provide " + continuation);
+                        set.Add(" to " + continuation);
+
+                        set.Add(Constants.SingleSpace + continuation);
+                    }
+
+                    return set;
+                }
+            }
+
+            private static HashSet<string> CreateMethodReplacementMapKeys()
+            {
+                var results = MethodStartingPhrases();
+                var startingWords = results.ToArray();
+
+                var continuations = new[]
+                                        {
+                                            string.Empty,
+                                            " and initialize",
+                                            " and initializes",
+                                            " and initializing",
+                                            " and provide",
+                                            " and provides",
+                                            " and providing",
+                                            " and return",
+                                            " and returns",
+                                            " and returning",
+                                            " and set up",
+                                            " and sets up",
+                                            " and setting up",
+                                        };
+
+                var suffixes = new[]
+                                   {
+                                       " an new instance of the ", " an new instance of an ", " an new instance of a ", " an new instance of ",
+                                       " an instance of the ", " an instance of an ", " an instance of a ", " an instance of ",
+                                       " an ", " a factory ",
+                                       " a new instance of the ", " a new instance of an ", " a new instance of a ", " a new instance of ",
+                                       " a instance of the ", " a instance of an ", " a instance of a ", " a instance of ",
+                                       " a new ", " a ",
+                                       " the instance of the ", " the instance of an ", " the instance of a ", " the instance of ",
+                                       " the new ", " the ",
+                                       " instances of the ", " instances of an ", " instances of a ", " instances of ",
+                                       " new instances of the ", " new instances of an ", " new instances of a ", " new instances of ",
+                                   };
+
+                var strangeTexts = new[]
+                                   {
+                                       " a factory",
+                                       "ize and init", "izes and init", "izing and init",
+                                       "urn and ret", "urns and ret", "urning and ret",
+                                       "ing and initialize ", "ing and provide ", "ing and return ", "ing and set ",
+                                       "ing and initializes", "ing and provides", "ing and returns", "ing and sets",
+                                       "s and initializing", "s and providing", "s and returning", "s and setting",
+                                       "onstruct and ",
+                                   };
+
+                var startingWordsLength = startingWords.Length;
+                var continuationsLength = continuations.Length;
+                var suffixesLength = suffixes.Length;
+
+                const int BufferSize = 128;
+
+                unsafe
                 {
-                    var continuation = continuations[index];
+                    var buffer = stackalloc char[BufferSize];
 
-                    set.Add(" that can build " + continuation);
-                    set.Add(" that build " + continuation);
-                    set.Add(" that builds " + continuation);
-                    set.Add(" that can construct " + continuation);
-                    set.Add(" that construct " + continuation);
-                    set.Add(" that constructs " + continuation);
-                    set.Add(" that can create " + continuation);
-                    set.Add(" that create " + continuation);
-                    set.Add(" that creates " + continuation);
-                    set.Add(" that can provide " + continuation);
-                    set.Add(" that provide " + continuation);
-                    set.Add(" that provides " + continuation);
-                    set.Add(" that can return " + continuation);
-                    set.Add(" that return " + continuation);
-                    set.Add(" that returns " + continuation);
-                    set.Add(" that " + continuation);
+                    for (var wordIndex = 0; wordIndex < startingWordsLength; wordIndex++)
+                    {
+                        var word = startingWords[wordIndex].AsSpan().Trim();
+                        var wordLength = word.Length;
 
-                    set.Add(" which can build " + continuation);
-                    set.Add(" which build " + continuation);
-                    set.Add(" which builds " + continuation);
-                    set.Add(" which can construct " + continuation);
-                    set.Add(" which construct " + continuation);
-                    set.Add(" which constructs " + continuation);
-                    set.Add(" which can create " + continuation);
-                    set.Add(" which create " + continuation);
-                    set.Add(" which creates " + continuation);
-                    set.Add(" which can provide " + continuation);
-                    set.Add(" which provide " + continuation);
-                    set.Add(" which provides " + continuation);
-                    set.Add(" which can return " + continuation);
-                    set.Add(" which return " + continuation);
-                    set.Add(" which returns " + continuation);
-                    set.Add(" which " + continuation);
+                        if (word.ContainsAnyOrdinal(strangeTexts))
+                        {
+                            continue;
+                        }
 
-                    set.Add(" for building of " + continuation);
-                    set.Add(" for building " + continuation);
-                    set.Add(" for the building of " + continuation);
-                    set.Add(" for constructing " + continuation);
-                    set.Add(" for construction of " + continuation);
-                    set.Add(" for the construction of " + continuation);
-                    set.Add(" for creating " + continuation);
-                    set.Add(" for creation of " + continuation);
-                    set.Add(" for the creation of " + continuation);
-                    set.Add(" for providing of " + continuation);
-                    set.Add(" for providing " + continuation);
-                    set.Add(" for returning of " + continuation);
-                    set.Add(" for returning " + continuation);
-                    set.Add(" for " + continuation);
+                        var bufferSpan = new Span<char>(buffer, BufferSize);
 
-                    set.Add(" building " + continuation);
-                    set.Add(" builds " + continuation);
-                    set.Add(" constructing " + continuation);
-                    set.Add(" constructs " + continuation);
-                    set.Add(" creating " + continuation);
-                    set.Add(" creates " + continuation);
-                    set.Add(" providing " + continuation);
-                    set.Add(" provides " + continuation);
-                    set.Add(" returning " + continuation);
-                    set.Add(" returns " + continuation);
+                        word.CopyTo(bufferSpan);
 
-                    set.Add(" that's able to build " + continuation);
-                    set.Add(" that is able to build " + continuation);
-                    set.Add(" which is able to build " + continuation);
-                    set.Add(" that's capable to build " + continuation);
-                    set.Add(" that is capable to build " + continuation);
-                    set.Add(" which is capable to build " + continuation);
-                    set.Add(" that's able to construct " + continuation);
-                    set.Add(" that is able to construct " + continuation);
-                    set.Add(" which is able to construct " + continuation);
-                    set.Add(" that's capable to construct " + continuation);
-                    set.Add(" that is capable to construct " + continuation);
-                    set.Add(" which is capable to construct " + continuation);
-                    set.Add(" that is able to create " + continuation);
-                    set.Add(" that's able to create " + continuation);
-                    set.Add(" which is able to create " + continuation);
-                    set.Add(" that's capable to create " + continuation);
-                    set.Add(" that is capable to create " + continuation);
-                    set.Add(" which is capable to create " + continuation);
-                    set.Add(" that's able to provide " + continuation);
-                    set.Add(" that is able to provide " + continuation);
-                    set.Add(" which is able to provide " + continuation);
-                    set.Add(" that's capable to provide " + continuation);
-                    set.Add(" that is capable to provide " + continuation);
-                    set.Add(" which is capable to provide " + continuation);
+                        for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
+                        {
+                            var continuation = continuations[continuationsIndex].AsSpan();
+                            var suffixStartLength = wordLength + continuation.Length;
 
-                    set.Add(" that are able to build " + continuation);
-                    set.Add(" which are able to build " + continuation);
-                    set.Add(" that are capable to build " + continuation);
-                    set.Add(" which are capable to build " + continuation);
-                    set.Add(" that are able to construct " + continuation);
-                    set.Add(" which are able to construct " + continuation);
-                    set.Add(" that are capable to construct " + continuation);
-                    set.Add(" which are capable to construct " + continuation);
-                    set.Add(" that are able to create " + continuation);
-                    set.Add(" which are able to create " + continuation);
-                    set.Add(" that are capable to create " + continuation);
-                    set.Add(" which are capable to create " + continuation);
-                    set.Add(" that are able to provide " + continuation);
-                    set.Add(" which are able to provide " + continuation);
-                    set.Add(" that are capable to provide " + continuation);
-                    set.Add(" which are capable to provide " + continuation);
+                            continuation.CopyTo(bufferSpan.Slice(wordLength));
 
-                    set.Add(" to build " + continuation);
-                    set.Add(" to construct " + continuation);
-                    set.Add(" to create " + continuation);
-                    set.Add(" to provide factory methods to build " + continuation);
-                    set.Add(" to provide factory methods to construct " + continuation);
-                    set.Add(" to provide factory methods to create " + continuation);
-                    set.Add(" to provide methods to build " + continuation);
-                    set.Add(" to provide methods to construct " + continuation);
-                    set.Add(" to provide methods to create " + continuation);
-                    set.Add(" to provide " + continuation);
-                    set.Add(" to " + continuation);
+                            ReadOnlySpan<char> candidate = bufferSpan.Slice(0, suffixStartLength);
 
-                    set.Add(Constants.SingleSpace + continuation);
+                            if (candidate.ContainsAnyOrdinal(strangeTexts))
+                            {
+                                continue;
+                            }
+
+                            for (var suffixIndex = 0; suffixIndex < suffixesLength; suffixIndex++)
+                            {
+                                var suffix = suffixes[suffixIndex].AsSpan();
+                                var totalLength = suffixStartLength + suffix.Length;
+
+                                suffix.CopyTo(bufferSpan.Slice(suffixStartLength));
+
+                                results.Add(new string(buffer, 0, totalLength));
+                            }
+                        }
+                    }
                 }
 
-                return set;
+                return results;
+
+                HashSet<string> MethodStartingPhrases()
+                {
+                    var subjects = new[]
+                                   {
+                                       "A factory method",
+                                       "A method",
+                                       "Factory method",
+                                       "Method",
+                                       "The factory method",
+                                       "The method",
+                                       "This factory method",
+                                       "This method",
+                                   };
+
+                    var startingPhrases = new List<string>((5 * 6 * subjects.Length) + (2 * 6));
+
+                    foreach (var subject in subjects)
+                    {
+                        startingPhrases.Add(subject + " builds ");
+                        startingPhrases.Add(subject + " constructs ");
+                        startingPhrases.Add(subject + " creates ");
+                        startingPhrases.Add(subject + " gets ");
+                        startingPhrases.Add(subject + " returns ");
+                        startingPhrases.Add(subject + " initializes ");
+
+                        startingPhrases.Add(subject + " for building ");
+                        startingPhrases.Add(subject + " for constructing ");
+                        startingPhrases.Add(subject + " for creating ");
+                        startingPhrases.Add(subject + " for getting ");
+                        startingPhrases.Add(subject + " for returning ");
+                        startingPhrases.Add(subject + " for initializing ");
+
+                        startingPhrases.Add(subject + " that builds ");
+                        startingPhrases.Add(subject + " that constructs ");
+                        startingPhrases.Add(subject + " that creates ");
+                        startingPhrases.Add(subject + " that gets ");
+                        startingPhrases.Add(subject + " that returns ");
+                        startingPhrases.Add(subject + " that initializes ");
+
+                        startingPhrases.Add(subject + " which builds ");
+                        startingPhrases.Add(subject + " which constructs ");
+                        startingPhrases.Add(subject + " which creates ");
+                        startingPhrases.Add(subject + " which gets ");
+                        startingPhrases.Add(subject + " which returns ");
+                        startingPhrases.Add(subject + " which initializes ");
+
+                        startingPhrases.Add(subject + " building ");
+                        startingPhrases.Add(subject + " constructing ");
+                        startingPhrases.Add(subject + " creating ");
+                        startingPhrases.Add(subject + " getting ");
+                        startingPhrases.Add(subject + " returning ");
+                        startingPhrases.Add(subject + " initializing ");
+                    }
+
+                    // avoid duplicates
+                    var set = new HashSet<string>(startingPhrases);
+
+                    var strangeMethodPhrases = new[]
+                                                 {
+                                                     "ethod build ",
+                                                     "ethod construct ",
+                                                     "ethod create ",
+                                                     "ethod get ",
+                                                     "ethod initialize ",
+                                                     "ethod return ",
+                                                     "A method gets ",
+                                                     "A factory method gets ",
+                                                     "Factory method gets ",
+                                                     "Method gets ",
+                                                 };
+
+                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeMethodPhrases));
+
+                    foreach (var phrase in startingPhrases)
+                    {
+                        var lowerBuilder = phrase.AsCachedBuilder();
+                        set.Add(lowerBuilder.Replace("method", "function").ToString());
+                        set.Add(lowerBuilder.Replace("s ", " ").Replace("Thi ", "This ").ToStringAndRelease());
+
+                        var upperBuilder = phrase.AsCachedBuilder();
+                        set.Add(upperBuilder.Replace("Method", "Function").ToString());
+                        set.Add(upperBuilder.Replace("s ", " ").Replace("Thi ", "This ").ToStringAndRelease());
+                    }
+
+                    var strangeStartingPhrases = new[]
+                                                 {
+                                                     "unction build ", "ethod build ",
+                                                     "unction construct ", "ethod construct ",
+                                                     "unction create ", "ethod create ",
+                                                     "unction get ", "ethod get ",
+                                                     "unction initialize ", "ethod initialize ",
+                                                     "unction return ", "ethod return ",
+                                                 };
+
+                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeStartingPhrases));
+
+                    set.Add("Used for building ");
+                    set.Add("Used for constructing ");
+                    set.Add("Used for creating ");
+                    set.Add("Used for getting ");
+                    set.Add("Used for returning ");
+                    set.Add("Used for initializing ");
+
+                    set.Add("Used to build ");
+                    set.Add("Used to construct ");
+                    set.Add("Used to create ");
+                    set.Add("Used to get ");
+                    set.Add("Used to return ");
+                    set.Add("Used to initialize ");
+
+                    set.Add("Create");
+                    set.Add("Creates");
+                    set.Add("Creating");
+                    set.Add("Construct");
+                    set.Add("Constructs");
+                    set.Add("Constructing");
+                    set.Add("Return");
+                    set.Add("Returns");
+                    set.Add("Returning");
+                    set.Add("Get");
+                    set.Add("Gets");
+                    set.Add("Getting");
+                    set.Add("Initialize");
+                    set.Add("Initializes");
+                    set.Add("Initializing");
+
+                    return set;
+                }
             }
         }
 //// ncrunch: no coverage end
