@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         public override string FixableDiagnosticId => "MiKo_3103";
 
-        protected sealed override string Title => Resources.MiKo_3103_CodeFixTitle;
-
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             foreach (var syntax in syntaxNodes)
