@@ -691,7 +691,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static HashSet<string> CreateTypeReplacementMapKeys()
             {
-                var strangeTexts = StrangeTexts().AsSpan();
+                var strangeTexts = StrangeTexts().OrderDescendingByLengthAndText().AsSpan();
                 var allPhrases = AllPhrases().OrderDescendingByLengthAndText().AsSpan();
                 var allContinuations = AllContinuations().OrderDescendingByLengthAndText().AsSpan();
 
@@ -708,18 +708,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var buffer = stackalloc char[128];
 
                     var allContinuationsLength = allContinuations.Length;
-                    int allPhrasesLength = allPhrases.Length;
+                    var allPhrasesLength = allPhrases.Length;
 
                     for (var i = 0; i < allPhrasesLength; i++)
                     {
                         var phrase = allPhrases[i].AsSpan();
+                        var phraseLength = phrase.Length;
 
                         for (var ci = 0; ci < allContinuationsLength; ci++)
                         {
                             var continuation = allContinuations[ci].AsSpan();
-
-                            var phraseLength = phrase.Length;
                             var continuationLength = continuation.Length;
+
                             var totalLength = phraseLength + continuationLength;
 
                             var bufferSpan = new Span<char>(buffer, totalLength);
@@ -739,7 +739,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 return results;
 
-                string[] StrangeTexts()
+                HashSet<string> StrangeTexts()
                 {
                     var rawStrangeTexts = new[]
                                               {
@@ -799,7 +799,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                     }
 
-                    return strangeTextsSet.ToArray();
+                    return strangeTextsSet;
                 }
 
                 HashSet<string> AllPhrases()
