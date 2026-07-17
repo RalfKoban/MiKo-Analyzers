@@ -22,8 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
 
-        protected virtual string Title => Resources.ResourceManager.GetString(FixableDiagnosticId + "_CodeFixTitle", Resources.Culture);
-
 //// ncrunch: rdi off
 
         protected virtual bool IsSolutionWide => false;
@@ -55,6 +53,8 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
 //// ncrunch: rdi default
+
+        protected internal virtual string GetTitle(Diagnostic issue) => Resources.ResourceManager.GetString(FixableDiagnosticId + "_CodeFixTitle", Resources.Culture);
 
         /// <summary>
         /// Gets an argument list containing the specified arguments.
@@ -833,7 +833,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 var trivia = root.FindTrivia(startPosition);
 
-                return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
+                return CodeAction.Create(GetTitle(issue), cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
             }
 
             // TODO RKN
@@ -851,10 +851,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsSolutionWide)
             {
-                return CodeAction.Create(Title, cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
+                return CodeAction.Create(GetTitle(issue), cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
             }
 
-            return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
+            return CodeAction.Create(GetTitle(issue), cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
         }
 
 //// ncrunch: rdi default
