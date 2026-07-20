@@ -22,48 +22,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
 
-        private static bool IsNoDeclarationCore(SyntaxNode node)
+        private static IEnumerable<string> GetAssignmentIdentifierCandidates(SyntaxNode node)
         {
-            switch (node.RawKind)
-            {
-                case (int)SyntaxKind.MethodDeclaration:
-                case (int)SyntaxKind.ConstructorDeclaration:
-                case (int)SyntaxKind.IndexerDeclaration:
-                    return false;
+            var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
+                                 .Select(_ => _.FirstChild<IdentifierNameSyntax>())
+                                 .WhereNotNull()
+                                 .Select(_ => _.GetName());
 
-                default:
-                    return true;
-            }
-        }
-
-        private static bool HasIssue(SwitchStatementSyntax switchStatement)
-        {
-            var variableNames = GetVariableNamesUntilHere(switchStatement).ToHashSet();
-
-            var usedVariables = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).ToList();
-
-            if (usedVariables.Count is 0)
-            {
-                // for whatever reason we do not have any variables
-                return false;
-            }
-
-            // keep those that are used on multiple cases
-            var variableUsages = usedVariables[0];
-
-            if (usedVariables.Count > 1)
-            {
-                // we have to collect all other variables together as otherwise, an intersect for each single block would ignore (get rid of) the variables in the other blocks
-                var allOtherVariables = usedVariables.Skip(1).SelectMany(_ => _).ToHashSet();
-                variableUsages.IntersectWith(allOtherVariables);
-            }
-
-            // now only keep those that are part of the original collection
-            variableUsages.IntersectWith(variableNames);
-
-            var foundReturn = switchStatement.DescendantNodes<ReturnStatementSyntax>().Any();
-
-            return variableUsages.Count != 0 && foundReturn is false;
+            return candidates;
         }
 
         private static IEnumerable<string> GetVariableNamesUntilHere(SwitchStatementSyntax switchStatement)
@@ -79,21 +45,115 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                               .Select(_ => _.GetName());
         }
 
-        private static IEnumerable<string> GetAssignmentIdentifierCandidates(SyntaxNode node)
+        private static bool HasIssue(SwitchStatementSyntax switchStatement, ISymbol symbol)
         {
-            var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
-                                 .Select(_ => _.FirstChild<IdentifierNameSyntax>())
-                                 .WhereNotNull()
-                                 .Select(_ => _.GetName());
+            if (switchStatement.DescendantNodes<ReturnStatementSyntax>().Any())
+            {
+                return false;
+            }
 
-            return candidates;
+            var usedIdentifiers = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).ToList();
+
+            if (usedIdentifiers.All(_ => _.Count is 0))
+            {
+                // for whatever reason we do not have any identifiers, so we do not have an issue here
+                return false;
+            }
+
+            return HasIssueWithVariable(usedIdentifiers, switchStatement)
+                || HasIssueWithProperty(usedIdentifiers, symbol)
+                || HasIssueWithField(usedIdentifiers, symbol)
+                || HasIssueWithParameter(usedIdentifiers, symbol);
+        }
+
+        private static bool HasIssue(IReadOnlyList<HashSet<string>> usedIdentifiers, HashSet<string> identifiers)
+        {
+            if (identifiers.None())
+            {
+                return false;
+            }
+
+            // keep those that are used on multiple cases
+            var identifierUsages = usedIdentifiers[0].ToHashSet();
+
+            if (usedIdentifiers.Count > 1)
+            {
+                // we have to collect all other together as otherwise, an intersect for each single block would ignore (get rid of) them in the other blocks
+                var allOtherIdentifiers = usedIdentifiers.Skip(1).SelectMany(_ => _).ToHashSet();
+                identifierUsages.IntersectWith(allOtherIdentifiers);
+            }
+
+            // now only keep those that are part of the original collection
+            identifierUsages.IntersectWith(identifiers);
+
+            return identifierUsages.Count != 0;
+        }
+
+        private static bool HasIssueWithField(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol method)
+            {
+                var fieldNames = method.ContainingType.GetFields().Where(_ => _.IsConst is false).ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, fieldNames);
+            }
+
+            // may be used in global context
+            return false;
+        }
+
+        private static bool HasIssueWithParameter(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol method)
+            {
+                var parameterNames = method.Parameters.Where(_ => _.RefKind is RefKind.Out || _.RefKind is RefKind.Ref).ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, parameterNames);
+            }
+
+            // may be used in global context
+            return false;
+        }
+
+        private static bool HasIssueWithProperty(IReadOnlyList<HashSet<string>> usedIdentifiers, ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol method)
+            {
+                var propertyNames = method.ContainingType.GetPropertiesIncludingInherited().ToHashSet(_ => _.Name);
+
+                return HasIssue(usedIdentifiers, propertyNames);
+            }
+
+            // may be used in global context
+            return false;
+        }
+
+        private static bool HasIssueWithVariable(IReadOnlyList<HashSet<string>> usedIdentifiers, SwitchStatementSyntax switchStatement)
+        {
+            var variableNames = GetVariableNamesUntilHere(switchStatement).ToHashSet();
+
+            return HasIssue(usedIdentifiers, variableNames);
+        }
+
+        private static bool IsNoDeclarationCore(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.MethodDeclaration:
+                case (int)SyntaxKind.ConstructorDeclaration:
+                case (int)SyntaxKind.IndexerDeclaration:
+                    return false;
+
+                default:
+                    return true;
+            }
         }
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
             var switchStatement = (SwitchStatementSyntax)context.Node;
 
-            if (HasIssue(switchStatement))
+            if (HasIssue(switchStatement, context.ContainingSymbol))
             {
                 // keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recursive calls
                 if (switchStatement.AncestorsWithinMethods<WhileStatementSyntax>().None())

@@ -13,6 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         public override string FixableDiagnosticId => "MiKo_1055_1056";
 
-        protected override string Title => Resources.MiKo_1055_CodeFixTitle;
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_1055_CodeFixTitle;
     }
 }

@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var eventName = token.ValueText;
 
             var method = context.GetEnclosingMethod();
-            var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().ToHashSet(_ => _.Name);
+            var events = method.ContainingType.GetEventsIncludingInherited().ToHashSet(_ => _.Name);
 
             if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
             {

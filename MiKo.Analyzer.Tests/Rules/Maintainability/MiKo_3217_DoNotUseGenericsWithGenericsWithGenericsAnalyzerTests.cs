@@ -37,6 +37,28 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_that_returns_generic_with_nullable_alias() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public IEnumerable<int?> DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_that_returns_generic_with_nullable_type() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public IEnumerable<Nullable<int>> DoSomething() => null;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_that_returns_generic_dictionary_with_non_generic() => No_issue_is_reported_for(@"
 using System.Collections.Generic;
 

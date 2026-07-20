@@ -58,66 +58,118 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ConstructorPhrases =
                                                               {
-                                                                  "copy constructor",
-                                                                  "copy Constructor",
-                                                                  "Copy constructor",
+                                                                  "Copy C-tor",
+                                                                  "Copy C'tor",
                                                                   "Copy Constructor",
-                                                                  "copy ctor",
-                                                                  "copy Ctor",
-                                                                  "Copy ctor",
                                                                   "Copy Ctor",
-                                                                  "default constructor",
-                                                                  "default Constructor",
-                                                                  "Default constructor",
+                                                                  "Copy D-tor", // typo
+                                                                  "Copy D'tor", // typo
+                                                                  "Copy c-tor",
+                                                                  "Copy c'tor",
+                                                                  "Copy constructor",
+                                                                  "Copy ctor",
+                                                                  "Copy d-tor", // typo
+                                                                  "Copy d'tor", // typo
+                                                                  "Default C-tor",
+                                                                  "Default C'tor",
                                                                   "Default Constructor",
-                                                                  "default ctor",
-                                                                  "default Ctor",
-                                                                  "Default ctor",
                                                                   "Default Ctor",
+                                                                  "Default D-tor", // typo
+                                                                  "Default D'tor", // typo
+                                                                  "Default Dtor", // typo
+                                                                  "Default c-tor",
+                                                                  "Default c'tor",
+                                                                  "Default constructor",
+                                                                  "Default ctor",
+                                                                  "Default d-tor", // typo
+                                                                  "Default d'tor", // typo
+                                                                  "Default dtor", // typo
+                                                                  "copy C-tor",
+                                                                  "copy C'tor",
+                                                                  "copy Constructor",
+                                                                  "copy Ctor",
+                                                                  "copy D-tor", // typo
+                                                                  "copy D'tor", // typo
+                                                                  "copy c-tor",
+                                                                  "copy c'tor",
+                                                                  "copy constructor",
+                                                                  "copy ctor",
+                                                                  "copy d-tor", // typo
+                                                                  "copy d'tor", // typo
+                                                                  "default C-tor",
+                                                                  "default C'tor",
+                                                                  "default Constructor",
+                                                                  "default Ctor",
+                                                                  "default D-tor", // typo
+                                                                  "default D'tor", // typo
+                                                                  "default Dtor", // typo
+                                                                  "default c-tor",
+                                                                  "default c'tor",
+                                                                  "default constructor",
+                                                                  "default ctor",
+                                                                  "default d-tor", // typo
+                                                                  "default d'tor", // typo
+                                                                  "default dtor", // typo
                                                                   "Constructor",
                                                                   "constructor",
                                                                   "Ctor",
                                                                   "ctor",
+                                                                  "Dtor", // typo
+                                                                  "dtor", // typo
+                                                                  "C-tor",
+                                                                  "C'tor",
+                                                                  "c-tor",
+                                                                  "c'tor",
+                                                                  "D-tor", // typo
+                                                                  "D'tor", // typo
+                                                                  "d-tor", // typo
+                                                                  "d'tor", // typo
                                                               };
 
-        private static readonly Pair[] CallbackReplacements = new[]
-                                                                  {
-                                                                      "A callback that is called",
-                                                                      "A callback which is called",
-                                                                      "A method that gets called",
-                                                                      "A method that is called",
-                                                                      "A method which gets called",
-                                                                      "A method which is called",
-                                                                      "Callback that is called",
-                                                                      "Callback which is called",
-                                                                      "Method that gets called",
-                                                                      "Method that is called",
-                                                                      "Method which gets called",
-                                                                      "Method which is called",
-                                                                      "The callback that is called",
-                                                                      "The callback which is called",
-                                                                      "The method gets called",
-                                                                      "The method is called",
-                                                                      "The method that gets called",
-                                                                      "The method that is called",
-                                                                      "The method which gets called",
-                                                                      "The method which is called",
-                                                                      "This method gets called",
-                                                                      "This method is called",
-                                                                  }.ToArray(_ => new Pair(_, "Gets called"));
+        private static readonly ReplacementMap CallbackReplacements = new ReplacementMap(
+                                                                                     "MiKo_2019_Replace",
+                                                                                     new[]
+                                                                                         {
+                                                                                             "A callback that's called",
+                                                                                             "A callback that is called",
+                                                                                             "A callback which is called",
+                                                                                             "A method that gets called",
+                                                                                             "A method that's called",
+                                                                                             "A method that is called",
+                                                                                             "A method which gets called",
+                                                                                             "A method which is called",
+                                                                                             "Callback that's called",
+                                                                                             "Callback that is called",
+                                                                                             "Callback which is called",
+                                                                                             "Method that gets called",
+                                                                                             "Method that's called",
+                                                                                             "Method that is called",
+                                                                                             "Method which gets called",
+                                                                                             "Method which is called",
+                                                                                             "The callback that is called",
+                                                                                             "The callback which is called",
+                                                                                             "The method gets called",
+                                                                                             "The method is called",
+                                                                                             "The method that gets called",
+                                                                                             "The method that's called",
+                                                                                             "The method that is called",
+                                                                                             "The method which gets called",
+                                                                                             "The method which is called",
+                                                                                             "This method gets called",
+                                                                                             "This method is called",
+                                                                                         }.ToArray(_ => new Pair(_, "Gets called")),
+                                                                                     _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] CallbackPhrases = GetTermsForQuickLookup(CallbackReplacements);
-
-        private static readonly Pair[] CallbackReplacementsWithLy =
-                                                                    {
-                                                                        new Pair(Constants.Comments.AsynchronouslyStartingPhrase + "called", Constants.Comments.AsynchronouslyStartingPhrase + "runs"),
-                                                                        new Pair(Constants.Comments.AsynchronouslyStartingPhrase + "invoked", Constants.Comments.AsynchronouslyStartingPhrase + "runs"),
-
-                                                                        new Pair(Constants.Comments.RecursivelyStartingPhrase + "called", Constants.Comments.RecursivelyStartingPhrase + "runs"),
-                                                                        new Pair(Constants.Comments.RecursivelyStartingPhrase + "invoked", Constants.Comments.RecursivelyStartingPhrase + "runs"),
-                                                                    };
-
-        private static readonly string[] CallbackPhrasesWithLy = GetTermsForQuickLookup(CallbackReplacementsWithLy);
+        private static readonly ReplacementMap CallbackReplacementsWithLy = new ReplacementMap(
+                                                                                           "MiKo_2019_Ly",
+                                                                                           new[]
+                                                                                               {
+                                                                                                   new Pair(Constants.Comments.AsynchronouslyStartingPhrase + "called", Constants.Comments.AsynchronouslyStartingPhrase + "runs"),
+                                                                                                   new Pair(Constants.Comments.AsynchronouslyStartingPhrase + "invoked", Constants.Comments.AsynchronouslyStartingPhrase + "runs"),
+                                                                                                   new Pair(Constants.Comments.RecursivelyStartingPhrase + "called", Constants.Comments.RecursivelyStartingPhrase + "runs"),
+                                                                                                   new Pair(Constants.Comments.RecursivelyStartingPhrase + "invoked", Constants.Comments.RecursivelyStartingPhrase + "runs"),
+                                                                                               },
+                                                                                           _ => GetTermsForQuickLookup(_));
 
         public override string FixableDiagnosticId => "MiKo_2019";
 
@@ -213,9 +265,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return CommentStartingWith(summary, "Represents the ");
                 }
 
-                if (startText.StartsWithAny(CallbackPhrases))
+                if (startText.StartsWithAny(CallbackReplacements.Keys))
                 {
-                    return Comment(summary, CallbackPhrases, CallbackReplacements);
+                    return Comment(summary, CallbackReplacements);
                 }
 
                 var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary);
@@ -227,7 +279,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWith(Constants.Comments.AsynchronouslyStartingPhrase) || text.StartsWith(Constants.Comments.RecursivelyStartingPhrase))
                 {
-                    var updatedSummary = Comment(summary, CallbackPhrasesWithLy, CallbackReplacementsWithLy);
+                    var updatedSummary = Comment(summary, CallbackReplacementsWithLy);
 
                     if (ReferenceEquals(summary, updatedSummary) is false)
                     {

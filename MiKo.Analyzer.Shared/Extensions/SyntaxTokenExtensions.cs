@@ -737,6 +737,73 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new syntax token with additional spaces at the end of its trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="additionalSpaces">
+        /// The number of additional spaces to add.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with additional spaces at the end of its trailing trivia.
+        /// </returns>
+        internal static SyntaxToken WithAdditionalTrailingSpacesAtEnd(this in SyntaxToken value, in int additionalSpaces)
+        {
+            if (additionalSpaces is 0)
+            {
+                return value;
+            }
+
+            return value.WithAdditionalTrailingTrivia(WhiteSpaces(additionalSpaces));
+        }
+
+        /// <summary>
+        /// Creates a new syntax token with additional trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="trivia">
+        /// The trivia to add.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with the additional trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithAdditionalTrailingTrivia(this in SyntaxToken value, in SyntaxTrivia trivia) => value.WithTrailingTrivia(value.TrailingTrivia.Add(trivia));
+
+        /// <summary>
+        /// Creates a new syntax token with additional trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="trivia">
+        /// The trivia list to add.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with the additional trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithAdditionalTrailingTrivia(this in SyntaxToken value, in SyntaxTriviaList trivia) => value.WithTrailingTrivia(value.TrailingTrivia.AddRange(trivia));
+
+        /// <summary>
+        /// Creates a new syntax token with additional trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="trivia">
+        /// The collection of trivia to add.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with the additional trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithAdditionalTrailingTrivia(this in SyntaxToken value, IEnumerable<SyntaxTrivia> trivia) => value.WithTrailingTrivia(value.TrailingTrivia.AddRange(trivia));
+
+        /// <summary>
         /// Creates a new syntax token with an end of line added as trailing trivia.
         /// </summary>
         /// <param name="value">

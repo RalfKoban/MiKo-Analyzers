@@ -658,6 +658,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (pluralName != null && originalName.SequenceEqual(pluralName.AsSpan()))
                 {
+                    // TODO: Make singular using dedicated 'Singularizer'
                     singularName = originalName.Slice(0, originalName.Length - 1).ToString();
 
                     return null; // seems the original name is already the plural name, so we do not report that
@@ -669,6 +670,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
             if (originalName.EndsWith("Map", StringComparison.OrdinalIgnoreCase)
              || originalName.EndsWith("Batch", StringComparison.OrdinalIgnoreCase)
              || originalName.EndsWith("Cache", StringComparison.OrdinalIgnoreCase))
+            {
+                singularName = originalName.ToString();
+
+                return null; // seems the original name is already the plural name, so we do not report that
+            }
+
+            if (originalName.Contains("sBy", StringComparison.Ordinal))
             {
                 singularName = originalName.ToString();
 

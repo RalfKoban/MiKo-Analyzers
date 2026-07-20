@@ -41,6 +41,11 @@ namespace MiKoSolutions.Analyzers
 
         private const int QuickStartSubstringProbeLengthThreshold = 4;
 
+        /// <summary>
+        /// The minimum length threshold used for optimized substring probing operations.
+        /// </summary>
+        private const int QuickSubstringProbeLengthThreshold = 8;
+
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
         private static readonly TimeSpan RegexTimeout = 250.Milliseconds();
@@ -1378,39 +1383,31 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static bool ContainsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
+            if (comparison is StringComparison.Ordinal)
+            {
+                return ContainsAnyOrdinal(value, phrases);
+            }
+
             if (value.Length > 0)
             {
-                var ordinalComparison = comparison is StringComparison.Ordinal;
-
                 string valueString = null;
 
-                for (int index = 0, length = phrases.Length; index < length; index++)
+                foreach (var phrase in phrases)
                 {
-                    var phrase = phrases[index];
                     var phraseSpan = phrase.AsSpan();
 
                     if (QuickContainsSubstringProbe(value, phraseSpan, comparison))
                     {
-                        if (ordinalComparison)
+                        // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
+                        // to avoid that, we cache the string representation of the value and reuse it for all phrases
+                        if (valueString is null)
                         {
-                            if (value.Contains(phraseSpan))
-                            {
-                                return true;
-                            }
+                            valueString = value.ToString();
                         }
-                        else
-                        {
-                            // Performance-Note: when compared other than with Ordinal comparison, a string gets created internally
-                            // to avoid that, we cache the string representation of the value and reuse it for all phrases
-                            if (valueString is null)
-                            {
-                                valueString = value.ToString();
-                            }
 
-                            if (valueString.Contains(phrase, comparison))
-                            {
-                                return true;
-                            }
+                        if (valueString.Contains(phrase, comparison))
+                        {
+                            return true;
                         }
                     }
                 }
@@ -1439,7 +1436,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (comparison is StringComparison.Ordinal)
             {
-                return ContainsAny(value.AsSpan(), phrases);
+                return ContainsAnyOrdinal(value.AsSpan(), phrases);
             }
 
             var span = value.AsSpan();
@@ -1451,6 +1448,44 @@ namespace MiKoSolutions.Analyzers
                 if (QuickContainsSubstringProbe(span, phrase.AsSpan(), comparison))
                 {
                     if (value.Contains(phrase, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the <see cref="string"/> contains any of the specified phrases using <see cref="StringComparison.Ordinal"/> as comparison method.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to search in.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to seek.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if any of the phrases are found; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool ContainsAnyOrdinal(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases)
+        {
+            if (value.Length > 0)
+            {
+                for (int index = 0, length = phrases.Length; index < length; index++)
+                {
+                    var phraseSpan = phrases[index].AsSpan();
+
+                    // Performance-Note: This is a hot-path, so we do a quick probe to see if the text is there
+                    var potentialStartPosition = value.QuickSubstringProbeOrdinal(phraseSpan);
+
+                    if (potentialStartPosition is -1)
+                    {
+                        continue;
+                    }
+
+                    if (value.Slice(potentialStartPosition).Contains(phraseSpan))
                     {
                         return true;
                     }
@@ -3210,6 +3245,133 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines the starting position where the specified text could potentially occur within the given text, using a quick probe optimization.
+        /// </summary>
+        /// <param name="source">
+        /// The text to search within.
+        /// </param>
+        /// <param name="substring">
+        /// The text to search for.
+        /// </param>
+        /// <returns>
+        /// The zero-based starting position where the specified text might occur, or <c>-1</c> if it does not occur.
+        /// </returns>
+        public static int QuickSubstringProbeOrdinal(this in ReadOnlySpan<char> source, in ReadOnlySpan<char> substring)
+        {
+            if (substring.Length is 0)
+            {
+                // cannot be part in the replacement as the substring is zero
+                return -1;
+            }
+
+            var delta = source.Length - substring.Length;
+
+            if (delta < 0)
+            {
+                // cannot be part in the replacement as the substring is too long to fit within the source
+                return -1;
+            }
+
+            var startChar = substring[0];
+
+            // Performance-Note:
+            // - restrict the search space upfront so that IndexOf never overshoots delta
+            var searchSpace = source.Slice(0, delta + 1);
+
+            // Performance-Note:
+            // - fast-exit: if startChar is not present at all in the valid window,
+            //   there is no point iterating; IndexOf is a tight single-comparison loop even without SIMD
+            var startIndex = searchSpace.IndexOf(startChar);
+
+            if (startIndex < 0)
+            {
+                return -1;
+            }
+
+            // Performance-Note:
+            // - fast-exit: if the substring is below the threshold, it is short enough to still fit inside the source
+            if (substring.Length < QuickSubstringProbeLengthThreshold)
+            {
+                return startIndex;
+            }
+
+            var lastIndex = substring.Length - 1;
+            var endChar = substring[lastIndex];
+
+            // Performance-Note:
+            // - fast-exit: if endChar does not appear anywhere in the valid end-character window, no complete match is possible
+            var endCharLastIndex = source.Slice(startIndex + lastIndex, delta - startIndex + 1).LastIndexOf(endChar);
+
+            if (endCharLastIndex < 0)
+            {
+                return -1;
+            }
+
+            // Performance-Note:
+            // - tighten delta to the last position where endChar actually appears,
+            //   so the loop never scans positions that cannot possibly yield a match
+            var effectiveDelta = startIndex + endCharLastIndex;
+
+            // Performance-Note:
+            // - if the substring is short enough, we can skip checking an extra probe character and just check the start and end characters;
+            // - note that most times the else part is run as the substring is often long enough
+            if (substring.Length <= 2 * QuickSubstringProbeLengthThreshold)
+            {
+                for (var offset = startIndex; offset <= effectiveDelta; offset++)
+                {
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
+
+                    if (index < 0)
+                    {
+                        return -1;
+                    }
+
+                    var position = offset + index;
+
+                    if (source[position + lastIndex] == endChar)
+                    {
+                        // could be part in the replacement as characters match both at start and end
+                        return position;
+                    }
+
+                    // Performance-Note:
+                    // - set offset to position here so the for-increment adds the +1,
+                    //   avoiding a separate variable and keeping the loop idiomatic
+                    offset = position;
+                }
+            }
+            else
+            {
+                var extraProbeChar = substring[QuickSubstringProbeLengthThreshold];
+
+                for (var offset = startIndex; offset <= effectiveDelta; offset++)
+                {
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
+
+                    if (index < 0)
+                    {
+                        return -1;
+                    }
+
+                    var position = offset + index;
+
+                    if (source[position + lastIndex] == endChar && source[position + QuickSubstringProbeLengthThreshold] == extraProbeChar)
+                    {
+                        // could be part in the replacement as characters match both at start and end
+                        return position;
+                    }
+
+                    // Performance-Note:
+                    // - set offset to position here so the for-increment adds the +1,
+                    //   avoiding a separate variable and keeping the loop idiomatic
+                    offset = position;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
         /// Gets the second word from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
@@ -3407,6 +3569,38 @@ namespace MiKoSolutions.Analyzers
                         {
                             return true;
                         }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the span of characters starts with any of the specified prefixes.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to check.
+        /// </param>
+        /// <param name="prefixes">
+        /// The prefixes to seek.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the span starts with any of the prefixes; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool StartsWithAny(this in ReadOnlySpan<char> value, IEnumerable<string> prefixes, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (value.Length > 0)
+            {
+                foreach (var prefix in prefixes)
+                {
+                    if (value.StartsWith(prefix, comparison))
+                    {
+                        return true;
                     }
                 }
             }
@@ -4415,7 +4609,6 @@ namespace MiKoSolutions.Analyzers
         {
             if (value.Length > other.Length)
             {
-                // continue to check
                 return true;
             }
 
@@ -4514,6 +4707,7 @@ namespace MiKoSolutions.Analyzers
 
             if (length < QuickStartSubstringProbeLengthThreshold)
             {
+                // continue to check
                 return true;
             }
 

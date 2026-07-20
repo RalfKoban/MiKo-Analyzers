@@ -10,6 +10,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly Pair[] Prefixes =
                                                   [
+                                                      new("adp", "adapter"),
                                                       new("adpt", "adapter"),
                                                       new("alt", "alternative"),
                                                       new("app", "application"),
@@ -248,6 +249,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] Postfixes =
                                                    [
+                                                       new("Adp", "Adapter"),
                                                        new("Adpt", "Adapter"),
                                                        new("Alt", "Alternative"),
                                                        new("App", "Application"),

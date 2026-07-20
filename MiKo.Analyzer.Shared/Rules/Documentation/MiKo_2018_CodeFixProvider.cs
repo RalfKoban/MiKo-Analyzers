@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2018";
 
-        protected override string Title => Resources.MiKo_2018_CodeFixTitle.FormatWith(StartingPhrase);
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_2018_CodeFixTitle.FormatWith(StartingPhrase);
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             map[2] = new Pair("whether that", "whether");
             map[3] = new Pair("whether whether", "whether");
 
-            return Comment(comment, new[] { firstWord }, map);
+            return Comment(comment, new ReplacementMap("MiKo_2018", map, new[] { firstWord }));
         }
     }
 }

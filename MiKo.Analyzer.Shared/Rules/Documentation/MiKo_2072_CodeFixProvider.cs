@@ -13,8 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2072", CreateReplacementMap(), _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -29,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment)
         {
-            return Comment(comment, ReplacementMapKeys, ReplacementMap);
+            return Comment(comment, ReplacementMap);
         }
 
 //// ncrunch: rdi off
