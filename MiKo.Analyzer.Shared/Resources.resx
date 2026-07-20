@@ -4907,16 +4907,16 @@ In contrast, tests should state exactly what was expected and found (e.g., 'Expe
     <value>Do not use 'Count' or 'Length' in assertions</value>
   </data>
   <data name="MiKo_3111_CodeFixTitle" xml:space="preserve">
-    <value>Use 'Zero'</value>
+    <value>Use '{0}'</value>
   </data>
   <data name="MiKo_3111_Description" xml:space="preserve">
-    <value>To improve clarity, use 'Is.Zero' instead of 'Is.EqualTo(0)' when asserting for zero in tests. This makes the code easier to read and understand.</value>
+    <value>To improve clarity, use a specific NUnit constraint instead of a generic comparison constraint when asserting for well-known values in tests. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3111_MessageFormat" xml:space="preserve">
-    <value>Use 'Zero' instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3111_Title" xml:space="preserve">
-    <value>Use 'Is.Zero' instead of 'Is.EqualTo(0)' in assertions</value>
+    <value>Use specific NUnit constraints instead of comparison-based constraints in assertions</value>
   </data>
   <data name="MiKo_3112_CodeFixTitle" xml:space="preserve">
     <value>Use 'Is.Empty'</value>

@@ -14000,7 +14000,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Zero&apos;.
+        ///   Looks up a localized string similar to Use &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_3111_CodeFixTitle {
             get {
@@ -14009,7 +14009,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To improve clarity, use &apos;Is.Zero&apos; instead of &apos;Is.EqualTo(0)&apos; when asserting for zero in tests. This makes the code easier to read and understand..
+        ///   Looks up a localized string similar to To improve clarity, use a specific NUnit constraint instead of a generic comparison constraint when asserting for well-known values in tests. This makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3111_Description {
             get {
@@ -14018,7 +14018,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Zero&apos; instead.
+        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
         /// </summary>
         internal static string MiKo_3111_MessageFormat {
             get {
@@ -14027,7 +14027,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Is.Zero&apos; instead of &apos;Is.EqualTo(0)&apos; in assertions.
+        ///   Looks up a localized string similar to Use specific NUnit constraints instead of comparison-based constraints in assertions.
         /// </summary>
         internal static string MiKo_3111_Title {
             get {
