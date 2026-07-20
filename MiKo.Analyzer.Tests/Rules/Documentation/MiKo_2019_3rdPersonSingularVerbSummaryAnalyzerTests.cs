@@ -31,24 +31,70 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         [
                                                             "constructor",
                                                             "Constructor",
-                                                            "Ctor",
-                                                            "ctor",
-                                                            "Copy constructor",
-                                                            "Copy Constructor",
-                                                            "Copy ctor",
-                                                            "Copy Ctor",
                                                             "copy constructor",
                                                             "copy Constructor",
+                                                            "Copy constructor",
+                                                            "Copy Constructor",
                                                             "copy ctor",
+                                                            "copy c'tor",
+                                                            "copy c-tor",
                                                             "copy Ctor",
-                                                            "Default constructor",
-                                                            "Default Constructor",
-                                                            "Default ctor",
-                                                            "Default Ctor",
+                                                            "copy C'tor",
+                                                            "copy C-tor",
+                                                            "Copy ctor",
+                                                            "Copy c'tor",
+                                                            "Copy c-tor",
+                                                            "Copy Ctor",
+                                                            "Copy C'tor",
+                                                            "Copy C-tor",
+                                                            "copy d'tor", // typo
+                                                            "copy d-tor", // typo
+                                                            "copy D'tor", // typo
+                                                            "copy D-tor", // typo
+                                                            "Copy d'tor", // typo
+                                                            "Copy d-tor", // typo
+                                                            "Copy D'tor", // typo
+                                                            "Copy D-tor", // typo
+                                                            "ctor",
+                                                            "c'tor",
+                                                            "c-tor",
+                                                            "Ctor",
+                                                            "C'tor",
+                                                            "C-tor",
                                                             "default constructor",
                                                             "default Constructor",
+                                                            "Default constructor",
+                                                            "Default Constructor",
                                                             "default ctor",
+                                                            "default c'tor",
+                                                            "default c-tor",
                                                             "default Ctor",
+                                                            "default C'tor",
+                                                            "default C-tor",
+                                                            "Default ctor",
+                                                            "Default c'tor",
+                                                            "Default c-tor",
+                                                            "Default Ctor",
+                                                            "Default C'tor",
+                                                            "Default C-tor",
+                                                            "default dtor", // typo
+                                                            "default d'tor", // typo
+                                                            "default d-tor", // typo
+                                                            "default Dtor", // typo
+                                                            "default D'tor", // typo
+                                                            "default D-tor", // typo
+                                                            "Default dtor", // typo
+                                                            "Default d'tor", // typo
+                                                            "Default d-tor", // typo
+                                                            "Default Dtor", // typo
+                                                            "Default D'tor", // typo
+                                                            "Default D-tor", // typo
+                                                            "dtor", // typo
+                                                            "d'tor", // typo
+                                                            "d-tor", // typo
+                                                            "Dtor", // typo
+                                                            "D'tor", // typo
+                                                            "D-tor", // typo
                                                         ];
 
         [Test]

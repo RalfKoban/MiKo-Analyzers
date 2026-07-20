@@ -49,6 +49,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Pluralizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Verbalizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReplacementMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Analyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
@@ -308,7 +309,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3108_TestMethodsContainAssertsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3109_TestAssertsHaveMessageAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3110_TestAssertsDoNotUseCountAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3111_TestAssertsUseZeroInsteadOfEqualToAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3111_TestAssertsUseSpecificConstraintInsteadOfEqualToAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3114_UseMockOfInsteadMockObjectAnalyzer.cs" />
@@ -646,6 +647,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6066_ExpressionElementsAreIndentedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6067_TernaryOperatorsAreOnSameLineLikeWhenClausesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6068_PropertyPatternInConditionIsOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6069_ObjectInitializerExpressionsAreIndentedBesideOpenBraceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6070_ConsoleStatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6071_UsingLocalDeclarationStatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6072_BaseExpressionSurroundedByBlankLinesAnalyzer.cs" />

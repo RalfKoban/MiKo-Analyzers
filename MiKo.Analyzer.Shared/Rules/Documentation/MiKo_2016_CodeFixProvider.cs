@@ -13,13 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2016_CodeFixProvider)), Shared]
     public sealed class MiKo_2016_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly Pair[] ReplacementMap = { new Pair("Gets called to ") };
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2016", new[] { new Pair("Gets called to ") }, _ => GetTermsForQuickLookup(_));
 
         public override string FixableDiagnosticId => "MiKo_2016";
 
-        protected override string Title => Resources.MiKo_2016_CodeFixTitle.FormatWith(Constants.Comments.AsynchronouslyStartingPhrase);
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_2016_CodeFixTitle.FormatWith(Constants.Comments.AsynchronouslyStartingPhrase);
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
@@ -34,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var preparedComment = MiKo_2019_CodeFixProvider.GetUpdatedSyntax(summary) as XmlElementSyntax ?? summary;
 
-                preparedComment = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
+                preparedComment = Comment(preparedComment, ReplacementMap);
 
                 return CommentStartingWith(preparedComment, Constants.Comments.AsynchronouslyStartingPhrase, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular);
             }

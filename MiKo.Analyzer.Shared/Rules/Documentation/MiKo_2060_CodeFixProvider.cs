@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,24 +27,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return text.StartsWithAny(mappedData.TypeReplacementMapKeysAc, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAf, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAi, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAn, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysAx, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysC, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysD, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysF, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysI, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysP, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysR, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheC, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheF, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheI, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysTheX, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
+            var keys = Enumerable.Empty<string>()
+                                 .Concat(mappedData.TypeReplacementMapAc.Keys)
+                                 .Concat(mappedData.TypeReplacementMapAf.Keys)
+                                 .Concat(mappedData.TypeReplacementMapAi.Keys)
+                                 .Concat(mappedData.TypeReplacementMapAn.Keys)
+                                 .Concat(mappedData.TypeReplacementMapAx.Keys)
+                                 .Concat(mappedData.TypeReplacementMapC.Keys)
+                                 .Concat(mappedData.TypeReplacementMapD.Keys)
+                                 .Concat(mappedData.TypeReplacementMapF.Keys)
+                                 .Concat(mappedData.TypeReplacementMapI.Keys)
+                                 .Concat(mappedData.TypeReplacementMapP.Keys)
+                                 .Concat(mappedData.TypeReplacementMapR.Keys)
+                                 .Concat(mappedData.TypeReplacementMapTheC.Keys)
+                                 .Concat(mappedData.TypeReplacementMapTheF.Keys)
+                                 .Concat(mappedData.TypeReplacementMapTheI.Keys)
+                                 .Concat(mappedData.TypeReplacementMapTheX.Keys)
+                                 .Concat(mappedData.TypeReplacementMapThis.Keys)
+                                 .Concat(mappedData.TypeReplacementMapOthers.Keys)
+                                 .Concat(mappedData.MethodReplacementMapA.Keys)
+                                 .Concat(mappedData.MethodReplacementMapThe.Keys)
+                                 .Concat(mappedData.MethodReplacementMapThis.Keys)
+                                 .Concat(mappedData.MethodReplacementMapOthers.Keys)
+                                 .Concat(mappedData.FunctionReplacementMapA.Keys)
+                                 .Concat(mappedData.FunctionReplacementMapThe.Keys)
+                                 .Concat(mappedData.FunctionReplacementMapThis.Keys)
+                                 .Concat(mappedData.FunctionReplacementMapOthers.Keys)
+                                 .Concat(mappedData.InstancesReplacementMapA.Keys)
+                                 .Concat(mappedData.InstancesReplacementMapThe.Keys)
+                                 .Concat(mappedData.InstancesReplacementMapThis.Keys)
+                                 .Concat(mappedData.InstancesReplacementMapOthers.Keys)
+                                 .Concat(mappedData.InstancesFunctionReplacementMapA.Keys)
+                                 .Concat(mappedData.InstancesFunctionReplacementMapThe.Keys)
+                                 .Concat(mappedData.InstancesFunctionReplacementMapThis.Keys)
+                                 .Concat(mappedData.InstancesFunctionReplacementMapOthers.Keys);
+
+            return text.StartsWithAny(keys, StringComparison.OrdinalIgnoreCase);
         }
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -56,40 +75,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
-                        {
-                            var mappedData = MappedData.Value;
-
-                            var preparedComment = PrepareTypeComment(summary, mappedData);
-
-                            if (preparedComment == summary)
-                            {
-                                preparedComment = Comment(summary, mappedData.InstancesReplacementMapKeys, mappedData.InstancesReplacementMap);
-                            }
-
-                            var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
-
-                            return CleanupComment(fixedComment);
-                        }
+                            return GetUpdatedTypeComment(summary);
 
                         case SyntaxKind.MethodDeclaration:
-                        {
-                            var preparedComment = PrepareMethodComment(summary);
-
-                            var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
-                            var returnType = ((MethodDeclarationSyntax)ancestor).ReturnType;
-
-                            if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count is 1)
-                            {
-                                template = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhraseTemplate;
-                                returnType = g.TypeArgumentList.Arguments[0];
-                            }
-
-                            var parts = template.FormatWith("|").Split('|');
-
-                            var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
-
-                            return CleanupComment(fixedComment);
-                        }
+                            return GetUpdatedMethodComment(summary, (MethodDeclarationSyntax)ancestor);
                     }
                 }
             }
@@ -104,7 +93,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Task.FromResult(updatedSyntax);
         }
 
-        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment, MapData mappedData)
+        private static XmlElementSyntax GetUpdatedTypeComment(XmlElementSyntax summary)
+        {
+            var mappedData = MappedData.Value;
+
+            var preparedComment = PrepareTypeComment(summary, mappedData);
+
+            if (ReferenceEquals(preparedComment, summary))
+            {
+                preparedComment = PrepareInstancesComment(summary, mappedData);
+            }
+
+            var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
+
+            return CleanupComment(fixedComment);
+        }
+
+        private static XmlElementSyntax GetUpdatedMethodComment(XmlElementSyntax summary, MethodDeclarationSyntax method)
+        {
+            var preparedComment = PrepareMethodComment(summary);
+
+            var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
+            var returnType = method.ReturnType;
+
+            if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count is 1)
+            {
+                template = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhraseTemplate;
+                returnType = g.TypeArgumentList.Arguments[0];
+            }
+
+            var parts = template.FormatWith("|").Split('|');
+
+            var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
+
+            return CleanupComment(fixedComment);
+        }
+
+        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment, MapData data)
         {
             var textTokens = comment.GetXmlTextTokens();
 
@@ -117,11 +142,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startText = textTokens[0].ValueText.AsSpan().TrimStart();
 
-            var mapping = GetApplicableMapping(startText, mappedData);
+            var map = GetApplicableTypeMap(startText, data);
 
-            if (mapping != default)
+            if (map != null)
             {
-                updated = Comment(comment, mapping.Keys, mapping.Map);
+                updated = Comment(comment, map);
 
                 if (ReferenceEquals(updated, comment) is false)
                 {
@@ -130,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysOthers, mappedData.TypeReplacementMapOthers);
+            updated = Comment(comment, data.TypeReplacementMapOthers);
 
             if (ReferenceEquals(updated, comment) is false)
             {
@@ -141,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        private static (string[] Keys, Pair[] Map) GetApplicableMapping(in ReadOnlySpan<char> startText, MapData mappedData)
+        private static ReplacementMap GetApplicableTypeMap(in ReadOnlySpan<char> startText, MapData data)
         {
             switch (startText[0])
             {
@@ -154,44 +179,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             case 'c':
                             case 'C':
-                                return (mappedData.TypeReplacementMapKeysAc, mappedData.TypeReplacementMapAc);
+                                return data.TypeReplacementMapAc;
                             case 'f':
                             case 'F':
-                                return (mappedData.TypeReplacementMapKeysAf, mappedData.TypeReplacementMapAf);
+                                return data.TypeReplacementMapAf;
                             case 'i':
                             case 'I':
-                                return (mappedData.TypeReplacementMapKeysAi, mappedData.TypeReplacementMapAi);
+                                return data.TypeReplacementMapAi;
                             default:
-                                return (mappedData.TypeReplacementMapKeysAx, mappedData.TypeReplacementMapAx);
+                                return data.TypeReplacementMapAx;
                         }
                     }
 
-                    return (mappedData.TypeReplacementMapKeysAn, mappedData.TypeReplacementMapAn);
+                    return data.TypeReplacementMapAn;
                 }
 
                 case 'C':
                 case 'c':
-                    return (mappedData.TypeReplacementMapKeysC, mappedData.TypeReplacementMapC);
+                    return data.TypeReplacementMapC;
 
                 case 'D':
                 case 'd':
-                    return (mappedData.TypeReplacementMapKeysD, mappedData.TypeReplacementMapD);
+                    return data.TypeReplacementMapD;
 
                 case 'F':
                 case 'f':
-                    return (mappedData.TypeReplacementMapKeysF, mappedData.TypeReplacementMapF);
+                    return data.TypeReplacementMapF;
 
                 case 'I':
                 case 'i':
-                    return (mappedData.TypeReplacementMapKeysI, mappedData.TypeReplacementMapI);
+                    return data.TypeReplacementMapI;
 
                 case 'P':
                 case 'p':
-                    return (mappedData.TypeReplacementMapKeysP, mappedData.TypeReplacementMapP);
+                    return data.TypeReplacementMapP;
 
                 case 'R':
                 case 'r':
-                    return (mappedData.TypeReplacementMapKeysR, mappedData.TypeReplacementMapR);
+                    return data.TypeReplacementMapR;
 
                 case 'T':
                 case 't':
@@ -201,188 +226,334 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             case 'c':
                             case 'C':
-                                return (mappedData.TypeReplacementMapKeysTheC, mappedData.TypeReplacementMapTheC);
+                                return data.TypeReplacementMapTheC;
                             case 'f':
                             case 'F':
-                                return (mappedData.TypeReplacementMapKeysTheF, mappedData.TypeReplacementMapTheF);
+                                return data.TypeReplacementMapTheF;
                             case 'i':
                             case 'I':
-                                return (mappedData.TypeReplacementMapKeysTheI, mappedData.TypeReplacementMapTheI);
+                                return data.TypeReplacementMapTheI;
                             default:
-                                return (mappedData.TypeReplacementMapKeysTheX, mappedData.TypeReplacementMapTheX);
+                                return data.TypeReplacementMapTheX;
                         }
                     }
 
-                    return (mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+                    return data.TypeReplacementMapThis;
 
                 default:
-                    return default;
+                    return null;
+            }
+        }
+
+        private static XmlElementSyntax PrepareInstancesComment(XmlElementSyntax summary, MapData data)
+        {
+            var textTokens = summary.GetXmlTextTokens();
+
+            if (textTokens.Count > 0)
+            {
+                var startText = textTokens[0].ValueText.AsSpan().TrimStart();
+                var map = GetApplicableInstancesMap(startText, data);
+
+                if (map != null)
+                {
+                    return Comment(summary, map);
+                }
+            }
+
+            return summary;
+        }
+
+        private static ReplacementMap GetApplicableInstancesMap(in ReadOnlySpan<char> startText, MapData data)
+        {
+            var isFunction = startText.Contains("unction".AsSpan());
+
+            switch (startText[0])
+            {
+                case 'A':
+                case 'a':
+                {
+                    return isFunction ? data.InstancesFunctionReplacementMapA : data.InstancesReplacementMapA;
+                }
+
+                case 'T':
+                case 't':
+                    if (startText.Length > 4 && (startText[2] is 'e' || startText[2] is 'E'))
+                    {
+                        return isFunction ? data.InstancesFunctionReplacementMapThe : data.InstancesReplacementMapThe;
+                    }
+
+                    return isFunction ? data.InstancesFunctionReplacementMapThis : data.InstancesReplacementMapThis;
+
+                default:
+                    return isFunction ? data.InstancesFunctionReplacementMapOthers : data.InstancesReplacementMapOthers;
             }
         }
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
         {
-            var mappedData = MappedData.Value;
+            var textTokens = comment.GetXmlTextTokens();
 
-            var preparedComment = Comment(comment, mappedData.MethodReplacementMapKeys, mappedData.MethodReplacementMap);
-
-            var content = preparedComment.Content;
-
-            if (content.Count > 2)
+            if (textTokens.Count > 0)
             {
-                var content1 = content[0];
-                var content2 = content[1];
+                var startText = textTokens[0].ValueText.AsSpan().TrimStart();
+                var map = GetApplicableMethodMap(startText, MappedData.Value);
 
-                if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.IsWhiteSpaceOnlyText())
+                if (map != null)
                 {
-                    return preparedComment.Without(content1, content2);
+                    var preparedComment = Comment(comment, map);
+
+                    var content = preparedComment.Content;
+
+                    if (content.Count > 2)
+                    {
+                        var content1 = content[0];
+                        var content2 = content[1];
+
+                        if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.IsWhiteSpaceOnlyText())
+                        {
+                            return preparedComment.Without(content1, content2);
+                        }
+                    }
+
+                    return preparedComment;
                 }
             }
 
-            return preparedComment;
+            return comment;
         }
 
-        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment)
+        private static ReplacementMap GetApplicableMethodMap(in ReadOnlySpan<char> startText, MapData data)
         {
-            var mappedData = MappedData.Value;
+            var isFunction = startText.Contains("unction".AsSpan());
 
-            return Comment(comment, mappedData.CleanupReplacementMapKeys, mappedData.CleanupReplacementMap);
+            switch (startText[0])
+            {
+                case 'A':
+                case 'a':
+                {
+                    return isFunction ? data.FunctionReplacementMapA : data.MethodReplacementMapA;
+                }
+
+                case 'T':
+                case 't':
+                    if (startText.Length > 4 && (startText[2] is 'e' || startText[2] is 'E'))
+                    {
+                        return isFunction ? data.FunctionReplacementMapThe : data.MethodReplacementMapThe;
+                    }
+
+                    return isFunction ? data.FunctionReplacementMapThis : data.MethodReplacementMapThis;
+
+                default:
+                    return isFunction ? data.FunctionReplacementMapOthers : data.MethodReplacementMapOthers;
+            }
         }
+
+        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment) => Comment(comment, MappedData.Value.CleanupReplacementMap);
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
-
         private sealed class MapData
         {
 #pragma warning disable SA1401 // Fields should be private
-            public readonly Pair[] TypeReplacementMapAc;
-            public readonly string[] TypeReplacementMapKeysAc;
-            public readonly Pair[] TypeReplacementMapAf;
-            public readonly string[] TypeReplacementMapKeysAf;
-            public readonly Pair[] TypeReplacementMapAi;
-            public readonly string[] TypeReplacementMapKeysAi;
-            public readonly Pair[] TypeReplacementMapAx;
-            public readonly string[] TypeReplacementMapKeysAx;
-            public readonly Pair[] TypeReplacementMapAn;
-            public readonly string[] TypeReplacementMapKeysAn;
-            public readonly Pair[] TypeReplacementMapC;
-            public readonly string[] TypeReplacementMapKeysC;
-            public readonly Pair[] TypeReplacementMapD;
-            public readonly string[] TypeReplacementMapKeysD;
-            public readonly Pair[] TypeReplacementMapF;
-            public readonly string[] TypeReplacementMapKeysF;
-            public readonly Pair[] TypeReplacementMapI;
-            public readonly string[] TypeReplacementMapKeysI;
-            public readonly Pair[] TypeReplacementMapP;
-            public readonly string[] TypeReplacementMapKeysP;
-            public readonly Pair[] TypeReplacementMapR;
-            public readonly string[] TypeReplacementMapKeysR;
-            public readonly Pair[] TypeReplacementMapTheC;
-            public readonly string[] TypeReplacementMapKeysTheC;
-            public readonly Pair[] TypeReplacementMapTheF;
-            public readonly string[] TypeReplacementMapKeysTheF;
-            public readonly Pair[] TypeReplacementMapTheI;
-            public readonly string[] TypeReplacementMapKeysTheI;
-            public readonly Pair[] TypeReplacementMapTheX;
-            public readonly string[] TypeReplacementMapKeysTheX;
-            public readonly Pair[] TypeReplacementMapThis;
-            public readonly string[] TypeReplacementMapKeysThis;
-            public readonly Pair[] TypeReplacementMapOthers;
-            public readonly string[] TypeReplacementMapKeysOthers;
-            public readonly Pair[] MethodReplacementMap;
-            public readonly string[] MethodReplacementMapKeys;
-            public readonly Pair[] InstancesReplacementMap;
-            public readonly string[] InstancesReplacementMapKeys;
-            public readonly Pair[] CleanupReplacementMap;
-            public readonly string[] CleanupReplacementMapKeys;
+            public readonly ReplacementMap TypeReplacementMapAc;
+            public readonly ReplacementMap TypeReplacementMapAf;
+            public readonly ReplacementMap TypeReplacementMapAi;
+            public readonly ReplacementMap TypeReplacementMapAx;
+            public readonly ReplacementMap TypeReplacementMapAn;
+            public readonly ReplacementMap TypeReplacementMapC;
+            public readonly ReplacementMap TypeReplacementMapD;
+            public readonly ReplacementMap TypeReplacementMapF;
+            public readonly ReplacementMap TypeReplacementMapI;
+            public readonly ReplacementMap TypeReplacementMapP;
+            public readonly ReplacementMap TypeReplacementMapR;
+            public readonly ReplacementMap TypeReplacementMapTheC;
+            public readonly ReplacementMap TypeReplacementMapTheF;
+            public readonly ReplacementMap TypeReplacementMapTheI;
+            public readonly ReplacementMap TypeReplacementMapTheX;
+            public readonly ReplacementMap TypeReplacementMapThis;
+            public readonly ReplacementMap TypeReplacementMapOthers;
+            public readonly ReplacementMap MethodReplacementMapA;
+            public readonly ReplacementMap MethodReplacementMapThe;
+            public readonly ReplacementMap MethodReplacementMapThis;
+            public readonly ReplacementMap MethodReplacementMapOthers;
+            public readonly ReplacementMap FunctionReplacementMapA;
+            public readonly ReplacementMap FunctionReplacementMapThe;
+            public readonly ReplacementMap FunctionReplacementMapThis;
+            public readonly ReplacementMap FunctionReplacementMapOthers;
+            public readonly ReplacementMap InstancesReplacementMapA;
+            public readonly ReplacementMap InstancesReplacementMapThe;
+            public readonly ReplacementMap InstancesReplacementMapThis;
+            public readonly ReplacementMap InstancesReplacementMapOthers;
+            public readonly ReplacementMap InstancesFunctionReplacementMapA;
+            public readonly ReplacementMap InstancesFunctionReplacementMapThe;
+            public readonly ReplacementMap InstancesFunctionReplacementMapThis;
+            public readonly ReplacementMap InstancesFunctionReplacementMapOthers;
+            public readonly ReplacementMap CleanupReplacementMap;
 #pragma warning restore SA1401 // Fields should be private
 
             public MapData()
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
 
-                var typeKeysStartingWithAc = new List<string>(16032); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAf = new List<string>(17016); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAi = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAc = new List<string>(23016); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAf = new List<string>(14820); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAi = new List<string>(13222); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithAx = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithAn = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithC = new List<string>(22396); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithD = new List<string>(7966); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithF = new List<string>(17016); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithI = new List<string>(9934); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithP = new List<string>(9046); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithR = new List<string>(9076); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheC = new List<string>(21376); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheF = new List<string>(21024); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithTheI = new List<string>(12090); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithAn = new List<string>(13222); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithC = new List<string>(31892); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithD = new List<string>(10826); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithF = new List<string>(14820); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithI = new List<string>(11158); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithP = new List<string>(11066); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithR = new List<string>(13524); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheC = new List<string>(30688); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheF = new List<string>(19570); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithTheI = new List<string>(13222); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysStartingWithTheX = new List<string>(0); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysStartingWithThis = new List<string>(16660); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysOther = new List<string>(2460); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithThis = new List<string>(21798); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysOther = new List<string>(1062); // TODO RKN: Adjust number as soon as there are other texts
 
-                foreach (var typeKey in typeKeys)
+                foreach (var key in typeKeys)
                 {
-                    GetDestinationList(typeKey.AsSpan()).Add(typeKey);
+                    GetTypeDestinationList(key.AsSpan()).Add(key);
                 }
 
-                Initialize(typeKeysStartingWithAc, out TypeReplacementMapAc, out TypeReplacementMapKeysAc);
-                Initialize(typeKeysStartingWithAf, out TypeReplacementMapAf, out TypeReplacementMapKeysAf);
-                Initialize(typeKeysStartingWithAi, out TypeReplacementMapAi, out TypeReplacementMapKeysAi);
-                Initialize(typeKeysStartingWithAx, out TypeReplacementMapAx, out TypeReplacementMapKeysAx);
-                Initialize(typeKeysStartingWithAn, out TypeReplacementMapAn, out TypeReplacementMapKeysAn);
-                Initialize(typeKeysStartingWithC, out TypeReplacementMapC, out TypeReplacementMapKeysC);
-                Initialize(typeKeysStartingWithD, out TypeReplacementMapD, out TypeReplacementMapKeysD);
-                Initialize(typeKeysStartingWithF, out TypeReplacementMapF, out TypeReplacementMapKeysF);
-                Initialize(typeKeysStartingWithI, out TypeReplacementMapI, out TypeReplacementMapKeysI);
-                Initialize(typeKeysStartingWithP, out TypeReplacementMapP, out TypeReplacementMapKeysP);
-                Initialize(typeKeysStartingWithR, out TypeReplacementMapR, out TypeReplacementMapKeysR);
-                Initialize(typeKeysStartingWithTheC, out TypeReplacementMapTheC, out TypeReplacementMapKeysTheC);
-                Initialize(typeKeysStartingWithTheF, out TypeReplacementMapTheF, out TypeReplacementMapKeysTheF);
-                Initialize(typeKeysStartingWithTheI, out TypeReplacementMapTheI, out TypeReplacementMapKeysTheI);
-                Initialize(typeKeysStartingWithTheX, out TypeReplacementMapTheX, out TypeReplacementMapKeysTheX);
-                Initialize(typeKeysStartingWithThis, out TypeReplacementMapThis, out TypeReplacementMapKeysThis);
-                Initialize(typeKeysOther, out TypeReplacementMapOthers, out TypeReplacementMapKeysOthers);
+                Initialize("MiKo_2060_A_c", typeKeysStartingWithAc, out TypeReplacementMapAc);
+                Initialize("MiKo_2060_A_f", typeKeysStartingWithAf, out TypeReplacementMapAf);
+                Initialize("MiKo_2060_A_i", typeKeysStartingWithAi, out TypeReplacementMapAi);
+                Initialize("MiKo_2060_A_", typeKeysStartingWithAx, out TypeReplacementMapAx);
+                Initialize("MiKo_2060_An_", typeKeysStartingWithAn, out TypeReplacementMapAn);
+                Initialize("MiKo_2060_C", typeKeysStartingWithC, out TypeReplacementMapC);
+                Initialize("MiKo_2060_D", typeKeysStartingWithD, out TypeReplacementMapD);
+                Initialize("MiKo_2060_F", typeKeysStartingWithF, out TypeReplacementMapF);
+                Initialize("MiKo_2060_I", typeKeysStartingWithI, out TypeReplacementMapI);
+                Initialize("MiKo_2060_P", typeKeysStartingWithP, out TypeReplacementMapP);
+                Initialize("MiKo_2060_R", typeKeysStartingWithR, out TypeReplacementMapR);
+                Initialize("MiKo_2060_The_c", typeKeysStartingWithTheC, out TypeReplacementMapTheC);
+                Initialize("MiKo_2060_The_f", typeKeysStartingWithTheF, out TypeReplacementMapTheF);
+                Initialize("MiKo_2060_The_i", typeKeysStartingWithTheI, out TypeReplacementMapTheI);
+                Initialize("MiKo_2060_The_", typeKeysStartingWithTheX, out TypeReplacementMapTheX);
+                Initialize("MiKo_2060_This_", typeKeysStartingWithThis, out TypeReplacementMapThis);
+                Initialize("MiKo_2060_Other", typeKeysOther, out TypeReplacementMapOthers);
 
                 var methodKeys = CreateMethodReplacementMapKeys();
-                var methodKeysLength = methodKeys.Length;
 
-                Array.Sort(methodKeys, AscendingStringComparer.Default);
+                var methodKeysStartingWithA = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysStartingWithThe = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysStartingWithThis = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var methodKeysOther = new List<string>(18991); // TODO RKN: Adjust number as soon as there are other texts
 
-                var methodReplacementMap = new Pair[methodKeysLength];
-                var instancesReplacementMap = new Pair[methodKeysLength];
+                var functionKeysStartingWithA = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysStartingWithThe = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysStartingWithThis = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
+                var functionKeysOther = new List<string>(14404); // TODO RKN: Adjust number as soon as there are other texts
 
-                for (var i = 0; i < methodKeysLength; i++)
+                var endingsToSkip = new[] { "instance of a ", "instance of an ", "instances of a ", "instances of an " };
+
+                foreach (var key in methodKeys.SkipWhere(_ => _.EndsWithAny(endingsToSkip)))
                 {
-                    var key = methodKeys[i];
-
-                    methodReplacementMap[i] = new Pair(key);
-                    instancesReplacementMap[i] = new Pair(key, "instances of the ");
+                    GetMethodDestinationList(key.AsSpan()).Add(key);
                 }
 
-                MethodReplacementMap = methodReplacementMap;
-                MethodReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
+                Initialize("MiKo_2060_Methods_A", methodKeysStartingWithA, out MethodReplacementMapA);
+                Initialize("MiKo_2060_Methods_The", methodKeysStartingWithThe, out MethodReplacementMapThe);
+                Initialize("MiKo_2060_Methods_This", methodKeysStartingWithThis, out MethodReplacementMapThis);
+                Initialize("MiKo_2060_Methods_Other", methodKeysOther, out MethodReplacementMapOthers);
 
-                InstancesReplacementMap = instancesReplacementMap;
-                InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
+                Initialize("MiKo_2060_Functions_A", functionKeysStartingWithA, out FunctionReplacementMapA);
+                Initialize("MiKo_2060_Functions_The", functionKeysStartingWithThe, out FunctionReplacementMapThe);
+                Initialize("MiKo_2060_Functions_This", functionKeysStartingWithThis, out FunctionReplacementMapThis);
+                Initialize("MiKo_2060_Functions_Other", functionKeysOther, out FunctionReplacementMapOthers);
 
-                CleanupReplacementMap = new[]
-                                            {
-                                                new Pair("classes", "types"),
-                                                new Pair("class", "type"),
-                                                new Pair("typeifi", "classifi"), // fix typo when 'class' in 'classification' or 'classified' gets changed into 'type'
-                                                new Pair(" based on ", " default values for "),
-                                                new Pair(" with for ", " with "),
-                                                new Pair(" with with ", " with "),
-                                                new Pair(" type with type.", " type with default values."),
-                                                new Pair(" type with that ", " type with default values that "),
-                                                new Pair(" type with which ", " type with default values which "),
-                                                new Pair(" creating creates ", " creating "),
-                                                new Pair(" creating create ", " creating "),
-                                            };
-                CleanupReplacementMapKeys = CleanupReplacementMap.ToArray(_ => _.Key);
+                var instancesKeysStartingWithA = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysStartingWithThe = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysStartingWithThis = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesKeysOther = new List<string>(32207); // TODO RKN: Adjust number as soon as there are other texts
+
+                var instancesFunctionKeysStartingWithA = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysStartingWithThe = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysStartingWithThis = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+                var instancesFunctionKeysOther = new List<string>(24428); // TODO RKN: Adjust number as soon as there are other texts
+
+                foreach (var key in methodKeys)
+                {
+                    GetInstancesDestinationList(key.AsSpan()).Add(key);
+                }
+
+                const string InstancesReplacement = "instances of the ";
+
+                Initialize("MiKo_2060_instances_A", instancesKeysStartingWithA, InstancesReplacement, out InstancesReplacementMapA);
+                Initialize("MiKo_2060_instances_The", instancesKeysStartingWithThe, InstancesReplacement, out InstancesReplacementMapThe);
+                Initialize("MiKo_2060_instances_This", instancesKeysStartingWithThis, InstancesReplacement, out InstancesReplacementMapThis);
+                Initialize("MiKo_2060_instances_Other", instancesKeysOther, InstancesReplacement, out InstancesReplacementMapOthers);
+
+                Initialize("MiKo_2060_instances_functions_A", instancesFunctionKeysStartingWithA, InstancesReplacement, out InstancesFunctionReplacementMapA);
+                Initialize("MiKo_2060_instances_functions_The", instancesFunctionKeysStartingWithThe, InstancesReplacement, out InstancesFunctionReplacementMapThe);
+                Initialize("MiKo_2060_instances_functions_This", instancesFunctionKeysStartingWithThis, InstancesReplacement, out InstancesFunctionReplacementMapThis);
+                Initialize("MiKo_2060_instances_functions_Other", instancesFunctionKeysOther, InstancesReplacement, out InstancesFunctionReplacementMapOthers);
+
+                CleanupReplacementMap = new ReplacementMap(
+                                                       "MiKo_2060_Cleanup",
+                                                       new[]
+                                                           {
+                                                               new Pair("classes", "types"),
+                                                               new Pair("class", "type"),
+                                                               new Pair("typeifi", "classifi"), // fix typo when 'class' in 'classification' or 'classified' gets changed into 'type'
+                                                               new Pair(" based on ", " default values for "),
+                                                               new Pair(" based upon ", " default values for "),
+                                                               new Pair(" with for ", " with "),
+                                                               new Pair(" with with ", " with "),
+                                                               new Pair(" with result", " with a result"),
+                                                               new Pair(" type with factory", " type with default values"),
+                                                               new Pair(" type with type.", " type with default values."),
+                                                               new Pair(" type with that ", " type with default values that "),
+                                                               new Pair(" type with which ", " type with default values which "),
+                                                               new Pair(" creating creates ", " creating "),
+                                                               new Pair(" creating create ", " creating "),
+
+                                                               // fix-ups for instances map
+                                                               new Pair(" of the s ", " "),
+                                                               new Pair(" of the  a new ", " of the "),
+                                                               new Pair(" of the  an new ", " of the "),
+                                                               new Pair(" of the  new ", " of the "),
+                                                               new Pair(" of the  a ", " of the "),
+                                                               new Pair(" of the  an ", " of the "),
+                                                               new Pair(" of the  and return ", " of "),
+                                                               new Pair(" of the  and provide ", " of "),
+                                                               new Pair(" of the  and initialize ", " of "),
+                                                               new Pair(" of the  and set up ", " "),
+                                                               new Pair(" of the  instances of ", " of "),
+                                                               new Pair(" of the  instances of the ", " of the "),
+                                                               new Pair(" instances and sets up ", " instances "),
+                                                               new Pair(" instances and provides ", " instances "),
+                                                               new Pair(" instances and initializes ", " instances "),
+                                                               new Pair(" instances and returns ", " instances "),
+                                                               new Pair(" instances the ", " instances of the "),
+                                                               new Pair(" instances a instance of ", " instances of "),
+                                                               new Pair(" instances an instance of ", " instances of "),
+                                                               new Pair(" instances a new instance of ", " instances of "),
+                                                               new Pair(" of the instances of ", " of the "),
+                                                               new Pair(" of the instance of ", " of the "),
+                                                               new Pair(" instances of ", " instances of the "),
+                                                               new Pair(" instances a ", " instances of the "),
+                                                               new Pair(" instances new ", " instances of the "),
+                                                               new Pair(" instances of the new ", " instances of the "),
+                                                               new Pair(" instances of the instances of ", " instances of the "),
+                                                               new Pair(" instances instances ", " instances "),
+                                                               new Pair(" of the a new instance of ", " of the "),
+                                                               new Pair(" of the a new ", " of the "),
+                                                               new Pair(" of the a instance of ", " of the "),
+                                                               new Pair(" of the an instance of ", " of the "),
+                                                               new Pair(" of the a ", " of the "),
+                                                               new Pair("the the the", "the"),
+                                                               new Pair("the the", "the"),
+                                                               new Pair("  ", " "),
+                                                           },
+                                                       _ => _.ToArray(__ => __.Key));
 
                 return;
 
-                List<string> GetDestinationList(in ReadOnlySpan<char> typeKey)
+                List<string> GetTypeDestinationList(in ReadOnlySpan<char> typeKey)
                 {
                     switch (typeKey[0])
                     {
@@ -430,7 +601,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'T':
                         case 't':
                         {
-                            if (typeKey[2] == 'i')
+                            if (typeKey[2] is 'i')
                             {
                                 return typeKeysStartingWithThis;
                             }
@@ -449,197 +620,191 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                void Initialize(List<string> keys, out Pair[] map, out string[] mapKeys)
+                List<string> GetMethodDestinationList(in ReadOnlySpan<char> typeKey)
                 {
-                    keys.Sort(AscendingStringComparer.Default);
+                    var isFunction = typeKey.Contains("unction".AsSpan());
 
-                    map = new Pair[keys.Count];
-
-                    for (var i = keys.Count - 1; i >= 0; i--)
+                    switch (typeKey[0])
                     {
-                        map[i] = new Pair(keys[i]);
-                    }
+                        case 'A':
+                        case 'a':
+                            return isFunction ? functionKeysStartingWithA : methodKeysStartingWithA;
 
-                    mapKeys = GetTermsForQuickLookup(keys);
+                        case 'T':
+                        case 't':
+                        {
+                            if (typeKey[2] is 'i')
+                            {
+                                return isFunction ? functionKeysStartingWithThis : methodKeysStartingWithThis;
+                            }
+
+                            return isFunction ? functionKeysStartingWithThe : methodKeysStartingWithThe;
+                        }
+
+                        default:
+                            return isFunction ? functionKeysOther : methodKeysOther;
+                    }
+                }
+
+                List<string> GetInstancesDestinationList(in ReadOnlySpan<char> typeKey)
+                {
+                    var isFunction = typeKey.Contains("unction".AsSpan());
+
+                    switch (typeKey[0])
+                    {
+                        case 'A':
+                        case 'a':
+                            return isFunction ? instancesFunctionKeysStartingWithA : instancesKeysStartingWithA;
+
+                        case 'T':
+                        case 't':
+                        {
+                            if (typeKey[2] is 'i')
+                            {
+                                return isFunction ? instancesFunctionKeysStartingWithThis : instancesKeysStartingWithThis;
+                            }
+
+                            return isFunction ? instancesFunctionKeysStartingWithThe : instancesKeysStartingWithThe;
+                        }
+
+                        default:
+                            return isFunction ? instancesFunctionKeysOther : instancesKeysOther;
+                    }
                 }
             }
 
-            private static string[] CreateTypeReplacementMapKeys()
+            private static void Initialize(string id, List<string> keys, out ReplacementMap map) => Initialize(id, keys, string.Empty, out map);
+
+            private static void Initialize(string id, List<string> keys, string replacement, out ReplacementMap map)
             {
-                var allPhrases = CreateAllPhrases();
-                var allContinuations = new HashSet<string>();
-                FillWithAllContinuations(allContinuations);
+                keys.Sort(AscendingStringComparer.Default);
+
+                var pairs = new Pair[keys.Count];
+
+                for (var i = keys.Count - 1; i >= 0; i--)
+                {
+                    pairs[i] = new Pair(keys[i], replacement);
+                }
+
+                map = new ReplacementMap(id, pairs, _ => GetTermsForQuickLookup(_, quickLookupMode: QuickLookupMode.Contains));
+            }
+
+            private static HashSet<string> CreateTypeReplacementMapKeys()
+            {
+                var strangeTexts = StrangeTexts().OrderDescendingByLengthAndText().AsSpan();
+                var allPhrases = AllPhrases().OrderDescendingByLengthAndText().AsSpan();
+                var allContinuations = AllContinuations().OrderDescendingByLengthAndText().AsSpan();
 
                 var results = new HashSet<string> // avoid duplicates
-                                  {
-                                      "Implementations construct ",
-                                      "Implementations create ",
-                                      "Implementations build ",
-                                      "Implementations provide ",
-                                  };
+                              {
+                                  "Implementations construct ",
+                                  "Implementations create ",
+                                  "Implementations build ",
+                                  "Implementations provide ",
+                              };
 
-                foreach (var phrase in allPhrases)
+                unsafe
                 {
-                    foreach (var continuation in allContinuations)
+                    var buffer = stackalloc char[128];
+
+                    var allContinuationsLength = allContinuations.Length;
+                    var allPhrasesLength = allPhrases.Length;
+
+                    for (var i = 0; i < allPhrasesLength; i++)
                     {
-                        results.Add(phrase + continuation);
+                        var phrase = allPhrases[i].AsSpan();
+                        var phraseLength = phrase.Length;
+
+                        for (var ci = 0; ci < allContinuationsLength; ci++)
+                        {
+                            var continuation = allContinuations[ci].AsSpan();
+                            var continuationLength = continuation.Length;
+
+                            var totalLength = phraseLength + continuationLength;
+
+                            var bufferSpan = new Span<char>(buffer, totalLength);
+
+                            phrase.CopyTo(bufferSpan);
+                            continuation.CopyTo(bufferSpan.Slice(phraseLength));
+
+                            if (((ReadOnlySpan<char>)bufferSpan).ContainsAnyOrdinal(strangeTexts))
+                            {
+                                continue;
+                            }
+
+                            results.Add(new string(buffer, 0, totalLength));
+                        }
                     }
                 }
 
-                var strangeTexts = new[]
-                                       {
-                                           "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are",
-                                           "es that is capable", "es which is capable", "es that is able", "es which is able",
-                                           "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
-                                           "y that are capable", "y which are capable", "y that are able", "y which are able",
-                                           "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
-                                           "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
-                                           "ies that provides", "ies which provides",
-                                           "roviding provid", "rovides provid", "rovide provid",
-                                       };
+                return results;
 
-                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
-
-                return results.ToArray();
-            }
-
-            private static string[] CreateMethodReplacementMapKeys()
-            {
-                var results = new HashSet<string> // avoid duplicates
-                                  {
-                                      "A factory method for building ",
-                                      "A factory method for constructing ",
-                                      "A factory method for creating ",
-                                      "A factory method that builds ",
-                                      "A factory method that constructs ",
-                                      "A factory method that creates ",
-                                      "A factory method which builds ",
-                                      "A factory method which constructs ",
-                                      "A factory method which creates ",
-                                      "Factory method for building ",
-                                      "Factory method for constructing ",
-                                      "Factory method for creating ",
-                                      "Factory method that builds ",
-                                      "Factory method that constructs ",
-                                      "Factory method that creates ",
-                                      "Factory method which builds ",
-                                      "Factory method which constructs ",
-                                      "Factory method which creates ",
-                                      "The factory method for building ",
-                                      "The factory method for constructing ",
-                                      "The factory method for creating ",
-                                      "The factory method that builds ",
-                                      "The factory method that constructs ",
-                                      "The factory method that creates ",
-                                      "The factory method which builds ",
-                                      "The factory method which constructs ",
-                                      "The factory method which creates ",
-                                      "This factory method builds ",
-                                      "This factory method constructs ",
-                                      "This factory method creates ",
-                                      "This method builds ",
-                                      "This method constructs ",
-                                      "This method creates ",
-                                      "Used for building ",
-                                      "Used for constructing ",
-                                      "Used for creating ",
-                                      "Used to build ",
-                                      "Used to construct ",
-                                      "Used to create ",
-                                  };
-
-                var startingWords = new[]
-                                        {
-                                            "Create",
-                                            "Creates",
-                                            "Construct",
-                                            "Constructs",
-                                            "Return",
-                                            "Returns",
-                                            "Get",
-                                            "Gets",
-                                            "Initializes",
-                                            "Initialize",
-                                        };
-
-                var continuations = new[]
-                                        {
-                                            string.Empty,
-                                            " and initialize",
-                                            " and initializes",
-                                            " and provide",
-                                            " and provides",
-                                            " and return",
-                                            " and returns",
-                                            " and set up",
-                                            " and sets up",
-                                        };
-
-                var startingWordsLength = startingWords.Length;
-                var continuationsLength = continuations.Length;
-
-                for (var wordIndex = 0; wordIndex < startingWordsLength; wordIndex++)
+                HashSet<string> StrangeTexts()
                 {
-                    var word = startingWords[wordIndex];
+                    var rawStrangeTexts = new[]
+                                              {
+                                                  "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are", "methods that is", "methods which is",
+                                                  "es that is capable", "es which is capable", "es that is able", "es which is able",
+                                                  "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
+                                                  "y that are capable", "y which are capable", "y that are able", "y which are able",
+                                                  "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
+                                                  "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
+                                                  "ies that provides", "ies which provides",
+                                                  "roviding provid", "rovides provid", "rovide provid", "rovides the factory provid", "rovides the factory class provid", "rovides which", "rovides that", "to provide to", "rovides to provid",
+                                                  "rovides builds", "rovides constructs", "rovides creates",
+                                                  "to provide builds", "to provide constructs", "to provide creates",
+                                                  "rovides to instance", "that provides to", "which provides to", "Provides to ",
+                                                  "methods to provide methods", "methods provides",
+                                                  "ass a ", "ass an ", "ass the ", "actory a ", "actory an ", "actory the ",
+                                                  "Used that ", "Used which ", "Used builds", "Used creates", "Used constructs", "Used provides",
+                                                  "Uses that ", "Uses which ", "Uses builds", "Uses creates", "Uses constructs", "Uses provides",
+                                                  "pattern a",
+                                                  "nterface new", "nterface to new", "s to new",
+                                                  "ethods to instance of", "ethods to provide factory methods",
+                                                  "actory builds", "actories builds", "ethods builds", "pattern builds", "nterface builds", "lass builds",
+                                                  "actory constructs", "actories constructs", "ethods constructs", "pattern constructs", "nterface constructs", "lass constructs",
+                                                  "actory creates", "actories creates", "ethods creates", "pattern creates", "nterface creates", "lass creates",
+                                                  "that instance", "which instance",
+                                                  "that a instance", "to a instance", "which a instance",
+                                                  "that an instance", "to an instance", "which an instance",
+                                                  "that the instance", "to the instance", "which the instance",
+                                                  "that new", "to new", "which new",
+                                                  "that a new", "to a new", "which a new",
+                                                  "that an new", "to an new", "which an new",
+                                                  "that the new", "to the new", "which the new",
+                                                  "es that's ", "ethods that's ",
+                                                  "es that builds ", "ethods that builds ", "es which builds ", "ethods which builds ",
+                                                  "es that constructs ", "ethods that constructs ", "es which constructs ", "ethods which constructs ",
+                                                  "es that creates ", "ethods that creates ", "es which creates ", "ethods which creates ",
+                                                  "es that gets ", "ethods that gets ", "es which gets ", "ethods which gets ",
+                                                  "es that provides ", "ethods that provides ", "es which provides ", "ethods which provides ",
+                                                  "es that returns ", "ethods that returns ", "es which returns ", "ethods which returns ",
+                                                  //// accept phrases such as "to provide that/which is/are" as they are unusual but valid texts
+                                              };
+                    var strangeTextsSet = new HashSet<string>(rawStrangeTexts);
 
-                    for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
+                    var methodSpan = "ethod".AsSpan();
+
+                    foreach (var raw in rawStrangeTexts)
                     {
-                        var continuation = continuations[continuationsIndex];
-                        var start = word + continuation; // TODO RKN: Change string creation
+                        if (raw.AsSpan().Contains(methodSpan))
+                        {
+                            var function = raw.AsCachedBuilder()
+                                              .Replace("method", "function")
+                                              .Replace("Method", "Function")
+                                              .Replace("ethod", "unction")
+                                              .ToStringAndRelease();
 
-                        results.Add(start + " an new instances of the ");
-                        results.Add(start + " an new instances of an ");
-                        results.Add(start + " an new instances of a ");
-                        results.Add(start + " an new instances of ");
-                        results.Add(start + " an new instance of the ");
-                        results.Add(start + " an new instance of an ");
-                        results.Add(start + " an new instance of a ");
-                        results.Add(start + " an new instance of ");
-                        results.Add(start + " an instances of the ");
-                        results.Add(start + " an instances of an ");
-                        results.Add(start + " an instances of a ");
-                        results.Add(start + " an instances of ");
-                        results.Add(start + " an instance of the ");
-                        results.Add(start + " an instance of an ");
-                        results.Add(start + " an instance of a ");
-                        results.Add(start + " an instance of ");
-                        results.Add(start + " an ");
-                        results.Add(start + " a factory ");
-                        results.Add(start + " a new instances of the ");
-                        results.Add(start + " a new instances of an ");
-                        results.Add(start + " a new instances of a ");
-                        results.Add(start + " a new instances of ");
-                        results.Add(start + " a new instance of the ");
-                        results.Add(start + " a new instance of an ");
-                        results.Add(start + " a new instance of a ");
-                        results.Add(start + " a new instance of ");
-                        results.Add(start + " a instances of the ");
-                        results.Add(start + " a instances of an ");
-                        results.Add(start + " a instances of a ");
-                        results.Add(start + " a instances of ");
-                        results.Add(start + " a instance of the ");
-                        results.Add(start + " a instance of an ");
-                        results.Add(start + " a instance of a ");
-                        results.Add(start + " a instance of ");
-                        results.Add(start + " a new ");
-                        results.Add(start + " a ");
-                        results.Add(start + " instances of the ");
-                        results.Add(start + " instances of an ");
-                        results.Add(start + " instances of a ");
-                        results.Add(start + " instances of ");
-                        results.Add(start + " new instances of the ");
-                        results.Add(start + " new instances of an ");
-                        results.Add(start + " new instances of a ");
-                        results.Add(start + " new instances of ");
+                            strangeTextsSet.Add(function);
+                        }
                     }
+
+                    return strangeTextsSet;
                 }
 
-                return results.ToArray();
-            }
-
-            private static HashSet<string> CreateAllPhrases()
-            {
-                var phrases = new[]
+                HashSet<string> AllPhrases()
+                {
+                    var phrases = new[]
                                   {
                                       "A class containing factory methods",
                                       "A class containing methods",
@@ -771,19 +936,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "Uses", // typo in 'Used'
                                   };
 
-                var results = new HashSet<string>(phrases);
+                    var set = new HashSet<string>(phrases);
 
-                for (int index = 0, phrasesLength = phrases.Length; index < phrasesLength; index++)
-                {
-                    results.Add(phrases[index].Replace("actory", "actory class"));
+                    foreach (var phrase in phrases)
+                    {
+                        set.Add(phrase.Replace("actory", "actory class"));
+                        set.Add(phrase.Replace("method", "function"));
+                    }
+
+                    return set;
                 }
 
-                return results;
-            }
+                HashSet<string> AllContinuations()
+                {
+                    var set = new HashSet<string>();
 
-            private static void FillWithAllContinuations(HashSet<string> set)
-            {
-                var continuations = new[]
+                    var continuations = new[]
                                         {
                                             string.Empty,
                                             "a ",
@@ -807,107 +975,358 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             "the new instances of the ",
                                         };
 
-                for (int index = 0, continuationsLength = continuations.Length; index < continuationsLength; index++)
+                    for (int index = 0, continuationsLength = continuations.Length; index < continuationsLength; index++)
+                    {
+                        var continuation = continuations[index];
+
+                        set.Add(" that can build " + continuation);
+                        set.Add(" that build " + continuation);
+                        set.Add(" that builds " + continuation);
+                        set.Add(" that can construct " + continuation);
+                        set.Add(" that construct " + continuation);
+                        set.Add(" that constructs " + continuation);
+                        set.Add(" that can create " + continuation);
+                        set.Add(" that create " + continuation);
+                        set.Add(" that creates " + continuation);
+                        set.Add(" that can provide " + continuation);
+                        set.Add(" that provide " + continuation);
+                        set.Add(" that provides " + continuation);
+                        set.Add(" that can return " + continuation);
+                        set.Add(" that return " + continuation);
+                        set.Add(" that returns " + continuation);
+                        set.Add(" that " + continuation);
+
+                        set.Add(" which can build " + continuation);
+                        set.Add(" which build " + continuation);
+                        set.Add(" which builds " + continuation);
+                        set.Add(" which can construct " + continuation);
+                        set.Add(" which construct " + continuation);
+                        set.Add(" which constructs " + continuation);
+                        set.Add(" which can create " + continuation);
+                        set.Add(" which create " + continuation);
+                        set.Add(" which creates " + continuation);
+                        set.Add(" which can provide " + continuation);
+                        set.Add(" which provide " + continuation);
+                        set.Add(" which provides " + continuation);
+                        set.Add(" which can return " + continuation);
+                        set.Add(" which return " + continuation);
+                        set.Add(" which returns " + continuation);
+                        set.Add(" which " + continuation);
+
+                        set.Add(" for building of " + continuation);
+                        set.Add(" for building " + continuation);
+                        set.Add(" for the building of " + continuation);
+                        set.Add(" for constructing " + continuation);
+                        set.Add(" for construction of " + continuation);
+                        set.Add(" for the construction of " + continuation);
+                        set.Add(" for creating " + continuation);
+                        set.Add(" for creation of " + continuation);
+                        set.Add(" for the creation of " + continuation);
+                        set.Add(" for providing of " + continuation);
+                        set.Add(" for providing " + continuation);
+                        set.Add(" for returning of " + continuation);
+                        set.Add(" for returning " + continuation);
+                        set.Add(" for " + continuation);
+
+                        set.Add(" building " + continuation);
+                        set.Add(" builds " + continuation);
+                        set.Add(" constructing " + continuation);
+                        set.Add(" constructs " + continuation);
+                        set.Add(" creating " + continuation);
+                        set.Add(" creates " + continuation);
+                        set.Add(" providing " + continuation);
+                        set.Add(" provides " + continuation);
+                        set.Add(" returning " + continuation);
+                        set.Add(" returns " + continuation);
+
+                        set.Add(" that's able to build " + continuation);
+                        set.Add(" that is able to build " + continuation);
+                        set.Add(" which is able to build " + continuation);
+                        set.Add(" that's capable to build " + continuation);
+                        set.Add(" that is capable to build " + continuation);
+                        set.Add(" which is capable to build " + continuation);
+                        set.Add(" that's able to construct " + continuation);
+                        set.Add(" that is able to construct " + continuation);
+                        set.Add(" which is able to construct " + continuation);
+                        set.Add(" that's capable to construct " + continuation);
+                        set.Add(" that is capable to construct " + continuation);
+                        set.Add(" which is capable to construct " + continuation);
+                        set.Add(" that is able to create " + continuation);
+                        set.Add(" that's able to create " + continuation);
+                        set.Add(" which is able to create " + continuation);
+                        set.Add(" that's capable to create " + continuation);
+                        set.Add(" that is capable to create " + continuation);
+                        set.Add(" which is capable to create " + continuation);
+                        set.Add(" that's able to provide " + continuation);
+                        set.Add(" that is able to provide " + continuation);
+                        set.Add(" which is able to provide " + continuation);
+                        set.Add(" that's capable to provide " + continuation);
+                        set.Add(" that is capable to provide " + continuation);
+                        set.Add(" which is capable to provide " + continuation);
+
+                        set.Add(" that are able to build " + continuation);
+                        set.Add(" which are able to build " + continuation);
+                        set.Add(" that are capable to build " + continuation);
+                        set.Add(" which are capable to build " + continuation);
+                        set.Add(" that are able to construct " + continuation);
+                        set.Add(" which are able to construct " + continuation);
+                        set.Add(" that are capable to construct " + continuation);
+                        set.Add(" which are capable to construct " + continuation);
+                        set.Add(" that are able to create " + continuation);
+                        set.Add(" which are able to create " + continuation);
+                        set.Add(" that are capable to create " + continuation);
+                        set.Add(" which are capable to create " + continuation);
+                        set.Add(" that are able to provide " + continuation);
+                        set.Add(" which are able to provide " + continuation);
+                        set.Add(" that are capable to provide " + continuation);
+                        set.Add(" which are capable to provide " + continuation);
+
+                        set.Add(" to build " + continuation);
+                        set.Add(" to construct " + continuation);
+                        set.Add(" to create " + continuation);
+                        set.Add(" to provide factory methods to build " + continuation);
+                        set.Add(" to provide factory methods to construct " + continuation);
+                        set.Add(" to provide factory methods to create " + continuation);
+                        set.Add(" to provide methods to build " + continuation);
+                        set.Add(" to provide methods to construct " + continuation);
+                        set.Add(" to provide methods to create " + continuation);
+                        set.Add(" to provide " + continuation);
+                        set.Add(" to " + continuation);
+
+                        set.Add(Constants.SingleSpace + continuation);
+                    }
+
+                    return set;
+                }
+            }
+
+            private static HashSet<string> CreateMethodReplacementMapKeys()
+            {
+                var results = MethodStartingPhrases();
+                var startingWords = results.ToArray();
+
+                var continuations = new[]
+                                        {
+                                            string.Empty,
+                                            " and initialize",
+                                            " and initializes",
+                                            " and initializing",
+                                            " and provide",
+                                            " and provides",
+                                            " and providing",
+                                            " and return",
+                                            " and returns",
+                                            " and returning",
+                                            " and set up",
+                                            " and sets up",
+                                            " and setting up",
+                                        };
+
+                var suffixes = new[]
+                                   {
+                                       " an new instance of the ", " an new instance of an ", " an new instance of a ", " an new instance of ",
+                                       " an instance of the ", " an instance of an ", " an instance of a ", " an instance of ",
+                                       " an ", " a factory ",
+                                       " a new instance of the ", " a new instance of an ", " a new instance of a ", " a new instance of ",
+                                       " a instance of the ", " a instance of an ", " a instance of a ", " a instance of ",
+                                       " a new ", " a ",
+                                       " the instance of the ", " the instance of an ", " the instance of a ", " the instance of ",
+                                       " the new ", " the ",
+                                       " instances of the ", " instances of an ", " instances of a ", " instances of ",
+                                       " new instances of the ", " new instances of an ", " new instances of a ", " new instances of ",
+                                   };
+
+                var strangeTexts = new[]
+                                   {
+                                       " a factory",
+                                       "ize and init", "izes and init", "izing and init",
+                                       "urn and ret", "urns and ret", "urning and ret",
+                                       "ing and initialize ", "ing and provide ", "ing and return ", "ing and set ",
+                                       "ing and initializes", "ing and provides", "ing and returns", "ing and sets",
+                                       "s and initializing", "s and providing", "s and returning", "s and setting",
+                                       "onstruct and ",
+                                   };
+
+                var startingWordsLength = startingWords.Length;
+                var continuationsLength = continuations.Length;
+                var suffixesLength = suffixes.Length;
+
+                const int BufferSize = 128;
+
+                unsafe
                 {
-                    var continuation = continuations[index];
+                    var buffer = stackalloc char[BufferSize];
 
-                    set.Add(" that can build " + continuation);
-                    set.Add(" that build " + continuation);
-                    set.Add(" that builds " + continuation);
-                    set.Add(" that can construct " + continuation);
-                    set.Add(" that construct " + continuation);
-                    set.Add(" that constructs " + continuation);
-                    set.Add(" that can create " + continuation);
-                    set.Add(" that create " + continuation);
-                    set.Add(" that creates " + continuation);
-                    set.Add(" that can provide " + continuation);
-                    set.Add(" that provide " + continuation);
-                    set.Add(" that provides " + continuation);
-                    set.Add(" that " + continuation);
+                    for (var wordIndex = 0; wordIndex < startingWordsLength; wordIndex++)
+                    {
+                        var word = startingWords[wordIndex].AsSpan().Trim();
+                        var wordLength = word.Length;
 
-                    set.Add(" which can build " + continuation);
-                    set.Add(" which build " + continuation);
-                    set.Add(" which builds " + continuation);
-                    set.Add(" which can construct " + continuation);
-                    set.Add(" which construct " + continuation);
-                    set.Add(" which constructs " + continuation);
-                    set.Add(" which can create " + continuation);
-                    set.Add(" which create " + continuation);
-                    set.Add(" which creates " + continuation);
-                    set.Add(" which can provide " + continuation);
-                    set.Add(" which provide " + continuation);
-                    set.Add(" which provides " + continuation);
-                    set.Add(" which " + continuation);
+                        if (word.ContainsAnyOrdinal(strangeTexts))
+                        {
+                            continue;
+                        }
 
-                    set.Add(" for building of " + continuation);
-                    set.Add(" for building " + continuation);
-                    set.Add(" for the building of " + continuation);
-                    set.Add(" for constructing " + continuation);
-                    set.Add(" for construction of " + continuation);
-                    set.Add(" for the construction of " + continuation);
-                    set.Add(" for creating " + continuation);
-                    set.Add(" for creation of " + continuation);
-                    set.Add(" for the creation of " + continuation);
-                    set.Add(" for providing of " + continuation);
-                    set.Add(" for providing " + continuation);
-                    set.Add(" for " + continuation);
+                        var bufferSpan = new Span<char>(buffer, BufferSize);
 
-                    set.Add(" building " + continuation);
-                    set.Add(" builds " + continuation);
-                    set.Add(" constructing " + continuation);
-                    set.Add(" constructs " + continuation);
-                    set.Add(" creating " + continuation);
-                    set.Add(" creates " + continuation);
-                    set.Add(" providing " + continuation);
-                    set.Add(" provides " + continuation);
+                        word.CopyTo(bufferSpan);
 
-                    set.Add(" that is able to build " + continuation);
-                    set.Add(" which is able to build " + continuation);
-                    set.Add(" that is capable to build " + continuation);
-                    set.Add(" which is capable to build " + continuation);
-                    set.Add(" that is able to construct " + continuation);
-                    set.Add(" which is able to construct " + continuation);
-                    set.Add(" that is capable to construct " + continuation);
-                    set.Add(" which is capable to construct " + continuation);
-                    set.Add(" that is able to create " + continuation);
-                    set.Add(" which is able to create " + continuation);
-                    set.Add(" that is capable to create " + continuation);
-                    set.Add(" which is capable to create " + continuation);
-                    set.Add(" that is able to provide " + continuation);
-                    set.Add(" which is able to provide " + continuation);
-                    set.Add(" that is capable to provide " + continuation);
-                    set.Add(" which is capable to provide " + continuation);
+                        for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
+                        {
+                            var continuation = continuations[continuationsIndex].AsSpan();
+                            var suffixStartLength = wordLength + continuation.Length;
 
-                    set.Add(" that are able to build " + continuation);
-                    set.Add(" which are able to build " + continuation);
-                    set.Add(" that are capable to build " + continuation);
-                    set.Add(" which are capable to build " + continuation);
-                    set.Add(" that are able to construct " + continuation);
-                    set.Add(" which are able to construct " + continuation);
-                    set.Add(" that are capable to construct " + continuation);
-                    set.Add(" which are capable to construct " + continuation);
-                    set.Add(" that are able to create " + continuation);
-                    set.Add(" which are able to create " + continuation);
-                    set.Add(" that are capable to create " + continuation);
-                    set.Add(" which are capable to create " + continuation);
-                    set.Add(" that are able to provide " + continuation);
-                    set.Add(" which are able to provide " + continuation);
-                    set.Add(" that are capable to provide " + continuation);
-                    set.Add(" which are capable to provide " + continuation);
+                            continuation.CopyTo(bufferSpan.Slice(wordLength));
 
-                    set.Add(" to build " + continuation);
-                    set.Add(" to construct " + continuation);
-                    set.Add(" to create " + continuation);
-                    set.Add(" to provide factory methods to build " + continuation);
-                    set.Add(" to provide factory methods to construct " + continuation);
-                    set.Add(" to provide factory methods to create " + continuation);
-                    set.Add(" to provide methods to build " + continuation);
-                    set.Add(" to provide methods to construct " + continuation);
-                    set.Add(" to provide methods to create " + continuation);
-                    set.Add(" to provide " + continuation);
-                    set.Add(" to " + continuation);
+                            ReadOnlySpan<char> candidate = bufferSpan.Slice(0, suffixStartLength);
 
-                    set.Add(Constants.SingleSpace + continuation);
+                            if (candidate.ContainsAnyOrdinal(strangeTexts))
+                            {
+                                continue;
+                            }
+
+                            for (var suffixIndex = 0; suffixIndex < suffixesLength; suffixIndex++)
+                            {
+                                var suffix = suffixes[suffixIndex].AsSpan();
+                                var totalLength = suffixStartLength + suffix.Length;
+
+                                suffix.CopyTo(bufferSpan.Slice(suffixStartLength));
+
+                                results.Add(new string(buffer, 0, totalLength));
+                            }
+                        }
+                    }
+                }
+
+                return results;
+
+                HashSet<string> MethodStartingPhrases()
+                {
+                    var subjects = new[]
+                                   {
+                                       "A factory method",
+                                       "A method",
+                                       "Factory method",
+                                       "Method",
+                                       "The factory method",
+                                       "The method",
+                                       "This factory method",
+                                       "This method",
+                                   };
+
+                    var startingPhrases = new List<string>((5 * 6 * subjects.Length) + (2 * 6));
+
+                    foreach (var subject in subjects)
+                    {
+                        startingPhrases.Add(subject + " builds ");
+                        startingPhrases.Add(subject + " constructs ");
+                        startingPhrases.Add(subject + " creates ");
+                        startingPhrases.Add(subject + " gets ");
+                        startingPhrases.Add(subject + " returns ");
+                        startingPhrases.Add(subject + " initializes ");
+
+                        startingPhrases.Add(subject + " for building ");
+                        startingPhrases.Add(subject + " for constructing ");
+                        startingPhrases.Add(subject + " for creating ");
+                        startingPhrases.Add(subject + " for getting ");
+                        startingPhrases.Add(subject + " for returning ");
+                        startingPhrases.Add(subject + " for initializing ");
+
+                        startingPhrases.Add(subject + " that builds ");
+                        startingPhrases.Add(subject + " that constructs ");
+                        startingPhrases.Add(subject + " that creates ");
+                        startingPhrases.Add(subject + " that gets ");
+                        startingPhrases.Add(subject + " that returns ");
+                        startingPhrases.Add(subject + " that initializes ");
+
+                        startingPhrases.Add(subject + " which builds ");
+                        startingPhrases.Add(subject + " which constructs ");
+                        startingPhrases.Add(subject + " which creates ");
+                        startingPhrases.Add(subject + " which gets ");
+                        startingPhrases.Add(subject + " which returns ");
+                        startingPhrases.Add(subject + " which initializes ");
+
+                        startingPhrases.Add(subject + " building ");
+                        startingPhrases.Add(subject + " constructing ");
+                        startingPhrases.Add(subject + " creating ");
+                        startingPhrases.Add(subject + " getting ");
+                        startingPhrases.Add(subject + " returning ");
+                        startingPhrases.Add(subject + " initializing ");
+                    }
+
+                    // avoid duplicates
+                    var set = new HashSet<string>(startingPhrases);
+
+                    var strangeMethodPhrases = new[]
+                                                 {
+                                                     "ethod build ",
+                                                     "ethod construct ",
+                                                     "ethod create ",
+                                                     "ethod get ",
+                                                     "ethod initialize ",
+                                                     "ethod return ",
+                                                     "A method gets ",
+                                                     "A factory method gets ",
+                                                     "Factory method gets ",
+                                                     "Method gets ",
+                                                 };
+
+                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeMethodPhrases));
+
+                    foreach (var phrase in startingPhrases)
+                    {
+                        var lowerBuilder = phrase.AsCachedBuilder();
+                        set.Add(lowerBuilder.Replace("method", "function").ToString());
+                        set.Add(lowerBuilder.Replace("s ", " ").Replace("Thi ", "This ").ToStringAndRelease());
+
+                        var upperBuilder = phrase.AsCachedBuilder();
+                        set.Add(upperBuilder.Replace("Method", "Function").ToString());
+                        set.Add(upperBuilder.Replace("s ", " ").Replace("Thi ", "This ").ToStringAndRelease());
+                    }
+
+                    var strangeStartingPhrases = new[]
+                                                 {
+                                                     "unction build ", "ethod build ",
+                                                     "unction construct ", "ethod construct ",
+                                                     "unction create ", "ethod create ",
+                                                     "unction get ", "ethod get ",
+                                                     "unction initialize ", "ethod initialize ",
+                                                     "unction return ", "ethod return ",
+                                                 };
+
+                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeStartingPhrases));
+
+                    set.Add("Used for building ");
+                    set.Add("Used for constructing ");
+                    set.Add("Used for creating ");
+                    set.Add("Used for getting ");
+                    set.Add("Used for returning ");
+                    set.Add("Used for initializing ");
+
+                    set.Add("Used to build ");
+                    set.Add("Used to construct ");
+                    set.Add("Used to create ");
+                    set.Add("Used to get ");
+                    set.Add("Used to return ");
+                    set.Add("Used to initialize ");
+
+                    set.Add("Create");
+                    set.Add("Creates");
+                    set.Add("Creating");
+                    set.Add("Construct");
+                    set.Add("Constructs");
+                    set.Add("Constructing");
+                    set.Add("Return");
+                    set.Add("Returns");
+                    set.Add("Returning");
+                    set.Add("Get");
+                    set.Add("Gets");
+                    set.Add("Getting");
+                    set.Add("Initialize");
+                    set.Add("Initializes");
+                    set.Add("Initializing");
+
+                    return set;
                 }
             }
         }
