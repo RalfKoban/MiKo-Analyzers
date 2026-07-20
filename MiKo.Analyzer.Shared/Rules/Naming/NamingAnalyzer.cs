@@ -341,18 +341,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (symbol.IsOverride)
+            if (symbol.ContainingSymbol is IMethodSymbol method)
             {
-                return false;
-            }
-
-            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsConstructor())
-            {
-                if (method.HasAttribute("System.Text.Json.Serialization.JsonConstructorAttribute")
-                 || method.HasAttribute("Newtonsoft.Json.JsonConstructorAttribute"))
+                if (method.IsOverride)
                 {
-                    // ignore Json constructors
-                    return false;
+                    var overriddenMethod = method.OverriddenMethod;
+
+                    // analyze it in case the names do not match (in such case the user has given the parameter a different name)
+                    return overriddenMethod != null && overriddenMethod.Parameters[method.Parameters.IndexOf(symbol)].Name != symbol.Name;
+                }
+
+                if (method.IsConstructor())
+                {
+                    if (method.HasAttribute("System.Text.Json.Serialization.JsonConstructorAttribute")
+                     || method.HasAttribute("Newtonsoft.Json.JsonConstructorAttribute"))
+                    {
+                        // ignore Json constructors
+                        return false;
+                    }
                 }
             }
 

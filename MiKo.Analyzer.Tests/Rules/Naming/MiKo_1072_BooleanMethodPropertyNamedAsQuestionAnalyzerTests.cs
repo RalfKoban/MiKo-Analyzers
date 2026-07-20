@@ -49,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "IsNavigationTarget",
                                                             "IsNextChild",
                                                             "IsNotCompleted",
+                                                            "IsOnSameLineAs",
                                                             "IsOfName",
                                                             "IsOfType",
                                                             "IsOfTypeWhatever",

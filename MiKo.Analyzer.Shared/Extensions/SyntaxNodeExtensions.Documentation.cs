@@ -1804,7 +1804,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlNodeSyntax"/> with the first matching starting text removed, or the original syntax list if none of the texts were found at the beginning.
         /// </returns>
-        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, in ReadOnlySpan<string> startTexts) => value.Content.WithoutStartText(startTexts);
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, IEnumerable<string> startTexts) => value.Content.WithoutStartText(startTexts);
 
         /// <summary>
         /// Creates a new XML text syntax from the specified XML text syntax without the specified starting texts.
@@ -1818,13 +1818,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new <see cref="XmlTextSyntax"/> with the first matching starting text removed (after trimming leading whitespace), or the original syntax if none of the texts were found at the beginning.
         /// </returns>
-        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, in ReadOnlySpan<string> startTexts)
+        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, IEnumerable<string> startTexts)
         {
-            if (startTexts.Length is 0)
-            {
-                return value;
-            }
-
             var tokens = value.TextTokens;
 
             if (tokens.Count is 0)

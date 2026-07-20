@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.Operations;
+
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers
 {
@@ -510,6 +512,8 @@ namespace MiKoSolutions.Analyzers
                                                                               "Converter",
                                                                               "Creator",
                                                                               "Ctor",
+                                                                              "C'tor",
+                                                                              "C-tor",
                                                                               "Default impl ",
                                                                               "Default implementation for ",
                                                                               "Default implementation of ",
@@ -522,6 +526,9 @@ namespace MiKoSolutions.Analyzers
                                                                               "Default-Implementation class of ",
                                                                               "Delegate",
                                                                               "Does implement ",
+                                                                              "Dtor", // typo
+                                                                              "D'tor", // typo
+                                                                              "D-tor", // typo
                                                                               Entity,
                                                                               "Event",
                                                                               "Extension class of",
@@ -581,6 +588,9 @@ namespace MiKoSolutions.Analyzers
                                                                       "that is called",
                                                                       "that is capable",
                                                                       "that is used",
+                                                                      "that's called",
+                                                                      "that's capable",
+                                                                      "that's used",
                                                                       "that can be used",
                                                                       "that could be used",
                                                                       "that may be used",
@@ -1137,6 +1147,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] WhichIsToTerms =
                                                                {
+                                                                   ", that's to have to ",
+                                                                   ", that's to ",
+                                                                   " that's to have to ",
+                                                                   " that's to ",
                                                                    ", that is to have to ",
                                                                    ", that is to ",
                                                                    " that is to have to ",
@@ -1711,6 +1725,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string Marker = nameof(Marker);
             internal const string CommentTags = nameof(CommentTags);
+
+            internal const string NUnitReplacement = nameof(NUnitReplacement);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2013";
 
-        protected override string Title => Resources.MiKo_2013_CodeFixTitle.FormatWith(Phrase);
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_2013_CodeFixTitle.FormatWith(Phrase);
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {

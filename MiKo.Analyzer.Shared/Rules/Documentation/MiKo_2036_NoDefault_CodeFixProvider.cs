@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2036_NoDefault_CodeFixProvider)), Shared]
     public sealed class MiKo_2036_NoDefault_CodeFixProvider : MiKo_2036_CodeFixProvider
     {
-        protected override string Title => Resources.MiKo_2036_CodeFixTitle_NoDefault;
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_2036_CodeFixTitle_NoDefault;
 
         protected override bool IsApplicable(in ImmutableArray<Diagnostic> issues) => issues.Any();
 

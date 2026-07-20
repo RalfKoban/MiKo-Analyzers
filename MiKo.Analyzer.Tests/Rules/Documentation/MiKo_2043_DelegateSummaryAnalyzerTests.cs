@@ -174,6 +174,14 @@ public delegate void TestMe();
         [TestCase("""Represents the signature of the <see cref="Whatever"/> method""", """Encapsulates a method that has the same signature as the <see cref="Whatever"/> method""")]
         [TestCase("""Represents the signature for <see cref="Whatever"/>""", """Encapsulates a method that has the same signature as the <see cref="Whatever"/>""")]
         [TestCase("""Represents the signature of <see cref="Whatever"/>""", """Encapsulates a method that has the same signature as the <see cref="Whatever"/>""")]
+        [TestCase("A delegate that's the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("A delegate that is the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("A delegate which is the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("Delegate that's the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("Delegate that is the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("Delegate which is the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("The delegate is the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("This delegate is the signature of", "Encapsulates a method that has the same signature as the")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = @"
