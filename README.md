@@ -451,7 +451,7 @@ The following tables list all the 562 rules that are currently provided by the a
 |[MiKo_3108](/Documentation/MiKo_3108.md)|Include assertions in test methods|&#x2713;|\-|
 |[MiKo_3109](/Documentation/MiKo_3109.md)|Include assertion messages with multiple assertions|&#x2713;|&#x2713;|
 |[MiKo_3110](/Documentation/MiKo_3110.md)|Do not use 'Count' or 'Length' in assertions|&#x2713;|&#x2713;|
-|[MiKo_3111](/Documentation/MiKo_3111.md)|Use 'Is.Zero' instead of 'Is.EqualTo(0)' in assertions|&#x2713;|&#x2713;|
+|[MiKo_3111](/Documentation/MiKo_3111.md)|Use specific NUnit constraints instead of comparison-based constraints in assertions|&#x2713;|&#x2713;|
 |[MiKo_3112](/Documentation/MiKo_3112.md)|Use 'Is.Empty' instead of 'Has.Count.Zero' in assertions|&#x2713;|&#x2713;|
 |[MiKo_3113](/Documentation/MiKo_3113.md)|Do not use FluentAssertions|&#x2713;|&#x2713;|
 |[MiKo_3114](/Documentation/MiKo_3114.md)|Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'|&#x2713;|&#x2713;|

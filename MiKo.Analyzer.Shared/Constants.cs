@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.Operations;
+
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers
 {
@@ -1723,6 +1725,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string Marker = nameof(Marker);
             internal const string CommentTags = nameof(CommentTags);
+
+            internal const string NUnitReplacement = nameof(NUnitReplacement);
         }
     }
 }
