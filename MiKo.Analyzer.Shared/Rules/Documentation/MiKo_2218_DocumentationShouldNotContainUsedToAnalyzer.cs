@@ -78,6 +78,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] UsedToPhrases =
                                                          {
+                                                             "that's used in order to",
+                                                             "that's used to",
                                                              "that is used in order to",
                                                              "that is used to",
                                                              "that it is used in order to",

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2036_Enum_CodeFixProvider)), Shared]
     public sealed class MiKo_2036_Enum_CodeFixProvider : MiKo_2036_CodeFixProvider
     {
-        protected override string Title => Resources.MiKo_2036_CodeFixTitle_Enum;
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_2036_CodeFixTitle_Enum;
 
         protected override bool IsApplicable(in ImmutableArray<Diagnostic> issues) => base.IsApplicable(issues) is false;
 

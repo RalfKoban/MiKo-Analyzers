@@ -17,19 +17,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith("|").Split('|');
 
-        private static readonly Pair[] ReplacementMap = CreateReplacementMapKeys().OrderDescendingByLengthAndText().ToArray(_ => new Pair(_));
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2039", CreateReplacementMapKeys().OrderDescendingByLengthAndText().ToArray(_ => new Pair(_)), _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2039";
 
-        internal static bool CanFix(in ReadOnlySpan<char> text) => text.StartsWithAny(ReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
+        internal static bool CanFix(in ReadOnlySpan<char> text) => text.StartsWithAny(ReplacementMap.Keys, StringComparison.OrdinalIgnoreCase);
 
         internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax syntax)
         {
-            var comment = Comment(syntax, ReplacementMapKeys, ReplacementMap);
+            var comment = Comment(syntax, ReplacementMap);
 
             return CommentStartingWith(comment, Parts[0], SeeLangword("static"), Parts[1]);
         }
