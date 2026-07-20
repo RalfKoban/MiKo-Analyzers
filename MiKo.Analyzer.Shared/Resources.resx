@@ -4575,15 +4575,15 @@ This approach ensures stability and clarity, keeping the Enum's behavior consist
     <value>Write HResults in hexadecimal</value>
   </data>
   <data name="MiKo_3080_Description" xml:space="preserve">
-    <value>Using switch statements to assign variables within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
-Let each section of the switch return values directly, instead of assigning them to a shared variable and using break statements.
-This approach enhances clarity and maintainability.</value>
+    <value>Using switch statements to assign values within methods increases complexity and reduces readability. Simplify this by moving the switch statement into its own method.
+Let each section of the switch return values directly, instead of assigning them to a shared variable, field, property, or parameter and using break statements.
+This makes the code easier to read and change later.</value>
   </data>
   <data name="MiKo_3080_MessageFormat" xml:space="preserve">
     <value>Place switch statement in separate method and return value within case blocks</value>
   </data>
   <data name="MiKo_3080_Title" xml:space="preserve">
-    <value>Use 'switch ... return' instead of 'switch ... break' for variable assignments</value>
+    <value>Use 'switch ... return' instead of 'switch ... break' for assignments</value>
   </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
@@ -4907,16 +4907,16 @@ In contrast, tests should state exactly what was expected and found (e.g., 'Expe
     <value>Do not use 'Count' or 'Length' in assertions</value>
   </data>
   <data name="MiKo_3111_CodeFixTitle" xml:space="preserve">
-    <value>Use 'Zero'</value>
+    <value>Use '{0}'</value>
   </data>
   <data name="MiKo_3111_Description" xml:space="preserve">
-    <value>To improve clarity, use 'Is.Zero' instead of 'Is.EqualTo(0)' when asserting for zero in tests. This makes the code easier to read and understand.</value>
+    <value>To improve clarity, use a specific NUnit constraint instead of a generic comparison constraint when asserting for well-known values in tests. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3111_MessageFormat" xml:space="preserve">
-    <value>Use 'Zero' instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3111_Title" xml:space="preserve">
-    <value>Use 'Is.Zero' instead of 'Is.EqualTo(0)' in assertions</value>
+    <value>Use specific NUnit constraints instead of comparison-based constraints in assertions</value>
   </data>
   <data name="MiKo_3112_CodeFixTitle" xml:space="preserve">
     <value>Use 'Is.Empty'</value>
@@ -6195,16 +6195,17 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Place open parenthesis on same line(s) as invoked methods</value>
   </data>
   <data name="MiKo_6036_CodeFixTitle" xml:space="preserve">
-    <value>Align block directly below arrow</value>
+    <value>Align lambda block with arrow</value>
   </data>
   <data name="MiKo_6036_Description" xml:space="preserve">
-    <value>To easily distinguish lambda blocks from other code blocks, position them either in line with or directly below the corresponding arrow. This makes the code clearer and easier to follow.</value>
+    <value>Lambda blocks are easier to distinguish from other code blocks when placed either on the same line as the arrow or directly below it.
+This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6036_MessageFormat" xml:space="preserve">
-    <value>Align lambda block directly below arrow</value>
+    <value>Align lambda block with arrow</value>
   </data>
   <data name="MiKo_6036_Title" xml:space="preserve">
-    <value>Place lambda blocks directly below the corresponding arrow(s)</value>
+    <value>Align lambda blocks with the corresponding arrow(s)</value>
   </data>
   <data name="MiKo_6037_CodeFixTitle" xml:space="preserve">
     <value>Place argument on same line as invocation</value>
@@ -6507,16 +6508,17 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Place switch expression arms on same line</value>
   </data>
   <data name="MiKo_6062_CodeFixTitle" xml:space="preserve">
-    <value>Align expression right beside open brace</value>
+    <value>Indent values beside the opening brace</value>
   </data>
   <data name="MiKo_6062_Description" xml:space="preserve">
-    <value>Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow.</value>
+    <value>Code readability improves when values inside element initializers are placed consistently, either on the same line as the opening brace or indented to that position on a new line.
+This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6062_MessageFormat" xml:space="preserve">
-    <value>Align expression right beside open brace</value>
+    <value>Indent values beside the opening brace</value>
   </data>
   <data name="MiKo_6062_Title" xml:space="preserve">
-    <value>Place expressions within complex initializer expressions beside open brace</value>
+    <value>Indent values in element initializers correctly</value>
   </data>
   <data name="MiKo_6063_CodeFixTitle" xml:space="preserve">
     <value>Place invocation on same line</value>
@@ -6590,6 +6592,18 @@ This style avoids dangling operators, aligns with common C# style guides and too
   </data>
   <data name="MiKo_6068_Title" xml:space="preserve">
     <value>Place property patterns inside 'if' conditions on same line</value>
+  </data>
+  <data name="MiKo_6069_CodeFixTitle" xml:space="preserve">
+    <value>Align expression relative to opening brace</value>
+  </data>
+  <data name="MiKo_6069_Description" xml:space="preserve">
+    <value>Code readability improves when object initializer expressions are placed consistently relative to the opening brace. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6069_MessageFormat" xml:space="preserve">
+    <value>Align expression relative to opening brace</value>
+  </data>
+  <data name="MiKo_6069_Title" xml:space="preserve">
+    <value>Align object initializer expressions relative to opening brace</value>
   </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

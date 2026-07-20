@@ -16,16 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly Pair[] TypeReplacementMap = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).OrderDescendingByLengthAndText().ToArray(_ => new Pair(_));
+        private static readonly ReplacementMap TypeReplacementMap = new ReplacementMap(
+                                                                                   "MiKo_2050_Replace",
+                                                                                   CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).OrderDescendingByLengthAndText().ToArray(_ => new Pair(_)),
+                                                                                   _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] TypeReplacementMapKeys = GetTermsForQuickLookup(TypeReplacementMap);
-
-        private static readonly Pair[] TypeCleanupMap =
-                                                        {
-                                                            new Pair("when during", "when an error occurs during"),
-                                                        };
-
-        private static readonly string[] TypeCleanupMapKeys = GetTermsForQuickLookup(TypeCleanupMap);
+        private static readonly ReplacementMap TypeCleanupMap = new ReplacementMap("MiKo_2050_Cleanup", new[] { new Pair("when during", "when an error occurs during") }, _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -65,9 +61,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var summary = summaries[0];
 
-                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
+                var preparedSummary = Comment(summary, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
                 var newSummary = CommentStartingWith(preparedSummary, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
-                var updatedSummary = Comment(newSummary, TypeCleanupMapKeys, TypeCleanupMap);
+                var updatedSummary = Comment(newSummary, TypeCleanupMap);
 
                 return comment.ReplaceNode(summary, updatedSummary);
             }
@@ -198,7 +194,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
                                  "A error", "An error", "The error", "This error", "Error", "Errors", "errors",
                              };
-            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire", "that occurs", "which occurs", "that occur", "which occur" };
+            var verbs = new[]
+                            {
+                                "that's thrown", "that is thrown", "which is thrown", "is thrown", "thrown", "to throw",
+                                "that's fired", "that is fired", "which is fired", "fired", "to fire",
+                                "that occurs", "which occurs", "that occur", "which occur",
+                            };
             var conditions = new[] { "if", "when", "in case" };
 
             var results = new HashSet<string>();
@@ -216,6 +217,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var start in starts)
             {
                 results.Add(start + " is used by ");
+                results.Add(start + " that's used by ");
                 results.Add(start + " that is used by ");
                 results.Add(start + " which is used by ");
                 results.Add(start + " used by ");

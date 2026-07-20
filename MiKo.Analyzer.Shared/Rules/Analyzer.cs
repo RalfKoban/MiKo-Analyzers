@@ -187,7 +187,11 @@ namespace MiKoSolutions.Analyzers.Rules
             m_analyzeParameterCallback = m_analyzeParameterCallback ?? AnalyzeParameter;
             m_analyzeParameterContextCallback = m_analyzeParameterContextCallback ?? AnalyzeParameter;
 
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+            // Performance-Note:
+            // For performance reasons we let the analyzer report any diagnostics found in generated code, but we do not let it analyze the code.
+            // This avoids a costly 'AnalyzerDriver.IsInGeneratedCode' call (for large files not correctly marked as generated code) that otherwise would consume most of the time when reporting any diagnostics,
+            // although we would not let the generated code get analyzed via 'GeneratedCodeAnalysisFlags.None' at all.
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.ReportDiagnostics);
 
             if (CanRunConcurrently)
             {
@@ -855,29 +859,6 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue<T1, T2>(SyntaxNode node, T1 arg1, T2 arg2) => Issue(node.GetLocation(), arg1, arg2, Array.Empty<Pair>());
 
         /// <summary>
-        /// Creates a diagnostic issue for a location with two arguments.
-        /// </summary>
-        /// <typeparam name="T1">
-        /// The type of the first argument.
-        /// </typeparam>
-        /// <typeparam name="T2">
-        /// The type of the second argument.
-        /// </typeparam>
-        /// <param name="location">
-        /// The location to create the issue for.
-        /// </param>
-        /// <param name="arg1">
-        /// The first argument for the diagnostic message.
-        /// </param>
-        /// <param name="arg2">
-        /// The second argument for the diagnostic message.
-        /// </param>
-        /// <returns>
-        /// A diagnostic issue for the location.
-        /// </returns>
-        protected Diagnostic Issue<T1, T2>(Location location, T1 arg1, T2 arg2) => Issue(location, arg1, arg2, Array.Empty<Pair>());
-
-        /// <summary>
         /// Creates a diagnostic issue for a symbol with a custom name and two arguments.
         /// </summary>
         /// <typeparam name="T1">
@@ -1269,6 +1250,26 @@ namespace MiKoSolutions.Analyzers.Rules
         /// A diagnostic issue for the syntax trivia.
         /// </returns>
         protected Diagnostic Issue<T>(in SyntaxTrivia trivia, T arg1, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties, arg1.ToString());
+
+        /// <summary>
+        /// Creates a diagnostic issue for a location with two arguments.
+        /// </summary>
+        /// <typeparam name="T1">
+        /// The type of the first argument.
+        /// </typeparam>
+        /// <param name="location">
+        /// The location to create the issue for.
+        /// </param>
+        /// <param name="arg1">
+        /// The first argument for the diagnostic message.
+        /// </param>
+        /// <param name="property">
+        /// The additional property for the diagnostic.
+        /// </param>
+        /// <returns>
+        /// A diagnostic issue for the location.
+        /// </returns>
+        protected Diagnostic Issue<T1>(Location location, T1 arg1, Pair property) => Issue(location, arg1, new[] { property });
 
         /// <summary>
         /// Creates a diagnostic issue for a location with a single argument and additional properties.

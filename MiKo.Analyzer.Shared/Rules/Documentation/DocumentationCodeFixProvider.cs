@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,6 +15,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
+        private static readonly ConcurrentDictionary<Triple, string> OriginalToReplacementMap = new ConcurrentDictionary<Triple, string>();
+
+        /// <summary>
+        /// Defines values that specify how to do a quick lookup.
+        /// </summary>
+        protected enum QuickLookupMode
+        {
+            /// <summary>
+            /// A term has to start with another term.
+            /// </summary>
+            StartsWith = 0,
+
+            /// <summary>
+            /// A term has to contain another term.
+            /// </summary>
+            Contains = 1,
+        }
+
         /// <summary>
         /// Gets the starting phrase proposal from the specified diagnostic issue.
         /// </summary>
@@ -54,36 +73,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage start
 
         /// <summary>
-        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// Creates an optimized array of terms for quick lookup by removing terms that are already covered by a shorter term according to the specified lookup mode.
         /// </summary>
         /// <param name="pairs">
-        /// The collection of terms to optimize.
+        /// The collection of key-value pairs whose keys, after trimming, are used as the terms to optimize.
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the comparison rules to use.
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
+        /// <param name="quickLookupMode">
+        /// One of the enumeration members that specifies the mode to use for the lookup.
+        /// The default is <see cref="QuickLookupMode.StartsWith"/>.
+        /// </param>
         /// <returns>
-        /// An array of terms where no term is a prefix of another term, ordered by specificity.
+        /// An array of terms, ordered by ascending length, where no term is covered by another shorter term according to the specified lookup mode.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// This optimization reduces the number of comparisons needed during text replacement operations by ensuring that longer, more specific terms are checked without being shadowed by their prefixes.
-        /// For example, if input contains ["get", "getter"], only "getter" is returned since "get" is a prefix.
+        /// This optimization reduces the number of comparisons needed during text replacement operations:
+        /// <list type="bullet">
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.StartsWith"/> mode, a term is discarded if it starts with a shorter term already in the result.
+        /// </description></item>
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.Contains"/> mode, a term is discarded if it contains a shorter term already in the result.
+        /// </description></item>
+        /// </list>
+        /// For example, if input contains ["get", "getter"], only "get" is returned in either mode.
         /// </para>
         /// <para>
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in QuickLookupMode quickLookupMode = QuickLookupMode.StartsWith)
         {
             var terms = pairs.ToArray(_ => _.Key.Trim());
 
-            return GetTermsForQuickLookup(terms, comparison);
+            return GetTermsForQuickLookup(terms, comparison, quickLookupMode);
         }
 
         /// <summary>
-        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// Creates an optimized array of terms for quick lookup by removing terms that are already covered by a shorter term according to the specified lookup mode.
         /// </summary>
         /// <param name="terms">
         /// The collection of terms to optimize.
@@ -92,19 +123,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// One of the enumeration members that specifies the comparison rules to use.
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
+        /// <param name="quickLookupMode">
+        /// One of the enumeration members that specifies the mode to use for the lookup.
+        /// The default is <see cref="QuickLookupMode.StartsWith"/>.
+        /// </param>
         /// <returns>
-        /// An array of terms where no term is a prefix of another term, ordered by specificity.
+        /// An array of terms, ordered by ascending length, where no term is covered by another shorter term according to the specified lookup mode.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// This optimization reduces the number of comparisons needed during text replacement operations by ensuring that longer, more specific terms are checked without being shadowed by their prefixes.
-        /// For example, if input contains ["get", "getter"], only "getter" is returned since "get" is a prefix.
+        /// This optimization reduces the number of comparisons needed during text replacement operations:
+        /// <list type="bullet">
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.StartsWith"/> mode, a term is discarded if it starts with a shorter term already in the result.
+        /// </description></item>
+        /// <item><description>
+        /// In <see cref="QuickLookupMode.Contains"/> mode, a term is discarded if it contains a shorter term already in the result.
+        /// </description></item>
+        /// </list>
+        /// For example, if input contains ["get", "getter"], only "get" is returned in either mode.
         /// </para>
         /// <para>
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in QuickLookupMode quickLookupMode = QuickLookupMode.StartsWith)
         {
             var pool = ArrayPool<string>.Shared;
 
@@ -117,15 +160,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in terms.OrderBy(_ => _.Length))
             {
-                var span = term.AsSpan();
-
                 found = false;
 
-                for (var index = 0; index < resultIndex; index++)
+                switch (quickLookupMode)
                 {
-                    if (span.StartsWith(rentedArray[index].AsSpan(), comparison))
+                    case QuickLookupMode.StartsWith:
                     {
-                        found = true;
+                        var span = term.AsSpan();
+
+                        for (var index = 0; index < resultIndex; index++)
+                        {
+                            if (span.StartsWith(rentedArray[index].AsSpan(), comparison))
+                            {
+                                found = true;
+
+                                break;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case QuickLookupMode.Contains:
+                    {
+                        for (var index = 0; index < resultIndex; index++)
+                        {
+                            if (term.Contains(rentedArray[index], comparison))
+                            {
+                                found = true;
+
+                                break;
+                            }
+                        }
 
                         break;
                     }
@@ -281,9 +347,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="syntax">
         /// The XML element to update.
         /// </param>
-        /// <param name="lookupTerms">
-        /// The terms to search for in the comment text.
-        /// </param>
         /// <param name="replacementMap">
         /// The map of terms to their replacements.
         /// </param>
@@ -294,9 +357,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <returns>
         /// The XML comment element with replaced text and combined text nodes.
         /// </returns>
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> lookupTerms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, ReplacementMap replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace)
         {
-            var result = Comment<XmlElementSyntax>(syntax, lookupTerms, replacementMap, firstWordAdjustment);
+            var result = Comment<XmlElementSyntax>(syntax, replacementMap, firstWordAdjustment);
 
             return CombineTexts(result);
         }
@@ -309,9 +372,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </typeparam>
         /// <param name="syntax">
         /// The syntax node to update.
-        /// </param>
-        /// <param name="lookupTerms">
-        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(Pair[],in StringComparison)"/> to optimize this array.
         /// </param>
         /// <param name="replacementMap">
         /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
@@ -327,8 +387,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// This is the core text replacement method that performs pattern matching and substitution across all XML text nodes within the syntax tree.
         /// It performs a deep search through all <see cref="XmlTextSyntax"/> descendants and replaces matching phrases while respecting the minimum length optimization for performance.
         /// </remarks>
-        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> lookupTerms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, ReplacementMap replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
+            var lookupTerms = replacementMap.Keys;
+
+            if (lookupTerms.Length is 0)
+            {
+                // nothing to replace
+                return syntax;
+            }
+
             var minimumLength = MinimumLength(lookupTerms);
 
             var textMap = CreateReplacementTextMap(minimumLength, lookupTerms, replacementMap, firstWordAdjustment);
@@ -337,6 +405,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // nothing found, so nothing to replace
                 return syntax;
+            }
+
+            if (textMap.Count is 1)
+            {
+                var onlyPair = textMap.First();
+
+                return syntax.ReplaceNode(onlyPair.Key, onlyPair.Value);
             }
 
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
@@ -366,14 +441,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return minimum;
             }
 
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> lookupPhrases, in ReadOnlySpan<Pair> map, in FirstWordAdjustment adjustment)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> lookupPhrases, ReplacementMap map, FirstWordAdjustment adjustment)
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
                 foreach (var text in syntax.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText))
                 {
-                    Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
-
                     // replace token in text
                     var textTokens = text.TextTokens;
 
@@ -396,44 +469,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                         // the lookup-phrases are mostly upper-case, so compare ignoring case here
-                        if (originalText.ContainsAny(lookupPhrases, StringComparison.OrdinalIgnoreCase))
+                        var replaced = false;
+
+                        foreach (var lookupPhrase in lookupPhrases)
                         {
-                            var replacedText = originalText.AsCachedBuilder()
-                                                           .ReplaceAllWithProbe(map)
-                                                           .AdjustFirstWord(adjustment)
-                                                           .ToStringAndRelease();
-
-                            if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
+                            if (originalText.Contains(lookupPhrase, StringComparison.OrdinalIgnoreCase))
                             {
-                                // replacement with itself does not make any sense
-                                continue;
+                                var replacedText = OriginalToReplacementMap.GetOrAdd(
+                                                                                 new Triple(map.Id, lookupPhrase, originalText),
+                                                                                 _ => _.C.AsCachedBuilder().ReplaceAllWithProbe(map).AdjustFirstWord(adjustment).ToStringAndRelease());
+
+                                if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
+                                {
+                                    // replacement with itself does not make any sense
+                                    continue;
+                                }
+
+                                if (result is null)
+                                {
+                                    result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
+                                }
+
+                                result.Add(text, text.ReplaceToken(token, token.WithText(replacedText)));
+
+                                replaced = true;
+
+                                // no need to loop further over the tokens
+                                break;
                             }
+                        }
 
-                            var newToken = token.WithText(replacedText);
-
-                            if (tokenMap is null)
-                            {
-                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>(1);
-                            }
-
-                            tokenMap.Add(token, newToken);
+                        if (replaced)
+                        {
+                            break;
                         }
                     }
-
-                    if (tokenMap is null)
-                    {
-                        // nothing found, so nothing to replace
-                        continue;
-                    }
-
-                    if (result is null)
-                    {
-                        result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
-                    }
-
-                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
-
-                    result.Add(text, newText);
                 }
 
                 return result;

@@ -79,34 +79,26 @@ public class TestMe : IValueConverter
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed()
+        [TestCase("Something.", "Represents a converter that converts something.")]
+        [TestCase("convert something.", "Represents a converter that converts something.")]
+        [TestCase("Convert something.", "Represents a converter that converts something.")]
+        [TestCase("converts something.", "Represents a converter that converts something.")]
+        [TestCase("Converts something.", "Represents a converter that converts something.")]
+        public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 using System;
 using System.Windows.Data;
 
 /// <summary>
-/// Something.
+/// ###
 /// </summary>
 public class TestMe : IValueConverter
 {
 }
 ";
 
-            const string FixedCode = @"
-using System;
-using System.Windows.Data;
-
-/// <summary>
-/// Represents a converter that converts something.
-/// </summary>
-public class TestMe : IValueConverter
-{
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
         protected override string GetDiagnosticId() => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;

@@ -685,29 +685,22 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith("ion", StringComparison.CurrentCultureIgnoreCase))
                 {
+                    if (word.EndsWith("ndation", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("tation", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 5);
+                    }
+
+                    if (word.EndsWith("idation", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("mation", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("ration", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.AsSpan(0, word.Length - 3).ConcatenatedWith('e');
+                    }
+
                     if (word.EndsWith("nsion", StringComparison.OrdinalIgnoreCase))
                     {
                         return word.AsSpan(0, word.Length - 4).ConcatenatedWith('d');
-                    }
-
-                    if (word.EndsWith("ndation", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return word.Substring(0, word.Length - 5);
-                    }
-
-                    if (word.EndsWith("idation", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return word.AsSpan(0, word.Length - 3).ConcatenatedWith('e');
-                    }
-
-                    if (word.EndsWith("ration", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return word.AsSpan(0, word.Length - 3).ConcatenatedWith('e');
-                    }
-
-                    if (word.EndsWith("tation", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return word.Substring(0, word.Length - 5);
                     }
 
                     return word.Substring(0, word.Length - 3);
