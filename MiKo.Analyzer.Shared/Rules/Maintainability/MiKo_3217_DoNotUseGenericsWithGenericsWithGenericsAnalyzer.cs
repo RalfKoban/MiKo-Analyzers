@@ -94,7 +94,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = type.TypeArguments;
 
-                return arguments.Length > 0 && arguments.Any(_ => _.HasGenericTypeArguments());
+                if (arguments.Length > 0)
+                {
+                    return arguments.SkipWhere(_ => _.IsNullable())
+                                    .Any(_ => _.HasGenericTypeArguments());
+                }
             }
 
             return false;

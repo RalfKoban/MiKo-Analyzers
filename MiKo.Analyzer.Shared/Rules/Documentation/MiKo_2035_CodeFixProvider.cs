@@ -85,9 +85,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var adjustedComment = CommentWithContent(comment, comment.Content);
 
-            adjustedComment = Comment(adjustedComment, MappedData.Value.PreparationMapKeys, MappedData.Value.PreparationMap);
+            adjustedComment = Comment(adjustedComment, MappedData.Value.PreparationMap);
 
-            return Comment(adjustedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
+            return Comment(adjustedComment, MappedData.Value.ReplacementMap);
         }
 
         private static XmlElementSyntax PrepareArrayComment(XmlElementSyntax comment, ArrayTypeSyntax arrayType)
@@ -97,14 +97,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return PrepareByteArrayComment(comment);
             }
 
-            var preparedComment = Comment(comment, MappedData.Value.SpecialArrayReplacementMapKeys, MappedData.Value.SpecialArrayReplacementMap);
+            var preparedComment = Comment(comment, MappedData.Value.SpecialArrayReplacementMap);
 
             return PrepareComment(preparedComment);
         }
 
         private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
         {
-            var preparedComment = Comment(comment, MappedData.Value.ByteArrayReplacementMapKeys, MappedData.Value.ByteArrayReplacementMap);
+            var preparedComment = Comment(comment, MappedData.Value.ByteArrayReplacementMap);
 
             var contents = preparedComment.Content;
             var count = contents.Count;
@@ -135,7 +135,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax CleanupComment(XmlElementSyntax comment)
         {
-            return Comment(comment, MappedData.Value.CleanupMapKeys, MappedData.Value.CleanupMap);
+            return Comment(comment, MappedData.Value.CleanupMap);
         }
 
         private static XmlElementSyntax GenericComment(XmlElementSyntax preparedComment, GenericNameSyntax returnType)
@@ -288,17 +288,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private sealed class MapData
         {
 #pragma warning disable SA1401 // Fields should be private
-            public readonly Pair[] ReplacementMap;
-            public readonly string[] ReplacementMapKeys;
-            public readonly Pair[] ByteArrayReplacementMap;
-            public readonly string[] SpecialArrayReplacementMapKeys;
-            public readonly Pair[] SpecialArrayReplacementMap;
-            public readonly string[] ByteArrayReplacementMapKeys;
+            public readonly ReplacementMap ReplacementMap;
+            public readonly ReplacementMap ByteArrayReplacementMap;
+            public readonly ReplacementMap SpecialArrayReplacementMap;
             public readonly string[] ByteArrayContinueTexts;
-            public readonly Pair[] PreparationMap;
-            public readonly string[] PreparationMapKeys;
-            public readonly Pair[] CleanupMap;
-            public readonly string[] CleanupMapKeys;
+            public readonly ReplacementMap PreparationMap;
+            public readonly ReplacementMap CleanupMap;
 #pragma warning restore SA1401 // Fields should be private
 
 #pragma warning disable CA1861
@@ -306,44 +301,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var phrases = CreatePhrases().ToHashSet(); // TODO RKN: Order by 'A', 'An ' and 'The '
 
-                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith("A task that can be used to await.", "A task that can be used to await", "A task to await.", "A task to await", "An awaitable task.", "An awaitable task")
-                                                                           .Concat(phrases)
-                                                                           .Select(_ => new Pair(_))
-                                                                           .OrderDescendingByLengthAndText(_ => _.Key);
+                ReplacementMap = new ReplacementMap(
+                                                "MiKo_2035_Replace",
+                                                AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith(
+                                                                                                        "A task that can be used to await.",
+                                                                                                        "A task that can be used to await",
+                                                                                                        "A task to await.",
+                                                                                                        "A task to await",
+                                                                                                        "An awaitable task.",
+                                                                                                        "An awaitable task")
+                                                                                          .Concat(phrases)
+                                                                                          .Select(_ => new Pair(_))
+                                                                                          .OrderDescendingByLengthAndText(_ => _.Key),
+                                                _ => GetTermsForQuickLookup(_, quickLookupMode: QuickLookupMode.Contains));
 
-                ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.ToArray(_ => _.Key));
-
-                ByteArrayReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith(
-                                                                                                  "A array of byte containing ",
-                                                                                                  "A array of byte that contains ",
-                                                                                                  "A array of byte which contains ",
-                                                                                                  "A array of bytes containing ",
-                                                                                                  "A array of bytes that contains ",
-                                                                                                  "A array of bytes which contains ",
-                                                                                                  "A array of ",
-                                                                                                  "A array with ",
-                                                                                                  "An array of byte containing ",
-                                                                                                  "An array of byte that contains ",
-                                                                                                  "An array of byte which contains ",
-                                                                                                  "An array of bytes containing ",
-                                                                                                  "An array of bytes that contains ",
-                                                                                                  "An array of bytes which contains ",
-                                                                                                  "An array of ",
-                                                                                                  "An array with ",
-                                                                                                  "Array of ",
-                                                                                                  "Array with ",
-                                                                                                  "The array of byte containing ",
-                                                                                                  "The array of byte that contains ",
-                                                                                                  "The array of byte which contains ",
-                                                                                                  "The array of bytes containing ",
-                                                                                                  "The array of bytes that contains ",
-                                                                                                  "The array of bytes which contains ",
-                                                                                                  "The array of ",
-                                                                                                  "The array with ")
-                                                                                    .Select(_ => new Pair(_))
-                                                                                    .OrderDescendingByLengthAndText(_ => _.Key);
-
-                ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap.ToArray(_ => _.Key));
+                ByteArrayReplacementMap = new ReplacementMap(
+                                                         "MiKo_2035_ByteArray_Replace",
+                                                         AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith(
+                                                                                                                 "A array of byte containing ",
+                                                                                                                 "A array of byte that contains ",
+                                                                                                                 "A array of byte which contains ",
+                                                                                                                 "A array of bytes containing ",
+                                                                                                                 "A array of bytes that contains ",
+                                                                                                                 "A array of bytes which contains ",
+                                                                                                                 "A array of ",
+                                                                                                                 "A array with ",
+                                                                                                                 "An array of byte containing ",
+                                                                                                                 "An array of byte that contains ",
+                                                                                                                 "An array of byte which contains ",
+                                                                                                                 "An array of bytes containing ",
+                                                                                                                 "An array of bytes that contains ",
+                                                                                                                 "An array of bytes which contains ",
+                                                                                                                 "An array of ",
+                                                                                                                 "An array with ",
+                                                                                                                 "Array of ",
+                                                                                                                 "Array with ",
+                                                                                                                 "The array of byte containing ",
+                                                                                                                 "The array of byte that contains ",
+                                                                                                                 "The array of byte which contains ",
+                                                                                                                 "The array of bytes containing ",
+                                                                                                                 "The array of bytes that contains ",
+                                                                                                                 "The array of bytes which contains ",
+                                                                                                                 "The array of ",
+                                                                                                                 "The array with ")
+                                                                                                   .Select(_ => new Pair(_))
+                                                                                                   .OrderDescendingByLengthAndText(_ => _.Key),
+                                                         _ => GetTermsForQuickLookup(_, quickLookupMode: QuickLookupMode.Contains));
 
                 ByteArrayContinueTexts = new[]
                                              {
@@ -355,34 +358,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                  " which contains ",
                                              };
 
-                SpecialArrayReplacementMapKeys = new[]
-                                                     {
-                                                         Constants.Comments.CollectionReturnTypeStartingPhrase,
-                                                     };
+                SpecialArrayReplacementMap = new ReplacementMap("MiKo_2035_Special", new[] { new Pair(Constants.Comments.CollectionReturnTypeStartingPhrase, Constants.Comments.ArrayReturnTypeStartingPhraseA) }, _ => _.ToArray(__ => __.Key));
 
-                SpecialArrayReplacementMap = SpecialArrayReplacementMapKeys.ToArray(_ => new Pair(_, Constants.Comments.ArrayReturnTypeStartingPhraseA));
+                PreparationMap = new ReplacementMap("MiKo_2035_Prepare", new[] { new Pair("trivia array", "#1#") }, _ => _.ToArray(__ => __.Key));
 
-                PreparationMap = new[]
-                                     {
-                                         new Pair("trivia array", "#1#"),
-                                     };
-
-                PreparationMapKeys = PreparationMap.ToArray(_ => _.Key);
-
-                CleanupMap = new[]
-                                 {
-                                     new Pair("#1#", "trivia"),
-                                     new Pair("the modified set", "elements from the original set"),
-                                     new Pair("the the", "the"),
-                                     new Pair("a the", "the"),
-                                     new Pair("an the", "the"),
-                                     new Pair(" of gets ", " of "),
-                                     new Pair(" of get ", " of "),
-                                     new Pair(" contains gets ", " contains "),
-                                     new Pair(" contains get ", " contains "),
-                                 };
-
-                CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
+                CleanupMap = new ReplacementMap(
+                                            "MiKo_2035_Cleanup",
+                                            new[]
+                                                {
+                                                    new Pair("#1#", "trivia"),
+                                                    new Pair("the modified set", "elements from the original set"),
+                                                    new Pair("the the", "the"),
+                                                    new Pair("a the", "the"),
+                                                    new Pair("an the", "the"),
+                                                    new Pair(" of gets ", " of "),
+                                                    new Pair(" of get ", " of "),
+                                                    new Pair(" contains gets ", " contains "),
+                                                    new Pair(" contains get ", " contains "),
+                                                },
+                                            _ => _.ToArray(__ => __.Key));
             }
 #pragma warning restore CA1861
 

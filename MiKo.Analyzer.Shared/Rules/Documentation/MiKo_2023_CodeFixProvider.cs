@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -24,14 +24,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string OrNotPhrase = " or not";
         private const string OtherwiseReplacement = "; otherwise, ";
 
-        private const string StartWithArticleA = "A ";
-        private const string StartWithArticleAn = "An ";
-        private const string StartWithArticleThe = "The ";
-        private const string StartWithArticleLowerCaseA = "a ";
-        private const string StartWithArticleLowerCaseAn = "an ";
-        private const string StartWithArticleLowerCaseThe = "the ";
-        private const string StartWithParenthesis = "(";
-
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string StartPhraseParts0 = StartPhraseParts[0];
         private static readonly string StartPhraseParts1 = StartPhraseParts[1];
@@ -44,19 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 250.Milliseconds());
 
-        private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
-                                                                                             StartWithArticleA,
-                                                                                             StartWithArticleAn,
-                                                                                             StartWithArticleThe,
-                                                                                             StartWithArticleLowerCaseA,
-                                                                                             StartWithArticleLowerCaseAn,
-                                                                                             StartWithArticleLowerCaseThe,
-                                                                                             StartWithParenthesis);
-
-        private static readonly Pair OtherwisePair = new Pair(". Otherwise", "; otherwise");
-
-        private static readonly string[] OtherwisePairKey = { OtherwisePair.Key };
-        private static readonly Pair[] OtherwisePairArray = { OtherwisePair };
+        private static readonly ReplacementMap OtherwiseMap = new ReplacementMap("MiKo_2023_Otherwise", new[] { new Pair(". Otherwise", "; otherwise") }, _ => _.ToArray(__ => __.Key));
 
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
@@ -70,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue)
         {
             // fix ". Otherwise ..." comments so that they will not get split
-            var mergedComment = Comment(comment, OtherwisePairKey, OtherwisePairArray);
+            var mergedComment = Comment(comment, OtherwiseMap);
 
             var firstSentence = SplitCommentAfterFirstSentence(mergedComment, out var partsAfterSentence);
 
@@ -183,12 +163,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage start
                     for (int index = 0, length = uniqueKeys.Length; index < length; index++)
                     {
-                        var key = uniqueKeys[index];
+                        var uniqueKey = uniqueKeys[index];
 
-                        if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
+                        if (text.StartsWith(uniqueKey, StringComparison.OrdinalIgnoreCase))
                         {
 //// ncrunch: no coverage end
-                            var subText = text.Slice(key.Length)
+                            var subText = text.Slice(uniqueKey.Length)
                                               .TrimStart(Constants.TrailingSentenceMarkers)
                                               .TrimEnd(Constants.TrailingSentenceMarkers);
 
@@ -213,13 +193,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // now get all data
-            var mappedDataValue = MappedData.Value;
+            var info = MappedData.Value.FindMatchingMapInfo(ReadOnlySpan<char>.Empty);
 
             var preparedComment = PrepareComment(comment);
-            var preparedComment2 = Comment(preparedComment, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapForOthers);
+            var preparedComment2 = Comment(preparedComment, info.Map);
             var preparedComment3 = ModifyElseOtherwisePart(preparedComment2);
 
-            return FixComment(preparedComment3, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapForOthers);
+            return FixComment(preparedComment3, info.Map);
         }
 
         private static XmlElementSyntax FixEmptyComment(XmlElementSyntax comment)
@@ -275,15 +255,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var prepared = comment.ReplaceNode(originalText, XmlText());
 
-            return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
+            return FixComment(prepared, info.Map, finalCommentContinuation);
         }
 
-        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, in ReadOnlySpan<string> replacementMapKeys, in ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
+        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, ReplacementMap replacementMap, string commentContinue = null)
         {
             var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
 
-            var fixedComment = Comment(bothFixed, replacementMapKeys, replacementMap);
+            var fixedComment = Comment(bothFixed, replacementMap);
 
             return fixedComment.WithTagsOnSeparateLines();
         }
@@ -341,87 +321,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static ConcreteMapInfo FindMatchingReplacementMapKeys(in ReadOnlySpan<char> text)
         {
             // now get all data
-            var data = MappedData.Value;
-
-            if (text.Length > 0)
-            {
-                if (text.StartsWith(StartWithArticleA))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForA, data.ReplacementMapKeysForA, data.UniqueReplacementMapKeysForA);
-                }
-
-                if (text.StartsWith(StartWithArticleAn))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForAn, data.ReplacementMapKeysForAn, data.UniqueReplacementMapKeysForAn);
-                }
-
-                if (text.StartsWith(StartWithArticleThe))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForThe, data.ReplacementMapKeysForThe, data.UniqueReplacementMapKeysForThe);
-                }
-
-                if (text.StartsWith(StartWithParenthesis))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForParenthesis, data.ReplacementMapKeysForParenthesis, data.UniqueReplacementMapKeysForParenthesis);
-                }
-
-                if (text.StartsWith(StartWithArticleLowerCaseA))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForLowerCaseA, data.ReplacementMapKeysForLowerCaseA, data.UniqueReplacementMapKeysForA);
-                }
-
-                if (text.StartsWith(StartWithArticleLowerCaseAn))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForLowerCaseAn, data.ReplacementMapKeysForLowerCaseAn, data.UniqueReplacementMapKeysForAn);
-                }
-
-                if (text.StartsWith(StartWithArticleLowerCaseThe))
-                {
-                    return new ConcreteMapInfo(data.ReplacementMapForLowerCaseThe, data.ReplacementMapKeysForLowerCaseThe, data.UniqueReplacementMapKeysForThe);
-                }
-            }
-
-            return new ConcreteMapInfo(data.ReplacementMapForOthers, data.ReplacementMapKeysForOthers, data.UniqueReplacementMapKeysForOthers);
+            return MappedData.Value.FindMatchingMapInfo(text);
         }
 
         private readonly ref struct ConcreteMapInfo
         {
-            public ConcreteMapInfo(Pair[] map, string[] keys, string[] uniqueKeys)
+            public ConcreteMapInfo(ReplacementMap map, string[] uniqueKeys)
             {
                 Map = map;
-                Keys = keys;
                 UniqueKeys = uniqueKeys;
             }
 
-            public Pair[] Map { get; }
-
-            public string[] Keys { get; }
+            public ReplacementMap Map { get; }
 
             public string[] UniqueKeys { get; }
         }
 
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "I want snake-cased names.")]
         private sealed class MapData
         {
-#pragma warning disable SA1401 // Fields should be private
-            public readonly Pair[] ReplacementMapForA;
-            public readonly Pair[] ReplacementMapForAn;
-            public readonly Pair[] ReplacementMapForThe;
-            public readonly Pair[] ReplacementMapForParenthesis;
-            public readonly Pair[] ReplacementMapForOthers;
-            public readonly Pair[] ReplacementMapForLowerCaseA;
-            public readonly Pair[] ReplacementMapForLowerCaseAn;
-            public readonly Pair[] ReplacementMapForLowerCaseThe;
-            public readonly string[] ReplacementMapKeysForA;
-            public readonly string[] ReplacementMapKeysForAn;
-            public readonly string[] ReplacementMapKeysForThe;
-            public readonly string[] ReplacementMapKeysForParenthesis;
-            public readonly string[] ReplacementMapKeysForOthers;
-            public readonly string[] UniqueReplacementMapKeysForA;
-            public readonly string[] UniqueReplacementMapKeysForAn;
-            public readonly string[] UniqueReplacementMapKeysForThe;
-            public readonly string[] UniqueReplacementMapKeysForParenthesis;
-            public readonly string[] UniqueReplacementMapKeysForOthers;
-#pragma warning restore SA1401 // Fields should be private
+#pragma warning disable SA1306 // Field should begin with lower-case letter
+#pragma warning disable SA1310 // Field should not contain underscore
+
+            // a
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_A;
+            private readonly ReplacementMap ReplacementMap_for_A;
+            private readonly string[] Unique_ReplacementMap_keys_for_A;
+
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_A_Oo;
+            private readonly ReplacementMap ReplacementMap_for_A_Oo;
+            private readonly string[] Unique_ReplacementMap_keys_for_A_Oo;
+
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_A_Parenthesis;
+            private readonly ReplacementMap ReplacementMap_for_A_Parenthesis;
+            private readonly string[] Unique_ReplacementMap_keys_for_A_Parenthesis;
+
+            // an
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_An;
+            private readonly ReplacementMap ReplacementMap_for_An;
+            private readonly string[] Unique_ReplacementMap_keys_for_An;
+
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_An_Oo;
+            private readonly ReplacementMap ReplacementMap_for_An_Oo;
+            private readonly string[] Unique_ReplacementMap_keys_for_An_Oo;
+
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_An_Parenthesis;
+            private readonly ReplacementMap ReplacementMap_for_An_Parenthesis;
+            private readonly string[] Unique_ReplacementMap_keys_for_An_Parenthesis;
+
+            // the
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_The;
+            private readonly ReplacementMap ReplacementMap_for_The;
+            private readonly string[] Unique_ReplacementMap_keys_for_The;
+
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_The_Oo;
+            private readonly ReplacementMap ReplacementMap_for_The_Oo;
+            private readonly string[] Unique_ReplacementMap_keys_for_The_Oo;
+
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_The_Parenthesis;
+            private readonly ReplacementMap ReplacementMap_for_The_Parenthesis;
+            private readonly string[] Unique_ReplacementMap_keys_for_The_Parenthesis;
+
+            // optional
+            private readonly ReplacementMap ReplacementMap_for_LowerCase_Optional;
+            private readonly ReplacementMap ReplacementMap_for_Optional;
+            private readonly string[] Unique_ReplacementMap_keys_for_Optional;
+
+            // others
+            private readonly ReplacementMap ReplacementMap_for_Others;
+            private readonly string[] Unique_ReplacementMap_keys_for_Others;
+
+            // (
+            private readonly ReplacementMap ReplacementMap_for_Parenthesis;
+            private readonly string[] Unique_ReplacementMap_keys_for_Parenthesis;
+
+#pragma warning restore SA1306 // Field should begin with lower-case letter
+#pragma warning restore SA1310 // Field should not contain underscore
 
             public MapData()
             {
@@ -506,140 +481,265 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    new Pair(". ", "; "),
                                                };
 
-                var replacementMapKeysCommon = replacementMapCommon.ToArray(_ => _.Key);
+                var replacementMapKeysForParenthesis = new HashSet<string>();
 
-                var replacementMap = CreateReplacementMap();
-                var replacementMapKeys = replacementMap.ToArray(_ => _.Key);
+                var replacementMapKeysForA = new HashSet<string>();
+                var replacementMapKeysForA_Parenthesis = new HashSet<string>();
+                var replacementMapKeysForA_Oo = new HashSet<string>();
 
-                var replacementMapKeysForA = ToKeyArray(replacementMapKeys, StartWithArticleA);
-                var replacementMapKeysForAn = ToKeyArray(replacementMapKeys, StartWithArticleAn);
-                var replacementMapKeysForThe = ToKeyArray(replacementMapKeys, StartWithArticleThe);
-                var replacementMapKeysForParenthesis = ToKeyArray(replacementMapKeys, StartWithParenthesis);
-                var replacementMapKeysForLowerCaseA = ToKeyArray(replacementMapKeys, StartWithArticleLowerCaseA);
-                var replacementMapKeysForLowerCaseAn = ToKeyArray(replacementMapKeys, StartWithArticleLowerCaseAn);
-                var replacementMapKeysForLowerCaseThe = ToKeyArray(replacementMapKeys, StartWithArticleLowerCaseThe);
+                var replacementMapKeysForAn = new HashSet<string>();
+                var replacementMapKeysForAn_Parenthesis = new HashSet<string>();
+                var replacementMapKeysForAn_Oo = new HashSet<string>();
 
-                var replacementMapKeysForAHashSet = replacementMapKeysForA.ToHashSet();
-                var replacementMapKeysForAnHashSet = replacementMapKeysForAn.ToHashSet();
-                var replacementMapKeysForTheHashSet = replacementMapKeysForThe.ToHashSet();
-                var replacementMapKeysForLowerCaseAHashSet = replacementMapKeysForLowerCaseA.ToHashSet();
-                var replacementMapKeysForLowerCaseAnHashSet = replacementMapKeysForLowerCaseAn.ToHashSet();
-                var replacementMapKeysForLowerCaseTheHashSet = replacementMapKeysForLowerCaseThe.ToHashSet();
-                var replacementMapKeysForParenthesisHashSet = replacementMapKeysForParenthesis.ToHashSet();
-                var replacementMapKeysForOthersHashSet = replacementMapKeysCommon.ToHashSet();
-                replacementMapKeysForOthersHashSet.AddRange(replacementMapKeys.ToHashSet()
-                                                                              .Except(replacementMapKeysForAHashSet)
-                                                                              .Except(replacementMapKeysForAnHashSet)
-                                                                              .Except(replacementMapKeysForTheHashSet)
-                                                                              .Except(replacementMapKeysForLowerCaseAHashSet)
-                                                                              .Except(replacementMapKeysForLowerCaseAnHashSet)
-                                                                              .Except(replacementMapKeysForLowerCaseTheHashSet)
-                                                                              .Except(replacementMapKeysForParenthesisHashSet));
+                var replacementMapKeysForThe = new HashSet<string>();
+                var replacementMapKeysForThe_Parenthesis = new HashSet<string>();
+                var replacementMapKeysForThe_Oo = new HashSet<string>();
 
-                ReplacementMapForA = ToMapArray(replacementMap, replacementMapKeysForAHashSet, replacementMapCommon);
-                ReplacementMapForAn = ToMapArray(replacementMap, replacementMapKeysForAnHashSet, replacementMapCommon);
-                ReplacementMapForThe = ToMapArray(replacementMap, replacementMapKeysForTheHashSet, replacementMapCommon);
-                ReplacementMapForLowerCaseA = ToMapArray(replacementMap, replacementMapKeysForLowerCaseAHashSet, replacementMapCommon);
-                ReplacementMapForLowerCaseAn = ToMapArray(replacementMap, replacementMapKeysForLowerCaseAnHashSet, replacementMapCommon);
-                ReplacementMapForLowerCaseThe = ToMapArray(replacementMap, replacementMapKeysForLowerCaseTheHashSet, replacementMapCommon);
-                ReplacementMapForParenthesis = ToMapArray(replacementMap, replacementMapKeysForParenthesisHashSet, replacementMapCommon);
-                ReplacementMapForOthers = ToMapArray(replacementMap, replacementMapKeysForOthersHashSet, replacementMapCommon);
+                var replacementMapKeysForOptional = new HashSet<string>();
+                var replacementMapKeysForOthers = new HashSet<string>();
 
-                UniqueReplacementMapKeysForA = ToUnique(replacementMapKeysForA);
-                UniqueReplacementMapKeysForAn = ToUnique(replacementMapKeysForAn);
-                UniqueReplacementMapKeysForThe = ToUnique(replacementMapKeysForThe);
-                UniqueReplacementMapKeysForParenthesis = ToUnique(replacementMapKeysForParenthesis);
-                UniqueReplacementMapKeysForOthers = ToUnique(replacementMapKeysForOthersHashSet);
+                foreach (var start in CreateStartTerms())
+                {
+                    var hashSet = GetCorrectHashSet(start);
+
+                    hashSet.Add(start);
+                }
+
+                // remove the lower case stuff and return them as an own hash set
+                var replacementMapKeysForLowerCaseA = SplitOutLowerCaseHashSet(replacementMapKeysForA);
+                var replacementMapKeysForLowerCaseA_Parenthesis = SplitOutLowerCaseHashSet(replacementMapKeysForA_Parenthesis);
+                var replacementMapKeysForLowerCaseA_Oo = SplitOutLowerCaseHashSet(replacementMapKeysForA_Oo);
+
+                var replacementMapKeysForLowerCaseAn = SplitOutLowerCaseHashSet(replacementMapKeysForAn);
+                var replacementMapKeysForLowerCaseAn_Parenthesis = SplitOutLowerCaseHashSet(replacementMapKeysForAn_Parenthesis);
+                var replacementMapKeysForLowerCaseAn_Oo = SplitOutLowerCaseHashSet(replacementMapKeysForAn_Oo);
+
+                var replacementMapKeysForLowerCaseThe = SplitOutLowerCaseHashSet(replacementMapKeysForThe);
+                var replacementMapKeysForLowerCaseThe_Parenthesis = SplitOutLowerCaseHashSet(replacementMapKeysForThe_Parenthesis);
+                var replacementMapKeysForLowerCaseThe_Oo = SplitOutLowerCaseHashSet(replacementMapKeysForThe_Oo);
+
+                var replacementMapKeysForLowerCaseOptional = SplitOutLowerCaseHashSet(replacementMapKeysForOptional);
+
+                // split the code into multiple lists
+                ReplacementMap_for_A = ToMap("MiKo_2023_A", replacementMapKeysForA, replacementMapCommon);
+                ReplacementMap_for_LowerCase_A = ToMap("MiKo_2023_a", replacementMapKeysForLowerCaseA, replacementMapCommon);
+                ReplacementMap_for_An = ToMap("MiKo_2023_An", replacementMapKeysForAn, replacementMapCommon);
+                ReplacementMap_for_LowerCase_An = ToMap("MiKo_2023_an", replacementMapKeysForLowerCaseAn, replacementMapCommon);
+                ReplacementMap_for_The = ToMap("MiKo_2023_The", replacementMapKeysForThe, replacementMapCommon);
+                ReplacementMap_for_LowerCase_The = ToMap("MiKo_2023_the", replacementMapKeysForLowerCaseThe, replacementMapCommon);
+                ReplacementMap_for_A_Parenthesis = ToMap("MiKo_2023_A_(", replacementMapKeysForA_Parenthesis, replacementMapCommon);
+                ReplacementMap_for_LowerCase_A_Parenthesis = ToMap("MiKo_2023_a_(", replacementMapKeysForLowerCaseA_Parenthesis, replacementMapCommon);
+                ReplacementMap_for_An_Parenthesis = ToMap("MiKo_2023_An_(", replacementMapKeysForAn_Parenthesis, replacementMapCommon);
+                ReplacementMap_for_LowerCase_An_Parenthesis = ToMap("MiKo_2023_an_(", replacementMapKeysForLowerCaseAn_Parenthesis, replacementMapCommon);
+                ReplacementMap_for_The_Parenthesis = ToMap("MiKo_2023_The_(", replacementMapKeysForThe_Parenthesis, replacementMapCommon);
+                ReplacementMap_for_LowerCase_The_Parenthesis = ToMap("MiKo_2023_the_(", replacementMapKeysForLowerCaseThe_Parenthesis, replacementMapCommon);
+                ReplacementMap_for_A_Oo = ToMap("MiKo_2023_A_Oo", replacementMapKeysForA_Oo, replacementMapCommon);
+                ReplacementMap_for_LowerCase_A_Oo = ToMap("MiKo_2023_a_Oo", replacementMapKeysForLowerCaseA_Oo, replacementMapCommon);
+                ReplacementMap_for_An_Oo = ToMap("MiKo_2023_An_Oo", replacementMapKeysForAn_Oo, replacementMapCommon);
+                ReplacementMap_for_LowerCase_An_Oo = ToMap("MiKo_2023_an_Oo", replacementMapKeysForLowerCaseAn_Oo, replacementMapCommon);
+                ReplacementMap_for_The_Oo = ToMap("MiKo_2023_The_Oo", replacementMapKeysForThe_Oo, replacementMapCommon);
+                ReplacementMap_for_LowerCase_The_Oo = ToMap("MiKo_2023_the_Oo", replacementMapKeysForLowerCaseThe_Oo, replacementMapCommon);
+
+                ReplacementMap_for_Optional = ToMap("MiKo_2023_Optional", replacementMapKeysForOptional, replacementMapCommon);
+                ReplacementMap_for_LowerCase_Optional = ToMap("MiKo_2023_optional", replacementMapKeysForLowerCaseOptional, replacementMapCommon);
+
+                ReplacementMap_for_Parenthesis = ToMap("MiKo_2023_(", replacementMapKeysForParenthesis, replacementMapCommon);
+                ReplacementMap_for_Others = ToMap("MiKo_2023_others", replacementMapKeysForOthers, replacementMapCommon);
+
+                Unique_ReplacementMap_keys_for_A = ToUnique(ReplacementMap_for_A);
+                Unique_ReplacementMap_keys_for_An = ToUnique(ReplacementMap_for_An);
+                Unique_ReplacementMap_keys_for_The = ToUnique(ReplacementMap_for_The);
+                Unique_ReplacementMap_keys_for_A_Parenthesis = ToUnique(ReplacementMap_for_A_Parenthesis);
+                Unique_ReplacementMap_keys_for_An_Parenthesis = ToUnique(ReplacementMap_for_An_Parenthesis);
+                Unique_ReplacementMap_keys_for_The_Parenthesis = ToUnique(ReplacementMap_for_The_Parenthesis);
+                Unique_ReplacementMap_keys_for_A_Oo = ToUnique(ReplacementMap_for_A_Oo);
+                Unique_ReplacementMap_keys_for_An_Oo = ToUnique(ReplacementMap_for_An_Oo);
+                Unique_ReplacementMap_keys_for_The_Oo = ToUnique(ReplacementMap_for_The_Oo);
+                Unique_ReplacementMap_keys_for_Optional = ToUnique(ReplacementMap_for_Optional);
+                Unique_ReplacementMap_keys_for_Parenthesis = ToUnique(ReplacementMap_for_Parenthesis);
+                Unique_ReplacementMap_keys_for_Others = ToUnique(ReplacementMap_for_Others);
 
                 // now set keys here at the end as we want these keys sorted based on string contents (and only contain the smallest sub-sequences)
-                ReplacementMapKeysForA = GetTermsForQuickLookup(UniqueReplacementMapKeysForA);
-                ReplacementMapKeysForAn = GetTermsForQuickLookup(UniqueReplacementMapKeysForAn);
-                ReplacementMapKeysForThe = GetTermsForQuickLookup(UniqueReplacementMapKeysForThe);
-                ReplacementMapKeysForParenthesis = GetTermsForQuickLookup(UniqueReplacementMapKeysForParenthesis);
-                ReplacementMapKeysForOthers = GetTermsForQuickLookup(UniqueReplacementMapKeysForOthers);
+                ReplacementMap_for_A.Keys = ReplacementMap_for_LowerCase_A.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_A);
+                ReplacementMap_for_An.Keys = ReplacementMap_for_LowerCase_An.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_An);
+                ReplacementMap_for_The.Keys = ReplacementMap_for_LowerCase_The.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_The);
+                ReplacementMap_for_A_Parenthesis.Keys = ReplacementMap_for_LowerCase_A_Parenthesis.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_A_Parenthesis);
+                ReplacementMap_for_An_Parenthesis.Keys = ReplacementMap_for_LowerCase_An_Parenthesis.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_An_Parenthesis);
+                ReplacementMap_for_The_Parenthesis.Keys = ReplacementMap_for_LowerCase_The_Parenthesis.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_The_Parenthesis);
+                ReplacementMap_for_A_Oo.Keys = ReplacementMap_for_LowerCase_A_Oo.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_A_Oo);
+                ReplacementMap_for_An_Oo.Keys = ReplacementMap_for_LowerCase_An_Oo.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_An_Oo);
+                ReplacementMap_for_The_Oo.Keys = ReplacementMap_for_LowerCase_The_Oo.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_The_Oo);
+                ReplacementMap_for_Optional.Keys = ReplacementMap_for_LowerCase_Optional.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_Optional);
+                ReplacementMap_for_Parenthesis.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_Parenthesis);
+                ReplacementMap_for_Others.Keys = GetTermsForQuickLookup(Unique_ReplacementMap_keys_for_Others);
 
-                string[] ToKeyArray(ReadOnlySpan<string> keys, string text)
+                return;
+
+                ReplacementMap ToMap(string id, HashSet<string> keys, Pair[] others)
                 {
-                    var length = keys.Length;
+                    var sorted = keys.OrderDescendingByLengthAndText();
+                    var results = new Pair[sorted.Length + others.Length];
 
-                    var indexInResult = 0;
-
-                    var pool = ArrayPool<string>.Shared;
-                    var rentedArray = pool.Rent(length);
-
-                    var textSpan = text.AsSpan();
-
-                    for (var index = 0; index < length; index++)
+                    for (int index = 0, count = sorted.Length; index < count; index++)
                     {
-                        var key = keys[index];
-
-                        if (key.AsSpan().StartsWith(textSpan))
-                        {
-                            rentedArray[indexInResult++] = key;
-                        }
+                        results[index] = new Pair(sorted[index]);
                     }
 
-                    var results = new string[indexInResult];
+                    Array.Copy(others, 0, results, sorted.Length, others.Length);
 
-                    Array.Copy(rentedArray, results, indexInResult);
-
-                    pool.Return(rentedArray);
-
-                    return results;
+                    return new ReplacementMap(id, results, Array.Empty<string>()); // keys will be set later on
                 }
 
-                Pair[] ToMapArray(in ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
+                string[] ToUnique(ReplacementMap map) => new HashSet<string>(map.Pairs.Select(_ => _.Key), StringComparer.OrdinalIgnoreCase).ToArray();
+
+                HashSet<string> SplitOutLowerCaseHashSet(HashSet<string> hashSet)
                 {
-                    var resultIndex = 0;
+                    var lowerHashSet = new HashSet<string>(hashSet.Where(_ => _[0].IsLowerCase()));
 
-                    var pool = ArrayPool<Pair>.Shared;
-                    var rentedArray = pool.Rent(keys.Count + others.Length);
+                    hashSet.ExceptWith(lowerHashSet);
 
-                    for (int index = 0, count = map.Length; index < count; index++)
+                    return lowerHashSet;
+                }
+
+                HashSet<string> GetCorrectHashSet(string text)
+                {
+                    if (text.StartsWith('('))
                     {
-                        var key = map[index];
-
-                        if (keys.Contains(key.Key))
-                        {
-                            rentedArray[resultIndex++] = key;
-                        }
+                        return replacementMapKeysForParenthesis;
                     }
 
-                    others.CopyTo(rentedArray, resultIndex);
+                    if (text.StartsWith("A ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (text.Length > 2)
+                        {
+                            switch (text[2])
+                            {
+                                case '(':
+                                    return replacementMapKeysForA_Parenthesis;
+                                case 'O':
+                                case 'o':
+                                    return replacementMapKeysForA_Oo;
+                            }
+                        }
 
-                    var results = new Pair[resultIndex + others.Length];
+                        return replacementMapKeysForA;
+                    }
 
-                    Array.Copy(rentedArray, results, results.Length);
+                    if (text.StartsWith("An ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (text.Length > 3)
+                        {
+                            switch (text[3])
+                            {
+                                case '(':
+                                    return replacementMapKeysForAn_Parenthesis;
+                                case 'O':
+                                case 'o':
+                                    return replacementMapKeysForAn_Oo;
+                            }
+                        }
 
-                    pool.Return(rentedArray);
+                        return replacementMapKeysForAn;
+                    }
 
-                    return results;
+                    if (text.StartsWith("The ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (text.Length > 4)
+                        {
+                            switch (text[4])
+                            {
+                                case '(':
+                                    return replacementMapKeysForThe_Parenthesis;
+                                case 'O':
+                                case 'o':
+                                    return replacementMapKeysForThe_Oo;
+                            }
+                        }
+
+                        return replacementMapKeysForThe;
+                    }
+
+                    if (text.StartsWith("Optional ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return replacementMapKeysForOptional;
+                    }
+
+                    return replacementMapKeysForOthers;
                 }
-
-                string[] ToUnique(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
             }
 
-            public string[] ReplacementMapKeysForLowerCaseA => ReplacementMapKeysForA;
-
-            public string[] ReplacementMapKeysForLowerCaseAn => ReplacementMapKeysForAn;
-
-            public string[] ReplacementMapKeysForLowerCaseThe => ReplacementMapKeysForThe;
-
-            private static Pair[] CreateReplacementMap()
+            public ConcreteMapInfo FindMatchingMapInfo(in ReadOnlySpan<char> text)
             {
-                var startTerms = CreateStartTerms();
-
-                var textsCount = startTerms.Count;
-
-                var index = 0;
-                var replacements = new Pair[textsCount];
-
-                foreach (var text in startTerms.OrderBy(_ => _, ArticleStartComparer).ThenByDescending(_ => _.Length).ThenBy(_ => _))
+                if (text.StartsWith("(", StringComparison.Ordinal))
                 {
-                    replacements[index++] = new Pair(text);
+                    return new ConcreteMapInfo(ReplacementMap_for_Parenthesis, Unique_ReplacementMap_keys_for_Parenthesis);
                 }
 
-                return replacements;
+                if (text.StartsWith("A ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var lowerCase = text[0] is 'a';
+
+                    if (text.Length > 2)
+                    {
+                        switch (text[2])
+                        {
+                            case '(':
+                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A_Parenthesis : ReplacementMap_for_A_Parenthesis, Unique_ReplacementMap_keys_for_A_Parenthesis);
+                            case 'O':
+                            case 'o':
+                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A_Oo : ReplacementMap_for_A_Oo, Unique_ReplacementMap_keys_for_A_Oo);
+                        }
+                    }
+
+                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A : ReplacementMap_for_A, Unique_ReplacementMap_keys_for_A);
+                }
+
+                if (text.StartsWith("An ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var lowerCase = text[0] is 'a';
+
+                    if (text.Length > 3)
+                    {
+                        switch (text[3])
+                        {
+                            case '(':
+                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An_Parenthesis : ReplacementMap_for_An_Parenthesis, Unique_ReplacementMap_keys_for_An_Parenthesis);
+                            case 'O':
+                            case 'o':
+                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An_Oo : ReplacementMap_for_An_Oo, Unique_ReplacementMap_keys_for_An_Oo);
+                        }
+                    }
+
+                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An : ReplacementMap_for_An, Unique_ReplacementMap_keys_for_An);
+                }
+
+                if (text.StartsWith("The ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var lowerCase = text[0] is 't';
+
+                    if (text.Length > 4)
+                    {
+                        switch (text[4])
+                        {
+                            case '(':
+                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The_Parenthesis : ReplacementMap_for_The_Parenthesis, Unique_ReplacementMap_keys_for_The_Parenthesis);
+                            case 'O':
+                            case 'o':
+                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The_Oo : ReplacementMap_for_The_Oo, Unique_ReplacementMap_keys_for_The_Oo);
+                        }
+                    }
+
+                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The : ReplacementMap_for_The, Unique_ReplacementMap_keys_for_The);
+                }
+
+                if (text.StartsWith("Optional ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var lowerCase = text[0] is 'o';
+
+                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_Optional : ReplacementMap_for_Optional, Unique_ReplacementMap_keys_for_Optional);
+                }
+
+                return new ConcreteMapInfo(ReplacementMap_for_Others, Unique_ReplacementMap_keys_for_Others);
             }
 
             private static HashSet<string> CreateStartTerms()
@@ -800,51 +900,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     return strings;
                 }
-            }
-        }
-
-        private sealed class StringStartComparer : IComparer<string>
-        {
-            private readonly string[] m_specialOrder;
-
-            internal StringStartComparer(params string[] specialOrder) => m_specialOrder = specialOrder;
-
-            public int Compare(string x, string y)
-            {
-                var notNullX = x != null;
-                var notNullY = y != null;
-
-                if (notNullX && notNullY)
-                {
-                    var orders = m_specialOrder.AsSpan();
-
-                    return GetOrder(x.AsSpan(), orders) - GetOrder(y.AsSpan(), orders);
-                }
-
-                if (notNullX)
-                {
-                    return 1;
-                }
-
-                if (notNullY)
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-
-            private static int GetOrder(in ReadOnlySpan<char> text, in ReadOnlySpan<string> orders)
-            {
-                for (int i = 0, length = orders.Length; i < length; i++)
-                {
-                    if (text.StartsWith(orders[i].AsSpan()))
-                    {
-                        return i;
-                    }
-                }
-
-                return int.MaxValue;
             }
         }
 //// ncrunch: no coverage end

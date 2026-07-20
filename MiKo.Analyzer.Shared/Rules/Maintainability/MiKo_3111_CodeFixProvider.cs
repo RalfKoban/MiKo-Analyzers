@@ -15,16 +15,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3111";
 
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_3111_CodeFixTitle.FormatWith(GetReplacement(issue));
+
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax);
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
 
             return Task.FromResult(updatedSyntax);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             var node = (InvocationExpressionSyntax)syntax;
 
@@ -35,10 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return MemberIs("Empty");
                 }
 
-                return Member(m.Expression, "Zero");
+                var replacement = GetReplacement(issue);
+
+                return Member(m.Expression, replacement);
             }
 
             return node;
         }
+
+        private static string GetReplacement(Diagnostic issue) => issue?.Properties[Constants.AnalyzerCodeFixSharedData.NUnitReplacement] ?? string.Empty;
     }
 }

@@ -95,6 +95,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parameters_of_overridden_method_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+#pragma warning disable MiKo_1063
+
+    public abstract class TestMeBase
+    {
+        public virtual void DoSomething(int " + prefix + @"Parameter)
+        { }
+    }
+
+#pragma warning restore MiKo_1063
+
+    public class TestMe : TestMeBase
+    {
+        public override void DoSomething(int " + prefix + @"Parameter)
+        { }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parameters_of_implemented_interfaces_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
 using System;
 
@@ -209,6 +233,37 @@ namespace Bla
     public class TestMe
     {
         public event EventHandler " + prefix + @"Event { get; set; }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_virtual_method_on_parameter_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public virtual void DoSomething(int " + prefix + @"Parameter) { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_overridden_method_on_changed_parameter_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public abstract class TestMeBase
+    {
+        public virtual void DoSomething(int someParameter) { }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        public override void DoSomething(int " + prefix + @"Parameter) { }
     }
 }
 ");

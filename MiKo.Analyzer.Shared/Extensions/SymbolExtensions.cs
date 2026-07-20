@@ -438,6 +438,17 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets all events of a type that can be referenced by name.
+        /// </summary>
+        /// <param name="value">
+        /// The type whose events are wanted.
+        /// </param>
+        /// <returns>
+        /// A collection of events (that can be referenced by name).
+        /// </returns>
+        internal static IEnumerable<IEventSymbol> GetEventsIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IEventSymbol>();
+
+        /// <summary>
         /// Gets all extension methods defined for the type.
         /// </summary>
         /// <param name="value">
@@ -492,6 +503,17 @@ namespace MiKoSolutions.Analyzers
 
             return Array.Empty<IFieldSymbol>();
         }
+
+        /// <summary>
+        /// Gets all fields of a type that can be referenced by name.
+        /// </summary>
+        /// <param name="value">
+        /// The type whose fields are wanted.
+        /// </param>
+        /// <returns>
+        /// A collection of fields (that can be referenced by name).
+        /// </returns>
+        internal static IEnumerable<IFieldSymbol> GetFieldsIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IFieldSymbol>();
 
         /// <summary>
         /// Gets a <see cref="string"/> representation of the generic arguments for a type as T parameters.
@@ -803,6 +825,17 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets all methods of a type that can be referenced by name.
+        /// </summary>
+        /// <param name="value">
+        /// The type whose methods are wanted.
+        /// </param>
+        /// <returns>
+        /// A collection of methods (that can be referenced by name).
+        /// </returns>
+        internal static IEnumerable<IMethodSymbol> GetMethodsIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IMethodSymbol>();
+
+        /// <summary>
         /// Gets a <see cref="string"/> representation of the method signature.
         /// </summary>
         /// <param name="value">
@@ -982,6 +1015,21 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<IMethodSymbol>();
         }
 
+        /// <summary>
+        /// Gets the direct properties of a type that can be referenced by name.
+        /// </summary>
+        /// <param name="value">
+        /// The type whose properties are wanted.
+        /// </param>
+        /// <returns>
+        /// A collection of properties (that can be referenced by name).
+        /// </returns>
+        /// <remarks>
+        /// <note type="important">
+        /// Indexers cannot be referenced by name and therefore are not part of the result.
+        /// Same applies for properties of any base type.
+        /// </note>
+        /// </remarks>
         internal static IReadOnlyList<IPropertySymbol> GetProperties(this ITypeSymbol value)
         {
             var properties = value.GetMembers<IPropertySymbol>();
@@ -993,6 +1041,22 @@ namespace MiKoSolutions.Analyzers
 
             return Array.Empty<IPropertySymbol>();
         }
+
+        /// <summary>
+        /// Gets all properties of a type that can be referenced by name.
+        /// </summary>
+        /// <param name="value">
+        /// The type whose properties are wanted.
+        /// </param>
+        /// <returns>
+        /// A collection of properties (that can be referenced by name).
+        /// </returns>
+        /// <remarks>
+        /// <note type="important">
+        /// Indexers cannot be referenced by name and therefore are not part of the result.
+        /// </note>
+        /// </remarks>
+        internal static IEnumerable<IPropertySymbol> GetPropertiesIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IPropertySymbol>();
 
         /// <summary>
         /// Gets the return type of a property.
@@ -1291,7 +1355,8 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name) || attributeNames.Contains(_.AttributeClass?.FullyQualifiedName()));
+            // the sets do not contain fully qualified names, so we check for names only to save time
+            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
         }
 
         /// <summary>
@@ -1381,6 +1446,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type has generic type arguments; otherwise, <see langword="false"/>.
         /// </returns>
+        /// <seealso cref="GetGenericArgumentsAsTs(ITypeSymbol)"/>
+        /// <seealso cref="GetGenericArgumentsAsTs(INamedTypeSymbol)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasGenericTypeArguments(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
@@ -3437,7 +3504,7 @@ namespace MiKoSolutions.Analyzers
         {
             string[] fieldNames = null;
 
-            foreach (var field in value.ContainingType.GetMembersIncludingInherited<IFieldSymbol>())
+            foreach (var field in value.ContainingType.GetFieldsIncludingInherited())
             {
                 if (fieldNames is null)
                 {
@@ -3477,7 +3544,7 @@ namespace MiKoSolutions.Analyzers
         {
             var valueName = value.Name;
 
-            return value.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(valueName, _.Name, StringComparison.OrdinalIgnoreCase));
+            return value.ContainingType.GetPropertiesIncludingInherited().Any(_ => string.Equals(valueName, _.Name, StringComparison.OrdinalIgnoreCase));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

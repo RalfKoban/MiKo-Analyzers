@@ -41,28 +41,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("new string with", "#2#"),
                                                         };
 
-        private static readonly Pair[] CleanupMap =
-                                                    {
-                                                        new Pair("#1#", "new string value with"),
-                                                        new Pair("#2#", "new string with"),
-                                                        new Pair("that contains a new string value", "that contains the original value"),
-                                                        new Pair("that contains a new string", "that contains the original value"),
-                                                        new Pair("that contains a new", "that contains the original value"),
-                                                        new Pair("that contains the new string value", "that contains the original value"),
-                                                        new Pair("that contains the new string", "that contains the original value"),
-                                                        new Pair("that contains the new", "that contains the original value"),
-                                                        new Pair("that contains a formatted string", "that contains the formatted result"),
-                                                        new Pair("that contains the formatted string", "that contains the formatted result"),
-                                                        new Pair("that contains a ", "that contains the "),
-                                                        new Pair("that contains value ", "that contains the value "),
-                                                        new Pair(" string result ", " result "),
-                                                    };
+        private static readonly ReplacementMap CleanupMap = new ReplacementMap(
+                                                                           "MiKo_2033_Cleanup",
+                                                                           new[]
+                                                                               {
+                                                                                   new Pair("#1#", "new string value with"),
+                                                                                   new Pair("#2#", "new string with"),
+                                                                                   new Pair("that contains a new string value", "that contains the original value"),
+                                                                                   new Pair("that contains a new string", "that contains the original value"),
+                                                                                   new Pair("that contains a new", "that contains the original value"),
+                                                                                   new Pair("that contains the new string value", "that contains the original value"),
+                                                                                   new Pair("that contains the new string", "that contains the original value"),
+                                                                                   new Pair("that contains the new", "that contains the original value"),
+                                                                                   new Pair("that contains a formatted string", "that contains the formatted result"),
+                                                                                   new Pair("that contains the formatted string", "that contains the formatted result"),
+                                                                                   new Pair("that contains a ", "that contains the "),
+                                                                                   new Pair("that contains value ", "that contains the value "),
+                                                                                   new Pair(" string result ", " result "),
+                                                                               },
+                                                                           _ => GetTermsForQuickLookup(_));
 
-        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
-
-        private static readonly Pair[] ReplacementMap = PreparationMap.Concat(CreateReplacementMapKeys().OrderDescendingByLengthAndText().Select(_ => new Pair(_))).ToArray();
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2033_Replace", PreparationMap.Concat(CreateReplacementMapKeys().OrderDescendingByLengthAndText().Select(_ => new Pair(_))).ToArray(), _ => GetTermsForQuickLookup(_));
 
 //// ncrunch: rdi default
 
@@ -164,17 +163,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // fix start text
-            contents = PrepareComment(comment).Content;
+            contents = Comment(comment, ReplacementMap).Content;
 
             // we have to replace the XmlText if it is part of the first item of context
             var updatedComment = Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
 
-            return CleanupComment(updatedComment);
+            return Comment(updatedComment, CleanupMap);
         }
-
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
-
-        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment) => Comment(comment, CleanupMapKeys, CleanupMap);
 
 //// ncrunch: rdi off
 

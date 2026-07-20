@@ -26,6 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("ICollection<string> blacklist")]
         [TestCase("ICollection<string> whitelist")]
         [TestCase("IDictionary<string,string> dictionary")]
+        [TestCase("Dictionary<string,int> requiredValuesByFeatureId")]
+        [TestCase("IReadOnlyDictionary<string,int> requiredValuesByFeatureId")]
         public void No_issue_is_reported_for_correctly_named_parameter_(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;

@@ -6,6 +6,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public partial class MiKo_1063_AbbreviationsInNameAnalyzerTests
     {
         [Test]
+        public void No_issue_is_reported_for_parameters_of_overridden_method_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+#pragma warning disable MiKo_1063
+
+    public abstract class TestMeBase
+    {
+        public virtual void DoSomething(int my" + midterm + @"Parameter)
+        { }
+    }
+
+#pragma warning restore MiKo_1063
+
+    public class TestMe : TestMeBase
+    {
+        public override void DoSomething(int my" + midterm + @"Parameter)
+        { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_local_variable_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
 using System;
 
@@ -103,6 +127,37 @@ namespace Bla
         public event EventHandler My" + midterm + @"Event { get; set; }
     }
 }");
+
+        [Test]
+        public void An_issue_is_reported_for_virtual_method_on_parameter_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public virtual void DoSomething(int my" + midterm + @"Parameter) { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_overridden_method_on_changed_parameter_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public abstract class TestMeBase
+    {
+        public virtual void DoSomething(int someParameter) { }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        public override void DoSomething(int my" + midterm + @"Parameter) { }
+    }
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_parameter_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"

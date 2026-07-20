@@ -17,9 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Pair[] ReplacementMap = CreateReplacementMapKeys().ToArray(_ => new Pair(_));
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2082", CreateReplacementMapKeys().ToArray(_ => new Pair(_)), _ => GetTermsForQuickLookup(_));
 
         private static readonly string[] TypesSuffixes = { "Types", "Type", "Enum" };
 
@@ -111,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace);
+            return Comment(comment, ReplacementMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace);
         }
 
 //// ncrunch: rdi off

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -17,10 +18,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ClassSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderDescendingByLengthAndText();
         private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(10)];
+        private static readonly string[] InstancesStartingPhrases = [.. CreateInstancesSummaryPhrases()];
         private static readonly string[] MethodStartingPhrases = [.. CreateMethodSummaryPhrases()];
 
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
+
+#if !NCRUNCH
+
+        [OneTimeTearDown]
+        public static void CleanupTestEnvironment() => GC.Collect();
+
+#endif
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
@@ -262,6 +271,33 @@ public class TestMeFactory
 }
 ");
 
+        [TestCase("Create")]
+        [TestCase("Creates")]
+        public void Code_gets_fixed_by_replacing_with_instances_phrase_for_factory_class_summary_(string summary)
+        {
+            var originalCode = @"
+/// <summary>
+/// " + summary + @" something.
+/// </summary>
+public class TestMeFactory
+{
+    public string Create() => new string();
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Provides support for creating instances of the something.
+/// </summary>
+public class TestMeFactory
+{
+    public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         [Test]
         public void Code_gets_fixed_by_replacing_with_standard_phrase_for_factory_class_summary_([ValueSource(nameof(ClassSummaryStartingPhrases))] string summary)
         {
@@ -312,17 +348,28 @@ public interface ITestMeFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("A factory function for creating a")]
+        [TestCase("A factory function that creates a")]
+        [TestCase("A factory function which creates a")]
         [TestCase("A factory method for creating a")]
         [TestCase("A factory method that creates a")]
         [TestCase("A factory method which creates a")]
         [TestCase("A")]
+        [TestCase("Factory function for creating a")]
+        [TestCase("Factory function that creates a")]
+        [TestCase("Factory function which creates a")]
         [TestCase("Factory method for creating a")]
         [TestCase("Factory method that creates a")]
         [TestCase("Factory method which creates a")]
+        [TestCase("The factory function for creating a")]
+        [TestCase("The factory function that creates a")]
+        [TestCase("The factory function which creates a")]
         [TestCase("The factory method for creating a")]
         [TestCase("The factory method that creates a")]
         [TestCase("The factory method which creates a")]
+        [TestCase("This factory function creates a")]
         [TestCase("This factory method creates a")]
+        [TestCase("This function creates a")]
         [TestCase("This method creates a")]
         [TestCase("Used for creating a")]
         [TestCase("Used to create a")]
@@ -360,6 +407,32 @@ public class TestMeFactory
 {
     /// <summary>
     /// Creates an instance of <see cref=""string""/> based on the identifier.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            const string FixedCode = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""string""/> type with default values for the identifier.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_by_replacing_based_upon_with_default_values_for()
+        {
+            const string OriginalCode = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates an instance of <see cref=""string""/> based upon the identifier.
     /// </summary>
     public string Create() => new string();
 }
@@ -494,7 +567,7 @@ internal interface IFactory
         }
 
         [Test]
-        public void Code_gets_fixed_by_normalizing_almost_standard_factory_interface_summary_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
+        public void Code_gets_fixed_by_normalizing_almost_standard_factory_interface_summary_([ValueSource(nameof(InstancesStartingPhrases))] string summary, [Values("class", "type")] string type)
         {
             var originalCode = @"
 /// <summary>
@@ -650,7 +723,7 @@ internal interface IFactory
 
             var s = verbs.SelectMany(_ => phrases, (verb, phrase) => phrase + " " + verb).ToList();
 
-            var startingPhrases = s.Concat(s.Select(_ => _.Replace("actory", "actory class"))).ToList();
+            var startingPhrases = s.Concat(s.Select(_ => _.Replace("actory", "actory class"))).ToHashSet();
 
             // TODO RKN: Do not test following phrases, to limit number of tests
             // var constructionPhrases = new List<string>(startingPhrases.Count);
@@ -685,120 +758,133 @@ internal interface IFactory
                 }
             }
 
-            string[] strangePhrases =
-                                      [
+            var strangePhrases = new HashSet<string>
+                                     {
+                                         // "a instance",
+                                         // "a new instances",
+                                         // "an instances",
+                                         // "an new instance",
+                                         "ace that are able",
+                                         "ace that are capable",
+                                         "ace which are able",
+                                         "ace which are capable",
+                                         "actory builds",
+                                         "actory constructs",
+                                         "actory creates",
+                                         "actory provides",
+                                         "ds buil",
+                                         "ds construc",
+                                         "ds creat",
+                                         "ds provid",
+                                         "epresents buil",
+                                         "epresents construc",
+                                         "epresents creat",
+                                         "epresents for",
+                                         "epresents provid",
+                                         "epresents that",
+                                         "epresents to",
+                                         "epresents which",
+                                         "es that is able",
+                                         "es that is capable",
+                                         "es which is able",
+                                         "es which is capable",
+                                         "factory class method",
+                                         "for providing of",
+                                         "for the constructing",
+                                         "for the creating",
+                                         "for the providing",
+                                         "function that are",
+                                         "function which are",
+                                         "functions new",
+                                         "functions the",
+                                         "ies buil",
+                                         "ies construc",
+                                         "ies creat",
+                                         "ies provid",
+                                         "ies that builds", "ies which builds", "ds that builds", "ds which builds", "ns that builds", "ns which builds",
+                                         "ies that constructs", "ies which constructs", "ds that constructs", "ds which constructs", "ns that constructs", "ns which constructs",
+                                         "ies that creates", "ies which creates", "ds that creates", "ds which creates", "ns that creates", "ns which creates",
+                                         "ies that gets", "ies which gets", "ds that gets", "ds which gets", "ns that gets", "ns which gets",
+                                         "ies that initializes", "ies which initializes", "ds that initializes", "ds which initializes", "ns that initializes", "ns which initializes",
+                                         "ies that is", "ies which is", "ds that is", "ds which is", "ns that is", "ns which is",
+                                         "ies that returns", "ies which returns", "ds that returns", "ds which returns", "ns that returns", "ns which returns",
+                                         "ies that's ", "ds that's", "ns that's",
+                                         "lass builds",
+                                         "lass constructs",
+                                         "lass creates",
+                                         "lass provides",
+                                         "method that are",
+                                         "method which are",
+                                         "methods a",
+                                         "methods instance",
+                                         "methods new",
+                                         "methods the",
+                                         "nterface builds",
+                                         "nterface constructs",
+                                         "nterface creates",
+                                         "nterface provides",
+                                         "pattern builds",
+                                         "pattern constructs",
+                                         "pattern creates",
+                                         "pattern provides",
+                                         "Provides buil",
+                                         "Provides construct",
+                                         "Provides creat",
+                                         "Provides for",
+                                         "Provides provid",
+                                         "Provides that",
+                                         "Provides to",
+                                         "Provides which",
+                                         "rn that are able",
+                                         "rn that are capable",
+                                         "rn which are able",
+                                         "rn which are capable",
+                                         "sed buil",
+                                         "sed construc",
+                                         "sed creat",
+                                         "sed provid",
+                                         "sed that",
+                                         "sed which",
+                                         "ses buil",
+                                         "ses construc",
+                                         "ses creat",
+                                         "ses provid",
+                                         "ses that",
+                                         "ses which",
+                                         "ss that are able",
+                                         "ss that are capable",
+                                         "ss which are able",
+                                         "ss which are capable",
+                                         "This factory class providing",
+                                         "This factory class that",
+                                         "This factory class which",
+                                         "This factory providing",
+                                         "y that are able",
+                                         "y that are capable",
+                                         "y which are able",
+                                         "y which are capable",
+                                     }.OrderDescendingByLengthAndText();
 
-                                          // "a instance",
-                                          // "a new instances",
-                                          // "an instances",
-                                          // "an new instance",
-                                          "epresents buil",
-                                          "epresents construc",
-                                          "epresents creat",
-                                          "epresents for",
-                                          "epresents provid",
-                                          "epresents that",
-                                          "epresents to",
-                                          "epresents which",
-                                          "factory class method",
-                                          "method that are",
-                                          "method which are",
-                                          "methods a",
-                                          "methods instance",
-                                          "methods new",
-                                          "methods that builds",
-                                          "methods that constructs",
-                                          "methods that creates",
-                                          "methods that is",
-                                          "methods that provides",
-                                          "methods the",
-                                          "methods which builds",
-                                          "methods which constructs",
-                                          "methods which creates",
-                                          "methods which is",
-                                          "methods which provides",
-                                          "Provides buil",
-                                          "Provides construct",
-                                          "Provides creat",
-                                          "Provides for",
-                                          "Provides provid",
-                                          "Provides that",
-                                          "Provides to",
-                                          "Provides which",
-                                          "for providing of",
-                                          "sed buil",
-                                          "sed construc",
-                                          "sed creat",
-                                          "sed provid",
-                                          "sed that",
-                                          "sed which",
-                                          "ses buil",
-                                          "ses construc",
-                                          "ses creat",
-                                          "ses provid",
-                                          "ses that",
-                                          "ses which",
-                                          "es that is capable",
-                                          "es which is capable",
-                                          "es that is able",
-                                          "es which is able",
-                                          "ss that are capable",
-                                          "ss which are capable",
-                                          "ss that are able",
-                                          "ss which are able",
-                                          "y that are capable",
-                                          "y which are capable",
-                                          "y that are able",
-                                          "y which are able",
-                                          "rn that are capable",
-                                          "rn which are capable",
-                                          "rn that are able",
-                                          "rn which are able",
-                                          "ace that are capable",
-                                          "ace which are capable",
-                                          "ace that are able",
-                                          "ace which are able",
-                                          "ies buil",
-                                          "ies construc",
-                                          "ies creat",
-                                          "ies provid",
-                                          "ies that provides",
-                                          "ies which provides",
-                                          "ds buil",
-                                          "ds construc",
-                                          "ds creat",
-                                          "ds provid",
-                                          "This factory class that",
-                                          "This factory class which",
-                                          "This factory class providing",
-                                          "This factory providing",
-                                          "for the constructing",
-                                          "for the creating",
-                                          "for the providing",
-                                      ];
-
-            results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
+            results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
 
             results.Add("Implementations create");
             results.Add("Implementations construct");
             results.Add("Implementations build");
             results.Add("Implementations provide");
-            results.Add("Create");
-            results.Add("Creates");
 
             return results;
         }
 
         [ExcludeFromCodeCoverage]
-        private static HashSet<string> CreateMethodSummaryPhrases()
+        private static HashSet<string> CreateInstancesSummaryPhrases()
         {
             string[] verbs = [
-                                "Construct", "Constructs",
-                                "Create", "Create and initialize", "Create and provide", "Create and return", "Create and set up",
-                                "Creates", "Creates and initializes", "Creates and provides", "Creates and returns", "Creates and sets up",
-                                "Return", "Returns",
-                                "Get", "Gets",
-                                "Initialize", "Initializes"
+                                 "Construct", "Constructs",
+                                 "Create", "Create and initialize", "Create and provide", "Create and return", "Create and set up",
+                                 "Creates", "Creates and initializes", "Creates and provides", "Creates and returns", "Creates and sets up",
+                                 "Return", "Returns",
+                                 "Get", "Gets",
+                                 "Initialize", "Initializes"
                              ];
             string[] followUps = ["a instance of the", "a instance of", "a new instance of the", "a new instance of", "a new", "a", "an instance of the", "an instance of", "instances of the", "instances of", "new instances of the", "new instances of"];
 
@@ -811,6 +897,82 @@ internal interface IFactory
                     results.Add(verb + " " + followUp);
                 }
             }
+
+            return results;
+        }
+
+        [ExcludeFromCodeCoverage]
+        private static HashSet<string> CreateMethodSummaryPhrases()
+        {
+            string[] starts = ["Factory", "A factory", "The factory", "This factory", "A", "The", "This"];
+            string[] verbs = [
+                                 "Construct", "Constructs", "Constructing",
+                                 "Create", "Create and initialize", "Create and provide", "Create and return", "Create and set up",
+                                 "Creates", "Creates and initializes", "Creates and provides", "Creates and returns", "Creates and sets up",
+                                 "Creating", "Creating and initializing", "Creating and providing", "Creating and returning", "Creating and setting up",
+                                 "Return", "Returns", "Returning",
+                                 "Get", "Gets", "Getting",
+                                 "Initialize", "Initializes", "Initializing",
+                             ];
+            string[] followUps = ["a instance of the", "a instance of", "a new instance of the", "a new instance of", "a new", "a", "an instance of the", "an instance of", "instances of the", "instances of", "new instances of the", "new instances of"];
+
+            var results = new HashSet<string>();
+
+            foreach (var verb in verbs)
+            {
+                var lowerCaseVerb = verb.ToLowerCaseAt(0);
+
+                foreach (var followUp in followUps)
+                {
+                    var lowerCaseFollowUp = lowerCaseVerb + " " + followUp;
+
+                    results.Add(verb + " " + followUp);
+
+                    // results.Add("function " + lowerCaseFollowUp);
+                    // results.Add("function that " + lowerCaseFollowUp);
+                    // results.Add("function which " + lowerCaseFollowUp);
+                    results.Add("Function " + lowerCaseFollowUp);
+                    results.Add("Function that " + lowerCaseFollowUp);
+                    results.Add("Function which " + lowerCaseFollowUp);
+
+                    // results.Add("method " + lowerCaseFollowUp);
+                    // results.Add("method that " + lowerCaseFollowUp);
+                    // results.Add("method which " + lowerCaseFollowUp);
+                    results.Add("Method " + lowerCaseFollowUp);
+                    results.Add("Method that " + lowerCaseFollowUp);
+                    results.Add("Method which " + lowerCaseFollowUp);
+
+                    foreach (var start in starts)
+                    {
+                        results.Add(start + " function " + lowerCaseFollowUp);
+                        results.Add(start + " function that " + lowerCaseFollowUp);
+                        results.Add(start + " function which " + lowerCaseFollowUp);
+                        results.Add(start + " method " + lowerCaseFollowUp);
+                        results.Add(start + " method that " + lowerCaseFollowUp);
+                        results.Add(start + " method which " + lowerCaseFollowUp);
+                    }
+                }
+            }
+
+            string[] strangePhrases =
+                                      [
+                                          "that constructing", "which constructing",
+                                          "that creating", "which creating",
+                                          "that getting", "which getting",
+                                          "that initializing", "which initializing",
+                                          "that returning", "which returning",
+                                          "unction construct ", "Function constructs ", "ethod construct ", "Method constructs ",
+                                          "unction create ", "Function creates ", "ethod create ", "Method creates ",
+                                          "unction get ", "Function gets ", "ethod get ", "Method gets ",
+                                          "unction return ", "Function returns ", "ethod return ", "Method returns ",
+                                          "unction initialize ", "Function initializes ", "ethod initialize ", "Method initializes ",
+                                          "A function gets ", "A method gets ",
+                                          "A factory function gets ", "A factory method gets ",
+                                          "Factory function gets ", "Factory method gets ",
+                                          "Function gets ", "Method gets ",
+                                      ];
+
+            results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
 
             return results;
         }
