@@ -14,8 +14,8 @@ namespace MiKoSolutions.Analyzers
 
         public Pair(string key, string value = "")
         {
-            Key = key;
-            Value = value;
+            Key = StringCache.Intern(key);
+            Value = StringCache.Intern(value);
         }
 
         public static bool operator ==(in Pair left, in Pair right) => left.Equals(right);
