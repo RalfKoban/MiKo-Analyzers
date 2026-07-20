@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2230";
 
-        protected override string Title => Resources.MiKo_2230_CodeFixTitle;
-
         protected override Task<DocumentationCommentTriviaSyntax> GetUpdatedSyntaxAsync(DocumentationCommentTriviaSyntax syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var updatedSyntax = GetUpdatedSyntax(syntax, issue);

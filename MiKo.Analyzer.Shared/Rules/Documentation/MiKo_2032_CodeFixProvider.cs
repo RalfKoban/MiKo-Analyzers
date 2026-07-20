@@ -21,7 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] GenericEndParts = Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
 
         private static readonly string[] Phrases = AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith(
-                                                                                                           " if ",
                                                                                                            "A task that has the result ",
                                                                                                            "A task that completes with a result of ",
                                                                                                            "a task that completes with a result of ",
@@ -67,7 +66,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                            "false",
                                                                                                            "Returns",
                                                                                                            "returns",
-                                                                                                           "will return")
+                                                                                                           "will return",
+                                                                                                           " else .")
                                                                                              .OrderDescendingByLengthAndText();
 
         private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().OrderDescendingByLengthAndText();
@@ -125,6 +125,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " Otherwise ",
                                                                      " Otherwise",
                                                                  };
+
+        private static readonly Pair[] CleanupMap =
+                                                    {
+                                                        new Pair(" if if ", " if "),
+                                                        new Pair(" if when ", " if "),
+                                                        new Pair(" orif ", " or if "),
+                                                        new Pair(" the value is .", ";"),
+
+                                                        // TODO RKN: special handling, needs rework (replace "button" with other texts, just keep the pattern)
+                                                        new Pair(" if the button is enabled, if the button is disabled", " if the button is enabled"),
+                                                    };
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2032";
@@ -245,7 +257,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (firstNode.IsPara())
             {
-                // clean up comment and remove first node (and any empty comment if the 1st node was the only one)
+                // clean up comment and remove first node (and any empty comment if the first node was the only one)
                 comment = comment.Without(firstNode).WithoutWhitespaceOnlyComment();
 
                 if (firstNode is XmlElementSyntax element)
@@ -279,18 +291,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { XmlText(startingPhrase + Constants.TODO + endingPhrase) };
             }
 
-            const string OrIfPhrase = " or if ";
-            const string OrIfReplacementPhrase = " orif ";
-
             // clean up comment and remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = RemoveBooleansTags(comment);
 
-            var nodes = adjustedComment.WithoutStartText(DelimiterPhrases)
-                                       .WithoutStartText(SimpleStartingPhrases)
-                                       .WithoutStartText(OtherStartingPhrases)
-                                       .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
+            var nodes = adjustedComment.WithoutStartText(DelimiterPhrases.ConcatenatedWith(SimpleStartingPhrases).ConcatenatedWith(OtherStartingPhrases))
                                        .WithoutText(Phrases)
-                                       .WithoutText(" else .")
                                        .WithoutFirstXmlNewLine();
 
             if (nodes.Count is 0)
@@ -300,8 +305,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             nodes = nodes.WithStartText(startingPhrase) // keep starting text and ensure that first character of original text is now lower-case
-                         .ReplaceText(OrIfReplacementPhrase, OrIfPhrase)
-                         .ReplaceText(" if when ", " if ");
+                         .ReplaceText(CleanupMap);
 
             // clean up comment and remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)

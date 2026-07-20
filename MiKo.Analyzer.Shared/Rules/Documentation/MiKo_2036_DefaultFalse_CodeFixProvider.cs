@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2036_DefaultFalse_CodeFixProvider)), Shared]
     public sealed class MiKo_2036_DefaultFalse_CodeFixProvider : MiKo_2036_CodeFixProvider
     {
-        protected override string Title => Resources.MiKo_2036_CodeFixTitle_DefaultFalse;
+        protected internal override string GetTitle(Diagnostic issue) => Resources.MiKo_2036_CodeFixTitle_DefaultFalse;
 
         protected override Task<XmlNodeSyntax[]> GetDefaultCommentAsync(TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {

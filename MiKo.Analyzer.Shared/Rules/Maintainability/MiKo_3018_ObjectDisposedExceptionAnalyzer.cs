@@ -104,10 +104,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (methods is null)
                         {
-                            methods = symbol.ContainingType
-                                            .GetMembersIncludingInherited<IMethodSymbol>()
-                                            .Where(_ => _.Locations.Any(__ => __.IsInSource))
-                                            .ToLookup(_ => _.Name);
+                            methods = symbol.ContainingType.GetMethodsIncludingInherited()
+                                                           .Where(_ => _.Locations.Any(__ => __.IsInSource))
+                                                           .ToLookup(_ => _.Name);
                         }
 
                         if (methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))

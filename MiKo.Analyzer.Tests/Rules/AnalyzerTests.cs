@@ -290,13 +290,13 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             Assert.Multiple(() =>
                                  {
-                                     foreach (var provider in AllCodeFixProviders)
+                                     foreach (var provider in AllCodeFixProviders.Cast<MiKoCodeFixProvider>())
                                      {
                                          var resourceKey = CreateResourceKey(provider);
 
                                          var expectedTitle = Resources.ResourceManager.GetString(resourceKey, CultureInfo.InvariantCulture) ?? "< - missing title - >";
 
-                                         var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(provider)?.ToString();
+                                         var codeFixTitle = provider.GetTitle(null);
 
                                          var parts = expectedTitle.FormatWith("|").Split('|');
 

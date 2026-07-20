@@ -9,18 +9,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2074_CodeFixProvider)), Shared]
     public sealed class MiKo_2074_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        private static readonly Pair[] ReplacementMap =
-                                                        {
-                                                            new Pair("to search to seek", "to seek"),
-                                                            new Pair("to search for to seek", "to seek"),
-                                                            new Pair("to look up to seek", "to seek"),
-                                                            new Pair("to look-up to seek", "to seek"),
-                                                            new Pair("to check to seek", "to seek"),
-                                                            new Pair("to check for to seek", "to seek"),
-                                                            new Pair("to check if contained to seek", "to seek"),
-                                                        };
-
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap(
+                                                                               "MiKo_2074",
+                                                                               new[]
+                                                                                   {
+                                                                                       new Pair("to search to seek", "to seek"),
+                                                                                       new Pair("to search for to seek", "to seek"),
+                                                                                       new Pair("to look up to seek", "to seek"),
+                                                                                       new Pair("to look-up to seek", "to seek"),
+                                                                                       new Pair("to check to seek", "to seek"),
+                                                                                       new Pair("to check for to seek", "to seek"),
+                                                                                       new Pair("to check if contained to seek", "to seek"),
+                                                                                   },
+                                                                               _ => GetTermsForQuickLookup(_));
 
         public override string FixableDiagnosticId => "MiKo_2074";
 
@@ -36,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var updatedComment = CommentEndingWith(comment, phrase);
 
-            return Comment(updatedComment, ReplacementMapKeys, ReplacementMap);
+            return Comment(updatedComment, ReplacementMap);
         }
     }
 }
