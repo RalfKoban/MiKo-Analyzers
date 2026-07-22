@@ -859,6 +859,26 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue<T1, T2>(SyntaxNode node, T1 arg1, T2 arg2) => Issue(node.GetLocation(), arg1, arg2, Array.Empty<Pair>());
 
         /// <summary>
+        /// Creates a diagnostic issue for a location with two arguments.
+        /// </summary>
+        /// <typeparam name="T1">
+        /// The type of the first argument.
+        /// </typeparam>
+        /// <param name="location">
+        /// The location to create the issue for.
+        /// </param>
+        /// <param name="arg1">
+        /// The first argument for the diagnostic message.
+        /// </param>
+        /// <param name="property">
+        /// The additional property for the diagnostic.
+        /// </param>
+        /// <returns>
+        /// A diagnostic issue for the location.
+        /// </returns>
+        protected Diagnostic Issue<T1>(Location location, T1 arg1, Pair property) => Issue(location, arg1, new[] { property });
+
+        /// <summary>
         /// Creates a diagnostic issue for a symbol with a custom name and two arguments.
         /// </summary>
         /// <typeparam name="T1">
@@ -1250,26 +1270,6 @@ namespace MiKoSolutions.Analyzers.Rules
         /// A diagnostic issue for the syntax trivia.
         /// </returns>
         protected Diagnostic Issue<T>(in SyntaxTrivia trivia, T arg1, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties, arg1.ToString());
-
-        /// <summary>
-        /// Creates a diagnostic issue for a location with two arguments.
-        /// </summary>
-        /// <typeparam name="T1">
-        /// The type of the first argument.
-        /// </typeparam>
-        /// <param name="location">
-        /// The location to create the issue for.
-        /// </param>
-        /// <param name="arg1">
-        /// The first argument for the diagnostic message.
-        /// </param>
-        /// <param name="property">
-        /// The additional property for the diagnostic.
-        /// </param>
-        /// <returns>
-        /// A diagnostic issue for the location.
-        /// </returns>
-        protected Diagnostic Issue<T1>(Location location, T1 arg1, Pair property) => Issue(location, arg1, new[] { property });
 
         /// <summary>
         /// Creates a diagnostic issue for a location with a single argument and additional properties.
