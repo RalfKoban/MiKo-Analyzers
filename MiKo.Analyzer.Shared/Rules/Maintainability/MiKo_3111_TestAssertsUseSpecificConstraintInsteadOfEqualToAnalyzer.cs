@@ -20,13 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private const string Positive = "Positive";
 
         private static readonly ConcurrentDictionary<string, string> ConstraintMap = new ConcurrentDictionary<string, string>(new Dictionary<string, string>
-                                                                                                                                   {
-                                                                                                                                       { "0", "Zero" },
-                                                                                                                                       { "null", "Null" },
-                                                                                                                                       { "true", "True" },
-                                                                                                                                       { "false", "False" },
-                                                                                                                                       { string.Empty, "Empty" },
-                                                                                                                                   });
+                                                                                                                                  {
+                                                                                                                                      { "0", "Zero" },
+                                                                                                                                      { "null", "Null" },
+                                                                                                                                      { "true", "True" },
+                                                                                                                                      { "false", "False" },
+                                                                                                                                      { string.Empty, "Empty" },
+                                                                                                                                  });
 
         public MiKo_3111_TestAssertsUseSpecificConstraintInsteadOfEqualToAnalyzer() : base(Id)
         {

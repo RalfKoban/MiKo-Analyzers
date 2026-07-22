@@ -696,12 +696,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var allContinuations = AllContinuations().OrderDescendingByLengthAndText().AsSpan();
 
                 var results = new HashSet<string> // avoid duplicates
-                              {
-                                  "Implementations construct ",
-                                  "Implementations create ",
-                                  "Implementations build ",
-                                  "Implementations provide ",
-                              };
+                                  {
+                                      "Implementations construct ",
+                                      "Implementations create ",
+                                      "Implementations build ",
+                                      "Implementations provide ",
+                                  };
 
                 unsafe
                 {
@@ -805,136 +805,136 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 HashSet<string> AllPhrases()
                 {
                     var phrases = new[]
-                                  {
-                                      "A class containing factory methods",
-                                      "A class containing methods",
-                                      "A class providing factory methods",
-                                      "A class providing methods",
-                                      "A class that contains factory methods",
-                                      "A class that contains methods",
-                                      "A class that provides factory methods",
-                                      "A class that provides methods",
-                                      "A class which contains factory methods",
-                                      "A class which contains methods",
-                                      "A class which provides factory methods",
-                                      "A class which provides methods",
-                                      "A factory that provides methods",
-                                      "A factory that provides",
-                                      "A factory to provide methods",
-                                      "A factory to provide",
-                                      "A factory which provides methods",
-                                      "A factory which provides",
-                                      "A factory",
-                                      "A implementation of the abstract factory pattern",
-                                      "A implementation of the factory pattern",
-                                      "A interface for factories",
-                                      "A interface implemented by factories",
-                                      "A interface of a factory",
-                                      "A interface that is implemented by factories",
-                                      "A interface which is implemented by factories",
-                                      "A interface",
-                                      "An implementation of the abstract factory pattern",
-                                      "An implementation of the factory pattern",
-                                      "An interface for factories",
-                                      "An interface implemented by factories",
-                                      "An interface of a factory",
-                                      "An interface that is implemented by factories",
-                                      "An interface which is implemented by factories",
-                                      "An interface",
-                                      "Class for factory methods",
-                                      "Class for methods",
-                                      "Class containing factory methods",
-                                      "Class containing methods",
-                                      "Class providing factory methods",
-                                      "Class providing methods",
-                                      "Class that contains factory methods",
-                                      "Class that contains methods",
-                                      "Class that provides factory methods",
-                                      "Class that provides methods",
-                                      "Class which contains factory methods",
-                                      "Class which contains methods",
-                                      "Class which provides factory methods",
-                                      "Class which provides methods",
-                                      "Class to provide factory methods",
-                                      "Class to provide methods",
-                                      "Class",
-                                      "Defines a factory",
-                                      "Defines a method",
-                                      "Defines methods",
-                                      "Defines the factory",
-                                      "Defines factories",
-                                      "Factory that provides methods",
-                                      "Factory that provides",
-                                      "Factory to provide methods",
-                                      "Factory to provide",
-                                      "Factory which provides methods",
-                                      "Factory which provides",
-                                      "Factory",
-                                      "Implementation of the abstract factory pattern",
-                                      "Implementation of the factory pattern",
-                                      "Interface for factories",
-                                      "Interface of a factory",
-                                      "Interface of factories",
-                                      "Interface",
-                                      "Provides a factory",
-                                      "Provides a method",
-                                      "Provides methods",
-                                      "Provides the factory",
-                                      "Provides factories",
-                                      "Provides",
-                                      "Represents a factory",
-                                      "Represents the factory",
-                                      "Represents factories",
-                                      "Represents a method",
-                                      "Represents the method",
-                                      "Represents methods",
-                                      "The class containing factory methods",
-                                      "The class containing methods",
-                                      "The class contains factory methods",
-                                      "The class contains methods",
-                                      "The class provides factory methods",
-                                      "The class provides methods",
-                                      "The class providing factory methods",
-                                      "The class providing methods",
-                                      "The class that contains factory methods",
-                                      "The class that contains methods",
-                                      "The class which contains factory methods",
-                                      "The class which contains methods",
-                                      "The class that provides factory methods",
-                                      "The class that provides methods",
-                                      "The class which provides factory methods",
-                                      "The class which provides methods",
-                                      "The factory that provides methods",
-                                      "The factory that provides",
-                                      "The factory to provide methods",
-                                      "The factory to provide",
-                                      "The factory which provides methods",
-                                      "The factory which provides",
-                                      "The factory providing factory methods",
-                                      "The factory providing methods",
-                                      "The factory",
-                                      "The implementation of the abstract factory pattern",
-                                      "The implementation of the factory pattern",
-                                      "The interface for factories",
-                                      "The interface implemented by factories",
-                                      "The interface of a factory",
-                                      "The interface that is implemented by factories",
-                                      "The interface which is implemented by factories",
-                                      "The interface",
-                                      "This class containing factory methods",
-                                      "This class containing methods",
-                                      "This class contains factory methods",
-                                      "This class contains methods",
-                                      "This class provides factory methods",
-                                      "This class provides methods",
-                                      "This class providing factory methods",
-                                      "This class providing methods",
-                                      "This factory provides methods",
-                                      "This factory",
-                                      "This interface is implemented by factories",
-                                      "Used",
-                                      "Uses", // typo in 'Used'
-                                  };
+                                      {
+                                          "A class containing factory methods",
+                                          "A class containing methods",
+                                          "A class providing factory methods",
+                                          "A class providing methods",
+                                          "A class that contains factory methods",
+                                          "A class that contains methods",
+                                          "A class that provides factory methods",
+                                          "A class that provides methods",
+                                          "A class which contains factory methods",
+                                          "A class which contains methods",
+                                          "A class which provides factory methods",
+                                          "A class which provides methods",
+                                          "A factory that provides methods",
+                                          "A factory that provides",
+                                          "A factory to provide methods",
+                                          "A factory to provide",
+                                          "A factory which provides methods",
+                                          "A factory which provides",
+                                          "A factory",
+                                          "A implementation of the abstract factory pattern",
+                                          "A implementation of the factory pattern",
+                                          "A interface for factories",
+                                          "A interface implemented by factories",
+                                          "A interface of a factory",
+                                          "A interface that is implemented by factories",
+                                          "A interface which is implemented by factories",
+                                          "A interface",
+                                          "An implementation of the abstract factory pattern",
+                                          "An implementation of the factory pattern",
+                                          "An interface for factories",
+                                          "An interface implemented by factories",
+                                          "An interface of a factory",
+                                          "An interface that is implemented by factories",
+                                          "An interface which is implemented by factories",
+                                          "An interface",
+                                          "Class for factory methods",
+                                          "Class for methods",
+                                          "Class containing factory methods",
+                                          "Class containing methods",
+                                          "Class providing factory methods",
+                                          "Class providing methods",
+                                          "Class that contains factory methods",
+                                          "Class that contains methods",
+                                          "Class that provides factory methods",
+                                          "Class that provides methods",
+                                          "Class which contains factory methods",
+                                          "Class which contains methods",
+                                          "Class which provides factory methods",
+                                          "Class which provides methods",
+                                          "Class to provide factory methods",
+                                          "Class to provide methods",
+                                          "Class",
+                                          "Defines a factory",
+                                          "Defines a method",
+                                          "Defines methods",
+                                          "Defines the factory",
+                                          "Defines factories",
+                                          "Factory that provides methods",
+                                          "Factory that provides",
+                                          "Factory to provide methods",
+                                          "Factory to provide",
+                                          "Factory which provides methods",
+                                          "Factory which provides",
+                                          "Factory",
+                                          "Implementation of the abstract factory pattern",
+                                          "Implementation of the factory pattern",
+                                          "Interface for factories",
+                                          "Interface of a factory",
+                                          "Interface of factories",
+                                          "Interface",
+                                          "Provides a factory",
+                                          "Provides a method",
+                                          "Provides methods",
+                                          "Provides the factory",
+                                          "Provides factories",
+                                          "Provides",
+                                          "Represents a factory",
+                                          "Represents the factory",
+                                          "Represents factories",
+                                          "Represents a method",
+                                          "Represents the method",
+                                          "Represents methods",
+                                          "The class containing factory methods",
+                                          "The class containing methods",
+                                          "The class contains factory methods",
+                                          "The class contains methods",
+                                          "The class provides factory methods",
+                                          "The class provides methods",
+                                          "The class providing factory methods",
+                                          "The class providing methods",
+                                          "The class that contains factory methods",
+                                          "The class that contains methods",
+                                          "The class which contains factory methods",
+                                          "The class which contains methods",
+                                          "The class that provides factory methods",
+                                          "The class that provides methods",
+                                          "The class which provides factory methods",
+                                          "The class which provides methods",
+                                          "The factory that provides methods",
+                                          "The factory that provides",
+                                          "The factory to provide methods",
+                                          "The factory to provide",
+                                          "The factory which provides methods",
+                                          "The factory which provides",
+                                          "The factory providing factory methods",
+                                          "The factory providing methods",
+                                          "The factory",
+                                          "The implementation of the abstract factory pattern",
+                                          "The implementation of the factory pattern",
+                                          "The interface for factories",
+                                          "The interface implemented by factories",
+                                          "The interface of a factory",
+                                          "The interface that is implemented by factories",
+                                          "The interface which is implemented by factories",
+                                          "The interface",
+                                          "This class containing factory methods",
+                                          "This class containing methods",
+                                          "This class contains factory methods",
+                                          "This class contains methods",
+                                          "This class provides factory methods",
+                                          "This class provides methods",
+                                          "This class providing factory methods",
+                                          "This class providing methods",
+                                          "This factory provides methods",
+                                          "This factory",
+                                          "This interface is implemented by factories",
+                                          "Used",
+                                          "Uses", // typo in 'Used'
+                                      };
 
                     var set = new HashSet<string>(phrases);
 
@@ -952,28 +952,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var set = new HashSet<string>();
 
                     var continuations = new[]
-                                        {
-                                            string.Empty,
-                                            "a ",
-                                            "a instance of a ",
-                                            //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
-                                            "a new instance of a ",
-                                            //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
-                                            "an ",
-                                            "an instance of an ",
-                                            //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
-                                            //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
-                                            //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
-                                            "instance of ",
-                                            "instances of ",
-                                            "new instance of ",
-                                            "new instances of ",
-                                            "the ",
-                                            "the instance of the ",
-                                            "the instances of the ",
-                                            "the new instance of the ",
-                                            "the new instances of the ",
-                                        };
+                                            {
+                                                string.Empty,
+                                                "a ",
+                                                "a instance of a ",
+                                                //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                                "a new instance of a ",
+                                                //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                                "an ",
+                                                "an instance of an ",
+                                                //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                                //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
+                                                //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                                "instance of ",
+                                                "instances of ",
+                                                "new instance of ",
+                                                "new instances of ",
+                                                "the ",
+                                                "the instance of the ",
+                                                "the instances of the ",
+                                                "the new instance of the ",
+                                                "the new instances of the ",
+                                            };
 
                     for (int index = 0, continuationsLength = continuations.Length; index < continuationsLength; index++)
                     {
@@ -1137,15 +1137,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    };
 
                 var strangeTexts = new[]
-                                   {
-                                       " a factory",
-                                       "ize and init", "izes and init", "izing and init",
-                                       "urn and ret", "urns and ret", "urning and ret",
-                                       "ing and initialize ", "ing and provide ", "ing and return ", "ing and set ",
-                                       "ing and initializes", "ing and provides", "ing and returns", "ing and sets",
-                                       "s and initializing", "s and providing", "s and returning", "s and setting",
-                                       "onstruct and ",
-                                   };
+                                       {
+                                           " a factory",
+                                           "ize and init", "izes and init", "izing and init",
+                                           "urn and ret", "urns and ret", "urning and ret",
+                                           "ing and initialize ", "ing and provide ", "ing and return ", "ing and set ",
+                                           "ing and initializes", "ing and provides", "ing and returns", "ing and sets",
+                                           "s and initializing", "s and providing", "s and returning", "s and setting",
+                                           "onstruct and ",
+                                       };
 
                 var startingWordsLength = startingWords.Length;
                 var continuationsLength = continuations.Length;
@@ -1203,16 +1203,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 HashSet<string> MethodStartingPhrases()
                 {
                     var subjects = new[]
-                                   {
-                                       "A factory method",
-                                       "A method",
-                                       "Factory method",
-                                       "Method",
-                                       "The factory method",
-                                       "The method",
-                                       "This factory method",
-                                       "This method",
-                                   };
+                                       {
+                                           "A factory method",
+                                           "A method",
+                                           "Factory method",
+                                           "Method",
+                                           "The factory method",
+                                           "The method",
+                                           "This factory method",
+                                           "This method",
+                                       };
 
                     var startingPhrases = new List<string>((5 * 6 * subjects.Length) + (2 * 6));
 
@@ -1258,18 +1258,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var set = new HashSet<string>(startingPhrases);
 
                     var strangeMethodPhrases = new[]
-                                                 {
-                                                     "ethod build ",
-                                                     "ethod construct ",
-                                                     "ethod create ",
-                                                     "ethod get ",
-                                                     "ethod initialize ",
-                                                     "ethod return ",
-                                                     "A method gets ",
-                                                     "A factory method gets ",
-                                                     "Factory method gets ",
-                                                     "Method gets ",
-                                                 };
+                                                   {
+                                                       "ethod build ",
+                                                       "ethod construct ",
+                                                       "ethod create ",
+                                                       "ethod get ",
+                                                       "ethod initialize ",
+                                                       "ethod return ",
+                                                       "A method gets ",
+                                                       "A factory method gets ",
+                                                       "Factory method gets ",
+                                                       "Method gets ",
+                                                   };
 
                     set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeMethodPhrases));
 
@@ -1285,14 +1285,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     var strangeStartingPhrases = new[]
-                                                 {
-                                                     "unction build ", "ethod build ",
-                                                     "unction construct ", "ethod construct ",
-                                                     "unction create ", "ethod create ",
-                                                     "unction get ", "ethod get ",
-                                                     "unction initialize ", "ethod initialize ",
-                                                     "unction return ", "ethod return ",
-                                                 };
+                                                     {
+                                                         "unction build ", "ethod build ",
+                                                         "unction construct ", "ethod construct ",
+                                                         "unction create ", "ethod create ",
+                                                         "unction get ", "ethod get ",
+                                                         "unction initialize ", "ethod initialize ",
+                                                         "unction return ", "ethod return ",
+                                                     };
 
                     set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeStartingPhrases));
 
