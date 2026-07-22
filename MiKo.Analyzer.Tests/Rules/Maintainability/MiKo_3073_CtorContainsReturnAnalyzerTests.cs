@@ -48,6 +48,30 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_body_ctor_with_return_and_separate_local_function() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int field1;
+    private int field2;
+
+    public TestMe()
+    {
+        field = Calculate();
+        field = 42;
+
+        return;
+
+        int Calculate()
+        {
+            return 42;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_body_ctor_with_return_inside_local_function() => No_issue_is_reported_for(@"
 using System;
 
