@@ -23,10 +23,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor()
                                                                    && symbol.IsPrimaryConstructor() is false;
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.GetSyntax()
-                                                                                                                   .DescendantNodes(IsNoNestedCall)
-                                                                                                                   .OfType<ReturnStatementSyntax>()
-                                                                                                                   .Select(_ => Issue(symbol.Name, _));
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
+        {
+            var syntaxNode = symbol.GetSyntax();
+
+            var returnStatements = syntaxNode.DescendantNodes(IsNoNestedCall).OfType<ReturnStatementSyntax>().ToList();
+
+            if (returnStatements.Count > 0)
+            {
+                // only report if we have no local function statement, as it is likely that the return is used to separate them from the other code
+                if (syntaxNode.DescendantNodes<LocalFunctionStatementSyntax>(SyntaxKind.LocalFunctionStatement).None())
+                {
+                    var symbolName = symbol.Name;
+
+                    return returnStatements.ToArray(_ => Issue(symbolName, _));
+                }
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
 
         private static bool IsNoNestedCallCore(SyntaxNode node)
         {
