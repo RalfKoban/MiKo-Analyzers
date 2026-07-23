@@ -235,32 +235,32 @@ namespace Bla
              "public void Do(object o) => Assert.Null(o);",
              "public void Do(object o) => Assert.That(o, Is.Null);")]
         [TestCase(
-             @"public void Do(object o) => Assert.Null(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Null, ""my message"");")]
+             """public void Do(object o) => Assert.Null(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Null, "my message");""")]
 
         // NotNull
         [TestCase(
              "public void Do(object o) => Assert.NotNull(o);",
              "public void Do(object o) => Assert.That(o, Is.Not.Null);")]
         [TestCase(
-             @"public void Do(object o) => Assert.NotNull(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Not.Null, ""my message"");")]
+             """public void Do(object o) => Assert.NotNull(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Not.Null, "my message");""")]
 
         // IsNotEmpty
         [TestCase(
              "public void Do(object o) => Assert.IsNotEmpty(o);",
              "public void Do(object o) => Assert.That(o, Is.Not.Empty);")]
         [TestCase(
-             @"public void Do(object o) => Assert.IsNotEmpty(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Not.Empty, ""my message"");")]
+             """public void Do(object o) => Assert.IsNotEmpty(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Not.Empty, "my message");""")]
 
         // IsTrue
         [TestCase(
              "public void Do(bool b) => Assert.IsTrue(b);",
              "public void Do(bool b) => Assert.That(b, Is.True);")]
         [TestCase(
-             @"public void Do(bool b) => Assert.IsTrue(b, ""my message"");",
-             @"public void Do(bool b) => Assert.That(b, Is.True, ""my message"");")]
+             """public void Do(bool b) => Assert.IsTrue(b, "my message");""",
+             """public void Do(bool b) => Assert.That(b, Is.True, "my message");""")]
         [TestCase(
              "public void Do(object a, object b) => Assert.IsTrue(a == b);",
              "public void Do(object a, object b) => Assert.That(a, Is.EqualTo(b));")]
@@ -305,8 +305,8 @@ namespace Bla
              "public void Do(bool b) => Assert.IsFalse(b);",
              "public void Do(bool b) => Assert.That(b, Is.False);")]
         [TestCase(
-             @"public void Do(bool b) => Assert.IsFalse(b, ""my message"");",
-             @"public void Do(bool b) => Assert.That(b, Is.False, ""my message"");")]
+             """public void Do(bool b) => Assert.IsFalse(b, "my message");""",
+             """public void Do(bool b) => Assert.That(b, Is.False, "my message");""")]
         [TestCase(
              "public void Do(object a, object b) => Assert.IsFalse(a == b);",
              "public void Do(object a, object b) => Assert.That(a, Is.Not.EqualTo(b));")]
@@ -341,8 +341,8 @@ namespace Bla
              "public void Do(int i) => Assert.IsFalse(i >= 5);",
              "public void Do(int i) => Assert.That(i, Is.LessThan(5));")]
         [TestCase(
-             @"public void Do() => Assert.IsFalse(File.Exists(""a.txt"");",
-             @"public void Do() => Assert.That(File.Exists(""a.txt""), Is.False);",
+             """public void Do() => Assert.IsFalse(File.Exists("a.txt");""",
+             """public void Do() => Assert.That(File.Exists("a.txt"), Is.False);""",
              "using System.IO;")]
 
         // False
@@ -355,8 +355,8 @@ namespace Bla
              "public void Do() => Assert.AreEqual(42, 11);",
              "public void Do() => Assert.That(11, Is.EqualTo(42));")]
         [TestCase(
-             @"public void Do() => Assert.AreEqual(42, 11, ""my message"");",
-             @"public void Do() => Assert.That(11, Is.EqualTo(42), ""my message"");")]
+             """public void Do() => Assert.AreEqual(42, 11, "my message");""",
+             """public void Do() => Assert.That(11, Is.EqualTo(42), "my message");""")]
         [TestCase(
              "public void Do(bool b) => Assert.AreEqual(true, b);",
              "public void Do(bool b) => Assert.That(b, Is.True);")]
@@ -376,11 +376,11 @@ namespace Bla
              "public void Do(int i) => Assert.AreEqual(42, i);",
              "public void Do(int i) => Assert.That(i, Is.EqualTo(42));")]
         [TestCase(
-             @"public void Do(string s) => Assert.AreEqual(s, ""abc"");",
-             @"public void Do(string s) => Assert.That(s, Is.EqualTo(""abc""));")]
+             """public void Do(string s) => Assert.AreEqual(s, "abc");""",
+             """public void Do(string s) => Assert.That(s, Is.EqualTo("abc"));""")]
         [TestCase(
-             @"public void Do(string s) => Assert.AreEqual(""abc"", s);",
-             @"public void Do(string s) => Assert.That(s, Is.EqualTo(""abc""));")]
+             """public void Do(string s) => Assert.AreEqual("abc", s);""",
+             """public void Do(string s) => Assert.That(s, Is.EqualTo("abc"));""")]
         [TestCase(
              "public void Do(object o) => Assert.AreEqual(null, o);",
              "public void Do(object o) => Assert.That(o, Is.Null);")]
@@ -391,17 +391,17 @@ namespace Bla
              "public void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon);",
              "public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon));")]
         [TestCase(
-             @"public void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon, ""some message"");",
-             @"public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), ""some message"");")]
+             """public void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon, "some message");""",
+             """public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), "some message");""")]
         [TestCase(
-             @"public void Do(double d) => Assert.AreEqual(8.5d, d, 0.1d, ""some message"");",
-             @"public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), ""some message"");")]
+             """public void Do(double d) => Assert.AreEqual(8.5d, d, 0.1d, "some message");""",
+             """public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), "some message");""")]
         [TestCase(
-             @"public void Do(double d) => Assert.AreEqual(d, 8.5d, double.Epsilon, ""some message"");",
-             @"public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), ""some message"");")]
+             """public void Do(double d) => Assert.AreEqual(d, 8.5d, double.Epsilon, "some message");""",
+             """public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), "some message");""")]
         [TestCase(
-             @"public void Do(double d) => Assert.AreEqual(d, 8.5d, 0.1d, ""some message"");",
-             @"public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), ""some message"");")]
+             """public void Do(double d) => Assert.AreEqual(d, 8.5d, 0.1d, "some message");""",
+             """public void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), "some message");""")]
         [TestCase(
              "public void Do(GCNotificationStatus status) => Assert.AreEqual(status, GCNotificationStatus.Failed);",
              "public void Do(GCNotificationStatus status) => Assert.That(status, Is.EqualTo(GCNotificationStatus.Failed));")]
@@ -440,8 +440,8 @@ namespace Bla
              "public void Do() => Assert.AreNotEqual(42, 11);",
              "public void Do() => Assert.That(11, Is.Not.EqualTo(42));")]
         [TestCase(
-             @"public void Do() => Assert.AreNotEqual(42, 11, ""my message"");",
-             @"public void Do() => Assert.That(11, Is.Not.EqualTo(42), ""my message"");")]
+             """public void Do() => Assert.AreNotEqual(42, 11, "my message");""",
+             """public void Do() => Assert.That(11, Is.Not.EqualTo(42), "my message");""")]
         [TestCase(
              "public void Do(bool b) => Assert.AreNotEqual(true, b);",
              "public void Do(bool b) => Assert.That(b, Is.False);")]
@@ -498,26 +498,26 @@ namespace Bla
              "public void Do() => Assert.Greater(42, 11);",
              "public void Do() => Assert.That(42, Is.GreaterThan(11));")]
         [TestCase(
-             @"public void Do() => Assert.Greater(42, 11, ""my message"");",
-             @"public void Do() => Assert.That(42, Is.GreaterThan(11), ""my message"");")]
+             """public void Do() => Assert.Greater(42, 11, "my message");""",
+             """public void Do() => Assert.That(42, Is.GreaterThan(11), "my message");""")]
         [TestCase(
              "public void Do() => Assert.GreaterOrEqual(42, 11);",
              "public void Do() => Assert.That(42, Is.GreaterThanOrEqualTo(11));")]
         [TestCase(
-             @"public void Do() => Assert.GreaterOrEqual(42, 11, ""my message"");",
-             @"public void Do() => Assert.That(42, Is.GreaterThanOrEqualTo(11), ""my message"");")]
+             """public void Do() => Assert.GreaterOrEqual(42, 11, "my message");""",
+             """public void Do() => Assert.That(42, Is.GreaterThanOrEqualTo(11), "my message");""")]
         [TestCase(
              "public void Do() => Assert.Less(42, 11);",
              "public void Do() => Assert.That(42, Is.LessThan(11));")]
         [TestCase(
-             @"public void Do() => Assert.Less(42, 11, ""my message"");",
-             @"public void Do() => Assert.That(42, Is.LessThan(11), ""my message"");")]
+             """public void Do() => Assert.Less(42, 11, "my message");""",
+             """public void Do() => Assert.That(42, Is.LessThan(11), "my message");""")]
         [TestCase(
              "public void Do() => Assert.LessOrEqual(42, 11);",
              "public void Do() => Assert.That(42, Is.LessThanOrEqualTo(11));")]
         [TestCase(
-             @"public void Do() => Assert.LessOrEqual(42, 11, ""my message"");",
-             @"public void Do() => Assert.That(42, Is.LessThanOrEqualTo(11), ""my message"");")]
+             """public void Do() => Assert.LessOrEqual(42, 11, "my message");""",
+             """public void Do() => Assert.That(42, Is.LessThanOrEqualTo(11), "my message");""")]
 
         // AreSame
         [TestCase(
@@ -540,10 +540,16 @@ namespace Bla
              "public void Do(bool b) => Assert.That(b, Is.True);")]
         [TestCase(
              "public void Do(int i) => Assert.AreSame(42, i);",
-             "public void Do(int i) => Assert.That(i, Is.SameAs(42));")]
+             "public void Do(int i) => Assert.That(i, Is.EqualTo(42));")]
         [TestCase(
              "public void Do(int i) => Assert.AreSame(i, 42);",
-             "public void Do(int i) => Assert.That(i, Is.SameAs(42));")]
+             "public void Do(int i) => Assert.That(i, Is.EqualTo(42));")]
+        [TestCase(
+             """public void Do(string s) => Assert.AreSame("42", s);""",
+             """public void Do(string s) => Assert.That(s, Is.SameAs("42"));""")]
+        [TestCase(
+             """public void Do(string s) => Assert.AreSame(s, "42");""",
+             """public void Do(string s) => Assert.That(s, Is.SameAs("42"));""")]
 
         // AreNotSame
         [TestCase(
@@ -566,89 +572,95 @@ namespace Bla
              "public void Do(bool b) => Assert.That(b, Is.False);")]
         [TestCase(
              "public void Do(int i) => Assert.AreNotSame(42, i);",
-             "public void Do(int i) => Assert.That(i, Is.Not.SameAs(42));")]
+             "public void Do(int i) => Assert.That(i, Is.Not.EqualTo(42));")]
         [TestCase(
              "public void Do(int i) => Assert.AreNotSame(i, 42);",
-             "public void Do(int i) => Assert.That(i, Is.Not.SameAs(42));")]
+             "public void Do(int i) => Assert.That(i, Is.Not.EqualTo(42));")]
+        [TestCase(
+             """public void Do(string s) => Assert.AreNotSame("42", s);""",
+             """public void Do(string s) => Assert.That(s, Is.Not.SameAs("42"));""")]
+        [TestCase(
+             """public void Do(string s) => Assert.AreNotSame(s, "42");""",
+             """public void Do(string s) => Assert.That(s, Is.Not.SameAs("42"));""")]
 
         [TestCase(
-             @"public void Do(object o) => Assert.IsNullOrEmpty(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Null.Or.Empty, ""my message"");")]
+             """public void Do(object o) => Assert.IsNullOrEmpty(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Null.Or.Empty, "my message");""")]
         [TestCase(
-             @"public void Do(object o) => Assert.IsNotNull(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Not.Null, ""my message"");")]
+             """public void Do(object o) => Assert.IsNotNull(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Not.Null, "my message");""")]
         [TestCase(
-             @"public void Do(string s) => Assert.IsEmpty(s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.Empty, ""my message"");")]
+             """public void Do(string s) => Assert.IsEmpty(s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.Empty, "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreEquivalent(e, a, ""my message"");",
-             @"public void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.EquivalentTo(e), ""my message"");")]
+             """public void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreEquivalent(e, a, "my message");""",
+             """public void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.EquivalentTo(e), "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreNotEquivalent(e, a, ""my message"");",
-             @"public void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.Not.EquivalentTo(e), ""my message"");")]
+             """public void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreNotEquivalent(e, a, "my message");""",
+             """public void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.Not.EquivalentTo(e), "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e, object o) => CollectionAssert.DoesNotContain(e, o, ""my message"");",
-             @"public void Do(IEnumerable e, object o) => Assert.That(e, Does.Not.Contain(o), ""my message"");")]
+             """public void Do(IEnumerable e, object o) => CollectionAssert.DoesNotContain(e, o, "my message");""",
+             """public void Do(IEnumerable e, object o) => Assert.That(e, Does.Not.Contain(o), "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e, Object o) => CollectionAssert.Contains(e, o, ""my message"");",
-             @"public void Do(IEnumerable e, Object o) => Assert.That(e, Does.Contain(o), ""my message"");")]
+             """public void Do(IEnumerable e, Object o) => CollectionAssert.Contains(e, o, "my message");""",
+             """public void Do(IEnumerable e, Object o) => Assert.That(e, Does.Contain(o), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.StartsWith(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Does.StartWith(""abc""), ""my message"");")]
+             """public void Do(string s) => StringAssert.StartsWith("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Does.StartWith("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.EndsWith(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Does.EndWith(""abc""), ""my message"");")]
+             """public void Do(string s) => StringAssert.EndsWith("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Does.EndWith("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.DoesNotContain(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Does.Not.Contain(""abc""), ""my message"");")]
+             """public void Do(string s) => StringAssert.DoesNotContain("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Does.Not.Contain("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.DoesNotStartWith(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Does.Not.StartWith(""abc""), ""my message"");")]
+             """public void Do(string s) => StringAssert.DoesNotStartWith("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Does.Not.StartWith("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.DoesNotEndWith(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Does.Not.EndWith(""abc""), ""my message"");")]
+             """public void Do(string s) => StringAssert.DoesNotEndWith("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Does.Not.EndWith("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.Contains(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Does.Contain(""abc""), ""my message"");")]
+             """public void Do(string s) => StringAssert.Contains("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Does.Contain("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.AreEqualIgnoringCase(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.EqualTo(""abc"").IgnoreCase, ""my message"");")]
+             """public void Do(string s) => StringAssert.AreEqualIgnoringCase("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.EqualTo("abc").IgnoreCase, "my message");""")]
         [TestCase(
-             @"public void Do(string s) => StringAssert.AreNotEqualIgnoringCase(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.Not.EqualTo(""abc"").IgnoreCase, ""my message"");")]
+             """public void Do(string s) => StringAssert.AreNotEqualIgnoringCase("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.Not.EqualTo("abc").IgnoreCase, "my message");""")]
         [TestCase(
-             @"public void Do(string s) => CollectionAssert.IsSubsetOf(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.SubsetOf(""abc""), ""my message"");")]
+             """public void Do(string s) => CollectionAssert.IsSubsetOf("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.SubsetOf("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => CollectionAssert.IsNotSubsetOf(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.Not.SubsetOf(""abc""), ""my message"");")]
+             """public void Do(string s) => CollectionAssert.IsNotSubsetOf("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.Not.SubsetOf("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => CollectionAssert.IsSupersetOf(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.SupersetOf(""abc""), ""my message"");")]
+             """public void Do(string s) => CollectionAssert.IsSupersetOf("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.SupersetOf("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(string s) => CollectionAssert.IsNotSupersetOf(""abc"", s, ""my message"");",
-             @"public void Do(string s) => Assert.That(s, Is.Not.SupersetOf(""abc""), ""my message"");")]
+             """public void Do(string s) => CollectionAssert.IsNotSupersetOf("abc", s, "my message");""",
+             """public void Do(string s) => Assert.That(s, Is.Not.SupersetOf("abc"), "my message");""")]
         [TestCase(
-             @"public void Do(object o) => Assert.IsInstanceOf(typeof(object), o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message"");")]
+             """public void Do(object o) => Assert.IsInstanceOf(typeof(object), o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), "my message");""")]
         [TestCase(
-             @"public void Do(object o) => Assert.IsInstanceOf<object>(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message"");")]
+             """public void Do(object o) => Assert.IsInstanceOf<object>(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), "my message");""")]
         [TestCase(
-             @"public void Do(object o) => Assert.IsNotInstanceOf(typeof(object), o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Not.InstanceOf<object>(), ""my message"");")]
+             """public void Do(object o) => Assert.IsNotInstanceOf(typeof(object), o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Not.InstanceOf<object>(), "my message");""")]
         [TestCase(
-             @"public void Do(object o) => Assert.IsNotInstanceOf<object>(o, ""my message"");",
-             @"public void Do(object o) => Assert.That(o, Is.Not.InstanceOf<object>(), ""my message"");")]
+             """public void Do(object o) => Assert.IsNotInstanceOf<object>(o, "my message");""",
+             """public void Do(object o) => Assert.That(o, Is.Not.InstanceOf<object>(), "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e) => CollectionAssert.IsOrdered(e, ""my message"");",
-             @"public void Do(IEnumerable e) => Assert.That(e, Is.Ordered, ""my message"");")]
+             """public void Do(IEnumerable e) => CollectionAssert.IsOrdered(e, "my message");""",
+             """public void Do(IEnumerable e) => Assert.That(e, Is.Ordered, "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e) => CollectionAssert.AllItemsAreNotNull(e, ""my message"");",
-             @"public void Do(IEnumerable e) => Assert.That(e, Is.All.Not.Null, ""my message"");")]
+             """public void Do(IEnumerable e) => CollectionAssert.AllItemsAreNotNull(e, "my message");""",
+             """public void Do(IEnumerable e) => Assert.That(e, Is.All.Not.Null, "my message");""")]
         [TestCase(
-             @"public void Do(IEnumerable e) => CollectionAssert.AllItemsAreUnique(e, ""my message"");",
-             @"public void Do(IEnumerable e) => Assert.That(e, Is.Unique, ""my message"");")]
+             """public void Do(IEnumerable e) => CollectionAssert.AllItemsAreUnique(e, "my message");""",
+             """public void Do(IEnumerable e) => Assert.That(e, Is.Unique, "my message");""")]
         [TestCase(
              "public void Do(int i) => Assert.Zero(i);",
              "public void Do(int i) => Assert.That(i, Is.Zero);")]
@@ -670,8 +682,8 @@ namespace Bla
              "public void Do() => Assert.IsAssignableFrom(typeof(object), new object());",
              "public void Do() => Assert.That(new object(), Is.AssignableFrom<object>());")]
         [TestCase(
-             @"public void Do() => Assert.IsAssignableFrom(typeof(object), new object(), ""should be assignable"");",
-             @"public void Do() => Assert.That(new object(), Is.AssignableFrom<object>(), ""should be assignable"");")]
+             """public void Do() => Assert.IsAssignableFrom(typeof(object), new object(), "should be assignable");""",
+             """public void Do() => Assert.That(new object(), Is.AssignableFrom<object>(), "should be assignable");""")]
         [TestCase(
              "public void Do() => Assert.IsAssignableFrom<object>(new object());",
              "public void Do() => Assert.That(new object(), Is.AssignableFrom<object>());")]
@@ -679,8 +691,8 @@ namespace Bla
              "public void Do() => Assert.IsNotAssignableFrom(typeof(object), new object());",
              "public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>());")]
         [TestCase(
-             @"public void Do() => Assert.IsNotAssignableFrom(typeof(object), new object(), ""should be not assignable"");",
-             @"public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>(), ""should be not assignable"");")]
+             """public void Do() => Assert.IsNotAssignableFrom(typeof(object), new object(), "should be not assignable");""",
+             """public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>(), "should be not assignable");""")]
         [TestCase(
              "public void Do() => Assert.IsNotAssignableFrom<object>(new object());",
              "public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>());")]
@@ -709,20 +721,20 @@ namespace Bla
              "public void Do(Type type) => Assert.IsFalse(type.IsNotAssignableFrom<object>());",
              "public void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>());")]
         [TestCase(
-            @"public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.IsTrue(expectedType.IsAssignableFrom(type), ""{0} should implement {1}."", type.FullName, expectedType.FullName); }",
-            @"public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.AssignableFrom(type), $""{type.FullName} should implement {expectedType.FullName}.""); }")]
+            """public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.IsTrue(expectedType.IsAssignableFrom(type), "{0} should implement {1}.", type.FullName, expectedType.FullName); }""",
+            """public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.AssignableFrom(type), $"{type.FullName} should implement {expectedType.FullName}."); }""")]
         [TestCase(
-             @"public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.IsFalse(expectedType.IsAssignableFrom(type), ""{0} should not implement {1}."", type.FullName, expectedType.FullName); }",
-             @"public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.Not.AssignableFrom(type), $""{type.FullName} should not implement {expectedType.FullName}.""); }")]
+             """public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.IsFalse(expectedType.IsAssignableFrom(type), "{0} should not implement {1}.", type.FullName, expectedType.FullName); }""",
+             """public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.Not.AssignableFrom(type), $"{type.FullName} should not implement {expectedType.FullName}."); }""")]
 
         // misc
         [TestCase(
-             @"public void Do() => StringAssert.IsMatch(""some pattern"", ""actual"");",
-             @"public void Do() => Assert.That(""actual"", Does.Match(""some pattern""));",
+             """public void Do() => StringAssert.IsMatch("some pattern", "actual");""",
+             """public void Do() => Assert.That("actual", Does.Match("some pattern"));""",
              "using System.Text.RegularExpressions;")]
         [TestCase(
-             @"public void Do() => StringAssert.DoesNotMatch(""some pattern"", ""actual"");",
-             @"public void Do() => Assert.That(""actual"", Does.Not.Match(""some pattern""));",
+             """public void Do() => StringAssert.DoesNotMatch("some pattern", "actual");""",
+             """public void Do() => Assert.That("actual", Does.Not.Match("some pattern"));""",
              "using System.Text.RegularExpressions;")]
         [TestCase(
              "public void Do(IEnumerable collection) => CollectionAssert.AllItemsAreInstancesOfType(collection, typeof(string));",
@@ -730,32 +742,32 @@ namespace Bla
 
         // Exists/DoesNotExist
         [TestCase(
-             @"public void Do() => FileAssert.Exists(@""c:\pagefile.sys"");",
-             @"public void Do() => Assert.That(@""c:\pagefile.sys"", Does.Exist);")]
+             """public void Do() => FileAssert.Exists(@"c:\pagefile.sys");""",
+             """public void Do() => Assert.That(@"c:\pagefile.sys", Does.Exist);""")]
         [TestCase(
-             @"public void Do() => DirectoryAssert.Exists(@""c:\Windows"");",
-             @"public void Do() => Assert.That(@""c:\Windows"", Does.Exist);")]
+             """public void Do() => DirectoryAssert.Exists(@"c:\Windows");""",
+             """public void Do() => Assert.That(@"c:\Windows", Does.Exist);""")]
 
         [TestCase(
-             @"public void Do() => FileAssert.DoesNotExist(@""c:\pagefile.sys"");",
-             @"public void Do() => Assert.That(@""c:\pagefile.sys"", Does.Not.Exist);")]
+             """public void Do() => FileAssert.DoesNotExist(@"c:\pagefile.sys");""",
+             """public void Do() => Assert.That(@"c:\pagefile.sys", Does.Not.Exist);""")]
         [TestCase(
-             @"public void Do() => DirectoryAssert.DoesNotExist(@""c:\Windows"");",
-             @"public void Do() => Assert.That(@""c:\Windows"", Does.Not.Exist);")]
+             """public void Do() => DirectoryAssert.DoesNotExist(@"c:\Windows");""",
+             """public void Do() => Assert.That(@"c:\Windows", Does.Not.Exist);""")]
 
         // Throws / DoesNotThrow
         [TestCase(
              "public void Do() => Assert.Throws<ArgumentNullException>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentNullException);")]
         [TestCase(
-             @"public void Do() => Assert.Throws<ArgumentNullException>(() => throw new Exception(), ""some message"");",
-             @"public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentNullException, ""some message"");")]
+             """public void Do() => Assert.Throws<ArgumentNullException>(() => throw new Exception(), "some message");""",
+             """public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentNullException, "some message");""")]
         [TestCase(
              "public void Do() => Assert.Throws<ArgumentException>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentException);")]
         [TestCase(
-             @"public void Do() => Assert.Throws<ArgumentException>(() => throw new Exception(), ""some message"");",
-             @"public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentException, ""some message"");")]
+             """public void Do() => Assert.Throws<ArgumentException>(() => throw new Exception(), "some message");""",
+             """public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentException, "some message");""")]
         [TestCase(
              "public void Do() => Assert.Throws<Exception>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.Exception);")]
@@ -763,26 +775,26 @@ namespace Bla
              "public void Do() => Assert.Throws<InvalidOperationException>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.InvalidOperationException);")]
         [TestCase(
-             @"public void Do() => Assert.Throws<InvalidOperationException>(() => throw new Exception(), ""some message"");",
-             @"public void Do() => Assert.That(() => throw new Exception(), Throws.InvalidOperationException, ""some message"");")]
+             """public void Do() => Assert.Throws<InvalidOperationException>(() => throw new Exception(), "some message");""",
+             """public void Do() => Assert.That(() => throw new Exception(), Throws.InvalidOperationException, "some message");""")]
         [TestCase(
              "public void Do() => Assert.Throws<TargetInvocationException>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.TargetInvocationException);")]
         [TestCase(
-             @"public void Do() => Assert.Throws<TargetInvocationException>(() => throw new Exception(), ""some message"");",
-             @"public void Do() => Assert.That(() => throw new Exception(), Throws.TargetInvocationException, ""some message"");")]
+             """public void Do() => Assert.Throws<TargetInvocationException>(() => throw new Exception(), "some message");""",
+             """public void Do() => Assert.That(() => throw new Exception(), Throws.TargetInvocationException, "some message");""")]
         [TestCase(
              "public void Do() => Assert.Throws<NotSupportedException>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<NotSupportedException>());")]
         [TestCase(
-             @"public void Do() => Assert.Throws<NotSupportedException>(() => throw new Exception(), ""some message"");",
-             @"public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<NotSupportedException>(), ""some message"");")]
+             """public void Do() => Assert.Throws<NotSupportedException>(() => throw new Exception(), "some message");""",
+             """public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<NotSupportedException>(), "some message");""")]
         [TestCase(
              "public void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>());")]
         [TestCase(
-             @"public void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception(), ""some message"");",
-             @"public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>(), ""some message"");")]
+             """public void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception(), "some message");""",
+             """public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>(), "some message");""")]
         [TestCase(
              "public void Do(Type exceptionType) => Assert.Throws(exceptionType, () => throw new Exception());",
              "public void Do(Type exceptionType) => Assert.That(() => throw new Exception(), Throws.TypeOf(exceptionType));")]
@@ -797,6 +809,8 @@ namespace Bla
         {
             var originalCode = @"
 using System;
+using System.Collections;
+
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
@@ -811,6 +825,8 @@ public class TestMe
 
             var fixedCode = @"
 using System;
+using System.Collections;
+
 using NUnit.Framework;
 
 " + additionalNamespace + @"
