@@ -1870,7 +1870,7 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
         private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
 
-        private Diagnostic CreateIssue(in Location location, in Pair[] properties, params object[] args)
+        private Diagnostic CreateIssue(Location location, Pair[] properties, params object[] args)
         {
             if (properties.Length is 0)
             {
