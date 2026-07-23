@@ -211,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// The diagnostic issue to report.
         /// </param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue)
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic issue)
         {
             if (issue != null)
             {
@@ -258,7 +258,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// <param name="issues">
         /// The diagnostic issues to report.
         /// </param>
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic[] issues)
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic[] issues)
         {
             for (int index = 0, length = issues.Length; index < length; index++)
             {
@@ -280,7 +280,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// <param name="issues">
         /// The diagnostic issues to report.
         /// </param>
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
         {
             switch (issues.Count)
             {
@@ -1789,7 +1789,7 @@ namespace MiKoSolutions.Analyzers.Rules
             ReportDiagnosticsEnumerable(context, issues);
         }
 
-        private static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic[] array)
+        private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic[] array)
         {
             for (int index = 0, length = array.Length; index < length; index++)
             {
@@ -1802,7 +1802,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnostics(SymbolAnalysisContext context, IReadOnlyList<Diagnostic> list)
+        private static void ReportDiagnostics(in SymbolAnalysisContext context, IReadOnlyList<Diagnostic> list)
         {
             for (int index = 0, count = list.Count; index < count; index++)
             {
@@ -1815,7 +1815,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnosticsEnumerable(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
+        private static void ReportDiagnosticsEnumerable(in SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             foreach (var issue in issues)
             {
@@ -1832,7 +1832,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnosticsEnumerable(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
+        private static void ReportDiagnosticsEnumerable(in SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             foreach (var issue in issues)
             {
@@ -1870,7 +1870,7 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
         private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
 
-        private Diagnostic CreateIssue(Location location, Pair[] properties, params object[] args)
+        private Diagnostic CreateIssue(in Location location, in Pair[] properties, params object[] args)
         {
             if (properties.Length is 0)
             {
