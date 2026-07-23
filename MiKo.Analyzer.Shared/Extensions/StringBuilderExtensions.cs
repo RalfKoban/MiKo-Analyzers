@@ -308,6 +308,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, ReplacementMap map) => value.ReplaceAllWithProbe(map.Pairs);
 
         /// <summary>
