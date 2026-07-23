@@ -173,11 +173,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (IsNumeric(arg2))
                         {
                             // seems we have a tolerance parameter
-                            return AssertThat(arg1, Is(call, arg0, "Within", arg2), args, 3);
+                            return AssertThat(arg1, Is("EqualTo", arg0, "Within", arg2), args, 3);
                         }
                     }
 
-                    return AssertThat(arg1, Is(call, arg0), args);
+                    return AssertThat(arg1, Is("EqualTo", arg0), args);
                 }
             }
 
@@ -202,11 +202,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (IsNumeric(arg2))
                         {
                             // seems we have a tolerance parameter
-                            return AssertThat(arg0, Is(call, arg1, "Within", arg2), args, 3);
+                            return AssertThat(arg0, Is("EqualTo", arg1, "Within", arg2), args, 3);
                         }
                     }
 
-                    return AssertThat(arg0, Is(call, arg1), args);
+                    return AssertThat(arg0, Is("EqualTo", arg1), args);
                 }
             }
 
@@ -238,7 +238,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("True"), args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("False"), args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Not", "Null"), args);
-                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.NumericLiteralExpression: return AssertThat(arg1, Is("Not", "EqualTo", arg0), args);
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is("Not", call, arg0), args);
             }
 
@@ -253,7 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("True"), args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("False"), args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Not", "Null"), args);
-                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.NumericLiteralExpression: return AssertThat(arg0, Is("Not", "EqualTo", arg1), args);
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is("Not", call, arg1), args);
             }
 
