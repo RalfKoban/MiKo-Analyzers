@@ -159,6 +159,8 @@ namespace TestHelper
                 {
                     diagnostics ??= new List<Diagnostic>(issues.Length);
 
+                    var tree = document.GetSyntaxTreeAsync().Result;
+
                     for (int index = 0, issuesLength = issues.Length; index < issuesLength; index++)
                     {
                         var issue = issues[index];
@@ -169,8 +171,6 @@ namespace TestHelper
                         }
                         else
                         {
-                            var tree = document.GetSyntaxTreeAsync().Result;
-
                             if (tree == issue.Location.SourceTree)
                             {
                                 diagnostics.Add(issue);
