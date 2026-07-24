@@ -134,18 +134,13 @@ namespace TestHelper
         /// </returns>
         protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(in ImmutableArray<DiagnosticAnalyzer> analyzers, in ReadOnlySpan<Document> documents, in bool profileAnalysis)
         {
-            var projects = new HashSet<Project>();
-
-            foreach (var document in documents)
-            {
-                projects.Add(document.Project);
-            }
-
-            var documentsLength = documents.Length;
             List<Diagnostic> diagnostics = null;
 
-            foreach (var project in projects)
+            for (int documentIndex = 0, documentsLength = documents.Length; documentIndex < documentsLength; documentIndex++)
             {
+                var document = documents[documentIndex];
+                var project = document.Project;
+
                 if (profileAnalysis)
                 {
                     JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
@@ -164,7 +159,9 @@ namespace TestHelper
                 {
                     diagnostics ??= new List<Diagnostic>(issues.Length);
 
-                    for (var index = 0; index < issues.Length; index++)
+                    var tree = document.GetSyntaxTreeAsync().Result;
+
+                    for (int index = 0, issuesLength = issues.Length; index < issuesLength; index++)
                     {
                         var issue = issues[index];
 
@@ -174,16 +171,9 @@ namespace TestHelper
                         }
                         else
                         {
-                            for (var documentIndex = 0; documentIndex < documentsLength; documentIndex++)
+                            if (tree == issue.Location.SourceTree)
                             {
-                                var tree = documents[documentIndex].GetSyntaxTreeAsync().Result;
-
-                                if (tree == issue.Location.SourceTree)
-                                {
-                                    diagnostics.Add(issue);
-
-                                    break;
-                                }
+                                diagnostics.Add(issue);
                             }
                         }
                     }

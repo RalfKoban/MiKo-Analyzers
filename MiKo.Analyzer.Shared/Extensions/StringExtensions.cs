@@ -3310,16 +3310,18 @@ namespace MiKoSolutions.Analyzers
             // Performance-Note:
             // - tighten delta to the last position where endChar actually appears,
             //   so the loop never scans positions that cannot possibly yield a match
-            var effectiveDelta = startIndex + endCharLastIndex;
+            // - and add a +1 already here to avoid the add each time we run any of the loops,
+            //   and note that the for loop end conditions are now using '<' instead of '<='
+            var effectiveDelta = startIndex + endCharLastIndex + 1;
 
             // Performance-Note:
             // - if the substring is short enough, we can skip checking an extra probe character and just check the start and end characters;
             // - note that most times the else part is run as the substring is often long enough
             if (substring.Length <= 2 * QuickSubstringProbeLengthThreshold)
             {
-                for (var offset = startIndex; offset <= effectiveDelta; offset++)
+                for (var offset = startIndex; offset < effectiveDelta; offset++)
                 {
-                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset).IndexOf(startChar);
 
                     if (index < 0)
                     {
@@ -3344,9 +3346,9 @@ namespace MiKoSolutions.Analyzers
             {
                 var extraProbeChar = substring[QuickSubstringProbeLengthThreshold];
 
-                for (var offset = startIndex; offset <= effectiveDelta; offset++)
+                for (var offset = startIndex; offset < effectiveDelta; offset++)
                 {
-                    var index = searchSpace.Slice(offset, effectiveDelta - offset + 1).IndexOf(startChar);
+                    var index = searchSpace.Slice(offset, effectiveDelta - offset).IndexOf(startChar);
 
                     if (index < 0)
                     {
