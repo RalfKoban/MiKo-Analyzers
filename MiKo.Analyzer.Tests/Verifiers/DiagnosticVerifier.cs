@@ -45,35 +45,40 @@ namespace TestHelper
 
         protected void An_issue_is_reported_for(int violations, string fileContent, LanguageVersion languageVersion = LanguageVersion.Default)
         {
-            Assert.Multiple(() =>
-                                 {
-                                     var results = GetDiagnostics(fileContent, languageVersion);
-                                     var resultsLength = results.Length;
+            using (Assert.EnterMultipleScope())
+            {
+                var results = GetDiagnostics(fileContent, languageVersion);
+                var resultsLength = results.Length;
 
-                                     Assert.That(resultsLength, Is.EqualTo(violations), string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
+                // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
+                Assert.That(resultsLength, Is.EqualTo(violations), () => string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
-                                     var placeholdersLength = Placeholders.Length;
+                var placeholdersLength = Placeholders.Length;
 
-                                     for (var index = 0; index < resultsLength; index++)
-                                     {
-                                         var result = results[index];
+                for (var index = 0; index < resultsLength; index++)
+                {
+                    var result = results[index];
 
-                                         Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
-                                         Assert.That(result.Id, Is.Not.EqualTo("AD0001")); // This is a programming error
+                    Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+                    Assert.That(result.Id, Is.Not.EqualTo("AD0001")); // This is a programming error
 
-                                         var message = result.GetMessage(null);
+                    var message = result.GetMessage(null);
 
-                                         Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
-                                         Assert.That(message, Does.Not.Contain(" -> "), "Wrong parameter provided, Pair.");
+                    Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
+                    Assert.That(message, Does.Not.Contain(" -> "), "Wrong parameter provided, Pair.");
 
-                                         for (var placeholderIndex = 0; placeholderIndex < placeholdersLength; placeholderIndex++)
-                                         {
-                                             var placeholder = Placeholders[placeholderIndex];
+                    if (message.AsSpan().IndexOf('{') >= 0)
+                    {
+                        for (var placeholderIndex = 0; placeholderIndex < placeholdersLength; placeholderIndex++)
+                        {
+                            var placeholder = Placeholders[placeholderIndex];
 
-                                             Assert.That(message, Does.Not.Contain(placeholder), "Placeholder " + placeholder + " found!");
-                                         }
-                                     }
-                                 });
+                            // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
+                            Assert.That(message, Does.Not.Contain(placeholder), () => "Placeholder " + placeholder + " found!");
+                        }
+                    }
+                }
+            }
         }
 
         protected void An_issue_is_reported_for_file_(string path, in int violations, in LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(violations, File.ReadAllText(path), languageVersion);
@@ -93,18 +98,18 @@ namespace TestHelper
 
         protected void No_issue_is_reported_for_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
         {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var directory in Directory.EnumerateDirectories(path))
-                                     {
-                                         No_issue_is_reported_for_folder_(directory, languageVersion);
-                                     }
+            using (Assert.EnterMultipleScope())
+            {
+                foreach (var directory in Directory.EnumerateDirectories(path))
+                {
+                    No_issue_is_reported_for_folder_(directory, languageVersion);
+                }
 
-                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
-                                     {
-                                         No_issue_is_reported_for_file_(file, languageVersion);
-                                     }
-                                 });
+                foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+                {
+                    No_issue_is_reported_for_file_(file, languageVersion);
+                }
+            }
         }
 
         protected IEnumerable<string> Collect_files_having_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
