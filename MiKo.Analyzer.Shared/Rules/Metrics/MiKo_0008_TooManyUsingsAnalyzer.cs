@@ -37,11 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
             if (usingsAboveLimit.Length > 0)
             {
-                var countedUsings = AllowedUsings + usingsAboveLimit.Length;
+                var totalUsings = AllowedUsings + usingsAboveLimit.Length;
 
                 foreach (var usingDirective in usingsAboveLimit)
                 {
-                    ReportDiagnostics(context, Issue(usingDirective, countedUsings, AllowedUsings));
+                    ReportDiagnostics(context, Issue(usingDirective, totalUsings, AllowedUsings));
                 }
             }
         }
