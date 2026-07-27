@@ -76,6 +76,50 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_using_directives_at_limit_in_compilation_unit_and_additional_using_alias() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+using Integer32 = System.Int32;
+
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_using_directives_at_limit_in_file_scoped_namespace_and_additional_using_alias() => No_issue_is_reported_for(@"
+namespace Bla;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+using Integer32 = System.Int32;
+
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_using_directives_at_limit_in_namespace_and_additional_using_alias() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
+    using Integer32 = System.Int32;
+
+    public class TestMe
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_using_directives_below_limit_in_compilation_unit() => No_issue_is_reported_for(@"
 using System;
 
