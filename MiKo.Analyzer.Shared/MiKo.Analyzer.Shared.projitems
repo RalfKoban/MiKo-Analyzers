@@ -375,6 +375,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0005_LocalFunctionLinesOfCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0006_LocalFunctionCyclomaticComplexityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0007_LocalFunctionParameterCountAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0008_TooManyUsingsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\LocalVariableNamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1000_EventArgsTypeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1001_EventArgsParameterAnalyzer.cs" />

@@ -254,6 +254,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A large number of using directives often means that a type depends on many different parts of the system. This can make the code harder to understand, maintain, and reuse.
+        ///Consider reviewing the design and splitting responsibilities if necessary..
+        /// </summary>
+        internal static string MiKo_0008_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0008_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many using directives: {1,4} (max. {2} allowed).
+        /// </summary>
+        internal static string MiKo_0008_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0008_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid types with too many namespace dependencies.
+        /// </summary>
+        internal static string MiKo_0008_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0008_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Append suffix &apos;EventArgs&apos;.
         /// </summary>
         internal static string MiKo_1000_CodeFixTitle {
