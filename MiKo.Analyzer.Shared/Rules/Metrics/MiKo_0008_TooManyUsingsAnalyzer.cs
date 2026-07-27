@@ -29,14 +29,19 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var usingDirectives = context.Node.ChildNodes<UsingDirectiveSyntax>().Skip(AllowedUsings).ToArray();
-            var usingsAboveLimit = usingDirectives.Length;
+            var usingsAboveLimit = context.Node
+                                          .ChildNodes<UsingDirectiveSyntax>()
+                                          .Where(_ => _.Alias is null) // we do not want to report aliases, even though they might be additional namespace dependencies
+                                          .Skip(AllowedUsings)
+                                          .ToArray();
 
-            if (usingsAboveLimit > 0)
+            if (usingsAboveLimit.Length > 0)
             {
-                foreach (var usingDirective in usingDirectives)
+                var totalUsings = AllowedUsings + usingsAboveLimit.Length;
+
+                foreach (var usingDirective in usingsAboveLimit)
                 {
-                    ReportDiagnostics(context, Issue(usingDirective, usingsAboveLimit, AllowedUsings));
+                    ReportDiagnostics(context, Issue(usingDirective, totalUsings, AllowedUsings));
                 }
             }
         }
