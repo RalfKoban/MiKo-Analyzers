@@ -82,6 +82,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Metrics", "0. Metrics", 
 		Documentation\MiKo_0005.md = Documentation\MiKo_0005.md
 		Documentation\MiKo_0006.md = Documentation\MiKo_0006.md
 		Documentation\MiKo_0007.md = Documentation\MiKo_0007.md
+		Documentation\MiKo_0008.md = Documentation\MiKo_0008.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Naming", "1. Naming", "{E7FE7355-4580-48AF-A4BF-957A43C8B93E}"
