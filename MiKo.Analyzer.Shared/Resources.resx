@@ -5436,6 +5436,16 @@ Using `IReadOnlyList&lt;T&gt;` as the parameter type instead makes the intent ex
   <data name="MiKo_3235_Title" xml:space="preserve">
     <value>Do not call 'ToList' on an 'IEnumerable' parameter</value>
   </data>
+  <data name="MiKo_3236_Description" xml:space="preserve">
+    <value>Qualified names can make code longer and harder to read. Use an alias for types with long namespace names to keep declarations short and easier to understand.
+This helps improve code readability and reduces visual noise.</value>
+  </data>
+  <data name="MiKo_3236_MessageFormat" xml:space="preserve">
+    <value>Use an alias instead of the fully qualified type '{0}'</value>
+  </data>
+  <data name="MiKo_3236_Title" xml:space="preserve">
+    <value>Use alias instead of fully qualified names</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

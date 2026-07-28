@@ -15544,6 +15544,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Qualified names can make code longer and harder to read. Use an alias for types with long namespace names to keep declarations short and easier to understand.
+        ///This helps improve code readability and reduces visual noise..
+        /// </summary>
+        internal static string MiKo_3236_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3236_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use an alias instead of the fully qualified type &apos;{0}&apos;.
+        /// </summary>
+        internal static string MiKo_3236_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3236_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use alias instead of fully qualified names.
+        /// </summary>
+        internal static string MiKo_3236_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3236_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
