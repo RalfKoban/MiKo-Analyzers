@@ -55,6 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case WhereClauseSyntax whereClause:
                         return whereClause.WhereKeyword;
+
+                    case ArrowExpressionClauseSyntax arrowClause:
+                        return arrowClause.ArrowToken;
                 }
             }
 
@@ -90,6 +93,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case WhereClauseSyntax whereClause:
                         return whereClause.WhereKeyword.GetPositionWithinEndLine() - 2;
+
+                    case ArrowExpressionClauseSyntax arrowClause:
+                        return arrowClause.ArrowToken.GetPositionWithinEndLine() - 2;
                 }
             }
 
