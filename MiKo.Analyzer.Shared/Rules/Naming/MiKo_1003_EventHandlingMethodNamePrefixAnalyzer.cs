@@ -59,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    ? methodName.AsSpan(Prefix.Length)
                                    : methodName.AsSpan();
 
+#pragma warning disable IDE0045 // Convert to conditional expression
                 if (adjustedName.EndsWith(OnCanExecuteSuffix))
                 {
                     name = "CanExecute".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnCanExecuteSuffix.Length));
@@ -73,6 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            ? methodName
                            : adjustedName.ToString();
                 }
+#pragma warning restore IDE0045 // Convert to conditional expression
             }
 
             return name.AsCachedBuilder()

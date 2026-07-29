@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 ExpressionSyntax expression;
 
+#pragma warning disable IDE0045 // Convert to conditional expression
                 if (isFlags && position > 0)
                 {
                     expression = SyntaxFactory.BinaryExpression(SyntaxKind.LeftShiftExpression, Literal(1), Literal(position - 1));
@@ -42,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     expression = Literal(position);
                 }
+#pragma warning restore IDE0045 // Convert to conditional expression
 
                 return member.WithEqualsValue(SyntaxFactory.EqualsValueClause(expression));
             }

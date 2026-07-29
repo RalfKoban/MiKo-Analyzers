@@ -33,14 +33,17 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void EqualsAny_with_IEnumerable_returns_true_for_different_casing_with_OrdinalIgnoreCase_comparison() => Assert.That("abc".EqualsAny(new List<string> { "ABC" }, StringComparison.OrdinalIgnoreCase), Is.True);
 
+#pragma warning disable IDE0300 // Simplify collection initialization
         [Test]
         public static void EqualsAny_with_array_returns_false_for_null_value() => Assert.That(((string)null).EqualsAny(new[] { "abc" }), Is.False);
 
         [Test]
         public static void EqualsAny_with_array_returns_false_for_empty_value() => Assert.That(string.Empty.EqualsAny(new[] { "abc" }), Is.False);
 
+#pragma warning disable IDE0301 // Simplify collection initialization
         [Test]
         public static void EqualsAny_with_array_returns_false_for_empty_phrases() => Assert.That("abc".EqualsAny(Array.Empty<string>()), Is.False);
+#pragma warning restore IDE0301 // Simplify collection initialization
 
         [Test]
         public static void EqualsAny_with_array_returns_false_when_no_phrase_matches() => Assert.That("abc".EqualsAny(new[] { "xyz", "def" }), Is.False);
@@ -56,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Extensions
 
         [Test]
         public static void EqualsAny_with_array_returns_true_for_different_casing_with_OrdinalIgnoreCase_comparison() => Assert.That("abc".EqualsAny(new[] { "ABC" }, StringComparison.OrdinalIgnoreCase), Is.True);
+#pragma warning restore IDE0300 // Simplify collection initialization
 
         [Test]
         public static void EqualsAny_with_collection_expression_returns_false_for_null_value() => Assert.That(((string)null).EqualsAny(["abc"]), Is.False);

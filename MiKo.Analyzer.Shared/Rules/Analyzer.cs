@@ -1879,6 +1879,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var immutableProperties = ImmutableDictionary<string, string>.Empty;
 
+#pragma warning disable IDE0045 // Convert to conditional expression
             if (properties.Length is 1)
             {
                 immutableProperties = immutableProperties.Add(properties[0].Key, properties[0].Value);
@@ -1887,6 +1888,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 immutableProperties = immutableProperties.AddRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
             }
+#pragma warning restore IDE0045 // Convert to conditional expression
 
             return Diagnostic.Create(m_rule, location, immutableProperties, args);
         }
