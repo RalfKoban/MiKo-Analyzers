@@ -876,7 +876,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// <returns>
         /// A diagnostic issue for the location.
         /// </returns>
-        protected Diagnostic Issue<T1>(Location location, T1 arg1, Pair property) => Issue(location, arg1, new[] { property });
+        protected Diagnostic Issue<T1>(Location location, T1 arg1, in Pair property) => Issue(location, arg1, new[] { property });
 
         /// <summary>
         /// Creates a diagnostic issue for a symbol with a custom name and two arguments.
