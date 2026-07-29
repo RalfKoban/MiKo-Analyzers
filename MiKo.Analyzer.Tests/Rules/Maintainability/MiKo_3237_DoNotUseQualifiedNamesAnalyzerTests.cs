@@ -24,15 +24,17 @@ namespace Bla
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_fully_qualified_namespace_only_in_nameof() => No_issue_is_reported_for(@"
+        [TestCase("System")]
+        [TestCase("System.Collections")]
+        [TestCase("System.Collections.Generic")]
+        public void No_issue_is_reported_for_fully_qualified_namespace_only_in_nameof_(string ns) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
 {
     public class TestMe
     {
-        public string DoSomething() => nameof(System.IO);
+        public string DoSomething() => nameof(" + ns + @");
     }
 }
 ");
