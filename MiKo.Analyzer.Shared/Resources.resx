@@ -5446,6 +5446,16 @@ This helps improve code readability and reduces visual noise.</value>
   <data name="MiKo_3236_Title" xml:space="preserve">
     <value>Use alias instead of fully qualified names</value>
   </data>
+  <data name="MiKo_3237_Description" xml:space="preserve">
+    <value>Qualified names can make code longer and harder to read. Use using directives when referencing types to keep the code short and easier to understand.
+This helps improve code readability and reduces visual noise.</value>
+  </data>
+  <data name="MiKo_3237_MessageFormat" xml:space="preserve">
+    <value>Use using directive instead of fully qualified type</value>
+  </data>
+  <data name="MiKo_3237_Title" xml:space="preserve">
+    <value>Use using directives instead of fully qualified names</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

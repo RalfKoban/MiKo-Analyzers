@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3236_DoNotUseQualifiedNamesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzerTests : CodeFixVerifier
     {
         [TestCase("int i")]
         [TestCase("string s")]
@@ -232,8 +232,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3236_DoNotUseQualifiedNamesAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3236_DoNotUseQualifiedNamesAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer();
     }
 }
