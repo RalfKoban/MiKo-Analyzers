@@ -45,7 +45,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_if_statement_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_if_statement_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -61,7 +61,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_if_statement_with_operator_aligned_with_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_if_statement_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -77,7 +77,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_if_statement_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_if_statement_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -93,7 +93,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_if_statement_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_if_statement_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -109,7 +109,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_right_operand_for_if_statement()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_if_statement()
         {
             const string OriginalCode = @"
 using System;
@@ -145,7 +145,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_if_statement()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_if_statement()
         {
             const string OriginalCode = @"
 using System;
@@ -181,7 +181,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_if_statement()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_if_statement()
         {
             const string OriginalCode = @"
 using System;
@@ -246,7 +246,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_return_statement_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_return_statement_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -260,7 +260,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_return_statement_with_operator_aligned_with_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_return_statement_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -274,7 +274,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_return_statement_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_return_statement_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -288,7 +288,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_return_statement_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_return_statement_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -302,7 +302,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_right_operand_for_return_statement()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_return_statement()
         {
             const string OriginalCode = @"
 using System;
@@ -334,7 +334,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_return_statement()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_return_statement()
         {
             const string OriginalCode = @"
 using System;
@@ -366,7 +366,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_return_statement()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_return_statement()
         {
             const string OriginalCode = @"
 using System;
@@ -441,7 +441,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_when_clause_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_when_clause_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -462,7 +462,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_when_clause_with_operator_aligned_with_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_when_clause_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -483,7 +483,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_when_clause_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_when_clause_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -504,7 +504,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_when_clause_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_when_clause_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -525,7 +525,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_right_operand_for_when_clause()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_when_clause()
         {
             const string OriginalCode = @"
 using System;
@@ -571,7 +571,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_when_clause()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_when_clause()
         {
             const string OriginalCode = @"
 using System;
@@ -617,7 +617,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_when_clause()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_when_clause()
         {
             const string OriginalCode = @"
 using System;
@@ -692,7 +692,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_declaration_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_declaration_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -706,7 +706,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_declaration_with_operator_aligned_with_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -720,7 +720,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_declaration_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -734,7 +734,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_declaration_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -748,7 +748,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_right_operand_for_variable_declaration()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_variable_declaration()
         {
             const string OriginalCode = @"
 using System;
@@ -780,7 +780,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_variable_declaration()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_variable_declaration()
         {
             const string OriginalCode = @"
 using System;
@@ -812,7 +812,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_variable_declaration()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_variable_declaration()
         {
             const string OriginalCode = @"
 using System;
@@ -873,7 +873,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_assignment_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_assignment_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -887,7 +887,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_assignment_with_operator_aligned_with_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_assignment_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -901,7 +901,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_assignment_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_assignment_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -915,7 +915,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_assignment_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_assignment_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -929,7 +929,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_right_operand_for_assignment()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_assignment()
         {
             const string OriginalCode = @"
 using System;
@@ -961,7 +961,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_assignment()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_assignment()
         {
             const string OriginalCode = @"
 using System;
@@ -993,7 +993,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_assignment()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_assignment()
         {
             const string OriginalCode = @"
 using System;
@@ -1062,7 +1062,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_argument_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_argument_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1080,7 +1080,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_argument_with_operator_aligned_with_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_argument_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1098,7 +1098,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_argument_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_argument_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1116,7 +1116,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_argument_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_argument_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1134,7 +1134,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_right_operand_for_argument()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_argument()
         {
             const string OriginalCode = @"
 using System;
@@ -1174,7 +1174,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_argument()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_argument()
         {
             const string OriginalCode = @"
 using System;
@@ -1214,7 +1214,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_argument()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_argument()
         {
             const string OriginalCode = @"
 using System;
@@ -1271,7 +1271,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_lambda_argument_with_operator_outdented_one_space_from_left_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_lambda_argument_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1289,7 +1289,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_lambda_argument_with_operator_aligned_with_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_lambda_argument_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1307,7 +1307,25 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_lambda_argument_with_operator_outdented_2_spaces_from_left_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_lambda_argument_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(() => condition1
+                              && condition2);
+    }
+
+    public void DoSomethingElse(Func<bool> condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_lambda_argument_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -1325,7 +1343,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_aligned_with_left_operand_for_lambda_argument()
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_lambda_argument()
         {
             const string OriginalCode = @"
 using System;
@@ -1365,7 +1383,47 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_lambda_argument()
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_lambda_argument()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(() => condition1
+                              && condition2);
+    }
+
+    public void DoSomethingElse(Func<bool> condition)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(() => condition1
+                           && condition2);
+    }
+
+    public void DoSomethingElse(Func<bool> condition)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_lambda_argument()
         {
             const string OriginalCode = @"
 using System;
@@ -1405,7 +1463,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_outdent_operator_one_space_from_left_operand_when_outdented_2_spaces_for_where_clause()
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_where_clause()
         {
             const string OriginalCode = @"
 using System;
@@ -1440,6 +1498,152 @@ public class TestMe
                         && number < 10
                      select number;
     }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1 && condition2;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_with_operator_after_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4) => condition1 &&
+                                                                                                   condition2 ||
+                                                                                                   condition3 &&
+                                                                                                   condition4;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_with_right_operand_directly_below_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                              && condition2;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_arrow_clause_with_operator_right_of_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                                  && condition2;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_arrow_clause_with_operator_directly_below_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                                 && condition2;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_arrow_clause_with_operator_left_of_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                               && condition2;
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_when_operator_is_right_of_left_operand_for_arrow_clause()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                                  && condition2;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                              && condition2;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_operator_is_directly_below_left_operand_for_arrow_clause()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                                 && condition2;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                              && condition2;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_operator_is_left_of_left_operand_for_arrow_clause()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                                && condition2;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool condition1, bool condition2) => condition1
+                                                              && condition2;
 }
 ";
 
