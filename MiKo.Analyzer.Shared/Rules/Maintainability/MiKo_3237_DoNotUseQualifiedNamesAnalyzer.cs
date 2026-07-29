@@ -1,0 +1,57 @@
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+namespace MiKoSolutions.Analyzers.Rules.Maintainability
+{
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public sealed class MiKo_3237_DoNotUseQualifiedNamesAnalyzer : MaintainabilityAnalyzer
+    {
+        public const string Id = "MiKo_3237";
+
+        public MiKo_3237_DoNotUseQualifiedNamesAnalyzer() : base(Id, (SymbolKind)(-1))
+        {
+        }
+
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQualifiedName, SyntaxKind.SimpleMemberAccessExpression);
+
+        private static bool HasIssue(MemberAccessExpressionSyntax node, in SyntaxNodeAnalysisContext context)
+        {
+            if (node.Name is IdentifierNameSyntax identifier)
+            {
+                if (node.Parent is ArgumentSyntax argument && argument.Expression == node)
+                {
+                    // only a complete namespace as argument, so do not report it
+                    return false;
+                }
+
+                var symbol = identifier.GetSymbol(context.SemanticModel);
+
+                if (symbol is INamespaceSymbol)
+                {
+                    if (node.Parent is MemberAccessExpressionSyntax parent && parent.Name is IdentifierNameSyntax identifierFromParent)
+                    {
+                        if (identifierFromParent.GetSymbol(context.SemanticModel) is INamespaceSymbol)
+                        {
+                            // ignore this as the parent is already reported
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void AnalyzeQualifiedName(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is MemberAccessExpressionSyntax node && HasIssue(node, context))
+            {
+                ReportDiagnostics(context, Issue(node));
+            }
+        }
+    }
+}

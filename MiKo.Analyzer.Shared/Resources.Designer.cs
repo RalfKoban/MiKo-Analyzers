@@ -15572,6 +15572,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Qualified names can make code longer and harder to read. Use using directives when referencing types to keep the code short and easier to understand.
+        ///This helps improve code readability and reduces visual noise..
+        /// </summary>
+        internal static string MiKo_3237_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3237_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use using directive instead of fully qualified type.
+        /// </summary>
+        internal static string MiKo_3237_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3237_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use using directives instead of fully qualified names.
+        /// </summary>
+        internal static string MiKo_3237_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3237_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
