@@ -6,11 +6,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3236_DoNotUseQualifiedNamesAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3236";
 
-        public MiKo_3236_DoNotUseQualifiedNamesAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -51,9 +51,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeQualifiedName(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is QualifiedNameSyntax name && HasIssue(name, context))
+            if (context.Node is QualifiedNameSyntax node && HasIssue(node, context))
             {
-                ReportDiagnostics(context, Issue(name));
+                ReportDiagnostics(context, Issue(node));
             }
         }
     }
