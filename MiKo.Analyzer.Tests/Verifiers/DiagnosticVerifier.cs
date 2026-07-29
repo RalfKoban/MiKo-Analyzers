@@ -43,7 +43,7 @@ namespace TestHelper
 
         protected void An_issue_is_reported_for(string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(1, fileContent, languageVersion);
 
-        protected void An_issue_is_reported_for(int violations, string fileContent, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void An_issue_is_reported_for(in int violations, string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default)
         {
             using (Assert.EnterMultipleScope())
             {
@@ -96,7 +96,7 @@ namespace TestHelper
 
         protected void No_issue_is_reported_for_file_(string path, in LanguageVersion languageVersion = LanguageVersion.Default) => No_issue_is_reported_for(File.ReadAllText(path), path, languageVersion);
 
-        protected void No_issue_is_reported_for_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void No_issue_is_reported_for_folder_(string path, in LanguageVersion languageVersion = LanguageVersion.Default)
         {
             using (Assert.EnterMultipleScope())
             {
