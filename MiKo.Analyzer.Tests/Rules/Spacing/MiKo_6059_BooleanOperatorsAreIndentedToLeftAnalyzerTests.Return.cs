@@ -25,7 +25,7 @@ using System;
 
 public class TestMe
 {
-    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
+    public bool DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
     {
         return condition1 &&
                condition2 ||
