@@ -53,13 +53,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeReturnType(IMethodSymbol method, ITypeSymbol returnType)
         {
-            if (returnType is IArrayTypeSymbol array)
+            if (returnType.IsByteArray())
             {
-                if (array.ElementType.IsByte())
-                {
-                    return null;
-                }
+                return null;
+            }
 
+            if (returnType.TypeKind is TypeKind.Array)
+            {
                 switch (method.Name)
                 {
                     case nameof(Enumerable.ToArray):
