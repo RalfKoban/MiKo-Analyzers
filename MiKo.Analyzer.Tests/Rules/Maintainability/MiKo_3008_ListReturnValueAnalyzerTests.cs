@@ -42,6 +42,20 @@ public interface TestMe
 }
 ");
 
+        [TestCase("object[] ToArray()")]
+        [TestCase("object[] GetAsArray()")]
+        [TestCase("string[] ToArray(StringComparer comparer)")]
+        public void No_issue_is_reported_for_special_method_(string method) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface TestMe
+{
+    public " + method + @";
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_forbidden_type_([ValueSource(nameof(ForbiddenTypes))] string returnValue) => An_issue_is_reported_for(@"
 using System;

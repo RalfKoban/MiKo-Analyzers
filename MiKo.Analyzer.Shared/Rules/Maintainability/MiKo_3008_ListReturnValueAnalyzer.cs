@@ -53,11 +53,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeReturnType(IMethodSymbol method, ITypeSymbol returnType)
         {
-            var returnTypeString = returnType.ToString();
-
-            if (returnTypeString is "byte[]")
+            if (returnType is IArrayTypeSymbol array)
             {
-                return null;
+                if (array.ElementType.IsByte())
+                {
+                    return null;
+                }
+
+                switch (method.Name)
+                {
+                    case nameof(Enumerable.ToArray):
+                    case "GetAsArray":
+                    {
+                        // accept special methods
+                        return null;
+                    }
+                }
             }
 
             if (ForbiddenTypes.Exists(returnType.ImplementsPotentialGeneric))
