@@ -8547,7 +8547,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum&apos;s own summary - like &apos;Defines&apos;, &apos;Indicates&apos;, or &apos;Specifies.&apos; Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum&apos;s own summary - like &apos;Defines&apos;, &apos;Indicates&apos;, or &apos;Specifies&apos;. Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
         ///This ensures the documentation is precise and informative, helping developers understand each member&apos;s role and functionality..
         /// </summary>
         internal static string MiKo_2082_Description {
@@ -10969,7 +10969,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Follow the Trier-Doer-Pattern.
+        ///   Looks up a localized string similar to Follow the Try-Doer-Pattern.
         /// </summary>
         internal static string MiKo_3005_MessageFormat {
             get {
@@ -10978,7 +10978,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Follow Trier-Doer-Pattern for methods named &apos;Try&apos;.
+        ///   Looks up a localized string similar to Follow Try-Doer-Pattern for methods named &apos;Try&apos;.
         /// </summary>
         internal static string MiKo_3005_Title {
             get {
@@ -14873,7 +14873,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Func&lt;T, bool&gt;&apos; instead of &apos;Predicate&lt;bool&gt;&apos; for callbacks.
+        ///   Looks up a localized string similar to Use &apos;Func&lt;T, bool&gt;&apos; instead of &apos;Predicate&lt;T&gt;&apos; for callbacks.
         /// </summary>
         internal static string MiKo_3215_Title {
             get {
