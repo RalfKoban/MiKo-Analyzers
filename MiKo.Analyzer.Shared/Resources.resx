@@ -3024,7 +3024,7 @@ This distinction clearly indicates the reason for the exception and helps develo
     <value>Fix enum member starting phrase</value>
   </data>
   <data name="MiKo_2082_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum's own summary - like 'Defines', 'Indicates', or 'Specifies.' Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
+    <value>The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum's own summary - like 'Defines', 'Indicates', or 'Specifies'. Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
 This ensures the documentation is precise and informative, helping developers understand each member's role and functionality.</value>
   </data>
   <data name="MiKo_2082_MessageFormat" xml:space="preserve">
@@ -3860,10 +3860,10 @@ To prevent this, make EventArgs properties read-only or only privately settable.
 This pattern keeps methods consistent and predictable, enhancing readability and reliability.</value>
   </data>
   <data name="MiKo_3005_MessageFormat" xml:space="preserve">
-    <value>Follow the Trier-Doer-Pattern</value>
+    <value>Follow the Try-Doer-Pattern</value>
   </data>
   <data name="MiKo_3005_Title" xml:space="preserve">
-    <value>Follow Trier-Doer-Pattern for methods named 'Try'</value>
+    <value>Follow Try-Doer-Pattern for methods named 'Try'</value>
   </data>
   <data name="MiKo_3006_Description" xml:space="preserve">
     <value>To ensure consistency with .NET Framework classes and ease maintenance, place 'CancellationToken' parameters after all other method parameters. This practice keeps your codebase predictable and aligned with established conventions, making it easier for developers to understand and maintain.</value>
@@ -5210,7 +5210,7 @@ Instead, provide a method that returns an 'IDisposable'. This way, developers ca
     <value>Use 'Func&lt;{0}, bool&gt;' instead of 'Predicate&lt;{0}&gt;'</value>
   </data>
   <data name="MiKo_3215_Title" xml:space="preserve">
-    <value>Use 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;bool&gt;' for callbacks</value>
+    <value>Use 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;T&gt;' for callbacks</value>
   </data>
   <data name="MiKo_3216_CodeFixTitle" xml:space="preserve">
     <value>Make field read-only</value>

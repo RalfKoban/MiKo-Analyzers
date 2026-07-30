@@ -355,7 +355,7 @@ The following tables list all the 565 rules that are currently provided by the a
 |[MiKo_3002](/Documentation/MiKo_3002.md)|Limit class dependencies|&#x2713;|\-|
 |[MiKo_3003](/Documentation/MiKo_3003.md)|Follow .NET Framework Design Guidelines for events|&#x2713;|\-|
 |[MiKo_3004](/Documentation/MiKo_3004.md)|Make EventArgs property setters private|&#x2713;|\-|
-|[MiKo_3005](/Documentation/MiKo_3005.md)|Follow Trier-Doer-Pattern for methods named 'Try'|&#x2713;|\-|
+|[MiKo_3005](/Documentation/MiKo_3005.md)|Follow Try-Doer-Pattern for methods named 'Try'|&#x2713;|\-|
 |[MiKo_3006](/Documentation/MiKo_3006.md)|Place 'CancellationToken' parameter last in method parameters|&#x2713;|\-|
 |[MiKo_3007](/Documentation/MiKo_3007.md)|Do not mix LINQ method and declarative query syntax in same method|&#x2713;|\-|
 |[MiKo_3008](/Documentation/MiKo_3008.md)|Return immutable collections|&#x2713;|\-|
@@ -477,7 +477,7 @@ The following tables list all the 565 rules that are currently provided by the a
 |[MiKo_3212](/Documentation/MiKo_3212.md)|Follow standard Dispose pattern without adding other Dispose methods|&#x2713;|\-|
 |[MiKo_3213](/Documentation/MiKo_3213.md)|Implement parameterless Dispose method using Basic Dispose pattern|&#x2713;|\-|
 |[MiKo_3214](/Documentation/MiKo_3214.md)|Remove 'Begin/End' or 'Enter/Exit' scope-defining methods from interfaces|&#x2713;|\-|
-|[MiKo_3215](/Documentation/MiKo_3215.md)|Use 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;bool&gt;' for callbacks|&#x2713;|&#x2713;|
+|[MiKo_3215](/Documentation/MiKo_3215.md)|Use 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;T&gt;' for callbacks|&#x2713;|&#x2713;|
 |[MiKo_3216](/Documentation/MiKo_3216.md)|Mark static fields with initializers as read-only|&#x2713;|&#x2713;|
 |[MiKo_3217](/Documentation/MiKo_3217.md)|Do not use generic types that have other generic types as type arguments|&#x2713;|\-|
 |[MiKo_3218](/Documentation/MiKo_3218.md)|Define extension methods in expected places|&#x2713;|\-|
