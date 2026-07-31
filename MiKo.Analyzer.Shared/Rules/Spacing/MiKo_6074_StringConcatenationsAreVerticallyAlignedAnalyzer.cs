@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,28 +19,27 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static LinePosition FindOrientationPosition(BinaryExpressionSyntax node)
         {
-            var clause = node.AncestorsWithinMethods<EqualsValueClauseSyntax>().FirstOrDefault();
-
-            if (clause != null)
+            foreach (var ancestor in node.AncestorsWithinMethods())
             {
-                return clause.EqualsToken.GetStartPosition();
-            }
+                switch (ancestor)
+                {
+                    case EqualsValueClauseSyntax clause:
+                        return clause.EqualsToken.GetStartPosition();
 
-            var attribute = node.AncestorsWithinMethods<AttributeArgumentSyntax>().FirstOrDefault();
+                    case AssignmentExpressionSyntax assignment when assignment.IsKind(SyntaxKind.SimpleAssignmentExpression):
+                        return assignment.OperatorToken.GetStartPosition();
 
-            if (attribute?.NameEquals is NameEqualsSyntax nes)
-            {
-                return nes.EqualsToken.GetStartPosition();
-            }
+                    case AttributeArgumentSyntax attribute when attribute.NameEquals is NameEqualsSyntax nes:
+                        return nes.EqualsToken.GetStartPosition();
 
-            var argument = node.AncestorsWithinMethods<ArgumentSyntax>().FirstOrDefault();
+                    case ArgumentSyntax _:
+                    {
+                        var leftPosition = node.Left.GetStartPosition();
+                        var offset = node.OperatorToken.Text.Length + 1; // length of operator (such as '+') plus the following space
 
-            if (argument != null)
-            {
-                var leftPosition = node.Left.GetStartPosition();
-                var offset = node.OperatorToken.Text.Length + 1; // length of operator (such as '+') plus the following space
-
-                return new LinePosition(leftPosition.Line, leftPosition.Character - offset);
+                        return new LinePosition(leftPosition.Line, leftPosition.Character - offset);
+                    }
+                }
             }
 
             return LinePosition.Zero;
