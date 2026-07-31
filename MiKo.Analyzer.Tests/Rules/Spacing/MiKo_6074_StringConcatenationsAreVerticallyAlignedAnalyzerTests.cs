@@ -27,6 +27,79 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_is_placed_on_single_line_for_named_argument() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomething(arg: ""some text"" + ""with some other text"" + ""and even more text"");
+    }
+
+    public void DoSomething(string arg = null, int i = 0)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_is_placed_on_single_line_for_invocation() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomething(this.ToString() + ""some text"" + ""with some other text"" + ""and even more text"");
+    }
+
+    public void DoSomething(string arg)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_is_placed_on_single_line_for_array_initializer() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private static readonly string[] Texts =
+                                             {
+                                                 ""some text"" + ""with some other text"" + ""and even more text"",
+                                             };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_is_placed_on_single_line_for_multi_line_strings()
+            => No_issue_is_reported_for("""
+
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public void DoSomething()
+                                            {
+                                                var s = "some text";
+
+                                                DoSomething(@"
+                                                      some multi-line text
+                                                      " + s + @"
+                                                      some more multi-line text
+                                                  ");
+                                            }
+
+                                            public void DoSomething(string arg)
+                                            {
+                                            }
+                                        }
+
+                                        """);
+
+        [Test]
         public void No_issue_is_reported_if_add_operation_of_string_constants_spans_multiple_lines_and_is_vertically_aligned() => No_issue_is_reported_for(@"
 using System;
 
