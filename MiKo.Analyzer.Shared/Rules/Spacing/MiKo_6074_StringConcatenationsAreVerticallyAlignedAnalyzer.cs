@@ -52,10 +52,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
+            var leftOperand = node.Left;
+            var rightOperand = node.Right;
+
+            if (rightOperand.IsOnSameLineAsEndOf(leftOperand))
+            {
+                // we do not need to report anything when placed on same line
+                return;
+            }
+
             if (node.IsStringConcatenation(context.SemanticModel))
             {
                 var operatorToken = node.OperatorToken;
-                var rightOperand = node.Right;
 
                 if (operatorToken.IsOnSameLineAs(rightOperand))
                 {
@@ -67,14 +75,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         ReportDiagnostics(context, Issue(operatorToken, CreateProposalForSpaces(position.Character)));
                     }
                 }
-                else if (operatorToken.IsOnSameLineAsEndOf(node.Left))
+                else
                 {
-                    // operator is at end of line
-                    var position = node.Left.GetStartPosition();
-
-                    if (NotVerticallyAligned(rightOperand.GetStartPosition(), position))
+                    if (operatorToken.IsOnSameLineAsEndOf(leftOperand))
                     {
-                        ReportDiagnostics(context, Issue(rightOperand, CreateProposalForSpaces(position.Character)));
+                        // operator is at end of line
+                        var position = leftOperand.GetStartPosition();
+
+                        if (NotVerticallyAligned(rightOperand.GetStartPosition(), position))
+                        {
+                            ReportDiagnostics(context, Issue(rightOperand, CreateProposalForSpaces(position.Character)));
+                        }
                     }
                 }
             }

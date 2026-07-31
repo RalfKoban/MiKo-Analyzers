@@ -175,6 +175,48 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxNodeOrToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
         /// <summary>
+        /// Determines whether the syntax token is on the same line as the end of the specified syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="other">
+        /// The syntax node to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is on the same line as the end of the node; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsOnSameLineAsEndOf(this SyntaxNode value, SyntaxNode other) => value.GetStartingLine() == other?.GetEndingLine();
+
+        /// <summary>
+        /// Determines whether the syntax token is on the same line as the end of the specified syntax node or token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="other">
+        /// The syntax node or token to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is on the same line as the end of the node or token; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsOnSameLineAsEndOf(this SyntaxNode value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetEndingLine();
+
+        /// <summary>
+        /// Determines whether the syntax token is on the same line as the end of another syntax token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="other">
+        /// The other syntax token to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is on the same line as the end of the other token; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsOnSameLineAsEndOf(this SyntaxNode value, in SyntaxToken other) => value.GetStartingLine() == other.GetEndingLine();
+
+        /// <summary>
         /// Creates a new separated syntax list with all its items and separators placed on the same line.
         /// </summary>
         /// <typeparam name="T">
