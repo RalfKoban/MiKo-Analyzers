@@ -39,11 +39,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (node.IsStringConcatenation(context.SemanticModel))
             {
                 // ignore string concatenations
+                return;
             }
-            else
-            {
-                ReportDiagnostics(context, Issue(node.OperatorToken));
-            }
+
+            ReportDiagnostics(context, Issue(node.OperatorToken));
         }
     }
 }

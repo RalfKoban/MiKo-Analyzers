@@ -19225,5 +19225,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6073_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align string concatenation vertically along with others.
+        /// </summary>
+        internal static string MiKo_6074_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6074_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when string concatenations are aligned vertically. This makes the query clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6074_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6074_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align string concatenation vertically along with others.
+        /// </summary>
+        internal static string MiKo_6074_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6074_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align multi-line string concatenations vertically.
+        /// </summary>
+        internal static string MiKo_6074_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6074_Title", resourceCulture);
+            }
+        }
     }
 }

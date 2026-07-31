@@ -20,11 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var issue = AnalyzeNode(context.Node as ExpressionElementSyntax);
-
-            if (issue != null)
+            if (context.Node is ExpressionElementSyntax node)
             {
-                ReportDiagnostics(context, issue);
+                var issue = AnalyzeNode(node);
+
+                if (issue != null)
+                {
+                    ReportDiagnostics(context, issue);
+                }
             }
         }
 

@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 565 rules that are currently provided by the analyzer.
+The following tables list all the 566 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -617,3 +617,4 @@ The following tables list all the 565 rules that are currently provided by the a
 |[MiKo_6071](/Documentation/MiKo_6071.md)|Surround local using statements with blank lines|&#x2713;|&#x2713;|
 |[MiKo_6072](/Documentation/MiKo_6072.md)|Surround base class calls with blank lines|&#x2713;|&#x2713;|
 |[MiKo_6073](/Documentation/MiKo_6073.md)|Align LINQ query clauses vertically|&#x2713;|&#x2713;|
+|[MiKo_6074](/Documentation/MiKo_6074.md)|Align multi-line string concatenations vertically|&#x2713;|&#x2713;|
