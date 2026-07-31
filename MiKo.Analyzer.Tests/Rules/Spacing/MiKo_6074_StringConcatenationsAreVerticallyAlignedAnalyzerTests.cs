@@ -169,6 +169,45 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
+        public void An_issue_is_reported_if_add_operation_of_single_line_string_values_spans_multiple_lines_and_is_aligned_more_to_the_left() => An_issue_is_reported_for(2, @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+    private string GetSomeOtherData() => string.Empty;
+
+    public void DoSomething()
+    {
+        var result = SomeData
+            + Environment.NewLine +
+            GetSomeOtherData();
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_if_add_operation_of_single_line_invocations_spans_multiple_lines_and_is_aligned_more_to_the_left() => An_issue_is_reported_for(2, @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+
+    public string GetSomeOtherData() => string.Empty;
+
+    public void DoSomething(TestMe other)
+    {
+        SomeData = other.GetSomeOtherData()
+            + Environment.NewLine +
+            other.GetSomeOtherData();
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
         public void An_issue_is_reported_if_add_operation_of_string_constants_spans_multiple_lines_and_is_aligned_more_to_the_left() => An_issue_is_reported_for(2, @"
 using System;
 
@@ -1619,6 +1658,88 @@ public class TestMe
                           Environment.NewLine +
                           Environment.NewLine +
                           text2);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_is_fixed_if_add_operation_of_single_line_string_values_spans_multiple_lines_and_is_aligned_more_to_the_left()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+    private string GetSomeOtherData() => string.Empty;
+
+    public void DoSomething()
+    {
+        var result = SomeData
+            + Environment.NewLine +
+            GetSomeOtherData();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+    private string GetSomeOtherData() => string.Empty;
+
+    public void DoSomething()
+    {
+        var result = SomeData
+                   + Environment.NewLine +
+                     GetSomeOtherData();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_add_operation_of_single_line_invocations_spans_multiple_lines_and_is_aligned_more_to_the_left()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+
+    public string GetSomeOtherData() => string.Empty;
+
+    public void DoSomething(TestMe other)
+    {
+        SomeData = other.GetSomeOtherData()
+            + Environment.NewLine +
+            other.GetSomeOtherData();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+
+    public string GetSomeOtherData() => string.Empty;
+
+    public void DoSomething(TestMe other)
+    {
+        SomeData = other.GetSomeOtherData()
+                 + Environment.NewLine +
+                   other.GetSomeOtherData();
     }
 }
 ";

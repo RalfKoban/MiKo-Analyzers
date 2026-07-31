@@ -110,6 +110,33 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets all ancestors of the specified syntax node that are within the scope of a method, local function, or property.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node whose ancestors to retrieve.
+        /// </param>
+        /// <returns>
+        /// A sequence that contains all ancestors of the specified type that are within the method, local function, or property scope.
+        /// </returns>
+        internal static IEnumerable<SyntaxNode> AncestorsWithinMethods(this SyntaxNode value)
+        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var ancestor in value.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case BaseMethodDeclarationSyntax _: // found the surrounding method
+                    case LocalFunctionStatementSyntax _: // found the surrounding local function
+                    case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
+                    case TypeDeclarationSyntax _: // found the surrounding type
+                        yield break;
+                }
+
+                yield return ancestor;
+            }
+        }
+
+        /// <summary>
         /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/> and are within the scope of a method, local function, or property.
         /// </summary>
         /// <typeparam name="T">
@@ -136,6 +163,7 @@ namespace MiKoSolutions.Analyzers
                     case BaseMethodDeclarationSyntax _: // found the surrounding method
                     case LocalFunctionStatementSyntax _: // found the surrounding local function
                     case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
+                    case TypeDeclarationSyntax _: // found the surrounding type
                         yield break;
                 }
             }
