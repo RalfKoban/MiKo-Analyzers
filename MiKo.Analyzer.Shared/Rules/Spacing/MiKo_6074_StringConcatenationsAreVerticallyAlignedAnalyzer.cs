@@ -39,6 +39,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                         return new LinePosition(leftPosition.Line, leftPosition.Character - offset);
                     }
+
+                    case ArrowExpressionClauseSyntax clause:
+                    {
+                        var position = clause.ArrowToken.GetStartPosition();
+
+                        return new LinePosition(position.Line, position.Character + 1);
+                    }
                 }
             }
 
@@ -49,10 +56,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
-            var leftOperand = node.Left;
-            var rightOperand = node.Right;
+            var left = node.Left;
+            var right = node.Right;
 
-            if (rightOperand.IsOnSameLineAsEndOf(leftOperand))
+            if (right.IsOnSameLineAsEndOf(left))
             {
                 // we do not need to report anything when placed on same line
                 return;
@@ -62,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var operatorToken = node.OperatorToken;
 
-                if (operatorToken.IsOnSameLineAs(rightOperand))
+                if (operatorToken.IsOnSameLineAs(right))
                 {
                     // operator is at begin of line
                     var position = FindOrientationPosition(node);
@@ -74,14 +81,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
                 else
                 {
-                    if (operatorToken.IsOnSameLineAsEndOf(leftOperand))
+                    if (operatorToken.IsOnSameLineAsEndOf(left))
                     {
                         // operator is at end of line
-                        var position = leftOperand.GetStartPosition();
+                        var position = left.GetStartPosition();
 
-                        if (NotVerticallyAligned(rightOperand.GetStartPosition(), position))
+                        if (NotVerticallyAligned(right.GetStartPosition(), position))
                         {
-                            ReportDiagnostics(context, Issue(rightOperand, CreateProposalForSpaces(position.Character)));
+                            ReportDiagnostics(context, Issue(right, CreateProposalForSpaces(position.Character)));
                         }
                     }
                 }

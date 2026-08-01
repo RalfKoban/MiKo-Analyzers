@@ -1747,6 +1747,93 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_is_placed_on_single_line_for_expression_bodied_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private string SomeText => ""some text"" + ""with some other text"" + ""and even more text"";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_spans_multiple_lines_and_is_vertically_aligned_for_expression_bodied_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private string SomeText => ""some text""
+                             + ""with some other text""
+                             + ""and even more text"";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_constants_spans_multiple_lines_and_is_vertically_aligned_and_operator_is_at_end_of_line_for_expression_bodied_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private string SomeText => ""some text"" +
+                               ""with some other text"" +
+                               ""and even more text"";
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_if_add_operation_of_single_line_string_values_spans_multiple_lines_and_is_aligned_more_to_the_left_for_expression_bodied_property() => An_issue_is_reported_for(2, @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+
+    private string GetSomeOtherData() => string.Empty;
+
+    private string SomeText => SomeData
+        + Environment.NewLine +
+        GetSomeOtherData();
+}
+");
+
+        [Test]
+        public void Code_is_fixed_if_add_operation_of_single_line_string_values_spans_multiple_lines_and_is_aligned_more_to_the_left_for_expression_bodied_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+
+    private string GetSomeOtherData() => string.Empty;
+
+    private string SomeText => SomeData
+        + Environment.NewLine +
+        GetSomeOtherData();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private string SomeData { get; set; }
+
+    private string GetSomeOtherData() => string.Empty;
+
+    private string SomeText => SomeData
+                             + Environment.NewLine +
+                               GetSomeOtherData();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6074_StringConcatenationsAreVerticallyAlignedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6074_StringConcatenationsAreVerticallyAlignedAnalyzer();
