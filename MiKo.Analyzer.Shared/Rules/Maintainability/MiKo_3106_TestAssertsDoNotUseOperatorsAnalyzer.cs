@@ -31,8 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
-                                                                                    && node.Expression is IdentifierNameSyntax invokedType
-                                                                                    && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
+                                                                                 && node.Expression is IdentifierNameSyntax invokedType
+                                                                                 && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
 
         private static bool IsXUnitAssertTrueMethod(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
         {

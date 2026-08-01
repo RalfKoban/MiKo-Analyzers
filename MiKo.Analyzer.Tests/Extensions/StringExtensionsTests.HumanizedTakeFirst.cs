@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+
+using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Extensions
@@ -31,6 +33,6 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("hello   ", 5, ExpectedResult = "hello")]
         [TestCase("hello   ", 3, ExpectedResult = "hel...")]
         [TestCase("hi  there", 4, ExpectedResult = "hi...")]
-        public static string HumanizedTakeFirst_ReadOnlySpan_returns_correct_result_(string value, in int maximum) => ((System.ReadOnlySpan<char>)value).HumanizedTakeFirst(maximum);
+        public static string HumanizedTakeFirst_ReadOnlySpan_returns_correct_result_(string value, in int maximum) => value.AsSpan().HumanizedTakeFirst(maximum);
     }
 }

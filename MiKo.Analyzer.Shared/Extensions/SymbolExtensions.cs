@@ -3140,9 +3140,9 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type is a Prism event; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
-                                                                     && value.SpecialType is SpecialType.None
-                                                                     && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
-                                                                     && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
+                                                                  && value.SpecialType is SpecialType.None
+                                                                  && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
+                                                                  && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
 
         /// <summary>
         /// Determines whether a symbol is publicly visible.

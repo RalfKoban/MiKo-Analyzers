@@ -34,8 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool IsUnitTestAnalyzer => true;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)
-                                                                      && symbol.IsTestMethod()
-                                                                      && symbol.Name.Length >= 7; // consider only long names
+                                                                   && symbol.Name.Length >= 7 // consider only long names
+                                                                   && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name.ContainsAny(WrongTerms, StringComparison.OrdinalIgnoreCase)
                                                                                                                  ? new[] { Issue(symbol) }

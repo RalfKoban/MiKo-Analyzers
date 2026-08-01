@@ -99,6 +99,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static bool IsApplicable(IfStatementSyntax node) => node.Else is null // do not invert in case of an else block
-                                                                    && node.ReturnsImmediately();
+                                                                 && node.ReturnsImmediately();
     }
 }
