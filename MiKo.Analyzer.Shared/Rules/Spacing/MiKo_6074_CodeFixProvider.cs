@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6074";
 
-        protected override BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax node, int spaces)
+        protected override BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax node, in int spaces)
         {
             var operatorToken = node.OperatorToken;
             var rightOperand = node.Right;
