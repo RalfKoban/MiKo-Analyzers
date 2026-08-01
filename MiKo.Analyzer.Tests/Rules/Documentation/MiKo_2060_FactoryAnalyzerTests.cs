@@ -24,13 +24,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
 
-#if !NCRUNCH
-
-        [OneTimeTearDown]
-        public static void CleanupTestEnvironment() => GC.Collect();
-
-#endif
-
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
 using System;
@@ -299,7 +292,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_factory_class_summary_([ValueSource(nameof(ClassSummaryStartingPhrases))] string summary)
+        public void Code_gets_fixed_for_class_summary_([ValueSource(nameof(ClassSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -325,7 +318,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_factory_interface_summary_([ValueSource(nameof(InterfaceSummaryStartingPhrases))] string summary)
+        public void Code_gets_fixed_for_interface_summary_([ValueSource(nameof(InterfaceSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -540,14 +533,40 @@ internal interface IFactory
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_by_normalizing_almost_standard_factory_method_summary_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
+        [Test] // split to see if NCrunch handles them separately and not in one big process
+        public void Code_gets_fixed_for_method_summary_with_class_([ValueSource(nameof(MethodStartingPhrases))] string summary)
         {
             var originalCode = @"
 internal interface IFactory
 {
     /// <summary>
-    /// " + summary + @" <see cref=""Xyz""/> " + type + @".
+    /// " + summary + @" <see cref=""Xyz""/> class.
+    /// </summary>
+    IXyz Create();
+}
+";
+
+            const string FixedCode = @"
+internal interface IFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""IXyz""/> type with default values.
+    /// </summary>
+    IXyz Create();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test] // split to see if NCrunch handles them separately and not in one big process
+        public void Code_gets_fixed_for_method_summary_with_type_([ValueSource(nameof(MethodStartingPhrases))] string summary)
+        {
+            var originalCode = @"
+internal interface IFactory
+{
+    /// <summary>
+    /// " + summary + @" <see cref=""Xyz""/> type.
     /// </summary>
     IXyz Create();
 }

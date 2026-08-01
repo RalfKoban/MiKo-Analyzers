@@ -55,7 +55,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'True': if some condition. Otherwise 'False'.",
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        ];
-
 //// ncrunch: no coverage end
 
         [OneTimeSetUp]
