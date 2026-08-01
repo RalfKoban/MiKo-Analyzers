@@ -292,7 +292,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (symbol is IMethodSymbol method)
             {
-                if (method.Name is nameof(GetHashCode))
+                if (method.Name.AsSpan().EndsWith("HashCode"))
                 {
                     // ignore hash calculation
                     return Array.Empty<Diagnostic>();

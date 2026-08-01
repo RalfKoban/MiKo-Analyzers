@@ -400,6 +400,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_CalculateHashCode_method() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private static int CalculateHashCode(string a, string b, string c)
+        {
+            unchecked
+            {
+                var hashCode = a?.GetHashCode() ?? 0;
+
+                hashCode = (hashCode * 397) ^ (b?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (c?.GetHashCode() ?? 0);
+
+                return hashCode;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_Version_ctor() => No_issue_is_reported_for(@"
 using System;
 
