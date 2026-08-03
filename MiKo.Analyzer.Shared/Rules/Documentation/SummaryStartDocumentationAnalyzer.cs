@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlElementSyntax e when e.GetName() is Constants.XmlTag.Para:
                     case XmlEmptyElementSyntax ee when ee.GetName() is Constants.XmlTag.Para:
                     {
-                        continue; // skip over the start tag and name syntax
+                        continue; // skip over the tag name node and nested <para> elements
                     }
 
                     case XmlTextSyntax text:
@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (tagName == tag || tagName is Constants.XmlTag.Para)
             {
-                // skip over the start tag and name syntax
+                // skip over the outer element's own start tag or a nested <para> start tag
                 issue = null;
 
                 return AnalysisResult.Continue;
@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (tagName is Constants.XmlTag.Para)
             {
-                // skip over the start tag and name syntax
+                // skip over the <para> tag
                 issue = null;
 
                 return AnalysisResult.Continue;
