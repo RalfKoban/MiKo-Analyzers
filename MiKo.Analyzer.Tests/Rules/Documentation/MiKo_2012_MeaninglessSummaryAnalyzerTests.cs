@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] MeaninglessFieldPhrases = [.. MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase)];
 
-#if NCRUNCH
+#if !NCRUNCH
 
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();

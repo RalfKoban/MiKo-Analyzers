@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Input;
 using System.Xml;
 
@@ -40,6 +41,8 @@ namespace TestHelper
     public abstract partial class DiagnosticVerifier
     {
         private const string TestProjectName = "MiKoSolutions.Analyzers.AdHoc.TestProject";
+
+        private const int TestLimitToRunGarbageCollection = 5_000;
 
         private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
         private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
@@ -101,6 +104,8 @@ namespace TestHelper
                                                                      SystemXmlReference,
                                                                  ];
 
+        private static int s_countedTestCalls;
+
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
         /// The returned diagnostics are then ordered by location in the source document.
@@ -134,60 +139,72 @@ namespace TestHelper
         /// </returns>
         protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(in ImmutableArray<DiagnosticAnalyzer> analyzers, in ReadOnlySpan<Document> documents, in bool profileAnalysis)
         {
-            List<Diagnostic> diagnostics = null;
+            var counted = Interlocked.Increment(ref s_countedTestCalls);
 
-            for (int documentIndex = 0, documentsLength = documents.Length; documentIndex < documentsLength; documentIndex++)
+            try
             {
-                var document = documents[documentIndex];
-                var project = document.Project;
+                List<Diagnostic> diagnostics = null;
 
-                if (profileAnalysis)
+                for (int documentIndex = 0, documentsLength = documents.Length; documentIndex < documentsLength; documentIndex++)
                 {
-                    JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
-                }
+                    var document = documents[documentIndex];
+                    var project = document.Project;
 
-                var compilation = project.GetCompilationAsync().Result;
-                var compilationWithAnalyzers = compilation.WithAnalyzers(analyzers);
-                var issues = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
-
-                if (profileAnalysis)
-                {
-                    JetBrains.Profiler.Api.MeasureProfiler.SaveData();
-                }
-
-                if (issues.Length > 0)
-                {
-                    diagnostics ??= new List<Diagnostic>(issues.Length);
-
-                    var tree = document.GetSyntaxTreeAsync().Result;
-
-                    for (int index = 0, issuesLength = issues.Length; index < issuesLength; index++)
+                    if (profileAnalysis)
                     {
-                        var issue = issues[index];
+                        JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
+                    }
 
-                        if (issue.Location == Location.None || issue.Location.IsInMetadata)
+                    var compilation = project.GetCompilationAsync().Result;
+                    var compilationWithAnalyzers = compilation.WithAnalyzers(analyzers);
+                    var issues = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+
+                    if (profileAnalysis)
+                    {
+                        JetBrains.Profiler.Api.MeasureProfiler.SaveData();
+                    }
+
+                    if (issues.Length > 0)
+                    {
+                        diagnostics ??= new List<Diagnostic>(issues.Length);
+
+                        var tree = document.GetSyntaxTreeAsync().Result;
+
+                        for (int index = 0, issuesLength = issues.Length; index < issuesLength; index++)
                         {
-                            diagnostics.Add(issue);
-                        }
-                        else
-                        {
-                            if (tree == issue.Location.SourceTree)
+                            var issue = issues[index];
+
+                            if (issue.Location == Location.None || issue.Location.IsInMetadata)
                             {
                                 diagnostics.Add(issue);
+                            }
+                            else
+                            {
+                                if (tree == issue.Location.SourceTree)
+                                {
+                                    diagnostics.Add(issue);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (diagnostics is null)
+                if (diagnostics is null)
+                {
+                    return [];
+                }
+
+                return diagnostics.Count is 1
+                           ? [diagnostics[0]]
+                           : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
+            }
+            finally
             {
-                return [];
+                if (counted > 0 && counted % TestLimitToRunGarbageCollection == 0)
+                {
+                    GC.Collect();
+                }
             }
-
-            return diagnostics.Count is 1
-                   ? [diagnostics[0]]
-                   : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
         /// <summary>
@@ -278,9 +295,7 @@ namespace TestHelper
                                                .AddProject(projectInfo)
                                                .AddMetadataReferences(projectId, References);
 
-            var length = sources.Length;
-
-            if (length is 1)
+            if (sources.Length is 1)
             {
                 const string FileName = "Test.cs";
                 var documentId = DocumentId.CreateNewId(projectId, debugName: FileName);
@@ -289,7 +304,7 @@ namespace TestHelper
             }
             else
             {
-                for (var index = 0; index < length; index++)
+                for (var index = 0; index < sources.Length; index++)
                 {
                     var source = sources[index];
 

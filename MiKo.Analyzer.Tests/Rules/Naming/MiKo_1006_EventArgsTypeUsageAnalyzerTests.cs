@@ -256,7 +256,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_predefined_WindowsForms_orWindowsControls_event_([ValueSource(nameof(WindowsPredefinedEventHandlers))] string eventHandlerType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_predefined_WindowsForms_or_WindowsControls_event_([ValueSource(nameof(WindowsPredefinedEventHandlers))] string eventHandlerType) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
