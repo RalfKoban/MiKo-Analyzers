@@ -20,10 +20,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (node.Name is IdentifierNameSyntax identifier)
             {
-                if (node.Parent is ArgumentSyntax argument && argument.Expression == node)
+                switch (node.Parent)
                 {
-                    // only a complete namespace as argument, so do not report it
-                    return false;
+                    case ArgumentSyntax argument when argument.Expression == node: // only a complete namespace as argument, so do not report it
+                    case AssignmentExpressionSyntax _:
+                    case BinaryExpressionSyntax _:
+                    case ConditionalExpressionSyntax _:
+                    case InvocationExpressionSyntax _: // we have an invocation, so this is no namespace
+                    case IsPatternExpressionSyntax _:
+                    case ParenthesizedExpressionSyntax _:
+                    case PrefixUnaryExpressionSyntax _:
+                    case PostfixUnaryExpressionSyntax _:
+                        return false;
                 }
 
                 var symbol = identifier.GetSymbol(context.SemanticModel);
