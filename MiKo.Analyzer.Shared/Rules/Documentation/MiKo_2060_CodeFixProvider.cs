@@ -693,9 +693,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static HashSet<string> CreateTypeReplacementMapKeys()
             {
-                var strangeTexts = StrangeTexts().OrderDescendingByLengthAndText().AsSpan();
-                var allPhrases = AllPhrases().OrderDescendingByLengthAndText().AsSpan();
-                var allContinuations = AllContinuations().OrderDescendingByLengthAndText().AsSpan();
+                var strangeTexts = StrangeTexts().ToArray(AscendingStringComparer.Default).AsSpan();
+                var allPhrases = AllPhrases().OrderDescendingByLengthAndText();
+                var allContinuations = AllContinuations().OrderDescendingByLengthAndText();
 
                 var results = new HashSet<string> // avoid duplicates
                                   {
@@ -715,19 +715,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var i = 0; i < allPhrasesLength; i++)
                     {
                         var phrase = allPhrases[i].AsSpan();
-                        var phraseLength = phrase.Length;
 
                         for (var ci = 0; ci < allContinuationsLength; ci++)
                         {
                             var continuation = allContinuations[ci].AsSpan();
-                            var continuationLength = continuation.Length;
 
-                            var totalLength = phraseLength + continuationLength;
-
+                            var totalLength = phrase.Length + continuation.Length;
                             var bufferSpan = new Span<char>(buffer, totalLength);
 
                             phrase.CopyTo(bufferSpan);
-                            continuation.CopyTo(bufferSpan.Slice(phraseLength));
+                            continuation.CopyTo(bufferSpan.Slice(phrase.Length));
 
                             if (((ReadOnlySpan<char>)bufferSpan).ContainsAnyOrdinal(strangeTexts))
                             {
@@ -766,14 +763,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                   "actory builds", "actories builds", "ethods builds", "pattern builds", "nterface builds", "lass builds",
                                                   "actory constructs", "actories constructs", "ethods constructs", "pattern constructs", "nterface constructs", "lass constructs",
                                                   "actory creates", "actories creates", "ethods creates", "pattern creates", "nterface creates", "lass creates",
-                                                  "that instance", "which instance",
-                                                  "that a instance", "to a instance", "which a instance",
-                                                  "that an instance", "to an instance", "which an instance",
-                                                  "that the instance", "to the instance", "which the instance",
-                                                  "that new", "to new", "which new",
-                                                  "that a new", "to a new", "which a new",
-                                                  "that an new", "to an new", "which an new",
-                                                  "that the new", "to the new", "which the new",
                                                   "es that's ", "ethods that's ",
                                                   "es that builds ", "ethods that builds ", "es which builds ", "ethods which builds ",
                                                   "es that constructs ", "ethods that constructs ", "es which constructs ", "ethods which constructs ",
@@ -785,11 +774,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               };
                     var strangeTextsSet = new HashSet<string>(rawStrangeTexts);
 
-                    var methodSpan = "ethod".AsSpan();
-
                     foreach (var raw in rawStrangeTexts)
                     {
-                        if (raw.AsSpan().Contains(methodSpan))
+                        if (raw.AsSpan().Contains("ethod".AsSpan()))
                         {
                             var function = raw.AsCachedBuilder()
                                               .Replace("method", "function")
@@ -1097,6 +1084,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         set.Add(Constants.SingleSpace + continuation);
                     }
+
+                    var strangePhrases = new[]
+                                             {
+                                                 "that instance", "which instance",
+                                                 "that a instance", "to a instance", "which a instance",
+                                                 "that an instance", "to an instance", "which an instance",
+                                                 "that the instance", "to the instance", "which the instance",
+                                                 "that new", "to new", "which new",
+                                                 "that a new", "to a new", "which a new",
+                                                 "that an new", "to an new", "which an new",
+                                                 "that the new", "to the new", "which the new",
+                                             };
+
+                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
 
                     return set;
                 }
