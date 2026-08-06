@@ -1490,17 +1490,8 @@ namespace MiKoSolutions.Analyzers
             {
                 for (int index = 0, length = phrases.Length; index < length; index++)
                 {
-                    var phraseSpan = phrases[index].AsSpan();
-
-                    // Performance-Note: This is a hot-path, so we do a quick probe to see if the text is there
-                    var potentialStartPosition = value.QuickSubstringProbeOrdinal(phraseSpan);
-
-                    if (potentialStartPosition is -1)
-                    {
-                        continue;
-                    }
-
-                    if (value.Slice(potentialStartPosition).Contains(phraseSpan))
+                    // Performance-Note: Even though this is a hot-path, we do a IndexOf check instead of a quick probe as that is still measurably faster
+                    if (value.IndexOf(phrases[index].AsSpan()) >= 0)
                     {
                         return true;
                     }
