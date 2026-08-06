@@ -92,16 +92,39 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="StringBuilder"/> where the word following the specified phrase is adjusted according to the specified adjustment.
         /// </returns>
-        public static StringBuilder AdjustWordAfter(this StringBuilder value, string phrase, in FirstWordAdjustment adjustment)
+        public static StringBuilder AdjustWordAfter(this StringBuilder value, string phrase, in FirstWordAdjustment adjustment) => value.AdjustWordAfter(phrase.AsSpan(), adjustment);
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where the word following the specified phrase is adjusted according to the specified adjustment.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="phrase">
+        /// The phrase after which the word gets adjusted.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the word following the phrase.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where the word following the specified phrase is adjusted according to the specified adjustment.
+        /// </returns>
+        public static StringBuilder AdjustWordAfter(this StringBuilder value, in ReadOnlySpan<char> phrase, in FirstWordAdjustment adjustment)
         {
-            if (phrase.IsNullOrEmpty())
+            if (phrase.IsEmpty)
             {
                 return value;
             }
 
-            var phraseStartCharacter = phrase[0];
+            var length = value.Length;
+            var buffer = SharedPool.Rent(length);
 
-            var phraseStartIndex = IndexOf(value, phraseStartCharacter);
+            value.CopyTo(0, buffer, 0, length);
+
+            ReadOnlySpan<char> bufferSpan = buffer.AsSpan(0, length);
+
+            var phraseStartCharacter = phrase[0];
+            var phraseStartIndex = bufferSpan.IndexOf(phraseStartCharacter);
 
             if (phraseStartIndex <= -1)
             {
@@ -111,43 +134,53 @@ namespace MiKoSolutions.Analyzers
             var phraseLength = phrase.Length;
             var phraseEndCharacter = phrase[phraseLength - 1];
 
-            for (int index = phraseStartIndex, length = value.Length; index < length; index++)
+            for (var index = phraseStartIndex; index < length; index++)
             {
-                if (value[index] != phraseStartCharacter)
+                if (bufferSpan[index] != phraseStartCharacter)
                 {
                     continue;
                 }
 
                 var phraseEndIndex = index + phraseLength - 1;
 
-                if (phraseEndIndex >= length || value[phraseEndIndex] != phraseEndCharacter)
+                if (phraseEndIndex >= length || bufferSpan[phraseEndIndex] != phraseEndCharacter)
                 {
                     continue;
                 }
 
-                if (value.ToString(index, phraseLength).Equals(phrase, StringComparison.Ordinal))
+                if (bufferSpan.Slice(index, phraseLength).SequenceEqual(phrase))
                 {
                     // get next word (separated by '_', or by ' ' for sentences)
                     var nextWordStartIndex = phraseEndIndex + 1;
-                    var nextWordEndIndex = value.IndexOf(Constants.Underscore, Constants.Space, nextWordStartIndex) - 1;
 
-                    if (nextWordEndIndex > 0)
+                    // index is relative to the slice, so it needs to be checked for '-1' (not found) before it can be converted into an absolute index
+                    var nextWordEndIndex = bufferSpan.Slice(nextWordStartIndex).IndexOfAny(Constants.Underscore, Constants.Space);
+
+                    if (nextWordEndIndex >= 0)
                     {
-                        var nextWordLength = nextWordEndIndex - nextWordStartIndex + 1;
+                        // convert to an absolute index; '-1' is done here (not above) so the 'not found' case stays clearly separated
+                        nextWordEndIndex += nextWordStartIndex - 1;
 
-                        var nextWord = value.ToString(nextWordStartIndex, nextWordLength);
-                        var adjustedWord = nextWord.AdjustFirstWord(adjustment);
+                        if (nextWordEndIndex > 0)
+                        {
+                            var nextWordLength = nextWordEndIndex - nextWordStartIndex + 1;
 
-                        // cut it out
-                        value.Remove(nextWordStartIndex, nextWordLength);
+                            var nextWord = bufferSpan.Slice(nextWordStartIndex, nextWordLength);
+                            var adjustedWord = nextWord.AdjustFirstWord(adjustment);
 
-                        // insert word adjusted by 'handling' using 'AdjustFirstWord'
-                        value.Insert(nextWordStartIndex, adjustedWord);
+                            // cut it out
+                            value.Remove(nextWordStartIndex, nextWordLength);
 
-                        return value;
+                            // insert word adjusted by 'handling' using 'AdjustFirstWord'
+                            value.Insert(nextWordStartIndex, adjustedWord);
+
+                            break;
+                        }
                     }
                 }
             }
+
+            SharedPool.Return(buffer);
 
             return value;
         }
@@ -1180,69 +1213,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Finds the first occurrence of the specified character in the text.
-        /// </summary>
-        /// <param name="value">
-        /// The text to search.
-        /// </param>
-        /// <param name="c">
-        /// The character to search for.
-        /// </param>
-        /// <param name="start">
-        /// The zero-based starting position to begin searching.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// The zero-based index of the first occurrence of the specified character, or <c>-1</c> if it is not found.
-        /// </returns>
-        private static int IndexOf(this StringBuilder value, in char c, in int start = 0)
-        {
-            for (int index = start, length = value.Length; index < length; index++)
-            {
-                if (value[index] == c)
-                {
-                    return index;
-                }
-            }
-
-            return -1;
-        }
-
-        /// <summary>
-        /// Finds the first occurrence of either of the specified characters in the text.
-        /// </summary>
-        /// <param name="value">
-        /// The text to search.
-        /// </param>
-        /// <param name="c1">
-        /// The first character to search for.
-        /// </param>
-        /// <param name="c2">
-        /// The second character to search for.
-        /// </param>
-        /// <param name="start">
-        /// The zero-based starting position to begin searching.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// The zero-based index of the first occurrence of either specified character, or <c>-1</c> if neither is found.
-        /// </returns>
-        private static int IndexOf(this StringBuilder value, in char c1, in char c2, in int start = 0)
-        {
-            for (int index = start, length = value.Length; index < length; index++)
-            {
-                var c = value[index];
-
-                if (c == c1 || c == c2)
-                {
-                    return index;
-                }
-            }
-
-            return -1;
-        }
-
-        /// <summary>
         /// Converts the first word in the text to its infinite verb form.
         /// </summary>
         /// <param name="value">
@@ -1250,7 +1220,7 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         private static void MakeInfinite(this StringBuilder value)
         {
-            var word = FirstWord(value, out var whitespacesBefore);
+            var word = value.FirstWord(out var whitespacesBefore);
 
             value.Remove(whitespacesBefore, word.Length);
 
@@ -1267,7 +1237,7 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         private static void MakePlural(this StringBuilder value)
         {
-            var word = FirstWord(value, out var whitespacesBefore);
+            var word = value.FirstWord(out var whitespacesBefore);
 
             value.Remove(whitespacesBefore, word.Length);
 
@@ -1284,7 +1254,7 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         private static void MakeThirdPersonSingular(this StringBuilder value)
         {
-            var word = FirstWord(value, out var whitespacesBefore);
+            var word = value.FirstWord(out var whitespacesBefore);
 
             value.Remove(whitespacesBefore, word.Length);
 

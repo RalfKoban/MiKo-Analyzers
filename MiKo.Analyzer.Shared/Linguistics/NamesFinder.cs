@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -280,26 +279,32 @@ namespace MiKoSolutions.Analyzers.Linguistics
             var betterName = FindBetterTestName(name);
 
             // let's see if the test name starts with any method/property/event/field name that shall be kept
-            var symbolName = symbol.Name;
+            var symbolName = symbol.Name.AsSpan();
 
             var index = symbolName.IndexOf(Constants.Underscore);
 
             if (index > 0)
             {
-                var methodName = symbolName.Substring(0, index);
+                var methodNameSpan = symbolName.Slice(0, index);
 
-                if (symbol.GetSyntax().DescendantNodes<IdentifierNameSyntax>().Any(_ => _.GetName() == methodName))
+                foreach (var identifier in symbol.GetSyntax().DescendantNodes<IdentifierNameSyntax>())
                 {
-                    var betterNamePrefix = FindBetterTestName(methodName);
-
-                    if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
+                    if (identifier.GetName().Equals(methodNameSpan))
                     {
-                        var fixedBetterName = betterName.AsCachedBuilder()
-                                                        .TrimStartBy(betterNamePrefix.Length)
-                                                        .Insert(0, methodName)
-                                                        .ToStringAndRelease();
+                        var methodName = methodNameSpan.ToString();
+                        var betterNamePrefix = FindBetterTestName(methodName);
 
-                        return fixedBetterName;
+                        if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
+                        {
+                            var fixedBetterName = betterName.AsCachedBuilder()
+                                                            .TrimStartBy(betterNamePrefix.Length)
+                                                            .Insert(0, methodName)
+                                                            .ToStringAndRelease();
+
+                            return fixedBetterName;
+                        }
+
+                        break;
                     }
                 }
             }
@@ -625,12 +630,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                   .ReplaceWithProbe("_will_be_", "_is_")
                   .ReplaceWithProbe("_will_", "_does_")
                   .Replace("__", "_")
-                  .AdjustWordAfter("_does_not_", FirstWordAdjustment.MakeInfinite)
+                  .AdjustWordAfter("_does_not_".AsSpan(), FirstWordAdjustment.MakeInfinite)
                   .ReplaceWithProbe("_does_not_", "<4>")
-                  .AdjustWordAfter("_does_", FirstWordAdjustment.MakeThirdPersonSingular)
+                  .AdjustWordAfter("_does_".AsSpan(), FirstWordAdjustment.MakeThirdPersonSingular)
                   .Replace("_does_", "_")
                   .ReplaceWithProbe("<4>", "_does_not_")
-                  .AdjustWordAfter("_to_", FirstWordAdjustment.MakeInfinite);
+                  .AdjustWordAfter("_to_".AsSpan(), FirstWordAdjustment.MakeInfinite);
 
                 return sb.ToStringAndRelease();
             }

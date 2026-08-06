@@ -77,13 +77,28 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var valueSpan = value.AsSpan();
+            return AdjustFirstWord(value.AsSpan(), adjustment);
+        }
 
+        /// <summary>
+        /// Adjusts the first word of the value according to the specified adjustment options.
+        /// </summary>
+        /// <param name="value">
+        /// The original value.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of enumeration values that specifies the adjustment options for the first word.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the adjusted first word.
+        /// </returns>
+        public static string AdjustFirstWord(this in ReadOnlySpan<char> value, in FirstWordAdjustment adjustment)
+        {
             string word;
 
             if (adjustment.HasSet(FirstWordAdjustment.StartLowerCase))
             {
-                var firstWord = valueSpan.FirstWord();
+                var firstWord = value.FirstWord();
 
                 // only make lower case in case we have a word that is not all in upper case
                 word = firstWord.Length > 1 && firstWord.IsAllUpperCase()
@@ -92,7 +107,7 @@ namespace MiKoSolutions.Analyzers
             }
             else
             {
-                var firstWord = valueSpan.FirstWord();
+                var firstWord = value.FirstWord();
 
                 word = adjustment.HasSet(FirstWordAdjustment.StartUpperCase)
                        ? firstWord.ToUpperCaseAt(0)
@@ -100,7 +115,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             // build continuation here because the word length may change based on the infinite term
-            var continuation = valueSpan.TrimStart().Slice(word.Length);
+            var continuation = value.TrimStart().Slice(word.Length);
 
             if (adjustment.HasSet(FirstWordAdjustment.MakeInfinite))
             {
