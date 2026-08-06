@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+        private const int BufferSize = 128;
+
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
         public override string FixableDiagnosticId => "MiKo_2060";
@@ -705,7 +707,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 unsafe
                 {
-                    var buffer = stackalloc char[128];
+                    var buffer = stackalloc char[BufferSize];
 
                     var allContinuationsLength = allContinuations.Length;
                     var allPhrasesLength = allPhrases.Length;
@@ -1151,8 +1153,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var continuationsLength = continuations.Length;
                 var suffixesLength = suffixes.Length;
 
-                const int BufferSize = 128;
-
                 unsafe
                 {
                     var buffer = stackalloc char[BufferSize];
@@ -1160,13 +1160,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var wordIndex = 0; wordIndex < startingWordsLength; wordIndex++)
                     {
                         var word = startingWords[wordIndex].AsSpan().Trim();
-                        var wordLength = word.Length;
 
                         if (word.ContainsAnyOrdinal(strangeTexts))
                         {
                             continue;
                         }
 
+                        var wordLength = word.Length;
                         var bufferSpan = new Span<char>(buffer, BufferSize);
 
                         word.CopyTo(bufferSpan);
