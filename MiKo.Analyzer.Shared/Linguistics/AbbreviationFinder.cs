@@ -813,6 +813,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
                                                   };
 
+        private static readonly string[] CleanupKeys = Cleanups.ToArray(_ => _.Key);
+
+        private static readonly ReplacementMap CleanupMap = new ReplacementMap("Abbreviations", Cleanups, CleanupKeys) { Matcher = AhoCorasickMatcher.For(CleanupKeys) };
+
         private static readonly AhoCorasickMatcher MidTermMatcher = AhoCorasickMatcher.For(MidTerms.Select(_ => _.Key));
 
         /// <summary>
@@ -896,7 +900,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             if (findings.Length > 0)
             {
                 value.ReplaceAllWithProbe(findings);
-                value.ReplaceAllWithProbe(Cleanups);
+                value.ReplaceAllWithProbe(CleanupMap);
             }
 
             return value;

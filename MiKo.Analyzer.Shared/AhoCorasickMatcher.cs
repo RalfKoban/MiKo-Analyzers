@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers
     /// The full transition table is resolved once, up-front, during construction, so that <see cref="IsMatch"/> never
     /// mutates any state afterward; instances are therefore safe to share and to query concurrently from multiple threads.
     /// </remarks>
-    internal sealed class AhoCorasickMatcher
+    public sealed class AhoCorasickMatcher
     {
         // sorted list of every character that occurs in any pattern; used to map a char to a dense alphabet index via binary search
         private readonly char[] m_alphabet;
