@@ -70,13 +70,13 @@ namespace MiKoSolutions.Analyzers
         {
             var matcher = AhoCorasickMatcher.For(["cat", "dog", "bird"]);
 
-            Assert.Multiple(() =>
-                                 {
-                                     Assert.That(matcher.IsMatch("I have a cat".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("I have a dog".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("I have a bird".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("I have a fish".AsSpan()), Is.False);
-                                 });
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("I have a cat".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("I have a dog".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("I have a bird".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("I have a fish".AsSpan()), Is.False);
+            }
         }
 
         [Test]
@@ -85,25 +85,29 @@ namespace MiKoSolutions.Analyzers
             // 'he' is a prefix of 'hers' and 'she' contains 'he' as well, this is the classic Aho-Corasick example
             var matcher = AhoCorasickMatcher.For(["he", "she", "his", "hers"]);
 
-            Assert.Multiple(() =>
-                                 {
-                                     Assert.That(matcher.IsMatch("he".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("she".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("his".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("hers".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("ushers".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("t".AsSpan()), Is.False);
-                                 });
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("he".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("she".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("his".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("hers".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("ushers".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("t".AsSpan()), Is.False);
+            }
         }
 
         [Test]
-        public static void IsMatch_finds_pattern_that_only_matches_via_a_failure_link_at_the_seam_of_two_patterns()
+        public static void IsMatch_finds_pattern_that_is_only_reachable_via_a_failure_link_after_a_mismatch()
         {
-            // the combined text does not contain 'abc' as a contiguous substring of either single pattern alone,
-            // but the seam between 'xab' and 'cx' does contain it, exercising the failure-link fallback
-            var matcher = AhoCorasickMatcher.For(["abc"]);
+            // while walking "caab" against pattern "caax", matching succeeds for 'c', 'a', 'a' and then mismatches
+            // on 'b' (since the trie only continues with 'x' at that point); a correct failure link must fall back to
+            // the node representing "aa" (a valid prefix of pattern "aab") instead of resetting to the root, so that
+            // 'b' still completes a match of "aab" (which is genuinely a contiguous substring of "caab" at index 1-3).
+            // An implementation that resets to the root on any mismatch, without reprocessing 'b' from the fallback
+            // state, would incorrectly report no match here.
+            var matcher = AhoCorasickMatcher.For(["caax", "aab"]);
 
-            Assert.That(matcher.IsMatch("xabcx".AsSpan()), Is.True);
+            Assert.That(matcher.IsMatch("caab".AsSpan()), Is.True);
         }
 
         [Test]
@@ -127,11 +131,11 @@ namespace MiKoSolutions.Analyzers
         {
             var matcher = AhoCorasickMatcher.For(["abc", null, "def"]);
 
-            Assert.Multiple(() =>
-                                 {
-                                     Assert.That(matcher.IsMatch("abc".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("def".AsSpan()), Is.True);
-                                 });
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("abc".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("def".AsSpan()), Is.True);
+            }
         }
 
         [Test]
@@ -139,12 +143,12 @@ namespace MiKoSolutions.Analyzers
         {
             var matcher = AhoCorasickMatcher.For(["abc", string.Empty, "def"]);
 
-            Assert.Multiple(() =>
-                                 {
-                                     Assert.That(matcher.IsMatch("abc".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch("def".AsSpan()), Is.True);
-                                     Assert.That(matcher.IsMatch(string.Empty.AsSpan()), Is.False);
-                                 });
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("abc".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("def".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch(string.Empty.AsSpan()), Is.False);
+            }
         }
 
         [Test]
@@ -192,5 +196,55 @@ namespace MiKoSolutions.Analyzers
 
         [Test]
         public static void For_throws_an_exception_when_patterns_is_null() => Assert.That(() => AhoCorasickMatcher.For(null), Throws.ArgumentNullException);
+
+        [Test]
+        public static void IsMatch_returns_false_for_an_empty_collection_of_patterns()
+        {
+            var matcher = AhoCorasickMatcher.For([]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("any text".AsSpan()), Is.False);
+                Assert.That(matcher.IsMatch(string.Empty.AsSpan()), Is.False);
+            }
+        }
+
+        [Test]
+        public static void IsMatch_finds_a_single_character_pattern()
+        {
+            var matcher = AhoCorasickMatcher.For(["x"]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("x".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("abcxdef".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("abcdef".AsSpan()), Is.False);
+            }
+        }
+
+        [Test]
+        public static void IsMatch_finds_matches_when_the_same_pattern_is_specified_multiple_times()
+        {
+            var matcher = AhoCorasickMatcher.For(["abc", "abc", "abc"]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("abc".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("xyz".AsSpan()), Is.False);
+            }
+        }
+
+        [Test]
+        public static void IsMatch_finds_patterns_that_contain_non_ascii_characters()
+        {
+            var matcher = AhoCorasickMatcher.For(["café", "日本語"]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("I like café very much".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("speaking 日本語 fluently".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("no matching text here".AsSpan()), Is.False);
+            }
+        }
     }
 }
