@@ -246,5 +246,75 @@ namespace MiKoSolutions.Analyzers
                 Assert.That(matcher.IsMatch("no matching text here".AsSpan()), Is.False);
             }
         }
+
+        [Test]
+        public static void IsMatch_finds_every_pattern_when_many_states_share_an_identical_transition_row()
+        {
+            // every pattern only differs in its first character and shares the exact same single-character suffix,
+            // so the intermediate nodes (reached right after the first character) all end up with an identical
+            // transition row (real edge on '1' towards the terminal state, fallback to root for everything else);
+            // this specifically exercises the transition-row deduplication introduced to shrink the transition table.
+            var patterns = Enumerable.Range(0, 10).Select(_ => $"{_}1").ToArray();
+
+            var matcher = AhoCorasickMatcher.For(patterns);
+
+            using (Assert.EnterMultipleScope())
+            {
+                foreach (var pattern in patterns)
+                {
+                    Assert.That(matcher.IsMatch($"contains {pattern} somewhere".AsSpan()), Is.True, $"Failed for pattern '{pattern}'");
+                }
+
+                Assert.That(matcher.IsMatch("contains no matching digits".AsSpan()), Is.False);
+                Assert.That(matcher.IsMatch("12345".AsSpan()), Is.False); // shares digits with the patterns but never followed by the required '1' suffix at the right spot
+            }
+        }
+
+        [Test]
+        public static void IsMatch_finds_every_pattern_when_many_states_share_an_identical_transition_row_but_differ_in_terminal_state()
+        {
+            // 'a1', 'b1', ... are terminal only right after their second character, whereas the intermediate,
+            // non-terminal node reached after the first character shares its transition row content with other,
+            // unrelated terminal leaf states (e.g. the single-character pattern "z"); deduplicating rows purely by
+            // their transition content must not accidentally also merge the (separately tracked) terminal flag.
+            var matcher = AhoCorasickMatcher.For(["a1", "b1", "c1", "z"]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matcher.IsMatch("a1".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("b1".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("c1".AsSpan()), Is.True);
+                Assert.That(matcher.IsMatch("z".AsSpan()), Is.True);
+
+                // reaching the intermediate (non-terminal) state alone, without completing any full pattern, must not match
+                Assert.That(matcher.IsMatch("a".AsSpan()), Is.False);
+                Assert.That(matcher.IsMatch("b".AsSpan()), Is.False);
+                Assert.That(matcher.IsMatch("c".AsSpan()), Is.False);
+            }
+        }
+
+        [Test]
+        public static void IsMatch_produces_correct_results_for_a_large_number_of_overlapping_patterns()
+        {
+            // simulates a realistic large phrase set (similar in spirit to the replacement phrases used by code fixes)
+            // with lots of shared prefixes and suffixes, which is exactly the scenario that produces many states and,
+            // consequently, many opportunities for the transition table to contain duplicate rows.
+            var prefixes = new[] { "Gets ", "Sets ", "Gets or sets ", "gets ", "sets " };
+            var suffixes = new[] { "a value ", "the value ", "an instance ", "a flag ", "the flag " };
+
+            var patterns = prefixes.SelectMany(prefix => suffixes.Select(suffix => prefix + suffix)).ToArray();
+
+            var matcher = AhoCorasickMatcher.For(patterns);
+
+            using (Assert.EnterMultipleScope())
+            {
+                foreach (var pattern in patterns)
+                {
+                    Assert.That(matcher.IsMatch($"Summary: {pattern}indicating something.".AsSpan()), Is.True, $"Failed for pattern '{pattern}'");
+                }
+
+                Assert.That(matcher.IsMatch("Summary: Provides access to something.".AsSpan()), Is.False);
+            }
+        }
     }
 }

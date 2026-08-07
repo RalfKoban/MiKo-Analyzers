@@ -21,15 +21,31 @@ namespace MiKoSolutions.Analyzers
     /// The full transition table is resolved once, up-front, during construction, so that <see cref="IsMatch"/> never
     /// mutates any state afterward; instances are therefore safe to share and to query concurrently from multiple threads.
     /// </remarks>
+    /// <seealso href="https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm"/>
     public sealed class AhoCorasickMatcher
     {
-        // sorted list of every character that occurs in any pattern; used to map a char to a dense alphabet index via binary search
+        /// <summary>
+        /// The sorted list of every character that occurs in any pattern; used to map a char to a dense alphabet index via binary search.
+        /// </summary>
         private readonly char[] m_alphabet;
 
-        // flattened deterministic transition table: m_transitions[(state * m_alphabet.Length) + alphabetIndex] = next state
-        private readonly int[] m_transitions;
+        /// <summary>
+        /// Contains the map for each state to the index of its (potentially shared) row within <see cref="m_transitionRows"/>.
+        /// </summary>
+        /// <remarks>
+        /// Many states end up with identical transition rows (e.g. deep fallback-only states), so sharing those rows
+        /// considerably shrinks memory compared to storing one dedicated row per state.
+        /// </remarks>
+        private readonly int[] m_stateToRow;
 
-        // m_isTerminal[state] indicates whether reaching that state means a pattern was matched
+        /// <summary>
+        /// The flattened deduplicated transition rows: <c>m_transitionRows[(rowIndex * m_alphabet.Length) + alphabetIndex] = next state</c>.
+        /// </summary>
+        private readonly int[] m_transitionRows;
+
+        /// <summary>
+        /// Contains the indicators about the terminal nodes where <c>m_isTerminal[state]</c> indicates whether reaching that state means a pattern was matched.
+        /// </summary>
         private readonly bool[] m_isTerminal;
 
         /// <summary>
@@ -79,7 +95,7 @@ namespace MiKoSolutions.Analyzers
 
             Array.Sort(m_alphabet);
 
-            CompileToArrays(root, m_alphabet, out m_transitions, out m_isTerminal);
+            CompileToArrays(root, m_alphabet, out m_stateToRow, out m_transitionRows, out m_isTerminal);
         }
 
         /// <summary>
@@ -115,7 +131,7 @@ namespace MiKoSolutions.Analyzers
                 var alphabetIndex = Array.BinarySearch(m_alphabet, text[index]);
 
                 // unknown character (not part of any pattern): simply stay at / return to the root
-                state = alphabetIndex < 0 ? 0 : m_transitions[(state * alphabetLength) + alphabetIndex];
+                state = alphabetIndex < 0 ? 0 : m_transitionRows[(m_stateToRow[state] * alphabetLength) + alphabetIndex];
 
                 if (m_isTerminal[state])
                 {
@@ -180,7 +196,13 @@ namespace MiKoSolutions.Analyzers
         /// Flattens the resolved <see cref="Node"/> graph (states, terminal flags, and per-character transitions)
         /// into plain arrays so that <see cref="IsMatch"/> only ever performs array indexing at query time.
         /// </summary>
-        private static void CompileToArrays(Node root, char[] alphabet, out int[] transitions, out bool[] isTerminal)
+        /// <remarks>
+        /// Many states (especially deep, fallback-only ones) end up with an identical row of per-character transitions.
+        /// Instead of storing one dedicated row per state (<c>stateCount * alphabetLength</c> entries), identical rows
+        /// are stored once and shared via <paramref name="stateToRow"/>, which considerably reduces memory for pattern
+        /// sets with many states but comparatively few distinct transition behaviors.
+        /// </remarks>
+        private static void CompileToArrays(Node root, char[] alphabet, out int[] stateToRow, out int[] transitionRows, out bool[] isTerminal)
         {
             // assign a stable, dense integer id to every reachable node (root is always state 0)
             var stateOf = new Dictionary<Node, int>();
@@ -210,23 +232,97 @@ namespace MiKoSolutions.Analyzers
             var alphabetLength = alphabet.Length;
             var stateCount = order.Count;
 
-            transitions = new int[stateCount * alphabetLength];
             isTerminal = new bool[stateCount];
+            stateToRow = new int[stateCount];
+
+            // deduplicate identical transition rows so that they are stored only once, keyed by their content
+            var rowIndexByContent = new Dictionary<RowKey, int>();
+            var uniqueRows = new List<int[]>();
 
             for (var state = 0; state < stateCount; state++)
             {
                 var node = order[state];
                 isTerminal[state] = node.IsTerminal;
 
-                var baseIndex = state * alphabetLength;
+                var row = new int[alphabetLength];
 
                 for (var alphabetIndex = 0; alphabetIndex < alphabetLength; alphabetIndex++)
                 {
                     // after 'BuildDeterministicTransitions', every node has an edge for every alphabet character
                     var next = node.Children[alphabet[alphabetIndex]];
 
-                    transitions[baseIndex + alphabetIndex] = stateOf[next];
+                    row[alphabetIndex] = stateOf[next];
                 }
+
+                var key = new RowKey(row);
+
+                if (rowIndexByContent.TryGetValue(key, out var rowIndex) is false)
+                {
+                    rowIndex = uniqueRows.Count;
+
+                    uniqueRows.Add(row);
+                    rowIndexByContent[key] = rowIndex;
+                }
+
+                stateToRow[state] = rowIndex;
+            }
+
+            transitionRows = new int[uniqueRows.Count * alphabetLength];
+
+            for (var rowIndex = 0; rowIndex < uniqueRows.Count; rowIndex++)
+            {
+                Array.Copy(uniqueRows[rowIndex], 0, transitionRows, rowIndex * alphabetLength, alphabetLength);
+            }
+        }
+
+        // wraps a transition row so that it can be used as a dictionary key based on its content rather than its reference identity
+        private readonly struct RowKey : IEquatable<RowKey>
+        {
+            private readonly int[] m_row;
+            private readonly int m_hashCode;
+
+            public RowKey(int[] row)
+            {
+                m_row = row;
+
+                var hashCode = 17;
+
+                foreach (var value in row)
+                {
+                    hashCode = (hashCode * 31) + value;
+                }
+
+                m_hashCode = hashCode;
+            }
+
+            public override int GetHashCode() => m_hashCode;
+
+            public override bool Equals(object obj) => obj is RowKey other && Equals(other);
+
+            public bool Equals(RowKey other)
+            {
+                if (m_hashCode != other.m_hashCode)
+                {
+                    return false;
+                }
+
+                var row = m_row;
+                var otherRow = other.m_row;
+
+                if (row.Length != otherRow.Length)
+                {
+                    return false;
+                }
+
+                for (var i = 0; i < row.Length; i++)
+                {
+                    if (row[i] != otherRow[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         }
 
