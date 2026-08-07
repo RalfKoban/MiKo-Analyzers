@@ -23,7 +23,14 @@ namespace MiKoSolutions.Analyzers
     /// </remarks>
     internal sealed class AhoCorasickMatcher
     {
-        private readonly Node m_root = new Node();
+        // sorted list of every character that occurs in any pattern; used to map a char to a dense alphabet index via binary search
+        private readonly char[] m_alphabet;
+
+        // flattened deterministic transition table: m_transitions[(state * m_alphabet.Length) + alphabetIndex] = next state
+        private readonly int[] m_transitions;
+
+        // m_isTerminal[state] indicates whether reaching that state means a pattern was matched
+        private readonly bool[] m_isTerminal;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AhoCorasickMatcher"/> class for the specified patterns.
@@ -33,6 +40,7 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         private AhoCorasickMatcher(IEnumerable<string> patterns)
         {
+            var root = new Node();
             var alphabet = new HashSet<char>();
 
             foreach (var pattern in patterns)
@@ -42,7 +50,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var node = m_root;
+                var node = root;
 
                 foreach (var c in pattern)
                 {
@@ -61,8 +69,17 @@ namespace MiKoSolutions.Analyzers
                 node.IsTerminal = true;
             }
 
-            // resolve the whole transition table once, up-front, so 'IsMatch' becomes read-only afterward (and therefore safe to call concurrently)
-            BuildDeterministicTransitions(alphabet);
+            // resolve the whole transition table once, up-front, based on the mutable 'Node' graph
+            BuildDeterministicTransitions(root, alphabet);
+
+            // compile the resolved 'Node' graph into flat arrays so that 'IsMatch' operates on cheap array indexing only
+            // (no dictionary lookups, no pointer chasing) and never mutates any state afterward;
+            // instances are therefore safe to share and to query concurrently from multiple threads.
+            m_alphabet = alphabet.ToArray();
+
+            Array.Sort(m_alphabet);
+
+            CompileToArrays(root, m_alphabet, out m_transitions, out m_isTerminal);
         }
 
         /// <summary>
@@ -89,13 +106,18 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public bool IsMatch(in ReadOnlySpan<char> text)
         {
-            var node = m_root;
+            var alphabetLength = m_alphabet.Length;
+
+            var state = 0; // root
 
             for (int index = 0, length = text.Length; index < length; index++)
             {
-                node = node.Children.TryGetValue(text[index], out var next) ? next : m_root;
+                var alphabetIndex = Array.BinarySearch(m_alphabet, text[index]);
 
-                if (node.IsTerminal)
+                // unknown character (not part of any pattern): simply stay at / return to the root
+                state = alphabetIndex < 0 ? 0 : m_transitions[(state * alphabetLength) + alphabetIndex];
+
+                if (m_isTerminal[state])
                 {
                     return true;
                 }
@@ -104,16 +126,16 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private void BuildDeterministicTransitions(HashSet<char> alphabet)
+        private static void BuildDeterministicTransitions(Node root, HashSet<char> alphabet)
         {
             // snapshot the root's genuine trie edges before extending them with fallback shortcuts
-            var rootRealChildren = new List<Node>(m_root.Children.Values);
+            var rootRealChildren = new List<Node>(root.Children.Values);
 
             foreach (var c in alphabet)
             {
-                if (m_root.Children.ContainsKey(c) is false)
+                if (root.Children.ContainsKey(c) is false)
                 {
-                    m_root.Children[c] = m_root; // unknown characters seen while at the root simply stay at the root
+                    root.Children[c] = root; // unknown characters seen while at the root simply stay at the root
                 }
             }
 
@@ -121,7 +143,7 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var child in rootRealChildren)
             {
-                child.Fail = m_root;
+                child.Fail = root;
             }
 
             while (queue.Count > 0)
@@ -150,6 +172,60 @@ namespace MiKoSolutions.Analyzers
                         // fallback shortcut, resolved from the already-complete parent transition (no real trie edge for this character)
                         current.Children[c] = current.Fail.Children[c];
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Flattens the resolved <see cref="Node"/> graph (states, terminal flags, and per-character transitions)
+        /// into plain arrays so that <see cref="IsMatch"/> only ever performs array indexing at query time.
+        /// </summary>
+        private static void CompileToArrays(Node root, char[] alphabet, out int[] transitions, out bool[] isTerminal)
+        {
+            // assign a stable, dense integer id to every reachable node (root is always state 0)
+            var stateOf = new Dictionary<Node, int>();
+            var order = new List<Node>();
+
+            var queue = new Queue<Node>();
+            queue.Enqueue(root);
+            stateOf[root] = 0;
+            order.Add(root);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                foreach (var child in current.Children.Values)
+                {
+                    if (stateOf.ContainsKey(child) is false)
+                    {
+                        stateOf[child] = order.Count;
+                        order.Add(child);
+
+                        queue.Enqueue(child);
+                    }
+                }
+            }
+
+            var alphabetLength = alphabet.Length;
+            var stateCount = order.Count;
+
+            transitions = new int[stateCount * alphabetLength];
+            isTerminal = new bool[stateCount];
+
+            for (var state = 0; state < stateCount; state++)
+            {
+                var node = order[state];
+                isTerminal[state] = node.IsTerminal;
+
+                var baseIndex = state * alphabetLength;
+
+                for (var alphabetIndex = 0; alphabetIndex < alphabetLength; alphabetIndex++)
+                {
+                    // after 'BuildDeterministicTransitions', every node has an edge for every alphabet character
+                    var next = node.Children[alphabet[alphabetIndex]];
+
+                    transitions[baseIndex + alphabetIndex] = stateOf[next];
                 }
             }
         }
