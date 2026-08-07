@@ -12,10 +12,14 @@ namespace MiKoSolutions.Analyzers
     /// in a single pass over the searched text, whether any of a fixed set of patterns is contained within it.
     /// </summary>
     /// <remarks>
-    /// The matcher is built once from a set of patterns and can then be queried many times, each query costing
-    /// <c>O(text length)</c> regardless of the number of patterns, instead of <c>O(patterns count * text length)</c>
-    /// as with a naive per-pattern <see cref="string.IndexOf(string)"/> loop.
+    /// The matcher is built once from a set of patterns and can then be queried many times,
+    /// each query costing <c>O(text length)</c> regardless of the number of patterns,
+    /// instead of <c>O(patterns count * text length)</c> as with a naive per-pattern <see cref="string.IndexOf(string)"/> loop.
+    /// <para />
     /// Matching is performed using <see cref="StringComparison.Ordinal"/> semantics.
+    /// <para />
+    /// The full transition table is resolved once, up-front, during construction, so that <see cref="IsMatch"/> never
+    /// mutates any state afterward; instances are therefore safe to share and to query concurrently from multiple threads.
     /// </remarks>
     internal sealed class AhoCorasickMatcher
     {
@@ -29,6 +33,8 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         private AhoCorasickMatcher(IEnumerable<string> patterns)
         {
+            var alphabet = new HashSet<char>();
+
             foreach (var pattern in patterns)
             {
                 if (string.IsNullOrEmpty(pattern))
@@ -40,6 +46,8 @@ namespace MiKoSolutions.Analyzers
 
                 foreach (var c in pattern)
                 {
+                    alphabet.Add(c);
+
                     if (node.Children.TryGetValue(c, out var next) is false)
                     {
                         next = new Node();
@@ -53,7 +61,8 @@ namespace MiKoSolutions.Analyzers
                 node.IsTerminal = true;
             }
 
-            BuildFailureLinks();
+            // resolve the whole transition table once, up-front, so 'IsMatch' becomes read-only afterward (and therefore safe to call concurrently)
+            BuildDeterministicTransitions(alphabet);
         }
 
         /// <summary>
@@ -84,23 +93,7 @@ namespace MiKoSolutions.Analyzers
 
             for (int index = 0, length = text.Length; index < length; index++)
             {
-                var c = text[index];
-
-                Node next;
-
-                while (node.Children.TryGetValue(c, out next) is false)
-                {
-                    if (node == m_root)
-                    {
-                        next = m_root;
-
-                        break;
-                    }
-
-                    node = node.Fail;
-                }
-
-                node = next;
+                node = node.Children.TryGetValue(text[index], out var next) ? next : m_root;
 
                 if (node.IsTerminal)
                 {
@@ -111,42 +104,52 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private void BuildFailureLinks()
+        private void BuildDeterministicTransitions(HashSet<char> alphabet)
         {
-            var queue = new Queue<Node>();
+            // snapshot the root's genuine trie edges before extending them with fallback shortcuts
+            var rootRealChildren = new List<Node>(m_root.Children.Values);
 
-            foreach (var child in m_root.Children.Values)
+            foreach (var c in alphabet)
+            {
+                if (m_root.Children.ContainsKey(c) is false)
+                {
+                    m_root.Children[c] = m_root; // unknown characters seen while at the root simply stay at the root
+                }
+            }
+
+            var queue = new Queue<Node>(rootRealChildren);
+
+            foreach (var child in rootRealChildren)
             {
                 child.Fail = m_root;
-
-                queue.Enqueue(child);
             }
 
             while (queue.Count > 0)
             {
                 var current = queue.Dequeue();
 
-                foreach (var pair in current.Children)
+                // snapshot the node's genuine trie edges before extending them with fallback shortcuts
+                var realChildren = new Dictionary<char, Node>(current.Children);
+
+                foreach (var c in alphabet)
                 {
-                    var c = pair.Key;
-                    var child = pair.Value;
-
-                    var failNode = current.Fail;
-                    Node failChild = null;
-
-                    while (failNode?.Children.TryGetValue(c, out failChild) is false)
+                    if (realChildren.TryGetValue(c, out var child))
                     {
-                        failNode = failNode.Fail;
+                        // 'current.Fail' was processed earlier (shallower BFS level) or is the root, so its transition table is already complete
+                        child.Fail = current.Fail.Children[c];
+
+                        if (child.Fail.IsTerminal)
+                        {
+                            child.IsTerminal = true;
+                        }
+
+                        queue.Enqueue(child);
                     }
-
-                    child.Fail = failChild ?? m_root;
-
-                    if (child.Fail.IsTerminal)
+                    else
                     {
-                        child.IsTerminal = true;
+                        // fallback shortcut, resolved from the already-complete parent transition (no real trie edge for this character)
+                        current.Children[c] = current.Fail.Children[c];
                     }
-
-                    queue.Enqueue(child);
                 }
             }
         }
