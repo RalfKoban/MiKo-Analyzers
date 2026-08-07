@@ -693,9 +693,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static HashSet<string> CreateTypeReplacementMapKeys()
             {
-                var strangeTexts = StrangeTexts().ToArray(AscendingStringComparer.Default).AsSpan();
+                var strangeTexts = StrangeTexts();
                 var allPhrases = AllPhrases().OrderDescendingByLengthAndText();
                 var allContinuations = AllContinuations().OrderDescendingByLengthAndText();
+
+                var matcher = AhoCorasickMatcher.For(strangeTexts);
 
                 var results = new HashSet<string> // avoid duplicates
                                   {
@@ -726,7 +728,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             phrase.CopyTo(bufferSpan);
                             continuation.CopyTo(bufferSpan.Slice(phrase.Length));
 
-                            if (((ReadOnlySpan<char>)bufferSpan).ContainsAnyOrdinal(strangeTexts))
+                            if (matcher.IsMatch(bufferSpan))
                             {
                                 continue;
                             }
@@ -1097,7 +1099,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                  "that the new", "to the new", "which the new",
                                              };
 
-                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
+                    var continuationsMatcher = AhoCorasickMatcher.For(strangePhrases);
+
+                    set.RemoveWhere(_ => continuationsMatcher.IsMatch(_.AsSpan()));
 
                     return set;
                 }
@@ -1150,6 +1154,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                            "onstruct and ",
                                        };
 
+                var matcher = AhoCorasickMatcher.For(strangeTexts);
+
                 var startingWordsLength = startingWords.Length;
                 var continuationsLength = continuations.Length;
                 var suffixesLength = suffixes.Length;
@@ -1162,7 +1168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var word = startingWords[wordIndex].AsSpan().Trim();
 
-                        if (word.ContainsAnyOrdinal(strangeTexts))
+                        if (matcher.IsMatch(word))
                         {
                             continue;
                         }
@@ -1181,7 +1187,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             ReadOnlySpan<char> candidate = bufferSpan.Slice(0, suffixStartLength);
 
-                            if (candidate.ContainsAnyOrdinal(strangeTexts))
+                            if (matcher.IsMatch(candidate))
                             {
                                 continue;
                             }
@@ -1272,7 +1278,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "Method gets ",
                                                    };
 
-                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeMethodPhrases));
+                    var strangeMethodMatcher = AhoCorasickMatcher.For(strangeMethodPhrases);
+
+                    set.RemoveWhere(_ => strangeMethodMatcher.IsMatch(_.AsSpan()));
 
                     foreach (var phrase in startingPhrases)
                     {
@@ -1295,7 +1303,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          "unction return ", "ethod return ",
                                                      };
 
-                    set.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangeStartingPhrases));
+                    var startingPhrasesMatcher = AhoCorasickMatcher.For(strangeStartingPhrases);
+
+                    set.RemoveWhere(_ => startingPhrasesMatcher.IsMatch(_.AsSpan()));
 
                     set.Add("Used for building ");
                     set.Add("Used for constructing ");

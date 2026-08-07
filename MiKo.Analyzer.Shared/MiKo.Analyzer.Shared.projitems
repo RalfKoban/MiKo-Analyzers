@@ -9,6 +9,7 @@
     <Import_RootNamespace>MiKo.Analyzer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AhoCorasickMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.Internals.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />

@@ -882,9 +882,11 @@ internal interface IFactory
                                          "y that are capable",
                                          "y which are able",
                                          "y which are capable",
-                                     }.OrderDescendingByLengthAndText();
+                                     };
 
-            results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
+            var matcher = AhoCorasickMatcher.For(strangePhrases);
+
+            results.RemoveWhere(_ => matcher.IsMatch(_.AsSpan()));
 
             results.Add("Implementations create");
             results.Add("Implementations construct");
@@ -991,7 +993,9 @@ internal interface IFactory
                                           "Function gets ", "Method gets ",
                                       ];
 
-            results.RemoveWhere(_ => _.AsSpan().ContainsAnyOrdinal(strangePhrases));
+            var matcher = AhoCorasickMatcher.For(strangePhrases);
+
+            results.RemoveWhere(_ => matcher.IsMatch(_.AsSpan()));
 
             return results;
         }
