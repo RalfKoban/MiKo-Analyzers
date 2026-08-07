@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
@@ -23,7 +25,7 @@ namespace MiKoSolutions.Analyzers
         /// Initializes a new instance of the <see cref="AhoCorasickMatcher"/> class for the specified patterns.
         /// </summary>
         /// <param name="patterns">
-        /// The patterns to seek for. <see langword="null"/> or empty entries are ignored.
+        /// The patterns to seek for. <see langword="null"/> or empty entries within <paramref name="patterns"/> are ignored.
         /// </param>
         private AhoCorasickMatcher(IEnumerable<string> patterns)
         {
@@ -58,12 +60,14 @@ namespace MiKoSolutions.Analyzers
         /// Gets a new instance of the <see cref="AhoCorasickMatcher"/> class for the specified patterns.
         /// </summary>
         /// <param name="patterns">
-        /// The patterns to seek for. <see langword="null"/> or empty entries are ignored.
+        /// The patterns to seek for. <see langword="null"/> or empty entries within <paramref name="patterns"/> are ignored.
         /// </param>
         /// <returns>
         /// The new created matcher initialized with the specified patterns.
         /// </returns>
-        public static AhoCorasickMatcher For(IEnumerable<string> patterns) => new AhoCorasickMatcher(patterns);
+        public static AhoCorasickMatcher For(IEnumerable<string> patterns) => patterns is null
+                                                                              ? throw new ArgumentNullException(nameof(patterns))
+                                                                              : new AhoCorasickMatcher(patterns);
 
         /// <summary>
         /// Determines whether the specified text contains any of the patterns that this matcher was constructed with.
@@ -82,12 +86,21 @@ namespace MiKoSolutions.Analyzers
             {
                 var c = text[index];
 
-                while (node != m_root && node.Children.TryGetValue(c, out _) is false)
+                Node next;
+
+                while (node.Children.TryGetValue(c, out next) is false)
                 {
+                    if (node == m_root)
+                    {
+                        next = m_root;
+
+                        break;
+                    }
+
                     node = node.Fail;
                 }
 
-                node = node.Children.TryGetValue(c, out var next) ? next : m_root;
+                node = next;
 
                 if (node.IsTerminal)
                 {
@@ -119,13 +132,14 @@ namespace MiKoSolutions.Analyzers
                     var child = pair.Value;
 
                     var failNode = current.Fail;
+                    Node failChild = null;
 
-                    while (failNode != null && failNode.Children.TryGetValue(c, out _) is false)
+                    while (failNode?.Children.TryGetValue(c, out failChild) is false)
                     {
                         failNode = failNode.Fail;
                     }
 
-                    child.Fail = (failNode != null && failNode.Children.TryGetValue(c, out var failChild)) ? failChild : m_root;
+                    child.Fail = failChild ?? m_root;
 
                     if (child.Fail.IsTerminal)
                     {
