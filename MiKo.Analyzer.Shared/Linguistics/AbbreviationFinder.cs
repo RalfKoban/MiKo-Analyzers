@@ -813,6 +813,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
                                                   };
 
+        private static readonly AhoCorasickMatcher MidTermMatcher = AhoCorasickMatcher.For(MidTerms.Select(_ => _.Key));
+
         /// <summary>
         /// Finds all abbreviations contained in the specified text.
         /// </summary>
@@ -1064,19 +1066,23 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
-                foreach (var pair in MidTerms)
+                // do a quick check on the hot path, as most times (~99.8%) there is no issue
+                if (MidTermMatcher.IsMatch(textSpan))
                 {
-                    var key = pair.Key.AsSpan();
-
-                    // do a quick check on the hot path, as most times (~99.8%) there is no issue
-                    if (textSpan.Contains(key, StringComparison.Ordinal) is false)
+                    foreach (var pair in MidTerms)
                     {
-                        continue;
-                    }
+                        var key = pair.Key.AsSpan();
 
-                    if (MidTermHasIssue(key, textSpan))
-                    {
-                        AddToResults(ref results, pair);
+                        // do a quick check on the hot path, as most times (~99.8%) there is no issue
+                        if (textSpan.Contains(key, StringComparison.Ordinal) is false)
+                        {
+                            continue;
+                        }
+
+                        if (MidTermHasIssue(key, textSpan))
+                        {
+                            AddToResults(ref results, pair);
+                        }
                     }
                 }
             }
