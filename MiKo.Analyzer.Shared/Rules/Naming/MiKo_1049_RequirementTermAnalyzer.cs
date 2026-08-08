@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1049";
 
-        private static readonly Pair[] ReplacementMap = CreateReplacementMapEntries().Distinct().ToArray();
+        private static readonly ReplacementMap ReplacementMap = new ReplacementMap(Id, CreateReplacementMapEntries().Distinct().ToArray());
 
         private static readonly ConcurrentDictionary<string, string> AnalyzeNameCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 

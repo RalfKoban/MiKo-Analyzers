@@ -65,8 +65,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                     .Except(new[] { "Gets or sets a value ", "Gets or sets ", "Gets a value ", "Sets a value ", "gets a value ", "sets a value " })
                                                                                                     .OrderDescendingByLengthAndText();
 
+        private static readonly ReplacementMap GetSetReplacementMap = new ReplacementMap("MiKo_2012_GetSet", GetSetReplacementPhrases.ToArray(_ => new Pair(_, Constants.SingleSpace)), GetSetReplacementPhrases)
+                                                                          {
+                                                                              Matcher = AhoCorasickMatcher.For(GetSetReplacementPhrases),
+                                                                          };
+
+        private static readonly Pair[] GetSetReplacementCleanups = CreateGetSetReplacementCleanups();
+
+        private static readonly string[] GetSetReplacementCleanupKeys = GetSetReplacementCleanups.ToArray(_ => _.Key);
+
+        private static readonly ReplacementMap GetSetReplacementCleanupMap = new ReplacementMap("MiKo_2012_GetSetCleanup", GetSetReplacementCleanups, GetSetReplacementCleanupKeys)
+                                                                                 {
+                                                                                     Matcher = AhoCorasickMatcher.For(GetSetReplacementCleanupKeys),
+                                                                                 };
+
         private static readonly ReplacementMap PreparationMap = new ReplacementMap(
-                                                                               "MiKo_2012_Replacement",
+                                                                               "MiKo_2012_Preparation",
                                                                                new[]
                                                                                    {
                                                                                        new Pair(Constants.Comments.SealedClassPhrase, "##SEALED##"),
@@ -310,107 +324,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
                                             .Append(startingPhrase)
                                             .Append(remainingText.ToLowerCaseAt(0))
-                                            .ReplaceAllWithProbe(GetSetReplacementPhrases, Constants.SingleSpace);
-
-            builder.ReplaceWithProbe(" only if ", " if ");
-            builder.ReplaceWithProbe(" only when ", " when ");
-            builder.ReplaceWithProbe(Constants.SingleSpace + Constants.SingleSpace, Constants.SingleSpace);
-            builder.ReplaceWithProbe("indicating describes ", "indicating ");
-            builder.ReplaceWithProbe("indicating describe ", "indicating ");
-            builder.ReplaceWithProbe("indicating specifies ", "indicating ");
-            builder.ReplaceWithProbe("indicating specify ", "indicating ");
-            builder.ReplaceWithProbe("indicating indicates ", "indicating ");
-            builder.ReplaceWithProbe("indicating indicate ", "indicating ");
-            builder.ReplaceWithProbe("indicating returns ", "indicating ");
-            builder.ReplaceWithProbe("indicating return ", "indicating ");
-            builder.ReplaceWithProbe("indicating indicating", "indicating");
-            builder.ReplaceWithProbe("indicating for ", "indicating whether the ");
-            builder.ReplaceWithProbe("indicating property for ", "indicating whether ");
-            builder.ReplaceWithProbe("bool indicating", "value indicating");
-            builder.ReplaceWithProbe("bool that indicates", "value indicating");
-            builder.ReplaceWithProbe("bool which indicates", "value indicating");
-            builder.ReplaceWithProbe("boolean indicating", "value indicating");
-            builder.ReplaceWithProbe("boolean that indicates", "value indicating");
-            builder.ReplaceWithProbe("boolean which indicates", "value indicating");
-            builder.ReplaceWithProbe("value that indicates", "value indicating");
-            builder.ReplaceWithProbe("value which indicates", "value indicating");
-            builder.ReplaceWithProbe("value indicating whether value indicating", "value indicating");
-            builder.ReplaceWithProbe("value indicating value indicating", "value indicating");
-            builder.ReplaceWithProbe("the value indicat", "a value indicat");
-            builder.ReplaceWithProbe(" value indicating whether a value indicating", " value indicating");
-            builder.ReplaceWithProbe(" value indicating gets a value indicating", " value indicating");
-            builder.ReplaceWithProbe(" value indicating sets a value indicating", " value indicating");
-            builder.ReplaceWithProbe(" value indicating gets or sets a value indicating", " value indicating");
-            builder.ReplaceWithProbe(" value indicating a value indicating", " value indicating");
-            builder.ReplaceWithProbe("whether value indicating whether", "whether");
-            builder.ReplaceWithProbe("a value indicating get ", "a value indicating ");
-            builder.ReplaceWithProbe("a value indicating set ", "a value indicating ");
-            builder.ReplaceWithProbe("indicating that indicates if", "indicating whether");
-            builder.ReplaceWithProbe("indicating which indicates if", "indicating whether");
-            builder.ReplaceWithProbe("indicating that indicates that", "indicating whether");
-            builder.ReplaceWithProbe("indicating which indicates that", "indicating whether");
-            builder.ReplaceWithProbe("indicating that indicates whether", "indicating whether");
-            builder.ReplaceWithProbe("indicating which indicates whether", "indicating whether");
-            builder.ReplaceWithProbe("indicating that", "indicating whether");
-            builder.ReplaceWithProbe("indicating flag ", "indicating whether ");
-            builder.ReplaceWithProbe("indicating if ", "indicating whether ");
-            builder.ReplaceWithProbe("indicating to", "indicating whether to");
-            builder.ReplaceWithProbe("whether to true if to", "whether to");
-            builder.ReplaceWithProbe("whether to true to", "whether to");
-            builder.ReplaceWithProbe("whether to true, to", "whether to");
-            builder.ReplaceWithProbe("whether describe if", "whether");
-            builder.ReplaceWithProbe("whether describe that", "whether");
-            builder.ReplaceWithProbe("whether describe whether", "whether");
-            builder.ReplaceWithProbe("whether describes if", "whether");
-            builder.ReplaceWithProbe("whether describes that", "whether");
-            builder.ReplaceWithProbe("whether describes whether", "whether");
-            builder.ReplaceWithProbe("whether indicate if", "whether");
-            builder.ReplaceWithProbe("whether indicate that", "whether ");
-            builder.ReplaceWithProbe("whether indicate whether", "whether");
-            builder.ReplaceWithProbe("whether indicates if", "whether");
-            builder.ReplaceWithProbe("whether indicates that", "whether ");
-            builder.ReplaceWithProbe("whether indicates whether", "whether");
-            builder.ReplaceWithProbe("whether specifies if", "whether");
-            builder.ReplaceWithProbe("whether specifies that", "whether");
-            builder.ReplaceWithProbe("whether specifies whether", "whether");
-            builder.ReplaceWithProbe("whether specify if", "whether");
-            builder.ReplaceWithProbe("whether specify that", "whether");
-            builder.ReplaceWithProbe("whether specify whether", "whether");
-            builder.ReplaceWithProbe("whether whether", "whether");
-            builder.ReplaceWithProbe("whether set to true then", "whether");
-            builder.ReplaceWithProbe("whether set to true, then", "whether");
-            builder.ReplaceWithProbe("whether set to True then", "whether");
-            builder.ReplaceWithProbe("whether set to True, then", "whether");
-            builder.ReplaceWithProbe("whether set to TRUE then", "whether");
-            builder.ReplaceWithProbe("whether set to TRUE, then", "whether");
-            builder.ReplaceWithProbe("ets get ", "ets ");
-            builder.ReplaceWithProbe("ets set ", "ets ");
-            builder.ReplaceWithProbe("gets returns", "gets");
-            builder.ReplaceWithProbe("Gets returns", "Gets");
-            builder.ReplaceWithProbe("sets returns", "sets");
-            builder.ReplaceWithProbe("Sets returns", "Sets");
-            builder.ReplaceWithProbe("Gets or sets property for ", "Gets or sets ");
-            builder.ReplaceWithProbe("Gets or sets property ", "Gets or sets ");
-            builder.ReplaceWithProbe("Gets property for ", "Gets ");
-            builder.ReplaceWithProbe("Sets property for ", "Sets ");
-            builder.ReplaceWithProbe(" the the ", " the ");
-            builder.ReplaceWithProbe(" the an ", " an ");
-            builder.ReplaceWithProbe(" the a ", " a ");
-            builder.ReplaceWithProbe(" to the ", " the ");
-            builder.ReplaceWithProbe(" to an ", " an ");
-            builder.ReplaceWithProbe(" to a ", " a ");
-            builder.ReplaceWithProbe(" true if ", " whether ");
-            builder.ReplaceWithProbe(" tRUE if ", " whether ");
-            builder.ReplaceWithProbe(" true when ", " whether ");
-            builder.ReplaceWithProbe(" tRUE when ", " whether ");
-            builder.ReplaceWithProbe(" when set to true then ", " whether ");
-            builder.ReplaceWithProbe(" when set to true, then ", " whether ");
-            builder.ReplaceWithProbe(" when set to True then ", " whether ");
-            builder.ReplaceWithProbe(" when set to True, then ", " whether ");
-            builder.ReplaceWithProbe(" when set to TRUE then ", " whether ");
-            builder.ReplaceWithProbe(" when set to TRUE, then ", " whether ");
-            builder.ReplaceWithProbe(" only whether ", " whether ");
-            builder.ReplaceWithProbe(Constants.SingleSpace + Constants.SingleSpace, Constants.SingleSpace);
+                                            .ReplaceAllWithProbe(GetSetReplacementMap)
+                                            .ReplaceAllWithProbe(GetSetReplacementCleanupMap);
 
             var replacedFixedText = builder.ToStringAndRelease();
 
@@ -1194,6 +1109,112 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-//// ncrunch: rdi default
-    }
+        private static Pair[] CreateGetSetReplacementCleanups()
+        {
+            return new[]
+                       {
+                           new Pair(" only if ", " if "),
+                           new Pair(" only when ", " when "),
+                           new Pair(Constants.SingleSpace + Constants.SingleSpace, Constants.SingleSpace),
+                           new Pair("indicating describes ", "indicating "),
+                           new Pair("indicating describe ", "indicating "),
+                           new Pair("indicating specifies ", "indicating "),
+                           new Pair("indicating specify ", "indicating "),
+                           new Pair("indicating indicates ", "indicating "),
+                           new Pair("indicating indicate ", "indicating "),
+                           new Pair("indicating returns ", "indicating "),
+                           new Pair("indicating return ", "indicating "),
+                           new Pair("indicating indicating", "indicating"),
+                           new Pair("indicating for ", "indicating whether the "),
+                           new Pair("indicating property for ", "indicating whether "),
+                           new Pair("bool indicating", "value indicating"),
+                           new Pair("bool that indicates", "value indicating"),
+                           new Pair("bool which indicates", "value indicating"),
+                           new Pair("boolean indicating", "value indicating"),
+                           new Pair("boolean that indicates", "value indicating"),
+                           new Pair("boolean which indicates", "value indicating"),
+                           new Pair("value that indicates", "value indicating"),
+                           new Pair("value which indicates", "value indicating"),
+                           new Pair("value indicating whether value indicating", "value indicating"),
+                           new Pair("value indicating value indicating", "value indicating"),
+                           new Pair("the value indicat", "a value indicat"),
+                           new Pair(" value indicating whether a value indicating", " value indicating"),
+                           new Pair(" value indicating gets a value indicating", " value indicating"),
+                           new Pair(" value indicating sets a value indicating", " value indicating"),
+                           new Pair(" value indicating gets or sets a value indicating", " value indicating"),
+                           new Pair(" value indicating a value indicating", " value indicating"),
+                           new Pair("whether value indicating whether", "whether"),
+                           new Pair("a value indicating get ", "a value indicating "),
+                           new Pair("a value indicating set ", "a value indicating "),
+                           new Pair("indicating that indicates if", "indicating whether"),
+                           new Pair("indicating which indicates if", "indicating whether"),
+                           new Pair("indicating that indicates that", "indicating whether"),
+                           new Pair("indicating which indicates that", "indicating whether"),
+                           new Pair("indicating that indicates whether", "indicating whether"),
+                           new Pair("indicating which indicates whether", "indicating whether"),
+                           new Pair("indicating that", "indicating whether"),
+                           new Pair("indicating flag ", "indicating whether "),
+                           new Pair("indicating if ", "indicating whether "),
+                           new Pair("indicating to", "indicating whether to"),
+                           new Pair("whether to true if to", "whether to"),
+                           new Pair("whether to true to", "whether to"),
+                           new Pair("whether to true, to", "whether to"),
+                           new Pair("whether describe if", "whether"),
+                           new Pair("whether describe that", "whether"),
+                           new Pair("whether describe whether", "whether"),
+                           new Pair("whether describes if", "whether"),
+                           new Pair("whether describes that", "whether"),
+                           new Pair("whether describes whether", "whether"),
+                           new Pair("whether indicate if", "whether"),
+                           new Pair("whether indicate that", "whether "),
+                           new Pair("whether indicate whether", "whether"),
+                           new Pair("whether indicates if", "whether"),
+                           new Pair("whether indicates that", "whether "),
+                           new Pair("whether indicates whether", "whether"),
+                           new Pair("whether specifies if", "whether"),
+                           new Pair("whether specifies that", "whether"),
+                           new Pair("whether specifies whether", "whether"),
+                           new Pair("whether specify if", "whether"),
+                           new Pair("whether specify that", "whether"),
+                           new Pair("whether specify whether", "whether"),
+                           new Pair("whether whether", "whether"),
+                           new Pair("whether set to true then", "whether"),
+                           new Pair("whether set to true, then", "whether"),
+                           new Pair("whether set to True then", "whether"),
+                           new Pair("whether set to True, then", "whether"),
+                           new Pair("whether set to TRUE then", "whether"),
+                           new Pair("whether set to TRUE, then", "whether"),
+                           new Pair("ets get ", "ets "),
+                           new Pair("ets set ", "ets "),
+                           new Pair("gets returns", "gets"),
+                           new Pair("Gets returns", "Gets"),
+                           new Pair("sets returns", "sets"),
+                           new Pair("Sets returns", "Sets"),
+                           new Pair("Gets or sets property for ", "Gets or sets "),
+                           new Pair("Gets or sets property ", "Gets or sets "),
+                           new Pair("Gets property for ", "Gets "),
+                           new Pair("Sets property for ", "Sets "),
+                           new Pair(" the the ", " the "),
+                           new Pair(" the an ", " an "),
+                           new Pair(" the a ", " a "),
+                           new Pair(" to the ", " the "),
+                           new Pair(" to an ", " an "),
+                           new Pair(" to a ", " a "),
+                           new Pair(" true if ", " whether "),
+                           new Pair(" tRUE if ", " whether "),
+                           new Pair(" true when ", " whether "),
+                           new Pair(" tRUE when ", " whether "),
+                           new Pair(" when set to true then ", " whether "),
+                           new Pair(" when set to true, then ", " whether "),
+                           new Pair(" when set to True then ", " whether "),
+                           new Pair(" when set to True, then ", " whether "),
+                           new Pair(" when set to TRUE then ", " whether "),
+                           new Pair(" when set to TRUE, then ", " whether "),
+                           new Pair(" only whether ", " whether "),
+                           new Pair(Constants.SingleSpace + Constants.SingleSpace, Constants.SingleSpace),
+                       };
+        }
+
+    //// ncrunch: rdi default
+}
 }
