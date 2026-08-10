@@ -19,6 +19,22 @@ namespace MiKoSolutions.Analyzers
         /// <param name="pairs">
         /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
         /// </param>
+        public ReplacementMap(string id, Pair[] pairs)
+        {
+            Id = id;
+            Pairs = pairs;
+            Keys = pairs.ToArray(_ => _.Key);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReplacementMap"/> class with an identifier and the terms to replace.
+        /// </summary>
+        /// <param name="id">
+        /// The identifier of the replacement map.
+        /// </param>
+        /// <param name="pairs">
+        /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
+        /// </param>
         /// <param name="keys">
         /// The keys to look up the corresponding replacements in <paramref name="pairs"/> (see <see cref="Keys"/>).
         /// </param>
@@ -75,6 +91,14 @@ namespace MiKoSolutions.Analyzers
         /// The keys do not need to contain all keys of <see cref="Pairs"/>. Instead, they can contain the most common sub-sequences of those keys to optimize searching.
         /// </remarks>
         public string[] Keys { get; set; }
+
+        /// <summary>
+        /// Gets or sets the matcher to check if a text could fit.
+        /// </summary>
+        /// <value>
+        /// A matcher to check if a text could fit.
+        /// </value>
+        public AhoCorasickMatcher Matcher { get; set; }
 #pragma warning restore CA1819
     }
 }

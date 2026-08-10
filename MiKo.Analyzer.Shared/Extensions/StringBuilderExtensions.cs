@@ -342,7 +342,7 @@ namespace MiKoSolutions.Analyzers
         /// A <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, ReplacementMap map) => value.ReplaceAllWithProbe(map.Pairs);
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, ReplacementMap map) => value.ReplaceAllWithProbe(map.Pairs, map.Matcher);
 
         /// <summary>
         /// Gets a <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
@@ -353,10 +353,13 @@ namespace MiKoSolutions.Analyzers
         /// <param name="replacementPairs">
         /// The key-value pairs for replacement.
         /// </param>
+        /// <param name="matcher">
+        /// The (optional) matcher to invoke to see if the text contains a specific text pattern.
+        /// </param>
         /// <returns>
         /// A <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
         /// </returns>
-        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs, AhoCorasickMatcher matcher = null)
         {
             if (value.IsNullOrEmpty())
             {
@@ -366,28 +369,31 @@ namespace MiKoSolutions.Analyzers
             char[] text = null;
             var textSpan = GetTextAsRentedArray(ref value, ref text);
 
-            for (int index = 0, count = replacementPairs.Length; index < count; index++)
+            if (matcher is null || matcher.IsMatch(textSpan))
             {
-                var pair = replacementPairs[index];
-
-                if (textSpan.Length < pair.Key.Length)
+                for (int index = 0, count = replacementPairs.Length; index < count; index++)
                 {
-                    // cannot be part in the replacement as the substring is too long and cannot fit
-                    continue;
+                    var pair = replacementPairs[index];
+
+                    if (textSpan.Length < pair.Key.Length)
+                    {
+                        // cannot be part in the replacement as the substring is too long and cannot fit
+                        continue;
+                    }
+
+                    var replaceStartIndex = textSpan.QuickSubstringProbeOrdinal(pair.Key.AsSpan());
+
+                    if (replaceStartIndex is -1)
+                    {
+                        continue;
+                    }
+
+                    // can be part in the replacement as value seems to fit
+                    value.Replace(pair.Key, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
+
+                    // re-assign text as we might have replaced the string, but use a different array
+                    textSpan = GetTextAsRentedArray(ref value, ref text);
                 }
-
-                var replaceStartIndex = textSpan.QuickSubstringProbeOrdinal(pair.Key.AsSpan());
-
-                if (replaceStartIndex is -1)
-                {
-                    continue;
-                }
-
-                // can be part in the replacement as value seems to fit
-                value.Replace(pair.Key, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
-
-                // re-assign text as we might have replaced the string, but use a different array
-                textSpan = GetTextAsRentedArray(ref value, ref text);
             }
 
             if (text != null)
