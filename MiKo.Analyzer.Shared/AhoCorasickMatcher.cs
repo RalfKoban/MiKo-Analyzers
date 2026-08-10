@@ -226,7 +226,7 @@ namespace MiKoSolutions.Analyzers
         /// Flattens the resolved <see cref="Node"/> graph into plain arrays (states, terminal flags, transitions).
         /// This uses the default/exception split described on <see cref="m_defaultTransition"/>.
         /// </summary>
-        private static void CompileToArrays(Node root, char[] alphabet, out int[] defaultTransition, out int[] exceptionOffsets, out char[] exceptionChars, out int[] exceptionTargets, out BitArray isTerminal)
+        private static void CompileToArrays(Node root, in ReadOnlySpan<char> alphabet, out int[] defaultTransition, out int[] exceptionOffsets, out char[] exceptionChars, out int[] exceptionTargets, out BitArray isTerminal)
         {
             // assign a stable, dense integer id to every reachable node (root is always state 0).
             // it is stored directly on the node. This makes resolving a child's state later on a cheap field read instead of a dictionary lookup.
@@ -300,13 +300,15 @@ namespace MiKoSolutions.Analyzers
 
                     for (var i = 1; i < alphabetLength; i++)
                     {
-                        if (sortedTargets[i] == runTarget)
+                        var target = sortedTargets[i];
+
+                        if (runTarget == target)
                         {
                             runLength++;
                         }
                         else
                         {
-                            runTarget = sortedTargets[i];
+                            runTarget = target;
                             runLength = 1;
                         }
 
@@ -354,7 +356,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The state to move to.
         /// </returns>
-        private int NextState(int state, char c)
+        private int NextState(in int state, in char c)
         {
             var start = m_exceptionOffsets[state];
             var count = m_exceptionOffsets[state + 1] - start;
