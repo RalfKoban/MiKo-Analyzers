@@ -359,7 +359,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.
         /// </returns>
-        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs, in AhoCorasickMatcher matcher = null)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs, AhoCorasickMatcher matcher = null)
         {
             if (value.IsNullOrEmpty())
             {

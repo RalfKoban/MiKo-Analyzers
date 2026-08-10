@@ -253,7 +253,8 @@ namespace MiKoSolutions.Analyzers
             // every pattern only differs in its first character and shares the exact same single-character suffix,
             // so the intermediate nodes (reached right after the first character) all end up with an identical
             // transition row (real edge on '1' towards the terminal state, fallback to root for everything else);
-            // this specifically exercises the transition-row deduplication introduced to shrink the transition table.
+            // this specifically exercises the per-state default/exception compression introduced to shrink the transition table,
+            // where the shared fallback target becomes the default and only the '1' edge is stored as an exception.
             var patterns = Enumerable.Range(0, 10).Select(_ => $"{_}1").ToArray();
 
             var matcher = AhoCorasickMatcher.For(patterns);
@@ -275,8 +276,8 @@ namespace MiKoSolutions.Analyzers
         {
             // 'a1', 'b1', ... are terminal only right after their second character, whereas the intermediate,
             // non-terminal node reached after the first character shares its transition row content with other,
-            // unrelated terminal leaf states (e.g. the single-character pattern "z"); deduplicating rows purely by
-            // their transition content must not accidentally also merge the (separately tracked) terminal flag.
+            // unrelated terminal leaf states (e.g. the single-character pattern "z"); compressing per-state transitions
+            // into a default plus exceptions must not accidentally also merge the (separately tracked) terminal flag.
             var matcher = AhoCorasickMatcher.For(["a1", "b1", "c1", "z"]);
 
             using (Assert.EnterMultipleScope())
@@ -298,7 +299,7 @@ namespace MiKoSolutions.Analyzers
         {
             // simulates a realistic large phrase set (similar in spirit to the replacement phrases used by code fixes)
             // with lots of shared prefixes and suffixes, which is exactly the scenario that produces many states and,
-            // consequently, many opportunities for the transition table to contain duplicate rows.
+            // consequently, many opportunities for states to share the same default transition target.
             var prefixes = new[] { "Gets ", "Sets ", "Gets or sets ", "gets ", "sets " };
             var suffixes = new[] { "a value ", "the value ", "an instance ", "a flag ", "the flag " };
 
