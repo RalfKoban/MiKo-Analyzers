@@ -234,7 +234,9 @@ namespace MiKoSolutions.Analyzers
 
             var queue = new Queue<Node>();
             queue.Enqueue(root);
+
             root.Id = 0;
+
             order.Add(root);
 
             while (queue.Count > 0)
@@ -246,6 +248,7 @@ namespace MiKoSolutions.Analyzers
                     if (child.Id < 0)
                     {
                         child.Id = order.Count;
+
                         order.Add(child);
 
                         queue.Enqueue(child);

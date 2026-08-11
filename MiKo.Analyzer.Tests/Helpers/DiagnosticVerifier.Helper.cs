@@ -195,12 +195,12 @@ namespace TestHelper
                 }
 
                 return diagnostics.Count is 1
-                           ? [diagnostics[0]]
-                           : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
+                       ? [diagnostics[0]]
+                       : [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
             }
             finally
             {
-                if (counted > 0 && counted % TestLimitToRunGarbageCollection == 0)
+                if (counted > 0 && counted % TestLimitToRunGarbageCollection is 0)
                 {
                     GC.Collect();
                 }

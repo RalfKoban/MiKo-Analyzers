@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             Assert.Multiple(() =>
                                  {
-                                     Assert.That(Array.Empty<string>().HumanizedConcatenated(), Is.EqualTo(string.Empty), "0 value");
+                                     Assert.That(Array.Empty<string>().HumanizedConcatenated(), Is.Empty, "0 value");
                                      Assert.That(new[] { "a" }.HumanizedConcatenated(), Is.EqualTo("'a'"), "1 value");
                                      Assert.That(new[] { "a", "b" }.HumanizedConcatenated(), Is.EqualTo("'a' or 'b'"), "2 values");
                                      Assert.That(new[] { "a", "b", "c" }.HumanizedConcatenated(), Is.EqualTo("'a', 'b' or 'c'"), "3 values");
@@ -272,8 +272,8 @@ namespace MiKoSolutions.Analyzers.Extensions
             Assert.Multiple(() =>
                                  {
                                      Assert.That(((string)null).LastWord(), Is.Null, "with null as text");
-                                     Assert.That(string.Empty.LastWord(), Is.EqualTo(string.Empty), "with empty text");
-                                     Assert.That("   ".LastWord(), Is.EqualTo(string.Empty), "with whitespace-only text");
+                                     Assert.That(string.Empty.LastWord(), Is.Empty, "with empty text");
+                                     Assert.That("   ".LastWord(), Is.Empty, "with whitespace-only text");
                                      Assert.That("bla".LastWord(), Is.EqualTo("bla"), "without whitespace");
                                      Assert.That("bla blubb".LastWord(), Is.EqualTo("blubb"), "without whitespace at end");
                                      Assert.That(" bla blubb ".LastWord(), Is.EqualTo("blubb"), "with single whitespace at end");

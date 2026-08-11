@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Extensions
 
             Assert.That(foundLines.Count, Is.EqualTo(3));
             Assert.That(foundLines[0], Is.EqualTo(Line1));
-            Assert.That(foundLines[1], Is.EqualTo(string.Empty)); // line between \r and \n
+            Assert.That(foundLines[1], Is.Empty); // line between \r and \n
             Assert.That(foundLines[2], Is.EqualTo(Line2));
         }
 
