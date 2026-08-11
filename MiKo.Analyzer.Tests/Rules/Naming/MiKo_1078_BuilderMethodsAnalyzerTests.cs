@@ -43,7 +43,7 @@ public class TestMeBuilder
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_builder_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_builder_method_with_Build_prefix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMeBuilder
@@ -83,7 +83,7 @@ public class CreateTestMeBuilder
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_builder_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_builder_method_with_Create_prefix() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMeBuilder

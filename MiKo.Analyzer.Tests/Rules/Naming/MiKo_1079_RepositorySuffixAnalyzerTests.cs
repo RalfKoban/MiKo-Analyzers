@@ -34,7 +34,7 @@ public class Repository
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_repository_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_Repository_suffix() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMeRepository

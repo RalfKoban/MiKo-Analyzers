@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_items_with_correct_example_docu() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_items_with_expected_example_phrase() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>

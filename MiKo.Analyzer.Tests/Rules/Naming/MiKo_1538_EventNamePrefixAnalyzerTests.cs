@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("interface", "Off")]
         [TestCase("interface", "On")]
         [TestCase("interface", "OnlineBlaBla")]
-        public void No_issue_is_reported_for_correctly_named_event_(string type, string eventName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_without_On_prefix_(string type, string eventName) => No_issue_is_reported_for(@"
 using System;
 
 public " + type + @" TestMe
@@ -30,7 +30,7 @@ public " + type + @" TestMe
 
         [TestCase("class", "OnStuff")]
         [TestCase("interface", "OnStuff")]
-        public void An_issue_is_reported_for_incorrectly_named_event_(string type, string eventName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_with_On_prefix_(string type, string eventName) => An_issue_is_reported_for(@"
 using System;
 
 public " + type + @" TestMe

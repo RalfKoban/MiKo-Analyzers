@@ -58,9 +58,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_OneTimeSetUp_method_with_correct_name_(
-                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                [ValueSource(nameof(TestOneTimeSetUps))] string oneTimeSetUp)
+        public void No_issue_is_reported_for_OneTimeSetUp_method_named_(
+                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                    [ValueSource(nameof(TestOneTimeSetUps))] string oneTimeSetUp)
             => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -71,9 +71,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_OneTimeTearDown_method_with_correct_name_(
-                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                   [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
+        public void No_issue_is_reported_for_OneTimeTearDown_method_named_(
+                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                       [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
             => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -99,9 +99,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_OneTimeTearDown_method_with_wrong_name_(
-                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                 [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
+        public void An_issue_is_reported_for_OneTimeTearDown_method_named_(
+                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                       [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe

@@ -65,9 +65,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correct_variable_name_(
-                                                                [ValueSource(nameof(DelegateTypes))] string type,
-                                                                [ValueSource(nameof(CorrectDelegateNames))] string name)
+        public void No_issue_is_reported_for_delegate_local_variable_with_suffix_(
+                                                                              [ValueSource(nameof(DelegateTypes))] string type,
+                                                                              [ValueSource(nameof(CorrectDelegateNames))] string name)
             => No_issue_is_reported_for(@"
 using System;
 

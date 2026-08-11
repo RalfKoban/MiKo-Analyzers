@@ -25,7 +25,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_unassigned_DependencyPropertyKey_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unassigned_DependencyPropertyKey_field_matching_property_name() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -40,7 +40,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_DependencyPropertyKey_field_with_nameof() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_DependencyPropertyKey_field_registered_with_nameof_matching_property_name() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -55,7 +55,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_DependencyPropertyKey_field_with_string() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_DependencyPropertyKey_field_registered_with_string_literal_matching_property_name() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -105,7 +105,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_DependencyPropertyKey_field_with_extra_Property_suffix() => An_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -120,7 +120,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+        public void An_issue_is_reported_for_DependencyPropertyKey_field_not_matching_registered_property_name_([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
             => An_issue_is_reported_for(@"
 using System.Windows;
 
@@ -136,7 +136,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_if_class_has_no_properties_([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+        public void No_issue_is_reported_for_DependencyPropertyKey_field_not_matching_any_property_when_class_has_no_properties_([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
             => No_issue_is_reported_for(@"
 using System.Windows;
 
@@ -150,7 +150,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_with_nameof() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_DependencyPropertyKey_field_registered_with_nameof_of_different_property() => An_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -166,7 +166,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_with_string() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_DependencyPropertyKey_field_registered_with_string_literal_of_different_property() => An_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla

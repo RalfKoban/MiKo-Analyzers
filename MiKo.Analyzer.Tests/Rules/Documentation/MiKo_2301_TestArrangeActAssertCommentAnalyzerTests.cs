@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_with_a_regular_comment_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -115,10 +115,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_test_method_(
-                                                                            [ValueSource(nameof(Tests))] string test,
-                                                                            [ValueSource(nameof(Comments))] string comment,
-                                                                            [ValueSource(nameof(Gaps))] string gap)
+        public void An_issue_is_reported_for_test_method_with_arrange_act_assert_comment_(
+                                                                                      [ValueSource(nameof(Tests))] string test,
+                                                                                      [ValueSource(nameof(Comments))] string comment,
+                                                                                      [ValueSource(nameof(Gaps))] string gap)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -133,10 +133,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_(
-                                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                              [ValueSource(nameof(Comments))] string comment,
-                                                                                              [ValueSource(nameof(Gaps))] string gap)
+        public void An_issue_is_reported_for_non_test_method_in_test_class_with_arrange_act_assert_comment_(
+                                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                        [ValueSource(nameof(Comments))] string comment,
+                                                                                                        [ValueSource(nameof(Gaps))] string gap)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -151,10 +151,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_with_visual_separators_(
-                                                                                                                     [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                                     [ValueSource(nameof(Comments))] string comment,
-                                                                                                                     [ValueSource(nameof(Gaps))] string gap)
+        public void An_issue_is_reported_for_non_test_method_in_test_class_with_arrange_act_assert_comment_surrounded_by_visual_separators_(
+                                                                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                                        [ValueSource(nameof(Comments))] string comment,
+                                                                                                                                        [ValueSource(nameof(Gaps))] string gap)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 

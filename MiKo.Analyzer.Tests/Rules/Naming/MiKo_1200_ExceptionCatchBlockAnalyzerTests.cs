@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_exception_in_catch_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_exception_named_ex_in_catch_block() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -76,7 +76,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_exception_in_catch_block() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_exception_named_exception_in_catch_block() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -94,7 +94,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_nested_exception_in_catch_block() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_exception_named_exception_in_nested_catch_block() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -154,7 +154,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_nested_exception_in_catch_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_exception_named_inner_in_nested_catch_block() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -183,7 +183,7 @@ public class TestMe
                                                      "class TestMe { void DoSomething() { try { } catch (System.Exception ex) { System.Diagnostics.Trace.Write(ex.Message); } } }");
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_named_nested_exception_in_catch_block()
+        public void Code_gets_fixed_for_exception_named_exception_in_nested_catch_block()
         {
             const string OriginalCode = @"
 using System;

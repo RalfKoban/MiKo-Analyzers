@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("CheckIn")]
         [TestCase("CheckOut")]
         [TestCase("CheckAccess")]
-        public void No_issue_is_reported_for_correctly_named_method_(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_named_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -26,7 +26,7 @@ public class TestMe
         [TestCase("CheckIn")]
         [TestCase("CheckOut")]
         [TestCase("CheckAccess")]
-        public void No_issue_is_reported_for_correctly_named_local_function_(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_named_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void Something()
@@ -41,7 +41,7 @@ public class TestMe
         [TestCase("CheckConnection")]
         [TestCase("CheckOnline")]
         [TestCase("Check")]
-        public void An_issue_is_reported_for_wrong_named_method_(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_named_(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -53,7 +53,7 @@ public class TestMe
         [TestCase("CheckConnection")]
         [TestCase("CheckOnline")]
         [TestCase("Check")]
-        public void An_issue_is_reported_for_wrong_named_local_function_(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_named_(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void Something()

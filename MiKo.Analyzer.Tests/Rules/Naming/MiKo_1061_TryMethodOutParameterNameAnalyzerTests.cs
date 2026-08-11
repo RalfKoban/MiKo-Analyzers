@@ -56,7 +56,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Try_method_with_correctly_named_out_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Try_method_with_out_parameter_named_result() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_TryGet_method_with_correctly_named_out_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_TryGet_method_with_out_parameter_named_after_get_suffix() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Try_method_with_incorrectly_named_out_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Try_method_with_out_parameter_named_i() => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -119,7 +119,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_TryGet_method_with_incorrectly_named_out_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_TryGet_method_with_out_parameter_named_i() => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -131,7 +131,7 @@ public class TestMe
         [TestCase("class TestMe { void TryGetWhatever(out int i) { } }", "class TestMe { void TryGetWhatever(out int whatever) { } }")]
         [TestCase("class TestMe { void TryParse(out int i) { } }", "class TestMe { void TryParse(out int result) { } }")]
         [TestCase("class TestMe { void TryGetObject(out object o) { } }", "class TestMe { void TryGetObject(out object result) { } }")]
-        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed_for_out_parameter_of_Try_method(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1061_TryMethodOutParameterNameAnalyzer.Id;
 

@@ -446,7 +446,7 @@ public class TestMeCfg
         }
 
         [Test]
-        public void Code_gets_fixed_for_unfinished_XAML_like_code()
+        public void Code_gets_fixed_for_XAML_like_comment_on_class()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -470,7 +470,7 @@ public class
         }
 
         [Test]
-        public void Code_gets_fixed_for_XAML_like_comment()
+        public void Code_gets_fixed_for_XAML_like_comment_on_interface()
         {
             const string OriginalCode = @"
 /// <summary>

@@ -54,7 +54,7 @@ namespace System
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_method_class_with_correct_namespace() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_method_class_with_fitting_namespace() => No_issue_is_reported_for(@"
 namespace System
 {
     public static class TestMe
@@ -65,7 +65,7 @@ namespace System
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_method_class_with_correct_file_scoped_namespace() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_method_class_with_fittingfile_scoped_namespace() => No_issue_is_reported_for(@"
 namespace System;
 
 public static class TestMe
@@ -136,7 +136,7 @@ public static class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_method_class_with_non_fitting_namespace() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public static class TestMe
@@ -147,7 +147,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_class_with_incorrect_namespace_2() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_method_class_with_non_fitting_namespace_2() => An_issue_is_reported_for(@"
 namespace Blah.Blubb
 {
     public class TestMe
@@ -168,7 +168,7 @@ namespace Blubber.Bla.Blubbdiblubb
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_class_with_incorrect_file_scoped_namespace() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_method_class_with_non_fitting_file_scoped_namespace() => An_issue_is_reported_for(@"
 namespace Bla;
 
 public static class TestMe

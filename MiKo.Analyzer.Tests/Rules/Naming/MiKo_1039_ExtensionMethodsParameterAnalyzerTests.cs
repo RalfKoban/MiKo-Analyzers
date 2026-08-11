@@ -26,7 +26,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_normal_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_plain_method() => No_issue_is_reported_for(@"
 public static class TestMe
 {
     public static void DoSomething(int i) { }
@@ -34,7 +34,7 @@ public static class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_([ValueSource(nameof(CorrectParameterNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_method_with_parameter_named_([ValueSource(nameof(CorrectParameterNames))] string name) => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
@@ -42,10 +42,10 @@ public static class TestMeExtensions
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
-                                                                                       [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-                                                                                       [Values("Something", "")] string methodName,
-                                                                                       [ValueSource(nameof(CorrectConversionParameterNames))] string name)
+        public void No_issue_is_reported_for_extension_method_conversion_with_parameter_named_(
+                                                                                           [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
+                                                                                           [Values("Something", "")] string methodName,
+                                                                                           [ValueSource(nameof(CorrectConversionParameterNames))] string name)
             => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
@@ -62,7 +62,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name_([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_method_with_parameter_named_([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
@@ -70,10 +70,10 @@ public static class TestMeExtensions
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name_(
-                                                                                         [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-                                                                                         [Values("Something", "2D", "")] string methodName,
-                                                                                         [ValueSource(nameof(WrongConversionParameterNames))] string name)
+        public void An_issue_is_reported_for_extension_method_with_parameter_named_(
+                                                                                [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
+                                                                                [Values("Something", "2D", "")] string methodName,
+                                                                                [ValueSource(nameof(WrongConversionParameterNames))] string name)
             => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
@@ -98,7 +98,7 @@ public static class TestMeExtensions
         }
 
         [Test]
-        public void Code_gets_fixed_for_normal_parameter()
+        public void Code_gets_fixed_for_plain_parameter()
         {
             const string Template = @"
 public static class TestMeExtensions

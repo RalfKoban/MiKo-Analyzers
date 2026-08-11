@@ -17,7 +17,7 @@ public sealed record TestMe(int X, int Y, double Distance);
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ctor_parameter_named_after_assigned_property() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public TestMe(int someProperty) => SomeProperty = someProperty;
@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ctor_parameters_each_named_after_assigned_property() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public TestMe(int someProperty1, double someProperty2, string someProperty3)

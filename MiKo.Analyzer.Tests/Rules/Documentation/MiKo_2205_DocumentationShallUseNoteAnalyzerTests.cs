@@ -47,7 +47,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correct_comment_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("caution", "important")] string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_using_a_note_tag_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("caution", "important")] string type) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// <note type=""" + type + @""" >
 /// The something.

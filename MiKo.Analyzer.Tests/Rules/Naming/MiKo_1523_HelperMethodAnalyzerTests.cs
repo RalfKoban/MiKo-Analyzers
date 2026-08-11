@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] WrongTerms = ["Helper", "HelpingMethod"];
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_helper_term() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe

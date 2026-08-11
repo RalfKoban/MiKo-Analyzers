@@ -46,7 +46,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_correct_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -64,7 +64,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_correct_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestableTestMe
@@ -82,7 +82,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_with_correct_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_of_generic_type_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe<T>
@@ -100,7 +100,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_correct_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe
@@ -118,9 +118,9 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix_(
-                                                                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                                           [Values("class", "struct")] string constraint)
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_prefix_(
+                                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                   [Values("class", "struct")] string constraint)
             => No_issue_is_reported_for(@"
 namespace Bla
 {

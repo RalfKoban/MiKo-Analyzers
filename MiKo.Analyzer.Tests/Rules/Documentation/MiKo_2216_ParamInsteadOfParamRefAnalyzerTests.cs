@@ -31,7 +31,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_used_param_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_param_tag_used_in_param_element() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_used_paramref_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_paramref_tag_used_in_summary() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_used_param_tag_in_summary() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_param_tag_used_in_summary_instead_of_paramref() => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -72,7 +72,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_used_param_tag_in_param() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_param_tag_used_in_param_element_instead_of_paramref() => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

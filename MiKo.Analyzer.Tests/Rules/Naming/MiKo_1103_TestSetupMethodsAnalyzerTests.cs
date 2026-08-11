@@ -45,9 +45,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_setup_method_with_correct_name_(
-                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                              [ValueSource(nameof(TestSetUps))] string test)
+        public void No_issue_is_reported_for_test_setup_method_named_(
+                                                                  [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                  [ValueSource(nameof(TestSetUps))] string test)
             => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -73,9 +73,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_setup_method_with_wrong_name_(
-                                                                            [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                            [ValueSource(nameof(TestSetUps))] string test)
+        public void An_issue_is_reported_for_test_setup_method_named_(
+                                                                  [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                  [ValueSource(nameof(TestSetUps))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe

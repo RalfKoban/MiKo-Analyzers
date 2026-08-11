@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1060_UseNotFoundInsteadOfMissingAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_normal_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_exception_type() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -27,7 +27,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_exception() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_exception_with_NotFound_suffix() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -42,7 +42,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_enum_member() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_member_named_NotFound() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -57,7 +57,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_exception_([Values("TestMeMissingException", "GetTestMeFailedException")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_exception_using_Missing_or_Failed_term_([Values("TestMeMissingException", "GetTestMeFailedException")] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class " + name + @" : Exception
@@ -69,7 +69,7 @@ public class " + name + @" : Exception
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_enum_member_([Values("Missing", "GetFailed")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_member_using_Missing_or_Failed_term_([Values("Missing", "GetFailed")] string name) => An_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -81,7 +81,7 @@ public enum TestMe
 
         [TestCase("TestMeMissingException", "TestMeNotFoundException")]
         [TestCase("GetTestMeFailedException", "TestMeNotFoundException")]
-        public void Code_gets_fixed_for_incorrectly_named_exception_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_exception_using_Missing_or_Failed_term_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -99,7 +99,7 @@ public class ### : Exception
 
         [TestCase("SomethingMissing", "SomethingNotFound")]
         [TestCase("GetSomethingFailed", "SomethingNotFound")]
-        public void Code_gets_fixed_for_incorrectly_named_enum_member_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_enum_member_using_Missing_or_Failed_term_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;

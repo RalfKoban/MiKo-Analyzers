@@ -194,7 +194,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_with_generic_EventHandler_using_correct_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_with_generic_EventHandler_using_expected_EventArgs() => No_issue_is_reported_for(@"
 using System;
 
 public class MyEventArgs : EventArgs { }
@@ -218,7 +218,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_event_with_generic_EventHandler_using_incorrect_EventArgs() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_with_generic_EventHandler_using_different_EventArgs() => An_issue_is_reported_for(@"
 using System;
 
 public class MyEventArgs : EventArgs { }

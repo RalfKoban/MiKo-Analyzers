@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_text_list_in_returns() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_list_tag_used_in_returns() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <returns>
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_text_list_in_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_list_tag_used_in_value() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <value>

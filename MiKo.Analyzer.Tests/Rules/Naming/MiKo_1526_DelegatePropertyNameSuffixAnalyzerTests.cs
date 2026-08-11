@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_property_name_([ValueSource(nameof(DelegateTypes))] string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_fitting_name_([ValueSource(nameof(DelegateTypes))] string type) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -43,8 +43,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_with_non_fitting_name_([ValueSource(nameof(DelegateTypes))] string type)
-            => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_non_fitting_name_([ValueSource(nameof(DelegateTypes))] string type) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -60,7 +59,7 @@ public class TestMe
         [TestCase("SomeDelegate", "SomeCallback")]
         [TestCase("SomeFunc", "SomeCallback")]
         [TestCase("Something", "SomethingCallback")]
-        public void Code_gets_fixed(string originalName, string fixedName)
+        public void Code_gets_fixed_for_(string originalName, string fixedName)
         {
             const string Template = """
                                     using System;

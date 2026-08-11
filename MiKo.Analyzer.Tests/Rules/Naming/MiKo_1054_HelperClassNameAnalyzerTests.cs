@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] CorrectNames = ["TestMe", "OnlineHelp", "SoftwareUtilization"];
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_helper_term_in_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 public class " + name + @"
 {
 }

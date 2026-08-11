@@ -19,9 +19,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_method_without_Test_in_name_(
+                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                           [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -32,9 +32,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_with_correct_name_inside_test_method_(
-                                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                              [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_local_function_without_Test_in_name_inside_test_method_(
+                                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                 [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -48,9 +48,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                      [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_test_method_with_Test_in_name_(
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                        [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -61,9 +61,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_function_with_wrong_name_inside_test_method_(
-                                                                                            [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                            [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_local_function_with_Test_in_name_inside_test_method_(
+                                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                              [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe

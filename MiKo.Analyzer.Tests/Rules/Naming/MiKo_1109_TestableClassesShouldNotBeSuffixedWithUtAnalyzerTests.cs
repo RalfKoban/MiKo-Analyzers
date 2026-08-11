@@ -12,14 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_Ut_suffix() => No_issue_is_reported_for(@"
 public class TestMe
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_Ut_suffix() => An_issue_is_reported_for(@"
 public class TestMeUt
 {
 }

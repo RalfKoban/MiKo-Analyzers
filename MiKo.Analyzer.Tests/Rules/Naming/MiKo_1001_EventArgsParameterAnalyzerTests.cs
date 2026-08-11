@@ -93,7 +93,7 @@ public class TestMe
         [TestCase("DependencyPropertyChangedEventArgs e")]
         [TestCase("DependencyPropertyChangedEventArgs e, string a")]
         [TestCase("DependencyPropertyChangedEventArgs e0, DependencyPropertyChangedEventArgs e1")]
-        public void No_issue_is_reported_for_correctly_named_parameters_on_method_(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_parameters_named_(string parameters) => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 
@@ -109,7 +109,7 @@ public class TestMe
         [TestCase("DependencyPropertyChangedEventArgs e")]
         [TestCase("DependencyPropertyChangedEventArgs e, string a")]
         [TestCase("DependencyPropertyChangedEventArgs e0, DependencyPropertyChangedEventArgs e1")]
-        public void No_issue_is_reported_for_correctly_named_parameters_on_local_function_(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_parameters_named_(string parameters) => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 
@@ -135,7 +135,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_contains_parameter_names() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_wrong_name_if_surrounding_method_contains_parameter_names() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -150,7 +150,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_is_event_handling_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_wrong_name_if_surrounding_method_is_event_handling_method() => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 

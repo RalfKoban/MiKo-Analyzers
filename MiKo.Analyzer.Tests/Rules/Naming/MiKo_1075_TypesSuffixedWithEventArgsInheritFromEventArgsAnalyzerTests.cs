@@ -42,7 +42,7 @@ public class TestMeEventArgs : EventArgs
         [TestCase("MyEventsArg")]
         [TestCase("MyEventArgs")]
         [TestCase("MyEventsArgs")]
-        public void An_issue_is_reported_for_non_EventArgs_type_incorrectly_named_(string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_non_EventArgs_type_named_(string name) => An_issue_is_reported_for(@"
 using System;
 
 public class " + name + @"
@@ -54,7 +54,7 @@ public class " + name + @"
         [TestCase("MyEventsArg")]
         [TestCase("MyEventArgs")]
         [TestCase("MyEventsArgs")]
-        public void An_issue_is_reported_for_Prism_event_type_incorrectly_named_(string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Prism_event_type_named_(string name) => An_issue_is_reported_for(@"
 
 namespace Microsoft.Practices.Prism.Events
 {
@@ -73,7 +73,7 @@ namespace MyNamespace
 
         [TestCase("using System; class TestMeEventArg { }", "using System; class TestMe { }")]
         [TestCase("using System; class TestMeEventArgs { }", "using System; class TestMe { }")]
-        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed_for_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [TestCase("TestMeEventArg", "TestMeEvent")]
         [TestCase("TestMeEventsArg", "TestMeEvent")]

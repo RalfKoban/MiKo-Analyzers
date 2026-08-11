@@ -20,14 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] AllowedEnumNames = ["Interface", "Class"];
 
         [Test]
-        public void No_issue_is_reported_for_correct_name_on_enum() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_expected_name_on_enum() => No_issue_is_reported_for(@"
 public enum TestMe
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_name_on_([ValueSource(nameof(NonEnumTypes))] string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_expected_name_on_([ValueSource(nameof(NonEnumTypes))] string type) => No_issue_is_reported_for(@"
 public " + type + @" TestMe
 {
 }

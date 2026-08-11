@@ -54,9 +54,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_correct_namespace_(
-                                                                            [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                            [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_class_with_namespace_(
+                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                    [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 namespace Bla
 {
@@ -70,9 +70,9 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_correct_file_scoped_namespace_(
-                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                        [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_class_with_file_scoped_namespace_(
+                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 namespace Bla;
 
@@ -85,10 +85,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_incorrect_namespace_(
-                                                                              [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
-                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                              [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_test_class_with_namespace_(
+                                                                    [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
+                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                    [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 namespace " + namespaceName + @"
 {
@@ -102,10 +102,10 @@ namespace " + namespaceName + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_incorrect_file_scoped_namespace_(
-                                                                                          [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
-                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                          [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_test_class_with_file_scoped_namespace_(
+                                                                                [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
+                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 namespace " + namespaceName + @";
 

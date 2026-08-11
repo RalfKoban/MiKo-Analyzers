@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_that_does_not_mention_the_term_flag() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>Does something.</summary>
@@ -53,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_class_that_mentions_the_term_flag_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 /// <" + tag + ">Its flag.</" + tag + @">
@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_method_that_mentions_the_term_flag_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_property_that_mentions_the_term_flag_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_event_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_event_that_mentions_the_term_flag_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -96,7 +96,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_field_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_field_that_mentions_the_term_flag_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

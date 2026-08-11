@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("IDictionary<string,string> dictionary")]
         [TestCase("Dictionary<string,int> requiredValuesByFeatureId")]
         [TestCase("IReadOnlyDictionary<string,int> requiredValuesByFeatureId")]
-        public void No_issue_is_reported_for_correctly_named_parameter_(string parameter) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_named_(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -55,7 +55,7 @@ public class TestMe
         [TestCase("XmlNode node")]
         [TestCase("XNode myNode")]
         [TestCase("XNode node")]
-        public void No_issue_is_reported_for_correctly_named_XML_parameter_(string parameter) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_parameter_named_(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Xml;
 using System.Xml.Linq;
@@ -68,7 +68,7 @@ public class TestMe
 ");
 
         [Test] // this situation is covered by CA 1725 so we do not report that as well
-        public void No_issue_is_reported_for_incorrectly_named_parameter_of_method_that_implements_interface() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_with_collection_suffix_on_method_that_implements_interface() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -217,7 +217,7 @@ public class TestMe
         [TestCase("string blaDictionary")]
         [TestCase("string blaDict")]
         [TestCase("string blaDic")]
-        public void An_issue_is_reported_for_incorrectly_named_parameter_(string parameter) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_named_(string parameter) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

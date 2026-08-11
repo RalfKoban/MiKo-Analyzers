@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_a_regular_comment() => No_issue_is_reported_for(@"
 
 public class TestMe
 {

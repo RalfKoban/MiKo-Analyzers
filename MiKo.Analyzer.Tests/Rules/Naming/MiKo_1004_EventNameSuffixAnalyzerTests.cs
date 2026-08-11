@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1004_EventNameSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_event() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -23,7 +23,7 @@ public class TestMe
 
         [TestCase("interface", "MyEvent")]
         [TestCase("class", "MyEvent")]
-        public void An_issue_is_reported_for_incorrectly_named_event_(string type, string eventName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_with_wrong_name_(string type, string eventName) => An_issue_is_reported_for(@"
 using System;
 
 public " + type + @" TestMe

@@ -26,7 +26,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_in_test_class_with_wrong_name_([ValueSource(nameof(TestFixtures))] string fixture)
+        public void An_issue_is_reported_for_field_in_test_class_named_([ValueSource(nameof(TestFixtures))] string fixture)
             => An_issue_is_reported_for(@"
 
 [" + fixture + @"]
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_const_field_in_test_class_with_wrong_name_([ValueSource(nameof(TestFixtures))] string fixture)
+        public void An_issue_is_reported_for_const_field_in_test_class_named_([ValueSource(nameof(TestFixtures))] string fixture)
             => An_issue_is_reported_for(@"
 
 [" + fixture + @"]
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_in_test_class_with_wrong_name_([ValueSource(nameof(TestFixtures))] string fixture)
+        public void An_issue_is_reported_for_property_in_test_class_named_([ValueSource(nameof(TestFixtures))] string fixture)
             => An_issue_is_reported_for(@"
 
 [" + fixture + @"]
@@ -59,9 +59,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_method_in_test_class_with_wrong_name_(
-                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                    [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_test_method_in_test_class_named_(
+                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                          [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -72,9 +72,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_of_test_method_in_test_class_with_wrong_name_(
-                                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                 [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_parameter_of_test_method_in_test_class_named_(
+                                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                       [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_of_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_of_test_method_in_non_test_class_named_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -95,9 +95,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_const_in_test_method_in_test_class_with_wrong_name_(
-                                                                                             [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                             [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_const_in_test_method_in_test_class_named_(
+                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                   [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -111,7 +111,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_const_in_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_const_in_test_method_in_non_test_class_named_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -124,9 +124,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_variable_in_test_method_in_test_class_with_wrong_name_(
-                                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                      [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_local_variable_in_test_method_in_test_class_named_(
+                                                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                            [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -140,7 +140,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_variable_in_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_variable_in_test_method_in_non_test_class_named_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

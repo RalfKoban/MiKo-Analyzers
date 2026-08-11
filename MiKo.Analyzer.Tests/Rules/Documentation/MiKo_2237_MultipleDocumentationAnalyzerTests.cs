@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items_with_multiple_elements() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_items_with_a_single_documentation_comment_per_multiple_xml_elements() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>This is some text.</summary>
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items_with_single_elements() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_items_with_a_single_documentation_comment_per_single_xml_element() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>This is some text.</summary>

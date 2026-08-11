@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_command_methods() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_command_method_invoked_with_matching_method_name() => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_command_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_command_local_function_invoked_with_Core_suffixed_name() => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -81,7 +81,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_methods() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_method_invoked_with_non_matching_method_name() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_local_function_invoked_with_non_matching_function_name() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 

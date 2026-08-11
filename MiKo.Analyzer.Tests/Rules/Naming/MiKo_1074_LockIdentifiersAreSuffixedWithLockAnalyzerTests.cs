@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_lock_([Values("syncRoot", "MyLock")] string lockName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_lock_object_named_([Values("syncRoot", "MyLock")] string lockName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_lock() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_lock_object_without_Lock_suffix_or_syncRoot_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
