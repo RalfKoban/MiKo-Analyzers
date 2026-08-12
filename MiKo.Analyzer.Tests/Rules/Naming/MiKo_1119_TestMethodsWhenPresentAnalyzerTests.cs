@@ -54,10 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                               ];
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                        [ValueSource(nameof(Tests))] string test,
-                                                                        [ValueSource(nameof(UnproblematicNames))] string unproblematicTest)
+        public void No_issue_is_reported_for_test_method_named_(
+                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                            [ValueSource(nameof(Tests))] string test,
+                                                            [ValueSource(nameof(UnproblematicNames))] string unproblematicTest)
             => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -68,10 +68,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_method_ending_with_incorrect_name_(
-                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                 [ValueSource(nameof(Tests))] string test,
-                                                                                 [ValueSource(nameof(ProblematicTexts))] string problematicTest)
+        public void An_issue_is_reported_for_test_method_ending_with_(
+                                                                  [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                  [ValueSource(nameof(Tests))] string test,
+                                                                  [ValueSource(nameof(ProblematicTexts))] string problematicTest)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe

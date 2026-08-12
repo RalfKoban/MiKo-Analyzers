@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                         ];
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_named_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_named_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_named_method_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_named_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_named_local_function_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_named_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()

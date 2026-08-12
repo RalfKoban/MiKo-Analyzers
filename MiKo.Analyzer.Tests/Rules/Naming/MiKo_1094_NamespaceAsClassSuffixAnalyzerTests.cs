@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1094_NamespaceAsClassSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_namespace_like_suffix() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -19,8 +19,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_wrong_name_([Values("Management", "Handling")] string suffix)
-            => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_named_([Values("Management", "Handling")] string suffix) => An_issue_is_reported_for(@"
 
 public class My" + suffix + @"
 {

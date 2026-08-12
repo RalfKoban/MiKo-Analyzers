@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_impl_suffix() => No_issue_is_reported_for(@"
 public class TestMe
 {
 }

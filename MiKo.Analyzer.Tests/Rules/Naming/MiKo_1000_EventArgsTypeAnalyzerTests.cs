@@ -21,7 +21,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_EventArgs_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 
 public class MyEventArgs : EventArgs
@@ -30,7 +30,7 @@ public class MyEventArgs : EventArgs
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_EventArgs() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe : EventArgs

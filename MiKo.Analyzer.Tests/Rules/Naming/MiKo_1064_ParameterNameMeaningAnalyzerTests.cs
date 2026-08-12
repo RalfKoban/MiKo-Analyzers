@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1064_ParameterNameMeaningAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_with_meaningful_name() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(TestMe culprit)

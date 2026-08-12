@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_without_a_going_to_phrase() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>Will be something.</summary>
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_class_with_a_going_to_phrase_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 /// <" + tag + ">" + phrase + "</" + tag + @">

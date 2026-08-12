@@ -25,7 +25,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_DependencyPropertyKey_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_DependencyPropertyKey_field_with_Key_suffix() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -38,7 +38,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_DependencyPropertyKey_field_without_Key_suffix() => An_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla

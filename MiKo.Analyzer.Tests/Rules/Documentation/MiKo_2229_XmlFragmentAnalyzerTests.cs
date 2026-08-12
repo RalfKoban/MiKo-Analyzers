@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2229_XmlFragmentAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correct_XML() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_XML_fragment() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some text
 /// </summary>
@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_with_CDataSection() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_XML_fragment_with_CDataSection() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some text
 /// </summary>

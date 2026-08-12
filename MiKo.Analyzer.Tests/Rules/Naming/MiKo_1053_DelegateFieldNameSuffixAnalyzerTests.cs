@@ -60,10 +60,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correct_field_name_(
-                                                             [ValueSource(nameof(DelegateTypes))] string type,
-                                                             [ValueSource(nameof(FieldPrefixes))] string prefix,
-                                                             [ValueSource(nameof(CorrectDelegateNames))] string name)
+        public void No_issue_is_reported_for_delegate_field_with_suffix_(
+                                                                     [ValueSource(nameof(DelegateTypes))] string type,
+                                                                     [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                                                     [ValueSource(nameof(CorrectDelegateNames))] string name)
         {
             var code = @"
 using System;

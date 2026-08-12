@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_meaningful_name() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int X { get; set; }
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_property_with_exact_same_name_as_interface() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_named_exactly_like_its_interface_type() => An_issue_is_reported_for(@"
 
 public interface ISomeInterface
 
@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_property_without_interface_prefix_I() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_named_like_interface_type_without_leading_I() => An_issue_is_reported_for(@"
 
 public interface ISomeInterfaceExtended
 
@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_getter_only_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_getter_only_property_named_like_interface_type_without_leading_I() => An_issue_is_reported_for(@"
 
 public interface ISomeInterfaceExtended
 
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_setter_only_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_setter_only_property_named_like_interface_type_without_leading_I() => An_issue_is_reported_for(@"
 
 public interface ISomeInterfaceExtended
 

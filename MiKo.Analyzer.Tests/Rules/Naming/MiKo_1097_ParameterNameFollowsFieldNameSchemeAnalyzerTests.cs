@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1097_ParameterNameFollowsFieldNameSchemeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_without_field_name_scheme_prefix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

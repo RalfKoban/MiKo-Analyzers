@@ -43,7 +43,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_CancellationToken_parameter_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_CancellationToken_parameter_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

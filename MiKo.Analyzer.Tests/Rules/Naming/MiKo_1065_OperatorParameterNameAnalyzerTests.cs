@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1065_OperatorParameterNameAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_unary_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unary_operator_parameter_named_value() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static implicit operator string(TestMe value) => ""bla"";
@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_binary_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_binary_operator_parameters_named_left_and_right() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool operator !=(TestMe left, TestMe right)  => false;

@@ -23,7 +23,7 @@ public class TestMe
         [TestCase("some parent")]
         [TestCase("some insignificant comment")]
         [TestCase("some significant comment")]
-        public void No_issue_is_reported_for_correct_single_line_comment_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_single_line_comment_without_an_nt_contraction_(string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -34,7 +34,7 @@ public class TestMe
 
         [TestCase("some comment")]
         [TestCase("some parent")]
-        public void No_issue_is_reported_for_correct_multi_line_comment_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_comment_without_an_nt_contraction_(string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()

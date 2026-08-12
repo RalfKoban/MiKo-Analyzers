@@ -42,7 +42,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_converter_class_in_correct_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_converter_class_in_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla.Blubb.Converters
@@ -54,7 +54,7 @@ namespace Bla.Blubb.Converters
 ");
 
         [Test]
-        public void No_issue_is_reported_for_converter_class_in_correct_file_scoped_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_converter_class_in_file_scoped_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla.Blubb.Converters;
@@ -65,7 +65,7 @@ public class TestMe : " + interfaceName + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_converter_class_in_wrong_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_converter_class_in_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla.Blubb
@@ -77,7 +77,7 @@ namespace Bla.Blubb
 ");
 
         [Test]
-        public void An_issue_is_reported_for_converter_class_in_wrong_file_scoped_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_converter_class_in_file_scoped_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla.Blubb;

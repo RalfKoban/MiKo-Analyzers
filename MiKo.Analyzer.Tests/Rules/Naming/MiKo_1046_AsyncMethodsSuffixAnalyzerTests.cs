@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_async_void_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_void_method_with_Async_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_async_void_core_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_void_core_method_with_AsyncCore_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -67,7 +67,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_Task_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_method_with_Async_suffix() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -77,7 +77,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_Task_core_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_core_method_with_AsyncCore_suffix() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -122,7 +122,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_async_void_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_void_local_function_with_Async_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -135,7 +135,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_Task_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_local_function_with_Async_suffix() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -148,7 +148,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_Task_local_function_with_Async_suffix_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
@@ -182,7 +182,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_async_void_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_async_void_method_without_Async_suffix() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -192,7 +192,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_Task_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Task_method_without_Async_suffix() => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -202,7 +202,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_async_void_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_async_void_local_function_without_Async_suffix() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -215,7 +215,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_Task_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Task_local_function_without_Async_suffix() => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -228,7 +228,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_Task_local_function_without_Async_suffix_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;

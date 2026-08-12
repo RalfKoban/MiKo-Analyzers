@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1537_MethodPrefixedWithEventAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_Event_prefix() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly TestCaseData[] CodeFixData = [.. CreateCodeFixData()];
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_with_expected_name() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue", "replacementMap")] string field)
+        public void No_issue_is_reported_for_field_named_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue", "replacementMap")] string field)
             => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -71,7 +71,7 @@ public class TestMe
         [TestCase("blaObservableCollection")]
         [TestCase("blaArray")]
         [TestCase("blaHashSet")]
-        public void No_issue_is_reported_for_incorrectly_named_field_in_enum_(string field) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_with_collection_suffix_in_enum_(string field) => No_issue_is_reported_for(@"
 
 public enum TestMe
 {
@@ -95,7 +95,7 @@ public enum TestMe
         [TestCase("XmlNode node")]
         [TestCase("XNode myNode")]
         [TestCase("XNode node")]
-        public void No_issue_is_reported_for_correctly_named_XML_field_(string field) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_field_named_(string field) => No_issue_is_reported_for(@"
 using System;
 using System.Xml;
 using System.Xml.Linq;
@@ -179,7 +179,7 @@ public class TestMe
         [TestCase("string blaDictionary")]
         [TestCase("string blaDict")]
         [TestCase("string blaDic")]
-        public void An_issue_is_reported_for_incorrectly_named_field_(string field) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_named_(string field) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

@@ -104,24 +104,24 @@ namespace Abc." + ns + @"
         public void No_issue_is_reported_for_combined_known_file_scoped_namespace_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))] string ns) => No_issue_is_reported_for("namespace Abc." + ns + ";");
 
         [Test]
-        public void No_issue_is_reported_for_proper_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_proper_file_scoped_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for("namespace " + ns + ";");
+        public void No_issue_is_reported_for_file_scoped_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for("namespace " + ns + ";");
 
         [Test]
-        public void No_issue_is_reported_for_combined_proper_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_combined_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
 namespace Abc." + ns + @"
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_combined_proper_file_scoped_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for("namespace Abc." + ns + ";");
+        public void No_issue_is_reported_for_combined_file_scoped_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for("namespace Abc." + ns + ";");
 
         [Test]
         public void No_issue_is_reported_for_top_level_singular_namespace_([ValueSource(nameof(SingularNamespaceNames))] string ns) => No_issue_is_reported_for(@"

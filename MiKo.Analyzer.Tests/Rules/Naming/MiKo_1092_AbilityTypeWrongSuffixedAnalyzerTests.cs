@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                       ];
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_ability_type_wrong_suffix() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -30,7 +30,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_wrong_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_named_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 
 public class " + name + @"
 {

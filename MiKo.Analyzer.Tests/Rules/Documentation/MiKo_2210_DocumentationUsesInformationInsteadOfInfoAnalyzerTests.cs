@@ -26,7 +26,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_term_in_commented_class_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_class_using_the_term_information_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The information something.
 /// </" + xmlTag + @">

@@ -87,7 +87,7 @@ public class TestMe
         [TestCase("m_command")]
         [TestCase("_myCommand")]
         [TestCase("m_myCommand")]
-        public void No_issue_is_reported_for_correctly_named_command_field_(string fieldName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_command_field_named_(string fieldName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -140,7 +140,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_class_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -155,7 +155,7 @@ public class TestMe : ICommand
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_interface() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_interface_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -165,7 +165,7 @@ public interface ITestMe : ICommand
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_method_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -176,7 +176,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_property_named_Bla() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -187,7 +187,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_command_field() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_field_named_m_bla() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 

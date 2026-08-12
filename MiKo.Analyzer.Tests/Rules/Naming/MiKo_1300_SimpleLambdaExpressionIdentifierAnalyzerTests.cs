@@ -32,7 +32,7 @@ public class TestMe
         [TestCase("_4")]
         [TestCase("_5")]
         [TestCase("failed")] // result to indicate an error in ASP .NET Core
-        public void No_issue_is_reported_for_correctly_named_simple_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_simple_lambda_identifier_named_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +60,7 @@ public class TestMe
         [TestCase("_4")]
         [TestCase("_5")]
         [TestCase("failed")] // result to indicate an error in ASP .NET Core
-        public void No_issue_is_reported_for_correctly_named_parenthesized_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parenthesized_lambda_identifier_named_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +96,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_simple_lambda_identifier() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_simple_lambda_identifier_named_s() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +114,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_parenthesized_lambda_identifier() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_lambda_identifier_named_s() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;

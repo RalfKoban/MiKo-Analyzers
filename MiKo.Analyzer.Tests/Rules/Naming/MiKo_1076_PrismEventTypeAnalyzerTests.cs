@@ -21,7 +21,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Prism_event_type_with_Event_suffix() => No_issue_is_reported_for(@"
 
 namespace Microsoft.Practices.Prism.Events
 {
@@ -39,7 +39,7 @@ namespace MyNamespace
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_EventArgs() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Prism_event_type_with_EventArgs_suffix() => An_issue_is_reported_for(@"
 
 namespace Microsoft.Practices.Prism.Events
 {

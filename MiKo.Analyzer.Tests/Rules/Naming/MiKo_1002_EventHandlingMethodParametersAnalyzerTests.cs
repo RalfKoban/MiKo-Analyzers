@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_expected_name() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_expected_name() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_contains_parameter_names() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_wrong_name_if_surrounding_method_contains_parameter_names() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -90,7 +90,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_sender() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_sender_with_wrong_name() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_sender_on_overridden_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_sender_with_wrong_name_on_overridden_method() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -112,7 +112,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_sender_on_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_sender_with_wrong_name_on_local_function() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -128,7 +128,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_EventArgs() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_with_wrong_name() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -139,7 +139,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_EventArgs_on_overridden_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_with_wrong_name_on_overridden_method() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -150,7 +150,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_named_EventArgs_on_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_with_expected_name_on_local_function() => An_issue_is_reported_for(@"
 
 using System;
 

@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_CancellationToken_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_CancellationToken_variable_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_var_CancellationToken_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_var_CancellationToken_variable_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -65,7 +65,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_CancellationToken_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_CancellationToken_variable_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -79,7 +79,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_CancellationToken_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_var_CancellationToken_variable_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -93,7 +93,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_field_with_incorrect_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_with_wrong_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -108,7 +108,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_variable_declaration_pattern_for_CancellationToken_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_variable_declaration_pattern_for_CancellationToken_variable_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -126,7 +126,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_variable_declaration_pattern_for_CancellationToken_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_variable_declaration_pattern_for_CancellationToken_variable_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

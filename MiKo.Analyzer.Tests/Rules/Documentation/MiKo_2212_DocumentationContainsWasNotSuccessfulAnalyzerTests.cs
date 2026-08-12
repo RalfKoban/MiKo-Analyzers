@@ -18,7 +18,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_correct_comment() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_without_the_phrase_was_not_successful() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some summary.
 /// </summary>

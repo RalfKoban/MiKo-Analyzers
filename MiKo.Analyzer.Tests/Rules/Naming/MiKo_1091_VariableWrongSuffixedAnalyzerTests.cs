@@ -29,7 +29,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_properly_named_variable_([Values("comparer", "view", "item", "entity", "xmlElement", "oldView", "newView", "currentView", "sourceEntity", "targetEntity")] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_variable_without_suffix_([Values("comparer", "view", "item", "entity", "xmlElement", "oldView", "newView", "currentView", "sourceEntity", "targetEntity")] string name) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_properly_named_source_and_target_variable_([Values("Item", "View")] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_source_and_target_prefixed_variable_without_suffix_([Values("Item", "View")] string name) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_incorrectly_named_variable_([Values("myComparer", "myView", "myItem", "myEntity", "myElement")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_variable_prefixed_with_my_([Values("myComparer", "myView", "myItem", "myEntity", "myElement")] string name) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

@@ -20,9 +20,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_method_named_(
+                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                            [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 
 [" + fixture + @"]
@@ -34,9 +34,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method_with_correct_upper_and_lower_case_name_(
-                                                                                             [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                             [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_method_with_upper_and_lower_case_name_(
+                                                                                     [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                     [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 
 [" + fixture + @"]
@@ -63,10 +63,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                      [ValueSource(nameof(Tests))] string test,
-                                                                      [Values("DoSomethingDoesSomething", "DoSomething_DoesSomething", "DoSomething_Expect_DoSomething")] string name)
+        public void An_issue_is_reported_for_test_method_named_(
+                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                            [ValueSource(nameof(Tests))] string test,
+                                                            [Values("DoSomethingDoesSomething", "DoSomething_DoesSomething", "DoSomething_Expect_DoSomething")] string name)
             => An_issue_is_reported_for(@"
 
 [" + fixture + @"]

@@ -46,7 +46,7 @@ public static class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_class_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_class_with_expected_name() => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int value) { }
@@ -54,7 +54,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_class_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_class_named_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 public static class " + name + @"
 {
     public static void DoSomething(this int value) { }

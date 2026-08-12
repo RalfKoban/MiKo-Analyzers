@@ -138,10 +138,10 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(
-                                                                        [ValueSource(nameof(CorrectMethodNames))] string methodName,
-                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_method_named_(
+                                                            [ValueSource(nameof(CorrectMethodNames))] string methodName,
+                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                            [ValueSource(nameof(Tests))] string test)
         => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -152,10 +152,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                      [ValueSource(nameof(VagueMethodNames))] string methodName,
-                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                      [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_test_method_named_(
+                                                            [ValueSource(nameof(VagueMethodNames))] string methodName,
+                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                            [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe

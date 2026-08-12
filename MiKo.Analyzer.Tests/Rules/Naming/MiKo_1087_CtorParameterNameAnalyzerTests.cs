@@ -19,7 +19,7 @@ public sealed record TestMe(int X, int Y, double Distance);
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_ctor() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_derived_ctor_with_parameter_names_matching_base_ctor() => No_issue_is_reported_for(@"
 using System;
 
 public class BaseClass
@@ -46,7 +46,7 @@ public class ChildClass : BaseClass
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_ctor_when_multiple_ctors_are_available() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_derived_ctor_with_parameter_names_matching_one_of_multiple_base_ctors() => No_issue_is_reported_for(@"
 using System;
 
 public class BaseClass

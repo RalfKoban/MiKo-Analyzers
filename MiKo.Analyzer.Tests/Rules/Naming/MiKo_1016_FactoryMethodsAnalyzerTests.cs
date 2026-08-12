@@ -79,7 +79,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_factory_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_method_with_expected_name() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMeFactory
@@ -109,7 +109,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_factory_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_factory_method_with_wrong_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMeFactory
@@ -119,7 +119,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_but_overridden_factory_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overridden_factory_method_with_wrong_name() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMeFactory : BaseFactory
@@ -129,7 +129,7 @@ public class TestMeFactory : BaseFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_local_function_inside_factory_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_wrong_name_inside_factory_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMeFactory

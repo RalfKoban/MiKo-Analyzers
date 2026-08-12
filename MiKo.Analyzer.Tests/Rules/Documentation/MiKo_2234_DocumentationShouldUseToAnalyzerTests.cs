@@ -21,7 +21,7 @@ public class TestMe
 
         [TestCase("Some summary.")]
         [TestCase("Some parent.")]
-        public void No_issue_is_reported_for_correct_comment_(string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_without_a_which_is_to_phrase_(string text) => No_issue_is_reported_for(@"
 /// <summary>
 /// " + text + @"
 /// </summary>

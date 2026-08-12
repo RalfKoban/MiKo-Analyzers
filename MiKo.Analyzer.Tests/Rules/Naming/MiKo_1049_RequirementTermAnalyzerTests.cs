@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] Marker = ["Must", "Need", "Shall", "Should", "Will", "Would"];
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_symbols() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_symbols_without_requirement_term() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_([Values("RefreshAllChildren", "CreateShallowCopy", "NeedsLicense", "Something_needs_license")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_that_only_contains_requirement_term_as_part_of_a_longer_word_([Values("RefreshAllChildren", "CreateShallowCopy", "NeedsLicense", "Something_needs_license")] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -45,7 +45,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_type_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_prefixed_with_requirement_term_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class " + marker + @"TestMe
@@ -54,7 +54,7 @@ public class " + marker + @"TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_field_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_containing_requirement_term_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_const_field_([ValueSource(nameof(Marker))] string marker) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_field_containing_requirement_term_([ValueSource(nameof(Marker))] string marker) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_event_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_containing_requirement_term_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -84,7 +84,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_property_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_prefixed_with_requirement_term_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -94,7 +94,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_prefixed_with_requirement_term_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -104,7 +104,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_local_function_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_prefixed_with_requirement_term_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

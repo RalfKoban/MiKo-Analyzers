@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1527_TypeSuffixedWithSubAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_type_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_without_Sub_suffix() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe

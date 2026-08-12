@@ -23,7 +23,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_expected_name() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_expected_name() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_overridden_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overridden_method_with_wrong_name() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -59,7 +59,7 @@ public class TestMe : BaseClass
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_name() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -70,7 +70,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method_with_own_event_assignment() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_name_and_own_event_assignment() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method_with_other_event_assignment() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_name_and_other_event_assignment() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -107,7 +107,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_with_other_event_assignment() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_expected_name_and_other_event_assignment() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -129,7 +129,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method_with_underscore_inside_other_event_assignment() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_name_containing_underscore_inside_other_event_assignment() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -151,7 +151,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_local_function_with_other_event_assignment() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_wrong_name_and_other_event_assignment() => An_issue_is_reported_for(@"
 
 using System;
 

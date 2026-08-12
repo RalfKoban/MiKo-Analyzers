@@ -35,7 +35,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_correct_comment() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_without_a_to_seek_phrase() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some summary.
 /// </summary>
@@ -44,7 +44,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_correct_comment_with_to_inspect_for() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_the_phrase_to_inspect_for_more_details() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some summary to inspect for more details.
 /// </summary>

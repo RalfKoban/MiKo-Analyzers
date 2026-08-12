@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1093_ObjectSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_Object_suffix() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -28,7 +28,7 @@ public class MyObject
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_without_Object_suffix() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_without_Object_suffix() => No_issue_is_reported_for(@"
 
 public class TestMe
 {

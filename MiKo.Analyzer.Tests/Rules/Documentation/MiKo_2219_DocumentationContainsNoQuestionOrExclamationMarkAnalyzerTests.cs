@@ -21,7 +21,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_without_question_or_exclamation_mark_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 /// <" + tag + ">Some text.</" + tag + @">
 public class TestMe
 {
