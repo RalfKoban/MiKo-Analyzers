@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Extensions
                 foundLines.Add(line.ToString());
             }
 
-            Assert.That(foundLines.Count, Is.EqualTo(3));
+            Assert.That(foundLines, Has.Count.EqualTo(3));
             Assert.That(foundLines[0], Is.EqualTo(Line1));
             Assert.That(foundLines[1], Is.Empty); // line between \r and \n
             Assert.That(foundLines[2], Is.EqualTo(Line2));
@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Extensions
                 foundLines.Add(line.ToString());
             }
 
-            Assert.That(foundLines.Count, Is.EqualTo(2));
+            Assert.That(foundLines, Has.Count.EqualTo(2));
             Assert.That(foundLines[0], Is.EqualTo(Line1));
             Assert.That(foundLines[1], Is.EqualTo(Line2));
         }
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             var lines = "something text to split".AsSpan().SplitBy([" text "], options: StringSplitOptions.RemoveEmptyEntries);
 
-            Assert.That(lines.Count, Is.EqualTo(2));
+            Assert.That(lines, Has.Count.EqualTo(2));
             Assert.That(lines[0], Is.EqualTo("something"));
             Assert.That(lines[1], Is.EqualTo("to split"));
         }
