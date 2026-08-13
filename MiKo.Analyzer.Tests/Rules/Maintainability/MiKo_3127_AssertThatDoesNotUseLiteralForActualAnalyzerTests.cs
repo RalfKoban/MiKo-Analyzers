@@ -359,6 +359,320 @@ namespace Bla
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_variable_and_chained_IgnoreCase()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = ""something"";
+
+            Assert.That(""some text"", Is.EqualTo(value).IgnoreCase);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = ""something"";
+
+            Assert.That(value, Is.EqualTo(""some text"").IgnoreCase);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_variable_and_chained_Within()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42.0;
+
+            Assert.That(47.11, Is.EqualTo(value).Within(0.5));
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42.0;
+
+            Assert.That(value, Is.EqualTo(47.11).Within(0.5));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void An_issue_is_reported_for_test_method_with_variable_and_Is_Not_EqualTo() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42;
+
+            Assert.That(4711, Is.Not.EqualTo(value));
+        }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_variable_and_Is_Not_EqualTo()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42;
+
+            Assert.That(4711, Is.Not.EqualTo(value));
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42;
+
+            Assert.That(value, Is.Not.EqualTo(4711));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_variable_and_Is_Not_EqualTo_and_chained_IgnoreCase()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = ""something"";
+
+            Assert.That(""some text"", Is.Not.EqualTo(value).IgnoreCase);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = ""something"";
+
+            Assert.That(value, Is.Not.EqualTo(""some text"").IgnoreCase);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_variable_and_Is_Not_EqualTo_and_chained_Within()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42.0;
+
+            Assert.That(47.11, Is.Not.EqualTo(value).Within(0.5));
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42.0;
+
+            Assert.That(value, Is.Not.EqualTo(47.11).Within(0.5));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_variable_and_Is_EqualTo_and_chained_Within_with_nested_invocation()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42.0;
+
+            Assert.That(47.11, Is.EqualTo(value).Within(GetTolerance()));
+        }
+
+        private double GetTolerance() => 0.5;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            var value = 42.0;
+
+            Assert.That(value, Is.EqualTo(47.11).Within(GetTolerance()));
+        }
+
+        private double GetTolerance() => 0.5;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3127_AssertThatDoesNotUseLiteralForActualAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3127_AssertThatDoesNotUseLiteralForActualAnalyzer();

@@ -33,13 +33,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = list.Arguments;
 
-                if (arguments.Count > 1 && arguments[1].Expression is InvocationExpressionSyntax comparison)
+                if (arguments.Count > 1)
                 {
-                    var comparisonArguments = comparison.ArgumentList.Arguments;
-                    if (comparisonArguments.Any())
+                    var illPlacedActual = FindIllPlacedActualArgument(arguments[1]);
+
+                    if (illPlacedActual != null)
                     {
                         var illPlacedExpected = arguments[0]; // this is the actual "expected" parameter
-                        var illPlacedActual = comparisonArguments.First(); // this is the actual "actual" parameter
 
                         var fixedActual = illPlacedActual.WithTriviaFrom(illPlacedExpected);
                         var fixedExpected = illPlacedExpected.WithoutTrivia();
@@ -67,6 +67,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return syntax;
+        }
+
+        private static ArgumentSyntax FindIllPlacedActualArgument(ArgumentSyntax constraint)
+        {
+            var invocation = constraint.FirstDescendant<InvocationExpressionSyntax>(_ => _.Expression is MemberAccessExpressionSyntax maes && maes.GetName() == "EqualTo");
+
+            if (invocation?.ArgumentList is ArgumentListSyntax list && list.Arguments is SeparatedSyntaxList<ArgumentSyntax> arguments && arguments.Count > 0)
+            {
+                return arguments[0]; // this should be the ill-placed "actual" parameter
+            }
+
+            return null;
         }
     }
 }
