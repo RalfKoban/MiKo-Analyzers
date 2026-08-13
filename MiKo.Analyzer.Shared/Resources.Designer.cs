@@ -15600,6 +15600,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove redundant empty argument list.
+        /// </summary>
+        internal static string MiKo_3238_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3238_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty parentheses on initializers add visual noise without providing any value, as no constructor arguments are passed. Removing them keeps the code concise and easier to read..
+        /// </summary>
+        internal static string MiKo_3238_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3238_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove redundant empty argument list.
+        /// </summary>
+        internal static string MiKo_3238_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3238_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid empty argument lists on initializers.
+        /// </summary>
+        internal static string MiKo_3238_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3238_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

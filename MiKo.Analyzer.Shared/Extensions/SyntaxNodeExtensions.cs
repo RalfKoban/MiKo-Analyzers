@@ -3032,7 +3032,27 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax tree with the node removed.
         /// </returns>
-        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.Without(node, SyntaxRemoveOptions.KeepNoTrivia);
+
+        /// <summary>
+        /// Removes a node from a syntax tree and attempts to adjust the node's trivia based on the given options.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the root node.
+        /// </typeparam>
+        /// <param name="value">
+        /// The root node of the syntax tree.
+        /// </param>
+        /// <param name="node">
+        /// The node to remove.
+        /// </param>
+        /// <param name="options">
+        /// A bitwise combination of the enumeration members that specifies how the node's trivia is treated.
+        /// </param>
+        /// <returns>
+        /// A new syntax tree with the node removed.
+        /// </returns>
+        internal static T Without<T>(this T value, SyntaxNode node, SyntaxRemoveOptions options) where T : SyntaxNode
         {
             switch (node)
             {
@@ -3041,8 +3061,6 @@ namespace MiKoSolutions.Analyzers
 
                 case AttributeListSyntax a:
                 {
-                    var options = SyntaxRemoveOptions.KeepNoTrivia;
-
                     if (a.NextSibling() is AttributeListSyntax next && a.IsOnSameLineAs(next))
                     {
                         options = SyntaxRemoveOptions.KeepLeadingTrivia;
@@ -3056,7 +3074,7 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 default:
-                    return value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+                    return value.RemoveNode(node, options);
             }
         }
 
