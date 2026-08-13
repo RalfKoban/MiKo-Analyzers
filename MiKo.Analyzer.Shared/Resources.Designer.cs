@@ -14561,6 +14561,44 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Swap &apos;actual&apos; and &apos;expected&apos; values on assertion.
+        /// </summary>
+        internal static string MiKo_3127_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3127_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NUnit&apos;s constraint model expects &apos;Assert.That(actual, Is.EqualTo(expected))&apos;, with actual first and expected second, unlike classic &apos;Assert.AreEqual(expected, actual)&apos;.
+        ///When switching from &apos;Assert.AreEqual&apos; to &apos;Assert.That&apos;, developers sometimes keep the old order by mistake, swapping the two values.
+        ///This leads to confusing failure messages that show the wrong value as &quot;expected&quot;..
+        /// </summary>
+        internal static string MiKo_3127_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3127_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Swap &apos;actual&apos; and &apos;expected&apos; values on assertion.
+        /// </summary>
+        internal static string MiKo_3127_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3127_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions should not swap &apos;actual&apos; and &apos;expected&apos; values.
+        /// </summary>
+        internal static string MiKo_3127_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3127_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
