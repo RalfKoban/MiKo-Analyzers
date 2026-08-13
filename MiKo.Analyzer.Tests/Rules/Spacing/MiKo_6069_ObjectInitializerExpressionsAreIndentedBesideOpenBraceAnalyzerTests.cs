@@ -392,6 +392,47 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_initializer_expressions_on_different_and_same_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public int Number { get; set; }
+
+    public bool Valid { get; set;
+
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                             Name = ""some name"", Valid = true
+                                         };
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public int Number { get; set; }
+
+    public bool Valid { get; set;
+
+    public static TestMe Create() => new TestMe
+                                         {
+                                             Number = 42,
+                                             Name = ""some name"",
+                                             Valid = true
+                                         };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6069_ObjectInitializerExpressionsAreIndentedBesideOpenBraceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6069_ObjectInitializerExpressionsAreIndentedBesideOpenBraceAnalyzer();
