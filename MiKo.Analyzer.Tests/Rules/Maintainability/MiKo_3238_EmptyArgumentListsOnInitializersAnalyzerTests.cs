@@ -86,6 +86,43 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_implicit_object_initializer_with_parenthesis_containing_no_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.IO;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Id { get; set; }
+
+        private static readonly TestMe = new()
+                                             {
+                                                 Id = 42,
+                                             };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_implicit_collection_initializer_with_parenthesis_containing_no_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private static readonly List<int> list = new()
+                                                     {
+                                                         1,
+                                                         2,
+                                                     };
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_object_initializer_with_parenthesis_containing_no_parameters() => An_issue_is_reported_for(@"
 using System;
 using System.IO;
