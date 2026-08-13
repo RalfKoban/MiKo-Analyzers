@@ -218,6 +218,66 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_qualified_name_in_nested_enum_used_as_method_parameter() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public static class S
+    {
+        public enum Nested
+        {
+        }
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(S.Nested nested) { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_qualified_name_in_nested_struct_used_as_field() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public struct S
+    {
+        public struct Nested
+        {
+        }
+    }
+
+    public class TestMe
+    {
+        private S.Nested nested;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_qualified_name_in_nested_enum_used_as_field() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public static class S
+    {
+        public enum Nested
+        {
+        }
+    }
+
+    public class TestMe
+    {
+        private S.Nested nested;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_fully_qualified_name_as_method_parameter() => An_issue_is_reported_for(@"
 using System;
 
