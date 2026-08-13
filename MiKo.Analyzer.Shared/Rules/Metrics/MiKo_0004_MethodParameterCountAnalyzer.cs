@@ -21,20 +21,22 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.IsExtern is false)
+            if (symbol.IsExtern || symbol.IsOverride)
             {
-                var parameters = symbol.Parameters;
-                var parametersCount = parameters.Length;
+                return Array.Empty<Diagnostic>();
+            }
 
-                if (parametersCount > MaxParametersCount && symbol.IsInterfaceImplementation() is false)
+            var parameters = symbol.Parameters;
+            var parametersCount = parameters.Length;
+
+            if (parametersCount > MaxParametersCount && symbol.IsInterfaceImplementation() is false)
+            {
+                var outParametersCount = parameters.Count(_ => _.IsOut());
+                var count = parametersCount - outParametersCount;
+
+                if (count > MaxParametersCount)
                 {
-                    var outParametersCount = parameters.Count(_ => _.IsOut());
-                    var count = parametersCount - outParametersCount;
-
-                    if (count > MaxParametersCount)
-                    {
-                        return new[] { Issue(symbol, count, MaxParametersCount) };
-                    }
+                    return new[] { Issue(symbol, count, MaxParametersCount) };
                 }
             }
 
