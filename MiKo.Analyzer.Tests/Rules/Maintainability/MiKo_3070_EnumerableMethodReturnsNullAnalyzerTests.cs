@@ -617,6 +617,60 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_Enumerable_method_with_optional_parameter_set_to_null_per_default_and_implicit_array_creation_syntax() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public TestMe[] DoSomething(string name = null)
+    {
+        return new[] { new TestMe { Name = name } };
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_with_optional_parameter_set_to_null_per_default_and_explicit_array_creation_syntax() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public TestMe[] DoSomething(string name = null)
+    {
+        return new TestMe[] { new TestMe { Name = name } };
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_with_optional_parameter_set_to_null_per_default_and_implicit_list_creation_syntax() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public List<TestMe> DoSomething(string name = null)
+    {
+        return new() { new TestMe { Name = name } };
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_with_optional_parameter_set_to_null_per_default_and_explicit_list_syntax() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public List<TestMe> DoSomething(string name = null)
+    {
+        return new List<TestMe> { new TestMe { Name = name } };
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_Enumerable_method_returning_null() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;

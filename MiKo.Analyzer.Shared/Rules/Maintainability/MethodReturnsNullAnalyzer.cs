@@ -212,10 +212,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeExpression(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax returnedExpression)
         {
-            if (returnedExpression is null)
+            switch (returnedExpression)
             {
-                // code seems to be incomplete, so ignore that
-                return;
+                case null: // code seems to be incomplete, so ignore that
+                case ArrayCreationExpressionSyntax _:
+                case ImplicitArrayCreationExpressionSyntax _:
+                case ObjectCreationExpressionSyntax _:
+                case ImplicitObjectCreationExpressionSyntax _:
+                    return;
             }
 
             if (HasIssue(returnedExpression))
