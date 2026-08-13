@@ -47,13 +47,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is AssignmentExpressionSyntax a && a.Parent is InitializerExpressionSyntax initializer)
             {
+                var expressions = initializer.Expressions;
+                var index = expressions.IndexOf(a);
+
                 var openBraceToken = initializer.OpenBraceToken;
 
                 if (initializer.CloseBraceToken.IsOnSameLineAs(openBraceToken))
                 {
-                    var expressions = initializer.Expressions;
-                    var index = expressions.IndexOf(a);
-
                     switch (index)
                     {
                         case -1: // should never happen as the syntax should be part of the initializer
@@ -65,6 +65,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         default:
                             return GetUpdatedSyntaxRoot(root, expressions.GetSeparator(index - 1));
                     }
+                }
+
+                // seems we are on different lines, so we have to place it at the next line
+                if (index > 0)
+                {
+                    var separator = expressions.GetSeparator(index - 1);
+
+                    return root.ReplaceToken(separator, separator.WithTrailingNewLine());
                 }
             }
 
