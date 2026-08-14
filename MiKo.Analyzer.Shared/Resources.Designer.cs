@@ -14599,6 +14599,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mark method as test.
+        /// </summary>
+        internal static string MiKo_3128_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3128_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that are tests should be marked as test methods so that the testing framework can find and run them..
+        /// </summary>
+        internal static string MiKo_3128_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3128_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark method as test.
+        /// </summary>
+        internal static string MiKo_3128_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3128_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be marked as tests.
+        /// </summary>
+        internal static string MiKo_3128_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3128_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

@@ -1288,6 +1288,9 @@ namespace MiKoSolutions.Analyzers
             internal const string TestCaseAttribute = "TestCase";
             internal const string TestCaseAttributeFullName = "TestCaseAttribute";
 
+            internal const string TestMethodAttribute = "TestMethod";
+            internal const string TestMethodAttributeFullName = "TestMethodAttribute";
+
             internal const string TheoryAttribute = "Theory";
             internal const string TheoryAttributeFullName = "TheoryAttribute";
 
@@ -1325,8 +1328,8 @@ namespace MiKoSolutions.Analyzers
                                                                                      TheoryAttributeFullName,
                                                                                      FactAttribute,
                                                                                      FactAttributeFullName,
-                                                                                     "TestMethod",
-                                                                                     "TestMethodAttribute",
+                                                                                     TestMethodAttribute,
+                                                                                     TestMethodAttributeFullName,
                                                                                  };
 
             internal static readonly ISet<string> TestClassAttributeNames = new HashSet<string>
