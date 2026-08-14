@@ -202,6 +202,42 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         /// <summary>
+        /// Determines whether NUnit is referenced within the compilation.
+        /// </summary>
+        /// <param name="compilation">
+        /// The compilation to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if NUnit is references; otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool ReferencesNUnit(Compilation compilation) => compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TestAttributeFullName) != null
+                                                                       || compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TestCaseAttributeFullName) != null
+                                                                       || compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TheoryAttributeFullName) != null;
+
+        /// <summary>
+        /// Determines whether xUnit is referenced within the compilation.
+        /// </summary>
+        /// <param name="compilation">
+        /// The compilation to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if xUnit is references; otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool ReferencesXUnit(Compilation compilation) => compilation.GetTypeByMetadataName("Xunit." + Constants.Names.FactAttributeFullName) != null
+                                                                          || compilation.GetTypeByMetadataName("Xunit." + Constants.Names.TheoryAttributeFullName) != null;
+
+        /// <summary>
+        /// Determines whether MSTest is referenced within the compilation.
+        /// </summary>
+        /// <param name="compilation">
+        /// The compilation to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if MSTest is references; otherwise, <see langword="false"/>.
+        /// </returns>
+        protected static bool ReferencesMsTest(Compilation compilation) => compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null;
+
+        /// <summary>
         /// Reports a diagnostic issue to the analysis context.
         /// </summary>
         /// <param name="context">
@@ -1930,32 +1966,17 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private bool ReferencesTestAssemblies(Compilation compilation)
         {
-            if (compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TestAttributeFullName) != null)
+            if (ReferencesNUnit(compilation))
             {
                 return SupportsNUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TestCaseAttributeFullName) != null)
-            {
-                return SupportsNUnit;
-            }
-
-            if (compilation.GetTypeByMetadataName("NUnit.Framework." + Constants.Names.TheoryAttributeFullName) != null)
-            {
-                return SupportsNUnit;
-            }
-
-            if (compilation.GetTypeByMetadataName("Xunit." + Constants.Names.FactAttributeFullName) != null)
+            if (ReferencesXUnit(compilation))
             {
                 return SupportsXUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("Xunit." + Constants.Names.TheoryAttributeFullName) != null)
-            {
-                return SupportsXUnit;
-            }
-
-            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null)
+            if (ReferencesMsTest(compilation))
             {
                 return SupportsMSTest;
             }
