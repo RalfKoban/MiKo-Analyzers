@@ -40,7 +40,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var modifiedType = typeSyntax.RemoveNodesAndAdjustOpenCloseBraces(methodNodes);
             var node = modifiedType.FirstChild(_ => _.IsEquivalentTo(orientationNode));
 
-            return modifiedType.InsertNodesAfter(node, replacements);
+            modifiedType = modifiedType.InsertNodesAfter(node, replacements);
+
+            return modifiedType;
         }
 
         private static List<SyntaxNode> CreateReplacements(IEnumerable<SyntaxNode> methodNodes)
