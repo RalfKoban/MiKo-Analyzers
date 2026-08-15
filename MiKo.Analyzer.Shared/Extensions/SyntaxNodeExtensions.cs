@@ -1886,9 +1886,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsMoqItIsConditionMatcher(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
                                                                                               && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                                                              && maes.Expression is IdentifierNameSyntax invokedType
-                                                                                              && invokedType.GetName() is Constants.Moq.ConditionMatcher.It
-                                                                                              && maes.GetName() is Constants.Moq.ConditionMatcher.Is;
+                                                                                              && maes.Is(Constants.Moq.ConditionMatcher.It, Constants.Moq.ConditionMatcher.Is);
 
         /// <summary>
         /// Determines whether an expression syntax represents a nameof expression.
@@ -2348,7 +2346,7 @@ namespace MiKoSolutions.Analyzers
                                                                                    && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
                                                                                    && maes.Expression is TypeSyntax invokedType
                                                                                    && invokedType.IsString()
-                                                                                   && maes.GetName() is nameof(string.Format);
+                                                                                   && maes.Is(nameof(string.Format));
 
         /// <summary>
         /// Determines whether an argument syntax represents a <see cref="string"/> literal.
@@ -2677,7 +2675,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the return statement returns a completed task; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() is nameof(Task) && maes.GetName() is nameof(Task.CompletedTask);
+        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Is(nameof(Task), nameof(Task.CompletedTask));
 
         /// <summary>
         /// Determines whether an if statement returns immediately.
@@ -2821,7 +2819,7 @@ namespace MiKoSolutions.Analyzers
         {
             result = null;
 
-            if (value.GetName() is Constants.Moq.Object)
+            if (value.Is(Constants.Moq.Object))
             {
                 var expression = value.Expression.WithoutParenthesis(); // let's see if we can fix it in case we remove the surrounding parenthesis
 

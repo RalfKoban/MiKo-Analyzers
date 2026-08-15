@@ -1068,5 +1068,83 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether the specified member has the given name.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression syntax.
+        /// </param>
+        /// <param name="name">
+        /// The name to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the member has the given name; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool Is(this MemberAccessExpressionSyntax value, string name) => value.GetName() == name;
+
+        /// <summary>
+        /// Determines whether the specified member has the given identifier name and name.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression syntax.
+        /// </param>
+        /// <param name="identifierName">
+        /// The name of the identifier to check.
+        /// </param>
+        /// <param name="name">
+        /// The name to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool Is(this ExpressionSyntax value, string identifierName, string name)
+        {
+            switch (value)
+            {
+                case InvocationExpressionSyntax i:
+                    return i.Is(identifierName, name);
+
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Is(identifierName, name);
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the specified member has the given identifier name and name.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression syntax.
+        /// </param>
+        /// <param name="identifierName">
+        /// The name of the identifier to check.
+        /// </param>
+        /// <param name="name">
+        /// The name to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool Is(this InvocationExpressionSyntax value, string identifierName, string name) => value?.Expression.Is(identifierName, name) is true;
+
+        /// <summary>
+        /// Determines whether the specified member has the given identifier name and name.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression syntax.
+        /// </param>
+        /// <param name="identifierName">
+        /// The name of the identifier to check.
+        /// </param>
+        /// <param name="name">
+        /// The name to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool Is(this MemberAccessExpressionSyntax value, string identifierName, string name) => value.GetIdentifierName() == identifierName && value.Is(name);
     }
 }

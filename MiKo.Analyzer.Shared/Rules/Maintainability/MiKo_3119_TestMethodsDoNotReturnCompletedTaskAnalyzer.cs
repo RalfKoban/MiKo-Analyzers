@@ -55,6 +55,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return returnStatements.Any(_ => _.ReturnsCompletedTask());
         }
 
-        private static bool HasIssue(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() is nameof(Task) && maes.GetName() is nameof(Task.CompletedTask);
+        private static bool HasIssue(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax maes && maes.Is(nameof(Task), nameof(Task.CompletedTask));
     }
 }

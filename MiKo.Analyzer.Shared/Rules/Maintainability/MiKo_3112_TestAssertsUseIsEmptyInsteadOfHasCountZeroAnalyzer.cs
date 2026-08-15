@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -40,16 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
-            var issues = Analyze(node);
-
-            if (issues.Length > 0)
+            if (HasIssue(node))
             {
-                ReportDiagnostics(context, issues);
+                ReportDiagnostics(context, Issue(node));
             }
         }
-
-        private Diagnostic[] Analyze(MemberAccessExpressionSyntax node) => HasIssue(node)
-                                                                           ? new[] { Issue(node) }
-                                                                           : Array.Empty<Diagnostic>();
     }
 }

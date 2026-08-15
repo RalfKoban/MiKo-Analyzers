@@ -18,9 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
-        private static bool IsStringComparisonOrdinal(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax m
-                                                                                   && m.GetIdentifierName() is nameof(StringComparison)
-                                                                                   && m.GetName() is nameof(StringComparison.Ordinal);
+        private static bool IsStringComparisonOrdinal(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax m && m.Is(nameof(StringComparison), nameof(StringComparison.Ordinal));
 
         private static bool IsStringComparisonOrdinal(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxNodeAnalysisContext context)
         {
@@ -37,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(InvocationExpressionSyntax invocation, in SyntaxNodeAnalysisContext context)
         {
-            if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.GetName() is nameof(Equals))
+            if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Is(nameof(Equals)))
             {
                 var arguments = invocation.ArgumentList.Arguments;
 

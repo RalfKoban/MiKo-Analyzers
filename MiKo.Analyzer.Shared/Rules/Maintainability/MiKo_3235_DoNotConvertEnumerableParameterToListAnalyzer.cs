@@ -55,9 +55,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsCall(MemberAccessExpressionSyntax syntax)
         {
-            var name = syntax.GetName();
+            switch (syntax.GetName())
+            {
+                case nameof(Enumerable.ToList):
+                case nameof(Enumerable.ToArray):
+                    return true;
 
-            return name is nameof(Enumerable.ToList) || name is nameof(Enumerable.ToArray);
+                default:
+                    return false;
+            }
         }
 
         private static bool IsIEnumerable(IParameterSymbol parameter) => parameter.Type.OriginalDefinition.SpecialType is SpecialType.System_Collections_Generic_IEnumerable_T;

@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax FindIllPlacedActualArgument(ArgumentSyntax constraint)
         {
-            var invocation = constraint.FirstDescendant<InvocationExpressionSyntax>(_ => _.Expression is MemberAccessExpressionSyntax maes && maes.GetName() is "EqualTo");
+            var invocation = constraint.FirstDescendant<InvocationExpressionSyntax>(_ => _.Expression is MemberAccessExpressionSyntax maes && maes.Is("EqualTo"));
 
             if (invocation?.ArgumentList is ArgumentListSyntax list && list.Arguments is SeparatedSyntaxList<ArgumentSyntax> arguments && arguments.Count > 0)
             {

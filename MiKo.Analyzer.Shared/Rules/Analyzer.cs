@@ -224,7 +224,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// <see langword="true"/> if xUnit is references; otherwise, <see langword="false"/>.
         /// </returns>
         protected static bool ReferencesXUnit(Compilation compilation) => compilation.GetTypeByMetadataName("Xunit." + Constants.Names.FactAttributeFullName) != null
-                                                                          || compilation.GetTypeByMetadataName("Xunit." + Constants.Names.TheoryAttributeFullName) != null;
+                                                                       || compilation.GetTypeByMetadataName("Xunit." + Constants.Names.TheoryAttributeFullName) != null;
 
         /// <summary>
         /// Determines whether MSTest is referenced within the compilation.

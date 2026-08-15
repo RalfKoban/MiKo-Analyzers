@@ -87,12 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return name is "PropertyName";
         }
 
-        private static bool IsPropertyName(MemberAccessExpressionSyntax expression)
-        {
-            var name = expression.GetName();
-
-            return name is "PropertyName";
-        }
+        private static bool IsPropertyName(MemberAccessExpressionSyntax expression) => expression.Is("PropertyName");
 
         private static bool IsPropertyNameAccess(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax syntax && syntax.IsKind(SyntaxKind.SimpleMemberAccessExpression) && IsPropertyName(syntax);
 

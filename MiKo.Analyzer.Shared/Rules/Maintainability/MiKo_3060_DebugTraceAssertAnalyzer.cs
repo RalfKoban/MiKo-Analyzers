@@ -28,19 +28,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var methodCall in syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
             {
-                if (methodCall.GetName() is nameof(Debug.Assert))
+                if (methodCall.Is(nameof(Debug), nameof(Debug.Assert)) || methodCall.Is(nameof(Trace), nameof(Trace.Assert)))
                 {
-                    var identifierName = methodCall.GetIdentifierName();
-
-                    if (identifierName is nameof(Debug) || identifierName is nameof(Trace))
+                    if (issues is null)
                     {
-                        if (issues is null)
-                        {
-                            issues = new List<Diagnostic>(1);
-                        }
-
-                        issues.Add(Issue(symbol.Name, methodCall, methodCall.ToCleanedUpString()));
+                        issues = new List<Diagnostic>(1);
                     }
+
+                    issues.Add(Issue(symbol.Name, methodCall, methodCall.ToCleanedUpString()));
                 }
             }
 

@@ -66,10 +66,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 case LiteralExpressionSyntax literal when ConstraintMap.TryGetValue(literal.Token.ValueText, out var constraint):
                                     return Issue(constraint);
 
-                                case MemberAccessExpressionSyntax m when m.GetName() is NaN:
+                                case MemberAccessExpressionSyntax m when m.Is(NaN):
                                     return Issue(NaN);
 
-                                case MemberAccessExpressionSyntax m when m.GetName() is Empty && (m.GetIdentifierName() is "string" || m.GetIdentifierName() is "String"):
+                                case MemberAccessExpressionSyntax m when m.Is("string", Empty) || m.Is("String", Empty):
                                     return Issue(Empty);
                             }
 

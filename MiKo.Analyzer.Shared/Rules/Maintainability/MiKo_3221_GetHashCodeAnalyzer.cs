@@ -31,11 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var expression in method.DescendantNodes<MemberAccessExpressionSyntax>())
                 {
-                    switch (expression.GetName())
+                    if (expression.Is(ToHashCode) || expression.Is(HashCode, Combine))
                     {
-                        case ToHashCode:
-                        case Combine when expression.Expression.GetName() == HashCode:
-                            yield break;
+                        yield break;
                     }
 
                     expressionsCount++;
