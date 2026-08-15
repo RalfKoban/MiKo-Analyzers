@@ -15,10 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3127";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
-        {
-            return syntaxNodes.OfType<ArgumentListSyntax>().First();
-        }
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ArgumentListSyntax>().FirstOrDefault();
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
@@ -71,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax FindIllPlacedActualArgument(ArgumentSyntax constraint)
         {
-            var invocation = constraint.FirstDescendant<InvocationExpressionSyntax>(_ => _.Expression is MemberAccessExpressionSyntax maes && maes.GetName() == "EqualTo");
+            var invocation = constraint.FirstDescendant<InvocationExpressionSyntax>(_ => _.Expression is MemberAccessExpressionSyntax maes && maes.GetName() is "EqualTo");
 
             if (invocation?.ArgumentList is ArgumentListSyntax list && list.Arguments is SeparatedSyntaxList<ArgumentSyntax> arguments && arguments.Count > 0)
             {
