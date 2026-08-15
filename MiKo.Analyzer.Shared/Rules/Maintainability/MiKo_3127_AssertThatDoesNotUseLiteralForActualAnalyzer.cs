@@ -16,17 +16,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        // !!! Attention !!!:
+        // Visual Studio will not allow the code fix to show up in case it is not for a location within the analyzed syntax node.
+        // So, we have to register for the invocation here (instead of the simple member access) as we are interested in reporting the element of the contained argument (actually it's expression).
+        // Otherwise, when we would register for the SimpleMemberAccessExpression, the argument would not belong to that access (it belongs to the invocation), and therefore it will be ignored by Visual Studio.
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
-        private static bool IsAssertThat(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType
-                                                                            && invokedType.GetName() is "Assert"
-                                                                            && node.GetName() is "That";
+        private static bool IsAssertThat(InvocationExpressionSyntax node) => node.Expression is MemberAccessExpressionSyntax maes && IsAssertThat(maes);
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private static bool IsAssertThat(MemberAccessExpressionSyntax node) => node.GetIdentifierName() is "Assert" && node.GetName() is "That";
+
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is MemberAccessExpressionSyntax maes)
+            if (context.Node is InvocationExpressionSyntax invocation && IsAssertThat(invocation))
             {
-                var issue = AnalyzeSimpleMemberAccessExpression(maes, context.SemanticModel);
+                var issue = AnalyzeInvocationExpression(invocation, context.SemanticModel);
 
                 if (issue != null)
                 {
@@ -35,23 +39,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
+        private Diagnostic AnalyzeInvocationExpression(InvocationExpressionSyntax invocation, SemanticModel semanticModel)
         {
-            if (node.Parent is InvocationExpressionSyntax methodCall && IsAssertThat(node))
+            var arguments = invocation.ArgumentList.Arguments;
+
+            if (arguments.Count > 0)
             {
-                var arguments = methodCall.ArgumentList.Arguments;
+                var expression = arguments[0].Expression;
 
-                if (arguments.Count > 0)
+                switch (expression)
                 {
-                    var expression = arguments[0].Expression;
-
-                    switch (expression)
-                    {
-                        case PrefixUnaryExpressionSyntax unary when unary.Operand is LiteralExpressionSyntax:
-                        case LiteralExpressionSyntax _:
-                        case MemberAccessExpressionSyntax maes when maes.IsEnum(semanticModel):
-                            return Issue(expression);
-                    }
+                    case PrefixUnaryExpressionSyntax unary when unary.Operand is LiteralExpressionSyntax:
+                    case LiteralExpressionSyntax _:
+                    case MemberAccessExpressionSyntax maes when maes.IsEnum(semanticModel):
+                        return Issue(expression);
                 }
             }
 
