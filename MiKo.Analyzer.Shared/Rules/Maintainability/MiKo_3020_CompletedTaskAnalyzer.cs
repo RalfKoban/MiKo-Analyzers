@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             foreach (var invocation in symbol.GetSyntax()
-                                             .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Expression.GetName() is nameof(Task) && _.GetName() is nameof(Task.FromResult))
+                                             .DescendantNodes<MemberAccessExpressionSyntax>(_ => _ is MemberAccessExpressionSyntax maes && maes.Is(nameof(Task), nameof(Task.FromResult)))
                                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>()))
             {
                 switch (invocation.Parent?.Kind())

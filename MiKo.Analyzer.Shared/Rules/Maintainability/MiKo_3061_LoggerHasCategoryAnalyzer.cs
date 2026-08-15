@@ -18,28 +18,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsApplicable(Compilation compilation) => compilation.GetTypeByMetadataName(Constants.ILog.FullTypeName) != null;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
-        private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.GetName() is "GetLogger"
+        private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.Is("GetLogger")
                                                                                          && node.Expression is IdentifierNameSyntax i
                                                                                          && i.GetName().EndsWith("LogManager", StringComparison.Ordinal);
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
+            var node = (InvocationExpressionSyntax)context.Node;
 
-            if (node.Parent is InvocationExpressionSyntax s)
+            var arguments = node.ArgumentList.Arguments;
+
+            if (arguments.Count is 1 && node.Expression is MemberAccessExpressionSyntax maes && IsLogManagerGetLoggerCall(maes))
             {
-                var arguments = s.ArgumentList.Arguments;
+                var argument = arguments[0];
 
-                if (arguments.Count is 1 && IsLogManagerGetLoggerCall(node))
+                if (argument.IsString(context.SemanticModel) is false)
                 {
-                    var argument = arguments[0];
-
-                    if (argument.IsString(context.SemanticModel) is false)
-                    {
-                        ReportDiagnostics(context, Issue(context.ContainingSymbol?.Name, argument));
-                    }
+                    ReportDiagnostics(context, Issue(context.ContainingSymbol?.Name, argument));
                 }
             }
         }

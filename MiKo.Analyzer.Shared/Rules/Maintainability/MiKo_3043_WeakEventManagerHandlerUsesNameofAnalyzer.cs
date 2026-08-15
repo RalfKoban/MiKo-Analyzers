@@ -16,56 +16,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
-        private Diagnostic[] AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
+        private Diagnostic[] AnalyzeIssue(InvocationExpressionSyntax invocation, ISymbol method)
         {
-            var name = node.GetName();
-
-            switch (name)
+            if (invocation.Is("WeakEventManager", "AddHandler") || invocation.Is("WeakEventManager", "RemoveHandler"))
             {
-                case "AddHandler":
-                case "RemoveHandler":
+                var arguments = invocation.ArgumentList.Arguments;
+
+                if (arguments.Count >= 2)
                 {
-                    if (node.Parent is InvocationExpressionSyntax invocation)
+                    var argument = arguments[1];
+
+                    if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
                     {
-                        var typeName = invocation.GetIdentifierName();
-
-                        if (typeName is "WeakEventManager")
-                        {
-                            var arguments = invocation.ArgumentList.Arguments;
-
-                            if (arguments.Count >= 2)
-                            {
-                                var argument = arguments[1];
-
-                                if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
-                                {
-                                    return new[] { Issue(method.Name, argument) };
-                                }
-                            }
-                        }
+                        return new[] { Issue(method.Name, argument) };
                     }
-
-                    break;
                 }
             }
 
             return Array.Empty<Diagnostic>();
         }
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
-
             var methodSymbol = context.GetEnclosingMethod();
 
             if (methodSymbol is null)
             {
-                // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
+                // nameof() is also a InvocationExpressionSyntax, so assignments of lists etc. may cause an NRE to be thrown
                 return;
             }
 
+            var node = (InvocationExpressionSyntax)context.Node;
             var issues = AnalyzeIssue(node, methodSymbol);
 
             if (issues.Length > 0)

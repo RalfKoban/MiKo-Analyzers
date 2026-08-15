@@ -59,9 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentListSyntax UpdatedSyntax(MemberAccessExpressionSyntax syntax, ArgumentListSyntax args)
         {
-            var methodName = syntax.GetName();
-
-            switch (methodName)
+            switch (syntax.GetName())
             {
                 case "Fail":
                 case "Inconclusive":

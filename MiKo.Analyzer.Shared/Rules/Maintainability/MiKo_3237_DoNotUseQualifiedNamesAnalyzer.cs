@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQualifiedName, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool HasIssue(MemberAccessExpressionSyntax node, in SyntaxNodeAnalysisContext context)
         {
@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private void AnalyzeQualifiedName(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is MemberAccessExpressionSyntax node && HasIssue(node, context))
             {

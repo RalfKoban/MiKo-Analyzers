@@ -14,18 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
-        private static bool NodeHasIssue(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
+        private static bool NodeHasIssue(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.GetName() != "WaitOne")
+            if (node.Expression is MemberAccessExpressionSyntax maes && maes.Is("WaitOne"))
             {
-                return false;
-            }
-
-            if (node.Parent is InvocationExpressionSyntax i)
-            {
-                var arguments = i.ArgumentList.Arguments;
+                var arguments = node.ArgumentList.Arguments;
                 var argumentsCount = arguments.Count;
 
                 if (argumentsCount > 0)
@@ -41,14 +36,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         }
                     }
                 }
+
+                return true;
             }
 
-            return true;
+            return false;
         }
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
+            var node = (InvocationExpressionSyntax)context.Node;
 
             if (NodeHasIssue(node, context.SemanticModel))
             {
@@ -56,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (methodSymbol is null)
                 {
-                    // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
+                    // nameof() is also a InvocationExpression, so assignments of lists etc. may cause an NRE to be thrown
                     return;
                 }
 

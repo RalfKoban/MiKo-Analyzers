@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool HasIssue(MemberAccessExpressionSyntax member)
         {
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 && name.IsOnSameLineAs(expression) is false;
         }
 
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is MemberAccessExpressionSyntax member && HasIssue(member))
             {

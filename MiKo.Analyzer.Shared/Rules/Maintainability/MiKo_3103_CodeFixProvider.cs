@@ -48,9 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected virtual Guid CreateGuid() => System.Guid.NewGuid();
 
-        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
-                                                            && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                            && m.GetName() is nameof(ToString);
+        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m && m.Is(nameof(ToString));
 
         private static InvocationExpressionSyntax GuidParse(ExpressionSyntax literal) => Invocation(nameof(System.Guid), nameof(System.Guid.Parse), Argument(literal));
 

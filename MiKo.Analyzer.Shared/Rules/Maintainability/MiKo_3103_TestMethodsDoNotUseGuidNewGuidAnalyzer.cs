@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -35,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var symbolName = symbol.Name;
 
             return symbol.GetSyntax()
-                         .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Expression.GetName() is nameof(Guid) && _.GetName() is nameof(Guid.NewGuid))
+                         .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.Is(nameof(Guid), nameof(Guid.NewGuid)))
                          .Select(_ => Issue(symbolName, _));
         }
     }

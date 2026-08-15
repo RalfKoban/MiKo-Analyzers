@@ -31,26 +31,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
                                                                                  && node.Expression is IdentifierNameSyntax invokedType
                                                                                  && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
 
-        private static bool IsFixableAssertionForLinqCall(InvocationExpressionSyntax invocation)
-        {
-            if (invocation.GetIdentifierName() is "Is")
-            {
-                switch (invocation.GetName())
-                {
-                    case "EqualTo":
-                    case "Zero":
-                        return true;
-                }
-            }
-
-            return false;
-        }
+        private static bool IsFixableAssertionForLinqCall(InvocationExpressionSyntax invocation) => invocation.Is("Is", "EqualTo") || invocation.Is("Is", "Zero");
 
         private static bool HasIssue(MemberAccessExpressionSyntax expression, out SyntaxToken token)
         {
@@ -70,26 +57,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is MemberAccessExpressionSyntax maes)
+            if (context.Node is InvocationExpressionSyntax invocation)
             {
-                var issues = AnalyzeSimpleMemberAccessExpression(maes);
+                var issues = AnalyzeInvocationExpression(invocation);
 
                 ReportDiagnostics(context, issues);
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node)
+        private IEnumerable<Diagnostic> AnalyzeInvocationExpression(InvocationExpressionSyntax node)
         {
-            if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
+            if (node.Expression is MemberAccessExpressionSyntax maes && IsAssertionMethod(maes))
             {
-                var arguments = methodCall.ArgumentList.Arguments;
+                var arguments = node.ArgumentList.Arguments;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 for (int index = 0, argumentsCount = arguments.Count; index < argumentsCount; index++)
                 {
-                    var issue = AnalyzeArgument(node, arguments[index], arguments);
+                    var issue = AnalyzeArgument(maes, arguments[index], arguments);
 
                     if (issue != null)
                     {
@@ -121,16 +108,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         case "That" when arguments.Count >= 2:
                         {
-                            var expression = arguments[1].Expression;
-
-                            switch (expression)
+                            switch (arguments[1].Expression)
                             {
-                                case InvocationExpressionSyntax ai when IsFixableAssertionForLinqCall(ai):
-                                    // we can only fix "Assert.That(xyz.Count(), Is.EqualTo(42)"
-                                    return Issue(token);
-
-                                case MemberAccessExpressionSyntax am when am.GetName() is "Zero":
-                                    // we can only fix "Assert.That(xyz.Count(), Is.Zero"
+                                case InvocationExpressionSyntax ai when IsFixableAssertionForLinqCall(ai): // we can only fix "Assert.That(xyz.Count(), Is.EqualTo(42)"
+                                case MemberAccessExpressionSyntax am when am.Is("Zero"): // we can only fix "Assert.That(xyz.Count(), Is.Zero"
                                     return Issue(token);
                             }
 

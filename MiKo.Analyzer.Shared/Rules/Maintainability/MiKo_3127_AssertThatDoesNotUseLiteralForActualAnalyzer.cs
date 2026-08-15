@@ -22,13 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         // Otherwise, when we would register for the SimpleMemberAccessExpression, the argument would not belong to that access (it belongs to the invocation), and therefore it will be ignored by Visual Studio.
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
-        private static bool IsAssertThat(InvocationExpressionSyntax node) => node.Expression is MemberAccessExpressionSyntax maes && IsAssertThat(maes);
-
-        private static bool IsAssertThat(MemberAccessExpressionSyntax node) => node.GetIdentifierName() is "Assert" && node.GetName() is "That";
-
         private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is InvocationExpressionSyntax invocation && IsAssertThat(invocation))
+            if (context.Node is InvocationExpressionSyntax invocation && invocation.Is("Assert", "That"))
             {
                 var issue = AnalyzeInvocationExpression(invocation, context.SemanticModel);
 

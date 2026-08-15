@@ -48,9 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static async Task<ExpressionStatementSyntax> ConvertAsync(ExpressionStatementSyntax statement, Document document, CancellationToken cancellationToken)
         {
             var shouldNode = statement.GetFluentAssertionShouldNode();
-            var shouldName = shouldNode.GetName();
 
-            var assertThat = shouldName is Constants.FluentAssertions.ShouldBeEquivalentTo
+            var assertThat = shouldNode.Is(Constants.FluentAssertions.ShouldBeEquivalentTo)
                              ? ConvertShouldBeEquivalentTo(shouldNode)
                              : await ConvertShouldAsync(shouldNode, document, cancellationToken).ConfigureAwait(false);
 

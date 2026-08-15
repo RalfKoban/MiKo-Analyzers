@@ -31,13 +31,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
-        private Diagnostic[] AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
+        private Diagnostic[] AnalyzeIssue(InvocationExpressionSyntax node, ISymbol method)
         {
-            if (node.Parent is InvocationExpressionSyntax i && Names.Contains(node.GetName()))
+            if (Names.Contains(node.GetName()))
             {
-                var argument = i.ArgumentList?.Arguments.FirstOrDefault(_ => _.Expression.IsKind(SyntaxKind.NumericLiteralExpression));
+                var argument = node.ArgumentList?.Arguments.FirstOrDefault(_ => _.Expression.IsKind(SyntaxKind.NumericLiteralExpression));
 
                 if (argument != null)
                 {
@@ -48,18 +48,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Array.Empty<Diagnostic>();
         }
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
-
             var methodSymbol = context.GetEnclosingMethod();
 
             if (methodSymbol is null)
             {
-                // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
+                // nameof() is also a InvocationExpressionSyntax, so assignments of lists etc. may cause an NRE to be thrown
                 return;
             }
 
+            var node = (InvocationExpressionSyntax)context.Node;
             var issues = AnalyzeIssue(node, methodSymbol);
 
             if (issues.Length > 0)

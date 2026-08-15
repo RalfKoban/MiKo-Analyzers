@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsXUnitAssertTrueMethod(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.GetName() is "True" && node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() is "Assert")
+            if (node.Is("Assert", "True") && node.Expression is IdentifierNameSyntax invokedType)
             {
                 var symbol = invokedType.GetTypeSymbol(semanticModel);
 

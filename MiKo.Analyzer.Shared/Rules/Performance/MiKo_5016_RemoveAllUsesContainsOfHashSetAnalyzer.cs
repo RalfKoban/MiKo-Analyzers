@@ -27,15 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             foreach (var node in syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
             {
-                var name = node.GetName();
-
-                if (name != nameof(List<object>.RemoveAll))
+                if (node.Is(nameof(List<object>.RemoveAll)) is false)
                 {
                     continue;
                 }
 
                 // inspect for 'Contains' inside lambda or method group
-                foreach (var maes in node.Parent.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.GetName() is nameof(Enumerable.Contains)))
+                foreach (var maes in node.Parent.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.Is(nameof(Enumerable.Contains))))
                 {
                     if (semanticModel is null)
                     {

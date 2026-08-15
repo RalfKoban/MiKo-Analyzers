@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             var mockName = ins.GetName();
 
                             // no arguments, so check for a 'Verifiable' call on the same mock object
-                            return nodes.Where(_ => _.GetName() is Constants.Moq.Verifiable && _.Parent is InvocationExpressionSyntax)
+                            return nodes.Where(_ => _.Is(Constants.Moq.Verifiable) && _.Parent is InvocationExpressionSyntax)
                                         .SelectMany(_ => _.DescendantNodes<MemberAccessExpressionSyntax>())
                                         .Any(_ => _.Expression is IdentifierNameSyntax e && e.GetName() == mockName);
                         }
