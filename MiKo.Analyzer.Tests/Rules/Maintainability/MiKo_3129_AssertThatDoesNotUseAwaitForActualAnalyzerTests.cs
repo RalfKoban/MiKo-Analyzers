@@ -100,6 +100,55 @@ namespace Bla
 ");
 
         [Test]
+        public void Code_gets_fixed_for_test_method_with_awaited_method_call_as_expression_body()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public async Task SomeTest() => Assert.That(await DoSomethingAsync(), Is.EqualTo(4711));
+
+        private Task<int> DoSomethingAsync() => Task.FromResult(42);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public async Task SomeTest()
+        {
+            var awaitedResult = await DoSomethingAsync();
+
+            Assert.That(awaitedResult, Is.EqualTo(4711));
+        }
+
+        private Task<int> DoSomethingAsync() => Task.FromResult(42);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_test_method_with_awaited_method_call()
         {
             const string OriginalCode = @"
@@ -204,7 +253,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_test_method_with_awaited_method_call_as_expression_body()
+        public void Code_gets_fixed_for_test_method_with_awaited_method_call_and_other_calls_before()
         {
             const string OriginalCode = @"
 using System;
@@ -218,7 +267,12 @@ namespace Bla
     public class TestMe
     {
         [Test]
-        public async Task SomeTest() => Assert.That(await DoSomethingAsync(), Is.EqualTo(4711));
+        public async Task SomeTest()
+        {
+            const int Expected = 4711;
+
+            Assert.That(await DoSomethingAsync(), Is.EqualTo(Expected));
+        }
 
         private Task<int> DoSomethingAsync() => Task.FromResult(42);
     }
@@ -239,9 +293,11 @@ namespace Bla
         [Test]
         public async Task SomeTest()
         {
+            const int Expected = 4711;
+
             var awaitedResult = await DoSomethingAsync();
 
-            Assert.That(awaitedResult, Is.EqualTo(4711));
+            Assert.That(awaitedResult, Is.EqualTo(Expected));
         }
 
         private Task<int> DoSomethingAsync() => Task.FromResult(42);
