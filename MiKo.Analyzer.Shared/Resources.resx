@@ -5127,6 +5127,18 @@ This leads to confusing failure messages that show the wrong value as "expected"
   <data name="MiKo_3128_Title" xml:space="preserve">
     <value>Test methods should be marked as tests</value>
   </data>
+  <data name="MiKo_3129_CodeFixTitle" xml:space="preserve">
+    <value>Move awaited call out of assertion</value>
+  </data>
+  <data name="MiKo_3129_Description" xml:space="preserve">
+    <value>Assertions should only compare already-available values. Awaiting an expression directly inside 'Assert.That' mixes the asynchronous operation with the assertion itself, which makes the code harder to read and follow.</value>
+  </data>
+  <data name="MiKo_3129_MessageFormat" xml:space="preserve">
+    <value>Do not await actual value inside assertion</value>
+  </data>
+  <data name="MiKo_3129_Title" xml:space="preserve">
+    <value>Assertions should not await the actual value</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

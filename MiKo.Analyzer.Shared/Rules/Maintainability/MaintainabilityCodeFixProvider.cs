@@ -373,6 +373,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        /// <summary>
+        /// Creates a local variable declaration statement with an initializer and the <c>var</c> keyword as type.
+        /// </summary>
+        /// <param name="variableName">
+        /// The name of the variable.
+        /// </param>
+        /// <param name="value">
+        /// The initial value of the variable.
+        /// </param>
+        /// <returns>
+        /// The local declaration statement syntax node.
+        /// </returns>
+        protected static LocalDeclarationStatementSyntax LocalVariable(string variableName, ExpressionSyntax value)
+        {
+            // in Roslyn, 'var' is no special syntax kind or predefined type, it is simply an IdentifierNameSyntax with the identifier text "var"
+            var typeSyntax = IdentifierName("var");
+
+            return LocalVariable(typeSyntax, variableName, value);
+        }
+
 #pragma warning disable CA1021
         /// <summary>
         /// Creates a local variable declaration statement.
