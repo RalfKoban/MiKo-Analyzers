@@ -14635,6 +14635,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move awaited call out of assertion.
+        /// </summary>
+        internal static string MiKo_3129_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3129_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions should only compare already-available values. Awaiting an expression directly inside &apos;Assert.That&apos; mixes the asynchronous operation with the assertion itself, which makes the code harder to read and follow..
+        /// </summary>
+        internal static string MiKo_3129_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3129_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not await actual value inside assertion.
+        /// </summary>
+        internal static string MiKo_3129_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3129_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions should not await the actual value.
+        /// </summary>
+        internal static string MiKo_3129_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3129_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
