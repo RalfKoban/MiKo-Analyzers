@@ -787,7 +787,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var method = methods[index];
 
-                    if (method.MethodKind == kind)
+                    if (method.MethodKind == kind && method.IsGenerated() is false)
                     {
                         yield return method;
                     }
@@ -2656,6 +2656,17 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
         }
+
+        /// <summary>
+        /// Determines whether a method is generated.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is generated; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsGenerated(this IMethodSymbol value) => value != null && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
         /// <summary>
         /// Determines whether a type is generated.
