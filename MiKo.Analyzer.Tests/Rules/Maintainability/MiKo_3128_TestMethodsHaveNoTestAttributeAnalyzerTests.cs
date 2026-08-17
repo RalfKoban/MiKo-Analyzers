@@ -24,6 +24,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_generated_method() => No_issue_is_reported_for(@"
+using System;
+
+public partial class App : System.Windows.Application
+{
+    [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(""PresentationBuildTasks"", ""10.0.11.0"")]
+    public void InitializeComponent()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_method_marked_as_test() => No_issue_is_reported_for(@"
 using System;
 
