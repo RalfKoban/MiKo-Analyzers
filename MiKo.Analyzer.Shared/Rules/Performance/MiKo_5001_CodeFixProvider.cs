@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var condition = CreateCondition(expression);
 
             // nest call in block
-            var block = SyntaxFactory.Block(SyntaxFactory.ExpressionStatement(call));
+            var block = SyntaxFactory.Block(Statement(call));
 
             return SyntaxFactory.IfStatement(condition, block);
         }

@@ -14671,6 +14671,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside condition.
+        /// </summary>
+        internal static string MiKo_3130_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3130_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Assert.Fail&apos; should not be invoked inside an &apos;if&apos; statement. Instead, &apos;Assert.That&apos; should be invoked asserting the condition of the &apos;if&apos; statement..
+        /// </summary>
+        internal static string MiKo_3130_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3130_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside condition.
+        /// </summary>
+        internal static string MiKo_3130_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3130_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside condition.
+        /// </summary>
+        internal static string MiKo_3130_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3130_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

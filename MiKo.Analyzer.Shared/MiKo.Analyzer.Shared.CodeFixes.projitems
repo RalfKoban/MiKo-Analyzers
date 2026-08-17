@@ -238,6 +238,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3127_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3128_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3129_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3130_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3201_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3202_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3203_CodeFixProvider.cs" />

@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arrowClause = argument.FirstAncestor<ArrowExpressionClauseSyntax>();
             var method = arrowClause.FirstAncestor<MethodDeclarationSyntax>();
 
-            var updatedAssertion = SyntaxFactory.ExpressionStatement(arrowClause.Expression.ReplaceNode(argument, argument.WithExpression(IdentifierName(VariableName))));
+            var updatedAssertion = Statement(arrowClause.Expression.ReplaceNode(argument, argument.WithExpression(IdentifierName(VariableName))));
 
             return root.ReplaceNode(method, method.WithoutExpressionBody()
                                                   .WithBody(SyntaxFactory.Block(addedLocalVariable, updatedAssertion)));
