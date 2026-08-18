@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -35,8 +36,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var whenTrue = ifStatement.Statement;
 
                 var belowIf = whenTrue.DescendantNodesAndSelf().OfType<StatementSyntax>().Any(_ => _.IsEquivalentTo(assertFailStatement));
+                var isTrue = belowIf is false;
 
-                var assert = AssertThat(Argument(ifStatement.Condition), Is(belowIf ? "False" : "True"), invocation.ArgumentList.Arguments, 0);
+                var condition = ifStatement.Condition;
+
+                if (condition is PrefixUnaryExpressionSyntax unary && unary.IsKind(SyntaxKind.LogicalNotExpression))
+                {
+                    // we are not interested in the unary not condition, so we have to switch both the condition and the 'Is' part
+                    condition = unary.Operand;
+                    isTrue = !isTrue;
+                }
+
+                var assert = AssertThat(Argument(condition), Is(isTrue ? "True" : "False"), invocation.ArgumentList.Arguments, 0);
                 var assertStatement = Statement(assert).WithTriviaFrom(ifStatement);
 
                 if (belowIf)
