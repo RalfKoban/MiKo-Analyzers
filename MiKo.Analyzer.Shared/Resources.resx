@@ -5140,16 +5140,16 @@ This leads to confusing failure messages that show the wrong value as "expected"
     <value>Assertions should not await the actual value</value>
   </data>
   <data name="MiKo_3130_CodeFixTitle" xml:space="preserve">
-    <value>Do not call 'Assert.Fail' inside condition</value>
+    <value>Do not call 'Assert.Fail' inside 'if' statement</value>
   </data>
   <data name="MiKo_3130_Description" xml:space="preserve">
     <value>'Assert.Fail' should not be invoked inside an 'if' statement. Instead, 'Assert.That' should be invoked asserting the condition of the 'if' statement.</value>
   </data>
   <data name="MiKo_3130_MessageFormat" xml:space="preserve">
-    <value>Do not call 'Assert.Fail' inside condition</value>
+    <value>Do not call 'Assert.Fail' inside 'if' statement</value>
   </data>
   <data name="MiKo_3130_Title" xml:space="preserve">
-    <value>Do not call 'Assert.Fail' inside condition</value>
+    <value>Do not call 'Assert.Fail' inside an 'if' statement</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>

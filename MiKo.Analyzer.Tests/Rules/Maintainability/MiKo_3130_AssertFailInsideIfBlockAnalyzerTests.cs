@@ -47,8 +47,8 @@ namespace Bla
         {
             switch (comparison)
             {
-                case StringComparison.Ordinal) break;
-                case StringComparison.OrdinalIgnoreCase) break;
+                case StringComparison.Ordinal: break;
+                case StringComparison.OrdinalIgnoreCase: break;
                 default:
                     Assert.Fail(""some failure"");
                     break;
@@ -300,6 +300,104 @@ namespace Bla
         }
 
         [Test]
+        public void Code_gets_fixed_for_Assert_Fail_as_only_statement_in_else_statement_with_no_block_as_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest(int value)
+        {
+            if (value is 42)
+                Assert.That(value, Is.EqualTo(42));
+            else
+                Assert.Fail(""some failure"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest(int value)
+        {
+            Assert.That(value is 42, Is.True, ""some failure"");
+            Assert.That(value, Is.EqualTo(42));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Assert_Fail_as_only_statement_in_else_block_with_no_block_as_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest(int value)
+        {
+            if (value is 42)
+                Assert.That(value, Is.EqualTo(42));
+            else
+            {
+                Assert.Fail(""some failure"");
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest(int value)
+        {
+            Assert.That(value is 42, Is.True, ""some failure"");
+            Assert.That(value, Is.EqualTo(42));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_Assert_Fail_as_only_statement_in_else_statement()
         {
             const string OriginalCode = @"
@@ -339,8 +437,8 @@ namespace Bla
         [Test]
         public void SomeTest(int value)
         {
-            Assert.That(value, Is.EqualTo(42));
             Assert.That(value is 42, Is.True, ""some failure"");
+            Assert.That(value, Is.EqualTo(42));
         }
     }
 }
@@ -391,8 +489,8 @@ namespace Bla
         [Test]
         public void SomeTest(int value)
         {
-            Assert.That(value, Is.EqualTo(42));
             Assert.That(value is 42, Is.True, ""some failure"");
+            Assert.That(value, Is.EqualTo(42));
         }
     }
 }
@@ -445,8 +543,8 @@ namespace Bla
         {
             var value = 0815;
 
-            Assert.That(value, Is.EqualTo(42));
             Assert.That(value is 42, Is.True, ""some failure"");
+            Assert.That(value, Is.EqualTo(42));
         }
     }
 }
@@ -501,8 +599,8 @@ namespace Bla
         {
             var value = 0815;
 
-            Assert.That(value, Is.EqualTo(42));
             Assert.That(value is 42, Is.True, ""some failure"");
+            Assert.That(value, Is.EqualTo(42));
         }
     }
 }

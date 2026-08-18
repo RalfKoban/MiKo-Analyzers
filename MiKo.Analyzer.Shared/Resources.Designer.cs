@@ -14671,7 +14671,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside condition.
+        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside &apos;if&apos; statement.
         /// </summary>
         internal static string MiKo_3130_CodeFixTitle {
             get {
@@ -14689,7 +14689,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside condition.
+        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside &apos;if&apos; statement.
         /// </summary>
         internal static string MiKo_3130_MessageFormat {
             get {
@@ -14698,7 +14698,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside condition.
+        ///   Looks up a localized string similar to Do not call &apos;Assert.Fail&apos; inside an &apos;if&apos; statement.
         /// </summary>
         internal static string MiKo_3130_Title {
             get {

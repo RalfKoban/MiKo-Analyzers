@@ -37,17 +37,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var belowIf = whenTrue.DescendantNodesAndSelf().OfType<StatementSyntax>().Any(_ => _.IsEquivalentTo(assertFailStatement));
 
                 var assert = AssertThat(Argument(ifStatement.Condition), Is(belowIf ? "False" : "True"), invocation.ArgumentList.Arguments, 0);
-                var assertStatement = Statement(assert);
+                var assertStatement = Statement(assert).WithTriviaFrom(ifStatement);
 
-                if (belowIf is false && whenTrue is BlockSyntax block)
+                if (belowIf)
                 {
-                    // copy the statements from the 'true' block as we still need them, add the assertion as last item
-                    var allStatements = block.Statements.Add(assertStatement).Select(_ => _.WithIndentation()).ToSyntaxList();
-
-                    return root.ReplaceNode(ifStatement, allStatements.Replace(allStatements[0], allStatements[0].WithTriviaFrom(ifStatement)));
+                    return root.ReplaceNode(ifStatement, assertStatement);
                 }
 
-                return root.ReplaceNode(ifStatement, assertStatement.WithTriviaFrom(ifStatement));
+                if (whenTrue is BlockSyntax block)
+                {
+                    // copy the statements from the 'true' block as we still need them
+                    var allStatements = block.Statements.Select(_ => _.WithIndentation()).ToSyntaxList()
+                                             .Insert(0, assertStatement); // place assert first
+
+                    return root.ReplaceNode(ifStatement, allStatements);
+                }
+
+                return root.ReplaceNode(ifStatement, new[] { assertStatement, whenTrue });
             }
 
             return root;
