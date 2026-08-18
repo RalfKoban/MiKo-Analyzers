@@ -1391,20 +1391,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsEnum(this IsPatternExpressionSyntax value, SemanticModel semanticModel) => value.Expression.IsEnum(semanticModel);
 
         /// <summary>
-        /// Determines whether a member access expression represents an enum access.
-        /// </summary>
-        /// <param name="value">
-        /// The member access expression to check.
-        /// </param>
-        /// <param name="semanticModel">
-        /// The semantic model to use for analysis.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the expression represents an enum access; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsEnum(this MemberAccessExpressionSyntax value, SemanticModel semanticModel) => value.Expression.IsEnum(semanticModel);
-
-        /// <summary>
         /// Determines whether an expression syntax represents an enum value.
         /// </summary>
         /// <param name="value">
@@ -1420,12 +1406,43 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is MemberAccessExpressionSyntax maes)
             {
-                return maes.IsEnum(semanticModel);
+                return maes.IsEnumMember(semanticModel);
             }
 
             var type = value.GetTypeSymbol(semanticModel);
 
             return type.IsEnum();
+        }
+
+        /// <summary>
+        /// Determines whether a member access expression represents an enum check.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression to check.
+        /// </param>
+        /// <param name="semanticModel">
+        /// The semantic model to use for analysis.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents an enum check; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsEnumMember(this MemberAccessExpressionSyntax value, SemanticModel semanticModel) => value.Name is IdentifierNameSyntax && value.Expression.IsEnum(semanticModel);
+
+        /// <summary>
+        /// Determines whether a member access expression represents an enum check.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression to check.
+        /// </param>
+        /// <param name="semanticModel">
+        /// The semantic model to use for analysis.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents an enum check; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsEnumMember(this ExpressionSyntax value, SemanticModel semanticModel)
+        {
+            return value is MemberAccessExpressionSyntax maes && maes.IsEnumMember(semanticModel);
         }
 
         /// <summary>
