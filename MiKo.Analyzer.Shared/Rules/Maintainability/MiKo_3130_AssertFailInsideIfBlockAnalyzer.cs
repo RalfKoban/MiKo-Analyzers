@@ -18,7 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
+        {
+            if (ReferencesNUnit(context.Compilation))
+            {
+                context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
+            }
+        }
 
         private static bool HasIssue(InvocationExpressionSyntax assertFail)
         {
