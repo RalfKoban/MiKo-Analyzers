@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 570 rules that are currently provided by the analyzer.
+The following tables list all the 571 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -471,6 +471,7 @@ The following tables list all the 570 rules that are currently provided by the a
 |[MiKo_3127](/Documentation/MiKo_3127.md)|Assertions should not swap 'actual' and 'expected' values|&#x2713;|&#x2713;|
 |[MiKo_3128](/Documentation/MiKo_3128.md)|Test methods should be marked as tests|&#x2713;|&#x2713;|
 |[MiKo_3129](/Documentation/MiKo_3129.md)|Assertions should not await the actual value|&#x2713;|&#x2713;|
+|[MiKo_3130](/Documentation/MiKo_3130.md)|Do not call 'Assert.Fail' inside an 'if' statement|&#x2713;|&#x2713;|
 |[MiKo_3201](/Documentation/MiKo_3201.md)|Invert if statements in short methods|&#x2713;|&#x2713;|
 |[MiKo_3202](/Documentation/MiKo_3202.md)|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |[MiKo_3203](/Documentation/MiKo_3203.md)|Invert if-continue statements when followed by single line|&#x2713;|&#x2713;|

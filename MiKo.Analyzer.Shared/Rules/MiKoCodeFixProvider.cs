@@ -700,6 +700,17 @@ namespace MiKoSolutions.Analyzers.Rules
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
         }
 
+        /// <summary>
+        /// Gets a statement with the given expression.
+        /// </summary>
+        /// <param name="expression">
+        /// The expression to use as statement.
+        /// </param>
+        /// <returns>
+        /// The statement with the given expression.
+        /// </returns>
+        protected static ExpressionStatementSyntax Statement(ExpressionSyntax expression) => SyntaxFactory.ExpressionStatement(expression);
+
 //// ncrunch: rdi off
 
         protected virtual bool IsApplicable(in ImmutableArray<Diagnostic> issues) => issues.Any();

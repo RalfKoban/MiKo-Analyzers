@@ -96,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var statement = arrowClause.HasReturnValue()
                                             ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
-                                            : SyntaxFactory.ExpressionStatement(updatedInvocation);
+                                            : Statement(updatedInvocation);
 
                             return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(localDeclaration, ifStatement, statement));
                         }
@@ -309,7 +309,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var clauseStatement = arrowClause.HasReturnValue()
                                       ? (StatementSyntax)SyntaxFactory.ReturnStatement(expressionSyntax)
-                                      : SyntaxFactory.ExpressionStatement(expressionSyntax);
+                                      : Statement(expressionSyntax);
 
                 return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(localDeclaration, ifStatement, clauseStatement));
             }
@@ -380,12 +380,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ExpressionStatementSyntax AssignmentStatement(AssignmentExpressionSyntax assignment, ExpressionSyntax expression)
         {
-            return SyntaxFactory.ExpressionStatement(assignment.WithRight(expression));
+            return Statement(assignment.WithRight(expression));
         }
 
         private static ExpressionStatementSyntax AssignmentStatement(VariableDeclaratorSyntax declarator, ExpressionSyntax expression)
         {
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, IdentifierName(declarator.Identifier), expression));
+            return Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, IdentifierName(declarator.Identifier), expression));
         }
 
         private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> callback)

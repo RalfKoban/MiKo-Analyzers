@@ -1350,13 +1350,21 @@ namespace MiKoSolutions.Analyzers
         {
             var attributes = value.GetAttributes();
 
-            if (attributes.Length is 0)
+            if (attributes.IsEmpty)
             {
                 return false;
             }
 
-            // the sets do not contain fully qualified names, so we check for names only to save time
-            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
+            foreach (var attribute in attributes)
+            {
+                // the sets do not contain fully qualified names, so we check for names only to save time
+                if (attributeNames.Contains(attribute.AttributeClass?.Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -1608,7 +1616,7 @@ namespace MiKoSolutions.Analyzers
 
             var fullName = value.ToString();
 
-            if (fullName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+            if (fullName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.Ordinal))
             {
                 return true;
             }
@@ -1623,7 +1631,7 @@ namespace MiKoSolutions.Analyzers
                     var implementedInterface = interfaces[i];
                     var fullInterfaceName = implementedInterface.ToString();
 
-                    if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+                    if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.Ordinal))
                     {
                         return true;
                     }
@@ -2996,7 +3004,7 @@ namespace MiKoSolutions.Analyzers
                         return true;
                     }
 
-                    if (ns.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                    if (ns.FullyQualifiedName().StartsWith("System.Linq", StringComparison.Ordinal))
                     {
                         return true;
                     }

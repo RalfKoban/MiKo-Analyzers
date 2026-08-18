@@ -155,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (exceptionIdentifier.IsNullOrEmpty())
             {
-                return SyntaxFactory.ExpressionStatement(expression).WithTriviaFrom(tryStatement);
+                return Statement(expression).WithTriviaFrom(tryStatement);
             }
 
             return LocalVariable(exceptionType, exceptionIdentifier, expression).WithLeadingTriviaFrom(tryStatement);
@@ -223,7 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return SyntaxFactory.ExpressionStatement(AssertThat(arguments.ToArray()));
+            return Statement(AssertThat(arguments.ToArray()));
         }
 
         private static BlockSyntax Block(IEnumerable<StatementSyntax> statements, int spaces)
