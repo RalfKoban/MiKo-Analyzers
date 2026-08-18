@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case PrefixUnaryExpressionSyntax unary when unary.Operand is LiteralExpressionSyntax:
                     case LiteralExpressionSyntax _:
-                    case MemberAccessExpressionSyntax maes when maes.IsEnum(semanticModel):
+                    case MemberAccessExpressionSyntax maes when maes.IsEnumMember(semanticModel):
                         return Issue(expression);
                 }
             }

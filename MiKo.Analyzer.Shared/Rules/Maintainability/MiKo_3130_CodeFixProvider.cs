@@ -20,14 +20,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken) => Task.FromResult(syntax);
 
-        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
-            var updatedRoot = GetUpdatedSyntaxRoot(root, syntax, issue);
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-            return Task.FromResult(updatedRoot);
+            var updatedRoot = GetUpdatedSyntaxRoot(root, syntax, issue, semanticModel);
+
+            return updatedRoot;
         }
 
-        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, Diagnostic issue, SemanticModel semanticModel)
         {
             var node = root.FindNode(issue.Location.SourceSpan);
 
@@ -36,18 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var whenTrue = ifStatement.Statement;
 
                 var belowIf = whenTrue.DescendantNodesAndSelf().OfType<StatementSyntax>().Any(_ => _.IsEquivalentTo(assertFailStatement));
-                var isTrue = belowIf is false;
 
-                var condition = ifStatement.Condition;
+                var updatedArguments = UpdateArguments(ifStatement.Condition, belowIf, semanticModel);
 
-                if (condition is PrefixUnaryExpressionSyntax unary && unary.IsKind(SyntaxKind.LogicalNotExpression))
-                {
-                    // we are not interested in the unary not condition, so we have to switch both the condition and the 'Is' part
-                    condition = unary.Operand;
-                    isTrue = !isTrue;
-                }
-
-                var assert = AssertThat(Argument(condition), Is(isTrue ? "True" : "False"), invocation.ArgumentList.Arguments, 0);
+                var assert = AssertThat(updatedArguments.Condition, updatedArguments.Constraint, invocation.ArgumentList.Arguments, 0);
                 var assertStatement = Statement(assert).WithTriviaFrom(ifStatement);
 
                 if (belowIf)
@@ -69,5 +63,81 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return root;
         }
+
+        private static (ArgumentSyntax Condition, ArgumentSyntax Constraint) UpdateArguments(ExpressionSyntax condition, in bool belowIf, SemanticModel semanticModel)
+        {
+            switch (condition)
+            {
+                case PrefixUnaryExpressionSyntax unary when unary.IsKind(SyntaxKind.LogicalNotExpression):
+                {
+                    // we are not interested in the unary not condition, so we have to switch both the condition and the 'Is' part
+                    return (Argument(unary.Operand), GetConstraintForFalse(belowIf));
+                }
+
+                case BinaryExpressionSyntax binary:
+                {
+                    var left = binary.Left;
+                    var right = binary.Right;
+
+                    switch (binary.Kind())
+                    {
+                        case SyntaxKind.EqualsExpression when right is LiteralExpressionSyntax l: return (Argument(left), GetConstraint(belowIf, l));
+                        case SyntaxKind.EqualsExpression when left is LiteralExpressionSyntax l: return (Argument(right), GetConstraint(belowIf, l));
+                        case SyntaxKind.EqualsExpression when right.IsEnumMember(semanticModel): return (Argument(left), GetConstraint(belowIf, right));
+                        case SyntaxKind.EqualsExpression when left.IsEnumMember(semanticModel): return (Argument(right), GetConstraint(belowIf, left));
+
+                        case SyntaxKind.NotEqualsExpression when right is LiteralExpressionSyntax l: return (Argument(left), GetConstraint(!belowIf, l));
+                        case SyntaxKind.NotEqualsExpression when left is LiteralExpressionSyntax l: return (Argument(right), GetConstraint(!belowIf, l));
+                        case SyntaxKind.NotEqualsExpression when right.IsEnumMember(semanticModel): return (Argument(left), GetConstraint(!belowIf, right));
+                        case SyntaxKind.NotEqualsExpression when left.IsEnumMember(semanticModel): return (Argument(right), GetConstraint(!belowIf, left));
+
+                        case SyntaxKind.IsExpression when right.IsEnum(semanticModel): return (Argument(left), GetConstraint(belowIf, right));
+                    }
+
+                    break;
+                }
+
+                case IsPatternExpressionSyntax isPattern:
+                {
+                    var expression = isPattern.Expression;
+
+                    switch (isPattern.Pattern)
+                    {
+                        case ConstantPatternSyntax c when c.Expression is LiteralExpressionSyntax l:
+                            return (Argument(expression), GetConstraint(belowIf, l));
+
+                        case UnaryPatternSyntax u when u.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax l:
+                            return (Argument(expression), GetConstraint(!belowIf, l));
+
+                        case UnaryPatternSyntax u when u.Pattern is ConstantPatternSyntax c && c.Expression.IsEnumMember(semanticModel):
+                            return (Argument(expression), GetConstraint(!belowIf, c.Expression));
+                    }
+
+                    break;
+                }
+            }
+
+            return (Argument(condition), GetConstraintForTrue(belowIf));
+        }
+
+        private static ArgumentSyntax GetConstraint(in bool inverse, LiteralExpressionSyntax literal)
+        {
+            switch (literal.Kind())
+            {
+                case SyntaxKind.TrueLiteralExpression: return GetConstraintForTrue(inverse);
+                case SyntaxKind.FalseLiteralExpression: return GetConstraintForFalse(inverse);
+                case SyntaxKind.NullLiteralExpression: return GetConstraintForNull(inverse);
+                default:
+                    return GetConstraint(inverse, (ExpressionSyntax)literal);
+            }
+        }
+
+        private static ArgumentSyntax GetConstraint(in bool inverse, ExpressionSyntax expression) => inverse ? Is("Not", "EqualTo", expression) : Is("EqualTo", expression);
+
+        private static ArgumentSyntax GetConstraintForTrue(in bool inverse) => Is(inverse ? "False" : "True");
+
+        private static ArgumentSyntax GetConstraintForFalse(in bool inverse) => Is(inverse ? "True" : "False");
+
+        private static ArgumentSyntax GetConstraintForNull(in bool inverse) => inverse ? Is("Not", "Null") : Is("Null");
     }
 }
