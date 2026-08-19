@@ -206,6 +206,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("describes a function that is called", "is called");
             yield return new Pair("describes a function that's called", "is called");
             yield return new Pair("describes a function which is called", "is called");
+
+            yield return new Pair("thats ", string.Empty);
+            yield return new Pair("whiches ", string.Empty);
         }
     }
 }
