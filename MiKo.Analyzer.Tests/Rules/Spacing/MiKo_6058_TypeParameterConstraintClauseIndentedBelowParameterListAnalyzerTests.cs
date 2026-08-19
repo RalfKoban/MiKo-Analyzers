@@ -14,6 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private static readonly string[] Types = ["class", "interface", "record", "struct"];
 
         [Test]
+        public void No_issue_is_reported_on_delegate() => No_issue_is_reported_for(@"
+public delegate void SomeDelegate<T>(T type) where T : struct;
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_without_type_parameter_constraint_clause() => No_issue_is_reported_for(@"
 public class TestMe
 {
