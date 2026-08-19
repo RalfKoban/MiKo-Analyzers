@@ -143,6 +143,7 @@ namespace MiKoSolutions.Analyzers
                 case StructDeclarationSyntax s: return s.ConstraintClauses;
                 case MethodDeclarationSyntax b: return b.ConstraintClauses;
                 case LocalFunctionStatementSyntax f: return f.ConstraintClauses;
+                case DelegateDeclarationSyntax d: return d.ConstraintClauses;
 
                 default:
                     return EmptyConstraintClauses;
@@ -554,6 +555,7 @@ namespace MiKoSolutions.Analyzers
 
                 case MethodDeclarationSyntax b: return b.ParameterList.CloseParenToken;
                 case LocalFunctionStatementSyntax f: return f.ParameterList.CloseParenToken;
+                case DelegateDeclarationSyntax d: return d.ParameterList.CloseParenToken;
 
                 default:
                     return default;
@@ -801,7 +803,7 @@ namespace MiKoSolutions.Analyzers
                 case BaseTypeSyntax b: return b.GetTypeSymbol(semanticModel);
                 case TypeSyntax t: return t.GetTypeSymbol(semanticModel);
                 case VariableDeclarationSyntax declaration: return declaration.GetTypeSymbol(semanticModel);
-                case ParenthesizedVariableDesignationSyntax p: return p.Parent.GetTypeSymbol(semanticModel); // TODO RKN: seems we have an parenthesize around
+                case ParenthesizedVariableDesignationSyntax p: return p.Parent.GetTypeSymbol(semanticModel); // TODO RKN: seems we have a parenthesis around
                 case VariableDesignationSyntax designation: return designation.GetTypeSymbol(semanticModel);
                 case DeclarationPatternSyntax dp: return dp.Type.GetTypeSymbol(semanticModel);
                 case DeclarationExpressionSyntax de: return de.Type.GetTypeSymbol(semanticModel);
