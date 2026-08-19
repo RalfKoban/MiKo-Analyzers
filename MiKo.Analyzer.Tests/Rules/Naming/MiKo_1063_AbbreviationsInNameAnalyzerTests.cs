@@ -507,6 +507,8 @@ namespace Bla
         [TestCase("exec", "execute", "execute")]
         [TestCase("exec", "execute", "executing")]
         [TestCase("exec", "execute", "execution")]
+        [TestCase("expr", "expression", "express")]
+        [TestCase("Expr", "Expression", "Express")]
         [TestCase("ext", "extension", "extend")]
         [TestCase("ext", "extension", "extends")]
         [TestCase("ext", "extension", "extension")]

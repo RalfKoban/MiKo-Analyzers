@@ -204,6 +204,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("evnt", "event"),
                                                       new Pair("evt", "event"),
                                                       new Pair("exec", "execute"),
+                                                      new Pair("expr", "expression"),
                                                       new Pair("ext", "extension"),
                                                       new Pair("fnc", "function"),
                                                       new Pair("frm", "form"),
@@ -454,6 +455,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Evnt", "Event"),
                                                           new Pair("Evt", "Event"),
                                                           new Pair("Exec", "Execute"),
+                                                          new Pair("Expr", "Expression"),
                                                           new Pair("Ext", "Extension"),
                                                           new Pair("Fnc", "Function"),
                                                           new Pair("Frm", "Form"),
@@ -806,6 +808,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("uthorizationori", "uthori"), // 'auth' within 'authorization' / 'authorize'
                                                       new Pair("valuationuat", "valuat"), // 'eval' within 'evaluate' / 'evaluation'
                                                       new Pair("xecuteu", "xecu"), // 'exec' within 'execute' / 'executing' / executable' / 'execution'
+                                                      new Pair("xpressioness", "xpress"), // 'expr' within 'express' / 'expression'
                                                       new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
                                                       new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
                                                       new Pair("ynamicamic", "ynamic"), // 'dyn' within 'dynamic'
