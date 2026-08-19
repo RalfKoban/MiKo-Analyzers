@@ -182,6 +182,8 @@ public delegate void TestMe();
         [TestCase("Delegate which is the signature of", "Encapsulates a method that has the same signature as the")]
         [TestCase("The delegate is the signature of", "Encapsulates a method that has the same signature as the")]
         [TestCase("This delegate is the signature of", "Encapsulates a method that has the same signature as the")]
+        [TestCase("Delegate that passes values to the", "Encapsulates a method that passes values to the")]
+        [TestCase("Delegate which passes values to the", "Encapsulates a method that passes values to the")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = @"
