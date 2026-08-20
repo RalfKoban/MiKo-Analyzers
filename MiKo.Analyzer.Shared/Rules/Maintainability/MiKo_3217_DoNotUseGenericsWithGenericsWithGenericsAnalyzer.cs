@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,29 +39,52 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
+            List<Diagnostic> issues = null;
+
             if (symbol.ReturnsVoid is false)
             {
-                if (HasIssue(symbol.ReturnType))
+                var returnType = symbol.ReturnType;
+
+                if (HasIssue(returnType))
                 {
-                    yield return IssueOnType(symbol.ReturnType, symbol);
+                    issues = new List<Diagnostic>(1);
+
+                    issues.Add(IssueOnType(returnType, symbol));
                 }
             }
 
-            foreach (var parameter in symbol.Parameters)
+            var parameters = symbol.Parameters;
+            var parametersLength = parameters.Length;
+
+            if (parametersLength > 0)
             {
-                if (HasIssue(parameter.Type))
+                for (var index = 0; index < parametersLength; index++)
                 {
-                    yield return IssueOnType(parameter.Type, parameter);
+                    var parameter = parameters[index];
+                    var parameterType = parameter.Type;
+
+                    if (HasIssue(parameterType))
+                    {
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>(1);
+                        }
+
+                        issues.Add(IssueOnType(parameterType, parameter));
+                    }
                 }
             }
+
+            return (IEnumerable<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
         {
-            if (HasIssue(symbol.Type))
-            {
-                yield return IssueOnType(symbol.Type, symbol);
-            }
+            var type = symbol.Type;
+
+            return HasIssue(type)
+                   ? new[] { IssueOnType(type, symbol) }
+                   : Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(ITypeSymbol symbol)
@@ -77,6 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case "Expression":
                     case "Predicate":
                     case nameof(Task):
+                    case nameof(ValueTuple):
                     {
                         var arguments = type.TypeArguments;
 
