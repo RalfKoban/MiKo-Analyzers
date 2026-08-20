@@ -634,6 +634,28 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_that_returns_tuple() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public (List<int> indices, List<string> names) DoSomething() => null;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_that_returns_tuple_with_generics() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public (List<int> indices, Dictionary<int, List<string>> mapping) DoSomething() => null;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3217_DoNotUseGenericsWithGenericsWithGenericsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3217_DoNotUseGenericsWithGenericsWithGenericsAnalyzer();
