@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 571 rules that are currently provided by the analyzer.
+The following tables list all the 572 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -505,6 +505,7 @@ The following tables list all the 571 rules that are currently provided by the a
 |[MiKo_3236](/Documentation/MiKo_3236.md)|Use alias instead of fully qualified names|&#x2713;|\-|
 |[MiKo_3237](/Documentation/MiKo_3237.md)|Use using directives instead of fully qualified names|&#x2713;|\-|
 |[MiKo_3238](/Documentation/MiKo_3238.md)|Avoid empty argument lists on initializers|&#x2713;|&#x2713;|
+|[MiKo_3239](/Documentation/MiKo_3239.md)|Avoid boolean parameters in attribute constructors|&#x2713;|\-|
 |[MiKo_3301](/Documentation/MiKo_3301.md)|Use lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |[MiKo_3302](/Documentation/MiKo_3302.md)|Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |[MiKo_3401](/Documentation/MiKo_3401.md)|Keep namespace hierarchies from becoming too deep|&#x2713;|\-|
