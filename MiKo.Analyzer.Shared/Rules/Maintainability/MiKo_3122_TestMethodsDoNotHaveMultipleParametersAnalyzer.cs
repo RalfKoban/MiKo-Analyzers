@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var parameterList = method.ParameterList;
 
-                if (parameterList.Parameters.Count > 2)
+                if (parameterList.Parameters.Count > 3)
                 {
                     ReportDiagnostics(context, Issue(parameterList));
                 }
