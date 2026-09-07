@@ -5518,6 +5518,16 @@ This helps improve code readability and reduces visual noise.</value>
   <data name="MiKo_3238_Title" xml:space="preserve">
     <value>Avoid empty argument lists on initializers</value>
   </data>
+  <data name="MiKo_3239_Description" xml:space="preserve">
+    <value>Attribute constructors should not accept bool parameters as they do not tell the reader what they mean at the call site.
+Expose them as named properties instead, so the intent is clear where the attribute is used.</value>
+  </data>
+  <data name="MiKo_3239_MessageFormat" xml:space="preserve">
+    <value>Change boolean parameter into named property</value>
+  </data>
+  <data name="MiKo_3239_Title" xml:space="preserve">
+    <value>Avoid boolean parameters in attribute constructors</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

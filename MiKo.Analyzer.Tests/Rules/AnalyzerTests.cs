@@ -386,7 +386,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
                                      {{description}}
 
-                                     ### Rationale behind
+                                     ## Rationale behind
 
                                      TODO
 

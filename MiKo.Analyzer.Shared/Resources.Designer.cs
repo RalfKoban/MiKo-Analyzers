@@ -15782,6 +15782,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attribute constructors should not accept bool parameters as they do not tell the reader what they mean at the call site.
+        ///Expose them as named properties instead, so the intent is clear where the attribute is used..
+        /// </summary>
+        internal static string MiKo_3239_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3239_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change boolean parameter into named property.
+        /// </summary>
+        internal static string MiKo_3239_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3239_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid boolean parameters in attribute constructors.
+        /// </summary>
+        internal static string MiKo_3239_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3239_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
