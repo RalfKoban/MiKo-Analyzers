@@ -26,7 +26,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_first() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_first() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_last() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_last() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -56,7 +56,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_multiple_logical_condition_parts_are_all_on_their_own_lines() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_multiple_logical_condition_parts_are_all_on_their_own_lines() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -75,7 +75,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_first() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_first() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -90,7 +90,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_last() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_last() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -105,7 +105,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_multiple_parenthesized_logical_condition_parts_are_all_on_multiple_lines() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_multiple_parenthesized_logical_condition_parts_are_all_on_multiple_lines() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -461,6 +461,187 @@ public class TestMe
     public string A, B;
 
     public bool Equality => (A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal))) && (B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)));
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("\r\n == null", "== null")]
+        [TestCase("== \r\n null", "== null")]
+        [TestCase("\r\n != null", "!= null")]
+        [TestCase("!= \r\n null", "!= null")]
+        [TestCase("\r\n is null", "is null")]
+        [TestCase("is \r\n null", "is null")]
+        [TestCase("\r\n is not null", "is not null")]
+        [TestCase("is \r\n not null", "is not null")]
+        [TestCase("is not \r\n null", "is not null")]
+        public void Code_gets_fixed_for_logical_condition_(string originalCondition, string fixedCondition)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty ###)
+        { }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCondition), Template.Replace("###", fixedCondition));
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_1()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null
+            && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_2()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty
+                != null
+            && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_3()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty
+                !=
+                    null
+            && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_4()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null
+            && SomeProperty
+                        .Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
 }
 ";
 
