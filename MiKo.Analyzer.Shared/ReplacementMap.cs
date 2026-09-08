@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     public sealed class ReplacementMap
     {
+        private string[] m_keys;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ReplacementMap"/> class with an identifier and the terms to replace.
         /// </summary>
@@ -90,7 +92,17 @@ namespace MiKoSolutions.Analyzers
         /// <remarks>
         /// The keys do not need to contain all keys of <see cref="Pairs"/>. Instead, they can contain the most common sub-sequences of those keys to optimize searching.
         /// </remarks>
-        public string[] Keys { get; set; }
+        public string[] Keys
+        {
+            get => m_keys;
+
+            set
+            {
+                m_keys = value;
+
+                KeysMinimumLength = FindMinimumLength(value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the matcher to check if a text could fit.
@@ -99,6 +111,39 @@ namespace MiKoSolutions.Analyzers
         /// A matcher to check if a text could fit.
         /// </value>
         public AhoCorasickMatcher Matcher { get; set; }
+
+        /// <summary>
+        /// Gets the minimum length of the <see cref="Keys"/> values.
+        /// </summary>
+        /// <value>
+        /// The minimum length.
+        /// </value>
+        public int KeysMinimumLength { get; private set; }
+
+        private static int FindMinimumLength(in ReadOnlySpan<string> source)
+        {
+            var sourceLength = source.Length;
+
+            if (sourceLength <= 0)
+            {
+                return 0;
+            }
+
+            var minimum = int.MaxValue;
+
+            for (var index = 0; index < sourceLength; index++)
+            {
+                var length = source[index].Length;
+
+                if (length < minimum)
+                {
+                    minimum = length;
+                }
+            }
+
+            return minimum;
+        }
+
 #pragma warning restore CA1819
     }
 }

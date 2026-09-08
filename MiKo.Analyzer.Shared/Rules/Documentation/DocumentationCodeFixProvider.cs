@@ -389,17 +389,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </remarks>
         protected static T Comment<T>(T syntax, ReplacementMap replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
-            var lookupTerms = replacementMap.Keys;
-
-            if (lookupTerms.Length is 0)
-            {
-                // nothing to replace
-                return syntax;
-            }
-
-            var minimumLength = MinimumLength(lookupTerms);
-
-            var textMap = CreateReplacementTextMap(minimumLength, lookupTerms, replacementMap, firstWordAdjustment);
+            var textMap = CreateReplacementTextMap(replacementMap, firstWordAdjustment);
 
             if (textMap is null)
             {
@@ -417,32 +407,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
 //// ncrunch: no coverage start
-            int MinimumLength(in ReadOnlySpan<string> source)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(ReplacementMap map, FirstWordAdjustment adjustment)
             {
-                var sourceLength = source.Length;
+                var lookupPhrases = replacementMap.Keys;
 
-                if (sourceLength <= 0)
+                if (lookupPhrases.Length is 0)
                 {
-                    return 0;
+                    // nothing to replace
+                    return null;
                 }
 
-                var minimum = int.MaxValue;
-
-                for (var index = 0; index < sourceLength; index++)
-                {
-                    var length = source[index].Length;
-
-                    if (length < minimum)
-                    {
-                        minimum = length;
-                    }
-                }
-
-                return minimum;
-            }
-
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> lookupPhrases, ReplacementMap map, FirstWordAdjustment adjustment)
-            {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
                 foreach (var text in syntax.DescendantNodes<XmlTextSyntax>(SyntaxKind.XmlText))
@@ -462,7 +436,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var originalText = token.Text;
 
-                        if (originalText.Length < minLength)
+                        if (originalText.Length < replacementMap.KeysMinimumLength)
                         {
                             // length is smaller than minimum provided, so no replacement possible
                             continue;
