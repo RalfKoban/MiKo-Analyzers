@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic[] AnalyzeAttribute(TypeDeclarationSyntax node)
+        private Diagnostic[] AnalyzeAttribute(ClassDeclarationSyntax node)
         {
             List<Diagnostic> issues = null;
 
