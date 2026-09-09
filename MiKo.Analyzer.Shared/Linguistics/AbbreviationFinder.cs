@@ -243,6 +243,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("lvw", "listView"),
                                                       new Pair("man", "manager"),
                                                       new Pair("max", "maximum"),
+                                                      new Pair("mem", "memory"),
                                                       new Pair("meth", "method"),
                                                       new Pair("mgmt", "management"),
                                                       new Pair("mgr", "manager"),
@@ -493,6 +494,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Lvw", "ListView"),
                                                           new Pair("Man", "Manager"),
                                                           new Pair("Max", "Maximum"),
+                                                          new Pair("Mem", "Memory"),
                                                           new Pair("Meth", "Method"),
                                                           new Pair("Mgmt", "Management"),
                                                           new Pair("Mgr", "Manager"),
@@ -677,6 +679,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
                                                       new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
+                                                      new Pair("emoryber", "ember"), // 'mem' within 'member'
+                                                      new Pair("emoryory", "emory"), // 'mem' within 'memory'
                                                       new Pair("eometrygraph", "eograph"), // 'geo' within 'geography'
                                                       new Pair("eometrymetr", "eometr"), // 'geo' within 'geometry'
                                                       new Pair("eparatora", "eparator"), // combination of 'sep' and 'sepa'
