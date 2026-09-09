@@ -48,7 +48,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (nameToInspect.IndexOfAny("AEIOUaeiou".AsSpan()) < 0)
             {
-                return AllowedNames.Contains(nameToInspect.ToString()) is false;
+                var allowedName = name;
+
+                if (name.Length != nameToInspect.Length)
+                {
+                    allowedName = nameToInspect.ToString();
+                }
+
+                return AllowedNames.Contains(allowedName) is false;
             }
 
             return false;
