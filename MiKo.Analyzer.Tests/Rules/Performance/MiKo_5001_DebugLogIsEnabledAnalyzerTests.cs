@@ -1595,6 +1595,69 @@ namespace log4net
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_when_log_contains_invocation_with_lambda()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        private List<object> _list = null;
+
+        public TestMe()
+        {
+            Log.DebugFormat(""{0} invoked by {1}"", this, _list.Aggregate("""", (current, element) => current + (element.ToString() + ""; "")));
+        }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        private List<object> _list = null;
+
+        public TestMe()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.DebugFormat(""{0} invoked by {1}"", this, _list.Aggregate("""", (current, element) => current + (element.ToString() + ""; "")));
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();
