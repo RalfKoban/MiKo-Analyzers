@@ -1487,6 +1487,114 @@ namespace log4net
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_when_there_is_a_preceding_comment()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+            // some comment
+            Log.Debug(""something"");
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+            // some comment
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""something"");
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_there_is_a_pragma_directive()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+#pragma warning disable CA1305 // Specify IFormatProvider
+            Log.Debug(""something"");
+#pragma warning restore CA1305
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+#pragma warning disable CA1305 // Specify IFormatProvider
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""something"");
+            }
+#pragma warning restore CA1305
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();

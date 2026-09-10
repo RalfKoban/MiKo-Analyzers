@@ -88,8 +88,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             var condition = CreateCondition(expression);
 
-            // nest call in block
-            var block = SyntaxFactory.Block(Statement(call));
+            // nest call in block (and remove comments or other trivia as they get placed around the 'if' statement
+            var block = SyntaxFactory.Block(Statement(call.WithoutTrivia()));
 
             return SyntaxFactory.IfStatement(condition, block);
         }
