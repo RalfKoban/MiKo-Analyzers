@@ -22,7 +22,22 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         public override string FixableDiagnosticId => "MiKo_5001";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            var invocation = syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
+
+            switch (invocation?.Parent)
+            {
+                case ExpressionStatementSyntax statement:
+                    return statement;
+
+                case LambdaExpressionSyntax lambda:
+                    return lambda.Parent;
+
+                default:
+                    return null;
+            }
+        }
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
@@ -42,20 +57,19 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (syntax is ExpressionStatementSyntax statement)
             {
-                var lambda = statement.FirstDescendant<LambdaExpressionSyntax>();
-
-                if (lambda != null)
-                {
-                    // fix inside lambda
-                    var ifStatement = CreateIfStatement(lambda.ExpressionBody);
-
-                    // nest call in block
-                    var block = SyntaxFactory.Block(ifStatement);
-
-                    return syntax.ReplaceNode(lambda, lambda.WithBody(block));
-                }
-
                 return CreateIfStatement(statement);
+            }
+
+            // probably a lambda
+            if (syntax?.FirstChild<LambdaExpressionSyntax>() is LambdaExpressionSyntax lambda)
+            {
+                // fix inside lambda
+                var ifStatement = CreateIfStatement(lambda.ExpressionBody);
+
+                // nest call in block
+                var block = SyntaxFactory.Block(ifStatement);
+
+                return syntax.ReplaceNode(lambda, lambda.WithBody(block));
             }
 
             return syntax;
@@ -63,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax)
         {
-            var parent = syntax.Parent;
+            var parent = syntax?.Parent;
 
             if (parent is null)
             {
