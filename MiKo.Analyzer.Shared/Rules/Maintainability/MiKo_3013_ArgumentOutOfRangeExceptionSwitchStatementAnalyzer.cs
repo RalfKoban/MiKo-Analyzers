@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var switchSection = node.GetEnclosing<SwitchSectionSyntax>();
+            var switchSection = node.GetEnclosingWithinMethod<SwitchSectionSyntax>();
 
             // we are in the 'default:' clause if there is a 'default' switch label in the specific switch section
             if (switchSection != null && switchSection.DescendantNodes<DefaultSwitchLabelSyntax>().Any())

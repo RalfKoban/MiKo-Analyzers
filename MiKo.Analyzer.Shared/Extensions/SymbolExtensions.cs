@@ -568,7 +568,7 @@ namespace MiKoSolutions.Analyzers
         /// A collection of argument syntaxes that contains arguments for the specified invocation.
         /// </returns>
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol value, string invocation) => value.GetAssignmentsVia(invocation)
-                                                                                                                                           .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                                                           .Select(_ => _.GetEnclosingWithinMethod<InvocationExpressionSyntax>())
                                                                                                                                            .Select(_ => _.ArgumentList.Arguments)
                                                                                                                                            .FirstOrDefault(_ => _.Count > 0);
 

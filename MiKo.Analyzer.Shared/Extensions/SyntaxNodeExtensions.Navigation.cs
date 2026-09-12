@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var node in value.AllDescendantNodes())
             {
                 if (node.IsKind(kind))
@@ -97,26 +98,27 @@ namespace MiKoSolutions.Analyzers
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var ancestor in value.Ancestors())
             {
-                if (ancestor is T t)
+                switch (ancestor)
                 {
-                    yield return t;
-                }
+                    case T t:
+                        yield return t;
 
-                if (ancestor is DocumentationCommentTriviaSyntax)
-                {
-                    yield break;
+                        break;
+
+                    case DocumentationCommentTriviaSyntax _:
+                        yield break;
                 }
             }
         }
 
         /// <summary>
-        /// Gets all ancestors of the specified syntax node that are within the scope of a method, local function, or property.
+        /// Gets all ancestors of the specified syntax node that are within the scope of a method, local function, property or event.
         /// </summary>
         /// <param name="value">
         /// The syntax node whose ancestors to retrieve.
         /// </param>
         /// <returns>
-        /// A sequence that contains all ancestors of the specified type that are within the method, local function, or property scope.
+        /// A sequence that contains all ancestors of the specified type that are within the method, local function, property or event scope.
         /// </returns>
         internal static IEnumerable<SyntaxNode> AncestorsWithinMethods(this SyntaxNode value)
         {
@@ -127,7 +129,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     case BaseMethodDeclarationSyntax _: // found the surrounding method
                     case LocalFunctionStatementSyntax _: // found the surrounding local function
-                    case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
+                    case BasePropertyDeclarationSyntax _: // found the surrounding property or event, so we already skipped the getters or setters
                     case TypeDeclarationSyntax _: // found the surrounding type
                         yield break;
                 }
@@ -137,7 +139,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/> and are within the scope of a method, local function, or property.
+        /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/> and are within the scope of a method, local function, property or event.
         /// </summary>
         /// <typeparam name="T">
         /// The type of nodes to return.
@@ -146,25 +148,16 @@ namespace MiKoSolutions.Analyzers
         /// The syntax node whose ancestors to retrieve.
         /// </param>
         /// <returns>
-        /// A sequence that contains all ancestors of the specified type that are within the method, local function, or property scope.
+        /// A sequence that contains all ancestors of the specified type that are within the method, local function, property or event scope.
         /// </returns>
         internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
         {
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var ancestor in value.Ancestors())
+            foreach (var ancestor in value.AncestorsWithinMethods())
             {
                 if (ancestor is T t)
                 {
                     yield return t;
-                }
-
-                switch (ancestor)
-                {
-                    case BaseMethodDeclarationSyntax _: // found the surrounding method
-                    case LocalFunctionStatementSyntax _: // found the surrounding local function
-                    case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
-                    case TypeDeclarationSyntax _: // found the surrounding type
-                        yield break;
                 }
             }
         }
@@ -591,7 +584,7 @@ namespace MiKoSolutions.Analyzers
                 return m;
             }
 
-            return GetEnclosingMethod(value.Node, value.SemanticModel);
+            return value.Node.GetEnclosingMethod(value.SemanticModel);
         }
 
         /// <summary>
@@ -676,6 +669,28 @@ namespace MiKoSolutions.Analyzers
         /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
         /// </returns>
         internal static SyntaxNode GetEnclosingSyntaxNode(this XmlNodeSyntax value) => value?.FirstAncestor<DocumentationCommentTriviaSyntax>().GetEnclosingSyntaxNode();
+
+        /// <summary>
+        /// Gets the nearest enclosing node of type <typeparamref name="T"/> that contains the specified syntax node.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose enclosing node to retrieve.
+        /// </param>
+        /// <returns>
+        /// The enclosing node of the specified type, or <see langword="null"/> if no such node exists.
+        /// </returns>
+        internal static T GetEnclosingWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode
+        {
+            if (value is T t)
+            {
+                return t;
+            }
+
+            return value.AncestorsWithinMethods<T>().FirstOrDefault();
+        }
 
         /// <summary>
         /// Gets the last child node of the specified syntax node that is of type <typeparamref name="T"/>.

@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var identifierName = syntax.Token.ValueText;
 
-            var ifStatement = syntax.GetEnclosing<IfStatementSyntax>();
+            var ifStatement = syntax.GetEnclosingWithinMethod<IfStatementSyntax>();
 
             if (ifStatement != null)
             {
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     ?? await FindRelatedTypeAsync(ifStatement.Else, identifierName, document, cancellationToken).ConfigureAwait(false);
             }
 
-            var switchStatement = syntax.GetEnclosing<SwitchStatementSyntax>();
+            var switchStatement = syntax.GetEnclosingWithinMethod<SwitchStatementSyntax>();
 
             if (switchStatement != null)
             {

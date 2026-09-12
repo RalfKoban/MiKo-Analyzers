@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // it might be a local variable inside a switch, so we have to find out which one
-            if (syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression is IdentifierNameSyntax identifier)
+            if (syntax.GetEnclosingWithinMethod<SwitchStatementSyntax>()?.Expression is IdentifierNameSyntax identifier)
             {
                 var arguments = GetUpdatedArgumentListSyntaxForIdentifier(syntax, identifier);
 

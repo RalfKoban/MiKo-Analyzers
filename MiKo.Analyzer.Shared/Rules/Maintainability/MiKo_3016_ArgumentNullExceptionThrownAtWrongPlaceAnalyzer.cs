@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (identifier.Parent is SwitchStatementSyntax && identifier.GetName() == parameterName)
             {
-                var switchSection = node.GetEnclosing<SwitchSectionSyntax>();
+                var switchSection = node.GetEnclosingWithinMethod<SwitchSectionSyntax>();
 
                 if (switchSection != null && switchSection.DescendantNodes<CaseSwitchLabelSyntax>().Any(_ => _.Value.IsKind(SyntaxKind.NullLiteralExpression)))
                 {

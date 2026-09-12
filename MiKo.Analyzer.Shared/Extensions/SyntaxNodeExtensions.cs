@@ -363,7 +363,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             // most probably it's a if/else, but it might be a switch statement as well
-            var condition = value.GetRelatedIfStatement()?.Condition ?? value.GetEnclosing<SwitchStatementSyntax>()?.Expression;
+            var condition = value.GetRelatedIfStatement()?.Condition ?? value.GetEnclosingWithinMethod<SwitchStatementSyntax>()?.Expression;
 
             return condition;
         }
@@ -1718,13 +1718,13 @@ namespace MiKoSolutions.Analyzers
         {
             while (true)
             {
-                var ifStatement = value.GetEnclosing<IfStatementSyntax>();
+                var ifStatement = value.GetEnclosingWithinMethod<IfStatementSyntax>();
 
                 if (ifStatement != null)
                 {
                     if (ifStatement.IsCallTo(methodName))
                     {
-                        var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
+                        var elseStatement = value.GetEnclosingWithinMethod<ElseClauseSyntax>();
 
                         if (elseStatement != null && ifStatement.Equals(elseStatement.Parent))
                         {
@@ -1741,7 +1741,7 @@ namespace MiKoSolutions.Analyzers
                 else
                 {
                     // maybe an else block
-                    var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
+                    var elseStatement = value.GetEnclosingWithinMethod<ElseClauseSyntax>();
 
                     if (elseStatement != null)
                     {

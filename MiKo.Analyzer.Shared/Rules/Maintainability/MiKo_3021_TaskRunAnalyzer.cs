@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var taskRunExpression in taskRunExpressions)
             {
-                var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
+                var expression = taskRunExpression.GetEnclosingWithinMethod<InvocationExpressionSyntax>();
                 var node = expression.GetEnclosing(EnclosingInvocationSyntaxKinds);
                 var syntaxKind = node?.Kind();
 

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var invocation in symbol.GetSyntax()
                                              .DescendantNodes<MemberAccessExpressionSyntax>(_ => _ is MemberAccessExpressionSyntax maes && maes.Is(nameof(Task), nameof(Task.FromResult)))
-                                             .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>()))
+                                             .Select(_ => _.GetEnclosingWithinMethod<InvocationExpressionSyntax>()))
             {
                 switch (invocation.Parent?.Kind())
                 {
