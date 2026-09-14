@@ -30,6 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return false;
             }
 
+            if (name.FirstAncestor<UsingDirectiveSyntax>() is UsingDirectiveSyntax directive && directive.Alias != null)
+            {
+                return false; // aliases using full qualified types are allowed
+            }
+
             var identifier = name.FirstDescendant<IdentifierNameSyntax>();
             var type = identifier.GetTypeSymbol(context.SemanticModel);
 
@@ -39,11 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case TypeKind.Struct: // nested structs are allowed
                 case TypeKind.Enum: // enums are allowed
                     return false;
-            }
-
-            if (name.FirstAncestor<UsingDirectiveSyntax>() is UsingDirectiveSyntax directive && directive.Alias != null)
-            {
-                return false; // aliases using full qualified types are allowed
             }
 
             return true;
