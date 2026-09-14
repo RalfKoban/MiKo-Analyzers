@@ -205,6 +205,26 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_element_access_on_property() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe Nested { get; }
+
+        public byte[] Data { get; }
+
+        public void DoSomething(TestMe item)
+        {
+            var b = item.Nested.Nested.Nested.Data[0];
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_fully_qualified_namespace_with_type_in_nameof() => An_issue_is_reported_for(@"
 using System;
 
@@ -280,7 +300,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_expression_with__fully_qualified_name_with_2_namespaces() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_expression_with_fully_qualified_name_with_2_namespaces() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -304,6 +324,26 @@ namespace Bla
     public class TestMe
     {
         public string DoSomething(bool flag) => flag ? System.IO.File.ReadAllText(""some path"") : string.Empty;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_element_access_on_property_with_fully_qualified_name_with_2_namespaces() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla.Blubb
+{
+    public class TestMe
+    {
+        public static TestMe Nested { get; }
+
+        public static byte[] Data { get; }
+
+        public void DoSomething()
+        {
+            var b = Bla.Blubb.Nested.Nested.Nested.Data[0];
+        }
     }
 }
 ");
