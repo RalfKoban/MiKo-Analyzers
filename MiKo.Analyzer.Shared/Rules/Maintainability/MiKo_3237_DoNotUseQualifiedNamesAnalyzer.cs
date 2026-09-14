@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case AssignmentExpressionSyntax _:
                     case BinaryExpressionSyntax _:
                     case ConditionalExpressionSyntax _:
+                    case ElementAccessExpressionSyntax _:
                     case InvocationExpressionSyntax _: // we have an invocation, so this is no namespace
                     case IsPatternExpressionSyntax _:
                     case ParenthesizedExpressionSyntax _:
