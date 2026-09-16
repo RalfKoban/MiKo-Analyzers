@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token of the specified kind.
         /// </returns>
-        internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
+        internal static SyntaxToken AsToken(this in SyntaxKind value) => SyntaxFactory.Token(value);
 
         /// <summary>
         /// Gets all comments associated with the syntax token.

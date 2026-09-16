@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         /// <returns>
         /// A collection of method symbols ordered by their source code location.
         /// </returns>
-        protected static IList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.GetLineSpan().Path, kind);
+        protected static IList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, in MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.GetLineSpan().Path, kind);
 
         /// <summary>
         /// Gets a collection of method symbols of the specified kind from a specific file path, ordered by their location in the source file.
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         /// <returns>
         /// A collection of method symbols from the specified file path, ordered by their source code location.
         /// </returns>
-        protected static IList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, MethodKind kind = MethodKind.Ordinary) => type.GetMethods(kind)
+        protected static IList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, in MethodKind kind = MethodKind.Ordinary) => type.GetMethods(kind)
                                                                                                                                                             .Where(_ => _.GetLineSpan().Path == path)
                                                                                                                                                             .OrderBy(_ => _.GetLineSpan().StartLinePosition)
                                                                                                                                                             .ToList();

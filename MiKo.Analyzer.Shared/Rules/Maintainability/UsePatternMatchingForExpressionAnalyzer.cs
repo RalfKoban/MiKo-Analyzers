@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private readonly SyntaxKind m_syntaxKind;
         private readonly LanguageVersion m_languageVersion;
 
-        protected UsePatternMatchingForExpressionAnalyzer(string diagnosticId, in SyntaxKind syntaxKind, LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, (SymbolKind)(-1))
+        protected UsePatternMatchingForExpressionAnalyzer(string diagnosticId, in SyntaxKind syntaxKind, in LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, (SymbolKind)(-1))
         {
             m_syntaxKind = syntaxKind;
             m_languageVersion = languageVersion;

@@ -26,6 +26,6 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the specified bit is set in the value; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasSet(this FirstWordAdjustment value, in FirstWordAdjustment flag) => (value & flag) == flag;
+        public static bool HasSet(this in FirstWordAdjustment value, in FirstWordAdjustment flag) => (value & flag) == flag;
     }
 }

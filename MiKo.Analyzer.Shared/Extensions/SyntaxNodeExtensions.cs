@@ -876,7 +876,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax tree's language version is greater than or equal to the expected version; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
+        internal static bool HasMinimumCSharpVersion(this SyntaxTree value, in LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)value.Options).LanguageVersion;
 

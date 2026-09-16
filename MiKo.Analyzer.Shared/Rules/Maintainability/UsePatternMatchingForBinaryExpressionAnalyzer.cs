@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UsePatternMatchingForBinaryExpressionAnalyzer : UsePatternMatchingForExpressionAnalyzer
     {
-        protected UsePatternMatchingForBinaryExpressionAnalyzer(string diagnosticId, in SyntaxKind syntaxKind, LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, syntaxKind, languageVersion)
+        protected UsePatternMatchingForBinaryExpressionAnalyzer(string diagnosticId, in SyntaxKind syntaxKind, in LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, syntaxKind, languageVersion)
         {
         }
 
