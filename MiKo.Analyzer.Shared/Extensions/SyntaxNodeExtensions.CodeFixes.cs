@@ -316,7 +316,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the document has at least the specified language version; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool HasMinimumCSharpVersion(this Document value, LanguageVersion wantedVersion) => value.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
+        internal static bool HasMinimumCSharpVersion(this Document value, in LanguageVersion wantedVersion) => value.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
 
         /// <summary>
         /// Asynchronously determines whether the specified <see cref="ArgumentSyntax"/> represents a constant value in the context of the given <see cref="Document"/>.

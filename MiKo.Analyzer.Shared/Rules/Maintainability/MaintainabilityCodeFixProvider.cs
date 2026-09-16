@@ -496,7 +496,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <returns>
         /// The literal expression syntax node.
         /// </returns>
-        protected static LiteralExpressionSyntax Literal(decimal value) => Literal(SyntaxFactory.Literal(value));
+        protected static LiteralExpressionSyntax Literal(in decimal value) => Literal(SyntaxFactory.Literal(value));
 
         /// <summary>
         /// Creates an integer literal expression.
