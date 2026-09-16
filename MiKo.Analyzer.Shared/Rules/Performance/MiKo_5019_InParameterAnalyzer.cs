@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool IsReadOnlyStruct(ITypeSymbol type)
         {
-            switch (type.SpecialType)
+            switch (type?.SpecialType)
             {
                 case SpecialType.System_Boolean:
                 case SpecialType.System_Char:
@@ -149,13 +149,19 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case SpecialType.System_UInt32:
                 case SpecialType.System_Int64:
                 case SpecialType.System_UInt64:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_DateTime:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
                     return true;
 
                 default:
-                    switch (type.TypeKind)
+                    switch (type?.TypeKind)
                     {
                         case TypeKind.Struct when type.IsReadOnly:
-                        case TypeKind.Enum when type is INamedTypeSymbol namedType && namedType.EnumUnderlyingType?.IsReadOnly is true:
+                        case TypeKind.Enum when type is INamedTypeSymbol namedType && IsReadOnlyStruct(namedType.EnumUnderlyingType):
                             return true;
 
                         default:

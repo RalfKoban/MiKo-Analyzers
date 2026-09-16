@@ -254,7 +254,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_gets_reported_for_enum_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_gets_reported_for_System_enum_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -264,11 +264,85 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_gets_reported_for_custom_enum_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+public enum Priority
+{
+    Low,
+    High,
+}
+
+public class TestMe
+{
+    public void DoSomething(in Priority value) { }
+}
+");
+
+        [Test]
         public void No_issue_gets_reported_for_primary_ctor_with_no_in_modifier_at_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public record TestMe(byte Value)
 {
+}
+");
+
+        [Test]
+        public void No_issue_gets_reported_for_float_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in float value) { }
+}
+");
+
+        [Test]
+        public void No_issue_gets_reported_for_double_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in double value) { }
+}
+");
+
+        [Test]
+        public void No_issue_gets_reported_for_decimal_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in decimal value) { }
+}
+");
+
+        [Test]
+        public void No_issue_gets_reported_for_DateTime_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in DateTime value) { }
+}
+");
+
+        [Test]
+        public void No_issue_gets_reported_for_IntPtr_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in IntPtr value) { }
+}
+");
+
+        [Test]
+        public void No_issue_gets_reported_for_UIntPtr_with_in_modifier_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in UIntPtr value) { }
 }
 ");
 
@@ -285,12 +359,86 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_gets_reported_for_enum_with_no_in_modifier_at_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_gets_reported_for_float_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(float value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_double_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(double value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_decimal_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(decimal value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_DateTime_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(DateTime value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_IntPtr_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(IntPtr value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_UIntPtr_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(UIntPtr value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_System_enum_with_no_in_modifier_at_parameter() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething(StringComparison value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_custom_enum_with_no_in_modifier_at_parameter() => An_issue_is_reported_for(@"
+public enum Priority
+{
+    Low,
+    High,
+}
+
+public class TestMe
+{
+    public void DoSomething(Priority value) { }
 }
 ");
 
@@ -365,6 +513,150 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_float_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(float value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in float value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_double_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(double value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in double value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_decimal_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(decimal value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in decimal value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_DateTime_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(DateTime value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in DateTime value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_IntPtr_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(IntPtr value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in IntPtr value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_UIntPtr_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(UIntPtr value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in UIntPtr value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_integer_as_parameter_on_2nd_line()
         {
             const string OriginalCode = @"
@@ -419,7 +711,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_enum_as_parameter()
+        public void Code_gets_fixed_for_System_enum_as_parameter()
         {
             const string OriginalCode = @"
 using System;
@@ -436,6 +728,38 @@ using System;
 public class TestMe
 {
     public void DoSomething(in StringComparison value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_custom_enum_as_parameter()
+        {
+            const string OriginalCode = @"
+public enum Priority
+{
+    Low,
+    High,
+}
+
+public class TestMe
+{
+    public void DoSomething(Priority value) { }
+}
+";
+
+            const string FixedCode = @"
+public enum Priority
+{
+    Low,
+    High,
+}
+
+public class TestMe
+{
+    public void DoSomething(in Priority value) { }
 }
 ";
 
