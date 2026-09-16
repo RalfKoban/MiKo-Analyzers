@@ -24,6 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol.IsOverride || symbol.IsAsync || symbol.IsExtern)
+            {
+                return false;
+            }
+
             var parameters = symbol.Parameters;
 
             if (parameters.Length is 0)
@@ -31,28 +36,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 return false;
             }
 
-            if (parameters.Length is 1 && symbol.Name.StartsWith("Analyze", StringComparison.Ordinal) && parameters[0].Name is "context")
-            {
-                return false;
-            }
-
-            if (symbol.IsOverride)
-            {
-                return false;
-            }
-
-            if (symbol.IsAsync)
-            {
-                return false;
-            }
-
-            if (symbol.IsExtern)
-            {
-                return false;
-            }
-
             if (symbol.CanBeReferencedByName)
             {
+                if (parameters.Length is 1 && symbol.Name.StartsWith("Analyze", StringComparison.Ordinal) && parameters[0].Name is "context")
+                {
+                    return false;
+                }
+
                 if (symbol.ReturnType.IsTask())
                 {
                     return false;
