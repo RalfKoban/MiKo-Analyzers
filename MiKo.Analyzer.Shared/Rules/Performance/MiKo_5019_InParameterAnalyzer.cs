@@ -46,6 +46,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 return false;
             }
 
+            if (symbol.IsExtern)
+            {
+                return false;
+            }
+
             if (symbol.CanBeReferencedByName)
             {
                 if (symbol.ReturnType.IsTask())

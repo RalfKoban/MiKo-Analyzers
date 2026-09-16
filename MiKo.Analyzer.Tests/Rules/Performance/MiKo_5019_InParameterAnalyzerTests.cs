@@ -278,6 +278,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_gets_reported_for_extern_method_with_no_in_modifier_at_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    [DllImport(""some.dll"")]
+    public static extern bool DoSomething(bool value);
+}
+");
+
+        [Test]
         public void No_issue_gets_reported_for_primary_ctor_with_no_in_modifier_at_parameter() => No_issue_is_reported_for(@"
 using System;
 
