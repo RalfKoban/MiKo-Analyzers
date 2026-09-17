@@ -2202,6 +2202,18 @@ Renaming the prefix from 'have' to 'has' makes the code grammatically correct an
   <data name="MiKo_1540_Title" xml:space="preserve">
     <value>Do not prefix local variables with 'actual'</value>
   </data>
+  <data name="MiKo_1541_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'actual' from name</value>
+  </data>
+  <data name="MiKo_1541_Description" xml:space="preserve">
+    <value>Parameters should not be prefixed with 'actual' because that term does not add any value and merely repeats what is already obvious from the surrounding code. Remove the prefix to keep names concise and easier to read.</value>
+  </data>
+  <data name="MiKo_1541_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1541_Title" xml:space="preserve">
+    <value>Do not prefix parameters with 'actual'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private static string FindBetterName(string name) => name.Length > Prefix.Length
-                                                             ? name.AsCachedBuilder().Remove(0, Prefix.Length).ToLowerCaseAt(0).ToStringAndRelease()
+                                                             ? name.AsSpan(Prefix.Length).ToLowerCaseAt(0)
                                                              : name;
     }
 }
