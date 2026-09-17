@@ -6082,6 +6082,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;actual&apos; from name.
+        /// </summary>
+        internal static string MiKo_1540_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1540_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be prefixed with &apos;actual&apos; because that term does not add any value and merely repeats what is already obvious from the surrounding code. Remove the prefix to keep names concise and easier to read..
+        /// </summary>
+        internal static string MiKo_1540_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1540_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1540_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1540_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix local variables with &apos;actual&apos;.
+        /// </summary>
+        internal static string MiKo_1540_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1540_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
