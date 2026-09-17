@@ -225,6 +225,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("img", "image"),
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
+                                                      new Pair("indiv", "individual"),
                                                       new Pair("init", "initialize"),
                                                       new Pair("inp", "input"),
                                                       new Pair("interv", "interval"),
@@ -479,6 +480,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Img", "Image"),
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
+                                                          new Pair("Indiv", "Individual"),
                                                           new Pair("Init", "Initialize"),
                                                           new Pair("Inp", "Input"),
                                                           new Pair("Interv", "Interval"),
@@ -755,6 +757,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("mplementationlement", "mplement"), // 'imp' within 'implement'
                                                       new Pair("mplementationr", "mpr"), // 'imp' within 'impress'
                                                       new Pair("ncryptypt", "ncrypt"), // 'encr' within 'encrypt'
+                                                      new Pair("ndividualidual", "ndividual"), // 'indiv' within 'individual'
+                                                      new Pair("ndividualiduat", "ndividuat"), // 'indiv' within 'individuate'
+                                                      new Pair("ndividualisibl", "ndivisibl"), // 'indiv' within 'indivisible'
+                                                      new Pair("ndividualisibil", "ndivisibil"), // 'indiv' within 'indivisibility'
+                                                      new Pair("ndividualiduum", "ndividuum"), // 'indiv' within 'individuum'
                                                       new Pair("nitializeialize", "nitialize"), // 'init' within 'initialize'
                                                       new Pair("ntaxtax", "ntax"), // 'syn' within 'syntax'
                                                       new Pair("ntervalal", "nterval"), // 'interv' within 'interval'
