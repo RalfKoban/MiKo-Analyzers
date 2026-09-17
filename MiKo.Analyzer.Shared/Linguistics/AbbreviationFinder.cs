@@ -222,6 +222,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("idents", "identifications"),
                                                       new Pair("idx", "index"),
                                                       new Pair("idxs", "indices"),
+                                                      new Pair("img", "image"),
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
                                                       new Pair("init", "initialize"),
@@ -306,6 +307,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("resp", "response"),
                                                       new Pair("rest", "restore"),
                                                       new Pair("rgn", "region"),
+                                                      new Pair("scal", "scaling"),
                                                       new Pair("sec", "security"),
                                                       new Pair("sem", "semantic"),
                                                       new Pair("sep", "separator"),
@@ -474,6 +476,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Idents", "Identifications"),
                                                           new Pair("Idx", "Index"),
                                                           new Pair("Idxs", "Indices"),
+                                                          new Pair("Img", "Image"),
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
                                                           new Pair("Init", "Initialize"),
@@ -557,6 +560,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Resp", "Response"),
                                                           new Pair("Rest", "Restore"),
                                                           new Pair("Rgn", "Region"),
+                                                          new Pair("Scal", "Scaling"),
                                                           new Pair("Sec", "Security"),
                                                           new Pair("Sel", "Selection"),
                                                           new Pair("Sem", "Semantic"),
@@ -657,6 +661,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ationati", "ati"), // 'reloc' within 'relocation' / 'relocating'
                                                       new Pair("aximumi", "axi"), // 'max' within 'maximum'
                                                       new Pair("aximumimum", "aximum"), // 'max' within 'maximum'
+                                                      new Pair("calinge", "cale"), // 'scal' within 'scale'
+                                                      new Pair("calinging", "caling"), // 'scal' within 'scaling'
                                                       new Pair("dentificationi", "denti"), // 'ident' within 'identification' / 'identifier' / 'identify' / 'identity'
                                                       new Pair("dopoint", "dopt"), // 'pt' within 'adopt'
                                                       new Pair("eclarationar", "eclar"), // 'decl' within 'declaration' / 'declare' / 'declaring'
