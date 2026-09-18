@@ -1425,8 +1425,6 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var map = new Dictionary<SyntaxToken, SyntaxToken>(1);
-
             for (var i = 0; i < textTokensCount; i++)
             {
                 var token = textTokens[i];
@@ -1444,16 +1442,11 @@ namespace MiKoSolutions.Analyzers
                 {
                     var result = text.AsSpan(0, index).ConcatenatedWith(replacement, text.AsSpan(index + phrase.Length));
 
-                    map[token] = token.WithText(result);
+                    return value.ReplaceToken(token, token.WithText(result));
                 }
             }
 
-            if (map.Count is 0)
-            {
-                return value;
-            }
-
-            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
+            return value;
         }
 
         /// <summary>
