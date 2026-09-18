@@ -410,7 +410,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                               originalName,
                                               _ =>
                                                   {
-                                                      var plural = FindPluralName(_.AsSpan(), out var singular);
+                                                      var plural = FindPluralNameCore(_, out var singular);
 
                                                       return new Pair(plural, singular);
                                                   });
@@ -653,18 +653,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <returns>
         /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
         /// </returns>
-        private static string FindPluralName(in ReadOnlySpan<char> originalName, out string singularName)
+        private static string FindPluralNameCore(string originalName, out string singularName)
         {
-            if (originalName.EndsWith('s'))
+            var originalNameSpan = originalName.AsSpan();
+
+            if (originalNameSpan.EndsWith('s'))
             {
-                singularName = originalName.ToString();
+                singularName = originalName;
 
                 var pluralName = Pluralizer.GetPluralName(singularName, StringComparison.Ordinal);
 
-                if (pluralName != null && originalName.SequenceEqual(pluralName.AsSpan()))
+                if (pluralName != null && originalNameSpan.SequenceEqual(pluralName.AsSpan()))
                 {
                     // TODO: Make singular using dedicated 'Singularizer'
-                    singularName = originalName.Slice(0, originalName.Length - 1).ToString();
+                    singularName = originalNameSpan.Slice(0, originalNameSpan.Length - 1).ToString();
 
                     return null; // seems the original name is already the plural name, so we do not report that
                 }
@@ -672,36 +674,36 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return pluralName;
             }
 
-            if (originalName.EndsWith("Map", StringComparison.OrdinalIgnoreCase)
-             || originalName.EndsWith("Batch", StringComparison.OrdinalIgnoreCase)
-             || originalName.EndsWith("Cache", StringComparison.OrdinalIgnoreCase))
+            if (originalNameSpan.EndsWith("Map", StringComparison.OrdinalIgnoreCase)
+             || originalNameSpan.EndsWith("Batch", StringComparison.OrdinalIgnoreCase)
+             || originalNameSpan.EndsWith("Cache", StringComparison.OrdinalIgnoreCase))
             {
-                singularName = originalName.ToString();
+                singularName = originalName;
 
                 return null; // seems the original name is already the plural name, so we do not report that
             }
 
-            if (originalName.Contains("sBy", StringComparison.Ordinal))
+            if (originalNameSpan.Contains("sBy", StringComparison.Ordinal))
             {
-                singularName = originalName.ToString();
+                singularName = originalName;
 
                 return null; // seems the original name is already the plural name, so we do not report that
             }
 
-            var index = originalName.IndexOfAny(Splitters);
+            var index = originalNameSpan.IndexOfAny(Splitters);
 
             if (index > 0)
             {
-                var nameToInspect = originalName.Slice(0, index);
-
-                var pluralName = FindPluralName(nameToInspect, out singularName);
+                // we need the subtext as string here
+                var nameToInspect = originalName.Substring(0, index);
+                var pluralName = FindPluralNameCore(nameToInspect, out singularName);
 
                 if (pluralName is null)
                 {
                     return null; // seems the original name is already the plural name, so we do not report that
                 }
 
-                var remainingPart = originalName.Slice(index);
+                var remainingPart = originalNameSpan.Slice(index);
 
                 singularName = singularName.ConcatenatedWith(remainingPart);
 
@@ -709,11 +711,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
             else
             {
-                var pluralName = originalName.EndsWithNumber()
-                                 ? originalName.WithoutNumberSuffix()
+                var pluralName = originalNameSpan.EndsWithNumber()
+                                 ? originalNameSpan.WithoutNumberSuffix().ToString()
                                  : originalName;
 
-                singularName = pluralName.ToString();
+                singularName = pluralName;
 
                 if (pluralName.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase))
                 {
