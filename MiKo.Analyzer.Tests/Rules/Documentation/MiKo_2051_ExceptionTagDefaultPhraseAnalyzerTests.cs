@@ -725,6 +725,46 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_by_replacing_with_exception_phrase_containing_example()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""InvalidOperationException"">
+    /// Thrown if a call went wrong.
+    /// For example, if you want to read a variable.
+    /// Or the variable lacks stuff.
+    /// </exception>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""InvalidOperationException"">
+    /// A call went wrong.
+    /// For example, you want to read a variable.
+    /// Or the variable lacks stuff.
+    /// </exception>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2051_ExceptionTagDefaultPhraseAnalyzer();
