@@ -1731,6 +1731,45 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> ends with any of the suffixes; otherwise, <see langword="false"/>.
         /// </returns>
+        public static bool EndsWithAny(this string value, string[] suffixes, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (value.HasCharacters())
+            {
+                var valueLength = value.Length;
+
+                foreach (var suffix in suffixes)
+                {
+                    if (suffix.Length > valueLength)
+                    {
+                        continue;
+                    }
+
+                    if (value.EndsWith(suffix, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to check.
+        /// </param>
+        /// <param name="suffixes">
+        /// The suffixes to check for.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="string"/> ends with any of the suffixes; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
