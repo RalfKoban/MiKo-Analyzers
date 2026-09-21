@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (pattern.PropertyPatternClause != null)
             {
-                if (pattern.FirstAncestor<IfStatementSyntax>() is IfStatementSyntax statement)
+                if (pattern.FirstAncestorWithinMethod<IfStatementSyntax>() is IfStatementSyntax statement)
                 {
                     return statement.Condition.DescendantNodes().Contains(pattern);
                 }

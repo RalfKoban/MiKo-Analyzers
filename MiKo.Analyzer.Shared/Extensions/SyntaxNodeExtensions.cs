@@ -164,7 +164,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxNode GetExceptionSwallowingNode(this ObjectCreationExpressionSyntax value, Func<SemanticModel> semanticModelCallback)
         {
-            var catchClause = value.FirstAncestorOrSelf<CatchClauseSyntax>();
+            var catchClause = value.FirstAncestorOrSelfWithinMethod<CatchClauseSyntax>();
 
             if (catchClause != null)
             {
@@ -272,7 +272,7 @@ namespace MiKoSolutions.Analyzers
                     return maes.Expression;
 
                 case MemberBindingExpressionSyntax mbes: // find parent conditional access expression as that contains the identifier
-                    return mbes.FirstAncestor<ConditionalAccessExpressionSyntax>()?.Expression;
+                    return mbes.FirstAncestorWithinMethod<ConditionalAccessExpressionSyntax>()?.Expression;
 
                 default:
                     return null;

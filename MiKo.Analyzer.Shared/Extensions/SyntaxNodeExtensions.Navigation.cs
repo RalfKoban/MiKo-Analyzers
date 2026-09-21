@@ -316,6 +316,35 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstAncestor<T>(this SyntaxNode value, ISet<SyntaxKind> kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
         /// <summary>
+        /// Gets the first ancestor of the specified syntax node that is of type <typeparamref name="T"/> and is within the scope of a method, local function, property or event.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose ancestor to retrieve.
+        /// </param>
+        /// <returns>
+        /// The first ancestor of the specified type that is within the method, local function, property or event scope, or <see langword="null"/> if no such ancestor exists.
+        /// </returns>
+        internal static T FirstAncestorWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsWithinMethods<T>().FirstOrDefault();
+
+        /// <summary>
+        /// Gets the specified syntax node itself if it is of type <typeparamref name="T"/>, otherwise gets the first ancestor of the specified syntax node that is of type <typeparamref name="T"/>
+        /// and is within the scope of a method, local function, property or event.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node to inspect, or whose ancestor to retrieve.
+        /// </param>
+        /// <returns>
+        /// The specified syntax node if it is of the specified type; otherwise, the first ancestor of the specified type that is within the method, local function, property or event scope, or <see langword="null"/> if no such ancestor exists.
+        /// </returns>
+        internal static T FirstAncestorOrSelfWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode => value is T t ? t : value.AncestorsWithinMethods<T>().FirstOrDefault();
+
+        /// <summary>
         /// Gets the first child node of the specified syntax node.
         /// </summary>
         /// <param name="value">
