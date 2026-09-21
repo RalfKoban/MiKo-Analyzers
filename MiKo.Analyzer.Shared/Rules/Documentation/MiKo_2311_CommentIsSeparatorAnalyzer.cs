@@ -28,11 +28,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<Diagnostic> issues = null;
 
-            // TODO RKN: Consider to not include all descendants, especially 'SyntaxKind.SingleLineDocumentationCommentTrivia' as inspecting documentation might take a lot of time
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var trivia in node.DescendantTrivia())
             {
-                if (trivia.IsSingleLineComment() && CommentContainsSeparator(trivia.ToString().AsSpan()))
+                // we use 'RawKind' for performance reasons as most likely, we have single line comments
+                // Note that the method 'IsSingleLineComment' got inlined here for performance reasons as invoking the method would have some remarkably costly overhead
+                if (trivia.RawKind != (uint)SyntaxKind.SingleLineCommentTrivia)
+                {
+                    continue;
+                }
+
+                if (CommentContainsSeparator(trivia.ToString().AsSpan()))
                 {
                     if (issues is null)
                     {
