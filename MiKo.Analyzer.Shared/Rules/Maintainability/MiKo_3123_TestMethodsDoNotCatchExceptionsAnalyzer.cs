@@ -22,9 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is CatchClauseSyntax catchClause)
             {
-                var method = catchClause.FirstAncestor<MethodDeclarationSyntax>();
+                var symbol = context.GetEnclosingMethod();
 
-                if (method != null && method.IsTestMethod())
+                if (symbol.IsTestMethod())
                 {
                     ReportDiagnostics(context, Issue(catchClause.CatchKeyword));
                 }

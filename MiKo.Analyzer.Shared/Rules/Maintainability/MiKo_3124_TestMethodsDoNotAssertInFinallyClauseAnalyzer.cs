@@ -27,9 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is FinallyClauseSyntax clause)
             {
-                var method = clause.FirstAncestor<MethodDeclarationSyntax>();
+                var symbol = context.GetEnclosingMethod();
 
-                if (method != null)
+                if (symbol != null)
                 {
                     var issues = clause.DescendantNodes<ExpressionStatementSyntax>()
                                        .Where(IsAssert)
