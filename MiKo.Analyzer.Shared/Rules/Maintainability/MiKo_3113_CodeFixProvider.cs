@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // find lambda
-            var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
+            var lambda = shouldNode.FirstAncestorWithinMethod<LambdaExpressionSyntax>();
 
             if (lambda != null && lambda.AncestorsWithinMethods<ExpressionStatementSyntax>().Any(_ => _ == statement))
             {
@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var expression = shouldNode.Expression.WithoutLeadingTrivia();
 
-            var invocation = shouldNode.FirstAncestor<InvocationExpressionSyntax>();
+            var invocation = shouldNode.FirstAncestorWithinMethod<InvocationExpressionSyntax>();
             var arguments = invocation.ArgumentList.Arguments;
 
             return AssertThat(expression, Is("EquivalentTo", arguments[0]), arguments, removeNameColon: true);
@@ -86,8 +86,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var expression = originalExpression.WithoutLeadingTrivia();
 
-            var constraintNode = shouldNode.FirstAncestor<MemberAccessExpressionSyntax>();
-            var invocation = constraintNode.FirstAncestor<InvocationExpressionSyntax>();
+            var constraintNode = shouldNode.FirstAncestorWithinMethod<MemberAccessExpressionSyntax>();
+            var invocation = constraintNode.FirstAncestorWithinMethod<InvocationExpressionSyntax>();
             var arguments = invocation.ArgumentList.Arguments;
 
             switch (constraintNode.GetName())
