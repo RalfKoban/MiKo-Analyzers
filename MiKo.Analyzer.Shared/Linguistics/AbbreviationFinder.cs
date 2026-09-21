@@ -157,6 +157,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ctrl", "control"),
                                                       new Pair("ctx", "context"),
                                                       new Pair("cur", "current"),
+                                                      new Pair("cycl", "cycle"),
+                                                      new Pair("cycls", "cycles"),
                                                       new Pair("db", "database"),
                                                       new Pair("ddl", "dropDownList"),
                                                       new Pair("decl", "declaration"),
@@ -211,6 +213,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("fwd", "forwarded"),
                                                       new Pair("gen", "generator"),
                                                       new Pair("geo", "geometry"),
+                                                      new Pair("gbl", "global"),
+                                                      new Pair("glb", "global"),
+                                                      new Pair("gw", "gateway"),
                                                       new Pair("hdls", "headless"),
                                                       new Pair("his", "history"),
                                                       new Pair("hist", "history"),
@@ -345,6 +350,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("val", "value"),
                                                       new Pair("var", "variable"),
                                                       new Pair("vars", "variables"),
+                                                      new Pair("velo", "velocity"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vert", "vertical"),
                                                       new Pair("vm", "viewModel"),
@@ -408,6 +414,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ctrl", "Control"),
                                                           new Pair("Ctx", "Context"),
                                                           new Pair("Cur", "Current"),
+                                                          new Pair("Cycl", "Cycle"),
+                                                          new Pair("Cycls", "Cycles"),
                                                           new Pair("Db", "Database"),
                                                           new Pair("Ddl", "DropDownList"),
                                                           new Pair("Decl", "Declaration"),
@@ -466,6 +474,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Fwd", "Forwarded"),
                                                           new Pair("Gen", "Generator"),
                                                           new Pair("Geo", "Geometry"),
+                                                          new Pair("Gbl", "Global"),
+                                                          new Pair("Glb", "Global"),
+                                                          new Pair("Gw", "Gateway"),
                                                           new Pair("Hdls", "Headless"),
                                                           new Pair("His", "History"),
                                                           new Pair("Hist", "History"),
@@ -598,6 +609,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Val", "Value"),
                                                           new Pair("Var", "Variable"),
                                                           new Pair("Vars", "Variables"),
+                                                          new Pair("Velo", "Velocity"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vert", "Vertical"),
                                                           new Pair("Vm", "ViewModel"),
@@ -686,6 +698,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("elativeat", "elat"), // 'rel' within 'relate' / 'relating'
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
+                                                      new Pair("elocitycit", "elocit"), // 'velo' within 'velocity'
                                                       new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
                                                       new Pair("emoryber", "ember"), // 'mem' within 'member'
                                                       new Pair("emoryory", "emory"), // 'mem' within 'memory'
@@ -828,6 +841,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("xpressioness", "xpress"), // 'expr' within 'express' / 'expression'
                                                       new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
                                                       new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
+                                                      new Pair("yclee", "ycle"), // 'cycl' within 'cycle'
+                                                      new Pair("ycleing", "ycling"), // 'cycl' within 'cycling'
                                                       new Pair("ynamicamic", "ynamic"), // 'dyn' within 'dynamic'
                                                       new Pair("ynchronizationhroniz", "ynchroniz"), // 'sync' within 'synchronize'
                                                       new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
