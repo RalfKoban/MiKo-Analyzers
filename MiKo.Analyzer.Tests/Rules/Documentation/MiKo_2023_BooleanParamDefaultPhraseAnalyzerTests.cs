@@ -718,7 +718,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("Whether to do something.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
         [TestCase("Suppress the whatever.", """<see langword="true"/> to suppress the whatever; otherwise, <see langword="false"/>.""")]
         [TestCase("<value>true</value>: Activates some stuff.", """<see langword="true"/> to activate some stuff; otherwise, <see langword="false"/>.""")]
         [TestCase("true: something should be done, false: anything should be done", """<see langword="true"/> to indicate that something should be done; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
@@ -753,6 +752,14 @@ public class TestMe
         [TestCase("""<see langword="true"/> if creating a <see cref="TestMe"/> should succeed, otherwise <see langword="false"/>.""", """<see langword="true"/> to indicate that creating a <see cref="TestMe"/> should succeed; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
         [TestCase("If all the items are considered.", """<see langword="true"/> to consider all the items; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
         [TestCase("Whether all the items are considered.", """<see langword="true"/> to consider all the items; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
+        [TestCase("whether the stuff does something.", """<see langword="true"/> to indicate that the stuff does something; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether the stuff does something.", """<see langword="true"/> to indicate that the stuff does something; otherwise, <see langword="false"/>.""")]
+        [TestCase("whether or not the stuff does something.", """<see langword="true"/> to indicate that the stuff does something; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether or not the stuff does something.", """<see langword="true"/> to indicate that the stuff does something; otherwise, <see langword="false"/>.""")]
+        [TestCase("whether to go online.", """<see langword="true"/> to go online; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether to go online.", """<see langword="true"/> to go online; otherwise, <see langword="false"/>.""")]
+        [TestCase("whether or not to go online.", """<see langword="true"/> to go online; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether or not to go online.", """<see langword="true"/> to go online; otherwise, <see langword="false"/>.""")]
 
         [TestCase("true to indicate that the operation succeeded, false otherwise.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
         [TestCase("true to indicate whether the operation succeeded, false otherwise.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
@@ -762,7 +769,7 @@ public class TestMe
         [TestCase("true to indicate whether the operation succeeded; otherwise false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
         [TestCase("true to indicate that the operation succeeded; otherwise, false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
         [TestCase("true to indicate whether the operation succeeded; otherwise, false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
-        public void Code_gets_fixed_by_normalizing_various_phrases_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_normalizing_phrase_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
