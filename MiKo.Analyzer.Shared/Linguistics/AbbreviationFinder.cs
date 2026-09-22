@@ -259,6 +259,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("mngr", "manager"),
                                                       new Pair("mngrs", "managers"),
                                                       new Pair("mnu", "menuItem"),
+                                                      new Pair("mob", "mobile"),
                                                       new Pair("mod", "modified"),
                                                       new Pair("msg", "message"),
                                                       new Pair("msgs", "messages"),
@@ -350,6 +351,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("val", "value"),
                                                       new Pair("var", "variable"),
                                                       new Pair("vars", "variables"),
+                                                      new Pair("veh", "vehicle"),
                                                       new Pair("velo", "velocity"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vert", "vertical"),
@@ -519,6 +521,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Mngr", "Manager"),
                                                           new Pair("Mngrs", "Managers"),
                                                           new Pair("Mnu", "MenuItem"),
+                                                          new Pair("Mob", "Mobile"),
                                                           new Pair("Mod", "Modified"),
                                                           new Pair("Msg", "Message"),
                                                           new Pair("Nav", "Navigation"),
@@ -609,6 +612,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Val", "Value"),
                                                           new Pair("Var", "Variable"),
                                                           new Pair("Vars", "Variables"),
+                                                          new Pair("Veh", "Vehicle"),
                                                           new Pair("Velo", "Velocity"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vert", "Vertical"),
@@ -695,6 +699,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("efinitionin", "efin"), // 'def' within 'define' / 'definition'
                                                       new Pair("egativeative", "egative"), // 'neg' within 'negative'
                                                       new Pair("egativeotiation", "egotiation"), // 'neg' within 'negotiation'
+                                                      new Pair("ehicleicle", "ehicle"), // 'veh' within 'vehicle'
                                                       new Pair("elativeat", "elat"), // 'rel' within 'relate' / 'relating'
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
@@ -781,6 +786,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ntervalene", "ntervene"), // 'interv' within 'intervene'
                                                       new Pair("nvironmentironment", "nvironment"), // 'env' within 'environment'
                                                       new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
+                                                      new Pair("obileile", "obile"), // 'mob' within 'mobile'
+                                                      new Pair("obileilit", "obilit"), // 'mob' within 'mobility'
                                                       new Pair("ocalal", "ocal"), // 'loc' within 'local'
                                                       new Pair("ocalat", "ocat"), // 'loc' within 'locate' / 'location'
                                                       new Pair("odifiede", "ode"), // 'mod' within 'mode'
