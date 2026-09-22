@@ -443,7 +443,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    new Pair(" to when set to ", ReplacementTo),
                                                    new Pair(" to if ", ReplacementTo),
                                                    new Pair(" to when ", ReplacementTo),
+                                                   new Pair(" to whether or not to ", ReplacementTo),
+                                                   new Pair(" to whether or not ", Replacement),
                                                    new Pair(" to whether to ", ReplacementTo),
+                                                   new Pair(" to whether ", Replacement),
                                                    new Pair(" to set to ", ReplacementTo),
                                                    new Pair(" to given ", ReplacementTo),
                                                    new Pair(" to use  if ", Replacement),
@@ -670,73 +673,78 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public ConcreteMapInfo FindMatchingMapInfo(in ReadOnlySpan<char> text)
             {
-                if (text.StartsWith("(", StringComparison.Ordinal))
+                if (text.Length > 0)
                 {
-                    return new ConcreteMapInfo(ReplacementMap_for_Parenthesis, Unique_ReplacementMap_keys_for_Parenthesis);
-                }
+                    var firstCharacter = text[0];
 
-                if (text.StartsWith("A ", StringComparison.OrdinalIgnoreCase))
-                {
-                    var lowerCase = text[0] is 'a';
-
-                    if (text.Length > 2)
+                    if (firstCharacter is '(')
                     {
-                        switch (text[2])
-                        {
-                            case '(':
-                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A_Parenthesis : ReplacementMap_for_A_Parenthesis, Unique_ReplacementMap_keys_for_A_Parenthesis);
-                            case 'O':
-                            case 'o':
-                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A_Oo : ReplacementMap_for_A_Oo, Unique_ReplacementMap_keys_for_A_Oo);
-                        }
+                        return new ConcreteMapInfo(ReplacementMap_for_Parenthesis, Unique_ReplacementMap_keys_for_Parenthesis);
                     }
 
-                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A : ReplacementMap_for_A, Unique_ReplacementMap_keys_for_A);
-                }
-
-                if (text.StartsWith("An ", StringComparison.OrdinalIgnoreCase))
-                {
-                    var lowerCase = text[0] is 'a';
-
-                    if (text.Length > 3)
+                    if (text.StartsWith("A ", StringComparison.OrdinalIgnoreCase))
                     {
-                        switch (text[3])
+                        var lowerCase = firstCharacter is 'a';
+
+                        if (text.Length > 2)
                         {
-                            case '(':
-                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An_Parenthesis : ReplacementMap_for_An_Parenthesis, Unique_ReplacementMap_keys_for_An_Parenthesis);
-                            case 'O':
-                            case 'o':
-                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An_Oo : ReplacementMap_for_An_Oo, Unique_ReplacementMap_keys_for_An_Oo);
+                            switch (text[2])
+                            {
+                                case '(':
+                                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A_Parenthesis : ReplacementMap_for_A_Parenthesis, Unique_ReplacementMap_keys_for_A_Parenthesis);
+                                case 'O':
+                                case 'o':
+                                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A_Oo : ReplacementMap_for_A_Oo, Unique_ReplacementMap_keys_for_A_Oo);
+                            }
                         }
+
+                        return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_A : ReplacementMap_for_A, Unique_ReplacementMap_keys_for_A);
                     }
 
-                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An : ReplacementMap_for_An, Unique_ReplacementMap_keys_for_An);
-                }
-
-                if (text.StartsWith("The ", StringComparison.OrdinalIgnoreCase))
-                {
-                    var lowerCase = text[0] is 't';
-
-                    if (text.Length > 4)
+                    if (text.StartsWith("An ", StringComparison.OrdinalIgnoreCase))
                     {
-                        switch (text[4])
+                        var lowerCase = firstCharacter is 'a';
+
+                        if (text.Length > 3)
                         {
-                            case '(':
-                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The_Parenthesis : ReplacementMap_for_The_Parenthesis, Unique_ReplacementMap_keys_for_The_Parenthesis);
-                            case 'O':
-                            case 'o':
-                                return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The_Oo : ReplacementMap_for_The_Oo, Unique_ReplacementMap_keys_for_The_Oo);
+                            switch (text[3])
+                            {
+                                case '(':
+                                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An_Parenthesis : ReplacementMap_for_An_Parenthesis, Unique_ReplacementMap_keys_for_An_Parenthesis);
+                                case 'O':
+                                case 'o':
+                                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An_Oo : ReplacementMap_for_An_Oo, Unique_ReplacementMap_keys_for_An_Oo);
+                            }
                         }
+
+                        return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_An : ReplacementMap_for_An, Unique_ReplacementMap_keys_for_An);
                     }
 
-                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The : ReplacementMap_for_The, Unique_ReplacementMap_keys_for_The);
-                }
+                    if (text.StartsWith("The ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var lowerCase = firstCharacter is 't';
 
-                if (text.StartsWith("Optional ", StringComparison.OrdinalIgnoreCase))
-                {
-                    var lowerCase = text[0] is 'o';
+                        if (text.Length > 4)
+                        {
+                            switch (text[4])
+                            {
+                                case '(':
+                                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The_Parenthesis : ReplacementMap_for_The_Parenthesis, Unique_ReplacementMap_keys_for_The_Parenthesis);
+                                case 'O':
+                                case 'o':
+                                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The_Oo : ReplacementMap_for_The_Oo, Unique_ReplacementMap_keys_for_The_Oo);
+                            }
+                        }
 
-                    return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_Optional : ReplacementMap_for_Optional, Unique_ReplacementMap_keys_for_Optional);
+                        return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_The : ReplacementMap_for_The, Unique_ReplacementMap_keys_for_The);
+                    }
+
+                    if (text.StartsWith("Optional ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var lowerCase = firstCharacter is 'o';
+
+                        return new ConcreteMapInfo(lowerCase ? ReplacementMap_for_LowerCase_Optional : ReplacementMap_for_Optional, Unique_ReplacementMap_keys_for_Optional);
+                    }
                 }
 
                 return new ConcreteMapInfo(ReplacementMap_for_Others, Unique_ReplacementMap_keys_for_Others);
