@@ -50,9 +50,13 @@ namespace Bla
 }");
 
         [TestCase("Assert.That(42, Is.EqualTo(0))")]
+        [TestCase("Assert.That(42, Is.EqualTo((int)0))")]
         [TestCase("Assert.That(42, Is.Not.EqualTo(0))")]
+        [TestCase("Assert.That(42, Is.Not.EqualTo((int)0))")]
         [TestCase("Assert.That(42, Is.Not.Negative.And.Not.EqualTo(0))")]
+        [TestCase("Assert.That(42, Is.Not.Negative.And.Not.EqualTo((int)0))")]
         [TestCase("Assert.That(42, Has.Count.EqualTo(0))")]
+        [TestCase("Assert.That(42, Has.Count.EqualTo((int)0))")]
         public void An_issue_is_reported_for_incorrect_usage_in_a_test_method_(string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -70,13 +74,29 @@ namespace Bla
 
         // Zero
         [TestCase("Is.EqualTo(0)", "Is.Zero")]
+        [TestCase("Is.EqualTo((int)0)", "Is.Zero")]
+        [TestCase("Is.EqualTo((int) 0)", "Is.Zero")]
         [TestCase("Is.Not.EqualTo(0)", "Is.Not.Zero")]
+        [TestCase("Is.Not.EqualTo((int)0)", "Is.Not.Zero")]
+        [TestCase("Is.Not.EqualTo((int) 0)", "Is.Not.Zero")]
         [TestCase("Is.Not.Negative.And.Not.EqualTo(0)", "Is.Not.Negative.And.Not.Zero")]
+        [TestCase("Is.Not.Negative.And.Not.EqualTo((int)0)", "Is.Not.Negative.And.Not.Zero")]
+        [TestCase("Is.Not.Negative.And.Not.EqualTo((int) 0)", "Is.Not.Negative.And.Not.Zero")]
         [TestCase("Has.Count.EqualTo(0)", "Is.Empty")]
+        [TestCase("Has.Count.EqualTo((int)0)", "Is.Empty")]
+        [TestCase("Has.Count.EqualTo((int) 0)", "Is.Empty")]
         [TestCase("Is.LessThan(0)", "Is.Negative")]
+        [TestCase("Is.LessThan((int)0)", "Is.Negative")]
+        [TestCase("Is.LessThan((int) 0)", "Is.Negative")]
         [TestCase("Is.Not.LessThan(0)", "Is.Not.Negative")]
+        [TestCase("Is.Not.LessThan((int)0)", "Is.Not.Negative")]
+        [TestCase("Is.Not.LessThan((int) 0)", "Is.Not.Negative")]
         [TestCase("Is.GreaterThan(0)", "Is.Positive")]
+        [TestCase("Is.GreaterThan((int)0)", "Is.Positive")]
+        [TestCase("Is.GreaterThan((int) 0)", "Is.Positive")]
         [TestCase("Is.Not.GreaterThan(0)", "Is.Not.Positive")]
+        [TestCase("Is.Not.GreaterThan((int)0)", "Is.Not.Positive")]
+        [TestCase("Is.Not.GreaterThan((int) 0)", "Is.Not.Positive")]
 
         // NaN
         [TestCase("Is.EqualTo(double.NaN)", "Is.NaN")]
