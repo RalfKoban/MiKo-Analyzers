@@ -413,7 +413,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var markdownBuilder = new StringBuilder().AppendLine()
                                                      .AppendLine("## Available Rules")
-                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
+                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzers.");
 
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
