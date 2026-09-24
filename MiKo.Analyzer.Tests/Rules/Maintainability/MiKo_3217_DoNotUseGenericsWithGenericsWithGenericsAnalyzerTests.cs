@@ -656,6 +656,28 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_that_receives_list_with_value_tuple() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public bool DoSomething(List<(int Name, int Value)> list) => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_that_returns_list_with_value_tuple() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public List<(int Name, int Value)> DoSomething() => null;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3217_DoNotUseGenericsWithGenericsWithGenericsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3217_DoNotUseGenericsWithGenericsWithGenericsAnalyzer();
