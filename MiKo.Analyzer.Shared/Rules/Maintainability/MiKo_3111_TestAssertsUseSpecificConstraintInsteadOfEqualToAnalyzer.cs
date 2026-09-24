@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                                       { "null", "Null" },
                                                                                                                                       { "true", "True" },
                                                                                                                                       { "false", "False" },
-                                                                                                                                      { string.Empty, "Empty" },
+                                                                                                                                      { string.Empty, Empty },
                                                                                                                                   });
 
         public MiKo_3111_TestAssertsUseSpecificConstraintInsteadOfEqualToAnalyzer() : base(Id)
@@ -61,10 +61,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case "EqualTo":
                         {
-                            switch (arguments[0].Expression)
+                            switch (arguments[0].Expression.WithoutParenthesis())
                             {
                                 case LiteralExpressionSyntax literal when ConstraintMap.TryGetValue(literal.Token.ValueText, out var constraint):
                                     return Issue(constraint);
+
+                                case CastExpressionSyntax cast when cast.Expression.WithoutParenthesis() is LiteralExpressionSyntax cl && ConstraintMap.TryGetValue(cl.Token.ValueText, out var castConstraint):
+                                    return Issue(castConstraint);
 
                                 case MemberAccessExpressionSyntax m when m.Is(NaN):
                                     return Issue(NaN);
@@ -76,11 +79,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             break;
                         }
 
-                        case "LessThan" when arguments[0].Expression is LiteralExpressionSyntax l && l.Token.ValueText is "0":
-                            return Issue(Negative);
+                        case "LessThan":
+                        {
+                            switch (arguments[0].Expression.WithoutParenthesis())
+                            {
+                                case LiteralExpressionSyntax l when l.Token.ValueText is "0":
+                                case CastExpressionSyntax cast when cast.Expression.WithoutParenthesis() is LiteralExpressionSyntax cl && cl.Token.ValueText is "0":
+                                    return Issue(Negative);
+                            }
 
-                        case "GreaterThan" when arguments[0].Expression is LiteralExpressionSyntax g && g.Token.ValueText is "0":
-                            return Issue(Positive);
+                            break;
+                        }
+
+                        case "GreaterThan":
+                        {
+                            switch (arguments[0].Expression.WithoutParenthesis())
+                            {
+                                case LiteralExpressionSyntax g when g.Token.ValueText is "0":
+                                case CastExpressionSyntax cast when cast.Expression.WithoutParenthesis() is LiteralExpressionSyntax cl && cl.Token.ValueText is "0":
+                                    return Issue(Positive);
+                            }
+
+                            break;
+                        }
                     }
                 }
 
