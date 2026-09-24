@@ -91,22 +91,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol is INamedTypeSymbol type)
             {
-                switch (symbol.Name)
+                if (symbol.Name is Constants.Moq.Mock)
                 {
-                    case Constants.Moq.Mock:
-                        return false; // ignore mocks completely
+                    return false; // ignore mocks completely
+                }
 
-                    case "Action":
-                    case "Func":
-                    case "Expression":
-                    case "Predicate":
-                    case nameof(Task):
-                    case nameof(ValueTuple):
-                    {
-                        var arguments = type.TypeArguments;
+                if (IsAllowed(symbol))
+                {
+                    var arguments = type.TypeArguments;
 
-                        return arguments.Length > 0 && arguments.Any(HasNestedGenericTypeArguments);
-                    }
+                    return arguments.Length > 0 && arguments.Any(HasNestedGenericTypeArguments);
                 }
             }
 
@@ -122,11 +116,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (arguments.Length > 0)
                 {
                     return arguments.SkipWhere(_ => _.IsNullable())
-                                    .Any(_ => _.HasGenericTypeArguments());
+                                    .Any(_ => _.HasGenericTypeArguments() && IsAllowed(_) is false);
                 }
             }
 
             return false;
+        }
+
+        private static bool IsAllowed(ITypeSymbol symbol)
+        {
+            switch (symbol.Name)
+            {
+                case "Action":
+                case "Func":
+                case "Expression":
+                case "Predicate":
+                case nameof(Task):
+                case nameof(ValueTuple):
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }
