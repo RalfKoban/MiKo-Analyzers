@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the identifier name from the specified <see cref="ArgumentSyntax"/>.
+        /// Gets the identifier name from the specified <see cref="ArgumentSyntax"/>, such as "Raise" in <c>Raise.Event()</c>.
         /// </summary>
         /// <param name="value">
         /// The argument syntax.
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers
         internal static string GetIdentifierName(this ArgumentSyntax value) => value.Expression.GetIdentifierName();
 
         /// <summary>
-        /// Gets the identifier name from the specified <see cref="ExpressionSyntax"/>.
+        /// Gets the identifier name from the specified <see cref="ExpressionSyntax"/>, such as "Raise" in <c>Raise.Event()</c>.
         /// </summary>
         /// <param name="value">
         /// The expression syntax.
