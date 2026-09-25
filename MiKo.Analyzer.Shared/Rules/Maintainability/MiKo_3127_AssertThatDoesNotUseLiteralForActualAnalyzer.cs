@@ -76,8 +76,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return null;
                     }
 
-                    if (constraintExpression is InvocationExpressionSyntax)
+                    if (constraintExpression is InvocationExpressionSyntax constraintInvocation)
                     {
+                        if (constraintInvocation.Expression is MemberAccessExpressionSyntax ce && ce.GetName() is nameof(ToString))
+                        {
+                            if (ce.Expression is LiteralExpressionSyntax || ce.Expression.IsConst(context))
+                            {
+                                // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
+                                return null;
+                            }
+                        }
+
                         // seems we found a method call, so we should report that as it is likely that this belongs into the 'actual' argument
                         return Issue(expression);
                     }

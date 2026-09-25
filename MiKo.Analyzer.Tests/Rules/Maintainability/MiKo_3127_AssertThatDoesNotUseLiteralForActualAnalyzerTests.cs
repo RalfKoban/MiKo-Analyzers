@@ -82,6 +82,40 @@ namespace Bla
 }
 ");
 
+        [TestCase("42")]
+        [TestCase("-42")]
+        [TestCase("42.0")]
+        [TestCase("42f")]
+        [TestCase("0xBB")]
+        [TestCase("0b0000_0000")]
+        [TestCase("'a'")]
+        [TestCase("\"something\"")]
+        [TestCase("true")]
+        [TestCase("false")]
+        [TestCase("StringComparison.Ordinal")]
+        public void No_issue_is_reported_for_test_method_with_ToString_call_on_(string value) => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Value);
+
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            SomeDto dto;
+
+            Assert.That(dto.Value, Is.EqualTo(" + value + @".ToString()));
+        }
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_test_method_with_multiple_asserts_when_the_actual_values_match() => No_issue_is_reported_for(@"
 using System;
