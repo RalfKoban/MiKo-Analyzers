@@ -117,6 +117,84 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_method_when_the_actual_and_expected_property_values_are_on_same_instance() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Value1, string Value2);
+
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            SomeDto dto;
+
+            Assert.That(dto.Value1, Is.EqualTo(dto.Value2));
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_when_the_actual_property_value_is_on_same_instance_as_expected_method_return_value() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Name, IEnumerable<string> PossibleNames);
+
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            SomeDto dto;
+
+            Assert.That(dto.Name, Is.EqualTo(dto.PossibleNames.First()));
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_when_the_actual_method_return_value_is_on_same_instance_as_expected_property_value() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Name, IEnumerable<string> PossibleNames);
+
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            SomeDto dto;
+
+            Assert.That(dto.PossibleNames.First(), Is.EqualTo(dto.Name));
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_method_with_multiple_asserts_when_the_actual_values_match() => No_issue_is_reported_for(@"
 using System;
 

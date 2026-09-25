@@ -87,6 +87,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             }
                         }
 
+                        var identifierName = expression.GetStartingIdentifierName();
+                        var otherIdentifierName = constraintInvocation.GetStartingIdentifierName();
+
+                        if (identifierName == otherIdentifierName)
+                        {
+                            // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
+                            return null;
+                        }
+
                         // seems we found a method call, so we should report that as it is likely that this belongs into the 'actual' argument
                         return Issue(expression);
                     }
@@ -102,8 +111,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             if (sibling.Expression is InvocationExpressionSyntax i && i.Is("Assert", "That") && i.ArgumentList.Arguments.FirstOrDefault()?.Expression is MemberAccessExpressionSyntax otherAssert)
                             {
                                 // let's inspect if we have a similar assertion
-                                var otherIdentifierName = otherAssert.GetIdentifierName();
                                 var identifierName = expression.GetIdentifierName();
+                                var otherIdentifierName = otherAssert.GetIdentifierName();
 
                                 if (otherIdentifierName != identifierName)
                                 {

@@ -59,6 +59,40 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets the identifier name from the specified <see cref="ExpressionSyntax"/>, such as "Raise" in <c>Raise.Event()</c>.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// </returns>
+        internal static string GetStartingIdentifierName(this ExpressionSyntax value)
+        {
+            ExpressionSyntax expression = value;
+
+            while (expression != null)
+            {
+                var nested = expression.GetIdentifierExpression();
+
+                if (nested is null)
+                {
+                    return expression.GetName();
+                }
+
+                if (expression == nested)
+                {
+                    // avoid endless loops
+                    return expression.GetName();
+                }
+
+                expression = nested;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Gets the identifier name from the specified <see cref="ArgumentSyntax"/>, such as "Raise" in <c>Raise.Event()</c>.
         /// </summary>
         /// <param name="value">
