@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -35,21 +33,57 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpression, Expressions);
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
+        {
+            context.RegisterSyntaxNodeAction(AnalyzeExpression, Expressions);
+            context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
+        }
 
-        private static bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
+        private static bool IsResponsible(CSharpSyntaxNode syntax)
+        {
+            switch (syntax)
+            {
+                case null:
+                    return false;
 
-        private static bool IsResponsibleNode(in SyntaxKind kind) => ExpressionValues.Contains(kind);
+                case PrefixUnaryExpressionSyntax u:
+                    return u.Operand.IsKind(SyntaxKind.NumericLiteralExpression) && (u.IsKind(SyntaxKind.UnaryPlusExpression) || u.IsKind(SyntaxKind.UnaryMinusExpression));
+
+                default:
+                    return syntax.IsAnyKind(ExpressionValues);
+            }
+        }
+
+        private static bool IsResponsible(CSharpSyntaxNode syntax, in SyntaxNodeAnalysisContext context) => IsResponsible(syntax) || syntax.IsConst(context);
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (BinaryExpressionSyntax)context.Node;
-
-            var left = node.Left;
-
-            if (IsResponsibleNode(left) || left.IsConst(context))
+            if (context.Node is BinaryExpressionSyntax node)
             {
-                ReportDiagnostics(context, Issue(left, node.OperatorToken.ValueText));
+                var left = node.Left;
+
+                if (IsResponsible(left, context))
+                {
+                    ReportDiagnostics(context, Issue(left, node.OperatorToken.ValueText));
+                }
+            }
+        }
+
+        private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is InvocationExpressionSyntax invocation && invocation.Expression is MemberAccessExpressionSyntax maes)
+            {
+                var name = maes.GetName();
+
+                if (name is nameof(Equals))
+                {
+                    var left = maes.Expression;
+
+                    if (IsResponsible(left, context))
+                    {
+                        ReportDiagnostics(context, Issue(left, name));
+                    }
+                }
             }
         }
     }

@@ -13272,7 +13272,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand..
+        ///   Looks up a localized string similar to To increase readability, place constants on the right side of an operator, not the left; or pass the constant as argument to an `Equals` method call.
+        ///This makes the code look more intuitive and easier to understand..
         /// </summary>
         internal static string MiKo_3084_Description {
             get {

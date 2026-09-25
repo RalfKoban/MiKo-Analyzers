@@ -26,7 +26,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         public override string FixableDiagnosticId => "MiKo_3084";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(_ => Expressions.ContainsKey(_.Kind()));
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                switch (node)
+                {
+                    case BinaryExpressionSyntax binary when Expressions.ContainsKey(binary.Kind()):
+                    case InvocationExpressionSyntax _:
+                        return node;
+                }
+            }
+
+            return null;
+        }
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
@@ -37,16 +50,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
-            if (syntax is BinaryExpressionSyntax binary)
+            switch (syntax)
             {
-                var operation = Expressions[binary.Kind()];
-                var left = binary.Right.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
-                var right = binary.Left.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
+                case BinaryExpressionSyntax binary:
+                {
+                    var operation = Expressions[binary.Kind()];
+                    var left = binary.Right.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
+                    var right = binary.Left.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
 
-                return SyntaxFactory.BinaryExpression(operation, left, right);
+                    return SyntaxFactory.BinaryExpression(operation, left, right);
+                }
+
+                case InvocationExpressionSyntax invocation when invocation.Expression is MemberAccessExpressionSyntax maes:
+                {
+                    var argumentList = invocation.ArgumentList;
+                    var arguments = argumentList.Arguments;
+
+                    if (arguments.Count > 0)
+                    {
+                        var argument = arguments[0];
+                        var comparand = argument.Expression;
+                        var literal = maes.Expression;
+
+                        return invocation.WithArgumentList(argumentList.WithArguments(arguments.Replace(argument, argument.WithExpression(literal.WithTriviaFrom(comparand)))))
+                                         .WithExpression(maes.WithExpression(comparand.WithTriviaFrom(literal)));
+                    }
+
+                    return syntax; // seems we found the wrong invocation
+                }
+
+                default:
+                    return syntax;
             }
-
-            return syntax;
         }
     }
 }

@@ -4659,7 +4659,8 @@ This makes the code easier to read and change later.</value>
     <value>Place constant value on right side</value>
   </data>
   <data name="MiKo_3084_Description" xml:space="preserve">
-    <value>To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand.</value>
+    <value>To increase readability, place constants on the right side of an operator, not the left; or pass the constant as argument to an `Equals` method call.
+This makes the code look more intuitive and easier to understand.</value>
   </data>
   <data name="MiKo_3084_MessageFormat" xml:space="preserve">
     <value>Place it on right side of '{0}'</value>
