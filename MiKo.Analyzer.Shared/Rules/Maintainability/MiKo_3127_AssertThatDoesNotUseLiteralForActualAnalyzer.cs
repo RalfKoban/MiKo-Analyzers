@@ -65,6 +65,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (arguments.Count > 1 && arguments[1].Expression is InvocationExpressionSyntax constraint)
             {
+                var identifierName = expression.GetStartingIdentifierName();
+
+                if (Constants.Names.ObjectUnderTestNames.Contains(identifierName))
+                {
+                    // seems everything is OK as we invoke something on our testee
+                    return null;
+                }
+
                 // TODO RKN: What about 'Is.Not.EqualTo' and similar checks?
                 if (constraint.Is("Is", "EqualTo"))
                 {
@@ -76,19 +84,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return null;
                     }
 
+                    var otherIdentifierName = constraintExpression.GetStartingIdentifierName();
+
+                    if (Constants.Names.ObjectUnderTestNames.Contains(otherIdentifierName))
+                    {
+                        // seems someone switched the testee
+                        return Issue(expression);
+                    }
+
                     if (constraintExpression is InvocationExpressionSyntax constraintInvocation)
                     {
-                        if (constraintInvocation.Expression is MemberAccessExpressionSyntax ce && ce.GetName() is nameof(ToString))
+                        if (constraintInvocation.Expression is MemberAccessExpressionSyntax ce)
                         {
-                            if (ce.Expression is LiteralExpressionSyntax || ce.Expression.IsConst(context))
+                            switch (ce.GetName())
                             {
-                                // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
-                                return null;
+                                case nameof(ToString) when ce.Expression is LiteralExpressionSyntax || ce.Expression.IsConst(context):
+                                    return null; // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
+
+                                case nameof(string.Format) when otherIdentifierName is "string" || otherIdentifierName is "String":
+                                    return null; // seems we have a 'String.Format' call which we currently accept
                             }
                         }
-
-                        var identifierName = expression.GetStartingIdentifierName();
-                        var otherIdentifierName = constraintInvocation.GetStartingIdentifierName();
 
                         if (identifierName == otherIdentifierName)
                         {
@@ -111,15 +127,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             if (sibling.Expression is InvocationExpressionSyntax i && i.Is("Assert", "That") && i.ArgumentList.Arguments.FirstOrDefault()?.Expression is MemberAccessExpressionSyntax otherAssert)
                             {
                                 // let's inspect if we have a similar assertion
-                                var identifierName = expression.GetIdentifierName();
-                                var otherIdentifierName = otherAssert.GetIdentifierName();
+                                var otherAssertIdentifierName = otherAssert.GetStartingIdentifierName();
 
-                                if (otherIdentifierName != identifierName)
+                                if (otherAssertIdentifierName != identifierName)
                                 {
                                     // seems we have a discrepancy here, so dig deeper
-                                    var comparedIdentifierName = maes.GetIdentifierName();
+                                    var comparedIdentifierName = maes.GetStartingIdentifierName();
 
-                                    if (otherIdentifierName == comparedIdentifierName)
+                                    if (otherAssertIdentifierName == comparedIdentifierName)
                                     {
                                         // seems we found a swapped value
                                         return Issue(expression);

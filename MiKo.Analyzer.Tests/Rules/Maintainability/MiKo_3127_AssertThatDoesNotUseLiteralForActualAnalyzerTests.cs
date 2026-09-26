@@ -12,6 +12,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3127_AssertThatDoesNotUseLiteralForActualAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_test_method_with_assertion_on_([ValueSource(nameof(ObjectUnderTestNames))] string objectUnderTest) => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Name);
+
+    [TestFixture]
+    public class TestMe
+    {
+        private SomeDto " + objectUnderTest + @";
+
+        [Test]
+        public void SomeTest()
+        {
+            var other = new SomeDto(""some name"");
+
+            Assert.That(" + objectUnderTest + @".Name, Is.EqualTo(other.Name.ToString()));
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_method_with_parameter() => No_issue_is_reported_for(@"
 using System;
 
@@ -117,6 +143,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_method_with_String_Format_call() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Value);
+
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void SomeTest()
+        {
+            SomeDto dto;
+
+            Assert.That(dto.Value, Is.EqualTo(string.Format(47, 11)));
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_method_when_the_actual_and_expected_property_values_are_on_same_instance() => No_issue_is_reported_for(@"
 using System;
 
@@ -189,6 +239,26 @@ namespace Bla
             SomeDto dto;
 
             Assert.That(dto.PossibleNames.First(), Is.EqualTo(dto.Name));
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_Does_not_contain() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [TestCase(""a"", ""b"")]
+        public void SomeTest(string message, string placeholder)
+        {
+            Assert.That(message, Does.Not.Contain(placeholder), () => ""Placeholder "" + placeholder + "" found!"");
         }
     }
 }
@@ -338,6 +408,58 @@ namespace Bla
             var value = 42;
 
             Assert.That(4711, Is.Not.EqualTo(value));
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_method_with_Is_EqualTo_using_([ValueSource(nameof(ObjectUnderTestNames))] string objectUnderTest) => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Name);
+
+    [TestFixture]
+    public class TestMe
+    {
+        private SomeDto " + objectUnderTest + @";
+
+        [Test]
+        public void SomeTest()
+        {
+            var other = new SomeDto(""some name"");
+
+            Assert.That(other.Name, Is.EqualTo(" + objectUnderTest + @".Name));
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_method_with_Is_EqualTo_ToString_using_([ValueSource(nameof(ObjectUnderTestNames))] string objectUnderTest) => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public record SomeDto(string Name);
+
+    [TestFixture]
+    public class TestMe
+    {
+        private SomeDto " + objectUnderTest + @";
+
+        [Test]
+        public void SomeTest()
+        {
+            var other = new SomeDto(""some name"");
+
+            Assert.That(other.Name, Is.EqualTo(" + objectUnderTest + @".Name.ToString()));
         }
     }
 }
