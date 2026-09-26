@@ -53,13 +53,15 @@ namespace TestHelper
                 // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
                 Assert.That(resultsLength, Is.EqualTo(violations), () => string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
+                var diagnosticId = GetDiagnosticId();
+
                 var placeholdersLength = Placeholders.Length;
 
                 for (var index = 0; index < resultsLength; index++)
                 {
                     var result = results[index];
 
-                    Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+                    Assert.That(result.Id, Is.EqualTo(diagnosticId));
                     Assert.That(result.Id, Is.Not.EqualTo("AD0001")); // This is a programming error
 
                     var message = result.GetMessage(null);
