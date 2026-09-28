@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var belowIf = whenTrue.DescendantNodesAndSelf().OfType<StatementSyntax>().Any(_ => _.IsEquivalentTo(assertFailStatement));
 
-                var updatedArguments = UpdateArguments(ifStatement.Condition, belowIf, semanticModel);
+                (ArgumentSyntax condition, ArgumentSyntax constraint) = UpdateArguments(ifStatement.Condition, belowIf, semanticModel);
 
-                var assert = AssertThat(updatedArguments.Condition, updatedArguments.Constraint, invocation.ArgumentList.Arguments, 0);
+                var assert = AssertThat(condition, constraint, invocation.ArgumentList.Arguments, 0);
                 var assertStatement = Statement(assert).WithTriviaFrom(ifStatement);
 
                 if (belowIf)
