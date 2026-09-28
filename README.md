@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 574 rules that are currently provided by the analyzers.
+The following tables list all the 575 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -331,6 +331,7 @@ The following tables list all the 574 rules that are currently provided by the a
 |[MiKo_2240](/Documentation/MiKo_2240.md)|Do not start &lt;response&gt; documentation with 'Returns'|&#x2713;|&#x2713;|
 |[MiKo_2241](/Documentation/MiKo_2241.md)|Do not use 'empty string' in documentation|&#x2713;|&#x2713;|
 |[MiKo_2242](/Documentation/MiKo_2242.md)|Use 'textual representation' instead of 'string representation' in documentation|&#x2713;|&#x2713;|
+|[MiKo_2243](/Documentation/MiKo_2243.md)|Do not use prefixes in 'cref' tags|&#x2713;|&#x2713;|
 |[MiKo_2244](/Documentation/MiKo_2244.md)|Use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt; in documentation|&#x2713;|&#x2713;|
 |[MiKo_2245](/Documentation/MiKo_2245.md)|Wrap numbers with &lt;c&gt; in documentation|&#x2713;|&#x2713;|
 |[MiKo_2300](/Documentation/MiKo_2300.md)|Explain the 'Why' instead of the 'How' in comments|&#x2713;|\-|

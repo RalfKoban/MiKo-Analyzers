@@ -1570,6 +1570,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextAttributeSyntax XmlAttribute(string tag, string text) => SyntaxFactory.XmlTextAttribute(tag, text.AsToken());
 
         /// <summary>
+        /// Creates a code reference attribute for the given reference.
+        /// </summary>
+        /// <param name="syntax">
+        /// The code reference syntax to include in the attribute.
+        /// </param>
+        /// <returns>
+        /// The code reference attribute.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static XmlCrefAttributeSyntax XmlCref(CrefSyntax syntax) => SyntaxFactory.XmlCrefAttribute(syntax);
+
+        /// <summary>
         /// Creates an XML list of given list type.
         /// </summary>
         /// <remarks>
@@ -1800,7 +1812,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <returns>
         /// The empty XML element with the code reference attribute.
         /// </returns>
-        private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
+        private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(XmlCref(syntax));
 
         /// <summary>
         /// Determines the index of the first content node to process, accounting for whitespace-only text nodes.

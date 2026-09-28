@@ -10354,6 +10354,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove prefix from &apos;cref&apos; attribute.
+        /// </summary>
+        internal static string MiKo_2243_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2243_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;cref&apos; attribute in XML documentation references a code element such as a type, method, or property.
+        ///Using prefixes prevents the compiler from validating the reference and stops Visual Studio from updating it during refactorings..
+        /// </summary>
+        internal static string MiKo_2243_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2243_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove prefix from &apos;cref&apos; attribute.
+        /// </summary>
+        internal static string MiKo_2243_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2243_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use prefixes in &apos;cref&apos; tags.
+        /// </summary>
+        internal static string MiKo_2243_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2243_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
         /// </summary>
         internal static string MiKo_2244_CodeFixTitle {
