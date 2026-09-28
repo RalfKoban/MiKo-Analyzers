@@ -94,6 +94,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (constraintExpression is InvocationExpressionSyntax constraintInvocation)
                     {
+                        if (identifierName == otherIdentifierName)
+                        {
+                            // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
+                            return null;
+                        }
+
                         if (constraintInvocation.Expression is MemberAccessExpressionSyntax ce)
                         {
                             switch (ce.GetName())
@@ -104,12 +110,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 case nameof(string.Format) when otherIdentifierName is "string" || otherIdentifierName is "String":
                                     return null; // seems we have a 'String.Format' call which we currently accept
                             }
-                        }
-
-                        if (identifierName == otherIdentifierName)
-                        {
-                            // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
-                            return null;
                         }
 
                         // seems we found a method call, so we should report that as it is likely that this belongs into the 'actual' argument
