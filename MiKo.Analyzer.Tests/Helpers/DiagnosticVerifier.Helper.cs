@@ -25,7 +25,6 @@ using MiKoSolutions.Analyzers.Rules;
 using Moq;
 
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
