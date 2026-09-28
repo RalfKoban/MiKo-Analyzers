@@ -1,9 +1,93 @@
-﻿//// ncrunch: rdi off
+﻿using System.Linq;
+
+//// ncrunch: rdi off
 // ReSharper disable CheckNamespace
 namespace TestHelper
 {
     public partial class CodeFixVerifier
     {
+        public static readonly string[] ObjectUnderTestPropertyNames =
+                                                                       [
+                                                                           "ObjectUnderTest",
+                                                                           "SubjectUnderTest",
+                                                                           "UnitUnderTest",
+                                                                           "Sut",
+                                                                           "SuT",
+                                                                           "SUT",
+                                                                           "UUT",
+                                                                           "UuT",
+                                                                           "Uut",
+                                                                           "TestCandidate",
+                                                                           "TestObject",
+                                                                       ];
+
+        public static readonly string[] ObjectUnderTestFieldNames =
+                                                                    [
+                                                                        "ObjectUnderTest",
+                                                                        "_ObjectUnderTest",
+                                                                        "m_ObjectUnderTest",
+                                                                        "s_ObjectUnderTest",
+                                                                        "objectUnderTest",
+                                                                        "_objectUnderTest",
+                                                                        "m_objectUnderTest",
+                                                                        "s_objectUnderTest",
+                                                                        "subjectUnderTest",
+                                                                        "_subjectUnderTest",
+                                                                        "m_subjectUnderTest",
+                                                                        "s_subjectUnderTest",
+                                                                        "SubjectUnderTest",
+                                                                        "_SubjectUnderTest",
+                                                                        "m_SubjectUnderTest",
+                                                                        "s_SubjectUnderTest",
+                                                                        "unitUnderTest",
+                                                                        "_unitUnderTest",
+                                                                        "m_unitUnderTest",
+                                                                        "s_unitUnderTest",
+                                                                        "UnitUnderTest",
+                                                                        "_UnitUnderTest",
+                                                                        "m_UnitUnderTest",
+                                                                        "s_UnitUnderTest",
+                                                                        "sut",
+                                                                        "_sut",
+                                                                        "m_sut",
+                                                                        "s_sut",
+                                                                        "Sut",
+                                                                        "_Sut",
+                                                                        "m_Sut",
+                                                                        "s_Sut",
+                                                                        "uut",
+                                                                        "_uut",
+                                                                        "m_uut",
+                                                                        "s_uut",
+                                                                        "Uut",
+                                                                        "_Uut",
+                                                                        "m_Uut",
+                                                                        "s_Uut",
+                                                                        "TestCandidate",
+                                                                        "testCandidate",
+                                                                        "_testCandidate",
+                                                                        "m_testCandidate",
+                                                                        "s_testCandidate",
+                                                                        "TestObject",
+                                                                        "testObject",
+                                                                        "_testObject",
+                                                                        "m_testObject",
+                                                                        "s_testObject",
+                                                                    ];
+
+        public static readonly string[] ObjectUnderTestVariableNames =
+                                                                       [
+                                                                           "objectUnderTest",
+                                                                           "subjectUnderTest",
+                                                                           "unitUnderTest",
+                                                                           "testCandidate",
+                                                                           "testObject",
+                                                                           "sut",
+                                                                           "uut",
+                                                                       ];
+
+        public static readonly string[] ObjectUnderTestNames = [.. ObjectUnderTestPropertyNames.Concat(ObjectUnderTestFieldNames).Concat(ObjectUnderTestVariableNames).Distinct()];
+
         public static readonly string[] TestFixtures =
                                                        [
                                                            "TestFixture",

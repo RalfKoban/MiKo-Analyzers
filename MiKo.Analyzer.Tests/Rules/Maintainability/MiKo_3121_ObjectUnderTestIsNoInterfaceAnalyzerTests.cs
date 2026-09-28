@@ -12,86 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private static readonly string[] AcceptableTestTypes = ["class", "struct", "record"];
 
-        private static readonly string[] PropertyNames =
-                                                         [
-                                                             "ObjectUnderTest",
-                                                             "SubjectUnderTest",
-                                                             "UnitUnderTest",
-                                                             "Sut",
-                                                             "SuT",
-                                                             "SUT",
-                                                             "UUT",
-                                                             "UuT",
-                                                             "Uut",
-                                                             "TestCandidate",
-                                                             "TestObject",
-                                                         ];
-
-        private static readonly string[] FieldNames =
-                                                      [
-                                                          "ObjectUnderTest",
-                                                          "_ObjectUnderTest",
-                                                          "m_ObjectUnderTest",
-                                                          "s_ObjectUnderTest",
-                                                          "objectUnderTest",
-                                                          "_objectUnderTest",
-                                                          "m_objectUnderTest",
-                                                          "s_objectUnderTest",
-                                                          "subjectUnderTest",
-                                                          "_subjectUnderTest",
-                                                          "m_subjectUnderTest",
-                                                          "s_subjectUnderTest",
-                                                          "SubjectUnderTest",
-                                                          "_SubjectUnderTest",
-                                                          "m_SubjectUnderTest",
-                                                          "s_SubjectUnderTest",
-                                                          "unitUnderTest",
-                                                          "_unitUnderTest",
-                                                          "m_unitUnderTest",
-                                                          "s_unitUnderTest",
-                                                          "UnitUnderTest",
-                                                          "_UnitUnderTest",
-                                                          "m_UnitUnderTest",
-                                                          "s_UnitUnderTest",
-                                                          "sut",
-                                                          "_sut",
-                                                          "m_sut",
-                                                          "s_sut",
-                                                          "Sut",
-                                                          "_Sut",
-                                                          "m_Sut",
-                                                          "s_Sut",
-                                                          "uut",
-                                                          "_uut",
-                                                          "m_uut",
-                                                          "s_uut",
-                                                          "Uut",
-                                                          "_Uut",
-                                                          "m_Uut",
-                                                          "s_Uut",
-                                                          "TestCandidate",
-                                                          "testCandidate",
-                                                          "_testCandidate",
-                                                          "m_testCandidate",
-                                                          "s_testCandidate",
-                                                          "TestObject",
-                                                          "testObject",
-                                                          "_testObject",
-                                                          "m_testObject",
-                                                          "s_testObject",
-                                                      ];
-
-        private static readonly string[] VariableNames =
-                                                         [
-                                                             "objectUnderTest",
-                                                             "subjectUnderTest",
-                                                             "unitUnderTest",
-                                                             "testCandidate",
-                                                             "testObject",
-                                                             "sut",
-                                                             "uut",
-                                                         ];
-
         private static readonly string[] MethodPrefixes =
                                                           [
                                                               "Get",
@@ -123,7 +43,7 @@ namespace BlaBla
         public void No_issue_is_reported_for_property_if_type_under_test_is_(
                                                                          [ValueSource(nameof(AcceptableTestTypes))] string type,
                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                         [ValueSource(nameof(PropertyNames))] string propertyName)
+                                                                         [ValueSource(nameof(ObjectUnderTestPropertyNames))] string propertyName)
             => No_issue_is_reported_for(@"
 namespace BlaBla
 {
@@ -143,7 +63,7 @@ namespace BlaBla
         public void No_issue_is_reported_for_method_if_type_under_test_is_(
                                                                        [ValueSource(nameof(AcceptableTestTypes))] string type,
                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                       [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                       [ValueSource(nameof(ObjectUnderTestPropertyNames))] string propertyName,
                                                                        [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => No_issue_is_reported_for(@"
 namespace BlaBla
@@ -164,7 +84,7 @@ namespace BlaBla
         public void No_issue_is_reported_for_field_if_type_under_test_is_(
                                                                       [ValueSource(nameof(AcceptableTestTypes))] string type,
                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                      [ValueSource(nameof(FieldNames))] string fieldName)
+                                                                      [ValueSource(nameof(ObjectUnderTestFieldNames))] string fieldName)
             => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
@@ -185,7 +105,7 @@ namespace BlaBla.BlaBlubb
                                                                               [ValueSource(nameof(AcceptableTestTypes))] string type,
                                                                               [ValueSource(nameof(TestFixtures))] string fixture,
                                                                               [ValueSource(nameof(Tests))] string test,
-                                                                              [ValueSource(nameof(VariableNames))] string variableName)
+                                                                              [ValueSource(nameof(ObjectUnderTestVariableNames))] string variableName)
             => No_issue_is_reported_for(@"
 namespace BlaBla
 {
@@ -208,7 +128,7 @@ namespace BlaBla
         [Test]
         public void An_issue_is_reported_for_property_if_type_under_test_is_an_interface_(
                                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                      [ValueSource(nameof(PropertyNames))] string propertyName)
+                                                                                      [ValueSource(nameof(ObjectUnderTestPropertyNames))] string propertyName)
             => An_issue_is_reported_for(@"
 namespace BlaBla
 {
@@ -227,7 +147,7 @@ namespace BlaBla
         [Test]
         public void An_issue_is_reported_for_method_if_type_under_test_is_an_interface_(
                                                                                     [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                    [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                    [ValueSource(nameof(ObjectUnderTestPropertyNames))] string propertyName,
                                                                                     [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => An_issue_is_reported_for(@"
 namespace BlaBla
@@ -247,7 +167,7 @@ namespace BlaBla
         [Test]
         public void An_issue_is_reported_for_field_if_type_under_test_is_an_interface_(
                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                   [ValueSource(nameof(FieldNames))] string fieldName)
+                                                                                   [ValueSource(nameof(ObjectUnderTestFieldNames))] string fieldName)
             => An_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
@@ -267,7 +187,7 @@ namespace BlaBla.BlaBlubb
         public void An_issue_is_reported_for_localVariable_if_type_under_test_is_an_interface_(
                                                                                            [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                            [ValueSource(nameof(Tests))] string test,
-                                                                                           [ValueSource(nameof(VariableNames))] string variableName)
+                                                                                           [ValueSource(nameof(ObjectUnderTestVariableNames))] string variableName)
             => An_issue_is_reported_for(@"
 namespace BlaBla
 {

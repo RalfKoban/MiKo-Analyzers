@@ -838,7 +838,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all sibling nodes of the specified syntax node.
+        /// Gets all sibling nodes of the specified node.
         /// </summary>
         /// <param name="value">
         /// The syntax node whose siblings to retrieve.
@@ -849,7 +849,7 @@ namespace MiKoSolutions.Analyzers
         internal static IList<SyntaxNode> Siblings(this SyntaxNode value) => Siblings<SyntaxNode>(value);
 
         /// <summary>
-        /// Gets all sibling nodes of the specified syntax node that are of type <typeparamref name="T"/>.
+        /// Gets all sibling nodes of the specified node that are of type <typeparamref name="T"/>, including the node itself.
         /// </summary>
         /// <typeparam name="T">
         /// The type of nodes to return.
