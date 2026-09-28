@@ -35,37 +35,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeInvocationExpression(in SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, SemanticModel semanticModel)
+        private Diagnostic AnalyzeInvocationExpression(in SyntaxNodeAnalysisContext context, InvocationExpressionSyntax assertThat, SemanticModel semanticModel)
         {
-            var arguments = invocation.ArgumentList.Arguments;
+            var arguments = assertThat.ArgumentList.Arguments;
 
             if (arguments.Count is 0)
             {
                 return null;
             }
 
-            var expression = arguments[0].Expression;
+            var actualPart = arguments[0].Expression;
 
-            switch (expression)
+            switch (actualPart)
             {
-                case PrefixUnaryExpressionSyntax unary when unary.Operand is LiteralExpressionSyntax:
+                case PrefixUnaryExpressionSyntax u when u.Operand is LiteralExpressionSyntax:
                 case LiteralExpressionSyntax _:
-                case MemberAccessExpressionSyntax maes when maes.IsEnumMember(semanticModel):
-                    return Issue(expression);
+                case MemberAccessExpressionSyntax part when part.IsEnumMember(semanticModel):
+                    return Issue(actualPart);
 
-                case MemberAccessExpressionSyntax maes:
-                    return AnalyzeAssertion(context, invocation, arguments, maes); // it looks like the values could be swapped based on other asserts, so we have to take a more costly look around
+                case MemberAccessExpressionSyntax part:
+                    return AnalyzeAssertion(context, assertThat, arguments, part); // it looks like the values could be swapped based on other asserts, so we have to take a more costly look around
 
                 default:
                     return null;
             }
         }
 
-        private Diagnostic AnalyzeAssertion(in SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, in SeparatedSyntaxList<ArgumentSyntax> arguments, MemberAccessExpressionSyntax expression)
+        private Diagnostic AnalyzeAssertion(in SyntaxNodeAnalysisContext context, InvocationExpressionSyntax assertThat, in SeparatedSyntaxList<ArgumentSyntax> assertArguments, MemberAccessExpressionSyntax actualPart)
         {
-            if (arguments.Count > 1 && arguments[1].Expression is InvocationExpressionSyntax constraint)
+            if (assertArguments.Count > 1 && assertArguments[1].Expression is InvocationExpressionSyntax constraint)
             {
-                var identifierName = expression.GetStartingIdentifierName();
+                var identifierName = actualPart.GetStartingIdentifierName();
 
                 if (Constants.Names.ObjectUnderTestNames.Contains(identifierName))
                 {
@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (Constants.Names.ObjectUnderTestNames.Contains(otherIdentifierName))
                     {
                         // seems someone switched the testee
-                        return Issue(expression);
+                        return Issue(actualPart);
                     }
 
                     if (constraintExpression is InvocationExpressionSyntax constraintInvocation)
@@ -100,11 +100,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             return null;
                         }
 
-                        if (constraintInvocation.Expression is MemberAccessExpressionSyntax ce)
+                        if (constraintInvocation.Expression is MemberAccessExpressionSyntax constraintMember)
                         {
-                            switch (ce.GetName())
+                            switch (constraintMember.GetName())
                             {
-                                case nameof(ToString) when ce.Expression is LiteralExpressionSyntax || ce.Expression.IsConst(context):
+                                case nameof(ToString) when constraintMember.Expression is LiteralExpressionSyntax || constraintMember.Expression.IsConst(context):
                                     return null; // seems everything is OK (code seems strange, but this analyzer is not responsible for reporting that)
 
                                 case nameof(string.Format) when otherIdentifierName is "string" || otherIdentifierName is "String":
@@ -113,10 +113,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         }
 
                         // seems we found a method call, so we should report that as it is likely that this belongs into the 'actual' argument
-                        return Issue(expression);
+                        return Issue(actualPart);
                     }
 
-                    if (constraintExpression is MemberAccessExpressionSyntax maes && invocation.Parent is ExpressionStatementSyntax statement)
+                    if (constraintExpression is MemberAccessExpressionSyntax expectedPart && assertThat.Parent is ExpressionStatementSyntax statement)
                     {
                         // we have to dig deeper into other asserts, as 'actual' and 'expected' might be swapped
                         var siblings = statement.Siblings<ExpressionStatementSyntax>();
@@ -124,20 +124,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         foreach (var sibling in siblings)
                         {
-                            if (sibling.Expression is InvocationExpressionSyntax i && i.Is("Assert", "That") && i.ArgumentList.Arguments.FirstOrDefault()?.Expression is MemberAccessExpressionSyntax otherAssert)
+                            if (sibling.Expression is InvocationExpressionSyntax i && i.Is("Assert", "That") && i.ArgumentList.Arguments.FirstOrDefault()?.Expression is MemberAccessExpressionSyntax otherActualPart)
                             {
                                 // let's inspect if we have a similar assertion
-                                var otherAssertIdentifierName = otherAssert.GetStartingIdentifierName();
+                                var otherAssertIdentifierName = otherActualPart.GetStartingIdentifierName();
 
                                 if (otherAssertIdentifierName != identifierName)
                                 {
                                     // seems we have a discrepancy here, so dig deeper
-                                    var comparedIdentifierName = maes.GetStartingIdentifierName();
+                                    var comparedIdentifierName = expectedPart.GetStartingIdentifierName();
 
                                     if (otherAssertIdentifierName == comparedIdentifierName)
                                     {
                                         // seems we found a swapped value
-                                        return Issue(expression);
+                                        return Issue(actualPart);
                                     }
                                 }
                             }
