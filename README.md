@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 575 rules that are currently provided by the analyzers.
+The following tables list all the 576 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -334,6 +334,7 @@ The following tables list all the 575 rules that are currently provided by the a
 |[MiKo_2243](/Documentation/MiKo_2243.md)|Do not use prefixes in 'cref' tags|&#x2713;|&#x2713;|
 |[MiKo_2244](/Documentation/MiKo_2244.md)|Use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt; in documentation|&#x2713;|&#x2713;|
 |[MiKo_2245](/Documentation/MiKo_2245.md)|Wrap numbers with &lt;c&gt; in documentation|&#x2713;|&#x2713;|
+|[MiKo_2246](/Documentation/MiKo_2246.md)|XML documentation should not contain unnecessary indentation|&#x2713;|&#x2713;|
 |[MiKo_2300](/Documentation/MiKo_2300.md)|Explain the 'Why' instead of the 'How' in comments|&#x2713;|\-|
 |[MiKo_2301](/Documentation/MiKo_2301.md)|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |[MiKo_2302](/Documentation/MiKo_2302.md)|Remove commented-out code|&#x2713;|\-|

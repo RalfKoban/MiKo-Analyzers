@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules
@@ -200,6 +201,109 @@ namespace MiKoSolutions.Analyzers.Rules
 
             context.RegisterCompilationStartAction(CompilationStartAction);
         }
+
+        /// <summary>
+        /// Creates an array of key-value pairs containing the line position information.
+        /// </summary>
+        /// <param name="linePosition">
+        /// The line position to create the proposal for.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the line number and character position.
+        /// </returns>
+        protected static Pair[] CreateProposalForLinePosition(in LinePosition linePosition) => new[]
+                                                                                                   {
+                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.LineNumber, linePosition.Line.ToString("D")),
+                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.CharacterPosition, linePosition.Character.ToString("D")),
+                                                                                                   };
+
+        /// <summary>
+        /// Creates an array of key-value pairs containing the spacing information.
+        /// </summary>
+        /// <param name="spaces">
+        /// The number of spaces.
+        /// </param>
+        /// <param name="additionalSpaces">
+        /// The number of additional spaces.
+        /// The default is <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the number of spaces and additional spaces.
+        /// </returns>
+        protected static Pair[] CreateProposalForSpaces(in int spaces, in int additionalSpaces = 0) => new[]
+                                                                                                           {
+                                                                                                               new Pair(Constants.AnalyzerCodeFixSharedData.Spaces, spaces.ToString("D")),
+                                                                                                               new Pair(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, additionalSpaces.ToString("D")),
+                                                                                                           };
+
+        /// <summary>
+        /// Creates a proposal that contains the specified starting phrase.
+        /// </summary>
+        /// <param name="phrase">
+        /// The starting phrase to include in the proposal.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the starting phrase proposal.
+        /// </returns>
+        protected static Pair[] CreateStartingPhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase) };
+
+        /// <summary>
+        /// Creates a proposal that contains the specified starting and ending phrases.
+        /// </summary>
+        /// <param name="startPhrase">
+        /// The starting phrase to include in the proposal.
+        /// </param>
+        /// <param name="endingPhrase">
+        /// The ending phrase to include in the proposal.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the starting and ending phrase proposals.
+        /// </returns>
+        protected static Pair[] CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new[]
+                                                                                                                   {
+                                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, startPhrase),
+                                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.EndingPhrase, endingPhrase),
+                                                                                                                   };
+
+        /// <summary>
+        /// Creates a proposal that contains the specified ending phrase.
+        /// </summary>
+        /// <param name="phrase">
+        /// The ending phrase to include in the proposal.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the ending phrase proposal.
+        /// </returns>
+        protected static Pair[] CreateEndingPhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.EndingPhrase, phrase) };
+
+        /// <summary>
+        /// Creates a proposal that contains the specified phrase.
+        /// </summary>
+        /// <param name="phrase">
+        /// The phrase to include in the proposal.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the phrase proposal.
+        /// </returns>
+        protected static Pair[] CreatePhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.Phrase, phrase) };
+
+        /// <summary>
+        /// Creates a proposal that contains the specified text and its replacement.
+        /// </summary>
+        /// <param name="text">
+        /// The text to be replaced.
+        /// </param>
+        /// <param name="replacement">
+        /// The replacement text.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the text and replacement proposal.
+        /// </returns>
+        protected static Pair[] CreateReplacementProposal(string text, string replacement) => new[]
+                                                                                                  {
+                                                                                                      new Pair(Constants.AnalyzerCodeFixSharedData.TextKey, text),
+                                                                                                      new Pair(Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement),
+                                                                                                  };
 
         /// <summary>
         /// Determines whether NUnit is referenced within the compilation.

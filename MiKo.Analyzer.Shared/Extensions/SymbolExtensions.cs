@@ -842,10 +842,10 @@ namespace MiKoSolutions.Analyzers
         /// The method to get the signature for.
         /// </param>
         /// <param name="builder">
-        /// The <see cref="StringBuilder"/>  to append the signature to.
+        /// The <see cref="StringBuilder"/> to append the signature to.
         /// </param>
         /// <returns>
-        /// The <see cref="StringBuilder"/>  with the appended method signature.
+        /// The <see cref="StringBuilder"/> with the appended method signature.
         /// </returns>
         internal static StringBuilder GetMethodSignature(this IMethodSymbol value, StringBuilder builder)
         {
