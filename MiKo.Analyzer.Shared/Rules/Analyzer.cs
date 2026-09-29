@@ -1186,6 +1186,20 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue(in SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, token.ValueText);
 
         /// <summary>
+        /// Creates a diagnostic issue for a syntax token list with additional properties.
+        /// </summary>
+        /// <param name="tokens">
+        /// The syntax token list to create the issue for.
+        /// </param>
+        /// <param name="properties">
+        /// The additional properties for the diagnostic.
+        /// </param>
+        /// <returns>
+        /// A diagnostic issue for the syntax token list.
+        /// </returns>
+        protected Diagnostic Issue(in SyntaxTokenList tokens, params Pair[] properties) => CreateIssue(tokens.GetLocation(), properties);
+
+        /// <summary>
         /// Creates a diagnostic issue for a syntax trivia with additional properties.
         /// </summary>
         /// <param name="trivia">

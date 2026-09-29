@@ -204,7 +204,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="string"/> that contains the text of the specified length starting from the location, or <see langword="null"/> if the location does not have a source tree.
         /// </returns>
-        internal static string GetText(this Location value, in int length) => GetText(value, 0, length);
+        internal static string GetText(this Location value, in int length) => value.GetText(0, length);
 
         /// <summary>
         /// Gets a substring of the specified length starting from the location.
@@ -549,7 +549,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var span = source.FullSpan;
 
-                return GetLocation(source[0].SyntaxTree, span.Start, span.End);
+                return source[0].SyntaxTree.GetLocation(span.Start, span.End);
             }
 
             return Location.None;
@@ -570,7 +570,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A location that spans from the start to the end position.
         /// </returns>
-        internal static Location GetLocation(this SyntaxNode value, in int start, in int end) => GetLocation(value.SyntaxTree, start, end);
+        internal static Location GetLocation(this SyntaxNode value, in int start, in int end) => value.SyntaxTree.GetLocation(start, end);
 
         /// <summary>
         /// Gets a location from a syntax token with specified bounds.
@@ -587,7 +587,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A location that spans from the start to the end position.
         /// </returns>
-        internal static Location GetLocation(this in SyntaxToken value, in int start, in int end) => GetLocation(value.SyntaxTree, start, end);
+        internal static Location GetLocation(this in SyntaxToken value, in int start, in int end) => value.SyntaxTree.GetLocation(start, end);
 
         /// <summary>
         /// Gets a location from a syntax tree with specified bounds.
@@ -648,7 +648,7 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            return GetLocation(syntaxTree, start, end);
+            return syntaxTree.GetLocation(start, end);
         }
 
         /// <summary>
@@ -693,7 +693,7 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            return GetLocation(syntaxTree, start, end);
+            return syntaxTree.GetLocation(start, end);
         }
 
         /// <summary>

@@ -238,6 +238,27 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets a location from a syntax trivia list.
+        /// </summary>
+        /// <param name="source">
+        /// The syntax trivia list.
+        /// </param>
+        /// <returns>
+        /// A location that spans the entire trivia list, or <see cref="Location.None"/> if the list is empty.
+        /// </returns>
+        internal static Location GetLocation(this in SyntaxTokenList source)
+        {
+            if (source.Count > 0)
+            {
+                var span = source.FullSpan;
+
+                return source[0].SyntaxTree.GetLocation(span.Start, span.End);
+            }
+
+            return Location.None;
+        }
+
+        /// <summary>
         /// Builds a <see cref="string"/> representation of the syntax token list without any trivia.
         /// </summary>
         /// <param name="source">
@@ -653,17 +674,17 @@ namespace MiKoSolutions.Analyzers
 
             if (tokens.Count > 0)
             {
-                tokens = WithoutEmptyText(tokens, tokens[0]);
+                tokens = tokens.WithoutEmptyText(tokens[0]);
             }
 
             if (tokens.Count > 0)
             {
-                tokens = WithoutNewLine(tokens, tokens[0]);
+                tokens = tokens.WithoutNewLine(tokens[0]);
             }
 
             if (tokens.Count > 0)
             {
-                tokens = WithoutEmptyText(tokens, tokens[0]);
+                tokens = tokens.WithoutEmptyText(tokens[0]);
             }
 
             return tokens;
@@ -687,7 +708,7 @@ namespace MiKoSolutions.Analyzers
 
             if (tokensCount > 0)
             {
-                tokens = WithoutEmptyText(tokens, tokens[tokensCount - 1]);
+                tokens = tokens.WithoutEmptyText(tokens[tokensCount - 1]);
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 tokensCount = tokens.Count;
@@ -695,7 +716,7 @@ namespace MiKoSolutions.Analyzers
 
             if (tokensCount > 0)
             {
-                tokens = WithoutNewLine(tokens, tokens[tokensCount - 1]);
+                tokens = tokens.WithoutNewLine(tokens[tokensCount - 1]);
             }
 
             return tokens;
