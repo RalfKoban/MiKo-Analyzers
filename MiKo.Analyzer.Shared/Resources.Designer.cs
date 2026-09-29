@@ -3942,7 +3942,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;.
+        ///   Looks up a localized string similar to Do not name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1108_MessageFormat {
             get {

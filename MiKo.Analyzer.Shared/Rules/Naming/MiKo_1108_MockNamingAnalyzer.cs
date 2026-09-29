@@ -63,19 +63,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (name.ContainsAny(MockNames, StringComparison.OrdinalIgnoreCase))
+                foreach (var mockName in MockNames)
                 {
-                    var symbol = identifier.GetSymbol(semanticModel);
-
-                    if (symbol is null)
+                    if (name.Contains(mockName, StringComparison.Ordinal))
                     {
-                        yield return Issue(identifier);
-                    }
-                    else
-                    {
-                        var betterName = FindBetterName(symbol);
+                        var symbol = identifier.GetSymbol(semanticModel);
 
-                        yield return Issue(symbol, CreateBetterNameProposal(betterName));
+                        if (symbol is null)
+                        {
+                            yield return Issue(identifier, mockName);
+                        }
+                        else
+                        {
+                            var betterName = FindBetterName(symbol);
+
+                            yield return Issue(symbol, mockName, CreateBetterNameProposal(betterName));
+                        }
+
+                        break;
                     }
                 }
             }
