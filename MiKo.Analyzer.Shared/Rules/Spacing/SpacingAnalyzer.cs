@@ -23,40 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         /// <summary>
-        /// Creates an array of key-value pairs containing the line position information.
-        /// </summary>
-        /// <param name="linePosition">
-        /// The line position to create the proposal for.
-        /// </param>
-        /// <returns>
-        /// An array of key-value pairs containing the line number and character position.
-        /// </returns>
-        protected static Pair[] CreateProposalForLinePosition(in LinePosition linePosition) => new[]
-                                                                                                   {
-                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.LineNumber, linePosition.Line.ToString("D")),
-                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.CharacterPosition, linePosition.Character.ToString("D")),
-                                                                                                   };
-
-        /// <summary>
-        /// Creates an array of key-value pairs containing the spacing information.
-        /// </summary>
-        /// <param name="spaces">
-        /// The number of spaces.
-        /// </param>
-        /// <param name="additionalSpaces">
-        /// The number of additional spaces.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// An array of key-value pairs containing the number of spaces and additional spaces.
-        /// </returns>
-        protected static Pair[] CreateProposalForSpaces(in int spaces, in int additionalSpaces = 0) => new[]
-                                                                                                           {
-                                                                                                               new Pair(Constants.AnalyzerCodeFixSharedData.Spaces, spaces.ToString("D")),
-                                                                                                               new Pair(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, additionalSpaces.ToString("D")),
-                                                                                                           };
-
-        /// <summary>
         /// Determines whether two <see cref="LinePosition"/> values are not vertically aligned.
         /// </summary>
         /// <param name="left">

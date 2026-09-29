@@ -685,10 +685,10 @@ namespace MiKoSolutions.Analyzers
         /// The XML text syntax to get the text from.
         /// </param>
         /// <param name="builder">
-        /// The <see cref="StringBuilder"/>  to append the text to.
+        /// The <see cref="StringBuilder"/> to append the text to.
         /// </param>
         /// <returns>
-        /// The same <see cref="StringBuilder"/>  with the appended text content.
+        /// The same <see cref="StringBuilder"/> with the appended text content.
         /// </returns>
         internal static StringBuilder GetTextWithoutTrivia(this XmlTextSyntax value, StringBuilder builder)
         {
@@ -707,10 +707,10 @@ namespace MiKoSolutions.Analyzers
         /// The XML element to get the text from.
         /// </param>
         /// <param name="builder">
-        /// The <see cref="StringBuilder"/>  to append the text to.
+        /// The <see cref="StringBuilder"/> to append the text to.
         /// </param>
         /// <returns>
-        /// The same <see cref="StringBuilder"/>  with the appended text content.
+        /// The same <see cref="StringBuilder"/> with the appended text content.
         /// </returns>
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value, StringBuilder builder)
         {
@@ -2115,10 +2115,10 @@ namespace MiKoSolutions.Analyzers
         /// Removes all XML comment exterior markers from a <see cref="StringBuilder"/> 's content.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="StringBuilder"/>  to remove XML comment exterior markers from.
+        /// The <see cref="StringBuilder"/> to remove XML comment exterior markers from.
         /// </param>
         /// <returns>
-        /// The <see cref="StringBuilder"/>  with all XML comment exterior markers removed.
+        /// The <see cref="StringBuilder"/> with all XML comment exterior markers removed.
         /// </returns>
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without(Constants.Comments.XmlCommentExterior);
 

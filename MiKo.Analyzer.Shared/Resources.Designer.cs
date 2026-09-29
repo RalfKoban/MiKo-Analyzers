@@ -10464,6 +10464,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove unnecessary indentation.
+        /// </summary>
+        internal static string MiKo_2246_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2246_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation text should not contain unnecessary leading spaces.
+        ///Extra indentation inside documentation comments does not improve the generated documentation, but it makes the source code harder to read and maintain..
+        /// </summary>
+        internal static string MiKo_2246_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2246_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unnecessary indentation in XML documentation text.
+        /// </summary>
+        internal static string MiKo_2246_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2246_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should not contain unnecessary indentation.
+        /// </summary>
+        internal static string MiKo_2246_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2246_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works - let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>

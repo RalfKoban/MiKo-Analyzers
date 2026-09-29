@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules
 {
@@ -621,6 +623,54 @@ namespace MiKoSolutions.Analyzers.Rules
         /// The generic name syntax with the specified type argument list.
         /// </returns>
         protected static GenericNameSyntax GenericName(string name, TypeArgumentListSyntax types) => SyntaxFactory.GenericName(name).WithTypeArgumentList(types);
+
+        /// <summary>
+        /// Gets the proposed line position that is stored in the properties of the specified <see cref="Diagnostic"/>.
+        /// </summary>
+        /// <param name="issue">
+        /// The diagnostic that contains the proposed line number and character position.
+        /// </param>
+        /// <returns>
+        /// The proposed <see cref="LinePosition"/>, or <see cref="LinePosition.Zero"/> if the diagnostic does not contain the required information.
+        /// </returns>
+        protected static LinePosition GetProposedLinePosition(Diagnostic issue)
+        {
+            var properties = issue.Properties;
+
+            if (properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.LineNumber, out var lineNumber)
+             && properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.CharacterPosition, out var characterPosition))
+            {
+                return new LinePosition(int.Parse(lineNumber, NumberStyles.Integer), int.Parse(characterPosition, NumberStyles.Integer));
+            }
+
+            return LinePosition.Zero;
+        }
+
+        /// <summary>
+        /// Gets the proposed number of spaces that is stored in the properties of the specified <see cref="Diagnostic"/>.
+        /// </summary>
+        /// <param name="issue">
+        /// The diagnostic that contains the proposed number of spaces.
+        /// </param>
+        /// <returns>
+        /// The proposed number of spaces, or <c>0</c> if the diagnostic does not contain the required information.
+        /// </returns>
+        protected static int GetProposedSpaces(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Spaces, out var s)
+                                                                    ? int.Parse(s)
+                                                                    : 0;
+
+        /// <summary>
+        /// Gets the proposed number of additional spaces that is stored in the properties of the specified <see cref="Diagnostic"/>.
+        /// </summary>
+        /// <param name="issue">
+        /// The diagnostic that contains the proposed number of additional spaces.
+        /// </param>
+        /// <returns>
+        /// The proposed number of additional spaces, or <c>0</c> if the diagnostic does not contain the required information.
+        /// </returns>
+        protected static int GetProposedAdditionalSpaces(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, out var s)
+                                                                              ? int.Parse(s)
+                                                                              : 0;
 
         /// <summary>
         /// Gets a syntax node with leading spaces adjusted to the specified position, including proper indentation for descendant nodes on new lines.
