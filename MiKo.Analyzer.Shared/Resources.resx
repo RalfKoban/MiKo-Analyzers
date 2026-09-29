@@ -1449,7 +1449,7 @@ Using names like 'Mock', 'Stub', 'Fake', or 'Shim' adds clutter and distracts de
 Clear, meaningful names keep the focus on what the code does.</value>
   </data>
   <data name="MiKo_1108_MessageFormat" xml:space="preserve">
-    <value>Do not name it 'Mock', 'Stub', 'Fake' or 'Shim'</value>
+    <value>Do not name it '{1}'</value>
   </data>
   <data name="MiKo_1108_Title" xml:space="preserve">
     <value>Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'</value>
