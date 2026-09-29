@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var proposal = CreateReplacementProposal(text, text.Substring(delimiterIndex));
 
-                    ReportDiagnostics(context, Issue(attribute, proposal));
+                    ReportDiagnostics(context, Issue(attribute.TextTokens, proposal));
                 }
             }
         }

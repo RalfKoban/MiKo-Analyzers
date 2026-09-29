@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var reference = issue.Properties[Constants.AnalyzerCodeFixSharedData.TextReplacementKey];
 
-                return XmlCref(Cref(reference));
+                return XmlCref(Cref(reference)).WithTriviaFrom(syntax);
             }
 
             return syntax;
