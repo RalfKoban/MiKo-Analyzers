@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,9 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public const string Id = "MiKo_5014";
 
-        public MiKo_5014_MethodReturnsEmptyListAnalyzer() : base(Id)
+        private static readonly SyntaxKind[] Ancestors = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
+
+        public MiKo_5014_MethodReturnsEmptyListAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
+
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreationExpression, SyntaxKind.ObjectCreationExpression);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
@@ -38,99 +41,37 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
-        {
-            switch (symbol.GetSyntax())
-            {
-                case BaseMethodDeclarationSyntax method:
-                    return Analyze(method, symbol.Name);
-
-                case AccessorDeclarationSyntax accessor:
-                    return Analyze(accessor, symbol.Name);
-
-                default:
-                    return Array.Empty<Diagnostic>();
-            }
-        }
-
         private static bool HasIssue(ObjectCreationExpressionSyntax creation)
         {
             if (creation.Type is GenericNameSyntax generic && generic.GetName() is "List")
             {
-                var argumentList = creation.ArgumentList;
+                var arguments = creation.ArgumentList?.Arguments;
 
-                if (argumentList is null)
+                switch (arguments?.Count)
                 {
-                    var initializer = creation.Initializer;
-
-                    return initializer is null || initializer.Expressions.Count is 0;
-                }
-
-                var arguments = argumentList.Arguments;
-
-                switch (arguments.Count)
-                {
+                    case null:
                     case 0:
-                    case 1 when arguments[0].Expression is LiteralExpressionSyntax:
-                        return true;
+                    case 1 when arguments.GetValueOrDefault()[0].Expression is LiteralExpressionSyntax:
+                    {
+                        var initializer = creation.Initializer;
+
+                        return initializer is null || initializer.Expressions.Count is 0;
+                    }
                 }
             }
 
             return false;
         }
 
-        private Diagnostic[] Analyze(AccessorDeclarationSyntax accessor, string symbolName)
+        private void AnalyzeObjectCreationExpression(SyntaxNodeAnalysisContext context)
         {
-            var expressionBody = accessor.ExpressionBody;
-
-            return expressionBody != null
-                   ? Analyze(expressionBody, symbolName)
-                   : Analyze(accessor.Body, symbolName);
-        }
-
-        private Diagnostic[] Analyze(BaseMethodDeclarationSyntax method, string symbolName)
-        {
-            var expressionBody = method.ExpressionBody;
-
-            return expressionBody != null
-                   ? Analyze(expressionBody, symbolName)
-                   : Analyze(method.Body, symbolName);
-        }
-
-        private Diagnostic[] Analyze(ArrowExpressionClauseSyntax expressionBody, string symbolName)
-        {
-            return Analyze(expressionBody.DescendantNodes<ObjectCreationExpressionSyntax>(), symbolName);
-        }
-
-        private Diagnostic[] Analyze(BlockSyntax body, string symbolName)
-        {
-            if (body is null)
+            if (context.Node is ObjectCreationExpressionSyntax node && context.ContainingSymbol is IMethodSymbol method)
             {
-                return Array.Empty<Diagnostic>();
-            }
-
-            return Analyze(body.DescendantNodes<ReturnStatementSyntax>().SelectMany(_ => _.DescendantNodes<ObjectCreationExpressionSyntax>()), symbolName);
-        }
-
-        private Diagnostic[] Analyze(IEnumerable<ObjectCreationExpressionSyntax> creations, string symbolName)
-        {
-            List<Diagnostic> issues = null;
-
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var creation in creations)
-            {
-                if (HasIssue(creation))
+                if (ShallAnalyze(method) && HasIssue(node) && node.AncestorsWithinMethods().Any(_ => _.IsAnyKind(Ancestors)))
                 {
-                    if (issues is null)
-                    {
-                        issues = new List<Diagnostic>(1);
-                    }
-
-                    issues.Add(Issue(symbolName, creation));
+                    ReportDiagnostics(context, Issue(method.Name, node));
                 }
             }
-
-            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -43,13 +43,24 @@ public class TestMe
 ");
 
         [TestCaseSource(nameof(ProblematicReturnTypes))]
-        public void No_issue_is_reported_for_a_method_that_returns_a_list_with_a_non_empty_initializer_(string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_method_that_returns_a_list_without_arguments_but_with_a_non_empty_initializer_(string returnType) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
 public class TestMe
 {
     public " + returnType + @"<int> DoSomething() { return new List<int> { 42 }; }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void No_issue_is_reported_for_a_method_that_returns_a_list_with_empty_arguments_and_a_non_empty_initializer_(string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public " + returnType + @"<int> DoSomething() { return new List<int>() { 42 }; }
 }
 ");
 
@@ -133,20 +144,6 @@ namespace Bla
     public class TestMe
     {
         public static List<int> Create() => new List<int> { };
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_non_empty_collection_initializer_with_enumerable_as_method_return_value() => No_issue_is_reported_for(@"
-using System;
-using System.Collections.Generic;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static IEnumerable<int> Create() => new List<int> { 42 };
     }
 }
 ");
