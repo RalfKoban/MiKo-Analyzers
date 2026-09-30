@@ -3222,6 +3222,8 @@ namespace MiKoSolutions.Analyzers
                 return value.InsertNodeBefore(value.FirstChild(), directive);
             }
 
+            bool isSystem = usingNamespace.StartsWith("System", StringComparison.Ordinal);
+
             for (var index = 0; index < usingsCount; index++)
             {
                 var usingDirective = usings[index];
@@ -3230,14 +3232,20 @@ namespace MiKoSolutions.Analyzers
 
                 if (usingName is "System")
                 {
-                    // skip 'System' namespace
-                    continue;
+                    if (isSystem is false)
+                    {
+                        // skip 'System' namespace
+                        continue;
+                    }
                 }
 
                 if (usingName?.StartsWith("System.", StringComparison.Ordinal) is true)
                 {
-                    // skip all 'System' sub-namespaces
-                    continue;
+                    if (isSystem is false)
+                    {
+                        // skip all 'System' sub-namespaces
+                        continue;
+                    }
                 }
 
                 if (string.Compare(usingName, usingNamespace, StringComparison.OrdinalIgnoreCase) > 0)
