@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Concurrent;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -9,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3236";
+
+        private static readonly ConcurrentDictionary<string, TypeKind> Cache = new ConcurrentDictionary<string, TypeKind>();
 
         public MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -35,18 +39,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false; // aliases using full qualified types are allowed
             }
 
-            var identifier = name.FirstDescendant<IdentifierNameSyntax>();
-            var type = identifier.GetTypeSymbol(context.SemanticModel);
+            var fullName = name.ToString();
 
-            switch (type?.TypeKind)
+            // assume that fully qualified names will not change their type, so we cache it here to avoid costly calls for the type symbols
+            if (Cache.TryGetValue(fullName, out var typeKind) is false)
+            {
+                var identifier = name.FirstDescendant<IdentifierNameSyntax>();
+                var type = identifier.GetTypeSymbol(context.SemanticModel);
+                typeKind = type?.TypeKind ?? TypeKind.Unknown;
+
+                Cache.TryAdd(fullName, typeKind);
+            }
+
+            switch (typeKind)
             {
                 case TypeKind.Class: // nested classes are allowed
                 case TypeKind.Struct: // nested structs are allowed
                 case TypeKind.Enum: // enums are allowed
                     return false;
-            }
 
-            return true;
+                default:
+                    return true;
+            }
         }
 
         private void AnalyzeQualifiedName(SyntaxNodeAnalysisContext context)
