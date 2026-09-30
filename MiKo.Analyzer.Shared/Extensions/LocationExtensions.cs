@@ -521,9 +521,10 @@ namespace MiKoSolutions.Analyzers
                     {
                         var tokenText = token.ValueText;
                         var leadingWhitespaces = tokenText.CountLeadingWhitespaces();
+                        var wordLength = tokenText.AsSpan().FirstWord().Length;
 
                         var location = leadingWhitespaces < tokenText.Length // check for spaces
-                                       ? token.GetLocationWithOffset(0, leadingWhitespaces)
+                                       ? token.GetLocationWithOffset(leadingWhitespaces, leadingWhitespaces + wordLength)
                                        : token.GetLocation();
 
                         return location;
