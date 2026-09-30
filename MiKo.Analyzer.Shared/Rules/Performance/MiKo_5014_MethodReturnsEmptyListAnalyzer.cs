@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,8 +9,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     public sealed class MiKo_5014_MethodReturnsEmptyListAnalyzer : PerformanceAnalyzer
     {
         public const string Id = "MiKo_5014";
-
-        private static readonly SyntaxKind[] Ancestors = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
 
         public MiKo_5014_MethodReturnsEmptyListAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -63,11 +59,35 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
+        private static bool GetsReturned(ObjectCreationExpressionSyntax node)
+        {
+            foreach (var ancestor in node.AncestorsWithinMethods())
+            {
+                switch (ancestor)
+                {
+                    case ArrowExpressionClauseSyntax _:
+                    case ReturnStatementSyntax _:
+                        return true;
+
+                    case ArgumentSyntax argument:
+                    {
+                        // it shall be an issue when we have a read-only collection that uses the list as constructor parameter
+                        return argument.Parent?.Parent is ObjectCreationExpressionSyntax o && o.Type is GenericNameSyntax generic && generic.GetName() is "ReadOnlyCollection";
+                    }
+
+                    case AssignmentExpressionSyntax _:
+                        return false;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeObjectCreationExpression(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is ObjectCreationExpressionSyntax node && context.ContainingSymbol is IMethodSymbol method)
             {
-                if (ShallAnalyze(method) && HasIssue(node) && node.AncestorsWithinMethods().Any(_ => _.IsAnyKind(Ancestors)))
+                if (ShallAnalyze(method) && HasIssue(node) && GetsReturned(node))
                 {
                     ReportDiagnostics(context, Issue(method.Name, node));
                 }

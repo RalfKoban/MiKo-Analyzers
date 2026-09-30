@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -234,6 +235,51 @@ namespace Bla
     public class TestMe
     {
         public static List<int> Create() => new List<int>();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_initializer_with_list_as_argument() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe(List<int> items)
+    {
+        public static IEnumerable<TestMe> Create() => new List<TestMe> { new TestMe(new List<int>()) };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_initializer_with_list_in_initializer() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe()
+    {
+        public List<int> Items { get; set; }
+
+        public static IEnumerable<TestMe> Create() => new List<TestMe> { new TestMe { Items = new List<int>() } };
+    }
+}
+");
+
+        [Test] // this is a special case where we want to fix it as we have only a read-only collection, so the list will never get updates
+        public void An_issue_is_reported_for_object_initializer_of_ReadOnlyCollection_and_list_as_argument() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace Bla
+{
+    public class TestMe()
+    {
+        public static IReadOnlyList<int> Create() => new ReadOnlyCollection<int>(new List<int>());
     }
 }
 ");
