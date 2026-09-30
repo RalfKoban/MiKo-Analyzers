@@ -25,14 +25,25 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return Task.FromResult(updatedSyntax);
         }
 
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedRoot = GetUpdatedSyntaxRoot(root);
+
+            return Task.FromResult(updatedRoot);
+        }
+
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             if (syntax is ObjectCreationExpressionSyntax node && node.Type is GenericNameSyntax generic)
             {
-                return Invocation(nameof(Array), nameof(Array.Empty), generic.TypeArgumentList.Arguments.ToArray()).WithTriviaFrom(node);
+                var invocation = Invocation(nameof(Array), nameof(Array.Empty), generic.TypeArgumentList.Arguments.ToArray());
+
+                return invocation.WithTriviaFrom(node);
             }
 
             return syntax;
         }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root) => root.WithUsing("System");
     }
 }

@@ -25,21 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                 if (returnType.TypeKind is TypeKind.Interface)
                 {
-                    switch (returnType.SpecialType)
+                    switch (returnType.OriginalDefinition.SpecialType)
                     {
-                        case SpecialType.None:
-                        {
-                            switch (returnType.Name)
-                            {
-                                case "IReadOnlyList":
-                                case "IReadOnlyCollection":
-                                    return true;
-
-                                default:
-                                    return false;
-                            }
-                        }
-
+                        case SpecialType.System_Collections_Generic_IEnumerable_T:
                         case SpecialType.System_Collections_Generic_IReadOnlyList_T:
                         case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
                             return true;
@@ -67,17 +55,31 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool HasIssue(ObjectCreationExpressionSyntax creation)
         {
-            if (creation.ArgumentList?.Arguments.Count is 0 || creation.Initializer?.Expressions.Count is 0)
+            if (creation.Type is GenericNameSyntax generic && generic.GetName() is "List")
             {
-                var name = creation.Type.GetNameOnlyPartWithoutGeneric();
+                var argumentList = creation.ArgumentList;
 
-                return name is "List";
+                if (argumentList is null)
+                {
+                    var initializer = creation.Initializer;
+
+                    return initializer is null || initializer.Expressions.Count is 0;
+                }
+
+                var arguments = argumentList.Arguments;
+
+                switch (arguments.Count)
+                {
+                    case 0:
+                    case 1 when arguments[0].Expression is LiteralExpressionSyntax:
+                        return true;
+                }
             }
 
             return false;
         }
 
-        private IEnumerable<Diagnostic> Analyze(AccessorDeclarationSyntax accessor, string symbolName)
+        private Diagnostic[] Analyze(AccessorDeclarationSyntax accessor, string symbolName)
         {
             var expressionBody = accessor.ExpressionBody;
 
@@ -86,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                    : Analyze(accessor.Body, symbolName);
         }
 
-        private IEnumerable<Diagnostic> Analyze(BaseMethodDeclarationSyntax method, string symbolName)
+        private Diagnostic[] Analyze(BaseMethodDeclarationSyntax method, string symbolName)
         {
             var expressionBody = method.ExpressionBody;
 
@@ -95,12 +97,12 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                    : Analyze(method.Body, symbolName);
         }
 
-        private IEnumerable<Diagnostic> Analyze(ArrowExpressionClauseSyntax expressionBody, string symbolName)
+        private Diagnostic[] Analyze(ArrowExpressionClauseSyntax expressionBody, string symbolName)
         {
             return Analyze(expressionBody.DescendantNodes<ObjectCreationExpressionSyntax>(), symbolName);
         }
 
-        private IEnumerable<Diagnostic> Analyze(BlockSyntax body, string symbolName)
+        private Diagnostic[] Analyze(BlockSyntax body, string symbolName)
         {
             if (body is null)
             {
@@ -110,9 +112,25 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return Analyze(body.DescendantNodes<ReturnStatementSyntax>().SelectMany(_ => _.DescendantNodes<ObjectCreationExpressionSyntax>()), symbolName);
         }
 
-        private IEnumerable<Diagnostic> Analyze(IEnumerable<ObjectCreationExpressionSyntax> creations, string symbolName)
+        private Diagnostic[] Analyze(IEnumerable<ObjectCreationExpressionSyntax> creations, string symbolName)
         {
-            return creations.Where(HasIssue).Select(_ => Issue(symbolName, _));
+            List<Diagnostic> issues = null;
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var creation in creations)
+            {
+                if (HasIssue(creation))
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(symbolName, creation));
+                }
+            }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }
