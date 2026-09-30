@@ -3330,6 +3330,18 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsTask(this ITypeSymbol value) => value?.Name is nameof(Task);
 
         /// <summary>
+        /// Determines whether a type is <see cref="System.Threading.Tasks.ValueTask"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is <see cref="System.Threading.Tasks.ValueTask"/>; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsValueTask(this ITypeSymbol value) => value?.Name is nameof(ValueTask);
+
+        /// <summary>
         /// Determines whether a method is an assembly-wide test setup method.
         /// </summary>
         /// <param name="value">

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -266,6 +265,190 @@ namespace Bla
 
         public static IEnumerable<TestMe> Create() => new List<TestMe> { new TestMe { Items = new List<int>() } };
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_async_method_that_returns_a_Task_without_result() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomething() { await Task.Delay(1); }
+}
+");
+
+        [TestCase("Task<int>")]
+        [TestCase("Task<List<int>>")]
+        [TestCase("Task<IList<int>>")]
+        [TestCase("Task<ICollection<int>>")]
+        [TestCase("Task<Dictionary<int, int>>")]
+        [TestCase("ValueTask<List<int>>")]
+        public void No_issue_is_reported_for_async_method_that_returns_a_(string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async " + returnType + @" DoSomething() { await Task.Delay(1); return default; }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void No_issue_is_reported_for_async_method_that_returns_a_list_with_a_non_empty_initializer_(string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return new List<int> { 42 }; }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void No_issue_is_reported_for_Task_FromResult_with_a_non_empty_initializer_(string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<" + returnType + @"<int>> DoSomething() => Task.FromResult<" + returnType + @"<int>>(new List<int> { 42 });
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_async_method_that_returns_a_List_with_no_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<List<int>> DoSomething() { await Task.Delay(1); return new List<int>(); }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_async_method_that_returns_a_collection_expression() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<IEnumerable<int>> DoSomething() { await Task.Delay(1); return []; }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_async_method_that_returns_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return new List<int>(); }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_async_ValueTask_method_that_returns_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async ValueTask<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return new List<int>(); }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_async_method_that_returns_a_list_with_a_non_default_capacity_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return new List<int>(42); }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_async_method_that_returns_a_list_with_an_empty_initializer_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return new List<int> { }; }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_async_expression_body_method_that_returns_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() => new List<int>();
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_async_conditional_method_that_returns_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething(bool flag) { await Task.Delay(1); return flag ? new List<int>() : new List<int> { 42 }; }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_Task_FromResult_with_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<" + returnType + @"<int>> DoSomething() => Task.FromResult<" + returnType + @"<int>>(new List<int>());
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_Task_FromResult_in_block_body_with_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<" + returnType + @"<int>> DoSomething() { return Task.FromResult<" + returnType + @"<int>>(new List<int>()); }
+}
+");
+
+        [TestCaseSource(nameof(ProblematicReturnTypes))]
+        public void An_issue_is_reported_for_ValueTask_with_an_empty_list_(string returnType) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public ValueTask<" + returnType + @"<int>> DoSomething() => new ValueTask<" + returnType + @"<int>>(new List<int>());
 }
 ");
 
@@ -609,6 +792,110 @@ namespace Bla
     {
         public static " + returnType + @"<int> Create() => Array.Empty<int>(); // some comment
     }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_async_method_that_returns_an_empty_list_(
+                                                                            [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                            [Values("new List<int> { }", "new List<int>()", "new List<int>(42)")] string creation)
+        {
+            var template = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return ###; }
+}
+";
+
+            VerifyCSharpFix(template.Replace("###", creation), template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_async_ValueTask_method_that_returns_an_empty_list_(
+                                                                                    [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                                    [Values("new List<int> { }", "new List<int>()")] string creation)
+        {
+            var template = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async ValueTask<" + returnType + @"<int>> DoSomething() { await Task.Delay(1); return ###; }
+}
+";
+
+            VerifyCSharpFix(template.Replace("###", creation), template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_async_expression_body_method_that_returns_an_empty_list_(
+                                                                                            [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                                            [Values("new List<int> { }", "new List<int>()")] string creation)
+        {
+            var template = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething() => ###;
+}
+";
+
+            VerifyCSharpFix(template.Replace("###", creation), template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Task_FromResult_with_an_empty_list_(
+                                                                        [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                        [Values("new List<int> { }", "new List<int>()")] string creation)
+        {
+            var template = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<" + returnType + @"<int>> DoSomething() => Task.FromResult<" + returnType + @"<int>>(###);
+}
+";
+
+            VerifyCSharpFix(template.Replace("###", creation), template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_async_conditional_method_that_returns_an_empty_list_([ValueSource(nameof(ProblematicReturnTypes))] string returnType)
+        {
+            var originalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething(bool flag) { await Task.Delay(1); return flag ? new List<int>() : new List<int> { 42 }; }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task<" + returnType + @"<int>> DoSomething(bool flag) { await Task.Delay(1); return flag ? Array.Empty<int>() : new List<int> { 42 }; }
 }
 ";
 

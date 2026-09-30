@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Threading.Tasks;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,15 +24,27 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 var returnType = symbol.ReturnType;
 
-                if (returnType.TypeKind is TypeKind.Interface)
+                if (returnType.IsTask() || returnType.IsValueTask())
                 {
-                    switch (returnType.OriginalDefinition.SpecialType)
-                    {
-                        case SpecialType.System_Collections_Generic_IEnumerable_T:
-                        case SpecialType.System_Collections_Generic_IReadOnlyList_T:
-                        case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
-                            return true;
-                    }
+                    return returnType.TryGetGenericArgumentType(out var generic) && ShallAnalyze(generic);
+                }
+
+                return ShallAnalyze(returnType);
+            }
+
+            return false;
+        }
+
+        private static bool ShallAnalyze(ITypeSymbol returnType)
+        {
+            if (returnType.TypeKind is TypeKind.Interface)
+            {
+                switch (returnType.OriginalDefinition.SpecialType)
+                {
+                    case SpecialType.System_Collections_Generic_IEnumerable_T:
+                    case SpecialType.System_Collections_Generic_IReadOnlyList_T:
+                    case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
+                        return true;
                 }
             }
 
@@ -69,14 +83,28 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     case ReturnStatementSyntax _:
                         return true;
 
+                    case AssignmentExpressionSyntax _:
+                        return false;
+
                     case ArgumentSyntax argument:
                     {
                         // it shall be an issue when we have a read-only collection that uses the list as constructor parameter
-                        return argument.Parent?.Parent is ObjectCreationExpressionSyntax o && o.Type is GenericNameSyntax generic && generic.GetName() is "ReadOnlyCollection";
-                    }
+                        switch (argument.Parent?.Parent)
+                        {
+                            case ObjectCreationExpressionSyntax o when o.Type is GenericNameSyntax generic:
+                            {
+                                var name = generic.GetName();
 
-                    case AssignmentExpressionSyntax _:
-                        return false;
+                                return name is "ReadOnlyCollection" || name is nameof(ValueTask);
+                            }
+
+                            case InvocationExpressionSyntax i when i.GetName() is nameof(Task.FromResult) && i.GetIdentifierName() is nameof(Task):
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
                 }
             }
 
