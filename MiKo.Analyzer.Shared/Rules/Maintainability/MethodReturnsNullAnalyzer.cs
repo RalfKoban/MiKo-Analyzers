@@ -102,6 +102,54 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        private static bool IsOverwritten(ExpressionSyntax assignment)
+        {
+            string name;
+            SyntaxNode statement;
+
+            switch (assignment.Parent)
+            {
+                case EqualsValueClauseSyntax e when e.Parent is VariableDeclaratorSyntax declarator:
+                {
+                    name = declarator.GetName();
+                    statement = declarator.Parent?.Parent;
+
+                    break;
+                }
+
+                case AssignmentExpressionSyntax a when a.Left is IdentifierNameSyntax identifier:
+                {
+                    name = identifier.GetName();
+                    statement = a.Parent;
+
+                    break;
+                }
+
+                default:
+                    return false;
+            }
+
+            if (statement is StatementSyntax current && current.Parent is BlockSyntax block)
+            {
+                var statements = block.Statements;
+
+                for (var i = statements.IndexOf(current) + 1; i < statements.Count; i++)
+                {
+                    if (statements[i] is ExpressionStatementSyntax s
+                     && s.Expression is AssignmentExpressionSyntax later
+                     && later.IsKind(SyntaxKind.SimpleAssignmentExpression)
+                     && later.Left is IdentifierNameSyntax left
+                     && left.GetName() == name
+                     && later.Right.IsKind(SyntaxKind.NullLiteralExpression) is false)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static List<ExpressionSyntax> GetIssues(in SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
         {
             var results = new List<ExpressionSyntax>();
@@ -222,6 +270,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
             }
 
+            if (returnedExpression is BinaryExpressionSyntax coalesce && coalesce.IsKind(SyntaxKind.CoalesceExpression))
+            {
+                AnalyzeExpression(context, method, coalesce.Right);
+
+                return;
+            }
+
             if (HasIssue(returnedExpression))
             {
                 ReportIssue(context, returnedExpression);
@@ -244,8 +299,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            var exp = returnedExpression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) ? b.Right : returnedExpression;
-            var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
+            var dataFlow = context.SemanticModel.AnalyzeDataFlow(returnedExpression);
 
             var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
 
@@ -256,13 +310,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // we found 'null' candidates
                 AnalyzeAssignments(context, candidates); // TODO RKN: Inspect expression
             }
-            else
+
+            // the conditional has to be inspected independent of any variable candidates
+            if (returnedExpression is ConditionalExpressionSyntax conditional)
             {
-                // might be no candidates with variables, so check for ternary operators
-                if (exp is ConditionalExpressionSyntax conditional)
-                {
-                    AnalyzeConditional(context, conditional);
-                }
+                AnalyzeConditional(context, conditional);
             }
         }
 
@@ -272,19 +324,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var assignmentsWithIssues = new List<ExpressionSyntax>();
 
-                var hasIssue = false;
-
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var assignment in assignments)
                 {
-                    hasIssue = HasIssue(assignment);
-
-                    if (hasIssue && assignment.Ancestors().Any(_ => _.IsAnyKind(ImportantAncestors)))
+                    if (HasIssue(assignment) && IsOverwritten(assignment) is false && assignment.AncestorsWithinMethods().Any(_ => _.IsAnyKind(ImportantAncestors)))
                     {
                         assignmentsWithIssues.Add(assignment);
                     }
                 }
 
-                if (hasIssue)
+                if (assignmentsWithIssues.Count > 0)
                 {
                     ReportIssues(context, assignmentsWithIssues);
                 }

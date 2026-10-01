@@ -118,6 +118,60 @@ public class TestMe
     public Task DoSomething() => null;
 }");
 
+        [Test]
+        public void An_issue_is_reported_for_Task_method_returning_variable_that_is_null_in_first_assignment_and_non_null_in_last_assignment() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable;
+
+        if (flag)
+            variable = null;
+        else
+            variable = Task.CompletedTask;
+
+        return variable;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Task_method_returning_Coalescence_operator_with_null_on_right_side() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Task value)
+    {
+        return value ?? null;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Task_method_returning_conditional_with_null_and_variable_that_has_assignments() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable = Task.CompletedTask;
+
+        return flag ? null : variable;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Task_method_body_returning_Coalescence_operator_with_null_on_right_side() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Task value) => value ?? null;
+}");
+
         protected override string GetDiagnosticId() => MiKo_3071_TaskMethodReturnsNullAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3071_TaskMethodReturnsNullAnalyzer();
