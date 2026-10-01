@@ -541,6 +541,139 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void No_issue_is_reported_if_multi_line_assignment_of_object_initializer_is_on_other_line() => No_issue_is_reported_for(@"
+using System;
+using System.Net.Http;
+
+public class TestMe
+{
+    public HttpClient Client { get; set; }
+
+    public void DoSomething()
+    {
+        TestMe x = new TestMe
+                       {
+                           Client =
+                                    {
+                                        Timeout = TimeSpan.FromSeconds(1),
+                                        MaxResponseContentBufferSize = 1,
+                                    },
+                       };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_object_initializer_assignment_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int Value { get; set; }
+
+    public void DoSomething()
+    {
+        var x = new TestMe { Value = 1 };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_assignment_of_object_initializer_is_on_other_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int Value { get; set; }
+
+    public void DoSomething()
+    {
+        var x =
+                new TestMe { Value = 1 };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_assignment_of_value_inside_object_initializer_is_on_other_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int Value { get; set; }
+
+    public void DoSomething()
+    {
+        var x = new TestMe
+                    {
+                        Value =
+                                1,
+                    };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_assignment_with_equals_inside_object_initializer_is_on_other_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int Value { get; set; }
+
+    public void DoSomething()
+    {
+        var x = new TestMe
+                    {
+                        Value
+                              = 1,
+                    };
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_if_assignment_of_value_inside_object_initializer_is_on_different_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int Value { get; set; }
+
+    public void DoSomething()
+    {
+        var x = new TestMe
+                    {
+                        Value =
+                                1,
+                    };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int Value { get; set; }
+
+    public void DoSomething()
+    {
+        var x = new TestMe
+                    {
+                        Value = 1,
+                    };
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6041_AssignmentsAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6041_AssignmentsAreOnSameLineAnalyzer();
