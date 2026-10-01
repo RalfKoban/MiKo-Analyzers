@@ -365,7 +365,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (assignments.Any(HasIssue))
             {
-                var assignmentsWithIssues = new List<ExpressionSyntax>();
+                var assignmentsWithIssues = new List<ExpressionSyntax>(1);
 
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var assignment in assignments)
@@ -394,7 +394,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var issues = GetIssues(context, conditional);
 
-            ReportIssues(context, issues, reported);
+            if (issues.Count > 0)
+            {
+                ReportIssues(context, issues, reported);
+            }
         }
 
         private void ReportIssues(in SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignmentsWithIssues, ISet<SyntaxNode> reported)
