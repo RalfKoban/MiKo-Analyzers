@@ -940,6 +940,72 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void An_issue_is_reported_for_method_returning_variable_that_is_null_in_first_assignment_and_non_null_in_last_assignment() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable;
+
+            if (flag)
+                variable = null;
+            else
+                variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_method_returning_Coalescence_operator_with_null_on_right_side() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<int> value)
+        {
+            return value ?? null;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_method_returning_conditional_with_null_and_variable_that_has_assignments() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable = new List<int>();
+
+            return flag ? null : variable;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_method_body_returning_Coalescence_operator_with_null_on_right_side() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<int> value) => value ?? null;
+    }
+}");
+
         //// TODO: RKN what about Linq calls such as FirstOrDefault();
 
         protected override string GetDiagnosticId() => MiKo_3070_EnumerableMethodReturnsNullAnalyzer.Id;
