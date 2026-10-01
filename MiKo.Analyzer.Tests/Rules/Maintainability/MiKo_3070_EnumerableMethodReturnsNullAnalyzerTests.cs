@@ -1006,6 +1006,135 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_in_if_without_braces_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable;
+
+            if (flag)
+                variable = null;
+
+            variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_in_if_else_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable;
+
+            if (flag)
+            {
+                variable = null;
+            }
+            else
+            {
+                variable = null;
+            }
+
+            variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_in_try_but_then_reassigned() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable;
+
+            try
+            {
+                if (flag)
+                    variable = null;
+            }
+            finally
+            {
+                Console.WriteLine();
+            }
+
+            variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_in_loop_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable;
+
+            while (flag)
+            {
+                if (flag)
+                    variable = null;
+
+                flag = false;
+            }
+
+            variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_and_returned_before_reassignment() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            IEnumerable<int> variable = null;
+
+            if (flag)
+                return variable;
+
+            variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
+
         //// TODO: RKN what about Linq calls such as FirstOrDefault();
 
         protected override string GetDiagnosticId() => MiKo_3070_EnumerableMethodReturnsNullAnalyzer.Id;

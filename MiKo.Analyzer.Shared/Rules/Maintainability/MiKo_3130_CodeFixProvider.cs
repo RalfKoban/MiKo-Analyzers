@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var whenTrue = ifStatement.Statement;
 
-                var belowIf = whenTrue.DescendantNodesAndSelf().OfType<StatementSyntax>().Any(_ => _.IsEquivalentTo(assertFailStatement));
+                var belowIf = whenTrue.DescendantNodesAndSelf<StatementSyntax>().Any(_ => _.IsEquivalentTo(assertFailStatement));
 
                 (ArgumentSyntax condition, ArgumentSyntax constraint) = UpdateArguments(ifStatement.Condition, belowIf, semanticModel);
 
