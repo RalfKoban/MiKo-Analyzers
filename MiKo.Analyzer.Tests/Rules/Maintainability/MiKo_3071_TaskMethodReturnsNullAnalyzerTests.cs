@@ -172,6 +172,120 @@ public class TestMe
     public Task DoSomething(Task value) => value ?? null;
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_Task_method_returning_a_variable_that_is_null_in_if_without_braces_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable;
+
+        if (flag)
+            variable = null;
+
+        variable = Task.CompletedTask;
+
+        return variable;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Task_method_returning_a_variable_that_is_null_in_if_else_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable;
+
+        if (flag)
+        {
+            variable = null;
+        }
+        else
+        {
+            variable = null;
+        }
+
+        variable = Task.CompletedTask;
+
+        return variable;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Task_method_returning_a_variable_that_is_null_in_try_but_then_reassigned() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable;
+
+        try
+        {
+            if (flag)
+                variable = null;
+        }
+        finally
+        {
+            Console.WriteLine();
+        }
+
+        variable = Task.CompletedTask;
+
+        return variable;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Task_method_returning_a_variable_that_is_null_in_loop_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable;
+
+        while (flag)
+        {
+            if (flag)
+                variable = null;
+
+            flag = false;
+        }
+
+        variable = Task.CompletedTask;
+
+        return variable;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Task_method_returning_a_variable_that_is_null_and_returned_before_reassignment() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(bool flag)
+    {
+        Task variable = null;
+
+        if (flag)
+            return variable;
+
+        variable = Task.CompletedTask;
+
+        return variable;
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_3071_TaskMethodReturnsNullAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3071_TaskMethodReturnsNullAnalyzer();

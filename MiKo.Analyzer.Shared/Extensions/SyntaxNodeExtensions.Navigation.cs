@@ -254,6 +254,20 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().Where(predicate);
 
         /// <summary>
+        /// Gets the specified syntax node and all its descendant nodes that are of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of nodes to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node to get the node itself and its descendants from.
+        /// </param>
+        /// <returns>
+        /// A sequence that contains the specified syntax node (if it is of the specified type) and all its descendant nodes of the specified type.
+        /// </returns>
+        internal static IEnumerable<T> DescendantNodesAndSelf<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodesAndSelf().OfType<T>();
+
+        /// <summary>
         /// Gets all descendant tokens of the specified syntax node that have the specified syntax kind.
         /// </summary>
         /// <param name="value">
