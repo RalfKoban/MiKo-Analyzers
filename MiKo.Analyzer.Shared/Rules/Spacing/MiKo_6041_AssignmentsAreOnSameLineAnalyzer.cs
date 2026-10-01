@@ -40,9 +40,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (node)
             {
-                // arrays and collections spanning multiple lines are allowed
+                // arrays and collections spanning multiple lines are allowed (except the initializer spans single line)
                 case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
+                {
+                    var expressions = initializer.Expressions;
+
+                    if (expressions.Count is 1 && expressions[0] is AssignmentExpressionSyntax assignment && assignment.IsKind(SyntaxKind.SimpleAssignmentExpression))
+                    {
+                        return assignment.Right.IsSpanningMultipleLines();
+                    }
+
                     return true;
+                }
 #if VS2022 || VS2026
                 case CollectionExpressionSyntax expression when expression.OpenBracketToken.IsOnSameLineAs(expression.CloseBracketToken) is false:
                     return true;
