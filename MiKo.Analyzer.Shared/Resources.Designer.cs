@@ -15809,8 +15809,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A method parameter typed as `IEnumerable&lt;T&gt;` that is immediately converted via `.ToList()` signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
-        ///Using `IReadOnlyList&lt;T&gt;` as the parameter type instead makes the intent explicit..
+        ///   Looks up a localized string similar to A method parameter typed as &apos;IEnumerable&lt;T&gt;&apos; that is immediately converted via &apos;.ToList()&apos; or &apos;.ToArray()&apos; signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
+        ///Using &apos;IReadOnlyList&lt;T&gt;&apos; as the parameter type instead makes the intent explicit..
         /// </summary>
         internal static string MiKo_3235_Description {
             get {
@@ -15828,7 +15828,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not call &apos;ToList&apos; on an &apos;IEnumerable&apos; parameter.
+        ///   Looks up a localized string similar to Do not call &apos;ToList&apos; or &apos;ToArray&apos; on an &apos;IEnumerable&apos; parameter.
         /// </summary>
         internal static string MiKo_3235_Title {
             get {

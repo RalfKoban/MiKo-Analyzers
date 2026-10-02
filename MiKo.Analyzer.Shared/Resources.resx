@@ -5528,14 +5528,14 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
     <value>Prefer pattern matching over boolean Equals checks</value>
   </data>
   <data name="MiKo_3235_Description" xml:space="preserve">
-    <value>A method parameter typed as `IEnumerable&lt;T&gt;` that is immediately converted via `.ToList()` signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
-Using `IReadOnlyList&lt;T&gt;` as the parameter type instead makes the intent explicit.</value>
+    <value>A method parameter typed as 'IEnumerable&lt;T&gt;' that is immediately converted via '.ToList()' or '.ToArray()' signals that the method actually needs a stable, indexed collection. This creates an unnecessary copy, hides a performance cost, and risks issues with lazy or infinite sequences.
+Using 'IReadOnlyList&lt;T&gt;' as the parameter type instead makes the intent explicit.</value>
   </data>
   <data name="MiKo_3235_MessageFormat" xml:space="preserve">
     <value>Change '{0}' type to 'IReadOnlyList'</value>
   </data>
   <data name="MiKo_3235_Title" xml:space="preserve">
-    <value>Do not call 'ToList' on an 'IEnumerable' parameter</value>
+    <value>Do not call 'ToList' or 'ToArray' on an 'IEnumerable' parameter</value>
   </data>
   <data name="MiKo_3236_Description" xml:space="preserve">
     <value>Qualified names can make code longer and harder to read. Use an alias for types with long namespace names to keep declarations short and easier to understand.

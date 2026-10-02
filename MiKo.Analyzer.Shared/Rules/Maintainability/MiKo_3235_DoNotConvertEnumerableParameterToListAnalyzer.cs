@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ContainingType?.TypeKind is TypeKind.Class && symbol.Parameters.Any(IsIEnumerable);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ContainingType?.TypeKind is TypeKind.Class && symbol.Parameters.Any(IsIEnumerable) && IsCall(symbol.Name) is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
@@ -53,9 +53,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Array.Empty<Diagnostic>();
         }
 
-        private static bool IsCall(MemberAccessExpressionSyntax syntax)
+        private static bool IsCall(MemberAccessExpressionSyntax syntax) => IsCall(syntax.GetName());
+
+        private static bool IsCall(string name)
         {
-            switch (syntax.GetName())
+            switch (name)
             {
                 case nameof(Enumerable.ToList):
                 case nameof(Enumerable.ToArray):
