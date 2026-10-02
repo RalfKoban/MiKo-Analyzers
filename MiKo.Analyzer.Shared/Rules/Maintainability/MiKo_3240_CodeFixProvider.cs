@@ -39,11 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var returnStatement = updatedIfStatement.FirstDescendant<ReturnStatementSyntax>();
                     updatedIfStatement = updatedIfStatement.ReplaceNode(returnStatement, returnStatement.WithExpression(value));
 
-                    var updatedStatements = statements;
+                    SyntaxList<StatementSyntax> updatedStatements;
 
-                    var elseClause = ifStatement.Else;
-
-                    if (elseClause?.Statement is BlockSyntax elseBlock)
+                    if (ifStatement.Else is ElseClauseSyntax elseClause && elseClause.Statement is BlockSyntax elseBlock)
                     {
                         // move declaration statement into else clause
                         var elseBlockStatements = elseBlock.Statements;
