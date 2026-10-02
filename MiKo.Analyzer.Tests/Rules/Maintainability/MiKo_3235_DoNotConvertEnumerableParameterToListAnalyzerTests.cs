@@ -46,6 +46,23 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_methods_with_IEnumerable_parameter_and_named_([ValueSource(nameof(Calls))] string call) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> " + call + @"(IEnumerable<int> values)
+        {
+            return values." + call + @"();
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_methods_with_IEnumerable_parameter_and_unrelated_call_([ValueSource(nameof(Calls))] string call) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
