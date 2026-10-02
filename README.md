@@ -505,7 +505,7 @@ The following tables list all the 577 rules that are currently provided by the a
 |[MiKo_3232](/Documentation/MiKo_3232.md)|Use null checks instead of empty property pattern|&#x2713;|\-|
 |[MiKo_3233](/Documentation/MiKo_3233.md)|Do not use var patterns for null checks|&#x2713;|\-|
 |[MiKo_3234](/Documentation/MiKo_3234.md)|Prefer pattern matching over boolean Equals checks|&#x2713;|\-|
-|[MiKo_3235](/Documentation/MiKo_3235.md)|Do not call 'ToList' on an 'IEnumerable' parameter|&#x2713;|\-|
+|[MiKo_3235](/Documentation/MiKo_3235.md)|Do not call 'ToList' or 'ToArray' on an 'IEnumerable' parameter|&#x2713;|\-|
 |[MiKo_3236](/Documentation/MiKo_3236.md)|Use alias instead of fully qualified names|&#x2713;|\-|
 |[MiKo_3237](/Documentation/MiKo_3237.md)|Use using directives instead of fully qualified names|&#x2713;|\-|
 |[MiKo_3238](/Documentation/MiKo_3238.md)|Avoid empty argument lists on initializers|&#x2713;|&#x2713;|
