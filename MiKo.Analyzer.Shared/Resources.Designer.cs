@@ -15957,6 +15957,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Return value directly and move variable declaration behind the &apos;if&apos; block.
+        /// </summary>
+        internal static string MiKo_3240_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3240_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not declare the return variable at the start of a method if the next if block only returns it. Readers have to look up the variable to see which value is returned, and the variable lives longer than needed.
+        ///Return the value directly and declare the variable later, when it is needed..
+        /// </summary>
+        internal static string MiKo_3240_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3240_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return the value directly in the early return and declare the variable later.
+        /// </summary>
+        internal static string MiKo_3240_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3240_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not declare return variables before an early return.
+        /// </summary>
+        internal static string MiKo_3240_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3240_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

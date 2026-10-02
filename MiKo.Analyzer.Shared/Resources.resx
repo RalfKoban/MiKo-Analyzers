@@ -5579,6 +5579,19 @@ Expose them as named properties instead, so the intent is clear where the attrib
   <data name="MiKo_3239_Title" xml:space="preserve">
     <value>Avoid boolean parameters in attribute constructors</value>
   </data>
+  <data name="MiKo_3240_CodeFixTitle" xml:space="preserve">
+    <value>Return value directly and move variable declaration behind the 'if' block</value>
+  </data>
+  <data name="MiKo_3240_Description" xml:space="preserve">
+    <value>Do not declare the return variable at the start of a method if the next if block only returns it. Readers have to look up the variable to see which value is returned, and the variable lives longer than needed.
+Return the value directly and declare the variable later, when it is needed.</value>
+  </data>
+  <data name="MiKo_3240_MessageFormat" xml:space="preserve">
+    <value>Return the value directly in the early return and declare the variable later</value>
+  </data>
+  <data name="MiKo_3240_Title" xml:space="preserve">
+    <value>Do not declare return variables before an early return</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
