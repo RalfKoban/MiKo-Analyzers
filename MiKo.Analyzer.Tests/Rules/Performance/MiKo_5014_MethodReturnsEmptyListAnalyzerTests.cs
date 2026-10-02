@@ -800,8 +800,8 @@ namespace Bla
 
         [Test]
         public void Code_gets_fixed_for_async_method_that_returns_an_empty_list_(
-                                                                            [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
-                                                                            [Values("new List<int> { }", "new List<int>()", "new List<int>(42)")] string creation)
+                                                                             [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                             [Values("new List<int> { }", "new List<int>()", "new List<int>(42)")] string creation)
         {
             var template = @"
 using System;
@@ -819,8 +819,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_async_ValueTask_method_that_returns_an_empty_list_(
-                                                                                    [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
-                                                                                    [Values("new List<int> { }", "new List<int>()")] string creation)
+                                                                                       [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                                       [Values("new List<int> { }", "new List<int>()")] string creation)
         {
             var template = @"
 using System;
@@ -838,8 +838,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_async_expression_body_method_that_returns_an_empty_list_(
-                                                                                            [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
-                                                                                            [Values("new List<int> { }", "new List<int>()")] string creation)
+                                                                                             [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                                             [Values("new List<int> { }", "new List<int>()")] string creation)
         {
             var template = @"
 using System;
