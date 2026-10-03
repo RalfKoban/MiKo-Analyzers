@@ -30,6 +30,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_XML_element_with_single_gap() => No_issue_is_reported_for(@"
+/// <summary>
+/// <see cref=""TestMe"" />
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_code() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some text
@@ -63,7 +73,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_text_with_multiple_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_text_with_multiple_spaces() => An_issue_is_reported_for(@"
 /// <summary>
 ///    Some text
 /// </summary>
@@ -73,10 +83,20 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_mixed_text_with_multiple_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_mixed_text_with_multiple_lines_and_spaces() => An_issue_is_reported_for(@"
 /// <summary>
 /// Some text
 ///     with some more text.
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_XML_element_with_single_gap() => An_issue_is_reported_for(@"
+/// <summary>
+///    <see cref=""TestMe"" />
 /// </summary>
 public class TestMe
 {
@@ -172,6 +192,30 @@ public class TestMe
             const string FixedCode = @"
 /// <summary>
 /// Some text.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_for_XML_element_with_multiple_spaces()
+        {
+            const string OriginalCode = @"
+/// <summary>
+///    <see cref=""TestMe"" />
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// <see cref=""TestMe"" />
 /// </summary>
 public class TestMe
 {

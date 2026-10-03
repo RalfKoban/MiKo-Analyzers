@@ -17,23 +17,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var spaces = GetProposedSpaces(issue);
 
             var token = syntax.FindToken(issue);
-            var text = token.ValueText;
+            var text = token.ValueText.AsSpan(spaces);
 
-            var finalText = text.AsSpan(spaces);
-
-            if (finalText.Trim().IsEmpty)
+            if (text.Trim().IsEmpty)
             {
-                var textTokens = syntax.TextTokens;
-
-                if (textTokens.Count is 1)
+                switch (syntax.NextSibling())
                 {
-                    return null; // seems it is the only one, so remove the complete text
-                }
+                    case XmlEmptyElementSyntax _:
+                    case XmlElementSyntax _:
+                        break; // seems we have an XML element as next element, so only shorten text
 
-                return syntax.WithTextTokens(textTokens.Remove(token));
+                    default:
+                    {
+                        var textTokens = syntax.TextTokens;
+
+                        if (textTokens.Count is 1)
+                        {
+                            return null; // seems it is the only one, so remove the complete text
+                        }
+
+                        return syntax.WithTextTokens(textTokens.Remove(token));
+                    }
+                }
             }
 
-            return syntax.ReplaceToken(token, token.WithText(finalText));
+            return syntax.ReplaceToken(token, token.WithText(text));
         }
     }
 }
