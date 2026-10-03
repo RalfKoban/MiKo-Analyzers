@@ -39,8 +39,6 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        private const string TestProjectName = "MiKoSolutions.Analyzers.AdHoc.TestProject";
-
         private const int TestLimitToRunGarbageCollection = 5_000;
 
         private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
@@ -215,35 +213,41 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <returns>
         /// A Document created from the source string.
         /// </returns>
-        protected static Document CreateDocument(string source, in LanguageVersion languageVersion)
+        protected static Document CreateDocument(string source, in LanguageVersion languageVersion, string testProjectName)
         {
-            return CreateProject([source], languageVersion).Documents.First();
+            return CreateProject([source], languageVersion, testProjectName).Documents.First();
         }
 
         /// <summary>
         /// Given classes in the form of strings, their language, and an <see cref="DiagnosticAnalyzer"/> to apply to it, return the diagnostics found in the string after converting it to a document.
         /// </summary>
         /// <param name="sources">
-        /// Classes in the form of strings.
+        ///     Classes in the form of strings.
         /// </param>
         /// <param name="languageVersion">
-        /// The version of the programming language.
+        ///     The version of the programming language.
+        /// </param>
+        /// <param name="testProjectName">
+        ///     The name of the project that shall contain the sources.
         /// </param>
         /// <param name="analyzers">
-        /// The analyzers to be run on the sources.
+        ///     The analyzers to be run on the sources.
         /// </param>
         /// <param name="profileAnalysis">
-        /// <see langword="true"/> to collect and save profiling data; otherwise, <see langword="false"/>.
+        ///     <see langword="true"/> to collect and save profiling data; otherwise, <see langword="false"/>.
         /// </param>
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ImmutableArray<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
+        private static Diagnostic[] GetSortedDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, string testProjectName, in ImmutableArray<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
         {
-            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
+            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion, testProjectName), profileAnalysis);
         }
 
         /// <summary>
@@ -255,12 +259,15 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <returns>
         /// The <see cref="Document"/>s produced from the sources.
         /// </returns>
-        private static Document[] GetDocuments(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion)
+        private static Document[] GetDocuments(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, string testProjectName)
         {
-            var project = CreateProject(sources, languageVersion);
+            var project = CreateProject(sources, languageVersion, testProjectName);
             var documents = project.Documents.ToArray();
 
             if (sources.Length != documents.Length)
@@ -282,13 +289,16 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <returns>
         /// A Project created out of the Documents created from the source strings.
         /// </returns>
-        private static Project CreateProject(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion)
+        private static Project CreateProject(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, string testProjectName)
         {
-            var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
-            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, TestProjectName, TestProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
+            var projectId = ProjectId.CreateNewId(debugName: testProjectName);
+            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, testProjectName, testProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
 
             var solution = new AdhocWorkspace().CurrentSolution
                                                .AddProject(projectInfo)

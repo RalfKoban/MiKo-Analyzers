@@ -14854,6 +14854,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mocks are intended for unit tests and test code. They help simulate dependencies during testing.
+        ///Do not use mock types from frameworks such as Moq or NSubstitute in production code. Production code should work with real implementations or abstractions, not test doubles.
+        ///Using mocks in production code can hide design problems and make the code harder to understand and maintain..
+        /// </summary>
+        internal static string MiKo_3131_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3131_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use real implementation instead of mock.
+        /// </summary>
+        internal static string MiKo_3131_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3131_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use mocks in production code.
+        /// </summary>
+        internal static string MiKo_3131_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3131_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
