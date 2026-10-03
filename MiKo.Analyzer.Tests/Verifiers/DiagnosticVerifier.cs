@@ -21,9 +21,14 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
+        protected internal const string TestProjectName = "MiKoSolutions.Analyzers.AdHoc.TestProject";
+
         private static readonly string[] Placeholders = [.. Enumerable.Range(0, 10).Select(_ => "{" + _ + "}")];
 
-        internal static Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ImmutableArray<DiagnosticAnalyzer> analyzers, in bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
+        internal static Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ImmutableArray<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
+        {
+            return GetSortedDiagnostics(sources, languageVersion, TestProjectName, analyzers, profileAnalysis);
+        }
 
         /// <summary>
         /// Gets the C# analyzer being tested - to be implemented in non-abstract class.
@@ -41,13 +46,16 @@ namespace TestHelper
         /// </returns>
         protected virtual string GetDiagnosticId() => null;
 
-        protected void An_issue_is_reported_for(string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(1, fileContent, languageVersion);
+        protected void An_issue_is_reported_for(string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
+        {
+            An_issue_is_reported_for(1, fileContent, languageVersion, testProjectName);
+        }
 
-        protected void An_issue_is_reported_for(in int violations, string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void An_issue_is_reported_for(in int violations, string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
             using (Assert.EnterMultipleScope())
             {
-                var results = GetDiagnostics(fileContent, languageVersion);
+                var results = GetDiagnostics(fileContent, languageVersion, testProjectName);
                 var resultsLength = results.Length;
 
                 // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
@@ -83,11 +91,14 @@ namespace TestHelper
             }
         }
 
-        protected void An_issue_is_reported_for_file_(string path, in int violations, in LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(violations, File.ReadAllText(path), languageVersion);
-
-        protected void No_issue_is_reported_for(string fileContent, string message = null, in LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void An_issue_is_reported_for_file_(string path, in int violations, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
-            var results = GetDiagnostics(fileContent, languageVersion);
+            An_issue_is_reported_for(violations, File.ReadAllText(path), languageVersion, testProjectName);
+        }
+
+        protected void No_issue_is_reported_for(string fileContent, string message = null, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
+        {
+            var results = GetDiagnostics(fileContent, languageVersion, testProjectName);
 
             // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
             if (results.Length > 0)
@@ -96,29 +107,29 @@ namespace TestHelper
             }
         }
 
-        protected void No_issue_is_reported_for_file_(string path, in LanguageVersion languageVersion = LanguageVersion.Default) => No_issue_is_reported_for(File.ReadAllText(path), path, languageVersion);
+        protected void No_issue_is_reported_for_file_(string path, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName) => No_issue_is_reported_for(File.ReadAllText(path), path, languageVersion, testProjectName);
 
-        protected void No_issue_is_reported_for_folder_(string path, in LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void No_issue_is_reported_for_folder_(string path, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
             using (Assert.EnterMultipleScope())
             {
                 foreach (var directory in Directory.EnumerateDirectories(path))
                 {
-                    No_issue_is_reported_for_folder_(directory, languageVersion);
+                    No_issue_is_reported_for_folder_(directory, languageVersion, testProjectName);
                 }
 
                 foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
                 {
-                    No_issue_is_reported_for_file_(file, languageVersion);
+                    No_issue_is_reported_for_file_(file, languageVersion, testProjectName);
                 }
             }
         }
 
-        protected IEnumerable<string> Collect_files_having_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected IEnumerable<string> Collect_files_having_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
-                var results = Collect_files_having_issues_in_folder_(directory);
+                var results = Collect_files_having_issues_in_folder_(directory, languageVersion, testProjectName);
 
                 foreach (var result in results)
                 {
@@ -128,7 +139,7 @@ namespace TestHelper
 
             foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
             {
-                var results = GetDiagnostics(File.ReadAllText(file), languageVersion);
+                var results = GetDiagnostics(File.ReadAllText(file), languageVersion, testProjectName);
 
                 if (results.Length is not 0)
                 {
@@ -137,11 +148,11 @@ namespace TestHelper
             }
         }
 
-        protected IEnumerable<string> Collect_messages_of_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected IEnumerable<string> Collect_messages_of_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
-                var results = Collect_messages_of_issues_in_folder_(directory);
+                var results = Collect_messages_of_issues_in_folder_(directory, languageVersion, testProjectName);
 
                 foreach (var result in results)
                 {
@@ -151,7 +162,7 @@ namespace TestHelper
 
             foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
             {
-                var results = GetDiagnostics(File.ReadAllText(file), languageVersion);
+                var results = GetDiagnostics(File.ReadAllText(file), languageVersion, testProjectName);
 
                 foreach (var result in results)
                 {
@@ -160,11 +171,11 @@ namespace TestHelper
             }
         }
 
-        protected IEnumerable<Diagnostic> Collect_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected IEnumerable<Diagnostic> Collect_issues_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
-                var issues = Collect_issues_in_folder_(directory);
+                var issues = Collect_issues_in_folder_(directory, languageVersion, testProjectName);
 
                 foreach (var issue in issues)
                 {
@@ -174,7 +185,7 @@ namespace TestHelper
 
             foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
             {
-                var issues = GetDiagnostics(File.ReadAllText(file), languageVersion);
+                var issues = GetDiagnostics(File.ReadAllText(file), languageVersion, testProjectName);
 
                 foreach (var issue in issues)
                 {
@@ -192,10 +203,13 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion) => GetDiagnostics([source], languageVersion);
+        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion, string testProjectName) => GetDiagnostics([source], languageVersion, testProjectName);
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,
@@ -207,9 +221,12 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        private Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, [GetObjectUnderTest()], false);
+        private Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, string testProjectName) => GetSortedDiagnostics(sources, languageVersion, testProjectName, [GetObjectUnderTest()], false);
     }
 }

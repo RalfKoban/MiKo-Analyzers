@@ -155,8 +155,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Moq
         {
+            internal const string Namespace = nameof(Moq);
             internal const string Mock = nameof(Mock);
-            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+            internal const string MockFullQualified = Namespace + "." + nameof(Mock);
             internal const string Object = nameof(Object);
             internal const string Of = nameof(Of);
             internal const string Setup = nameof(Setup);
@@ -174,6 +175,40 @@ namespace MiKoSolutions.Analyzers
                 internal const string It = nameof(It);
                 internal const string Is = nameof(Is);
             }
+        }
+
+        internal static class NSubstitute
+        {
+            internal const string Namespace = nameof(NSubstitute);
+            internal const string Substitute = nameof(Substitute);
+            internal const string SubstituteFullQualified = Namespace + "." + nameof(Substitute);
+            internal const string For = nameof(For);
+        }
+
+        internal static class Rhino
+        {
+            internal const string Namespace = "Rhino.Mocks";
+            internal const string MockRepository = nameof(MockRepository);
+            internal const string MockRepositoryFullQualified = Namespace + "." + nameof(MockRepository);
+            internal const string CreateMock = nameof(CreateMock);
+            internal const string CreateMockObject = nameof(CreateMockObject);
+            internal const string CreateMockWithRemoting = nameof(CreateMockWithRemoting);
+            internal const string CreateMultiMock = nameof(CreateMultiMock);
+            internal const string DynamicMock = nameof(DynamicMock);
+            internal const string DynamicMockWithRemoting = nameof(DynamicMockWithRemoting);
+            internal const string DynamicMultiMock = nameof(DynamicMultiMock);
+            internal const string GenerateDynamicMockWithRemoting = nameof(GenerateDynamicMockWithRemoting);
+            internal const string GenerateMock = nameof(GenerateMock);
+            internal const string GeneratePartialMock = nameof(GeneratePartialMock);
+            internal const string GenerateStrictMock = nameof(GenerateStrictMock);
+            internal const string GenerateStrictMockWithRemoting = nameof(GenerateStrictMockWithRemoting);
+            internal const string GenerateStub = nameof(GenerateStub);
+            internal const string PartialMock = nameof(PartialMock);
+            internal const string PartialMultiMock = nameof(PartialMultiMock);
+            internal const string RemotingMock = nameof(RemotingMock);
+            internal const string StrictMock = nameof(StrictMock);
+            internal const string StrictMockWithRemoting = nameof(StrictMockWithRemoting);
+            internal const string StrictMultiMock = nameof(StrictMultiMock);
         }
 
         internal static class FluentAssertions

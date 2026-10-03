@@ -5202,6 +5202,17 @@ This leads to confusing failure messages that show the wrong value as "expected"
   <data name="MiKo_3130_Title" xml:space="preserve">
     <value>Do not call 'Assert.Fail' inside an 'if' statement</value>
   </data>
+  <data name="MiKo_3131_Description" xml:space="preserve">
+    <value>Mocks are intended for unit tests and test code. They help simulate dependencies during testing.
+Do not use mock types from frameworks such as Moq or NSubstitute in production code. Production code should work with real implementations or abstractions, not test doubles.
+Using mocks in production code can hide design problems and make the code harder to understand and maintain.</value>
+  </data>
+  <data name="MiKo_3131_MessageFormat" xml:space="preserve">
+    <value>Use real implementation instead of mock</value>
+  </data>
+  <data name="MiKo_3131_Title" xml:space="preserve">
+    <value>Do not use mocks in production code</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

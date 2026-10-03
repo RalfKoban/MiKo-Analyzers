@@ -50,29 +50,32 @@ namespace TestHelper
         /// </returns>
         protected virtual CodeFixProvider GetCSharpCodeFixProvider() => null;
 
-        protected void Codefix_causes_no_exception_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void Codefix_causes_no_exception_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
-                                     {
-                                         var oldSource = File.ReadAllText(file);
+            using (Assert.EnterMultipleScope())
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
+                {
+                    var oldSource = File.ReadAllText(file);
 
-                                         var issues = GetDiagnostics(oldSource, languageVersion);
+                    var issues = GetDiagnostics(oldSource, languageVersion, testProjectName);
 
-                                         if (issues.Length > 0)
-                                         {
-                                             try
-                                             {
-                                                 Assert.Multiple(() => VerifyCSharpFix(oldSource, oldSource, allowNewCompilerDiagnostics: true, assertResult: false));
-                                             }
-                                             catch (Exception ex)
-                                             {
-                                                 Assert.Fail($"'{file}' failed with {ex}");
-                                             }
-                                         }
-                                     }
-                                 });
+                    if (issues.Length > 0)
+                    {
+                        try
+                        {
+                            using (Assert.EnterMultipleScope())
+                            {
+                                VerifyCSharpFix(oldSource, oldSource, allowNewCompilerDiagnostics: true, assertResult: false);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Assert.Fail($"'{file}' failed with {ex}");
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -87,6 +90,9 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <param name="codeFixIndex">
         /// Index determining which codefix to apply if there are multiple.
         /// </param>
@@ -96,7 +102,7 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
+        protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
         {
             VerifyFix(
                   GetObjectUnderTest(),
@@ -104,6 +110,7 @@ namespace TestHelper
                   oldSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
                   newSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
                   languageVersion,
+                  testProjectName,
                   codeFixIndex,
                   allowNewCompilerDiagnostics,
                   assertResult);
@@ -130,6 +137,9 @@ namespace TestHelper
         /// <param name="languageVersion">
         /// The version of the programming language.
         /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
         /// <param name="codeFixIndex">
         /// Index determining which codefix to apply if there are multiple.
         /// </param>
@@ -139,12 +149,12 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, in LanguageVersion languageVersion, int? codeFixIndex, in bool allowNewCompilerDiagnostics, in bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, in LanguageVersion languageVersion, string testProjectName, int? codeFixIndex, in bool allowNewCompilerDiagnostics, in bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
-            var document = CreateDocument(oldSource, languageVersion);
+            var document = CreateDocument(oldSource, languageVersion, testProjectName);
             var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
