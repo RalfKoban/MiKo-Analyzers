@@ -36,18 +36,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var syntax = symbol.GetSyntax();
 
+            var compilationUnit = syntax.FirstAncestor<CompilationUnitSyntax>();
+            var alias = compilationUnit?.Usings.FirstOrDefault(_ => _.Name.GetName() is "System.NullReferenceException");
+
+            var nullReferenceExceptionName = alias?.Alias.GetName() ?? nameof(NullReferenceException);
+
             var types = syntax.DescendantNodes<InvocationExpressionSyntax>()
                               .Where(_ => _.GetIdentifierName() is "Assert")
                               .Where(_ => AssertionMethods.Contains(_.GetName()))
-                              .SelectMany(_ => _.DescendantNodes<TypeSyntax>().Where(__ => __.GetName() is nameof(NullReferenceException)));
+                              .SelectMany(_ => _.DescendantNodes<TypeSyntax>().Where(__ => __.GetName() == nullReferenceExceptionName));
 
             foreach (var type in types)
             {
-                switch (type.Parent?.Parent)
+                if (type.Parent is ObjectCreationExpressionSyntax)
                 {
-                    case ThrowExpressionSyntax _:
-                    case ThrowStatementSyntax _:
-                        continue; // do not report tests that simulate behavior
+                    continue; // do not report tests that simulate behavior
                 }
 
                 if (issues is null)

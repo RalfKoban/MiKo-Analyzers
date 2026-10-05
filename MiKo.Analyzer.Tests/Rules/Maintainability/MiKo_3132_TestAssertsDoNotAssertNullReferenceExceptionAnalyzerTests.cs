@@ -137,6 +137,65 @@ public class TestMeTests
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_that_asserts_exception_is_not_NullReferenceException() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        var error = new InvalidOperationException();
+
+        Assert.That(error, Is.Not.InstanceOf<NullReferenceException>());
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_that_passes_NullReferenceException_as_argument_and_asserts_nothing_is_thrown() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    private void Handle(Exception ex)
+    {
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+        Assert.That(() => Handle(new NullReferenceException()), Throws.Nothing);
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_NullReferenceException_assert_using_type_alias() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+using NRE = System.NullReferenceException;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        Assert.Throws<NRE>(() => 42.ToString());
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_NullReferenceException_assert_in_test_([ValueSource(nameof(WrongAsserts))] string assertion) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
