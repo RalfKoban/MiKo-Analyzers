@@ -28,7 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            // TODO RKN: RhinoMocks
             return compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null
                 || compilation.GetTypeByMetadataName(Constants.NSubstitute.SubstituteFullQualified) != null
                 || compilation.GetTypeByMetadataName(Constants.Rhino.MockRepositoryFullQualified) != null;
