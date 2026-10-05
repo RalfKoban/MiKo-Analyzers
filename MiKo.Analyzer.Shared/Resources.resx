@@ -5213,6 +5213,15 @@ Using mocks in production code can hide design problems and make the code harder
   <data name="MiKo_3131_Title" xml:space="preserve">
     <value>Do not use mocks in production code</value>
   </data>
+  <data name="MiKo_3132_Description" xml:space="preserve">
+    <value>Tests should not assert for NullReferenceException, as it indicates a bug in the code under test and not an intended behavior. Instead, they should assert for a specific exception or fix the code. This makes the tests more meaningful and easier to maintain.</value>
+  </data>
+  <data name="MiKo_3132_MessageFormat" xml:space="preserve">
+    <value>Do not assert for 'NullReferenceException'</value>
+  </data>
+  <data name="MiKo_3132_Title" xml:space="preserve">
+    <value>Do not assert 'NullReferenceException' in unit tests</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

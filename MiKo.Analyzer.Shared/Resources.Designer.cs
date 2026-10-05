@@ -14883,6 +14883,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tests should not assert for NullReferenceException, as it indicates a bug in the code under test and not an intended behavior. Instead, they should assert for a specific exception or fix the code. This makes the tests more meaningful and easier to maintain..
+        /// </summary>
+        internal static string MiKo_3132_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3132_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assert for &apos;NullReferenceException&apos;.
+        /// </summary>
+        internal static string MiKo_3132_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3132_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assert &apos;NullReferenceException&apos; in unit tests.
+        /// </summary>
+        internal static string MiKo_3132_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3132_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
