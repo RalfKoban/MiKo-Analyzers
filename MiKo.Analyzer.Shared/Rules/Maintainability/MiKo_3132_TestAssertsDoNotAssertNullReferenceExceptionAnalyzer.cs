@@ -44,15 +44,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var types = syntax.DescendantNodes<InvocationExpressionSyntax>()
                               .Where(_ => _.GetIdentifierName() is "Assert")
                               .Where(_ => AssertionMethods.Contains(_.GetName()))
-                              .SelectMany(_ => _.DescendantNodes<TypeSyntax>().Where(__ => __.GetName() == nullReferenceExceptionName));
+                              .SelectMany(_ => _.DescendantNodes<TypeSyntax>().Where(__ => __.GetName() == nullReferenceExceptionName))
+                              .SkipWhere(ShallIgnore);
 
             foreach (var type in types)
             {
-                if (type.Parent is ObjectCreationExpressionSyntax)
-                {
-                    continue; // do not report tests that simulate behavior
-                }
-
                 if (issues is null)
                 {
                     issues = new List<Diagnostic>(1);
@@ -62,6 +58,45 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return issues?.ToArray() ?? Array.Empty<Diagnostic>();
+        }
+
+        private static bool ShallIgnore(TypeSyntax type)
+        {
+            var parent = type.Parent;
+
+            if (parent is ObjectCreationExpressionSyntax)
+            {
+                return true; // do not report tests that simulate behavior
+            }
+
+            var grandParent = parent?.Parent?.Parent;
+
+            if (grandParent is MemberAccessExpressionSyntax maes)
+            {
+                return ShallIgnoreLocal(maes.GetIdentifierName());
+            }
+
+            if (grandParent?.Parent is InvocationExpressionSyntax i)
+            {
+                return ShallIgnoreLocal(i.GetIdentifierName());
+            }
+
+            return false;
+
+            bool ShallIgnoreLocal(string identifierName)
+            {
+                switch (identifierName)
+                {
+                    case "Not":
+                        return true; // do not report tests that assert that the exception is NOT a NullReferenceException
+
+                    case "InnerException":
+                        return true; // do not report tests that assert that the inner exception is a NullReferenceException
+
+                    default:
+                        return false;
+                }
+            }
         }
     }
 }

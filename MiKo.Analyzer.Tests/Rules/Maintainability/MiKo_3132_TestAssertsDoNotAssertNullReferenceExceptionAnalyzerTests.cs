@@ -12,33 +12,45 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private static readonly string[] ValidAsserts =
                                                         [
-                                                            "Assert.That(() => 42.ToString(), Throws.TypeOf<ArgumentException>());",
+                                                            "Assert.Catch<InvalidOperationException>(() => 42.ToString());",
                                                             "Assert.That(() => 42.ToString(), Throws.Exception.InstanceOf<InvalidOperationException>());",
                                                             "Assert.That(() => 42.ToString(), Throws.Nothing);",
-                                                            "Assert.Throws<ArgumentNullException>(() => 42.ToString());",
+                                                            "Assert.That(() => 42.ToString(), Throws.TypeOf<ArgumentException>());",
+                                                            "Assert.That(() => false, Throws.Exception.With.InnerException.InstanceOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => false, Throws.Exception.With.InnerException.InstanceOf<NullReferenceException>());",
+                                                            "Assert.That(() => false, Throws.Exception.With.InnerException.TypeOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => false, Throws.Exception.With.InnerException.TypeOf<NullReferenceException>());",
+                                                            "Assert.That(() => false, Throws.InnerException.InstanceOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => false, Throws.InnerException.InstanceOf<NullReferenceException>());",
+                                                            "Assert.That(() => false, Throws.InnerException.TypeOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => false, Throws.InnerException.TypeOf<NullReferenceException>());",
+                                                            "Assert.That(new InvalidOperationException(), Is.Not.InstanceOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(new InvalidOperationException(), Is.Not.InstanceOf<NullReferenceException>());",
+                                                            "Assert.That(new InvalidOperationException(), Is.Not.TypeOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(new InvalidOperationException(), Is.Not.TypeOf<NullReferenceException>());",
                                                             "Assert.Throws(typeof(ArgumentException), () => 42.ToString());",
-                                                            "Assert.Catch<InvalidOperationException>(() => 42.ToString());",
+                                                            "Assert.Throws<ArgumentNullException>(() => 42.ToString());",
                                                             "Assert.ThrowsAsync<ArgumentException>(async () => await Task.FromResult(42.ToString()));",
                                                         ];
 
         private static readonly string[] WrongAsserts =
                                                         [
-                                                            "Assert.That(() => 42.ToString(), Throws.TypeOf<NullReferenceException>());",
-                                                            "Assert.That(() => 42.ToString(), Throws.TypeOf(typeof(NullReferenceException)));",
-                                                            "Assert.That(() => 42.ToString(), Throws.Exception.TypeOf<NullReferenceException>());",
-                                                            "Assert.That(() => 42.ToString(), Throws.Exception.TypeOf(typeof(NullReferenceException)));",
-                                                            "Assert.That(() => 42.ToString(), Throws.InstanceOf<NullReferenceException>());",
-                                                            "Assert.That(() => 42.ToString(), Throws.InstanceOf(typeof(NullReferenceException)));",
-                                                            "Assert.That(() => 42.ToString(), Throws.Exception.InstanceOf<NullReferenceException>());",
-                                                            "Assert.That(() => 42.ToString(), Throws.Exception.InstanceOf(typeof(NullReferenceException)));",
-                                                            "Assert.Throws(typeof(NullReferenceException), () => 42.ToString());",
-                                                            "Assert.Throws<NullReferenceException>(() => 42.ToString());",
-                                                            "Assert.ThrowsAsync(typeof(NullReferenceException), async () => await Task.FromResult(42.ToString()));",
-                                                            "Assert.ThrowsAsync<NullReferenceException>(async () => await Task.FromResult(42.ToString()));",
                                                             "Assert.Catch(typeof(NullReferenceException), () => 42.ToString());",
                                                             "Assert.Catch<NullReferenceException>(() => 42.ToString());",
                                                             "Assert.CatchAsync(typeof(NullReferenceException), async () => await Task.FromResult(42.ToString()));",
                                                             "Assert.CatchAsync<NullReferenceException>(async () => await Task.FromResult(42.ToString()));",
+                                                            "Assert.That(() => 42.ToString(), Throws.Exception.InstanceOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => 42.ToString(), Throws.Exception.InstanceOf<NullReferenceException>());",
+                                                            "Assert.That(() => 42.ToString(), Throws.Exception.TypeOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => 42.ToString(), Throws.Exception.TypeOf<NullReferenceException>());",
+                                                            "Assert.That(() => 42.ToString(), Throws.InstanceOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => 42.ToString(), Throws.InstanceOf<NullReferenceException>());",
+                                                            "Assert.That(() => 42.ToString(), Throws.TypeOf(typeof(NullReferenceException)));",
+                                                            "Assert.That(() => 42.ToString(), Throws.TypeOf<NullReferenceException>());",
+                                                            "Assert.Throws(typeof(NullReferenceException), () => 42.ToString());",
+                                                            "Assert.Throws<NullReferenceException>(() => 42.ToString());",
+                                                            "Assert.ThrowsAsync(typeof(NullReferenceException), async () => await Task.FromResult(42.ToString()));",
+                                                            "Assert.ThrowsAsync<NullReferenceException>(async () => await Task.FromResult(42.ToString()));",
                                                         ];
 
         [Test]
@@ -132,25 +144,6 @@ public class TestMeTests
     public void DoSomething()
     {
         Assert.Throws<NotSupportedException>(() => ObjectUnderTest.DoStuff(() => throw new NullReferenceException(""Inner exception"")));
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_test_that_asserts_exception_is_not_NullReferenceException() => No_issue_is_reported_for(@"
-using System;
-
-using NUnit.Framework;
-
-[TestFixture]
-public class TestMe
-{
-    [Test]
-    public void DoSomething()
-    {
-        var error = new InvalidOperationException();
-
-        Assert.That(error, Is.Not.InstanceOf<NullReferenceException>());
     }
 }
 ");
