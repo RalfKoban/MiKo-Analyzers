@@ -58,6 +58,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static string GetComment(this IParameterSymbol value, string commentXml)
         {
+            if (commentXml is null)
+            {
+                return null;
+            }
+
             var parameterName = value.Name;
 
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
@@ -231,12 +236,13 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
+            var valueSpan = value.AsSpan();
+            var start = valueSpan.CountLeadingWhitespaces();
+            var end = valueSpan.CountTrailingWhitespaces(start);
+
+            var count = valueSpan.Length - end - start;
+
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var start = value.CountLeadingWhitespaces();
-            var end = value.CountTrailingWhitespaces(start);
-
-            var count = value.Length - end - start;
-
             var xml = StringBuilderCache.Acquire(13 + count)
                                         .Append("<root>")
                                         .Append(value, start, count)

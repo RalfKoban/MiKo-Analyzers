@@ -1513,6 +1513,26 @@ namespace MiKoSolutions.Analyzers
         public static bool ContainsXml(this string value) => value.Contains('<') && value.Contains("/>");
 
         /// <summary>
+        /// Counts the number of leading whitespace characters in the span.
+        /// </summary>
+        /// <param name="value">
+        /// The span to check.
+        /// </param>
+        /// <param name="start">
+        /// The starting index to begin counting from.
+        /// The default is <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// The number of consecutive whitespace characters at the beginning of the span.
+        /// </returns>
+        public static int CountLeadingWhitespaces(this in ReadOnlySpan<char> value, in int start = 0)
+        {
+            var span = value.Slice(start);
+
+            return span.Length - span.TrimStart().Length;
+        }
+
+        /// <summary>
         /// Counts the number of leading whitespace characters in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
@@ -1525,23 +1545,26 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The number of consecutive whitespace characters at the beginning of the <see cref="string"/>.
         /// </returns>
-        public static int CountLeadingWhitespaces(this string value, int start = 0)
+        public static int CountLeadingWhitespaces(this string value, in int start = 0) => value.AsSpan().CountLeadingWhitespaces(start);
+
+        /// <summary>
+        /// Counts the number of trailing whitespace characters in the span.
+        /// </summary>
+        /// <param name="value">
+        /// The span to check.
+        /// </param>
+        /// <param name="start">
+        /// The starting index to begin counting from.
+        /// The default is <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// The number of consecutive whitespace characters at the end of the span.
+        /// </returns>
+        public static int CountTrailingWhitespaces(this in ReadOnlySpan<char> value, in int start = 0)
         {
-            var whitespaces = 0;
+            var span = value.Slice(start);
 
-            for (var length = value.Length; start < length; start++)
-            {
-                if (value[start].IsWhiteSpace())
-                {
-                    whitespaces++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return whitespaces;
+            return span.Length - span.TrimEnd().Length;
         }
 
         /// <summary>
@@ -1557,24 +1580,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The number of consecutive whitespace characters at the end of the <see cref="string"/>.
         /// </returns>
-        public static int CountTrailingWhitespaces(this string value, in int start = 0)
-        {
-            var whitespaces = 0;
-
-            for (var i = value.Length - 1; i >= start; i--)
-            {
-                if (value[i].IsWhiteSpace())
-                {
-                    whitespaces++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return whitespaces;
-        }
+        public static int CountTrailingWhitespaces(this string value, in int start = 0) => value.AsSpan().CountTrailingWhitespaces(start);
 
         /// <summary>
         /// Determines whether the <see cref="string"/> ends with the specified character.
