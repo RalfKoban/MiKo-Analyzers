@@ -5607,7 +5607,7 @@ Expose them as named properties instead, so the intent is clear where the attrib
 Return the value directly and declare the variable later, when it is needed.</value>
   </data>
   <data name="MiKo_3240_MessageFormat" xml:space="preserve">
-    <value>Return the value directly in the early return and declare the variable later</value>
+    <value>Return value directly in early return and declare variable later</value>
   </data>
   <data name="MiKo_3240_Title" xml:space="preserve">
     <value>Do not declare return variables before an early return</value>

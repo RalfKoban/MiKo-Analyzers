@@ -16032,7 +16032,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Return the value directly in the early return and declare the variable later.
+        ///   Looks up a localized string similar to Return value directly in early return and declare variable later.
         /// </summary>
         internal static string MiKo_3240_MessageFormat {
             get {
