@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Method_name_returns_false_if_load_fails_and_some_condition",
                                                                   "Create_refuses_null_as_name",
                                                                   "Create_refuses_null_as_input_for_name",
+                                                                  "TryStartAsync_activates_alternative_state_without_restoring_if_successful_",
+                                                                  "TryStartAsync_restores_previous_state_if_unsuccessful_",
                                                               ];
 
         private static readonly string[] WrongMethodNames =

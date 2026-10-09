@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1115";
 
-        private const string SpecialMarkerHandling = "Create";
-
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
                                                                       "Actual",
@@ -38,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Consumed",
                                                                       "Once",
                                                                       "Does", // incl. 'DoesNot'
-                                                                      SpecialMarkerHandling,
+                                                                      "Create",
                                                                       "Creates",
                                                                       "Append",
                                                                       "Keep",
@@ -99,16 +97,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
 
                 // jump over first part
-                if (first && part.StartsWithAny(SpecialFirstPhrases))
+                if (first)
                 {
                     first = false;
 
-                    continue;
+                    if (part.StartsWith("Create", StringComparison.Ordinal))
+                    {
+                        if (part.Length is 6 || part[6].IsUpperCase())
+                        {
+                            continue; // we allow 'Create' methods
+                        }
+                    }
+                    else if (part.StartsWith("Try", StringComparison.Ordinal))
+                    {
+                        if (part.Length is 3 || part[3].IsUpperCase())
+                        {
+                            continue; // we allow 'Try' methods
+                        }
+                    }
+                    else if (part.StartsWithAny(SpecialFirstPhrases))
+                    {
+                        continue;
+                    }
                 }
-
-                if (index is 1 && part.StartsWithAny(SpecialConditionPhrases))
+                else
                 {
-                    return true;
+                    if (index is 1 && part.StartsWithAny(SpecialConditionPhrases))
+                    {
+                        return true;
+                    }
                 }
 
                 for (int i = 0, length = ExpectedOutcomeMarkers.Length; i < length; i++)
@@ -117,16 +134,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (part.Contains(marker, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (first && SpecialMarkerHandling.Equals(marker, StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }
-
                         return true;
                     }
                 }
-
-                first = false;
             }
 
             return false;
