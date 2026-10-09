@@ -30,8 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Analyze(symbol.Parameters, commentXml);
         }
 
-        private IEnumerable<Diagnostic> Analyze(ImmutableArray<IParameterSymbol> parameters, string commentXml)
+        private Diagnostic[] Analyze(in ImmutableArray<IParameterSymbol> parameters, string commentXml)
         {
+            List<Diagnostic> issues = null;
+
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             for (int index = 0, parametersLength = parameters.Length; index < parametersLength; index++)
             {
@@ -45,9 +47,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (comment.ContainsAny(Constants.Comments.FuturePhrase, StringComparison.OrdinalIgnoreCase))
                 {
-                    yield return Issue(parameter);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(parameter));
                 }
             }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }
