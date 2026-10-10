@@ -84,12 +84,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string methodName)
         {
-            var parts = methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
             var first = true;
+            var index = -1;
 
-            for (int index = 0; index < parts.Length; index++)
+            foreach (ReadOnlySpan<char> part in methodName.AsSpan().SplitBy(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries))
             {
-                string part = parts[index];
+                index++;
 
                 if (part[0].IsUpperCaseOrNumber() is false)
                 {
@@ -101,14 +101,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     first = false;
 
-                    if (part.StartsWith("Create", StringComparison.Ordinal))
+                    if (part.StartsWith("Create"))
                     {
                         if (part.Length is 6 || part[6].IsUpperCase())
                         {
                             continue; // we allow 'Create' methods
                         }
                     }
-                    else if (part.StartsWith("Try", StringComparison.Ordinal))
+                    else if (part.StartsWith("Try"))
                     {
                         if (part.Length is 3 || part[3].IsUpperCase())
                         {
@@ -128,14 +128,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     }
                 }
 
-                for (int i = 0, length = ExpectedOutcomeMarkers.Length; i < length; i++)
+                if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
                 {
-                    var marker = ExpectedOutcomeMarkers[i];
-
-                    if (part.Contains(marker, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
