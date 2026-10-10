@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
@@ -60,6 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                        "When",
                                                                    };
 
+        private static readonly ConcurrentDictionary<string, (bool HasIssue, string BetterName)> BetterNamesCache = new ConcurrentDictionary<string, (bool, string)>();
+
         public MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {
         }
@@ -72,11 +75,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (methodName.Length > 10 && HasIssue(methodName))
+            if (methodName.Length > 10)
             {
-                var betterName = NamesFinder.FindBetterTestNameWithReorder(methodName, symbol);
+                var hasIssue = false;
+                var betterName = string.Empty;
 
-                return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
+                if (BetterNamesCache.TryGetValue(methodName, out var cachedValue))
+                {
+                    if (cachedValue.HasIssue)
+                    {
+                        hasIssue = true;
+                        betterName = cachedValue.BetterName;
+                    }
+                }
+                else
+                {
+                    if (HasIssue(methodName))
+                    {
+                        hasIssue = true;
+                        betterName = NamesFinder.FindBetterTestNameWithReorder(methodName, symbol);
+                    }
+
+                    BetterNamesCache.TryAdd(methodName, (hasIssue, betterName));
+                }
+
+                if (hasIssue)
+                {
+                    return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
+                }
             }
 
             return Array.Empty<Diagnostic>();
@@ -84,12 +110,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string methodName)
         {
-            var parts = methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
             var first = true;
+            var index = -1;
 
-            for (int index = 0; index < parts.Length; index++)
+            foreach (ReadOnlySpan<char> part in methodName.AsSpan().SplitBy(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries))
             {
-                string part = parts[index];
+                index++;
 
                 if (part[0].IsUpperCaseOrNumber() is false)
                 {
@@ -101,14 +127,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     first = false;
 
-                    if (part.StartsWith("Create", StringComparison.Ordinal))
+                    if (part.StartsWith("Create"))
                     {
                         if (part.Length is 6 || part[6].IsUpperCase())
                         {
                             continue; // we allow 'Create' methods
                         }
                     }
-                    else if (part.StartsWith("Try", StringComparison.Ordinal))
+                    else if (part.StartsWith("Try"))
                     {
                         if (part.Length is 3 || part[3].IsUpperCase())
                         {
@@ -128,14 +154,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     }
                 }
 
-                for (int i = 0, length = ExpectedOutcomeMarkers.Length; i < length; i++)
+                if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
                 {
-                    var marker = ExpectedOutcomeMarkers[i];
-
-                    if (part.Contains(marker, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
