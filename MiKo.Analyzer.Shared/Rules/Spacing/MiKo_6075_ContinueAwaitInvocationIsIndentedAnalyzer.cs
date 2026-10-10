@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     {
                         var identifier = otherCall.FirstDescendant<SimpleNameSyntax>();
 
-                        switch (identifier.Parent)
+                        switch (identifier?.Parent)
                         {
                             case InvocationExpressionSyntax _:
                             {

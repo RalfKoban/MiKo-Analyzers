@@ -105,6 +105,23 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_user_defined_ConfigureAwait_on_multi_line_parenthesized_this_expression() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var configured = (
+                          this).ConfigureAwait(false);
+    }
+
+    private TestMe ConfigureAwait(bool continueOnCapturedContext) => this;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_configured_invocation_spans_multiple_lines_and_ConfigureAwait_is_on_same_line() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
