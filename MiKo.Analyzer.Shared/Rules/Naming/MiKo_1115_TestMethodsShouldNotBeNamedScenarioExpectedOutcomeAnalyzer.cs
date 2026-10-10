@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
@@ -60,6 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                        "When",
                                                                    };
 
+        private static readonly ConcurrentDictionary<string, (bool HasIssue, string BetterName)> BetterNamesCache = new ConcurrentDictionary<string, (bool, string)>();
+
         public MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {
         }
@@ -72,11 +75,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (methodName.Length > 10 && HasIssue(methodName))
+            if (methodName.Length > 10)
             {
-                var betterName = NamesFinder.FindBetterTestNameWithReorder(methodName, symbol);
+                var hasIssue = false;
+                var betterName = string.Empty;
 
-                return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
+                if (BetterNamesCache.TryGetValue(methodName, out var cachedValue))
+                {
+                    if (cachedValue.HasIssue)
+                    {
+                        hasIssue = true;
+                        betterName = cachedValue.BetterName;
+                    }
+                }
+                else
+                {
+                    if (HasIssue(methodName))
+                    {
+                        hasIssue = true;
+                        betterName = NamesFinder.FindBetterTestNameWithReorder(methodName, symbol);
+                    }
+
+                    BetterNamesCache.TryAdd(methodName, (hasIssue, betterName));
+                }
+
+                if (hasIssue)
+                {
+                    return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
+                }
             }
 
             return Array.Empty<Diagnostic>();
