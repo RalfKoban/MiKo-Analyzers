@@ -162,6 +162,57 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_unqualified_generic_invocation_spanning_multiple_lines_and_ConfigureAwait_on_same_line_as_end() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync()
+    {
+        await DoStuffAsync<int>(
+                                1).ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync<T>(T value) => Task.CompletedTask;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_generic_invocation_with_identifier_argument_and_ConfigureAwait_on_same_line_as_end() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync(int value)
+    {
+        await DoStuffAsync<int>(
+                                value).ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync<T>(T value) => Task.CompletedTask;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_non_awaited_ConfigureAwait_on_same_line_as_end_of_multi_line_invocation() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(int value)
+    {
+        var configured = DoStuffAsync(
+                                      value).ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync(int value) => Task.CompletedTask;
+}
+");
+
+        [Test]
         public void Code_gets_fixed_if_configured_invocation_spans_multiple_lines_and_ConfigureAwait_is_on_same_line()
         {
             const string OriginalCode = @"
@@ -284,6 +335,164 @@ public class TestMe
     }
 
     private Task DoStuff(TestMe value) => Task.CompletedTask;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_unqualified_generic_invocation_spanning_multiple_lines_and_ConfigureAwait_on_same_line_as_end()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync()
+    {
+        await DoStuffAsync<int>(
+                                1).ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync<T>(T value) => Task.CompletedTask;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync()
+    {
+        await DoStuffAsync<int>(
+                                1)
+                           .ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync<T>(T value) => Task.CompletedTask;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_invocation_with_identifier_argument_and_ConfigureAwait_on_same_line_as_end()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync(int value)
+    {
+        await DoStuffAsync<int>(
+                                value).ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync<T>(T value) => Task.CompletedTask;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync(int value)
+    {
+        await DoStuffAsync<int>(
+                                value)
+                           .ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync<T>(T value) => Task.CompletedTask;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_awaited_ConfigureAwait_on_same_line_as_end_of_multi_line_invocation()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(int value)
+    {
+        var configured = DoStuffAsync(
+                                      value).ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync(int value) => Task.CompletedTask;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(int value)
+    {
+        var configured = DoStuffAsync(
+                                      value)
+                                 .ConfigureAwait(false);
+    }
+
+    private Task DoStuffAsync(int value) => Task.CompletedTask;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_ConfigureAwait_is_on_same_line_and_preceded_by_whitespace()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync()
+    {
+        await Task.Run(
+                       () =>
+                           {
+                               // do stuff
+                           })   .ConfigureAwait(false);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async Task DoSomethingAsync()
+    {
+        await Task.Run(
+                       () =>
+                           {
+                               // do stuff
+                           })   
+                  .ConfigureAwait(false);
+    }
 }
 ";
 

@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var spaces = GetProposedSpaces(issue);
 
-                return maes.WithOperatorToken(maes.OperatorToken.WithLeadingEmptyLine().WithAdditionalLeadingSpacesAtEnd(spaces));
+                return maes.WithOperatorToken(maes.OperatorToken.WithoutTrivia().WithLeadingEmptyLine().WithAdditionalLeadingSpacesAtEnd(spaces));
             }
 
             return syntax;

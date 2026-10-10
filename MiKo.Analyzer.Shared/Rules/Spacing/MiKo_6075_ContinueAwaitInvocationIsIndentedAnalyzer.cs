@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     if (configureAwait.IsOnSameLineAsEndOf(otherCall))
                     {
-                        var identifier = otherCall.FirstDescendant<IdentifierNameSyntax>();
+                        var identifier = otherCall.FirstDescendant<SimpleNameSyntax>();
 
                         switch (identifier.Parent)
                         {
