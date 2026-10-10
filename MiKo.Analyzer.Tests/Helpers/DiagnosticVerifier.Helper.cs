@@ -142,16 +142,26 @@ namespace TestHelper
             {
                 List<Diagnostic> diagnostics = null;
 
-                for (int documentIndex = 0, documentsLength = documents.Length; documentIndex < documentsLength; documentIndex++)
-                {
-                    var document = documents[documentIndex];
-                    var project = document.Project;
+                HashSet<Project> projects = new();
+                HashSet<SyntaxTree> trees = new();
 
+                foreach (Document document in documents)
+                {
+                    projects.Add(document.Project);
+
+                    var tree = document.GetSyntaxTreeAsync().Result;
+
+                    trees.Add(tree);
+                }
+
+                foreach (var project in projects)
+                {
                     if (profileAnalysis)
                     {
                         JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
                     }
 
+                    // Attention - Only do this once per project and not once per document as all the analyzers would run again and again and again for the complete project !!!
                     var compilation = project.GetCompilationAsync().Result;
                     var compilationWithAnalyzers = compilation.WithAnalyzers(analyzers);
                     var issues = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
@@ -165,8 +175,6 @@ namespace TestHelper
                     {
                         diagnostics ??= new List<Diagnostic>(issues.Length);
 
-                        var tree = document.GetSyntaxTreeAsync().Result;
-
                         for (int index = 0, issuesLength = issues.Length; index < issuesLength; index++)
                         {
                             var issue = issues[index];
@@ -177,7 +185,7 @@ namespace TestHelper
                             }
                             else
                             {
-                                if (tree == issue.Location.SourceTree)
+                                if (trees.Contains(issue.Location.SourceTree))
                                 {
                                     diagnostics.Add(issue);
                                 }
