@@ -16,7 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
 
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, FindIssue(context));
+        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        {
+            var issue = FindIssue(context);
+
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
+        }
 
         private Diagnostic FindIssue(in SyntaxNodeAnalysisContext context)
         {
@@ -86,8 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic FindIssue(in SyntaxToken dot, IdentifierNameSyntax identifier)
         {
-            var location = identifier.GetLocation();
-            var position = location.GetPositionWithinEndLine();
+            var position = identifier.GetPositionWithinEndLine();
 
             return Issue(dot, CreateProposalForSpaces(position - Constants.Indentation));
         }

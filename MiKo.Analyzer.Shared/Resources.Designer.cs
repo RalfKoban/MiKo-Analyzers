@@ -19711,5 +19711,42 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6074_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move &apos;ConfigureAwait&apos; to separate line.
+        /// </summary>
+        internal static string MiKo_6075_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6075_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When an awaited method invocation spans multiple lines, place the call to &apos;ConfigureAwait&apos; on its own line. This makes the code easier to read and keeps the invocation and continuation chain clearly separated.
+        ///Align the call with the start of the method chain to maintain consistent formatting..
+        /// </summary>
+        internal static string MiKo_6075_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6075_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move &apos;ConfigureAwait&apos; to separate line.
+        /// </summary>
+        internal static string MiKo_6075_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6075_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;ConfigureAwait&apos; on separate line.
+        /// </summary>
+        internal static string MiKo_6075_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6075_Title", resourceCulture);
+            }
+        }
     }
 }
