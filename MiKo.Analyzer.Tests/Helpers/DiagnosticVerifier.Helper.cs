@@ -142,8 +142,8 @@ namespace TestHelper
             {
                 List<Diagnostic> diagnostics = null;
 
-                HashSet<Project> projects = new();
-                HashSet<SyntaxTree> trees = new();
+                HashSet<Project> projects = new(1);
+                HashSet<SyntaxTree> trees = new(documents.Length);
 
                 foreach (Document document in documents)
                 {
