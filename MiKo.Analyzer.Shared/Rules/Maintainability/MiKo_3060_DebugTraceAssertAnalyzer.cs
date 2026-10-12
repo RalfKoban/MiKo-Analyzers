@@ -18,15 +18,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        {
+            if (symbol.ContainingType?.TypeKind is TypeKind.Class)
+            {
+                if (symbol.IsAbstract || symbol.IsPartialDefinition || symbol.IsExtern || symbol.IsImplicitlyDeclared)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var syntax = symbol.GetSyntax();
 
+            var methodCalls = syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+
+            if (methodCalls.Count is 0)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
             List<Diagnostic> issues = null;
 
-            foreach (var methodCall in syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression))
+            foreach (var methodCall in methodCalls)
             {
                 if (methodCall.Is(nameof(Debug), nameof(Debug.Assert)) || methodCall.Is(nameof(Trace), nameof(Trace.Assert)))
                 {
