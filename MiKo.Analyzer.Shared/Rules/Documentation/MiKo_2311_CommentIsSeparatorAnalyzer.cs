@@ -22,9 +22,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.CompilationUnit);
 
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeComment(context.Node));
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        {
+            var issues = AnalyzeComment(context.Node);
 
-        private IReadOnlyList<Diagnostic> AnalyzeComment(SyntaxNode node)
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
+        }
+
+        private Diagnostic[] AnalyzeComment(SyntaxNode node)
         {
             List<Diagnostic> issues = null;
 
@@ -48,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }
