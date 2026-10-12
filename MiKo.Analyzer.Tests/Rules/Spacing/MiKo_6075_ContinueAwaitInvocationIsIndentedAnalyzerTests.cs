@@ -507,7 +507,7 @@ public class TestMe
                        () =>
                            {
                                // do stuff
-                           })   
+                           })
                   .ConfigureAwait(false);
     }
 }
