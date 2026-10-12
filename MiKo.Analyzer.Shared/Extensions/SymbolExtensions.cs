@@ -594,12 +594,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static LocalFunctionStatementSyntax[] GetLocalFunctions(this IMethodSymbol value)
         {
-            if (value.IsAbstract)
-            {
-                return Array.Empty<LocalFunctionStatementSyntax>();
-            }
-
-            if (value.IsPartialDefinition)
+            if (value.IsAbstract || value.IsPartialDefinition || value.IsExtern || value.IsImplicitlyDeclared)
             {
                 return Array.Empty<LocalFunctionStatementSyntax>();
             }
