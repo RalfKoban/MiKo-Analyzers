@@ -26,7 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var issues = Analyze(node, context);
 
-                ReportDiagnostics(context, issues);
+                if (issues.Length > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
             }
         }
 

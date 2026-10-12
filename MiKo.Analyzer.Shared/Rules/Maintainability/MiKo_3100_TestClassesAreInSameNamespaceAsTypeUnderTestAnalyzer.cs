@@ -153,7 +153,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var issues = AnalyzeTypeSymbol(context);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private Diagnostic[] AnalyzeTypeSymbol(SyntaxNodeAnalysisContext context)
