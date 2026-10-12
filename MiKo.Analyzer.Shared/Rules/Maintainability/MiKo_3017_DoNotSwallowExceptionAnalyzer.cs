@@ -14,12 +14,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3017";
 
+        private static readonly string[] NamesToIgnore =
+                                                         {
+                                                             "List",
+                                                             "Dictionary",
+                                                             "ConcurrentDictionary",
+                                                             "Factory",
+                                                             "Command",
+                                                             "ViewModel",
+                                                             "Adapter",
+                                                             "Manager",
+                                                             "Collection",
+                                                             "HashSet",
+                                                             "Queue",
+                                                             "Stack",
+                                                             "KeyValuePair",
+                                                             "EventArgs",
+                                                             "Provider",
+                                                             "Analyzer",
+                                                         };
+
         public MiKo_3017_DoNotSwallowExceptionAnalyzer() : base(Id)
         {
         }
 
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
+            var name = node.Type.GetName();
+
+            if (name.AsSpan().EndsWithAny(NamesToIgnore))
+            {
+                // it's no exception that gets created here
+                return false;
+            }
+
             var typeSymbol = node.GetTypeSymbol(semanticModel);
 
             if (typeSymbol.IsException())

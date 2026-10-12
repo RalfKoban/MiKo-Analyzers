@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] Exceptions = [nameof(ArgumentException), nameof(ArgumentNullException), nameof(ArgumentOutOfRangeException), nameof(InvalidOperationException)];
 
         [Test]
-        public void No_issue_is_reported_for_normal_created_object() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_created_normal_object() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -24,6 +24,20 @@ public class TestMe
     public void DoSomething()
     {
         var x = new object();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_created_generic_object() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = new List<int>();
     }
 }
 ");
