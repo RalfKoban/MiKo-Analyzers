@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,25 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3017";
 
-        private static readonly string[] NamesToIgnore =
-                                                         {
-                                                             "List",
-                                                             "Dictionary",
-                                                             "ConcurrentDictionary",
-                                                             "Factory",
-                                                             "Command",
-                                                             "ViewModel",
-                                                             "Adapter",
-                                                             "Manager",
-                                                             "Collection",
-                                                             "HashSet",
-                                                             "Queue",
-                                                             "Stack",
-                                                             "KeyValuePair",
-                                                             "EventArgs",
-                                                             "Provider",
-                                                             "Analyzer",
-                                                         };
+        private static readonly ConcurrentDictionary<string, bool> Cache = new ConcurrentDictionary<string, bool>();
 
         public MiKo_3017_DoNotSwallowExceptionAnalyzer() : base(Id)
         {
@@ -42,15 +25,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = node.Type.GetName();
 
-            if (name.AsSpan().EndsWithAny(NamesToIgnore))
+            if (Cache.TryGetValue(name, out var isException) is false)
             {
-                // it's no exception that gets created here
-                return false;
+                var typeSymbol = node.GetTypeSymbol(semanticModel);
+
+                isException = typeSymbol.IsException();
+
+                Cache.TryAdd(name, isException);
             }
 
-            var typeSymbol = node.GetTypeSymbol(semanticModel);
-
-            if (typeSymbol.IsException())
+            if (isException)
             {
                 var argumentList = node.ArgumentList;
 
@@ -63,6 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // seems like this is an exception with no inner exception, so see if the exception type supports creation via exceptions
+                    var typeSymbol = node.GetTypeSymbol(semanticModel);
+
                     return typeSymbol.GetMethods(MethodKind.Constructor).Any(_ =>
                                                                                  {
                                                                                      var parameters = _.Parameters;
