@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return Task.FromResult(updatedSyntax);
         }
 
-        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             switch (syntax.Parent)
             {
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     var updated = statement.PlacedOnSameLine();
 
-                    return root.ReplaceNode(statement, updated);
+                    return Task.FromResult(root.ReplaceNode(statement, updated));
                 }
 
                 case ArrowExpressionClauseSyntax arrowClause:
@@ -39,14 +39,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         {
                             var updatedMethod = method.WithSemicolonToken(method.SemicolonToken.WithoutLeadingTrivia());
 
-                            return root.ReplaceNode(method, updatedMethod);
+                            return Task.FromResult(root.ReplaceNode(method, updatedMethod));
                         }
 
                         case PropertyDeclarationSyntax property:
                         {
                             var updatedProperty = property.WithSemicolonToken(property.SemicolonToken.WithoutLeadingTrivia());
 
-                            return root.ReplaceNode(property, updatedProperty);
+                            return Task.FromResult(root.ReplaceNode(property, updatedProperty));
                         }
                     }
 
@@ -57,11 +57,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     var updatedReturnStatement = returnStatement.WithSemicolonToken(returnStatement.SemicolonToken.WithoutLeadingTrivia());
 
-                    return root.ReplaceNode(returnStatement, updatedReturnStatement);
+                    return Task.FromResult(root.ReplaceNode(returnStatement, updatedReturnStatement));
                 }
             }
 
-            return await base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken).ConfigureAwait(false);
+            return base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken);
         }
 
         private static T GetUpdatedSyntax<T>(T syntax) where T : SyntaxNode

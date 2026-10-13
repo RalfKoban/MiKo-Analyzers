@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Task.FromResult(updatedSyntax);
         }
 
-        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             if (syntax is XmlEmptyElementSyntax element)
             {
@@ -54,10 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     nodes.Add(NewLineXmlText());
                 }
 
-                return root.ReplaceNode(element, nodes);
+                return Task.FromResult(root.ReplaceNode(element, nodes));
             }
 
-            return await base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken).ConfigureAwait(false);
+            return base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken);
         }
 
         private static SyntaxNode GetUpdatedSyntax(XmlElementStartTagSyntax syntax)

@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return Task.FromResult(updatedSyntax);
         }
 
-        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             if (syntax is CollectionExpressionSyntax expression && expression.Parent is ArgumentSyntax argument && argument.Parent is ArgumentListSyntax argumentList && argumentList.Arguments.IndexOf(argument) is 0)
             {
@@ -80,10 +80,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     updatedArgumentList = updatedArgumentList.WithOpenParenToken(openParenToken.WithoutTrailingTrivia());
                 }
 
-                return root.ReplaceNode(argumentList, updatedArgumentList);
+                return Task.FromResult(root.ReplaceNode(argumentList, updatedArgumentList));
             }
 
-            return await base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken).ConfigureAwait(false);
+            return base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken);
         }
 
         private SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
