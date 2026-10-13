@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                     nameof(StringComparison.CurrentCultureIgnoreCase),
                                                                     nameof(StringComparison.InvariantCulture),
                                                                     nameof(StringComparison.InvariantCultureIgnoreCase),
-                                                                    nameof(StringComparison.OrdinalIgnoreCase)
+                                                                    nameof(StringComparison.OrdinalIgnoreCase),
                                                                 ];
 
         [Test]

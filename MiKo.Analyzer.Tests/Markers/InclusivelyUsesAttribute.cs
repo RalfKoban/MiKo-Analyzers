@@ -8,6 +8,9 @@ namespace NCrunch.Framework
     /// <summary>
     /// Specifies that the test marked with this attribute makes constrained use of a specific set of resources.
     /// </summary>
+    /// <param name="resourceNames">
+    /// The names of the resources.
+    /// </param>
     /// <remarks>
     /// The primary reason for this is to prevent concurrent execution of tests that do not support it.
     /// <para />
@@ -27,7 +30,7 @@ namespace NCrunch.Framework
     /// </remarks>
     /// <seealso cref="ExclusivelyUsesAttribute"/>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class InclusivelyUsesAttribute(params string[] resourceName) : ResourceUsageAttribute(resourceName)
+    public class InclusivelyUsesAttribute(params string[] resourceNames) : ResourceUsageAttribute(resourceNames)
     {
     }
 }

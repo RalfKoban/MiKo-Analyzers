@@ -26,8 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             "<see langword=\"false\"/>",
                                                             "<see langword=\"null\" />",
                                                             "<see langword=\"null\"/>",
-                                                           "This is a nullable information.",
-                                                           "This is a Nullable information.",
+                                                            "This is a nullable information.",
+                                                            "This is a Nullable information.",
                                                             string.Empty,
                                                         ];
 

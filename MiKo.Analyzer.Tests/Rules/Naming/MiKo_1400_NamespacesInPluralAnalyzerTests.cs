@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                      "UndoRedo",
                                                                      "UserExperience",
                                                                      "VisualBasic",
-                                                                     "Web"
+                                                                     "Web",
                                                                  ];
 
         private static readonly string[] WellKnownCompanyAndFrameworkNames =
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                  "NDepend",
                                                                                  "PostSharp",
                                                                                  "Azure",
-                                                                                 "Docker"
+                                                                                 "Docker",
                                                                              ];
 
         private static readonly string[] Acronyms = ["WYSIWYG"];

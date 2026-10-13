@@ -731,7 +731,7 @@ internal interface IFactory
                                 "for", "for creating", "for creation of", "for the creation of",
                                 "that create", "that can create", "that is able to create", "that are able to create", "that is capable to create", "that are capable to create", "that creates",
                                 "to create",
-                                "which create", "which can create", "which is able to create", "which are able to create", "which is capable to create", "which are capable to create", "which creates"
+                                "which create", "which can create", "which is able to create", "which are able to create", "which is capable to create", "which are capable to create", "which creates",
                              ];
 
             // we do not test them to limit number of tests
@@ -905,7 +905,7 @@ internal interface IFactory
                                  "Creates", "Creates and initializes", "Creates and provides", "Creates and returns", "Creates and sets up",
                                  "Return", "Returns",
                                  "Get", "Gets",
-                                 "Initialize", "Initializes"
+                                 "Initialize", "Initializes",
                              ];
             string[] followUps = ["a instance of the", "a instance of", "a new instance of the", "a new instance of", "a new", "a", "an instance of the", "an instance of", "instances of the", "instances of", "new instances of the", "new instances of"];
 

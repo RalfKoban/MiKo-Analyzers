@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                          "UnregisterEvents",
                                                                          "UnRegisterEvents",
                                                                          "UnsubscribeEvents",
-                                                                         "UnSubscribeEvents"
+                                                                         "UnSubscribeEvents",
                                                                      ];
 
         [Test]

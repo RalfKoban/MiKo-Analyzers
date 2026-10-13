@@ -77,7 +77,7 @@ namespace Bla
                                new("decorator", "decorated"),
                                new("dataAdapter", "adaptedData"),
                                new("dataWrapper", "wrappedData"),
-                               new("dataDecorator", "decoratedData")
+                               new("dataDecorator", "decoratedData"),
                            ];
 
             foreach (var prefix in FieldPrefixes)

@@ -8,6 +8,9 @@ namespace NCrunch.Framework
     /// <summary>
     /// Specifies that the test marked with this attribute can only be run on a machine configured to support the specified capability.
     /// </summary>
+    /// <param name="capabilityName">
+    /// The name of the capability.
+    /// </param>
     /// <remarks>
     /// This attribute can be specified at test, fixture, or assembly level.
     /// When specified at assembly level, it will automatically apply to all tests within the assembly.
