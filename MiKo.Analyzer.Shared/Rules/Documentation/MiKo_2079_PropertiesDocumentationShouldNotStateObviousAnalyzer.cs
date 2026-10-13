@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
@@ -36,6 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ContinuationPhrases = { "flag", "Flag", "field", "Field" };
 
+        private static readonly ConcurrentDictionary<string, HashSet<string>> Cache = new ConcurrentDictionary<string, HashSet<string>>();
+
         public MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzer() : base(Id)
         {
         }
@@ -50,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string[]> summaries)
         {
             var symbolName = symbol.Name;
-            var obviousComments = GetObviousComments(symbolName);
+            var obviousComments = Cache.GetOrAdd(symbolName, GetObviousComments);
 
             List<Diagnostic> issues = null;
 
