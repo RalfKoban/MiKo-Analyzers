@@ -50,7 +50,7 @@ namespace TestHelper
         /// </returns>
         protected virtual CodeFixProvider GetCSharpCodeFixProvider() => null;
 
-        protected void Codefix_causes_no_exception_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
+        protected void Codefix_causes_no_exception_in_folder_(string path, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName)
         {
             using (Assert.EnterMultipleScope())
             {
