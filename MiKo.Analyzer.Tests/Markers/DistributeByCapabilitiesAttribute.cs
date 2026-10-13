@@ -8,6 +8,9 @@ namespace NCrunch.Framework
     /// <summary>
     /// Specifies that the test marked with this attribute will be executed by NCrunch using distributed processing.
     /// </summary>
+    /// <param name="capabilities">
+    /// The capabilities to distribute by.
+    /// </param>
     /// <remarks>
     /// The <see cref="DistributeByCapabilitiesAttribute"/> can be applied to tests, fixtures, or assemblies to simplify the use of NCrunch for multi-platform
     /// testing using distributed processing.

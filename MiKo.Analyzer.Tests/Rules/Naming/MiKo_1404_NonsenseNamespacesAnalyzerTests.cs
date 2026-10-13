@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                        "Util",
                                                                        "Utils",
                                                                        "Utility",
-                                                                       "Utilities"
+                                                                       "Utilities",
                                                                    ];
 
         [TestCase("MiKoSolutions")]

@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                   "Props",
                                                                                   "Vm",
                                                                                   "VM",
-                                                                              ])];
+                                                                              ]),];
 
         private static readonly string[] AllowedTerms =
                                                         [
