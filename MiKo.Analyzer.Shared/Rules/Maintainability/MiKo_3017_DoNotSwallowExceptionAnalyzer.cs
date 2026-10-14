@@ -25,6 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = node.Type.GetName();
 
+            // !!! Attention !!!
+            // the cache is keyed by type name only, which assumes that a name always refers to the same kind of type (exception or not)
+            // that may be wrong, as the same name can refer to different types in different solutions,
+            // so revisit the caching if we get evidence of that
             if (Cache.TryGetValue(name, out var isException) is false)
             {
                 var typeSymbol = node.GetTypeSymbol(semanticModel);
