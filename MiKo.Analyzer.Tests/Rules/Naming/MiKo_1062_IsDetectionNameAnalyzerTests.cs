@@ -55,6 +55,10 @@ public class TestMe
         [TestCase("CanSomethingFitting")]
         [TestCase("HasSomethingFitting")]
         [TestCase("ContainsSomethingFitting")]
+        [TestCase("CanActivateSomethingFitting")]
+        [TestCase("CanDeactivateSomethingFitting")]
+        [TestCase("CanChangeSomethingFitting")]
+        [TestCase("CanToggleSomethingFitting")]
         public void No_issue_is_reported_for_property_named_(string propertyName) => No_issue_is_reported_for(@"
 public class TestMe
 {
