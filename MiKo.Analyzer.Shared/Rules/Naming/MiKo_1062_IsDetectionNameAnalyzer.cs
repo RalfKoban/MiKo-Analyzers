@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] Prefixes = { "Can", "Has", "Contains" };
 
-        private static readonly string[] PropertiesWith4Words = { "CanToggle", "CanChange", "CanActivate", "CanDeactivate" };
+        private static readonly string[] PropertiesWith4Words = { "CanToggle", "CanChange", "CanActivate", "CanDeactivate", "CanUse" };
 
         public MiKo_1062_IsDetectionNameAnalyzer() : base(Id, (SymbolKind)(-1))
         {
