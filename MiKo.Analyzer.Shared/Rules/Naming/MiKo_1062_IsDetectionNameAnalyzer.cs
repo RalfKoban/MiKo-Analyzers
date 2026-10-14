@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] Prefixes = { "Can", "Has", "Contains" };
 
+        private static readonly string[] PropertiesWith4Words = { "CanToggle", "CanChange", "CanActivate", "CanDeactivate" };
+
         public MiKo_1062_IsDetectionNameAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -30,7 +32,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name.AsSpan(), 4);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name.AsSpan(), 3);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation)
+        {
+            var symbolName = symbol.Name.AsSpan();
+
+            if (symbolName.StartsWithAny(PropertiesWith4Words))
+            {
+                return AnalyzeCamelCase(symbol, symbolName, 4);
+            }
+
+            return AnalyzeCamelCase(symbol, symbolName, 3);
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
@@ -49,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return AnalyzeCamelCase(symbol, symbolName, 2);
         }
 
-        private static bool ViolatesLimit(in ReadOnlySpan<char> name, in ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
+        private static bool ViolatesLimit(in ReadOnlySpan<char> name, in ushort limit) => name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(limit);
 
         private Diagnostic[] AnalyzeCamelCase(ISymbol symbol, in ReadOnlySpan<char> symbolName, in ushort limit) => ViolatesLimit(symbolName, limit)
                                                                                                                     ? new[] { Issue(symbol, limit) }
