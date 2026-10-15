@@ -16,9 +16,9 @@ using MiKoSolutions.Analyzers.Linguistics;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
-    /// <summary>
+    /// <content>
     /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxNode"/>s related to comments and XML documentation.
-    /// </summary>
+    /// </content>
     internal static partial class SyntaxNodeExtensions
     {
         /// <summary>

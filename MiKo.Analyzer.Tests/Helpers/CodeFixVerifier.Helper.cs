@@ -13,10 +13,10 @@ using Microsoft.CodeAnalysis.Simplification;
 // ReSharper disable CheckNamespace
 namespace TestHelper
 {
-    /// <summary>
+    /// <content>
     /// Diagnostic Producer class with extra methods dealing with applying codefixes.
     /// All methods are static.
-    /// </summary>
+    /// </content>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
         /// <summary>

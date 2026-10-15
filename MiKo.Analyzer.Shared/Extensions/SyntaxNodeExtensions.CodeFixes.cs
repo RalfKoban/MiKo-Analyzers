@@ -13,9 +13,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
-    /// <summary>
+    /// <content>
     /// Provides extensions for <see cref="SyntaxNode"/>s that are suitable for code fixes where the <see cref="Document"/> class is available.
-    /// </summary>
+    /// </content>
     internal static partial class SyntaxNodeExtensions
     {
         /// <summary>

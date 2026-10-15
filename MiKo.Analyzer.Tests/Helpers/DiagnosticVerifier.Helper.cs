@@ -33,10 +33,10 @@ using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 // ReSharper disable CheckNamespace
 namespace TestHelper
 {
-    /// <summary>
+    /// <content>
     /// Class for turning strings into documents and getting the diagnostics on them.
     /// All methods are static.
-    /// </summary>
+    /// </content>
     public abstract partial class DiagnosticVerifier
     {
         private const int TestLimitToRunGarbageCollection = 5_000;

@@ -94,7 +94,10 @@ namespace MiKoSolutions.Analyzers
         /// </remarks>
         public string[] Keys
         {
-            get => m_keys;
+            get
+            {
+                return m_keys;
+            }
 
             set
             {
