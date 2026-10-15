@@ -81,6 +81,8 @@ public class TestMe
         [TestCase("xml")]
         [TestCase("Xml")]
         [TestCase("XML")]
+        [TestCase("xmls")]
+        [TestCase("Xmls")]
         public void No_issue_is_reported_for_(string name) => No_issue_is_reported_for(@"
 public class TestMe
     {

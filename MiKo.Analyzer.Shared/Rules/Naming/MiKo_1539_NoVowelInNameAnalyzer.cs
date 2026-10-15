@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                        "tcs", // TaskCancellationSource
                                                                        "Try",
                                                                        "XML",
+                                                                       "XMLS",
                                                                    };
 
         public MiKo_1539_NoVowelInNameAnalyzer() : base(Id)
