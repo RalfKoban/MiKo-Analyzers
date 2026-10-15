@@ -40,9 +40,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (symbol.ReturnType.IsBoolean())
+            var returnType = symbol.ReturnType;
+
+            if (returnType.IsBoolean())
             {
+                // ignore booleans
                 return false;
+            }
+
+            if (returnType.IsTask() || returnType.IsValueTask())
+            {
+                if (returnType.TryGetGenericArgumentType(out var generic) && generic.IsBoolean())
+                {
+                    // ignore booleans
+                    return false;
+                }
             }
 
             if (symbol.IsTestMethod())
@@ -66,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (methodName.StartsWith("Is", StringComparison.Ordinal) && symbol.IsDependencyPropertyChangedCallback())
             {
                 // 'Is' is an allowed start, see remarks section of 'https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertychangedeventhandler?view=netframework-4.0'
-                // ("Typically these events follow the naming pattern Is(PropertyName)Changed, where PropertyName is the DependencyProperty.Name of the property that changed.")
+                // ("Typically these events follow the naming pattern Is(PropertyName)Changed, where 'PropertyName' is the DependencyProperty.Name of the property that changed.")
                 return Array.Empty<Diagnostic>();
             }
 

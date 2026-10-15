@@ -34,6 +34,40 @@ public class TestMe
 }
 ");
 
+        [TestCase("Ends")]
+        [TestCase("Starts")]
+        [TestCase("Contains")]
+        [TestCase("Extends")]
+        [TestCase("Implements")]
+        [TestCase("Is")]
+        [TestCase("Matches")]
+        [TestCase("Throws")]
+        public void No_issue_is_reported_for_Task_boolean_method_starting_with_(string verb) => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<bool> " + verb + @"SomethingAsync() { }
+}
+");
+
+        [TestCase("Ends")]
+        [TestCase("Starts")]
+        [TestCase("Contains")]
+        [TestCase("Extends")]
+        [TestCase("Implements")]
+        [TestCase("Is")]
+        [TestCase("Matches")]
+        [TestCase("Throws")]
+        public void No_issue_is_reported_for_ValueTask_boolean_method_starting_with_(string verb) => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public ValueTask<bool> " + verb + @"SomethingAsync() { }
+}
+");
+
         [TestCase("AsSomething")]
         [TestCase("BytesCount")]
         [TestCase("ColumnsCount")]
