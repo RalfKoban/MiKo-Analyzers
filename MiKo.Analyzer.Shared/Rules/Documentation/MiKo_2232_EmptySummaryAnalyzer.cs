@@ -39,16 +39,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            for (int index = 0, count = summaryXmls.Count; index < count; index++)
-            {
-                var summary = summaryXmls[index];
-                var content = summary.Content;
+            return Analyze(summaryXmls);
+        }
 
-                switch (content.Count)
+        protected override IReadOnlyList<Diagnostic> AnalyzeContents(
+                                                                 DocumentationCommentTriviaSyntax comment,
+                                                                 ISymbol symbol,
+                                                                 IReadOnlyList<XmlElementSyntax> contentXmls,
+                                                                 Lazy<string> commentXml,
+                                                                 Lazy<string[]> contents)
+        {
+            return Analyze(contentXmls);
+        }
+
+        private Diagnostic[] Analyze(IReadOnlyList<XmlElementSyntax> xmls)
+        {
+            for (int index = 0, count = xmls.Count; index < count; index++)
+            {
+                var xml = xmls[index];
+                var contents = xml.Content;
+
+                switch (contents.Count)
                 {
                     case 0:
-                    case 1 when content[0].IsWhiteSpaceOnlyText():
-                        return new[] { Issue(summary) };
+                    case 1 when contents[0].IsWhiteSpaceOnlyText():
+                        return new[] { Issue(xml) };
                 }
             }
 

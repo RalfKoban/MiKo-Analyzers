@@ -97,6 +97,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                },
                                                                            _ => GetTermsForQuickLookup(_));
 
+        private static readonly HashSet<string> Tags = new HashSet<string>
+                                                           {
+                                                               Constants.XmlTag.Summary,
+                                                               Constants.XmlTag.Content,
+                                                           };
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
@@ -119,6 +125,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return GetUpdatedSyntax(comment, FirstWordAdjustment.StartLowerCase);
         }
+
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstXmlSyntax(Tags);
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {

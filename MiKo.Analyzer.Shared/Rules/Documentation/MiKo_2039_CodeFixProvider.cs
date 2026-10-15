@@ -19,6 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly ReplacementMap ReplacementMap = new ReplacementMap("MiKo_2039", CreateReplacementMapKeys().OrderDescendingByLengthAndText().ToArray(_ => new Pair(_)), _ => GetTermsForQuickLookup(_));
 
+        private static readonly HashSet<string> Tags = new HashSet<string>
+                                                           {
+                                                               Constants.XmlTag.Summary,
+                                                               Constants.XmlTag.Content,
+                                                           };
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2039";
@@ -31,6 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return CommentStartingWith(comment, Parts[0], SeeLangword("static"), Parts[1]);
         }
+
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstXmlSyntax(Tags);
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {

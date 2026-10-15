@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2019_CodeFixProvider)), Shared]
     public sealed class MiKo_2019_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly string[] RepresentsCandidates =
                                                                 {
                                                                     "Additional ",
@@ -171,6 +174,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                },
                                                                                            _ => GetTermsForQuickLookup(_));
 
+        private static readonly HashSet<string> Tags = new HashSet<string>
+                                                           {
+                                                               Constants.XmlTag.Summary,
+                                                               Constants.XmlTag.Content,
+                                                           };
+
+//// ncrunch: rdi default
+
         public override string FixableDiagnosticId => "MiKo_2019";
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -187,6 +198,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return syntax;
         }
+
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstXmlSyntax(Tags);
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {

@@ -211,6 +211,17 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets all <c>&lt;content&gt;</c> XML elements from documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia syntax to get the <c>&lt;content&gt;</c> XML elements from.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that represent the <c>&lt;content&gt;</c> XML elements.
+        /// </returns>
+        internal static IReadOnlyList<XmlElementSyntax> GetContentXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Content);
+
+        /// <summary>
         /// Gets the cref attribute from an XML element or empty element syntax node.
         /// </summary>
         /// <param name="value">
@@ -495,49 +506,49 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all remarks XML elements from documentation comment trivia syntax.
+        /// Gets all <c>&lt;remarks&gt;</c> XML elements from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The documentation comment trivia syntax to get the remarks XML elements from.
+        /// The documentation comment trivia syntax to get the <c>&lt;remarks&gt;</c> XML elements from.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the remarks XML elements.
+        /// A collection of <see cref="XmlElementSyntax"/> that represents the <c>&lt;remarks&gt;</c> XML elements.
         /// </returns>
         internal static IReadOnlyList<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Remarks);
 
         /// <summary>
-        /// Gets all returns XML elements from documentation comment trivia syntax.
+        /// Gets all <c>&lt;returns&gt;</c> XML elements from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The documentation comment trivia syntax to get the returns XML elements from.
+        /// The documentation comment trivia syntax to get the <c>&lt;returns&gt;</c> XML elements from.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the returns XML elements.
+        /// A collection of <see cref="XmlElementSyntax"/> that represent the <c>&lt;returns&gt;</c> XML elements.
         /// </returns>
         internal static IReadOnlyList<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Returns);
 
         /// <summary>
-        /// Gets all summary XML elements from documentation comment trivia syntax.
+        /// Gets all <c>&lt;summary&gt;</c> XML elements from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The documentation comment trivia syntax to get the summary XML elements from.
+        /// The documentation comment trivia syntax to get the <c>&lt;summary&gt;</c> XML elements from.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the summary XML elements.
+        /// A collection of <see cref="XmlElementSyntax"/> that represent the <c>&lt;summary&gt;</c> XML elements.
         /// </returns>
         internal static IReadOnlyList<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Summary);
 
         /// <summary>
-        /// Gets all summary XML nodes matching the specified tags from documentation comment trivia syntax.
+        /// Gets all <c>&lt;summary&gt;</c> XML nodes matching the specified tags from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The documentation comment trivia syntax to get the summary XML nodes from.
+        /// The documentation comment trivia syntax to get the <c>&lt;summary&gt;</c> XML nodes from.
         /// </param>
         /// <param name="tags">
-        /// The set of tags to match within summary XML elements.
+        /// The set of tags to match within <c>&lt;summary&gt;</c> XML elements.
         /// </param>
         /// <returns>
-        /// A sequence that contains <see cref="XmlNodeSyntax"/> that represents the summary XML nodes matching the specified tags.
+        /// A sequence that contains <see cref="XmlNodeSyntax"/> that represents the <c>&lt;summary&gt;</c> XML nodes matching the specified tags.
         /// </returns>
         internal static IEnumerable<XmlNodeSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value, ISet<string> tags)
         {
@@ -827,6 +838,8 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,string)"/>
         /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,ISet{string})"/>
         internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, string tag)
         {
@@ -837,6 +850,83 @@ namespace MiKoSolutions.Analyzers
                                   : value.DescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement);
 
             foreach (var element in descendantNodes)
+            {
+                if (element.GetName() == tag)
+                {
+                    if (elements is null)
+                    {
+                        elements = new List<XmlElementSyntax>(1);
+                    }
+
+                    elements.Add(element);
+                }
+            }
+
+            return (IReadOnlyList<XmlElementSyntax>)elements ?? Array.Empty<XmlElementSyntax>();
+        }
+
+        /// <summary>
+        /// Gets only those XML elements that are NOT empty (have some content) and match any of the given tags out of the documentation syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation syntax.
+        /// </param>
+        /// <param name="tags">
+        /// The tags of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> representing non-empty XML elements that match the given tags.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,ISet{string})"/>
+        internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, ISet<string> tags)
+        {
+            List<XmlElementSyntax> elements = null;
+
+            var descendantNodes = value is MemberDeclarationSyntax
+                                  ? value.AllDescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement)
+                                  : value.DescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement);
+
+            foreach (var element in descendantNodes)
+            {
+                if (tags.Contains(element.GetName()))
+                {
+                    if (elements is null)
+                    {
+                        elements = new List<XmlElementSyntax>(1);
+                    }
+
+                    elements.Add(element);
+                }
+            }
+
+            return (IReadOnlyList<XmlElementSyntax>)elements ?? Array.Empty<XmlElementSyntax>();
+        }
+
+        /// <summary>
+        /// Gets only those XML elements that are NOT empty (have some content) and match the given tag out of the documentation syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation syntax.
+        /// </param>
+        /// <param name="tag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> representing non-empty XML elements that match the given tag.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,ISet{string})"/>
+        internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this DocumentationCommentTriviaSyntax value, string tag)
+        {
+            // we have to delve into the trivia to find the XML syntax nodes
+            List<XmlElementSyntax> elements = null;
+
+            foreach (var element in value.DescendantNodes<XmlElementSyntax>(SyntaxKind.XmlElement))
             {
                 if (element.GetName() == tag)
                 {
@@ -867,6 +957,8 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(DocumentationCommentTriviaSyntax,string)"/>
         internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this DocumentationCommentTriviaSyntax value, ISet<string> tags)
         {
             // we have to delve into the trivia to find the XML syntax nodes
@@ -2306,16 +2398,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all summary XML nodes matching the specified tags from a collection of summary XML elements.
+        /// Gets all <c>&lt;summary&gt;</c> XML nodes matching the specified tags from a collection of <c>&lt;summary&gt;</c> XML elements.
         /// </summary>
         /// <param name="summaryXmls">
-        /// The read-only list of summary XML elements to search within.
+        /// The read-only list of <c>&lt;summary&gt;</c> XML elements to search within.
         /// </param>
         /// <param name="tags">
-        /// The set of tags to match within summary XML elements.
+        /// The set of tags to match within <c>&lt;summary&gt;</c> XML elements.
         /// </param>
         /// <returns>
-        /// A sequence that contains <see cref="XmlNodeSyntax"/> that represents the XML nodes matching the specified tags found within the summary XML elements.
+        /// A sequence that contains <see cref="XmlNodeSyntax"/> that represents the XML nodes matching the specified tags found within the <c>&lt;summary&gt;</c> XML elements.
         /// </returns>
         private static IEnumerable<XmlNodeSyntax> GetSummaryXmlsCore(IReadOnlyList<XmlElementSyntax> summaryXmls, ISet<string> tags)
         {

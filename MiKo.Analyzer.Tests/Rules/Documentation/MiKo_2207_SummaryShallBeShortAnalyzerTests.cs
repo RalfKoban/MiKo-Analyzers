@@ -256,6 +256,34 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_class_content_containing_minus_sign_and_has_exact_limit() => No_issue_is_reported_for(@"
+/// <content>
+/// A b c d e f g h i j k l m n o p q r t u v w x y z - 1 2 3 4 5 6 7 8 9 0 - A b c d e f g h.
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_content_containing_minus_sign_and_has_exactly_1_word_more_than_limit() => An_issue_is_reported_for(@"
+/// <content>
+/// A b c d e f g h i j k l m n o p q r t u v w x y z - 1 2 3 4 5 6 7 8 9 0 - A b c d e f g h i.
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2207_SummaryShallBeShortAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2207_SummaryShallBeShortAnalyzer();

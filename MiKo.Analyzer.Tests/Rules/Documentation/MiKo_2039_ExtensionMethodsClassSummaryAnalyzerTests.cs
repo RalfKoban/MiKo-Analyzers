@@ -63,6 +63,36 @@ public static class TestMeExtensions
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_extension_class_with_standard_content_phrase_([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
+/// <content>
+/// " + phrase + @" something.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+public static partial class TestMeExtensions
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_extension_class_with_non_standard_content_phrase() => An_issue_is_reported_for(@"
+/// <content>
+/// Does something.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+public static partial class TestMeExtensions
+{
+}
+");
+
         [TestCase("Class containing extension methods for", "")]
         [TestCase("Class containing extension methods to", "")]
         [TestCase("Class for extension methods that extend", "")]
@@ -118,7 +148,7 @@ public static class TestMeExtensions
         [TestCase("Several basic helper functions for", "")]
         [TestCase("Basic helper functions for", "")]
         [TestCase("Helper functions for", "")]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_(string originalCode, string fixedCode)
+        public void Code_gets_fixed_by_replacing_summary_with_standard_phrase_(string originalCode, string fixedCode)
         {
             const string Template = @"
 /// <summary>
@@ -127,6 +157,26 @@ public static class TestMeExtensions
 public static class TestMeExtensions
 {
     public static void DoSomething(this int value) { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", @"Provides a set of <see langword=""static""/> methods for" + fixedCode));
+        }
+
+        [TestCase("Helper functions for", "")]
+        public void Code_gets_fixed_by_replacing_content_with_standard_phrase_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <content>
+/// ### something.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+public static partial class TestMeExtensions
+{
 }
 ";
 
