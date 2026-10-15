@@ -478,7 +478,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ínterface_list_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_list_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;

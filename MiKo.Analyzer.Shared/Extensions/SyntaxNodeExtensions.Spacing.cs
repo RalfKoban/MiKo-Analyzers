@@ -14,9 +14,9 @@ using Microsoft.CodeAnalysis.Text;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
-    /// <summary>
+    /// <content>
     /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxNode"/>s that are related to spacing.
-    /// </summary>
+    /// </content>
     internal static partial class SyntaxNodeExtensions
     {
         /// <summary>

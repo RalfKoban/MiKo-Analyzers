@@ -13,9 +13,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
-    /// <summary>
+    /// <content>
     /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxNode"/>s that focus on navigation.
-    /// </summary>
+    /// </content>
     internal static partial class SyntaxNodeExtensions
     {
         /// <summary>

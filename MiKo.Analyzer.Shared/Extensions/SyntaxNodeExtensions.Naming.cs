@@ -13,9 +13,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
-    /// <summary>
+    /// <content>
     /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxNode"/>s that focus on naming.
-    /// </summary>
+    /// </content>
     internal static partial class SyntaxNodeExtensions
     {
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
