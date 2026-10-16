@@ -533,6 +533,9 @@ dotnet_diagnostic.SA1311.severity = error
 dotnet_diagnostic.SA1312.severity = error
 dotnet_diagnostic.SA1313.severity = error
 dotnet_diagnostic.SA1314.severity = error
+dotnet_diagnostic.SA1315.severity = error
+dotnet_diagnostic.SA1316.severity = error
+dotnet_diagnostic.SA1317.severity = error
 dotnet_diagnostic.SA1400.severity = error
 dotnet_diagnostic.SA1401.severity = error
 dotnet_diagnostic.SA1402.severity = error
@@ -620,6 +623,7 @@ dotnet_diagnostic.SA1648.severity = error
 dotnet_diagnostic.SA1649.severity = error
 dotnet_diagnostic.SA1650.severity = error
 dotnet_diagnostic.SA1651.severity = error
+dotnet_diagnostic.SA1653.severity = error
 
 dotnet_diagnostic.SX1101.severity = none
 dotnet_diagnostic.SX1309.severity = none
