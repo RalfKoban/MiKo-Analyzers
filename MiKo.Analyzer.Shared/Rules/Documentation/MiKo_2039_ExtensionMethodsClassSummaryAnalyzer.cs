@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var syntax = comment.GetXmlSyntax(tag)[0];
 
-                return new[] { Issue(syntax, tag, phrases[0]) };
+                return new[] { Issue(syntax.GetContentsLocation(), tag, phrases[0]) };
             }
 
             return Array.Empty<Diagnostic>();

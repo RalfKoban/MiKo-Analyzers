@@ -76,11 +76,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return isBoolean ? Constants.Comments.BooleanPropertyGetterSetterStartingPhrase : Constants.Comments.PropertyGetterSetterStartingPhrase;
         }
 
-        private static void FindSelfSymbolNames(ISymbol symbol, List<string> names)
+        private static HashSet<string> GetSelfSymbolNames(ISymbol symbol)
         {
-            names.Capacity += 1;
-
-            names.Add(symbol.Name.ConcatenatedWith(Constants.Space));
+            var names = new HashSet<string> { symbol.Name.ConcatenatedWith(Constants.Space) };
 
             switch (symbol)
             {
@@ -91,8 +89,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (interfacesLength > 0)
                     {
-                        names.Capacity += interfacesLength;
-
                         names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(Constants.Space)));
                     }
 
@@ -108,15 +104,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (interfacesLength > 0)
                     {
-                        names.Capacity += interfacesLength;
-
                         names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(Constants.Space)));
                     }
 
                     break;
                 }
             }
-       }
+
+            return names;
+        }
 
         private Diagnostic[] AnalyzePhrases(ISymbol symbol, in ReadOnlySpan<string> texts, IReadOnlyList<XmlElementSyntax> xmls)
         {
@@ -125,14 +121,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Array.Empty<Diagnostic>();
             }
 
-            var phrases = GetPhrases(symbol).ToList();
+            var phrases = GetPhrases(symbol);
 
-            FindSelfSymbolNames(symbol, phrases);
+            var symbolNames = GetSelfSymbolNames(symbol);
 
-            return AnalyzePhrases(symbol, texts, xmls, phrases);
+            return AnalyzePhrases(symbol, texts, xmls, phrases.Concat(symbolNames));
         }
 
-        private Diagnostic[] AnalyzePhrases(ISymbol symbol, in ReadOnlySpan<string> texts, IReadOnlyList<XmlElementSyntax> xmls, IReadOnlyCollection<string> phrases)
+        private Diagnostic[] AnalyzePhrases(ISymbol symbol, in ReadOnlySpan<string> texts, IReadOnlyList<XmlElementSyntax> xmls, IEnumerable<string> phrases)
         {
             var property = symbol as IPropertySymbol;
 
@@ -215,28 +211,59 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private Diagnostic[] Issue(ISymbol symbol, XmlElementSyntax xml, string condition, string phrase)
         {
             // safety check to see if we have really an XML (for whatever reason that could be null as tested with a real-life project)
-            if (xml != null)
+            if (xml is null)
             {
-                var startOffset = phrase.StartsWith(Constants.Space) ? 1 : 0; // we do not want to underline the first space
-                var endOffset = phrase.EndsWith(Constants.Space) ? 1 : 0; // we do not want to underline the last space
+                return new[] { Issue(symbol, condition, phrase.HumanizedTakeFirst(200)) };
+            }
 
-                // let's find the phrase in the XML to report the issue at the correct location
-                foreach (var textToken in xml.GetXmlTextTokens())
+            // let's find the phrase in the XML to report the issue at the correct location
+            if (phrase.StartsWith(Constants.Comments.XmlElementStartingTagChar))
+            {
+                // we have an XML link here, such as /// <see cref="..."/>
+                foreach (var content in xml.Content)
                 {
-                    var location = textToken.GetFirstLocation(phrase, startOffset: startOffset, endOffset: endOffset);
-
-                    if (location is null)
+                    switch (content)
                     {
-                        // it is not part of the current text token, so we have to search further
-                        continue;
-                    }
+                        case XmlEmptyElementSyntax _:
+                            return new[] { Issue(symbol.Name, content, condition, phrase.HumanizedTakeFirst(200)) };
 
-                    return new[] { Issue(symbol.Name, location, condition, phrase.HumanizedTakeFirst(200)) };
+                        case XmlElementSyntax e when e.IsPara():
+                        {
+                            // we have a <para> tag around, so we have to get rid of it
+                            foreach (var subContent in e.Content)
+                            {
+                                if (subContent is XmlEmptyElementSyntax)
+                                {
+                                    return new[] { Issue(symbol.Name, subContent, condition, phrase.HumanizedTakeFirst(200)) };
+                                }
+                            }
+
+                            break;
+                        }
+                    }
                 }
             }
 
+            var startOffset = phrase.StartsWith(Constants.Space) ? 1 : 0; // we do not want to underline the first space
+            var endOffset = phrase.EndsWith(Constants.Space) ? 1 : 0; // we do not want to underline the last space
+
+            var xmlTextTokens = xml.GetXmlTextTokens();
+
+            foreach (var textToken in xmlTextTokens)
+            {
+                var location = textToken.GetFirstLocation(phrase, comparison: StringComparison.OrdinalIgnoreCase, startOffset: startOffset, endOffset: endOffset);
+
+                if (location is null)
+                {
+                    // it is not part of the current text token, so we have to search further
+                    continue;
+                }
+
+                return new[] { Issue(symbol.Name, location, condition, phrase.HumanizedTakeFirst(200)) };
+            }
+
             // fall-back to default location if the phrase is not found in the XML (could happen if the phrase spans multiple lines)
-            return new[] { Issue(symbol, condition, phrase.HumanizedTakeFirst(200)) };
+            return new[] { Issue(symbol.Name, xml.GetContentsLocation(), condition, phrase.HumanizedTakeFirst(200)) };
         }
     }
 }
