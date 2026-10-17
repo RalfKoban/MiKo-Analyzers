@@ -24,7 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             switch (syntax.Parent)
             {
                 case ArgumentSyntax argument when argument.Parent is ArgumentListSyntax argumentList:
-                    return argumentList.OpenParenToken.GetEndPosition();
+                {
+                    var firstArgument = argumentList.Arguments[0];
+
+                    if (firstArgument == argument)
+                    {
+                        return argumentList.OpenParenToken.GetEndPosition();
+                    }
+
+                    return firstArgument.GetStartPosition();
+                }
 
                 case EqualsValueClauseSyntax clause:
                     return clause.EqualsToken.GetPositionAfterEnd();
@@ -55,15 +64,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax.Elements.None(SyntaxKind.SpreadElement))
             {
                 var openBracketToken = syntax.OpenBracketToken;
-                var openBracketPosition = openBracketToken.GetStartPosition();
+                var closeBracketToken = syntax.CloseBracketToken;
+
+                if (openBracketToken.IsOnSameLineAs(closeBracketToken))
+                {
+                    return null;
+                }
+
                 var startPosition = GetStartPosition(syntax);
+                var openBracketPosition = openBracketToken.GetStartPosition();
 
                 if (NotVerticallyAligned(startPosition, openBracketPosition))
                 {
                     return Issue(openBracketToken, CreateProposalForSpaces(startPosition.Character));
                 }
-
-                var closeBracketToken = syntax.CloseBracketToken;
 
                 if (NotVerticallyAligned(closeBracketToken, openBracketPosition))
                 {
