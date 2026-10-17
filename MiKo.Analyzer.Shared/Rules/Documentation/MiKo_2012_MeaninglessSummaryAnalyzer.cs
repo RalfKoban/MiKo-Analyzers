@@ -41,10 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            var symbolNames = GetSelfSymbolNames(symbol);
-            var phrases = GetPhrases(symbol);
+            return AnalyzePhrases(symbol, summaries.Value, summaryXmls);
+        }
 
-            return AnalyzeSummaryPhrases(symbol, summaries.Value, summaryXmls, phrases.Concat(symbolNames));
+        protected override IReadOnlyList<Diagnostic> AnalyzeContents(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> contentXmls, Lazy<string> commentXml, Lazy<string[]> contents)
+        {
+            return AnalyzePhrases(symbol, contents.Value, contentXmls);
         }
 
         private static string[] GetPhrases(ISymbol symbol)
@@ -83,8 +85,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case INamedTypeSymbol s:
                 {
                     var interfaces = s.AllInterfaces;
+                    var interfacesLength = interfaces.Length;
 
-                    if (interfaces.Length > 0)
+                    if (interfacesLength > 0)
                     {
                         names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(Constants.Space)));
                     }
@@ -97,8 +100,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     names.Add(s.ContainingType.Name);
 
                     var interfaces = s.ContainingType.AllInterfaces;
+                    var interfacesLength = interfaces.Length;
 
-                    if (interfaces.Length > 0)
+                    if (interfacesLength > 0)
                     {
                         names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(Constants.Space)));
                     }
@@ -110,35 +114,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return names;
         }
 
-        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, in ReadOnlySpan<string> summaries, IReadOnlyList<XmlElementSyntax> summaryXmls, IEnumerable<string> phrases)
+        private Diagnostic[] AnalyzePhrases(ISymbol symbol, in ReadOnlySpan<string> texts, IReadOnlyList<XmlElementSyntax> xmls)
         {
-            var summariesLength = summaries.Length;
-
-            if (summariesLength is 0)
+            if (texts.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
 
+            var phrases = GetPhrases(symbol);
+
+            var symbolNames = GetSelfSymbolNames(symbol);
+
+            return AnalyzePhrases(symbol, texts, xmls, phrases.Concat(symbolNames));
+        }
+
+        private Diagnostic[] AnalyzePhrases(ISymbol symbol, in ReadOnlySpan<string> texts, IReadOnlyList<XmlElementSyntax> xmls, IEnumerable<string> phrases)
+        {
             var property = symbol as IPropertySymbol;
 
-            for (var index = 0; index < summariesLength; index++)
+            for (int index = 0, textsLength = texts.Length; index < textsLength; index++)
             {
-                var summary = summaries[index];
-                var summaryXml = summaryXmls.ElementAtOrDefault(index);
+                var text = texts[index];
+                var xml = xmls.ElementAtOrDefault(index);
 
-                if (summary.StartsWith(Constants.Comments.XmlElementStartingTagChar))
+                if (text.StartsWith(Constants.Comments.XmlElementStartingTagChar))
                 {
-                    var i = summary.AsSpan().IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
-                    var phrase = i > 0 ? summary.AsSpan(0, i + 2).ToString() : Constants.Comments.XmlElementStartingTag;
+                    var i = text.AsSpan().IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
+                    var phrase = i > 0 ? text.AsSpan(0, i + 2).ToString() : Constants.Comments.XmlElementStartingTag;
 
-                    return ReportIssueStartingPhrase(symbol, summaryXml, phrase);
+                    return ReportIssueStartingPhrase(symbol, xml, phrase);
                 }
 
                 foreach (var phrase in phrases)
                 {
-                    if (summary.StartsWith(phrase, StringComparison.OrdinalIgnoreCase))
+                    if (text.StartsWith(phrase, StringComparison.OrdinalIgnoreCase))
                     {
-                        return ReportIssueStartingPhrase(symbol, summaryXml, phrase);
+                        return ReportIssueStartingPhrase(symbol, xml, phrase);
                     }
                 }
 
@@ -149,22 +160,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     expectedPropertyStart = GetExpectedStartPhrase(property);
 
-                    isExpectedPropertyStart = summary.StartsWith(expectedPropertyStart, StringComparison.Ordinal);
+                    isExpectedPropertyStart = text.StartsWith(expectedPropertyStart, StringComparison.Ordinal);
                 }
 
                 foreach (var phrase in Constants.Comments.MeaninglessPhrase)
                 {
-                    if (summary.Contains(phrase, StringComparison.OrdinalIgnoreCase))
+                    if (text.Contains(phrase, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (phrase.EndsWith(" used", StringComparison.Ordinal) && summary.Contains(" used in ", StringComparison.Ordinal))
+                        if (phrase.EndsWith(" used", StringComparison.Ordinal) && text.Contains(" used in ", StringComparison.Ordinal))
                         {
                             // ignore the specific phrase
                             continue;
                         }
 
-                        if (phrase is "able to" && summary.Contains("vailable to", StringComparison.Ordinal))
+                        if (phrase is "able to" && text.Contains("vailable to", StringComparison.Ordinal))
                         {
-                            if (summary.Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                            if (text.Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
                             {
                                 // ignore phrase 'available'
                                 continue;
@@ -173,55 +184,86 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (isExpectedPropertyStart)
                         {
-                            if (phrase.Equals("value indicating whether", StringComparison.OrdinalIgnoreCase) && summary.AsSpan(expectedPropertyStart.Length).Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                            if (phrase.Equals("value indicating whether", StringComparison.OrdinalIgnoreCase) && text.AsSpan(expectedPropertyStart.Length).Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
                             {
                                 // ignore phrase as it is the expected property start
                                 continue;
                             }
                         }
 
-                        return ReportIssueContainsPhrase(symbol, summaryXml, phrase);
+                        return ReportIssueContainsPhrase(symbol, xml, phrase);
                     }
                 }
 
                 if (property != null && isExpectedPropertyStart is false)
                 {
-                    return ReportIssueStartingPhrase(property, summaryXml, summary.FirstWord());
+                    return ReportIssueStartingPhrase(property, xml, text.FirstWord());
                 }
             }
 
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, XmlElementSyntax summaryXml, string phrase) => Issue(symbol, summaryXml, "contain", phrase);
+        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, XmlElementSyntax xml, string phrase) => Issue(symbol, xml, "contain", phrase);
 
-        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, XmlElementSyntax summaryXml, string phrase) => Issue(symbol, summaryXml, "start with", phrase);
+        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, XmlElementSyntax xml, string phrase) => Issue(symbol, xml, "start with", phrase);
 
-        private Diagnostic[] Issue(ISymbol symbol, XmlElementSyntax summaryXml, string condition, string phrase)
+        private Diagnostic[] Issue(ISymbol symbol, XmlElementSyntax xml, string condition, string phrase)
         {
-            // safety check to see if we have really a summary XML (for whatever reason that could be null as tested with a real-life project)
-            if (summaryXml != null)
+            // safety check to see if we have really an XML (for whatever reason that could be null as tested with a real-life project)
+            if (xml is null)
             {
-                var startOffset = phrase.StartsWith(Constants.Space) ? 1 : 0; // we do not want to underline the first space
-                var endOffset = phrase.EndsWith(Constants.Space) ? 1 : 0; // we do not want to underline the last space
+                return new[] { Issue(symbol, condition, phrase.HumanizedTakeFirst(200)) };
+            }
 
-                // let's find the phrase in the summary XML to report the issue at the correct location
-                foreach (var textToken in summaryXml.GetXmlTextTokens())
+            // let's find the phrase in the XML to report the issue at the correct location
+            if (phrase.StartsWith(Constants.Comments.XmlElementStartingTagChar))
+            {
+                // we have an XML link here, such as /// <see cref="..."/>
+                foreach (var content in xml.Content)
                 {
-                    var location = textToken.GetFirstLocation(phrase, startOffset: startOffset, endOffset: endOffset);
-
-                    if (location is null)
+                    switch (content)
                     {
-                        // it is not part of the current text token, so we have to search further
-                        continue;
-                    }
+                        case XmlEmptyElementSyntax _:
+                            return new[] { Issue(symbol.Name, content, condition, phrase.HumanizedTakeFirst(200)) };
 
-                    return new[] { Issue(symbol.Name, location, condition, phrase.HumanizedTakeFirst(200)) };
+                        case XmlElementSyntax e when e.IsPara():
+                        {
+                            // we have a <para> tag around, so we have to get rid of it
+                            foreach (var subContent in e.Content)
+                            {
+                                if (subContent is XmlEmptyElementSyntax)
+                                {
+                                    return new[] { Issue(symbol.Name, subContent, condition, phrase.HumanizedTakeFirst(200)) };
+                                }
+                            }
+
+                            break;
+                        }
+                    }
                 }
             }
 
-            // fall-back to default location if the phrase is not found in the summary XML (could happen if the phrase spans multiple lines)
-            return new[] { Issue(symbol, condition, phrase.HumanizedTakeFirst(200)) };
+            var startOffset = phrase.StartsWith(Constants.Space) ? 1 : 0; // we do not want to underline the first space
+            var endOffset = phrase.EndsWith(Constants.Space) ? 1 : 0; // we do not want to underline the last space
+
+            var xmlTextTokens = xml.GetXmlTextTokens();
+
+            foreach (var textToken in xmlTextTokens)
+            {
+                var location = textToken.GetFirstLocation(phrase, comparison: StringComparison.OrdinalIgnoreCase, startOffset: startOffset, endOffset: endOffset);
+
+                if (location is null)
+                {
+                    // it is not part of the current text token, so we have to search further
+                    continue;
+                }
+
+                return new[] { Issue(symbol.Name, location, condition, phrase.HumanizedTakeFirst(200)) };
+            }
+
+            // fall-back to default location if the phrase is not found in the XML (could happen if the phrase spans multiple lines)
+            return new[] { Issue(symbol.Name, xml.GetContentsLocation(), condition, phrase.HumanizedTakeFirst(200)) };
         }
     }
 }

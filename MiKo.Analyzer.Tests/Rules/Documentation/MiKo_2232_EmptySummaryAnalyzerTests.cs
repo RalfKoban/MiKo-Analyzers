@@ -31,9 +31,45 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_summary_on_documented_type() => No_issue_is_reported_for(@"
+/// <summary>Some text</summary>
+public class TestMe
+{
+    public void DoSomething()
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_content_on_documented_type() => No_issue_is_reported_for(@"
+/// <content>Some text</content>
+public partial class TestMe
+{
+    public void DoSomething()
+    { }
+}
+
+public partial class TestMe
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_type_with_empty_summary_on_single_line() => An_issue_is_reported_for(@"
 /// <summary></summary>
 public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_type_with_empty_content_on_single_line() => An_issue_is_reported_for(@"
+/// <content></content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
 {
 }
 ");
@@ -113,6 +149,47 @@ public class TestMe
         {
             const string OriginalCode = @"
 /// <summary></summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_empty_summary_on_separate_line()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_whitespace_only_summary_on_separate_line()
+        {
+            const string OriginalCode = @"
+/// <summary>
+///
+/// </summary>
 public class TestMe
 {
 }
@@ -553,6 +630,119 @@ public class TestMe
 
     /// <returns>Some value</returns>
     public int DoSomethingElse() => 42;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_empty_content_on_single_line()
+        {
+            const string OriginalCode = @"
+/// <content></content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_empty_content_on_separate_lines()
+        {
+            const string OriginalCode = @"
+/// <content>
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_empty_content_and_non_empty_remarks_on_single_line()
+        {
+            const string OriginalCode = @"
+/// <content></content>
+/// <remarks>Some value</remarks>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <remarks>Some value</remarks>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_whitespace_only_content_on_separate_lines()
+        {
+            const string OriginalCode = @"
+/// <content>
+///
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
 }
 ";
 

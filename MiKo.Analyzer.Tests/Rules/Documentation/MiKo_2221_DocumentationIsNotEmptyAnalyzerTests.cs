@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Tags =
                                                 [
                                                     Constants.XmlTag.Code,
+                                                    Constants.XmlTag.Content,
                                                     Constants.XmlTag.Example,
                                                     Constants.XmlTag.Exception,
                                                     Constants.XmlTag.Note,

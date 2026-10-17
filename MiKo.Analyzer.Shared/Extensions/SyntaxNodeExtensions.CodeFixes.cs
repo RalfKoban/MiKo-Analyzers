@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Gets the first XML element that is NOT empty (has some content) and matches the given tag.
         /// </summary>
-        /// <param name="syntaxNodes">
+        /// <param name="source">
         /// The collection of syntax nodes to search.
         /// </param>
         /// <param name="startTag">
@@ -55,9 +55,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="XmlElementSyntax"/> that is NOT empty (has some content) and matches the given tag; or <see langword="null"/> if none is found.
         /// </returns>
-        internal static XmlElementSyntax FirstXmlSyntax(this IEnumerable<SyntaxNode> syntaxNodes, string startTag)
+        internal static XmlElementSyntax FirstXmlSyntax(this IEnumerable<SyntaxNode> source, string startTag)
         {
-            foreach (var node in syntaxNodes)
+            foreach (var node in source)
             {
                 if (node is XmlElementSyntax element && element.GetName() == startTag)
                 {
@@ -65,9 +65,44 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            foreach (var node in syntaxNodes)
+            foreach (var node in source)
             {
                 var elementSyntaxes = node.GetXmlSyntax(startTag);
+
+                if (elementSyntaxes.Count > 0)
+                {
+                    return elementSyntaxes[0];
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the first XML element that is NOT empty (has some content) and matches any of the given tags.
+        /// </summary>
+        /// <param name="source">
+        /// The collection of syntax nodes to search.
+        /// </param>
+        /// <param name="startTags">
+        /// The tags of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A <see cref="XmlElementSyntax"/> that is NOT empty (has some content) and matches any of the given tags; or <see langword="null"/> if none is found.
+        /// </returns>
+        internal static XmlElementSyntax FirstXmlSyntax(this IEnumerable<SyntaxNode> source, ISet<string> startTags)
+        {
+            foreach (var node in source)
+            {
+                if (node is XmlElementSyntax element && startTags.Contains(element.GetName()))
+                {
+                    return element;
+                }
+            }
+
+            foreach (var node in source)
+            {
+                var elementSyntaxes = node.GetXmlSyntax(startTags);
 
                 if (elementSyntaxes.Count > 0)
                 {

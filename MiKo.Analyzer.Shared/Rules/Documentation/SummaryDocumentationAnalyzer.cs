@@ -16,15 +16,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            if (summaryXmls.Count is 0)
+            if (summaryXmls.Count > 0)
             {
-                return Array.Empty<Diagnostic>();
+                var lazyCommentXml = new Lazy<string>(() => symbol.GetDocumentationCommentXml());
+                var lazySummaries = new Lazy<string[]>(() => CommentExtensions.GetSummaries(lazyCommentXml.Value));
+
+                return AnalyzeSummaries(comment, symbol, summaryXmls, lazyCommentXml, lazySummaries);
             }
 
-            var lazyCommentXml = new Lazy<string>(() => symbol.GetDocumentationCommentXml());
-            var lazySummaries = new Lazy<string[]>(() => CommentExtensions.GetSummaries(lazyCommentXml.Value));
+            // only run for partial type
+            if (symbol is ITypeSymbol t && t.IsPartial())
+            {
+                var contentXmls = comment.GetContentXmls();
 
-            return AnalyzeSummaries(comment, symbol, summaryXmls, lazyCommentXml, lazySummaries);
+                if (contentXmls.Count > 0)
+                {
+                    var lazyCommentXml = new Lazy<string>(() => symbol.GetDocumentationCommentXml());
+                    var lazyContents = new Lazy<string[]>(() => CommentExtensions.GetContents(lazyCommentXml.Value));
+
+                    return AnalyzeContents(comment, symbol, contentXmls, lazyCommentXml, lazyContents);
+                }
+            }
+
+            return Array.Empty<Diagnostic>();
         }
 
         protected virtual IReadOnlyList<Diagnostic> AnalyzeSummaries(
@@ -33,6 +47,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                  Lazy<string> commentXml,
                                                                  Lazy<string[]> summaries)
+        {
+            return Array.Empty<Diagnostic>();
+        }
+
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeContents(
+                                                                DocumentationCommentTriviaSyntax comment,
+                                                                ISymbol symbol,
+                                                                IReadOnlyList<XmlElementSyntax> contentXmls,
+                                                                Lazy<string> commentXml,
+                                                                Lazy<string[]> contents)
         {
             return Array.Empty<Diagnostic>();
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -53,6 +55,21 @@ public static class TestMeExtensions
 ");
 
         [Test]
+        public void No_issue_is_reported_for_extension_class_with_standard_content_phrase_([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
+/// <content>
+/// " + phrase + @" something.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+public static partial class TestMeExtensions
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_extension_class_with_non_standard_summary_phrase() => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
@@ -60,6 +77,41 @@ public static class TestMeExtensions
 public static class TestMeExtensions
 {
     public static void DoSomething(this int value) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_extension_class_with_non_standard_content_phrase() => An_issue_is_reported_for(@"
+/// <content>
+/// Does something.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+public static partial class TestMeExtensions
+{
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_extension_class_with_non_standard_summary_and_content_phrase() => An_issue_is_reported_for(2, @"
+/// <summary>
+/// Does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+/// <content>
+/// Does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
 }
 ");
 
@@ -118,7 +170,7 @@ public static class TestMeExtensions
         [TestCase("Several basic helper functions for", "")]
         [TestCase("Basic helper functions for", "")]
         [TestCase("Helper functions for", "")]
-        public void Code_gets_fixed_by_replacing_with_standard_phrase_(string originalCode, string fixedCode)
+        public void Code_gets_fixed_by_replacing_summary_with_standard_phrase_(string originalCode, string fixedCode)
         {
             const string Template = @"
 /// <summary>
@@ -131,6 +183,68 @@ public static class TestMeExtensions
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", @"Provides a set of <see langword=""static""/> methods for" + fixedCode));
+        }
+
+        [TestCase("Helper functions for", "")]
+        public void Code_gets_fixed_by_replacing_content_with_standard_phrase_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <content>
+/// ### something.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+public static partial class TestMeExtensions
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", @"Provides a set of <see langword=""static""/> methods for" + fixedCode));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_extension_class_with_non_standard_summary_and_content_phrase()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+/// <content>
+/// Does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Provides a set of <see langword=""static""/> methods for does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+
+/// <content>
+/// Provides a set of <see langword=""static""/> methods for does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;

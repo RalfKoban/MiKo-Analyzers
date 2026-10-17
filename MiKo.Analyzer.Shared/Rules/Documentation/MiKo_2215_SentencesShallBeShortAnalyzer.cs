@@ -20,18 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IEnumerable<string> XmlTags = new HashSet<string>
                                                                   {
-                                                                      Constants.XmlTag.Summary,
-                                                                      Constants.XmlTag.Remarks,
-                                                                      Constants.XmlTag.Param,
-                                                                      Constants.XmlTag.Returns,
-                                                                      Constants.XmlTag.Value,
-                                                                      Constants.XmlTag.Exception,
-                                                                      Constants.XmlTag.TypeParam,
+                                                                      Constants.XmlTag.Content,
                                                                       Constants.XmlTag.Example,
+                                                                      Constants.XmlTag.Exception,
                                                                       Constants.XmlTag.Note,
                                                                       Constants.XmlTag.Overloads,
                                                                       Constants.XmlTag.Para,
+                                                                      Constants.XmlTag.Param,
                                                                       Constants.XmlTag.Permission,
+                                                                      Constants.XmlTag.Remarks,
+                                                                      Constants.XmlTag.Returns,
+                                                                      Constants.XmlTag.Summary,
+                                                                      Constants.XmlTag.TypeParam,
+                                                                      Constants.XmlTag.Value,
                                                                   };
 
         public MiKo_2215_SentencesShallBeShortAnalyzer() : base(Id)

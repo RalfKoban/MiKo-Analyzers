@@ -905,6 +905,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly ISet<string> InvalidSummaryCrefXmlTags = new HashSet<string>
                                                                                   {
+                                                                                      XmlTag.Content,
                                                                                       XmlTag.Example,
                                                                                       XmlTag.Exception,
                                                                                       XmlTag.Include,
@@ -1199,6 +1200,7 @@ namespace MiKoSolutions.Analyzers
         {
             internal const string C = "c";
             internal const string Code = "code";
+            internal const string Content = "content"; // suggested by StyleCop analyzer rule SA1653 (https://dotnetanalyzers.github.io/StyleCopAnalyzers/SA1653.html) for partial types
             internal const string Description = "description";
             internal const string Example = "example";
             internal const string Exception = "exception";

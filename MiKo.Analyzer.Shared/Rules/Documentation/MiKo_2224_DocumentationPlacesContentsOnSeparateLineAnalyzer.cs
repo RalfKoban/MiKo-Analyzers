@@ -16,19 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> Tags = new HashSet<string>
                                                            {
-                                                               Constants.XmlTag.Overloads,
-                                                               Constants.XmlTag.Note,
-                                                               Constants.XmlTag.Summary,
-                                                               Constants.XmlTag.Exception,
-                                                               Constants.XmlTag.Param,
-                                                               Constants.XmlTag.Para, // (except for <para>-or-</para>)
-                                                               Constants.XmlTag.TypeParam,
-                                                               Constants.XmlTag.Returns,
-                                                               Constants.XmlTag.Value,
-                                                               Constants.XmlTag.Remarks,
+                                                               Constants.XmlTag.Content,
                                                                Constants.XmlTag.Example,
+                                                               Constants.XmlTag.Exception,
                                                                Constants.XmlTag.List,
+                                                               Constants.XmlTag.Note,
+                                                               Constants.XmlTag.Overloads,
+                                                               Constants.XmlTag.Para, // (except for <para>-or-</para>)
+                                                               Constants.XmlTag.Param,
+                                                               Constants.XmlTag.Remarks,
                                                                Constants.XmlTag.Response,
+                                                               Constants.XmlTag.Returns,
+                                                               Constants.XmlTag.Summary,
+                                                               Constants.XmlTag.TypeParam,
+                                                               Constants.XmlTag.Value,
                                                            };
 
         private static readonly HashSet<string> EmptyTags = new HashSet<string>

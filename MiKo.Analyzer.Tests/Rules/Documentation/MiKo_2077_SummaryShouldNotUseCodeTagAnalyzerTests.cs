@@ -51,6 +51,36 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_content_without_code_tag() => No_issue_is_reported_for(@"
+using System;
+
+/// <content>
+/// Some documentation.
+/// </content>
+public partial class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    public event EventHandler<T> MyEvent;
+
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    public int Age { get; set; }
+}
+
+public partial class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_code_tag_in_example_section() => No_issue_is_reported_for(@"
 using System;
 
@@ -97,6 +127,25 @@ public class TestMe
     /// </code>
     /// </example>
     public int Age { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_code_tag_in_type_content() => An_issue_is_reported_for(@"
+using System;
+
+/// <content>
+/// Some documentation.
+/// <code>
+/// var x = 42;
+/// </code>
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
 }
 ");
 

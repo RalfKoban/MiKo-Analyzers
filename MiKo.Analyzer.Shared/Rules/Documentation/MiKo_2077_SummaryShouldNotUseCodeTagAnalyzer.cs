@@ -38,13 +38,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
+            return Analyze(symbol, summaryXmls);
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeContents(
+                                                                 DocumentationCommentTriviaSyntax comment,
+                                                                 ISymbol symbol,
+                                                                 IReadOnlyList<XmlElementSyntax> contentXmls,
+                                                                 Lazy<string> commentXml,
+                                                                 Lazy<string[]> contents)
+        {
+            return Analyze(symbol, contentXmls);
+        }
+
+        private Diagnostic[] Analyze(ISymbol symbol, IReadOnlyList<XmlElementSyntax> xmls)
+        {
             List<Diagnostic> issues = null;
 
-            for (int index = 0, count = summaryXmls.Count; index < count; index++)
+            for (int index = 0, count = xmls.Count; index < count; index++)
             {
-                var summaryXml = summaryXmls[index];
+                var xml = xmls[index];
 
-                foreach (var code in summaryXml.GetXmlSyntax(Constants.XmlTag.Code))
+                foreach (var code in xml.GetXmlSyntax(Constants.XmlTag.Code))
                 {
                     if (issues is null)
                     {
@@ -56,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }
