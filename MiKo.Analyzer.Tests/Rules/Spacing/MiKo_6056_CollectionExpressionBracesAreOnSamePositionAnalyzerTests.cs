@@ -137,7 +137,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parameter_with_collection_expression_open_bracket_placed_on_same_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_only_parameter_with_collection_expression_open_bracket_placed_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -154,7 +154,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parameter_with_collection_expression_placed_on_same_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_only_parameter_with_collection_expression_placed_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -162,6 +162,132 @@ public class TestMe
     public void DoSomething(int[] values)
     {
         DoSomething([1, 2, 3]);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_2nd_parameter_with_collection_expression_with_single_element_and_placed_on_same_indentation_as_other_method_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public static void DoSomething()
+    {
+        DoSomethingElse(
+                    false,
+                    [new TestMe()],
+                    42);
+    }
+
+    public static void DoSomethingElse(boolean b, TestMe[] testees, int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_2nd_parameter_with_collection_expression_with_single_element_and_placed_on_more_to_left_than_other_method_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public static void DoSomething()
+    {
+        DoSomethingElse(
+                    false,
+                [new TestMe()],
+                    42);
+    }
+
+    public static void DoSomethingElse(boolean b, TestMe[] testees, int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_2nd_parameter_with_collection_expression_with_single_element_and_placed_on_more_to_right_than_other_method_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public static void DoSomething()
+    {
+        DoSomethingElse(
+                    false,
+                        [new TestMe()],
+                    42);
+    }
+
+    public static void DoSomethingElse(boolean b, TestMe[] testees, int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_2nd_parameter_with_collection_expression_with_multiple_elements_on_same_line_and_placed_on_same_indentation_as_other_method_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public static void DoSomething()
+    {
+        DoSomethingElse(
+                    false,
+                    [new TestMe(), new TestMe(), new TestMe()],
+                    42);
+    }
+
+    public static void DoSomethingElse(boolean b, TestMe[] testees, int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_2nd_parameter_with_collection_expression_with_multiple_elements_on_same_line_and_placed_more_to_left_than_other_method_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public static void DoSomething()
+    {
+        DoSomethingElse(
+                    false,
+                [new TestMe(), new TestMe(), new TestMe()],
+                    42);
+    }
+
+    public static void DoSomethingElse(boolean b, TestMe[] testees, int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_2nd_parameter_with_collection_expression_with_multiple_elements_on_same_line_and_placed_more_to_right_than_other_method_parameters() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public static void DoSomething()
+    {
+        DoSomethingElse(
+                    false,
+                        [new TestMe(), new TestMe(), new TestMe()],
+                    42);
+    }
+
+    public static void DoSomethingElse(boolean b, TestMe[] testees, int i)
+    {
     }
 }
 ");
@@ -218,7 +344,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_instance_with_nested_instances() => An_issue_is_reported_for(3, @"
+        public void An_issue_is_reported_for_instance_with_nested_instances_with_misplaces_brackets() => An_issue_is_reported_for(3, @"
 using System;
 using System.Collections.Generic;
 
@@ -383,7 +509,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_left() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_only_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_left() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -401,7 +527,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_right() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_only_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_right() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -790,7 +916,51 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_middle_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_right()
+        public void Code_gets_fixed_for_middle_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_right_and_other_parameters_are_aligned_to_left()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(float minValue, int[] values, float maxValue)
+    {
+        DoSomething(
+                float.MinValue,
+                    [
+                        1,
+                        2,
+                        3
+                    ],
+                float.MaxValue);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(float minValue, int[] values, float maxValue)
+    {
+        DoSomething(
+                float.MinValue,
+                [
+                    1,
+                    2,
+                    3
+                ],
+                float.MaxValue);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_middle_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_right_and_other_parameters_are_aligned_to_open_bracket()
         {
             const string OriginalCode = @"
 using System;
@@ -834,7 +1004,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_parameter_with_collection_expression_close_bracket_placed_on_different_line_outdented_to_the_left_by_1_and_last_item_with_separator()
+        public void Code_gets_fixed_for_only_parameter_with_collection_expression_close_bracket_placed_on_different_line_outdented_to_the_left_by_1_and_last_item_with_separator()
         {
             const string OriginalCode = @"
 using System;
@@ -871,7 +1041,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_parameter_with_collection_expression_close_bracket_placed_on_different_line_outdented_to_the_left_by_1_and_last_item_without_separator()
+        public void Code_gets_fixed_for_only_parameter_with_collection_expression_close_bracket_placed_on_different_line_outdented_to_the_left_by_1_and_last_item_without_separator()
         {
             const string OriginalCode = @"
 using System;
@@ -908,7 +1078,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_left()
+        public void Code_gets_fixed_for_only_parameter_with_collection_expression_open_bracket_placed_on_different_line_outdented_to_the_left()
         {
             const string OriginalCode = @"
 using System;
