@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6030";
 
-        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces)
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode syntax, in int leadingSpaces)
         {
-            switch (node)
+            switch (syntax)
             {
                 case InitializerExpressionSyntax initializer when initializer.IsKind(SyntaxKind.ComplexElementInitializerExpression) // such as for dictionaries
                                                                && initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
 
                 default:
-                    return base.GetUpdatedSyntax(node, leadingSpaces);
+                    return base.GetUpdatedSyntax(syntax, leadingSpaces);
             }
         }
 

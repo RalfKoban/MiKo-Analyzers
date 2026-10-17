@@ -103,7 +103,7 @@ namespace Bla
         public void No_issue_is_reported_for_mock_method_invocation_using_direct_comparison_(
                                                                                          [Values("object", "bool", "string", "int")] string type,
                                                                                          [Values("!=", ">=", "<=", ">", "<")] string comparison,
-                                                                                         [Values("null", "true", "false", "42", @"""42""")]string value)
+                                                                                         [Values("null", "true", "false", "42", @"""42""")] string value)
             => No_issue_is_reported_for(@"
 using System;
 

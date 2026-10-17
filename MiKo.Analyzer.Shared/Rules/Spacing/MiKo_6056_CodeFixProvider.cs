@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CollectionExpressionSyntax>().FirstOrDefault();
 
-        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces)
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode syntax, in int leadingSpaces)
         {
-            switch (node)
+            switch (syntax)
             {
                 case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
                 {
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 default:
                 {
-                    return base.GetUpdatedSyntax(node, leadingSpaces);
+                    return base.GetUpdatedSyntax(syntax, leadingSpaces);
                 }
             }
         }

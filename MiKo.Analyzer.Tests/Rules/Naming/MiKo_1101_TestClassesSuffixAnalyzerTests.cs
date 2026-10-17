@@ -19,7 +19,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_suffix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_with_suffix_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMeTests
 {
