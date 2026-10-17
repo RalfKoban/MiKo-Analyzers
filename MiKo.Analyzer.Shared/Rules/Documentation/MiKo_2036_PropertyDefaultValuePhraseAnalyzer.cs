@@ -46,9 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var endingPhrases = isBoolean
                                 ? Constants.Comments.DefaultBooleanLangwordPhrases
-                                : returnType.GetFields()
-                                            .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
-                                            .ToArray();
+                                : returnType.GetFields().SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol)).ToArray();
 
             if (commentXml.EndsWithAny(endingPhrases))
             {

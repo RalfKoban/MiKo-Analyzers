@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] Acronyms = ["WYSIWYG"];
 
         [Test]
-        public void No_issue_is_reported_for_acronym_namespace_name_([ValueSource(nameof(Acronyms))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_acronym_namespace_name_([ValueSource(nameof(Acronyms))] string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
@@ -84,7 +84,7 @@ namespace " + ns + @"
         public void No_issue_is_reported_for_acronym_file_scoped_namespace_([ValueSource(nameof(Acronyms))] string ns) => No_issue_is_reported_for("namespace " + ns + ";");
 
         [Test]
-        public void No_issue_is_reported_for_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))] string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
@@ -94,7 +94,7 @@ namespace " + ns + @"
         public void No_issue_is_reported_for_known_file_scoped_namespace_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))] string ns) => No_issue_is_reported_for("namespace " + ns + ";");
 
         [Test]
-        public void No_issue_is_reported_for_combined_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_combined_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))] string ns) => No_issue_is_reported_for(@"
 namespace Abc." + ns + @"
 {
 }
@@ -104,7 +104,7 @@ namespace Abc." + ns + @"
         public void No_issue_is_reported_for_combined_known_file_scoped_namespace_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))] string ns) => No_issue_is_reported_for("namespace Abc." + ns + ";");
 
         [Test]
-        public void No_issue_is_reported_for_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
@@ -114,7 +114,7 @@ namespace " + ns + @"
         public void No_issue_is_reported_for_file_scoped_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for("namespace " + ns + ";");
 
         [Test]
-        public void No_issue_is_reported_for_combined_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_combined_namespace_([ValueSource(nameof(AllowedNamespaceNames))] string ns) => No_issue_is_reported_for(@"
 namespace Abc." + ns + @"
 {
 }

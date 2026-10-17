@@ -34,7 +34,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_without_object_under_test_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_without_object_under_test_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     [" + fixture + @"]
@@ -46,7 +46,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_with_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -64,7 +64,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestableTestMe
@@ -82,7 +82,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_of_generic_type_with_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe<T>
@@ -100,7 +100,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe
@@ -139,7 +139,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_if_factory_method_returns_concrete_type_but_has_base_type_as_return_type_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_if_factory_method_returns_concrete_type_but_has_base_type_as_return_type_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class BaseTestMe
@@ -192,7 +192,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_named_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_named_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class Testable
@@ -210,7 +210,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestableTestMe
@@ -246,7 +246,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -264,7 +264,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_if_factory_method_returns_different_concrete_type_but_has_base_type_as_return_type_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_if_factory_method_returns_different_concrete_type_but_has_base_type_as_return_type_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class BaseTestMe
