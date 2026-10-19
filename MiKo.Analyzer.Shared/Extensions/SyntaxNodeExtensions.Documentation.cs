@@ -2266,7 +2266,9 @@ namespace MiKoSolutions.Analyzers
         /// The default is <see cref="FirstWordAdjustment.StartLowerCase"/>.
         /// </param>
         /// <returns>
-        /// A new <see cref="XmlTextSyntax"/> with the starting text added or replaced and the first word adjusted according to the specified adjustment, or a new syntax with only the starting text if no existing content is found.
+        /// A new <see cref="XmlTextSyntax"/> with the starting text added or replaced.
+        /// The first word is adjusted according to the specified adjustment.
+        /// If no existing content is found, the new syntax contains only the starting text.
         /// </returns>
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
