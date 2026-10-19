@@ -3092,7 +3092,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type is partial; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
+        internal static bool IsPartial(this ITypeSymbol value) => value.DeclaringSyntaxReferences.Length > 1;
 
         /// <summary>
         /// Determines whether a method is partial.

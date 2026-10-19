@@ -195,7 +195,26 @@ using Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_starting_verb_in_passive_form_([ValueSource(nameof(ThirdPersonVerbs))] string verb) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_starting_content_verb_in_passive_form_([ValueSource(nameof(ThirdPersonVerbs))] string verb) => No_issue_is_reported_for(@"
+using System;
+
+using Bla
+{
+    /// <content>
+    /// " + verb + @" some test data.
+    /// </content>
+    public partial class TestMe
+    {
+    }
+
+    public partial class TestMe
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_starting_summary_verb_in_passive_form_([ValueSource(nameof(ThirdPersonVerbs))] string verb) => No_issue_is_reported_for(@"
 using System;
 
 using Bla
@@ -210,7 +229,7 @@ using Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_starting_verb_in_para_tag_in_passive_form_([ValueSource(nameof(ThirdPersonVerbs))] string verb) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_starting_summary_verb_in_para_tag_in_passive_form_([ValueSource(nameof(ThirdPersonVerbs))] string verb) => No_issue_is_reported_for(@"
 using System;
 
 using Bla
@@ -227,7 +246,7 @@ using Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_starting_verb_in_passive_form_followed_by_comma() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_starting_summary_verb_in_passive_form_followed_by_comma() => No_issue_is_reported_for(@"
 using System;
 
 using Bla
@@ -242,7 +261,50 @@ using Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_non_3rd_person_singular_verb_documentation_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_3rd_person_verb_after_adverb_([Values("Recursively")] string term) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + term + @" loops over some test data.
+    /// </summary>
+    public void Loop() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_private_class_with_see_cref_as_second_word_and_3rd_person_verb() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Converts <see cref=""string""/> into something else.
+    /// </summary>
+    private class Converter
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_non_3rd_person_singular_content_verb_documentation_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
+using System;
+
+/// <content>
+/// " + start + @" some test data.
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_non_3rd_person_singular_summary_verb_documentation_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -303,33 +365,6 @@ public class TestMe
     /// Get or sets some test data.
     /// </summary>
     public int Age { get; set; }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_with_3rd_person_verb_after_adverb_([Values("Recursively")] string term) => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// " + term + @" loops over some test data.
-    /// </summary>
-    public void Loop() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_private_class_with_see_cref_as_second_word_and_3rd_person_verb() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// Converts <see cref=""string""/> into something else.
-    /// </summary>
-    private class Converter
-    { }
 }
 ");
 
@@ -449,7 +484,7 @@ public class TestMe
         [TestCase("This interface is responsible for collecting something", "Collects something")]
         [TestCase("This is an adapter between something", "Adapts between something")]
         [TestCase("This is an adapter for something", "Adapts something")]
-        public void Code_gets_fixed_for_class_text_(string originalText, string fixedText)
+        public void Code_gets_fixed_for_class_summary_text_(string originalText, string fixedText)
         {
             const string Template = @"
 using System;
@@ -469,7 +504,7 @@ public class TestMe
         [TestCase(@"Implementation for ")]
         [TestCase(@"Implementation class of ")]
         [TestCase(@"Implementation class for ")]
-        public void Code_gets_fixed_for_implementation_class_text_(string originalText)
+        public void Code_gets_fixed_for_implementation_class_summary_text_(string originalText)
         {
             var originalCode = @"
 using System;
@@ -650,7 +685,7 @@ public interface TestMe
         [TestCase("Several basic helper functions for")]
         [TestCase("Basic helper functions for")]
         [TestCase("Helper functions for")]
-        public void Code_gets_fixed_for_helper_class_text_(string originalText)
+        public void Code_gets_fixed_for_helper_class_summary_text_(string originalText)
         {
             const string Template = @"
 using System;
@@ -687,7 +722,7 @@ public static class TestMe
         [TestCase("Optimal version to do stuff", "Represents the optimal version to do stuff")]
         [TestCase("Absolute version to do stuff", "Represents the absolute version to do stuff")]
         [TestCase("Repository that does something", "Represents a repository that does something")]
-        public void Code_gets_fixed_for_special_class_text_(string originalText, string fixedText)
+        public void Code_gets_fixed_for_special_class_summary_text_(string originalText, string fixedText)
         {
             const string Template = @"
 using System;
@@ -911,25 +946,6 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
-        [TestCase("Given anything, does something")]
-        [TestCase("When anything, does something")]
-        public void Code_is_not_fixed_for_special_phrase_(string phrase)
-        {
-            var code = @"
-using System;
-
-public interface TestMe
-{
-    /// <summary>
-    /// " + phrase + @".
-    /// </summary>
-    public void DoSomething() { }
-}
-";
-
-            VerifyCSharpFix(code, code);
-        }
-
         [Test]
         public void Code_gets_fixed_for_public_constructor_([ValueSource(nameof(Constructors))] string originalText)
         {
@@ -1010,46 +1026,6 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe{T1,T2}"/> class"""));
         }
 
-        [TestCase("A callback that is called", "Gets called")]
-        [TestCase("A callback which is called", "Gets called")]
-        [TestCase("A method that gets called", "Gets called")]
-        [TestCase("A method that is called", "Gets called")]
-        [TestCase("A method which gets called", "Gets called")]
-        [TestCase("A method which is called", "Gets called")]
-        [TestCase("Callback that is called", "Gets called")]
-        [TestCase("Callback which is called", "Gets called")]
-        [TestCase("Method that gets called", "Gets called")]
-        [TestCase("Method that is called", "Gets called")]
-        [TestCase("Method which gets called", "Gets called")]
-        [TestCase("Method which is called", "Gets called")]
-        [TestCase("The callback that is called", "Gets called")]
-        [TestCase("The callback which is called", "Gets called")]
-        [TestCase("The method gets called", "Gets called")]
-        [TestCase("The method is called", "Gets called")]
-        [TestCase("The method that gets called", "Gets called")]
-        [TestCase("The method that is called", "Gets called")]
-        [TestCase("The method which gets called", "Gets called")]
-        [TestCase("The method which is called", "Gets called")]
-        [TestCase("This method gets called", "Gets called")]
-        [TestCase("This method is called", "Gets called")]
-        [TestCase("Called by someone", "Gets called by someone")]
-        [TestCase("Called if someone tries", "Gets called if someone tries")]
-        public void Code_gets_fixed_for_(string originalText, string fixedText)
-        {
-            const string Template = """
-
-                                    public class TestMe
-                                    {
-                                        /// <summary>
-                                        /// ### to do something.
-                                        /// </summary>
-                                        public void DoSomething() { }
-                                    }
-                                    """;
-
-            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
-        }
-
         [TestCase("A service implementation to do", "Represents a service to do")]
         [TestCase("A service to do", "Represents a service to do")]
         [TestCase("Interface for a service that checks", "Represents a service that checks")]
@@ -1079,6 +1055,86 @@ public static class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("A callback that is called", "Gets called")]
+        [TestCase("A callback which is called", "Gets called")]
+        [TestCase("A method that gets called", "Gets called")]
+        [TestCase("A method that is called", "Gets called")]
+        [TestCase("A method which gets called", "Gets called")]
+        [TestCase("A method which is called", "Gets called")]
+        [TestCase("Callback that is called", "Gets called")]
+        [TestCase("Callback which is called", "Gets called")]
+        [TestCase("Method that gets called", "Gets called")]
+        [TestCase("Method that is called", "Gets called")]
+        [TestCase("Method which gets called", "Gets called")]
+        [TestCase("Method which is called", "Gets called")]
+        [TestCase("The callback that is called", "Gets called")]
+        [TestCase("The callback which is called", "Gets called")]
+        [TestCase("The method gets called", "Gets called")]
+        [TestCase("The method is called", "Gets called")]
+        [TestCase("The method that gets called", "Gets called")]
+        [TestCase("The method that is called", "Gets called")]
+        [TestCase("The method which gets called", "Gets called")]
+        [TestCase("The method which is called", "Gets called")]
+        [TestCase("This method gets called", "Gets called")]
+        [TestCase("This method is called", "Gets called")]
+        [TestCase("Called by someone", "Gets called by someone")]
+        [TestCase("Called if someone tries", "Gets called if someone tries")]
+        public void Code_gets_fixed_for_callback_(string originalText, string fixedText)
+        {
+            const string Template = """
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ### to do something.
+                                        /// </summary>
+                                        public void DoSomething() { }
+                                    }
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("Provide something", "Provides something")]
+        public void Code_gets_fixed_for_class_content_text_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System;
+
+/// <content>
+/// ###
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("Given anything, does something")]
+        [TestCase("When anything, does something")]
+        public void Code_is_not_fixed_for_special_phrase_(string phrase)
+        {
+            var code = @"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// " + phrase + @".
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(code, code);
         }
 
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;

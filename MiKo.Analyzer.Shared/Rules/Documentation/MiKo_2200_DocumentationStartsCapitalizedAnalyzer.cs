@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> XmlTags = new HashSet<string>
                                                               {
+                                                                  Constants.XmlTag.Content,
                                                                   Constants.XmlTag.Example,
                                                                   Constants.XmlTag.Exception,
                                                                   Constants.XmlTag.Note,

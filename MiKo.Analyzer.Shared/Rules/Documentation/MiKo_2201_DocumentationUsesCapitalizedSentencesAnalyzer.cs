@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        Constants.XmlTag.Overloads,
                                                        Constants.XmlTag.Para,
                                                        Constants.XmlTag.Permission,
+                                                       Constants.XmlTag.Content,
                                                    };
 
         public MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer() : base(Id)

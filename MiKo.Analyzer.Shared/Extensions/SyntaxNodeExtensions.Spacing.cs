@@ -144,6 +144,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if both nodes are on the same line; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAs(this SyntaxNode value, SyntaxNode other) => value?.GetStartingLine() == other?.GetStartingLine();
 
         /// <summary>
@@ -158,6 +159,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the node and token are on the same line; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
         /// <summary>
@@ -172,6 +174,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if both are on the same line; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxNodeOrToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
         /// <summary>
@@ -186,6 +189,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the end of the node; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this SyntaxNode value, SyntaxNode other) => value.GetStartingLine() == other?.GetEndingLine();
 
         /// <summary>
@@ -200,6 +204,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the end of the node or token; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this SyntaxNode value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetEndingLine();
 
         /// <summary>
@@ -214,6 +219,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the end of the other token; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this SyntaxNode value, in SyntaxToken other) => value.GetStartingLine() == other.GetEndingLine();
 
         /// <summary>

@@ -51,24 +51,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            List<Diagnostic> issues = null;
+            return Analyze(summaryXmls);
+        }
 
-            for (int index = 0, count = summaryXmls.Count; index < count; index++)
-            {
-                var xml = summaryXmls[index];
-
-                if (HasIssue(xml))
-                {
-                    if (issues is null)
-                    {
-                        issues = new List<Diagnostic>(1);
-                    }
-
-                    issues.Add(Issue(xml.StartTag));
-                }
-            }
-
-            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
+        protected override IReadOnlyList<Diagnostic> AnalyzeContents(
+                                                                 DocumentationCommentTriviaSyntax comment,
+                                                                 ISymbol symbol,
+                                                                 IReadOnlyList<XmlElementSyntax> contentXmls,
+                                                                 Lazy<string> commentXml,
+                                                                 Lazy<string[]> contents)
+        {
+            return Analyze(contentXmls);
         }
 
         private static bool HasIssue(XmlElementSyntax xml)
@@ -117,6 +110,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return false;
+        }
+
+        private Diagnostic[] Analyze(IReadOnlyList<XmlElementSyntax> xmls)
+        {
+            List<Diagnostic> issues = null;
+
+            for (int index = 0, count = xmls.Count; index < count; index++)
+            {
+                var xml = xmls[index];
+
+                if (HasIssue(xml))
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(xml.StartTag));
+                }
+            }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }

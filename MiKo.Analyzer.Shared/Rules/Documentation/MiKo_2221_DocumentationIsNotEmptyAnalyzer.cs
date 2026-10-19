@@ -14,14 +14,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> Tags = new HashSet<string>
                                                            {
-                                                               Constants.XmlTag.Overloads,
-                                                               Constants.XmlTag.Summary,
-                                                               Constants.XmlTag.Remarks,
-                                                               Constants.XmlTag.Returns,
+                                                               Constants.XmlTag.Code,
+                                                               Constants.XmlTag.Content,
                                                                Constants.XmlTag.Example,
                                                                Constants.XmlTag.Exception,
-                                                               Constants.XmlTag.Code,
                                                                Constants.XmlTag.Note,
+                                                               Constants.XmlTag.Overloads,
+                                                               Constants.XmlTag.Remarks,
+                                                               Constants.XmlTag.Returns,
+                                                               Constants.XmlTag.Summary,
                                                                Constants.XmlTag.Value,
                                                            };
 

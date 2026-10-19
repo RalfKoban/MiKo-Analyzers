@@ -58,9 +58,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
+                var sourceSpan = issue.Location.SourceSpan;
+
+                if (sourceSpan.End > root.FullSpan.Length)
+                {
+                    // seems we are out-side of the span, so we cannot adjust the token
+                    return root;
+                }
+
                 // XML comment should be removed here, so adjust empty line on token
-                // (we need to be aware of attributes, so we have to find the node first to get the attribute and it's first token)
-                var node = root.FindNode(issue.Location.SourceSpan);
+                // (we need to be aware of attributes, so we have to find the node first to get the attribute, and it's first token)
+                var node = root.FindNode(sourceSpan);
 
                 token = node.FirstDescendantToken();
             }

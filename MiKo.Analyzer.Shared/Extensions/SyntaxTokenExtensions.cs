@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token of the specified kind.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken AsToken(this in SyntaxKind value) => SyntaxFactory.Token(value);
 
         /// <summary>
@@ -122,6 +123,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The enclosing node of the specified type.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T GetEnclosing<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
         /// <summary>
@@ -461,6 +463,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the node; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAs(this in SyntaxToken value, SyntaxNode other) => value.GetStartingLine() == other?.GetStartingLine();
 
         /// <summary>
@@ -475,6 +478,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the node or token; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetStartingLine();
 
         /// <summary>
@@ -489,6 +493,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the other token; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetStartingLine();
 
         /// <summary>
@@ -503,6 +508,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the end of the node; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, SyntaxNode other) => value.GetStartingLine() == other?.GetEndingLine();
 
         /// <summary>
@@ -517,6 +523,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the end of the node or token; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetEndingLine();
 
         /// <summary>
@@ -531,6 +538,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the token is on the same line as the end of the other token; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetEndingLine();
 
         /// <summary>
@@ -1033,6 +1041,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token without leading trivia but preserving trailing trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithoutLeadingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithTrailingTrivia(value.TrailingTrivia);
 
         /// <summary>
@@ -1044,6 +1053,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token without trailing trivia but preserving leading trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithoutTrailingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
 
         /// <summary>
@@ -1085,6 +1095,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token with the specified text.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithText(this in SyntaxToken value, in ReadOnlySpan<char> text) => value.WithText(text.ToString());
 
         /// <summary>

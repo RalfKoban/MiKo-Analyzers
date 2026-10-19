@@ -25,11 +25,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
+            return Analyze(comment, Constants.XmlTag.Summary, summaries);
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeContents(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> contentXmls, Lazy<string> commentXml, Lazy<string[]> contents)
+        {
+            return Analyze(comment, Constants.XmlTag.Content, contents);
+        }
+
+        private Diagnostic[] Analyze(DocumentationCommentTriviaSyntax comment, string tag, Lazy<string[]> texts)
+        {
             var phrases = Constants.Comments.ExtensionMethodClassStartingPhrase;
 
-            if (summaries.Value.None(_ => _.StartsWithAny(phrases)))
+            if (texts.Value.None(_ => _.StartsWithAny(phrases)))
             {
-                return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
+                var syntax = comment.GetXmlSyntax(tag)[0];
+
+                return new[] { Issue(syntax.GetContentsLocation(), tag, phrases[0]) };
             }
 
             return Array.Empty<Diagnostic>();

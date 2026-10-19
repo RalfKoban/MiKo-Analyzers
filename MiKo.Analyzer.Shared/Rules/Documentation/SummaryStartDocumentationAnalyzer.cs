@@ -33,26 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            List<Diagnostic> issues = null;
+            return Analyze(symbol, summaryXmls);
+        }
 
-            for (int index = 0, count = summaryXmls.Count; index < count; index++)
-            {
-                var issue = AnalyzeTextStart(symbol, summaryXmls[index]);
-
-                if (issue is null)
-                {
-                    continue;
-                }
-
-                if (issues is null)
-                {
-                    issues = new List<Diagnostic>(1);
-                }
-
-                issues.Add(issue);
-            }
-
-            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
+        protected override IReadOnlyList<Diagnostic> AnalyzeContents(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> contentXmls, Lazy<string> commentXml, Lazy<string[]> contents)
+        {
+            return Analyze(symbol, contentXmls);
         }
 
         protected Diagnostic AnalyzeTextStart(ISymbol symbol, XmlElementSyntax xml)
@@ -212,6 +198,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             issue = null;
 
             return AnalysisResult.Continue;
+        }
+
+        private Diagnostic[] Analyze(ISymbol symbol, IReadOnlyList<XmlElementSyntax> xmls)
+        {
+            List<Diagnostic> issues = null;
+
+            for (int index = 0, count = xmls.Count; index < count; index++)
+            {
+                var issue = AnalyzeTextStart(symbol, xmls[index]);
+
+                if (issue is null)
+                {
+                    continue;
+                }
+
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(issue);
+            }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }

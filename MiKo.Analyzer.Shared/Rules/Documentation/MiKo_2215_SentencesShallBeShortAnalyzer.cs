@@ -20,18 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IEnumerable<string> XmlTags = new HashSet<string>
                                                                   {
-                                                                      Constants.XmlTag.Summary,
-                                                                      Constants.XmlTag.Remarks,
-                                                                      Constants.XmlTag.Param,
-                                                                      Constants.XmlTag.Returns,
-                                                                      Constants.XmlTag.Value,
-                                                                      Constants.XmlTag.Exception,
-                                                                      Constants.XmlTag.TypeParam,
+                                                                      Constants.XmlTag.Content,
                                                                       Constants.XmlTag.Example,
+                                                                      Constants.XmlTag.Exception,
                                                                       Constants.XmlTag.Note,
                                                                       Constants.XmlTag.Overloads,
                                                                       Constants.XmlTag.Para,
+                                                                      Constants.XmlTag.Param,
                                                                       Constants.XmlTag.Permission,
+                                                                      Constants.XmlTag.Remarks,
+                                                                      Constants.XmlTag.Returns,
+                                                                      Constants.XmlTag.Summary,
+                                                                      Constants.XmlTag.TypeParam,
+                                                                      Constants.XmlTag.Value,
                                                                   };
 
         public MiKo_2215_SentencesShallBeShortAnalyzer() : base(Id)
@@ -40,16 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            if (HasIssue(comment))
-            {
-                return new[] { Issue(symbol) };
-            }
+            List<Diagnostic> issues = null;
 
-            return Array.Empty<Diagnostic>();
-        }
-
-        private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
-        {
             foreach (var node in comment.DescendantNodes<XmlElementSyntax>(_ => XmlTags.Contains(_.GetName())))
             {
                 var builder = StringBuilderCache.Acquire();
@@ -65,11 +58,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (HasIssue(specificComment.AsSpan()))
                 {
-                    return true;
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(symbol.Name, node.GetContentsLocation()));
                 }
             }
 
-            return false;
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(in ReadOnlySpan<char> text)

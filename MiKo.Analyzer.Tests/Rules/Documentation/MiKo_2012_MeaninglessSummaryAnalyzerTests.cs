@@ -58,6 +58,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_partial_class_with_and_without_documentation() => No_issue_is_reported_for(@"
+/// <content>
+/// Some documentation.
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_exception_class_with_documentation() => No_issue_is_reported_for(@"
 /// <summary>
 /// The exception to be thrown.
@@ -207,6 +221,20 @@ public enum TestMe
     /// " + firstWord + @" documentation.
     /// </summary>
     None = 0,
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_partial_class_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+/// <content>
+/// " + phrase + @" whatever
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
 }
 ");
 
@@ -1051,6 +1079,25 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
+        [TestCase("This class provides", "Provides")]
+        public void Code_gets_fixed_for_partial_class_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <content>
+/// ### something.
+/// </content>
+public partial class TestMe
+{
+}
+
+public partial class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         [TestCase("This delegate is the signature of", "Encapsulates a method that has the same signature as the")]
         public void Code_gets_fixed_for_delegate_(string originalCode, string fixedCode)
         {
@@ -1871,7 +1918,6 @@ public class TestMe
             var results = new HashSet<string>
                               {
                                   "TestMe",
-                                  "ITestMe",
                                   "A ",
                                   "An ",
                                   "Builder ",

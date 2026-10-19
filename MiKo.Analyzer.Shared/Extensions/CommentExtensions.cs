@@ -100,6 +100,17 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<string> GetComments(string commentXml, string xmlTag, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlTag).Descendants(xmlSubElement));
 
         /// <summary>
+        /// Gets all cleaned <c>&lt;content&gt;</c> comments from the provided XML documentation.
+        /// </summary>
+        /// <param name="commentXml">
+        /// The XML documentation to extract the <c>&lt;content&gt;</c> comments from.
+        /// </param>
+        /// <returns>
+        /// The array of cleaned <c>&lt;content&gt;</c> comments.
+        /// </returns>
+        internal static string[] GetContents(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Content));
+
+        /// <summary>
         /// Gets all cleaned <c>&lt;summary&gt;</c> comments from the provided XML documentation.
         /// </summary>
         /// <param name="commentXml">
