@@ -19,30 +19,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                          "Assert.AreEqual(42, 0815)",
                                                                          "Assert.IsNull(null)",
                                                                          "Assert.False(true)",
-                                                                         "Assert.Fail()",
                                                                          "Assert.Pass()",
                                                                          "Assert.AreSame(1, 2)",
                                                                      ];
 
         private static readonly string[] AssertionsWithMessages =
                                                                   [
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message {0}"", 42)",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42)",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message"")",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), 42 + "" some message "")",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), $""{42} some message "")",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), $""some message {42} "")",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"")",
-                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"" + 0815)",
-                                                                      @"Assert.AreEqual(42, 0815, ""some message"")",
-                                                                      @"Assert.IsNull(null, ""some message {0}"", 42)",
-                                                                      @"Assert.IsNull(null, ""some message"")",
-                                                                      @"Assert.False(true, ""some message"")",
-                                                                      @"Assert.Fail(""some message {0}"", 42)",
-                                                                      @"Assert.Fail(""some message"")",
-                                                                      @"Assert.Pass(""some message"")",
-                                                                      @"Assert.AreSame(1, 2, ""some message"")",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), "some message {0}", 42)""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), "some message " + 42)""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), "some message")""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), 42 + " some message ")""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), $"{42} some message ")""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), $"some message {42} ")""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), "some message " + 42 + "some more message")""",
+                                                                      """Assert.That(42, Is.Not.EqualTo(0815), "some message " + 42 + "some more message" + 0815)""",
+                                                                      """Assert.AreEqual(42, 0815, "some message")""",
+                                                                      """Assert.IsNull(null, "some message {0}", 42)""",
+                                                                      """Assert.IsNull(null, "some message")""",
+                                                                      """Assert.False(true, "some message")""",
+                                                                      """Assert.Fail("some message {0}", 42)""",
+                                                                      """Assert.Fail("some message")""",
+                                                                      """Assert.Pass("some message")""",
+                                                                      """Assert.AreSame(1, 2, "some message")""",
                                                                   ];
+
+        private static readonly string[] AcceptableAssertionsWithoutMessage = ["Fail", "Ignore", "Inconclusive"];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
@@ -145,6 +146,79 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_a_single_assertion_with_message_variable_([ValueSource(nameof(AcceptableAssertionsWithoutMessage))] string method) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            var message = ""some message"";
+
+            Assert." + method + @"(message);
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_single_assertion_with_exception_message_([ValueSource(nameof(AcceptableAssertionsWithoutMessage))] string method) => No_issue_is_reported_for(@"
+using System;
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            var exception = new InvalidOperationException();
+
+            Assert." + method + @"(exception.Message);
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_single_assertion_with_concatenated_message_([ValueSource(nameof(AcceptableAssertionsWithoutMessage))] string method) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            var detail = ""some detail"";
+
+            Assert." + method + @"(""reason: "" + detail);
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_single_assertion_with_formatted_message_([ValueSource(nameof(AcceptableAssertionsWithoutMessage))] string method) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            var detail = ""some detail"";
+
+            Assert." + method + @"(string.Format(""reason: {0}"", detail));
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_a_Assert_EnterMultipleScope() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -214,6 +288,22 @@ namespace Bla
         {
             Assert.That(42, Is.EqualTo(42), message);
             Assert.That(-1, Is.Negative, message);
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_uses_([ValueSource(nameof(AcceptableAssertionsWithoutMessage))] string assertion) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(string message)
+        {
+            Assert." + assertion + @"();
         }
     }
 }");
@@ -392,6 +482,34 @@ namespace Bla
         {
             ###;
             Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.Ignore()", @"Assert.Ignore()")]
+        [TestCase("Assert.Inconclusive()", @"Assert.Inconclusive()")]
+        [TestCase("Assert.Fail()", @"Assert.Fail()")]
+        [TestCase("Assert.Multiple()", @"Assert.Multiple()")]
+        [TestCase("Assert.MultipleAsync()", @"Assert.MultipleAsync()")]
+        [TestCase("Assert.EnterMultipleScope()", @"Assert.EnterMultipleScope()")]
+        public void Code_is_not_fixed_for_single_assertion_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
         }
     }
 }";
