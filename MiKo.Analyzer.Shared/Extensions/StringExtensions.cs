@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        private static readonly TimeSpan RegexTimeout = 250.Milliseconds();
+        private static readonly TimeSpan RegexTimeout = 500.Milliseconds();
 
         private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, RegexTimeout);
 
@@ -4688,7 +4688,7 @@ namespace MiKoSolutions.Analyzers
         {
             int charA = *(a + index);
 
-            if ((uint)(charA - 'a') <= 'z' - 'a')
+            if ((uint)(charA - 'a') <= 'z' - 'a') // see 'IsAsciiLetterLower', inlined for performance reasons
             {
                 charA -= DifferenceBetweenUpperAndLowerCaseAscii;
             }
