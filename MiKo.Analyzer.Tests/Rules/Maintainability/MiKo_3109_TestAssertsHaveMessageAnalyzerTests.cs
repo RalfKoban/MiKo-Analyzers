@@ -19,7 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                          "Assert.AreEqual(42, 0815)",
                                                                          "Assert.IsNull(null)",
                                                                          "Assert.False(true)",
-                                                                         "Assert.Fail()",
                                                                          "Assert.Pass()",
                                                                          "Assert.AreSame(1, 2)",
                                                                      ];
@@ -219,6 +218,22 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_a_test_method_that_uses_([Values("Assert.Fail()", "Assert.Inconclusive()", "Assert.Ignore()")] string assertion) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(string message)
+        {
+            " + assertion + @";
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_a_test_method_that_uses_AssertMultiple_and_1_assertion_with_no_message_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -392,6 +407,34 @@ namespace Bla
         {
             ###;
             Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.Ignore()", @"Assert.Ignore()")]
+        [TestCase("Assert.Inconclusive()", @"Assert.Inconclusive()")]
+        [TestCase("Assert.Fail()", @"Assert.Fail()")]
+        [TestCase("Assert.Multiple()", @"Assert.Multiple()")]
+        [TestCase("Assert.MultipleAsync()", @"Assert.MultipleAsync()")]
+        [TestCase("Assert.EnterMultipleScope()", @"Assert.EnterMultipleScope()")]
+        public void Code_is_not_fixed_for_single_assertion_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
         }
     }
 }";

@@ -108,11 +108,47 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var assertions = GetAllAssertions(symbol.GetSyntax());
 
-            if (assertions.Count > 1)
+            switch (assertions.Count)
             {
-                foreach (var assertion in assertions.Where(_ => HasMessageParameter(_, compilation) is false))
+                case 0:
+                    return Array.Empty<Diagnostic>();
+
+                case 1:
                 {
-                    yield return Issue(assertion);
+                    var assertion = assertions[0];
+
+                    if (HasMessageParameter(assertion, compilation) is false)
+                    {
+                        switch (assertion.GetName())
+                        {
+                            case "Fail":
+                            case "Ignore":
+                            case "Inconclusive":
+                                return new[] { Issue(assertion) };
+                        }
+                    }
+
+                    return Array.Empty<Diagnostic>();
+                }
+
+                default:
+                {
+                    List<Diagnostic> issues = null;
+
+                    foreach (var assertion in assertions)
+                    {
+                        if (HasMessageParameter(assertion, compilation) is false)
+                        {
+                            if (issues is null)
+                            {
+                                issues = new List<Diagnostic>(assertions.Count); // let's assume if any has no message, then it's likely that all have no message
+                            }
+
+                            issues.Add(Issue(assertion));
+                        }
+                    }
+
+                    return issues?.ToArray() ?? Array.Empty<Diagnostic>();
                 }
             }
         }
