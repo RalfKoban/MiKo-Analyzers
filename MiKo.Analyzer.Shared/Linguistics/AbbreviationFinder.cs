@@ -1278,13 +1278,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
-        /// Provides equality comparison for <see cref="Pair"/> instances where keys are considered equal if they match exactly (when same length) or if one key contains the other as a substring (when different lengths).
+        /// Provides substring-aware equality comparison for <see cref="Pair"/> instances.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// This comparer allows grouping abbreviations that overlap, such as "app" and "application".
+        /// Keys of equal length must match exactly. Keys of different length match if one contains the other.
+        /// </para>
         /// <para>
         /// <note type="information">
-        /// <see cref="GetHashCode"/> returns a constant value to force hash collisions, ensuring <see cref="Equals"/> is invoked for all comparisons. This trades hash table performance for the ability to use substring-based equality logic.
+        /// <see cref="GetHashCode"/> returns a constant to force <see cref="Equals"/> calls.
+        /// This trades hash table performance for substring-based equality.
         /// </note>
         /// </para>
         /// </remarks>
