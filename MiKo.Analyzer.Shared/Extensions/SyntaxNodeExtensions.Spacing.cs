@@ -821,6 +821,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the additional leading trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
         /// <summary>
@@ -838,6 +839,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the additional leading trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
 
         /// <summary>
@@ -855,6 +857,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the additional leading trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
         /// <summary>
@@ -935,6 +938,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the additional trailing trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         /// <summary>
@@ -952,6 +956,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the additional trailing trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
 
         /// <summary>
@@ -969,6 +974,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the additional trailing trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         /// <summary>
@@ -983,6 +989,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with a trailing end-of-line.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
@@ -1485,6 +1492,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with leading and trailing trivia from the specified node.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.WithLeadingTriviaFrom(node)
                                                                                                         .WithTrailingTriviaFrom(node);
 
@@ -1503,6 +1511,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with leading and trailing trivia from the specified token.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTriviaFrom<T>(this T value, in SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
                                                                                                              .WithTrailingTriviaFrom(token);
 

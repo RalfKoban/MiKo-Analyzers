@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Runtime.CompilerServices;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
@@ -20,6 +22,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The zero-based line number where the syntax node or token ends.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetEndingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndingLine();
 
         /// <summary>
@@ -31,6 +34,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The line position where the syntax node or token ends.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetEndPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndPosition();
 
         /// <summary>
@@ -42,6 +46,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The zero-based character position within the starting line.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinStartLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetPositionWithinStartLine();
 
         /// <summary>
@@ -53,6 +58,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The zero-based line number where the syntax node or token begins.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetStartingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartingLine();
 
         /// <summary>
@@ -64,6 +70,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The line position where the syntax node or token begins.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartPosition();
     }
 }

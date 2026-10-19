@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all ancestor nodes of the specified type.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> Ancestors<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
 
         /// <summary>

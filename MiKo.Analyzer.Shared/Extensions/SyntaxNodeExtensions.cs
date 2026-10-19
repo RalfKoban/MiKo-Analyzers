@@ -508,6 +508,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The symbol associated with the syntax node, or <see langword="null"/> if none exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ISymbol GetSymbol(this SyntaxNode value, Compilation compilation) => value?.GetSymbol(compilation.GetSemanticModel(value.SyntaxTree));
 
         /// <summary>
@@ -2961,6 +2962,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new invocation expression with the specified arguments.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             return value.WithArgumentList(SyntaxFactory.ArgumentList(arguments));
@@ -2978,6 +2980,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new invocation expression with the specified arguments.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, params ArgumentSyntax[] arguments)
         {
             return value.WithArguments(arguments.ToSeparatedSyntaxList());
@@ -3032,6 +3035,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with the specified modifiers.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxNode WithModifiers(this FieldDeclarationSyntax value, params SyntaxKind[] modifiers) => value.WithModifiers((IEnumerable<SyntaxKind>)modifiers);
 
         /// <summary>
@@ -3049,6 +3053,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax tree with the node removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.Without(node, SyntaxRemoveOptions.KeepNoTrivia);
 
         /// <summary>
@@ -3110,6 +3115,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax tree with the nodes removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T Without<T>(this T value, IEnumerable<SyntaxNode> nodes) where T : SyntaxNode => value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
 
         /// <summary>
@@ -3127,6 +3133,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax tree with the trivia removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T Without<T>(this T value, IEnumerable<SyntaxTrivia> trivia) where T : SyntaxNode => value.ReplaceTrivia(trivia, (original, rewritten) => default);
 
         /// <summary>
@@ -3144,6 +3151,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax tree with the nodes removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T Without<T>(this T value, params SyntaxNode[] nodes) where T : SyntaxNode => value.Without((IEnumerable<SyntaxNode>)nodes);
 
         /// <summary>
