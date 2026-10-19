@@ -59,8 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (int index = 0, count = summaryXmls.Count; index < count; index++)
             {
-                var summary = summaryXmls[index];
-                var trimmed = summary.GetTextTrimmed();
+                var trimmed = summaryXmls[index].GetTextTrimmed();
 
                 if (obviousComments.Contains(trimmed))
                 {
@@ -79,13 +78,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static HashSet<string> GetObviousComments(string symbolName)
         {
-            var articles = new[] { string.Empty, "the " };
-
             var result = new HashSet<string>();
 
-            foreach (var startingPhrase in ObviousStartingPhrases)
+            var articles = new[] { string.Empty, "the " };
+
+            foreach (var article in articles)
             {
-                foreach (var article in articles)
+                foreach (var startingPhrase in ObviousStartingPhrases)
                 {
                     var obviousPhrase = startingPhrase + article + symbolName;
 
