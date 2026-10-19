@@ -184,11 +184,11 @@ namespace TestHelper
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
             var project = CreateProject(oldSources, languageVersion, testProjectName);
-            var documents = project.Documents.ToList();
+            var documentIds = project.Documents.Select(_ => _.Id).ToArray();
 
             for (var documentIndex = 0; documentIndex < oldSources.Length; documentIndex++)
             {
-                var document = documents[documentIndex];
+                var document = project.GetDocument(documentIds[documentIndex]);
 
                 var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
                 var compilerDiagnostics = GetCompilerDiagnostics(document);
@@ -247,10 +247,16 @@ New document:
                     }
                 }
 
-                if (assertResult)
+                // carry the fixed state forward, so that following documents are analyzed against the fixed solution
+                project = document.Project;
+            }
+
+            if (assertResult)
+            {
+                for (var documentIndex = 0; documentIndex < oldSources.Length; documentIndex++)
                 {
                     // after applying all of the code fixes, compare the resulting string to the inputted one
-                    var actual = GetStringFromDocument(document);
+                    var actual = GetStringFromDocument(project.GetDocument(documentIds[documentIndex]));
 
                     Assert.That(
                             actual,
