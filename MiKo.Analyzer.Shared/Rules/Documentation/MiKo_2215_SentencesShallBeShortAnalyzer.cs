@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var builder = StringBuilderCache.Acquire();
 
-                foreach (var syntax in node.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
+                foreach (var syntax in node.ChildNodes<XmlTextSyntax>())
                 {
                     builder.Append(Constants.Space).Append(syntax).Append(Constants.Space);
                 }
