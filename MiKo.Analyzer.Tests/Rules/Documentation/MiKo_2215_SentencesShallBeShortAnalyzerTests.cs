@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -67,6 +69,21 @@ public class TestMe
 /// This is a very long sentence that is hard to understand and difficult to read,
 /// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
 /// </code>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_para_containing_short_sentences_inside_summary() => No_issue_is_reported_for(@"
+/// <summary>
+/// <para>
+/// This is a short sentence.
+/// </para>
+/// <para>
+/// And yet another short one.
+/// </para>
 /// </summary>
 public class TestMe
 {
@@ -242,6 +259,209 @@ public class TestMe
     /// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
     /// </summary>
     private int m_field;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_in_para_inside_summary() => An_issue_is_reported_for(@"
+/// <summary>
+/// <para>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </para>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_in_para_inside_content() => An_issue_is_reported_for(@"
+/// <content>
+/// <para>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </para>
+/// </content>
+public class TestMe
+{
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_each_section_containing_long_sentences() => An_issue_is_reported_for(2, @"
+/// <summary>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </summary>
+/// <remarks>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </remarks>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_in_one_of_multiple_para_inside_summary() => An_issue_is_reported_for(@"
+/// <summary>
+/// <para>
+/// This is a short sentence.
+/// </para>
+/// <para>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </para>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_in_note_inside_summary() => An_issue_is_reported_for(@"
+/// <summary>
+/// <note type=""note"">
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </note>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_in_note_inside_remarks() => An_issue_is_reported_for(@"
+/// <summary />
+/// <remarks>
+/// <note type=""note"">
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </note>
+/// </remarks>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_note_containing_short_sentences_inside_summary() => No_issue_is_reported_for(@"
+/// <summary>
+/// This is a short sentence.
+/// <note type=""note"">
+/// And yet another short one.
+/// </note>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_note_containing_short_sentences_inside_remarks() => No_issue_is_reported_for(@"
+/// <summary />
+/// <remarks>
+/// This is a short sentence.
+/// <note type=""note"">
+/// And yet another short one.
+/// </note>
+/// </remarks>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_outside_of_short_note_inside_summary() => An_issue_is_reported_for(@"
+/// <summary>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// <note type=""note"">
+/// This is a short sentence.
+/// </note>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_sentence_outside_of_short_note_inside_remarks() => An_issue_is_reported_for(@"
+/// <summary />
+/// <remarks>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// <note type=""note"">
+/// This is a short sentence.
+/// </note>
+/// </remarks>
+public class TestMe
+{
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_long_sentences_inside_and_outside_of_note_inside_summary() => An_issue_is_reported_for(2, @"
+/// <summary>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// <note type=""note"">
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </note>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_long_sentences_inside_and_outside_of_note_inside_remarks() => An_issue_is_reported_for(2, @"
+/// <summary />
+/// <remarks>
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// <note type=""note"">
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </note>
+/// </remarks>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_note_inside_summary_containing_short_text() => An_issue_is_reported_for(@"
+/// <summary>
+/// This is a short sentence.
+/// <note type=""note"">
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </note>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_long_note_inside_remarks_containing_short_text() => An_issue_is_reported_for(@"
+/// <summary />
+/// <remarks>
+/// This is a short sentence.
+/// <note type=""note"">
+/// This is a very long sentence that is hard to understand and difficult to read,
+/// thus leading to the situation that the reader gets bored out due to the sheer amount of words to keep in mind.
+/// </note>
+/// </remarks>
+public class TestMe
+{
 }
 ");
 
