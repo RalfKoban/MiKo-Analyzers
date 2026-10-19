@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var assertion = assertions[0];
 
-                    if (HasMessageParameter(assertion, compilation) is false)
+                    if (HasNoParameter(assertion))
                     {
                         switch (assertion.GetName())
                         {
@@ -254,5 +254,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return false;
         }
+
+        private static bool HasNoParameter(MemberAccessExpressionSyntax assertion) => assertion.Parent is InvocationExpressionSyntax invocation && invocation.ArgumentList.Arguments.Count is 0;
     }
 }
