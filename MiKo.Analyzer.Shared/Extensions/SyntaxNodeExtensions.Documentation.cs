@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -219,6 +220,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represent the <c>&lt;content&gt;</c> XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetContentXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Content);
 
         /// <summary>
@@ -380,6 +382,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represents the example XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Example);
 
         /// <summary>
@@ -391,6 +394,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represents the exception XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Exception);
 
         /// <summary>
@@ -443,6 +447,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="string"/> that contains the type value without trivia.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetListType(this XmlTextAttributeSyntax value) => value.GetTextWithoutTrivia();
 
         /// <summary>
@@ -514,6 +519,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represents the <c>&lt;remarks&gt;</c> XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Remarks);
 
         /// <summary>
@@ -525,6 +531,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represent the <c>&lt;returns&gt;</c> XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Returns);
 
         /// <summary>
@@ -536,6 +543,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represent the <c>&lt;summary&gt;</c> XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Summary);
 
         /// <summary>
@@ -822,6 +830,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that represents the value XML elements.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Value);
 
         /// <summary>
@@ -989,6 +998,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node has comment trivia in leading or trailing trivia; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
 
         /// <summary>
@@ -1016,6 +1026,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node has leading comment trivia; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().HasComment();
 
         /// <summary>
@@ -1027,6 +1038,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node has trailing comment trivia; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasComment();
 
         /// <summary>
@@ -1038,6 +1050,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;b&gt;true&lt;/b&gt;</c> or <c>&lt;b&gt;false&lt;/b&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsBBool(this SyntaxNode value) => value.Is("b", Booleans);
 
         /// <summary>
@@ -1049,6 +1062,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;b&gt;null&lt;/b&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsBNull(this SyntaxNode value) => value.Is("b", Nulls);
 
         /// <summary>
@@ -1060,6 +1074,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a boolean tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangwordBool() || value.IsWrongBooleanTag();
 
         /// <summary>
@@ -1071,6 +1086,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsC(this SyntaxNode value) => value is XmlElementSyntax e && e.IsC();
 
         /// <summary>
@@ -1082,6 +1098,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsC(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.C;
 
         /// <summary>
@@ -1093,6 +1110,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
 
         /// <summary>
@@ -1104,6 +1122,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
 
         /// <summary>
@@ -1126,6 +1145,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCode(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.Code;
 
         /// <summary>
@@ -1137,6 +1157,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCodeBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Booleans);
 
         /// <summary>
@@ -1148,6 +1169,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
 
         /// <summary>
@@ -1159,6 +1181,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents an <c>&lt;exception… /&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsException(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.Exception;
 
         /// <summary>
@@ -1210,6 +1233,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsFilterPriority(this SyntaxNode value) => value is XmlElementSyntax e && e.IsFilterPriority();
 
         /// <summary>
@@ -1221,6 +1245,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsFilterPriority(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.FilterPriority;
 
         /// <summary>
@@ -1232,6 +1257,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;para/&gt;</c> XML tag ; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
 
         /// <summary>
@@ -1246,6 +1272,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the XML empty element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
 
         /// <summary>
@@ -1260,6 +1287,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
 
         /// <summary>
@@ -1274,6 +1302,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the XML empty element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
         /// <summary>
@@ -1288,6 +1317,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSeeAlso(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
         /// <summary>
@@ -1370,6 +1400,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;value&gt;true&lt;/value&gt;</c> or <c>&lt;value&gt;false&lt;/value&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsValueBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Booleans);
 
         /// <summary>
@@ -1381,6 +1412,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;value&gt;null&lt;/value&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
         /// <summary>
@@ -1392,6 +1424,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents XML text that contains only whitespace characters; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
 
         /// <summary>
@@ -1430,6 +1463,7 @@ namespace MiKoSolutions.Analyzers
         /// Incorrect tags include <c>&lt;c&gt;</c>, <c>&lt;b&gt;</c>, <c>&lt;value&gt;</c> or <c>&lt;code&gt;</c> containing boolean values.
         /// The correct format is <c>&lt;see langword="true"/&gt;</c> or <c>&lt;see langword="false"/&gt;</c>.
         /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
 
         /// <summary>
@@ -1441,6 +1475,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a wrong <see langword="null"/> tag; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
 
         /// <summary>
@@ -1731,6 +1766,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new <see cref="DocumentationCommentTriviaSyntax"/> with the specified contents.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(contents.ToSyntaxList());
 
         /// <summary>
@@ -1745,6 +1781,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new <see cref="XmlElementSyntax"/> with the specified contents.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(contents.ToSyntaxList());
 
         /// <summary>
@@ -1759,6 +1796,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new <see cref="DocumentationCommentTriviaSyntax"/> with the specified contents.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(contents.ToSyntaxList());
 
         /// <summary>
@@ -1773,6 +1811,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new <see cref="XmlElementSyntax"/> with the specified contents.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(contents.ToSyntaxList());
 
         /// <summary>
@@ -1787,6 +1826,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with leading XML comment trivia added.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
         /// <summary>
@@ -1801,6 +1841,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with leading XML comment exterior trivia added.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithLeadingXmlCommentExterior<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentExterior);
 
         /// <summary>
@@ -1889,6 +1930,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlNodeSyntax"/> with the first matching starting text removed, or the original syntax list if none of the texts were found at the beginning.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, IEnumerable<string> startTexts) => value.Content.WithoutStartText(startTexts);
 
         /// <summary>
@@ -1959,6 +2001,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlNodeSyntax"/> with all occurrences of the specified text removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, string text) => value.Content.WithoutText(text);
 
         /// <summary>
@@ -1973,6 +2016,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlNodeSyntax"/> with all occurrences of the specified texts removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, in ReadOnlySpan<string> texts) => value.Content.WithoutText(texts);
 
         /// <summary>
@@ -1987,6 +2031,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new <see cref="XmlTextSyntax"/> with the trailing text removed, or the original syntax if the text was not found at the end.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text) => value.WithoutTrailing(new[] { text });
 
         /// <summary>
@@ -2212,6 +2257,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The <see cref="StringBuilder"/> with all XML comment exterior markers removed.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without(Constants.Comments.XmlCommentExterior);
 
         /// <summary>
@@ -2250,6 +2296,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of <see cref="XmlNodeSyntax"/> with the starting text added or replaced and the first word adjusted according to the specified adjustment.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase) => value.Content.WithStartText(startText, firstWordAdjustment);
 
         /// <summary>
@@ -2345,6 +2392,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax node with trailing XML comment trivia added.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
 
         /// <summary>

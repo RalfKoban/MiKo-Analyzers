@@ -145,6 +145,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of syntax tokens that contains syntax tokens from the documentation comment.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
             return GetXmlTextTokens(value, node => node.IsCode() is false); // skip code

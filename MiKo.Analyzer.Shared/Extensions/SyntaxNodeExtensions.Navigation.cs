@@ -66,6 +66,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant nodes and tokens of the specified syntax node.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(/* always descent */);
 
         /// <summary>
@@ -80,6 +81,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all ancestors of the specified type.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         /// <summary>
@@ -175,6 +177,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all child nodes of the specified type.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> ChildNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes().OfType<T>();
 
         /// <summary>
@@ -189,6 +192,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant nodes of the specified type.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes().OfType<T>();
 
         /// <summary>
@@ -252,6 +256,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant nodes of the specified type that satisfy the predicate.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().Where(predicate);
 
         /// <summary>
@@ -266,6 +271,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains the specified syntax node (if it is of the specified type) and all its descendant nodes of the specified type.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> DescendantNodesAndSelf<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodesAndSelf().OfType<T>();
 
         /// <summary>
@@ -280,6 +286,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant tokens of the specified syntax kind.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, in SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
         /// <summary>
@@ -370,6 +377,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child node, or <see langword="null"/> if the node has no children.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
 
         /// <summary>
@@ -384,6 +392,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child node of the specified type, or <see langword="null"/> if no such child exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
 
         /// <summary>
@@ -398,6 +407,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child node that satisfies the predicate, or <see langword="null"/> if no such child exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxNode FirstChild(this SyntaxNode value, Func<SyntaxNode, bool> predicate) => value.ChildNodes().FirstOrDefault(predicate);
 
         /// <summary>
@@ -415,6 +425,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child node of the specified type and syntax kind, or <see langword="null"/> if no such child exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstChild<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode => value.ChildNodes().OfKind(kind).FirstOrDefault() as T;
 
         /// <summary>
@@ -432,6 +443,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child node of the specified type that satisfies the predicate, or <see langword="null"/> if no such child exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstChild<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault(predicate);
 
         /// <summary>
@@ -443,6 +455,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child token, or a default token if the node has no child tokens.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken FirstChildToken(this SyntaxNode value) => value.ChildTokens().FirstOrDefault();
 
         /// <summary>
@@ -457,6 +470,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first child token of the specified syntax kind.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken FirstChildToken(this SyntaxNode value, in SyntaxKind kind) => value.ChildTokens().OfKind(kind).First();
 
         /// <summary>
@@ -471,6 +485,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant node of the specified type, or <see langword="null"/> if no such descendant exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstDescendant<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault();
 
         /// <summary>
@@ -488,6 +503,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant node of the specified type and syntax kind, or <see langword="null"/> if no such descendant exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstDescendant<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).FirstOrDefault() as T;
 
         /// <summary>
@@ -505,6 +521,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant node of the specified type that satisfies the predicate, or <see langword="null"/> if no such descendant exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
         /// <summary>
@@ -516,6 +533,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant token, or a default token if the node has no descendant tokens.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken FirstDescendantToken(this SyntaxNode value) => value.DescendantTokens().FirstOrDefault();
 
         /// <summary>
@@ -530,6 +548,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant token of the specified syntax kind.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken FirstDescendantToken(this SyntaxNode value, in SyntaxKind kind) => value.DescendantTokens().OfKind(kind).First();
 
         /// <summary>
@@ -646,6 +665,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The method symbol that encloses the syntax node, or <see langword="null"/> if no enclosing method exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, SemanticModel semanticModel) => value.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
 
         /// <summary>
@@ -693,6 +713,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxNode GetEnclosingSyntaxNode(this DocumentationCommentTriviaSyntax value) => value?.ParentTrivia.Token.Parent;
 
         /// <summary>
@@ -704,6 +725,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxNode GetEnclosingSyntaxNode(this StructuredTriviaSyntax value) => value?.ParentTrivia.Token.Parent;
 
         /// <summary>
@@ -715,6 +737,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The enclosing syntax node, or <see langword="null"/> if no enclosing node exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxNode GetEnclosingSyntaxNode(this XmlNodeSyntax value) => value?.FirstAncestor<DocumentationCommentTriviaSyntax>().GetEnclosingSyntaxNode();
 
         /// <summary>
@@ -751,6 +774,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The last child node of the specified type, or <see langword="null"/> if no such child exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
 
         /// <summary>
@@ -864,6 +888,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of syntax nodes that contains all sibling nodes, including the node itself.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IList<SyntaxNode> Siblings(this SyntaxNode value) => Siblings<SyntaxNode>(value);
 
         /// <summary>
