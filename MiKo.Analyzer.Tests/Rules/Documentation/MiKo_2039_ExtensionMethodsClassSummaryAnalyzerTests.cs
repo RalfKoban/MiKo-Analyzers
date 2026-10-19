@@ -247,6 +247,98 @@ public static partial class TestMeExtensions
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_extension_class_with_non_standard_summary_and_content_phrase_in_separate_files()
+        {
+            const string OriginalCode1 = @"
+/// <summary>
+/// Does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+";
+
+            const string OriginalCode2 = @"
+/// <content>
+/// Does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
+}
+";
+
+            const string FixedCode1 = @"
+/// <summary>
+/// Provides a set of <see langword=""static""/> methods for does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+";
+
+            const string FixedCode2 = @"
+/// <content>
+/// Provides a set of <see langword=""static""/> methods for does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
+}
+";
+
+            VerifyCSharpFix([OriginalCode1, OriginalCode2], [FixedCode1, FixedCode2]);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_extension_class_with_standard_summary_and_non_standard_content_phrase_in_separate_files()
+        {
+            const string OriginalCode1 = @"
+/// <summary>
+/// Provides a set of <see langword=""static""/> methods for does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+";
+
+            const string OriginalCode2 = @"
+/// <content>
+/// Does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
+}
+";
+
+            const string FixedCode1 = @"
+/// <summary>
+/// Provides a set of <see langword=""static""/> methods for does something.
+/// </summary>
+public static partial class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+";
+
+            const string FixedCode2 = @"
+/// <content>
+/// Provides a set of <see langword=""static""/> methods for does something else.
+/// </content>
+public static partial class TestMeExtensions
+{
+    public static void DoSomethingElse(this int value) { }
+}
+";
+
+            VerifyCSharpFix([OriginalCode1, OriginalCode2], [FixedCode1, FixedCode2]);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2039_ExtensionMethodsClassSummaryAnalyzer();

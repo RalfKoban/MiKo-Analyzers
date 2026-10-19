@@ -104,11 +104,40 @@ namespace TestHelper
         /// </param>
         protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
         {
+            VerifyCSharpFix([oldSource], [newSource], languageVersion, testProjectName, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
+        }
+
+        /// <summary>
+        /// Called to test a C# codefix when applied on the inputted string as a source.
+        /// </summary>
+        /// <param name="oldSources">
+        /// The classes in the form of a string before the CodeFix was applied to them.
+        /// </param>
+        /// <param name="newSources">
+        /// The classes in the form of a string after the CodeFix was applied to them.
+        /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
+        /// <param name="codeFixIndex">
+        /// Index determining which codefix to apply if there are multiple.
+        /// </param>
+        /// <param name="allowNewCompilerDiagnostics">
+        /// A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied.
+        /// </param>
+        /// <param name="assertResult">
+        /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
+        /// </param>
+        protected void VerifyCSharpFix(string[] oldSources, string[] newSources, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
+        {
             VerifyFix(
                   GetObjectUnderTest(),
                   GetCSharpCodeFixProvider(),
-                  oldSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
-                  newSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
+                  [.. oldSources.Select(_ => _.ReplaceLineEndings()),], // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
+                  [.. newSources.Select(_ => _.ReplaceLineEndings()),], // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
                   languageVersion,
                   testProjectName,
                   codeFixIndex,
@@ -128,11 +157,11 @@ namespace TestHelper
         /// <param name="codeFixProvider">
         /// The codefix to be applied to the code wherever the relevant Diagnostic is found.
         /// </param>
-        /// <param name="oldSource">
-        /// A class in the form of a string before the CodeFix was applied to it.
+        /// <param name="oldSources">
+        /// The classes in the form of a string before the CodeFix was applied to them.
         /// </param>
-        /// <param name="newSource">
-        /// A class in the form of a string after the CodeFix was applied to it.
+        /// <param name="newSources">
+        /// The classes in the form of a string after the CodeFix was applied to them.
         /// </param>
         /// <param name="languageVersion">
         /// The version of the programming language.
@@ -149,82 +178,89 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, in LanguageVersion languageVersion, string testProjectName, int? codeFixIndex, in bool allowNewCompilerDiagnostics, in bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, in ReadOnlySpan<string> oldSources, in ReadOnlySpan<string> newSources, in LanguageVersion languageVersion, string testProjectName, int? codeFixIndex, in bool allowNewCompilerDiagnostics, in bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
-            var document = CreateDocument(oldSource, languageVersion, testProjectName);
-            var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
-            var compilerDiagnostics = GetCompilerDiagnostics(document);
-            var attempts = analyzerDiagnostics.Length;
+            var project = CreateProject(oldSources, languageVersion, testProjectName);
+            var documents = project.Documents.ToList();
 
-            if (attempts > 0)
+            for (var documentIndex = 0; documentIndex < oldSources.Length; documentIndex++)
             {
-                for (var i = 0; i < attempts; i++)
-                {
-                    Assert.That(analyzerDiagnostics[i].Id, Is.Not.EqualTo("AD0001"));
-                }
+                var document = documents[documentIndex];
 
-                for (var i = 0; i < attempts; ++i)
-                {
-                    var actions = new List<CodeAction>(1);
-                    var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
-                    codeFixProvider.RegisterCodeFixesAsync(context).Wait();
+                var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
+                var compilerDiagnostics = GetCompilerDiagnostics(document);
+                var attempts = analyzerDiagnostics.Length;
 
-                    if (actions.Count is 0)
+                if (attempts > 0)
+                {
+                    for (var i = 0; i < attempts; i++)
                     {
-                        break;
+                        Assert.That(analyzerDiagnostics[i].Id, Is.Not.EqualTo("AD0001"));
                     }
 
-                    if (codeFixIndex is not null)
+                    for (var i = 0; i < attempts; ++i)
                     {
-                        document = ApplyFix(document, actions[(int)codeFixIndex]);
+                        var actions = new List<CodeAction>(1);
+                        var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
+                        codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
-                        break;
-                    }
+                        if (actions.Count is 0)
+                        {
+                            break;
+                        }
 
-                    document = ApplyFix(document, actions[0]);
-                    analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
+                        if (codeFixIndex is not null)
+                        {
+                            document = ApplyFix(document, actions[(int)codeFixIndex]);
 
-                    var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+                            break;
+                        }
 
-                    // check if applying the code fix introduced any new compiler diagnostics
-                    if (allowNewCompilerDiagnostics is false && newCompilerDiagnostics.Any())
-                    {
-                        // Format and get the compiler diagnostics again so that the locations make sense in the output
-                        document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().Result, Formatter.Annotation, document.Project.Solution.Workspace));
-                        newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+                        document = ApplyFix(document, actions[0]);
+                        analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
 
-                        Assert.Fail($@"Fix introduced new compiler diagnostics:
+                        var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+
+                        // check if applying the code fix introduced any new compiler diagnostics
+                        if (allowNewCompilerDiagnostics is false && newCompilerDiagnostics.Any())
+                        {
+                            // Format and get the compiler diagnostics again so that the locations make sense in the output
+                            document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().Result, Formatter.Annotation, document.Project.Solution.Workspace));
+                            newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+
+                            Assert.Fail($@"Fix introduced new compiler diagnostics:
 {string.Join("\r\n", newCompilerDiagnostics.Select(d => d.ToString()))}
 
 New document:
 {document.GetSyntaxRootAsync().Result!.ToFullString()}
 ");
-                    }
+                        }
 
-                    // check if there are analyzer diagnostics left after the code fix
-                    if (analyzerDiagnostics.Length is 0)
-                    {
-                        break;
+                        // check if there are analyzer diagnostics left after the code fix
+                        if (analyzerDiagnostics.Length is 0)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (assertResult)
-            {
-                // after applying all of the code fixes, compare the resulting string to the inputted one
-                var actual = GetStringFromDocument(document);
+                if (assertResult)
+                {
+                    // after applying all of the code fixes, compare the resulting string to the inputted one
+                    var actual = GetStringFromDocument(document);
 
-                Assert.That(
-                        actual,
-                        Is.EqualTo(newSource),
-                        () => @"Fix created unexpected document.
+                    Assert.That(
+                            actual,
+                            Is.EqualTo(newSources[documentIndex]),
+                            () => @"Fix created unexpected document.
 New document:
 ################################################
 " + actual + @"
 ################################################");
+                }
             }
         }
     }

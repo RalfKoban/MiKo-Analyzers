@@ -104,6 +104,53 @@ namespace TestHelper
         private static int s_countedTestCalls;
 
         /// <summary>
+        /// Create a project using the inputted strings as sources.
+        /// </summary>
+        /// <param name="sources">
+        /// Classes in the form of strings.
+        /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
+        /// <param name="testProjectName">
+        /// The name of the project that shall contain the sources.
+        /// </param>
+        /// <returns>
+        /// A Project created out of the Documents created from the source strings.
+        /// </returns>
+        protected static Project CreateProject(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, string testProjectName)
+        {
+            var projectId = ProjectId.CreateNewId(debugName: testProjectName);
+            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, testProjectName, testProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
+
+            var solution = new AdhocWorkspace().CurrentSolution
+                                               .AddProject(projectInfo)
+                                               .AddMetadataReferences(projectId, References);
+
+            if (sources.Length is 1)
+            {
+                const string FileName = "Test.cs";
+                var documentId = DocumentId.CreateNewId(projectId, debugName: FileName);
+
+                solution = solution.AddDocument(documentId, FileName, SourceText.From(sources[0]));
+            }
+            else
+            {
+                for (var index = 0; index < sources.Length; index++)
+                {
+                    var source = sources[index];
+
+                    var newFileName = "Test" + index + ".cs";
+                    var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+
+                    solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
+                }
+            }
+
+            return solution.GetProject(projectId);
+        }
+
+        /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
         /// The returned diagnostics are then ordered by location in the source document.
         /// </summary>
@@ -213,26 +260,6 @@ namespace TestHelper
         }
 
         /// <summary>
-        /// Create a Document from a string through creating a project that contains it.
-        /// </summary>
-        /// <param name="source">
-        /// Classes in the form of a string.
-        /// </param>
-        /// <param name="languageVersion">
-        /// The version of the programming language.
-        /// </param>
-        /// <param name="testProjectName">
-        /// The name of the project that shall contain the sources.
-        /// </param>
-        /// <returns>
-        /// A Document created from the source string.
-        /// </returns>
-        protected static Document CreateDocument(string source, in LanguageVersion languageVersion, string testProjectName)
-        {
-            return CreateProject([source], languageVersion, testProjectName).Documents.First();
-        }
-
-        /// <summary>
         /// Given classes in the form of strings, their language, and an <see cref="DiagnosticAnalyzer"/> to apply to it, return the diagnostics found in the string after converting it to a document.
         /// </summary>
         /// <param name="sources">
@@ -287,52 +314,5 @@ namespace TestHelper
         }
 
         private static void ThrowInvalidOperation(string message) => throw new InvalidOperationException(message);
-
-        /// <summary>
-        /// Create a project using the inputted strings as sources.
-        /// </summary>
-        /// <param name="sources">
-        /// Classes in the form of strings.
-        /// </param>
-        /// <param name="languageVersion">
-        /// The version of the programming language.
-        /// </param>
-        /// <param name="testProjectName">
-        /// The name of the project that shall contain the sources.
-        /// </param>
-        /// <returns>
-        /// A Project created out of the Documents created from the source strings.
-        /// </returns>
-        private static Project CreateProject(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, string testProjectName)
-        {
-            var projectId = ProjectId.CreateNewId(debugName: testProjectName);
-            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, testProjectName, testProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
-
-            var solution = new AdhocWorkspace().CurrentSolution
-                                               .AddProject(projectInfo)
-                                               .AddMetadataReferences(projectId, References);
-
-            if (sources.Length is 1)
-            {
-                const string FileName = "Test.cs";
-                var documentId = DocumentId.CreateNewId(projectId, debugName: FileName);
-
-                solution = solution.AddDocument(documentId, FileName, SourceText.From(sources[0]));
-            }
-            else
-            {
-                for (var index = 0; index < sources.Length; index++)
-                {
-                    var source = sources[index];
-
-                    var newFileName = "Test" + index + ".cs";
-                    var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
-
-                    solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
-                }
-            }
-
-            return solution.GetProject(projectId);
-        }
     }
 }
