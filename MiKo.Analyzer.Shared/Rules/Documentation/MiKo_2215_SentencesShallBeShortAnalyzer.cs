@@ -41,16 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            if (HasIssue(comment))
-            {
-                return new[] { Issue(symbol) };
-            }
+            List<Diagnostic> issues = null;
 
-            return Array.Empty<Diagnostic>();
-        }
-
-        private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
-        {
             foreach (var node in comment.DescendantNodes<XmlElementSyntax>(_ => XmlTags.Contains(_.GetName())))
             {
                 var builder = StringBuilderCache.Acquire();
@@ -66,11 +58,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (HasIssue(specificComment.AsSpan()))
                 {
-                    return true;
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(symbol.Name, node.GetContentsLocation()));
                 }
             }
 
-            return false;
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(in ReadOnlySpan<char> text)
