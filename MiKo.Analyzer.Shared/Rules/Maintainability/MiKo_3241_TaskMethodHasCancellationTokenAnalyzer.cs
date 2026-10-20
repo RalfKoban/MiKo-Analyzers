@@ -17,43 +17,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
-            switch (symbol.MethodKind)
+            if (base.ShallAnalyze(symbol, compilation) && symbol.MethodKind is MethodKind.Ordinary)
             {
-                case MethodKind.Ordinary:
-                case MethodKind.LocalFunction:
+                if (symbol.ReturnType.IsTask() || symbol.ReturnType.IsValueTask())
                 {
-                    if (base.ShallAnalyze(symbol, compilation))
+                    if (symbol.IsMainMethod(compilation))
                     {
-                        if (symbol.ReturnType.IsTask() || symbol.ReturnType.IsValueTask())
-                        {
-                            if (symbol.IsMainMethod(compilation))
-                            {
-                                // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
-                                return false;
-                            }
-
-                            if (symbol.IsInterfaceImplementation()
-                             || symbol.IsTestMethod()
-                             || symbol.IsTestSetUpMethod()
-                             || symbol.IsTestOneTimeSetUpMethod()
-                             || symbol.IsTestTearDownMethod()
-                             || symbol.IsTestOneTimeTearDownMethod()
-                             || symbol.IsTestAssemblyWideSetUpMethod()
-                             || symbol.IsTestAssemblyWideTearDownMethod())
-                            {
-                                return false;
-                            }
-
-                            return true;
-                        }
+                        // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
+                        return false;
                     }
 
-                    return false;
-                }
+                    if (symbol.IsInterfaceImplementation()
+                     || symbol.IsTestMethod()
+                     || symbol.IsTestSetUpMethod()
+                     || symbol.IsTestOneTimeSetUpMethod()
+                     || symbol.IsTestTearDownMethod()
+                     || symbol.IsTestOneTimeTearDownMethod()
+                     || symbol.IsTestAssemblyWideSetUpMethod()
+                     || symbol.IsTestAssemblyWideTearDownMethod())
+                    {
+                        return false;
+                    }
 
-                default:
-                    return false;
+                    return true;
+                }
             }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
