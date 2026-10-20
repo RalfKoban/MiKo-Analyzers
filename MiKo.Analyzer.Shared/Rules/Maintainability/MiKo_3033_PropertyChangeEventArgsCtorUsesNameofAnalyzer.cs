@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -62,6 +63,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case IdentifierNameSyntax s when node.EnclosingMethodHasParameter(s.GetName(), semanticModel):
                     return false; // it's a parameter, so do not report an issue
+
+                case LiteralExpressionSyntax l when l.IsStringLiteral():
+                    return l.Token.ValueText.Length > 0; // report to use nameof instead but ignore empty strings
+
+                case LiteralExpressionSyntax l when l.IsKind(SyntaxKind.NullLiteralExpression):
+                    return false; // do not report to use nameof
+
+                case MemberAccessExpressionSyntax maes when maes.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                    return false; // do not report to use nameof
 
                 default:
                     return true; // report to use nameof instead
