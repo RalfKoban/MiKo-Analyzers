@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ContainingType.IsEventArgs();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.ContainingType.IsEventArgs();
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ContainingType.IsEventArgs();
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation) => symbol.ContainingType.IsEventArgs();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

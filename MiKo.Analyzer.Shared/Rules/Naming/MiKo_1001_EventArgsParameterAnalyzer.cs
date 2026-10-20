@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return GetParameters(method).Contains(parameter) && FindBetterName(parameter) == parameter.Name;
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol)
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol, Compilation compilation) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

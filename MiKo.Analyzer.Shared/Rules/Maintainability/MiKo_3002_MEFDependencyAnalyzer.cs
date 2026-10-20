@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false;
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsNamespace is false;
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {

@@ -23,16 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsCommand() is true;
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation) => symbol?.IsCommand() is true;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (base.ShallAnalyze(symbol) is false)
+            if (base.ShallAnalyze(symbol, compilation) is false)
             {
                 return false;
             }
 
-            if (ShallAnalyze(symbol.ReturnType) is false)
+            if (ShallAnalyze(symbol.ReturnType, compilation) is false)
             {
                 return false;
             }
@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol)
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -60,10 +60,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return symbol.IsIndexer is false && ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+            return symbol.IsIndexer is false && ShallAnalyze(symbol.Type, compilation) && symbol.ContainingType.IsTestClass() is false;
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+            return ShallAnalyze(symbol.Type, compilation) && symbol.ContainingType.IsTestClass() is false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeName(symbol);

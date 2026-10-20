@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {

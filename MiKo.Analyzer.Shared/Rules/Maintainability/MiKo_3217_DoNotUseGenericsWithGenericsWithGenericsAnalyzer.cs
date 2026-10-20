@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (base.ShallAnalyze(symbol))
+            if (base.ShallAnalyze(symbol, compilation))
             {
                 switch (symbol.MethodKind)
                 {

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask() && symbol.ReturnType.HasGenericTypeArguments() is false; // allow only plain tasks
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.ReturnType.IsTask() && symbol.ReturnType.HasGenericTypeArguments() is false; // allow only plain tasks
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var expression = invocation.FirstAncestor(IsLambda);
 
                         // investigate into lambda return types and ignore those that are of no interest to us
-                        if (expression?.GetSymbol(compilation) is IMethodSymbol lambdaMethod && ShallAnalyze(lambdaMethod) is false)
+                        if (expression?.GetSymbol(compilation) is IMethodSymbol lambdaMethod && ShallAnalyze(lambdaMethod, compilation) is false)
                         {
                             continue;
                         }

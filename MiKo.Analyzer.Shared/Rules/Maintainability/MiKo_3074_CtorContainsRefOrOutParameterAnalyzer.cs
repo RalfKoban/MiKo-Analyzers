@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsConstructor();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

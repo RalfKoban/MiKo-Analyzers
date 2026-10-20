@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.Parameters.Length > 0 && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.Parameters.Length > 0 && base.ShallAnalyze(symbol, compilation);
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol?.Type.IsCollection(symbol.Name) is true;
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation) => symbol?.Type.IsCollection(symbol.Name) is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (ShallAnalyze(parameter))
+                if (ShallAnalyze(parameter, compilation))
                 {
                     var issue = AnalyzeCollectionSuffix(parameter);
 

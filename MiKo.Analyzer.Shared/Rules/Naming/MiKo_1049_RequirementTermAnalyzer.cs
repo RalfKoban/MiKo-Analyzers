@@ -35,11 +35,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol?.IsConst is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => symbol?.IsConst is false && base.ShallAnalyze(symbol, compilation);
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => true;
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol, Compilation compilation) => true;
 
         private static IEnumerable<Pair> CreateReplacementMapEntries()
         {

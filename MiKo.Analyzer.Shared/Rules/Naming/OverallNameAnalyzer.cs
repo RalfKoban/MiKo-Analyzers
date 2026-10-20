@@ -51,11 +51,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return (IEnumerable<Diagnostic>)overallIssues ?? Array.Empty<Diagnostic>();
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsExtern is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.IsExtern is false && base.ShallAnalyze(symbol, compilation);
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation)
         {
-            if (base.ShallAnalyze(symbol))
+            if (base.ShallAnalyze(symbol, compilation))
             {
                 if (symbol.ContainingSymbol is IMethodSymbol method)
                 {

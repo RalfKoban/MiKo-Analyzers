@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ContainingType?.TypeKind is TypeKind.Class && symbol.Parameters.Any(IsIEnumerable) && IsCall(symbol.Name) is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.ContainingType?.TypeKind is TypeKind.Class && symbol.Parameters.Any(IsIEnumerable) && IsCall(symbol.Name) is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

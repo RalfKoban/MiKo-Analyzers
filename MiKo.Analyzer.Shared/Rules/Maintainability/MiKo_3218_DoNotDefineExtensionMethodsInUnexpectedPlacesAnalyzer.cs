@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtensionMethod;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsExtensionMethod;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.ContainingType.Name.Contains("Extension")
                                                                                                              ? Array.Empty<Diagnostic>()

@@ -78,12 +78,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                                 ? AnalyzeName(symbol, compilation)
                                                                                                                                 : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                            ? AnalyzeName(symbol, compilation)
                                                                                                                            : Array.Empty<Diagnostic>();
 
@@ -93,12 +93,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             IEnumerable<Diagnostic> namingIssues = Array.Empty<Diagnostic>();
             IEnumerable<Diagnostic> localFunctionIssues = Array.Empty<Diagnostic>();
 
-            if (ShallAnalyze(symbol))
+            if (ShallAnalyze(symbol, compilation))
             {
                 namingIssues = AnalyzeName(symbol, compilation);
             }
 
-            if (ShallAnalyzeLocalFunctions(symbol))
+            if (ShallAnalyzeLocalFunctions(symbol, compilation))
             {
                 localFunctionIssues = AnalyzeLocalFunctions(symbol, compilation);
             }
@@ -113,22 +113,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                               ? AnalyzeName(symbol, compilation)
                                                                                                                               : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                         ? AnalyzeName(symbol, compilation)
                                                                                                                         : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                         ? AnalyzeName(symbol, compilation)
                                                                                                                         : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                                 ? AnalyzeName(symbol, compilation)
                                                                                                                                 : Array.Empty<Diagnostic>();
 
@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var localSymbol = function.GetSymbol(semanticModel);
 
-                if (ShallAnalyzeLocalFunction(localSymbol))
+                if (ShallAnalyzeLocalFunction(localSymbol, compilation))
                 {
                     foreach (var issue in AnalyzeName(localSymbol, compilation))
                     {
@@ -185,10 +185,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The namespace symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the namespace shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol)
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -205,10 +208,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The type symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the type shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol)
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -225,10 +231,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The method symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the method shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol)
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -265,10 +274,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The property symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the property shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol)
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -285,10 +297,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The event symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the event shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IEventSymbol symbol)
+        protected virtual bool ShallAnalyze(IEventSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -305,10 +320,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The field symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the field shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol)
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -325,10 +343,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The parameter symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the parameter shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IParameterSymbol symbol)
+        protected virtual bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -371,10 +392,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The method symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the local functions shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false;
+        protected virtual bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => false;
 
         /// <summary>
         /// Determines whether the specified local function shall be analyzed.
@@ -382,10 +406,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="symbol">
         /// The local function symbol to check.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the local function shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
+        protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol, Compilation compilation) => false;
 
         /// <summary>
         /// Analyzes the name of a namespace.
@@ -553,7 +580,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            if (ShallAnalyze(type))
+            if (ShallAnalyze(type, context.Compilation))
             {
                 var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
 
@@ -578,9 +605,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var semanticModel = context.SemanticModel;
+            var compilation = context.Compilation;
+
             var type = node.Type.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type))
+            if (ShallAnalyze(type, compilation))
             {
                 var issues = AnalyzeIdentifiers(semanticModel, type, node.Identifier);
 
@@ -598,6 +627,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var node = (TupleExpressionSyntax)context.Node;
             var semanticModel = context.SemanticModel;
+            var compilation = context.Compilation;
 
             foreach (var argument in node.Arguments)
             {
@@ -605,9 +635,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var type = argument.GetTypeSymbol(semanticModel);
 
-                    if (ShallAnalyze(type))
+                    if (ShallAnalyze(type, compilation))
                     {
-                        var issues = Analyze(semanticModel, declaration);
+                        var issues = Analyze(declaration, semanticModel, compilation);
 
                         ReportDiagnostics(context, issues);
                     }
@@ -625,10 +655,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var node = (VariableDesignationSyntax)context.Node;
             var semanticModel = context.SemanticModel;
+            var compilation = context.Compilation;
 
             var type = node.Parent.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type))
+            if (ShallAnalyze(type, compilation))
             {
                 var issues = Analyze(semanticModel, type, node);
 
@@ -645,11 +676,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForEachStatementSyntax)context.Node;
-
             var semanticModel = context.SemanticModel;
+            var compilation = context.Compilation;
+
             var type = node.Type.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type))
+            if (ShallAnalyze(type, compilation))
             {
                 var issues = AnalyzeIdentifiers(semanticModel, type, node.Identifier);
 
@@ -700,13 +732,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => Array.Empty<Diagnostic>();
 
-        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, DeclarationExpressionSyntax declaration)
+        private IEnumerable<Diagnostic> Analyze(DeclarationExpressionSyntax declaration, SemanticModel semanticModel, Compilation compilation)
         {
             if (ShallAnalyzeLocal(declaration))
             {
                 var type = declaration.GetTypeSymbol(semanticModel);
 
-                if (ShallAnalyze(type))
+                if (ShallAnalyze(type, compilation))
                 {
                     return Analyze(semanticModel, type, declaration.Designation);
                 }
@@ -752,9 +784,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var semanticModel = context.SemanticModel;
+            var compilation = context.Compilation;
+
             var type = variableDeclaration.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type))
+            if (ShallAnalyze(type, compilation))
             {
                 var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
 

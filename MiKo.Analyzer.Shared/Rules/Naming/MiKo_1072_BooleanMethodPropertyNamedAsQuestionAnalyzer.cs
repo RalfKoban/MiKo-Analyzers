@@ -95,9 +95,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             InitializeCore(context, SymbolKind.Property);
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.ReturnType.IsBoolean() is true && base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.ReturnType.IsBoolean() is true && base.ShallAnalyze(symbol, compilation) && symbol.IsTestMethod() is false;
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.GetReturnType()?.IsBoolean() is true;
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.GetReturnType()?.IsBoolean() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 

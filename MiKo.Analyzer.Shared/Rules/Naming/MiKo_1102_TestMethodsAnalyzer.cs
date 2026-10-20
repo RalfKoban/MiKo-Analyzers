@@ -20,11 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.IsTestMethod();
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => true;
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol?.ContainingSymbol is IMethodSymbol method && ShallAnalyze(method);
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol, Compilation compilation) => symbol?.ContainingSymbol is IMethodSymbol method && ShallAnalyze(method, compilation);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

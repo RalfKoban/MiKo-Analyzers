@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Parameters.Length > 0;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.Parameters.Length > 0;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

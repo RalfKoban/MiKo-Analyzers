@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Name.StartsWith(Constants.Markers.Have, StringComparison.OrdinalIgnoreCase);
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.Name.StartsWith(Constants.Markers.Have, StringComparison.OrdinalIgnoreCase);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {

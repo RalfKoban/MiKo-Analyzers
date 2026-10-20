@@ -17,9 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation)
         {
-            switch (symbol.GetEnclosingMethod()?.Name)
+            var method = symbol.GetEnclosingMethod();
+
+            switch (method?.Name)
             {
                 case "Concat":
                 case "ConcatWidth":
@@ -27,12 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "Format":
                 case "FormatWith":
                 case "FormattedWith":
-                case "Main":
                     return false;
-
-                default:
-                    return base.ShallAnalyze(symbol);
             }
+
+            if (method.IsMainMethod(compilation))
+            {
+                return false;
+            }
+
+            return base.ShallAnalyze(symbol, compilation);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)

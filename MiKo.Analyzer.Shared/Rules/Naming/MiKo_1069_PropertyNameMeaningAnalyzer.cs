@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && WellknownNames.Contains(symbol.Name) is false;
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && WellknownNames.Contains(symbol.Name) is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation)
         {

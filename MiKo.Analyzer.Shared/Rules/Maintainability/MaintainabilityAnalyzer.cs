@@ -26,32 +26,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                                 ? Analyze(symbol, compilation)
                                                                                                                                 : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                            ? Analyze(symbol, compilation)
                                                                                                                            : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                           ? Analyze(symbol, compilation)
                                                                                                                           : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                               ? Analyze(symbol, compilation)
                                                                                                                               : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                         ? Analyze(symbol, compilation)
                                                                                                                         : Array.Empty<Diagnostic>();
 
         /// <inheritdoc/>
-        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol, compilation)
                                                                                                                         ? Analyze(symbol, compilation)
                                                                                                                         : Array.Empty<Diagnostic>();
 
@@ -61,10 +61,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <param name="symbol">
         /// The namespace symbol to verify.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol, Compilation compilation) => true;
 
         /// <summary>
         /// Determines whether the specified type symbol shall be analyzed.
@@ -72,10 +75,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <param name="symbol">
         /// The type symbol to verify.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol, Compilation compilation) => true;
 
         /// <summary>
         /// Determines whether the specified method symbol shall be analyzed.
@@ -83,10 +89,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <param name="symbol">
         /// The method symbol to verify.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsOverride is false;
 
         /// <summary>
         /// Determines whether the specified property symbol shall be analyzed.
@@ -94,10 +103,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <param name="symbol">
         /// The property symbol to verify.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation) => symbol.IsOverride is false;
 
         /// <summary>
         /// Determines whether the specified field symbol shall be analyzed.
@@ -105,10 +117,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <param name="symbol">
         /// The field symbol to verify.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => symbol.IsOverride is false;
 
         /// <summary>
         /// Determines whether the specified event symbol shall be analyzed.
@@ -116,10 +131,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <param name="symbol">
         /// The event symbol to verify.
         /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol, Compilation compilation) => symbol.IsOverride is false;
 
         /// <summary>
         /// Analyzes the specified namespace symbol for maintainability issues and returns any diagnostics found.

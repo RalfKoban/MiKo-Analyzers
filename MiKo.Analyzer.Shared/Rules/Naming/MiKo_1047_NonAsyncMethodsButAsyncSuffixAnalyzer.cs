@@ -15,11 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol, compilation);
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => true;
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol?.IsAsyncTaskBased() is false;
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol, Compilation compilation) => symbol?.IsAsyncTaskBased() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

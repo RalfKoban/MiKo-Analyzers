@@ -19,15 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsAsyncTaskBased() is true
-                                                                   && base.ShallAnalyze(symbol)
-                                                                   && symbol.IsTestMethod() is false
-                                                                   && symbol.IsTestSetUpMethod() is false
-                                                                   && symbol.IsTestTearDownMethod() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.IsAsyncTaskBased() is true
+                                                                                            && base.ShallAnalyze(symbol, compilation)
+                                                                                            && symbol.IsTestMethod() is false
+                                                                                            && symbol.IsTestSetUpMethod() is false
+                                                                                            && symbol.IsTestTearDownMethod() is false;
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => true;
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol?.IsAsyncTaskBased() is true;
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol, Compilation compilation) => symbol?.IsAsyncTaskBased() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (symbol.IsStatic && methodName is "Main")
+            if (symbol.IsMainMethod(compilation))
             {
                 // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
                 return Array.Empty<Diagnostic>();

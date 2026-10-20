@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsEnum();
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {

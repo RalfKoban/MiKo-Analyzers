@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var issues = symbol.GetNamedMethods()
-                               .Where(ShallAnalyze)
+                               .Where(symbol1 => ShallAnalyze(symbol1, compilation))
                                .GroupBy(_ => _.Name)
                                .Where(_ => _.MoreThan(1)) // we have more than 1 method with the name, so inspect the parameters
                                .SelectMany(AnalyzeMethods)

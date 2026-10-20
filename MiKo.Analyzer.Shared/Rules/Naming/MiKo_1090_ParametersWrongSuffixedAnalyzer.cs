@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => ShallAnalyze(symbol?.GetEnclosingMethod());
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation) => ShallAnalyze(symbol?.GetEnclosingMethod(), compilation);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {

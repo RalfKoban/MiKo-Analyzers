@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventHandler() is true;
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation) => symbol?.IsEventHandler() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {

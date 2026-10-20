@@ -3010,6 +3010,30 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a method is the main entry point of a program.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is the main entry point of a program; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsMainMethod(this IMethodSymbol value, Compilation compilation)
+        {
+            var mainMethod = compilation.GetEntryPoint(CancellationToken.None);
+
+            if (SymbolEqualityComparer.Default.Equals(value, mainMethod))
+            {
+                return true;
+            }
+
+            return value?.IsStatic is true && value.Name is "Main";
+        }
+
+        /// <summary>
         /// Determines whether a type is a multi-value converter.
         /// </summary>
         /// <param name="value">

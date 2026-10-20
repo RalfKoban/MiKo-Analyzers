@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyPropertyKey();
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => symbol.Type.IsDependencyPropertyKey();
     }
 }

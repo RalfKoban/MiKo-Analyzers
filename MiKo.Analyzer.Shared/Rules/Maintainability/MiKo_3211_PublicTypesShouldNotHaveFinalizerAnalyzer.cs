@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind is MethodKind.Destructor;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.MethodKind is MethodKind.Destructor;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.ContainingType.DeclaredAccessibility is Accessibility.Public
                                                                                                              ? new[] { Issue(symbol) }

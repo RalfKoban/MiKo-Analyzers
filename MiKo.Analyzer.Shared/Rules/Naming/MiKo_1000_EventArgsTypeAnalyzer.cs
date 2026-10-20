@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEventArgs();
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation) => symbol.IsEventArgs();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

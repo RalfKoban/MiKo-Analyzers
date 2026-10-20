@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool SupportsXUnit => false; // Xunit does not support assertion messages, see https://github.com/xunit/xunit/issues/350
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

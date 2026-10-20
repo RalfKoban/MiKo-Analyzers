@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsValueConverter();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsValueConverter();
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.HasAttribute("System.Windows.Data.ValueConversionAttribute")
                                                                                                                 ? Array.Empty<Diagnostic>()
