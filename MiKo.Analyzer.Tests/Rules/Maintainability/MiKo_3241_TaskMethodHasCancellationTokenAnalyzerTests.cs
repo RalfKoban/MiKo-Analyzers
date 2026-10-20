@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,6 +12,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3241_TaskMethodHasCancellationTokenAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] TestRelatedAttributes = Enumerable.Empty<string>()
+                                                                           .Concat(Tests)
+                                                                           .Concat(TestSetUps)
+                                                                           .Concat(TestTearDowns)
+                                                                           .Concat(TestOneTimeSetUps)
+                                                                           .Concat(TestOneTimeTearDowns)
+                                                                           .Concat(TestAssemblySetUps)
+                                                                           .Concat(TestAssemblyTearDowns)
+                                                                           .ToArray();
+
         [Test]
         public void No_issue_is_reported_for_generic_Task_method_with_cancellation_token() => No_issue_is_reported_for(@"
 using System.Threading;
@@ -97,14 +109,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_without_cancellation_token_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_test_method_without_cancellation_token_parameter_([ValueSource(nameof(TestRelatedAttributes))] string test) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 public class TestMe
 {
-    [TestCase(42)]
+    [" + test + @"]
     public Task DoSomething(int value)
     {
         return Task.CompletedTask;
@@ -113,14 +125,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_without_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_test_method_without_parameters_([ValueSource(nameof(TestRelatedAttributes))] string test) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 public class TestMe
 {
-    [Test]
+    [" + test + @"]
     public Task DoSomething()
     {
         return Task.CompletedTask;
@@ -148,14 +160,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ValueTask_test_method_without_cancellation_token_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ValueTask_test_method_without_cancellation_token_parameter_([ValueSource(nameof(TestRelatedAttributes))] string test) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 public class TestMe
 {
-    [TestCase(42)]
+    [" + test + @"]
     public ValueTask DoSomething(int value)
     {
         return default;
@@ -164,14 +176,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ValueTask_test_method_without_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ValueTask_test_method_without_parameters_([ValueSource(nameof(TestRelatedAttributes))] string test) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 public class TestMe
 {
-    [Test]
+    [" + test + @"]
     public ValueTask DoSomething()
     {
         return default;
@@ -184,6 +196,31 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething() {}
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Main_method() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public static Task Main() {}
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_interface_implementation() => No_issue_is_reported_for(@"
+#pragma warning disable MiKo_3241
+
+public interface ITestMe
+{
+    Task DoSomethingAsync();
+}
+
+#pragma warning restore MiKo_3241
+
+public class TestMe : ITestMe
+{
+    public Task DoSomethingAsync() {}
 }
 ");
 

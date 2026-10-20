@@ -15,10 +15,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && (symbol.ReturnType.IsTask() || symbol.ReturnType.IsValueTask()) && symbol.IsTestMethod() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        {
+            if (base.ShallAnalyze(symbol))
+            {
+                if (symbol.ReturnType.IsTask() || symbol.ReturnType.IsValueTask())
+                {
+                    if (symbol.IsInterfaceImplementation())
+                    {
+                        return false;
+                    }
+
+                    if (symbol.IsTestMethod()
+                     || symbol.IsTestSetUpMethod()
+                     || symbol.IsTestOneTimeSetUpMethod()
+                     || symbol.IsTestTearDownMethod()
+                     || symbol.IsTestOneTimeTearDownMethod()
+                     || symbol.IsTestAssemblyWideSetUpMethod()
+                     || symbol.IsTestAssemblyWideTearDownMethod())
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
+            if (symbol.IsMainMethod(compilation))
+            {
+                // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
+                return Array.Empty<Diagnostic>();
+            }
+
             foreach (var parameter in symbol.Parameters)
             {
                 if (parameter.Type.IsCancellationToken())
@@ -34,16 +67,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 foreach (var overload in methodsWithSameName.Except(symbol))
                 {
-                    var returnType = overload.ReturnType;
-
-                    if (returnType.IsTask() || returnType.IsValueTask())
+                    if (overload.DeclaredAccessibility == symbol.DeclaredAccessibility)
                     {
-                        foreach (var parameter in overload.Parameters)
+                        var returnType = overload.ReturnType;
+
+                        if (returnType.IsTask() || returnType.IsValueTask())
                         {
-                            if (parameter.Type.IsCancellationToken())
+                            foreach (var parameter in overload.Parameters)
                             {
-                                // do not report this method as we just found an overload with a cancellation token
-                                return Array.Empty<Diagnostic>();
+                                if (parameter.Type.IsCancellationToken())
+                                {
+                                    // do not report this method as we just found an overload with a cancellation token
+                                    return Array.Empty<Diagnostic>();
+                                }
                             }
                         }
                     }
