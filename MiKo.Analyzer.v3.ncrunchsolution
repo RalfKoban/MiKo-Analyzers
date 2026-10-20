@@ -12,10 +12,10 @@
       <Value>..\MiKo.Analyzer.Shared\Resources.Designer.cs:MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj</Value>
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
-    <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
+    <PipelineOptimisationPriority>Responsiveness</PipelineOptimisationPriority>
     <RdiConfigured>True</RdiConfigured>
     <RestrictToString>False</RestrictToString>
-    <SlidingBuildDelayInMilliseconds>5000</SlidingBuildDelayInMilliseconds>
+    <SlidingBuildDelayInMilliseconds>1000</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
   <EngineModes>
