@@ -58,17 +58,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (argumentExpression)
             {
-                case InvocationExpressionSyntax i when i.IsNameOf():
-                    return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
+                case InvocationExpressionSyntax i:
+                    return i.IsNameOf() && NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
+
+                case LiteralExpressionSyntax l:
+                    return l.IsStringLiteral() && l.Token.ValueText.Length > 0; // report to use nameof instead but ignore empty strings
 
                 case IdentifierNameSyntax s when node.EnclosingMethodHasParameter(s.GetName(), semanticModel):
                     return false; // it's a parameter, so do not report an issue
-
-                case LiteralExpressionSyntax l when l.IsStringLiteral():
-                    return l.Token.ValueText.Length > 0; // report to use nameof instead but ignore empty strings
-
-                case LiteralExpressionSyntax l when l.IsKind(SyntaxKind.NullLiteralExpression):
-                    return false; // do not report to use nameof
 
                 case MemberAccessExpressionSyntax maes when maes.IsKind(SyntaxKind.SimpleMemberAccessExpression):
                     return false; // do not report to use nameof

@@ -190,6 +190,27 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_invocation_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public object Something
+        {
+            set
+            {
+                var e = new " + typeName + @"(Convert.ToString(value));
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_null_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
 
 using System;
