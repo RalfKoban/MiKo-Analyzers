@@ -72,6 +72,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "Toplevel",
                                                             "TopMost",
                                                             "Topmost",
+                                                            "User",
                                                             "MEF",
 
                                                             // languages
