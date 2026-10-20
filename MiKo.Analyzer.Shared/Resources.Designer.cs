@@ -16050,6 +16050,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that return &apos;Task&apos; or &apos;Task&lt;T&gt;&apos; should be cancelable. Such methods should therefore declare a &apos;CancellationToken&apos; parameter so callers can cancel the operation when needed..
+        /// </summary>
+        internal static string MiKo_3241_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3241_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a &apos;CancellationToken&apos; parameter to support cancellation.
+        /// </summary>
+        internal static string MiKo_3241_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3241_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task-returning methods should be cancelable.
+        /// </summary>
+        internal static string MiKo_3241_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3241_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
