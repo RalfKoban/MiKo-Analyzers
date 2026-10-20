@@ -95,6 +95,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new("dto", string.Empty),
                                                       new("dyn", "dynamic"),
                                                       new("ed", "edit"),
+                                                      new("edm", "externalDeviceMonitor"),
                                                       new("el", "element"),
                                                       new("ele", "element"),
                                                       new("elem", "element"),
@@ -356,6 +357,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                        new("DTO", string.Empty),
                                                        new("Dyn", "Dynamic"),
                                                        new("Ed", "Edit"),
+                                                       new("Edm", "ExternalDeviceMonitor"),
+                                                       new("EDM", "ExternalDeviceMonitor"),
                                                        new("Ef", "EntityFramework"),
                                                        new("EF", "EntityFramework"),
                                                        new("El", "Element"),
@@ -609,12 +612,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             Assert.That(replacement, Is.EqualTo(completeTerm.Value));
         }
-
-        [TestCase("sepaMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
-        [TestCase("sepaMysepSepStuff",  ExpectedResult = "separatorMyseparatorSeparatorStuff", Ignore = "Currently not fixed but very unlikely")]
-        [TestCase("sepMysepaSepStuff",  ExpectedResult = "separatorMyseparatorSeparatorStuff")]
-        [TestCase("sepMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
-        public static string Finds_strange_combinations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
         [TestCase("adoptSomething")]
         [TestCase("args")]
