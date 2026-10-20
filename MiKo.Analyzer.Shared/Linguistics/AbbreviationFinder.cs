@@ -195,6 +195,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("dto", string.Empty),
                                                       new Pair("dyn", "dynamic"),
                                                       new Pair("ed", "edit"),
+                                                      new Pair("edm", "externalDeviceMonitor"),
                                                       new Pair("el", "element"),
                                                       new Pair("ele", "element"),
                                                       new Pair("elem", "element"),
@@ -456,6 +457,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("DTO", string.Empty),
                                                           new Pair("Dyn", "Dynamic"),
                                                           new Pair("Ed", "Edit"),
+                                                          new Pair("Edm", "ExternalDeviceMonitor"),
+                                                          new Pair("EDM", "ExternalDeviceMonitor"),
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
                                                           new Pair("El", "Element"),
@@ -638,10 +641,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] UpperCasePrefixes = OnlyMidTerms.Except(SpecialUpperCasePrefixes, IdenticalKeyComparer.Instance)
                                                                        .Concat(SpecialUpperCasePrefixes)
-                                                                       .OrderBy(_ => _.Key)
-                                                                       .ToArray();
+                                                                       .OrderDescendingByLengthAndText(_ => _.Key);
 
-        private static readonly Pair[] MidTerms = OnlyMidTerms.Concat(Prefixes).ToArray();
+        private static readonly Pair[] MidTerms = OnlyMidTerms.Concat(Prefixes)
+                                                              .OrderDescendingByLengthAndText(_ => _.Key);
 
         private static readonly Pair[] OnlyPostfixes =
                                                        {
@@ -651,8 +654,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                        };
 
         private static readonly Pair[] Postfixes = OnlyMidTerms.Except(OnlyPostfixes, IdenticalKeyComparer.Instance).Concat(OnlyPostfixes)
-                                                               .OrderBy(_ => _.Key)
-                                                               .ToArray();
+                                                               .OrderDescendingByLengthAndText(_ => _.Key);
 
         private static readonly Pair[] CompleteTerms = Prefixes.Concat(Postfixes)
                                                                .Except(UpperCasePrefixes, IdenticalKeyComparer.Instance).Concat(UpperCasePrefixes)
