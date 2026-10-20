@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnsVoid
-                                                                   && symbol.Parameters.Length is 0
-                                                                   && symbol.Name is nameof(IDisposable.Dispose)
-                                                                   && symbol.ContainingType.GetMembers(nameof(IDisposable.Dispose)).Length > 1;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.ReturnsVoid
+                                                                                            && symbol.Parameters.Length is 0
+                                                                                            && symbol.Name is nameof(IDisposable.Dispose)
+                                                                                            && symbol.ContainingType.GetMembers(nameof(IDisposable.Dispose)).Length > 1;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

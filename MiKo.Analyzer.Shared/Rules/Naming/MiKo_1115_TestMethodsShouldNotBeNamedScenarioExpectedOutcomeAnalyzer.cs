@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

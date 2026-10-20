@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Field);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsTestClass();
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => symbol.ContainingType.IsTestClass();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => Analyze(symbol);
 

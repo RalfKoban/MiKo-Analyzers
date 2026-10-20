@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => IsStaticField(symbol);
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => IsStaticField(symbol);
 
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {

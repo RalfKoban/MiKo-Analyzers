@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (base.ShallAnalyze(symbol) is false)
+            if (base.ShallAnalyze(symbol, compilation) is false)
             {
                 return false;
             }

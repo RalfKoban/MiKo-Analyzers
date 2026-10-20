@@ -25,6 +25,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeUsingStatement, SyntaxKind.UsingStatement);
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => base.ShallAnalyze(symbol) || symbol?.TypeKind is TypeKind.Array; // accept analysis of arrays
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) || symbol?.TypeKind is TypeKind.Array; // accept analysis of arrays
     }
 }

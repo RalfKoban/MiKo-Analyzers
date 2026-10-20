@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol)
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol, Compilation compilation)
         {
             if (symbol.IsPubliclyVisible())
             {

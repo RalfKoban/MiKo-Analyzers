@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsFactory() is true;
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation) => symbol?.IsFactory() is true;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -31,10 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // ignore private methods or those that do not have any accessibility (means they are also private)
-            return symbol.IsPubliclyVisible() && base.ShallAnalyze(symbol);
+            return symbol.IsPubliclyVisible() && base.ShallAnalyze(symbol, compilation);
         }
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false; // do not consider local functions at all
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => false; // do not consider local functions at all
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

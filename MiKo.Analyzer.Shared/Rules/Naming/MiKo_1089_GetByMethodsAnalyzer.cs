@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol)
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {
@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbolName.EndsWith("Repository");
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)
-                                                                   && symbol.IsExtensionMethod is false
-                                                                   && symbol.IsTestMethod() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation)
+                                                                                            && symbol.IsExtensionMethod is false
+                                                                                            && symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Length > Get.Length && symbolName.StartsWith(Get, StringComparison.Ordinal))
             {
-                if (ShallAnalyze(symbol.ContainingType))
+                if (ShallAnalyze(symbol.ContainingType, compilation))
                 {
                     return new[] { Issue(symbol, CreateBetterNameProposal(FindBetterName(symbolName))) };
                 }

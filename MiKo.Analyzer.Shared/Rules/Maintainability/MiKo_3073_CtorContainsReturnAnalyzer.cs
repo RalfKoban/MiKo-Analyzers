@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor()
-                                                                   && symbol.IsPrimaryConstructor() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsConstructor()
+                                                                                            && symbol.IsPrimaryConstructor() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {

@@ -24,11 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.ReturnType.IsBoolean() is true;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.ReturnType.IsBoolean() is true;
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol?.GetReturnType()?.IsBoolean() is true;
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation) => symbol?.GetReturnType()?.IsBoolean() is true;
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol?.Type.IsBoolean() is true;
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => symbol?.Type.IsBoolean() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name.AsSpan(), 4);
 

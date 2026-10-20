@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol)
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation)
         {
             if (symbol?.Type.IsBoolean() is true)
             {

@@ -3016,12 +3016,12 @@ namespace MiKoSolutions.Analyzers
         /// The method to inspect.
         /// </param>
         /// <param name="compilation">
-        /// The compilation to use.
+        /// The compilation that provides access to the semantic model.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method is the main entry point of a program; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool IsMainMethod(this IMethodSymbol value, Compilation compilation)
+        internal static bool IsMainMethod(this IMethodSymbol value, Compilation compilation)
         {
             var mainMethod = compilation.GetEntryPoint(CancellationToken.None);
 

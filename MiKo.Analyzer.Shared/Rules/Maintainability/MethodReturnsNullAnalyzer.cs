@@ -226,7 +226,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
-            return ShallAnalyze(context.GetEnclosingMethod()) is false;
+            return ShallAnalyze(context.GetEnclosingMethod(), context.Compilation) is false;
         }
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)

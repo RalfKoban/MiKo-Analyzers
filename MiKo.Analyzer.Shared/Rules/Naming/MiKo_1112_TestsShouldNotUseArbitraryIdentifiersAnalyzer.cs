@@ -26,13 +26,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             InitializeCore(context, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field, SymbolKind.Parameter);
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.IsTestMethod();
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.ContainingType.IsTestClass();
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.ContainingType.IsTestClass();
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => base.ShallAnalyze(symbol) && symbol.ContainingType.IsTestClass();
+        protected override bool ShallAnalyze(IFieldSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && symbol.ContainingType.IsTestClass();
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => base.ShallAnalyze(symbol) && ShallAnalyze(symbol.GetEnclosingMethod());
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation) && ShallAnalyze(symbol.GetEnclosingMethod(), compilation);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 

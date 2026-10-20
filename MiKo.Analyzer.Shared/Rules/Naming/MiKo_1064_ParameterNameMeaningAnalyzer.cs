@@ -26,9 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        protected override bool ShallAnalyze(IParameterSymbol symbol, Compilation compilation)
         {
-            if (base.ShallAnalyze(symbol))
+            if (base.ShallAnalyze(symbol, compilation))
             {
                 if (WellknownNames.Contains(symbol.Name))
                 {

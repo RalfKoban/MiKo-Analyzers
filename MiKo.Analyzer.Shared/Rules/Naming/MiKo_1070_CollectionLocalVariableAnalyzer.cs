@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol)
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation)
         {
             if (symbol is null)
             {

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass();
+        protected override bool ShallAnalyze(ITypeSymbol symbol, Compilation compilation) => symbol.IsTestClass();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

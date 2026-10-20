@@ -19,11 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind != TypeKind.Interface && symbol.IsDisposable() && symbol.IsTestClass() is false;
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.TypeKind != TypeKind.Interface && symbol.IsDisposable() && symbol.IsTestClass() is false;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (ShallAnalyze(symbol.ContainingType) && symbol.IsPubliclyVisible() && symbol.IsTestMethod() is false)
+            if (ShallAnalyze(symbol.ContainingType, compilation) && symbol.IsPubliclyVisible() && symbol.IsTestMethod() is false)
             {
                 switch (symbol.MethodKind)
                 {

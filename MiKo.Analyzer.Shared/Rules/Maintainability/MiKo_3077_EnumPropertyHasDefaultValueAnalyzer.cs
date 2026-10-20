@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol)
+        protected override bool ShallAnalyze(IPropertySymbol symbol, Compilation compilation)
         {
             if (symbol.IsAbstract)
             {

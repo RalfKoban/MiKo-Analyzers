@@ -192,6 +192,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public Task Completion
+    {
+        get
+        {
+            return Task.CompletedTask;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_void_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
