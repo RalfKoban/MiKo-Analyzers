@@ -110,6 +110,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "signCertificate",
                                                             "text",
                                                             "tires",
+                                                            "User",
+                                                            "user",
 
                                                             // languages
                                                             "ptPT", // Portugal
@@ -208,6 +210,22 @@ namespace Bla
         public void DoSomething(IntPtr wParam, IntPtr lParam) { }
     }
 }");
+
+        [Test]
+        public void No_issue_is_reported_for_boolean_method_([Values("IsUserAdministrator", "IsUser")] string methodName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public bool " + methodName + @"()
+        {
+            return true;
+        }
+    }
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_method_([ValueSource(nameof(AllowedWords))] string methodName) => No_issue_is_reported_for(@"
