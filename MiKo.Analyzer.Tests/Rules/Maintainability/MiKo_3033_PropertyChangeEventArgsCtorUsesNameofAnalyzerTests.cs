@@ -115,6 +115,117 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_empty_string_literal_usage([ValueSource(nameof(TypeNames))] string typeName)
+        {
+            No_issue_is_reported_for($$"""
+                                       using System;
+                                       using System.ComponentModel;
+
+                                       namespace Bla
+                                       {
+                                           public class TestMe
+                                           {
+                                               public int Something
+                                               {
+                                                   get
+                                                   {
+                                                       return m_something;
+                                                   }
+
+                                                   set
+                                                   {
+                                                       var x = new {{typeName}}("");
+                                                   }
+                                               }
+
+                                               private int m_something;
+                                           }
+                                       }
+                                       """);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_empty_string_usage([ValueSource(nameof(TypeNames))] string typeName)
+        {
+            No_issue_is_reported_for($$"""
+                                       using System;
+                                       using System.ComponentModel;
+
+                                       namespace Bla
+                                       {
+                                           public class TestMe
+                                           {
+                                               public int Something
+                                               {
+                                                   get
+                                                   {
+                                                       return m_something;
+                                                   }
+
+                                                   set
+                                                   {
+                                                       var x = new {{typeName}}(string.Empty);
+                                                   }
+                                               }
+
+                                               private int m_something;
+                                           }
+                                       }
+                                       """);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_non_nameof_parameter_invocation_usage_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public " + typeName + " DoSomething(string paramName) => new " + typeName + @"(paramName);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_invocation_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public object Something
+        {
+            set
+            {
+                var e = new " + typeName + @"(Convert.ToString(value));
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_null_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private " + typeName + " e = new " + typeName + @"(null);
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_string_usage_([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
 
 using System;
@@ -170,36 +281,6 @@ namespace Bla
         public string Something { get; set; }
 
         private " + typeName + " e = new " + typeName + @"(() => Something);
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_non_nameof_parameter_invocation_usage_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
-
-using System;
-using System.ComponentModel;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public " + typeName + " DoSomething(string paramName) => new " + typeName + @"(paramName);
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_null_([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
-
-using System;
-using System.ComponentModel;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        private " + typeName + " e = new " + typeName + @"(null);
     }
 }
 ");
