@@ -627,6 +627,7 @@ dotnet_diagnostic.SA1649.severity = error
 dotnet_diagnostic.SA1650.severity = error
 dotnet_diagnostic.SA1651.severity = error
 dotnet_diagnostic.SA1653.severity = error
+dotnet_diagnostic.SA1654.severity = error
 
 dotnet_diagnostic.SX1101.severity = none
 dotnet_diagnostic.SX1309.severity = none
