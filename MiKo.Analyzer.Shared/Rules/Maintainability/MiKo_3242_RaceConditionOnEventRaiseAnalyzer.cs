@@ -18,7 +18,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(in SyntaxNodeAnalysisContext context, IfStatementSyntax node)
         {
-            if (node.Condition is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.NotEqualsExpression) && b.Left is IdentifierNameSyntax identifier && b.Right.IsKind(SyntaxKind.NullLiteralExpression))
+            var condition = node.Condition;
+
+            switch (condition)
+            {
+                case BinaryExpressionSyntax b when b.Left is IdentifierNameSyntax bi:
+                    return HasIssue(context, node, bi);
+
+                case IsPatternExpressionSyntax p when p.Expression is IdentifierNameSyntax pi:
+                    return HasIssue(context, node, pi);
+            }
+
+            return false;
+        }
+
+        private static bool HasIssue(in SyntaxNodeAnalysisContext context, IfStatementSyntax node, IdentifierNameSyntax identifier)
+        {
+            if (node.Condition.IsNullCheck(identifier))
             {
                 switch (node.Statement)
                 {

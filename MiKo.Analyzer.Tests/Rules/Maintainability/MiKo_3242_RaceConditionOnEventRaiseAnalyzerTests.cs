@@ -458,6 +458,90 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        // currently, we do not know how to fix that situation, except for introducing a handler variable
+        [Test]
+        public void Code_gets_not_fixed_for_event_raised_with_race_condition_and_else_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        if (MyEvent != null)
+        {
+            MyEvent(this, EventArgs.Empty);
+        }
+        else
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        if (MyEvent != null)
+        {
+            MyEvent(this, EventArgs.Empty);
+        }
+        else
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_event_raised_with_race_condition_and_is_not_null_check()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        if (MyEvent is not null)
+        {
+            MyEvent(this, EventArgs.Empty);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        MyEvent?.Invoke(this, EventArgs.Empty);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3242_RaceConditionOnEventRaiseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3242_RaceConditionOnEventRaiseAnalyzer();

@@ -28,38 +28,52 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
-            if (syntax is IfStatementSyntax statement && statement.Condition is BinaryExpressionSyntax b && b.Left is IdentifierNameSyntax identifier)
+            if (syntax is IfStatementSyntax statement && statement.Else is null)
             {
-                var invocation = statement.Statement.FirstDescendant<InvocationExpressionSyntax>();
-
-                if (invocation.Parent is ExpressionStatementSyntax invocationStatement)
+                switch (statement.Condition)
                 {
-                    var updatedInvocation = invocation.WithoutTrivia()
-                                                      .WithExpression(MemberBinding(nameof(EventHandler.Invoke)));
+                    case BinaryExpressionSyntax b when b.Left is IdentifierNameSyntax bi:
+                        return GetUpdatedSyntax(statement, bi);
 
-                    var updatedSyntax = SyntaxFactory.ConditionalAccessExpression(identifier, updatedInvocation);
-
-                    var updatedStatement = Statement(updatedSyntax).WithTriviaFrom(statement);
-
-                    // re-add comments (either from statement or from invocation)
-                    if (invocationStatement.HasLeadingComment())
-                    {
-                        updatedStatement = updatedStatement.WithLeadingTriviaFrom(invocationStatement)
-                                                           .WithAdditionalLeadingSpaces(-Constants.Indentation); // out-dent the statement
-                    }
-
-                    var semicolonToken = invocationStatement.SemicolonToken;
-
-                    if (semicolonToken.HasTrailingComment())
-                    {
-                        updatedStatement = updatedStatement.WithSemicolonToken(updatedStatement.SemicolonToken.WithTrailingTriviaFrom(semicolonToken));
-                    }
-
-                    return updatedStatement;
+                    case IsPatternExpressionSyntax p when p.Expression is IdentifierNameSyntax pi:
+                        return GetUpdatedSyntax(statement, pi);
                 }
             }
 
             return syntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(IfStatementSyntax statement, IdentifierNameSyntax identifier)
+        {
+            var invocation = statement.Statement.FirstDescendant<InvocationExpressionSyntax>();
+
+            if (invocation.Parent is ExpressionStatementSyntax invocationStatement)
+            {
+                var updatedInvocation = invocation.WithoutTrivia()
+                                                  .WithExpression(MemberBinding(nameof(EventHandler.Invoke)));
+
+                var updatedSyntax = SyntaxFactory.ConditionalAccessExpression(identifier, updatedInvocation);
+
+                var updatedStatement = Statement(updatedSyntax).WithTriviaFrom(statement);
+
+                // re-add comments (either from statement or from invocation)
+                if (invocationStatement.HasLeadingComment())
+                {
+                    updatedStatement = updatedStatement.WithLeadingTriviaFrom(invocationStatement)
+                                                       .WithAdditionalLeadingSpaces(-Constants.Indentation); // out-dent the statement
+                }
+
+                var semicolonToken = invocationStatement.SemicolonToken;
+
+                if (semicolonToken.HasTrailingComment())
+                {
+                    updatedStatement = updatedStatement.WithSemicolonToken(updatedStatement.SemicolonToken.WithTrailingTriviaFrom(semicolonToken));
+                }
+
+                return updatedStatement;
+            }
+
+            return statement;
         }
     }
 }
