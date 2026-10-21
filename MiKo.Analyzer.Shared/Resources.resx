@@ -5621,6 +5621,18 @@ Return the value directly and declare the variable later, when it is needed.</va
   <data name="MiKo_3241_Title" xml:space="preserve">
     <value>Task-returning methods should be cancelable</value>
   </data>
+  <data name="MiKo_3242_CodeFixTitle" xml:space="preserve">
+    <value>Raise event via ' ?.Invoke(...) '</value>
+  </data>
+  <data name="MiKo_3242_Description" xml:space="preserve">
+    <value>Checking an event for 'null' and invoking it in a separate statement can cause a race condition if another thread unsubscribes the last event handler between the check and the invocation. Raise events via ' ?.Invoke(...) ' to make the code thread-safe and more concise.</value>
+  </data>
+  <data name="MiKo_3242_MessageFormat" xml:space="preserve">
+    <value>Raise event via ' ?.Invoke(...) ' to avoid a race condition</value>
+  </data>
+  <data name="MiKo_3242_Title" xml:space="preserve">
+    <value>Avoid race conditions when raising events</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
