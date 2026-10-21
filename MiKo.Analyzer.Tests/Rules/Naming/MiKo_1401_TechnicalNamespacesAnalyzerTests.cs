@@ -23,7 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "ApplicationService",
                                                                            "ApplicationServices",
                                                                            "Attributes",
-                                                                           "Base",
                                                                            "Builder",
                                                                            "Builders",
                                                                            "Class",
@@ -70,6 +69,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Executions",
                                                                            "Factories",
                                                                            "Filters",
+                                                                           "Framework",
+                                                                           "FrameWork",
                                                                            "Func",
                                                                            "Funcs",
                                                                            "Function",
@@ -206,8 +207,10 @@ namespace ABCD.EFG." + ns + @".HIJK
 
         private static string[] CreateNames(params string[] names)
         {
-            var results = new HashSet<string>((11 * names.Length) + 3)
+            var results = new HashSet<string>((15 * names.Length) + 5)
                               {
+                                  "Base",
+                                  "Common",
                                   "Shared",
                                   "Technical",
                                   "TechnicalDesign",
@@ -217,12 +220,16 @@ namespace ABCD.EFG." + ns + @".HIJK
             {
                 results.Add(name);
 
+                results.Add(name + "Base");
+                results.Add(name + "Common");
                 results.Add(name + "Core");
                 results.Add(name + "Shared");
                 results.Add(name + "Design");
                 results.Add(name + "Technical");
                 results.Add(name + "TechnicalDesign");
 
+                results.Add("Base" + name);
+                results.Add("Common" + name);
                 results.Add("Core" + name);
                 results.Add("Shared" + name);
                 results.Add("Technical" + name);

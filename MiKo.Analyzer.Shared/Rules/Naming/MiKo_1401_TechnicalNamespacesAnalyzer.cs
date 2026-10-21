@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Applications",
                                 "Attributes",
                                 "Builder", "Builders",
-                                "Base", "Class", "Classes",
+                                "Class", "Classes",
                                 "Client", "Clients", "HttpClient", "HttpClients",
                                 "Command", "Commands", "CommandPattern", "CommandPatterns",
                                 "Compare", "Comparer", "Comparers",
@@ -67,6 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Execution", "Executions",
                                 "Factories",
                                 "Filters",
+                                "Framework", "FrameWork",
                                 "Func", "Funcs", "Function", "Functions",
                                 "Handler", "Handlers",
                                 "Imp", "Impl", "Impls", "Implementation", "Implementations",
@@ -102,6 +103,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var results = new HashSet<string>
                               {
+                                  "Base",
+                                  "Common",
                                   "Shared",
                                   "Technical",
                                   "TechnicalDesign",
@@ -111,12 +114,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 results.Add(name);
 
+                results.Add(name + "Base");
+                results.Add(name + "Common");
                 results.Add(name + "Core");
                 results.Add(name + "Shared");
                 results.Add(name + "Design");
                 results.Add(name + "Technical");
                 results.Add(name + "TechnicalDesign");
 
+                results.Add("Base" + name);
+                results.Add("Common" + name);
                 results.Add("Core" + name);
                 results.Add("Shared" + name);
                 results.Add("Technical" + name);
