@@ -182,6 +182,41 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_event_raised_with_Invoke_and_race_condition_without_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        if (MyEvent != null)
+            MyEvent.Invoke(this, EventArgs.Empty);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        MyEvent?.Invoke(this, EventArgs.Empty);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_event_raised_with_race_condition_with_block()
         {
             const string OriginalCode = @"
@@ -196,6 +231,43 @@ public class TestMe
         if (MyEvent != null)
         {
             MyEvent(this, EventArgs.Empty);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        MyEvent?.Invoke(this, EventArgs.Empty);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_event_raised_with_Invoke_and_race_condition_with_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public void DoSomething()
+    {
+        if (MyEvent != null)
+        {
+            MyEvent.Invoke(this, EventArgs.Empty);
         }
     }
 }

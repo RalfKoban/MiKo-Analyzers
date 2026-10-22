@@ -57,11 +57,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(in SyntaxNodeAnalysisContext context, ExpressionStatementSyntax e, IdentifierNameSyntax identifier)
         {
-            if (e.Expression is InvocationExpressionSyntax i && i.Expression is IdentifierNameSyntax invokedIdentifier && identifier.GetName() == invokedIdentifier.GetName())
+            if (e.Expression is InvocationExpressionSyntax invocation)
             {
-                var symbol = identifier.GetSymbol(context.SemanticModel);
+                switch (invocation.Expression)
+                {
+                    case IdentifierNameSyntax i when i.GetName() == identifier.GetName():
+                    case MemberAccessExpressionSyntax m when m.Expression is IdentifierNameSyntax mi && mi.GetName() == identifier.GetName():
+                    {
+                        var symbol = identifier.GetSymbol(context.SemanticModel);
 
-                return symbol is IEventSymbol;
+                        return symbol is IEventSymbol;
+                    }
+                }
             }
 
             return false;
