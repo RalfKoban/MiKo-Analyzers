@@ -278,6 +278,66 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_enum_member_in_comparison() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            if (Execute() == StringComparison.Ordinal)
+            {
+            }
+        }
+
+        private StringComparison Execute() => StringComparison.Invariant;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_enum_member_in_is_pattern() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            if (Execute() is StringComparison.Ordinal)
+            {
+            }
+        }
+
+        private StringComparison Execute() => StringComparison.Invariant;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_enum_member_in_is_not_pattern() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            if (Execute() is not StringComparison.Ordinal)
+            {
+            }
+        }
+
+        private StringComparison Execute() => StringComparison.Invariant;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_fully_qualified_name_as_method_parameter() => An_issue_is_reported_for(@"
 using System;
 
