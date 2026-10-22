@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var properties = new Pair(Constants.AnalyzerCodeFixSharedData.CommentTags, commentTags.ConcatenatedWith("|"));
 
-                        context.ReportDiagnostic(Issue(member.GetLeadingTrivia(), properties));
+                        ReportDiagnostics(context, Issue(member.GetLeadingTrivia(), properties));
                     }
                 }
             }

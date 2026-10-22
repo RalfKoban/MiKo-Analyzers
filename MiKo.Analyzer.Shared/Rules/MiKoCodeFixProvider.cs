@@ -471,8 +471,30 @@ namespace MiKoSolutions.Analyzers.Rules
         /// </returns>
         protected static ConditionalAccessExpressionSyntax ConditionalAccess(ExpressionSyntax expression, SimpleNameSyntax binding)
         {
-            return SyntaxFactory.ConditionalAccessExpression(expression, SyntaxFactory.MemberBindingExpression(binding));
+            return SyntaxFactory.ConditionalAccessExpression(expression, MemberBinding(binding));
         }
+
+        /// <summary>
+        /// Gets a member binding expression for the specified name.
+        /// </summary>
+        /// <param name="name">
+        /// The simple name to bind to.
+        /// </param>
+        /// <returns>
+        /// The member binding expression representing the binding.
+        /// </returns>
+        protected static MemberBindingExpressionSyntax MemberBinding(SimpleNameSyntax name) => SyntaxFactory.MemberBindingExpression(name);
+
+        /// <summary>
+        /// Gets a member binding expression for the specified name.
+        /// </summary>
+        /// <param name="name">
+        /// The name to bind to.
+        /// </param>
+        /// <returns>
+        /// The member binding expression representing the binding.
+        /// </returns>
+        protected static MemberBindingExpressionSyntax MemberBinding(string name) => MemberBinding(IdentifierName(name));
 
         /// <summary>
         /// Gets a member access expression for accessing a named member on an expression.

@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 581 rules that are currently provided by the analyzers.
+The following tables list all the 582 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -514,6 +514,7 @@ The following tables list all the 581 rules that are currently provided by the a
 |[MiKo_3239](/Documentation/MiKo_3239.md)|Avoid boolean parameters in attribute constructors|&#x2713;|\-|
 |[MiKo_3240](/Documentation/MiKo_3240.md)|Do not declare return variables before an early return|&#x2713;|&#x2713;|
 |[MiKo_3241](/Documentation/MiKo_3241.md)|Task-returning methods should be cancelable|&#x2713;|\-|
+|[MiKo_3242](/Documentation/MiKo_3242.md)|Avoid race conditions when raising events|&#x2713;|&#x2713;|
 |[MiKo_3301](/Documentation/MiKo_3301.md)|Use lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |[MiKo_3302](/Documentation/MiKo_3302.md)|Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |[MiKo_3401](/Documentation/MiKo_3401.md)|Keep namespace hierarchies from becoming too deep|&#x2713;|\-|

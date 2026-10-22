@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (type.IsGuid() && property.GetName().EndsWithAny(WrongNameSuffixes))
             {
-                context.ReportDiagnostic(Issue(type));
+                ReportDiagnostics(context, Issue(type));
             }
         }
 
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (name == WrongParameterName || name.EndsWithAny(WrongNameSuffixes))
                 {
-                    context.ReportDiagnostic(Issue(type));
+                    ReportDiagnostics(context, Issue(type));
                 }
             }
         }
