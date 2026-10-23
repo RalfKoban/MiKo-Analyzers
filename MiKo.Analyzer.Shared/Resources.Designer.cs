@@ -16077,6 +16077,70 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Raise event via &apos; ?.Invoke(...) &apos;.
+        /// </summary>
+        internal static string MiKo_3242_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3242_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking an event for &apos;null&apos; and invoking it in a separate statement can cause a race condition if another thread unsubscribes the last event handler between the check and the invocation. Raise events via &apos; ?.Invoke(...) &apos; to make the code thread-safe and more concise..
+        /// </summary>
+        internal static string MiKo_3242_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3242_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raise event via &apos; ?.Invoke(...) &apos; to avoid a race condition.
+        /// </summary>
+        internal static string MiKo_3242_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3242_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid race conditions when raising events.
+        /// </summary>
+        internal static string MiKo_3242_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3242_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;do/while&apos; loops evaluate their condition after the loop body. That makes the control flow harder to follow, especially in combination with &apos;continue&apos;.
+        ///Prefer &apos;while&apos; or &apos;for&apos; loops, where the condition is visible up front. This makes the code easier to read and maintain..
+        /// </summary>
+        internal static string MiKo_3243_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3243_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer &apos;while&apos; loop over &apos;do/while&apos; loop.
+        /// </summary>
+        internal static string MiKo_3243_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3243_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid &apos;do/while&apos; loops.
+        /// </summary>
+        internal static string MiKo_3243_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3243_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
