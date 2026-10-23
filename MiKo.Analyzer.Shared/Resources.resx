@@ -5633,6 +5633,16 @@ Return the value directly and declare the variable later, when it is needed.</va
   <data name="MiKo_3242_Title" xml:space="preserve">
     <value>Avoid race conditions when raising events</value>
   </data>
+  <data name="MiKo_3243_Description" xml:space="preserve">
+    <value>'do/while' loops evaluate their condition after the loop body. That makes the control flow harder to follow, especially in combination with 'continue'.
+Prefer 'while' or 'for' loops, where the condition is visible up front. This makes the code easier to read and maintain.</value>
+  </data>
+  <data name="MiKo_3243_MessageFormat" xml:space="preserve">
+    <value>Prefer 'while' loop over 'do/while' loop</value>
+  </data>
+  <data name="MiKo_3243_Title" xml:space="preserve">
+    <value>Avoid 'do/while' loops</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
