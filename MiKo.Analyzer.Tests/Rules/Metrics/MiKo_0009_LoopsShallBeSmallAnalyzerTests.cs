@@ -162,6 +162,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_foreach_variable_statement_with_maximum_allowed_lines() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var (key, value) in Enumerable.Empty<Tuple>())
+        {
+            ;
+            ;
+            ;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_while_statement_when_above_maximum_allowed_lines() => An_issue_is_reported_for(@"
 using System;
 
@@ -229,6 +248,26 @@ public class TestMe
     public void DoSomething()
     {
         foreach (var x in Enumerable.Empty<object>())
+        {
+            ;
+            ;
+            ;
+            ;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_foreach_variable_statement_when_above_maximum_allowed_lines() => An_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var (key, value) in Enumerable.Empty<Tuple>())
         {
             ;
             ;

@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             context.RegisterSyntaxNodeAction(AnalyzeWhileStatement, SyntaxKind.WhileStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForStatement, SyntaxKind.ForStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachVariableStatement);
         }
 
         private void AnalyzeDoStatement(SyntaxNodeAnalysisContext context)
@@ -65,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ForEachStatementSyntax node)
+            if (context.Node is CommonForEachStatementSyntax node)
             {
                 var lines = node.Statement.CountLines();
 
