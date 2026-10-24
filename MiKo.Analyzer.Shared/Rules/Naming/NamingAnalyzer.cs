@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -625,7 +626,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </param>
         protected virtual void AnalyzeTupleExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (TupleExpressionSyntax)context.Node;
+            if (context.Node is TupleExpressionSyntax node)
+            {
+                AnalyzeTupleExpression(context, node);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a given tuple expression.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        /// <param name="node">
+        /// The tuple expression to analyze.
+        /// </param>
+        protected virtual void AnalyzeTupleExpression(in SyntaxNodeAnalysisContext context, TupleExpressionSyntax node)
+        {
             var semanticModel = context.SemanticModel;
             var compilation = context.Compilation;
 
@@ -653,7 +670,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </param>
         protected virtual void AnalyzeVariableDesignation(SyntaxNodeAnalysisContext context)
         {
-            var node = (VariableDesignationSyntax)context.Node;
+            if (context.Node is VariableDesignationSyntax node)
+            {
+                if (node.IsKind(SyntaxKind.SingleVariableDesignation))
+                {
+                    switch (node.Parent)
+                    {
+                        case ParenthesizedVariableDesignationSyntax _: // parenthesized variable gets analyzed itself
+                        case DeclarationExpressionSyntax d when d.Parent is ArgumentSyntax a && a.Parent is TupleExpressionSyntax: // Analyzed by tuple expression itself
+                            return;
+                    }
+                }
+
+                AnalyzeVariableDesignation(context, node);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a single variable designation.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        /// <param name="node">
+        /// The variable designation to analyze.
+        /// </param>
+        protected virtual void AnalyzeVariableDesignation(in SyntaxNodeAnalysisContext context, VariableDesignationSyntax node)
+        {
             var semanticModel = context.SemanticModel;
             var compilation = context.Compilation;
 

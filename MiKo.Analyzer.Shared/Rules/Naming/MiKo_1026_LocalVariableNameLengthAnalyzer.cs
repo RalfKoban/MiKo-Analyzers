@@ -2,6 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -21,8 +22,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             // local variables in 'for' and 'foreach' statements are covered by MiKo_1027 rule
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.ParenthesizedVariableDesignation);
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.SingleVariableDesignation);
+
+            context.RegisterSyntaxNodeAction(AnalyzeTupleExpression, SyntaxKind.TupleExpression); // also covers tuple in ForEachVariableStatement
+            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.ParenthesizedVariableDesignation); // also covers variable designation in ForEachVariableStatement
+            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.SingleVariableDesignation); // also covers variable designation in ForEachVariableStatement
+        }
+
+        protected override void AnalyzeTupleExpression(in SyntaxNodeAnalysisContext context, TupleExpressionSyntax node)
+        {
+            if (node.Parent is ForEachVariableStatementSyntax)
+            {
+                return; // covered by MiKo_1027
+            }
+
+            base.AnalyzeTupleExpression(context, node);
+        }
+
+        protected override void AnalyzeVariableDesignation(in SyntaxNodeAnalysisContext context, VariableDesignationSyntax node)
+        {
+            if (node.Parent is DeclarationExpressionSyntax declaration && declaration.Parent is ForEachVariableStatementSyntax)
+            {
+                return; // covered by MiKo_1027
+            }
+
+            base.AnalyzeVariableDesignation(context, node);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
