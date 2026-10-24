@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 583 rules that are currently provided by the analyzers.
+The following tables list all the 584 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -30,6 +30,7 @@ The following tables list all the 583 rules that are currently provided by the a
 |[MiKo_0006](/Documentation/MiKo_0006.md)|Simplify complex local functions|&#x2713;|\-|
 |[MiKo_0007](/Documentation/MiKo_0007.md)|Limit local function parameters|&#x2713;|\-|
 |[MiKo_0008](/Documentation/MiKo_0008.md)|Avoid types with too many namespace dependencies|&#x2713;|\-|
+|[MiKo_0009](/Documentation/MiKo_0009.md)|Keep loops small|&#x2713;|\-|
 
 ### Naming
 
