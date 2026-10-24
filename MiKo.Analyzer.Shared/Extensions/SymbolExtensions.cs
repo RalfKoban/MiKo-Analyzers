@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
@@ -2609,29 +2610,22 @@ namespace MiKoSolutions.Analyzers
                                                                  && value.OriginalDefinition.InheritsFrom<Exception>();
 
         /// <summary>
-        /// Determines whether an argument represents an exception.
+        /// Determines whether a type is part of an expression tree.
         /// </summary>
         /// <param name="value">
-        /// The argument to inspect.
-        /// </param>
-        /// <param name="semanticModel">
-        /// The semantic model to use for symbol resolution.
+        /// The type to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the argument represents an exception; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is part of an expression tree; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
+        internal static bool IsExpressionTree(this ITypeSymbol value)
         {
-            if (value is null)
+            if (value is INamedTypeSymbol namedType && namedType.ConstructedFrom.Name is nameof(Expression) && namedType.ContainingNamespace is INamespaceSymbol namespaceSymbol)
             {
-                return false;
+                return namespaceSymbol.FullyQualifiedName() is "System.Linq.Expressions";
             }
 
-            var argumentType = value.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
-                               ? m.GetTypeSymbol(semanticModel)
-                               : value.GetTypeSymbol(semanticModel);
-
-            return argumentType.IsException();
+            return false;
         }
 
         /// <summary>

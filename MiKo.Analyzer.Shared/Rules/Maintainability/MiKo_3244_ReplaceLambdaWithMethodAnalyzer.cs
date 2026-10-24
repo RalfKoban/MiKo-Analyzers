@@ -30,6 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (lines > MaxLinesOfCode)
                 {
+                    if (lambda.IsExpressionTree(context.SemanticModel))
+                    {
+                        return; // we cannot convert expression trees
+                    }
+
                     ReportDiagnostics(context, Issue(string.Empty, lambda.Body, lines, MaxLinesOfCode));
                 }
             }
