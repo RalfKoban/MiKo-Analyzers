@@ -2,6 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -20,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             // normal local variables are covered in MiKo_1026
+            context.RegisterSyntaxNodeAction(AnalyzeForEachVariableStatement, SyntaxKind.ForEachVariableStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForStatement, SyntaxKind.ForStatement);
         }
@@ -41,6 +43,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                         yield return Issue(symbol, exceeding);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a <see langword="foreach"/> statement.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        private void AnalyzeForEachVariableStatement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (ForEachVariableStatementSyntax)context.Node;
+
+            switch (node.Variable)
+            {
+                case DeclarationExpressionSyntax d: // e.g. foreach (var (a, b) in ...) or foreach ((int a, int b) in ...)
+                {
+                    AnalyzeVariableDesignation(context, d.Designation);
+
+                    break;
+                }
+
+                case TupleExpressionSyntax tuple: // e.g. foreach ((a, b) in ...)
+                {
+                    AnalyzeTupleExpression(context, tuple);
+
+                    break;
+                }
+
+                case IdentifierNameSyntax _: // e.g. foreach (_ in ...) - a discard is parsed as an identifier named "_"
+                {
+                    // so nothing to analyze here
+                    break;
                 }
             }
         }
