@@ -2620,7 +2620,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsExpressionTree(this ITypeSymbol value)
         {
-            if (value is INamedTypeSymbol namedType && namedType.ConstructedFrom.Name is nameof(Expression) && namedType.ContainingNamespace is INamespaceSymbol namespaceSymbol)
+            if (value.InheritsFrom<Expression>() && value.ContainingNamespace is INamespaceSymbol namespaceSymbol)
             {
                 return namespaceSymbol.FullyQualifiedName() is "System.Linq.Expressions";
             }

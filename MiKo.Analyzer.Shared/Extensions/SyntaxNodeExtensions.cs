@@ -1647,10 +1647,12 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsExpressionTree(this SyntaxNode value, SemanticModel semanticModel)
         {
-            if (value is LambdaExpressionSyntax lambda)
+            if (value is LambdaExpressionSyntax lambda && semanticModel.GetOperation(lambda) is IOperation o && o.Parent is IConversionOperation c && c.Type.IsExpressionTree())
             {
-                return semanticModel.GetOperation(lambda) is IOperation o && o.Parent is IConversionOperation c && c.Type.IsExpressionTree();
+                return true; // we know for sure that it is an expression tree
             }
+
+            // we do not know if it is an expression tree, so we have to walk upwards to find one
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())

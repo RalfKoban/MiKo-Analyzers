@@ -148,6 +148,31 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_long_nested_delegate_lambda_inside_expression_tree() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Parent
+{
+    public List<int> Children { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(IQueryable<Parent> query)
+    {
+        var result = query.Where(p => p.Children.Any(c =>
+                                                              c > 0
+                                                           && c < 10
+                                                           && c != 5
+                                                           && c != 6
+                                                           && c != 7)).ToList();
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3244_ReplaceLambdaWithMethodAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3244_ReplaceLambdaWithMethodAnalyzer { MaxLinesOfCode = 3 };
