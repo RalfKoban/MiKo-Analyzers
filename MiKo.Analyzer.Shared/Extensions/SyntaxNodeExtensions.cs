@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Operations;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
@@ -1608,6 +1608,32 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether an argument represents an exception.
+        /// </summary>
+        /// <param name="value">
+        /// The argument to inspect.
+        /// </param>
+        /// <param name="semanticModel">
+        /// The semantic model to use for symbol resolution.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the argument represents an exception; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            var argumentType = value.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
+                               ? m.GetTypeSymbol(semanticModel)
+                               : value.GetTypeSymbol(semanticModel);
+
+            return argumentType.IsException();
+        }
+
+        /// <summary>
         /// Determines whether a syntax node is part of an expression tree.
         /// </summary>
         /// <param name="value">
@@ -1621,13 +1647,19 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsExpressionTree(this SyntaxNode value, SemanticModel semanticModel)
         {
+            if (value is LambdaExpressionSyntax lambda && semanticModel.GetOperation(lambda) is IOperation o && o.Parent is IConversionOperation c && c.Type.IsExpressionTree())
+            {
+                return true; // we know for sure that it is an expression tree
+            }
+
+            // we do not know if it is an expression tree, so we have to walk upwards to find one
+
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())
             {
-                var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
-                var isExpression = convertedType?.InheritsFrom<Expression>() is true;
+                var type = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
 
-                if (isExpression)
+                if (type.IsExpressionTree())
                 {
                     return true;
                 }
