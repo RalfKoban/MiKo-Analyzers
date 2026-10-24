@@ -16168,6 +16168,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To make code easier to read and maintain, lambda expressions should be kept short. Long lambda bodies are difficult to understand and often deserve a meaningful name. Consider replacing the lambda expression with a named method..
+        /// </summary>
+        internal static string MiKo_3244_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3244_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a named method instead of a complex lambda expression.
+        /// </summary>
+        internal static string MiKo_3244_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3244_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace complex lambda expressions with named methods.
+        /// </summary>
+        internal static string MiKo_3244_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3244_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

@@ -5652,6 +5652,15 @@ Prefer 'while' or 'for' loops, where the condition is visible up front. This mak
   <data name="MiKo_3243_Title" xml:space="preserve">
     <value>Avoid 'do/while' loops</value>
   </data>
+  <data name="MiKo_3244_Description" xml:space="preserve">
+    <value>To make code easier to read and maintain, lambda expressions should be kept short. Long lambda bodies are difficult to understand and often deserve a meaningful name. Consider replacing the lambda expression with a named method.</value>
+  </data>
+  <data name="MiKo_3244_MessageFormat" xml:space="preserve">
+    <value>Use a named method instead of a complex lambda expression</value>
+  </data>
+  <data name="MiKo_3244_Title" xml:space="preserve">
+    <value>Replace complex lambda expressions with named methods</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
