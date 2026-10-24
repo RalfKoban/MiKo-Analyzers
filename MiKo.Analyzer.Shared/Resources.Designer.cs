@@ -282,6 +282,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To make code easier to read and maintain, loops should be kept short. This follows the Single Responsibility Principle (SRP) and the Single Level of Abstraction (SLoA) principle..
+        /// </summary>
+        internal static string MiKo_0009_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0009_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2} allowed).
+        /// </summary>
+        internal static string MiKo_0009_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0009_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep loops small.
+        /// </summary>
+        internal static string MiKo_0009_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0009_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Append suffix &apos;EventArgs&apos;.
         /// </summary>
         internal static string MiKo_1000_CodeFixTitle {

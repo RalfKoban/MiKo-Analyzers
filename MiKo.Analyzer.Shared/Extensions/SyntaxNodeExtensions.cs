@@ -39,6 +39,44 @@ namespace MiKoSolutions.Analyzers
         internal static bool Contains(this SyntaxNode value, in char c) => value?.ToString().Contains(c) ?? false;
 
         /// <summary>
+        /// Counts the lines of a syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to inspect.
+        /// </param>
+        /// <returns>
+        /// The lines the syntax node spans; <c>1</c> if the syntax node is on a single line.
+        /// </returns>
+        /// <seealso cref="IsSpanningMultipleLines"/>
+        internal static int CountLines(this SyntaxNode value)
+        {
+            if (value is BlockSyntax block)
+            {
+                var statements = block.Statements;
+                var count = statements.Count;
+
+                if (count is 0)
+                {
+                    return 0;
+                }
+
+                var startingLine = statements[0].GetStartingLine();
+                var endingLine = statements[count - 1].GetEndingLine();
+
+                return 1 + endingLine - startingLine;
+            }
+            else
+            {
+                var lineSpan = value.GetLineSpan();
+
+                var startingLine = lineSpan.StartLinePosition.Line;
+                var endingLine = lineSpan.EndLinePosition.Line;
+
+                return 1 + endingLine - startingLine;
+            }
+        }
+
+        /// <summary>
         /// Determines whether the enclosing method of a syntax node has a parameter with the specified name.
         /// </summary>
         /// <param name="value">
@@ -2189,6 +2227,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node spans multiple lines; otherwise, <see langword="false"/>.
         /// </returns>
+        /// <seealso cref="CountLines"/>
         internal static bool IsSpanningMultipleLines(this SyntaxNode value)
         {
             var lineSpan = value.GetLineSpan();
