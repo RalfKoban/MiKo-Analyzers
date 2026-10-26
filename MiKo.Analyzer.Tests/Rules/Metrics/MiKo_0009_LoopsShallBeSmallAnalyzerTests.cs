@@ -181,6 +181,217 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_while_statement_with_maximum_allowed_lines_and_empty_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while (flag)
+        {
+            ;
+
+            ;
+
+            ;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_do_while_statement_with_maximum_allowed_lines_and_empty_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        do
+        {
+            ;
+
+            ;
+
+            ;
+        }
+        while (flag);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_for_statement_with_maximum_allowed_lines_and_empty_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            ;
+
+            ;
+
+            ;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_foreach_statement_with_maximum_allowed_lines_and_empty_lines() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var x in Enumerable.Empty<object>())
+        {
+            ;
+
+            ;
+
+            ;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_foreach_variable_statement_with_maximum_allowed_lines_and_empty_lines() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var (key, value) in Enumerable.Empty<Tuple>())
+        {
+            ;
+
+            ;
+
+            ;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_while_statement_with_maximum_allowed_lines_and_braces() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while (flag)
+        {
+            {
+                ;
+            }
+            {
+                ;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_do_while_statement_with_maximum_allowed_lines_and_braces() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        do
+        {
+            {
+                ;
+            }
+            {
+                ;
+            }
+        }
+        while (flag);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_for_statement_with_maximum_allowed_lines_and_braces() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            {
+                ;
+            }
+            {
+                ;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_foreach_statement_with_maximum_allowed_lines_and_braces() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var x in Enumerable.Empty<object>())
+        {
+            {
+                ;
+            }
+            {
+                ;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_foreach_variable_statement_with_maximum_allowed_lines_and_braces() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var (key, value) in Enumerable.Empty<Tuple>())
+        {
+            {
+                ;
+            }
+            {
+                ;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_while_statement_when_above_maximum_allowed_lines() => An_issue_is_reported_for(@"
 using System;
 
