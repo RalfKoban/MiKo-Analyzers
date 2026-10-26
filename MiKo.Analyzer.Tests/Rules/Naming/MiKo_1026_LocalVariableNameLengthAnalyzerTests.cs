@@ -244,6 +244,17 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_variable_in_nested_tuple_deconstruction_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        (int key, (int value, int " + name + @")) = (1, (2, 3));
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_variable_1_in_tuple_deconstruction_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 using System.Collections.Generic;
 

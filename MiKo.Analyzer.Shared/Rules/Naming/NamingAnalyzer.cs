@@ -628,6 +628,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (context.Node is TupleExpressionSyntax node)
             {
+                if (node.Parent is ArgumentSyntax a && a.Parent is TupleExpressionSyntax)
+                {
+                    // already covered by analysis of parent tuple expression
+                    return;
+                }
+
                 AnalyzeTupleExpression(context, node);
             }
         }
