@@ -58,6 +58,7 @@ namespace TestHelper
         private static readonly MetadataReference SystemCompositionReference = MetadataReference.CreateFromFile(typeof(ImportAttribute).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
         private static readonly MetadataReference SystemLinqReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
+        private static readonly MetadataReference SystemLinqQueryableReference = MetadataReference.CreateFromFile(typeof(Queryable).Assembly.Location);
         private static readonly MetadataReference SystemRuntimeReference = MetadataReference.CreateFromFile(typeof(DataContractAttribute).Assembly.Location); // needed also for other attributes
         private static readonly MetadataReference SystemTextReference = MetadataReference.CreateFromFile(typeof(Regex).Assembly.Location);
         private static readonly MetadataReference SystemTextJsonReference = MetadataReference.CreateFromFile(typeof(JsonConstructorAttribute).Assembly.Location);
@@ -92,6 +93,7 @@ namespace TestHelper
                                                                      SystemCompositionReference,
                                                                      SystemCoreReference,
                                                                      SystemLinqReference,
+                                                                     SystemLinqQueryableReference,
                                                                      SystemReference,
                                                                      SystemRuntimeNetStandardReference,
                                                                      SystemRuntimeReference,
