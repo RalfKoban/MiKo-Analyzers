@@ -16,11 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForStatement, SyntaxKind.ForStatement);
 
-            // TODO RKN: Renaming tuples currently does not work, see https://github.com/dotnet/roslyn/issues/14115
+            // TODO RKN: Renaming tuples currently does not work, see https://github.com/dotnet/roslyn/issues/14115 and https://github.com/dotnet/roslyn/issues/20115
             // context.RegisterSyntaxNodeAction(AnalyzeTupleElement, SyntaxKind.TupleElement);
-            context.RegisterSyntaxNodeAction(AnalyzeTupleExpression, SyntaxKind.TupleExpression);
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.SingleVariableDesignation);
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.ParenthesizedVariableDesignation);
+            context.RegisterSyntaxNodeAction(AnalyzeTupleExpression, SyntaxKind.TupleExpression); // also covers tuple in ForEachVariableStatement
+            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.SingleVariableDesignation); // also covers variable designation in ForEachVariableStatement
+            context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.ParenthesizedVariableDesignation); // also covers variable designation in ForEachVariableStatement
 
             context.RegisterSyntaxNodeAction(AnalyzeUsingStatement, SyntaxKind.UsingStatement);
         }

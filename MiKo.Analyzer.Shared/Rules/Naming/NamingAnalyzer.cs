@@ -625,21 +625,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </param>
         protected virtual void AnalyzeTupleExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (TupleExpressionSyntax)context.Node;
+            if (context.Node is TupleExpressionSyntax node)
+            {
+                if (node.Parent is ArgumentSyntax a && a.Parent is TupleExpressionSyntax)
+                {
+                    // already covered by analysis of parent tuple expression
+                    return;
+                }
+
+                AnalyzeTupleExpression(context, node);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a given tuple expression.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        /// <param name="node">
+        /// The tuple expression to analyze.
+        /// </param>
+        protected virtual void AnalyzeTupleExpression(in SyntaxNodeAnalysisContext context, TupleExpressionSyntax node)
+        {
             var semanticModel = context.SemanticModel;
             var compilation = context.Compilation;
 
             foreach (var argument in node.Arguments)
             {
-                if (argument.Expression is DeclarationExpressionSyntax declaration)
+                switch (argument.Expression)
                 {
-                    var type = argument.GetTypeSymbol(semanticModel);
-
-                    if (ShallAnalyze(type, compilation))
+                    case DeclarationExpressionSyntax declaration:
                     {
-                        var issues = Analyze(declaration, semanticModel, compilation);
+                        var type = argument.GetTypeSymbol(semanticModel);
 
-                        ReportDiagnostics(context, issues);
+                        if (ShallAnalyze(type, compilation))
+                        {
+                            var issues = Analyze(declaration, semanticModel, compilation);
+
+                            ReportDiagnostics(context, issues);
+                        }
+
+                        break;
+                    }
+
+                    case TupleExpressionSyntax nested:
+                    {
+                        AnalyzeTupleExpression(context, nested);
+
+                        break;
                     }
                 }
             }
@@ -653,7 +687,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </param>
         protected virtual void AnalyzeVariableDesignation(SyntaxNodeAnalysisContext context)
         {
-            var node = (VariableDesignationSyntax)context.Node;
+            if (context.Node is VariableDesignationSyntax node)
+            {
+                switch (node.Parent)
+                {
+                    case ParenthesizedVariableDesignationSyntax _: // parenthesized variable gets analyzed itself
+                    case DeclarationExpressionSyntax d when d.Parent is ArgumentSyntax a && a.Parent is TupleExpressionSyntax: // Analyzed by tuple expression itself
+                        return;
+                }
+
+                AnalyzeVariableDesignation(context, node);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a single variable designation.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        /// <param name="node">
+        /// The variable designation to analyze.
+        /// </param>
+        protected virtual void AnalyzeVariableDesignation(in SyntaxNodeAnalysisContext context, VariableDesignationSyntax node)
+        {
             var semanticModel = context.SemanticModel;
             var compilation = context.Compilation;
 
