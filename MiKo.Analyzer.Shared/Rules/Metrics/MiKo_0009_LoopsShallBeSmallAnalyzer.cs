@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             if (context.Node is DoStatementSyntax node)
             {
-                var lines = node.Statement.CountLines();
+                var lines = Counter.CountLinesOfCode(node.Statement);
 
                 if (lines > MaxLinesOfCode)
                 {
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             if (context.Node is WhileStatementSyntax node)
             {
-                var lines = node.Statement.CountLines();
+                var lines = Counter.CountLinesOfCode(node.Statement);
 
                 if (lines > MaxLinesOfCode)
                 {
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             if (context.Node is ForStatementSyntax node)
             {
-                var lines = node.Statement.CountLines();
+                var lines = Counter.CountLinesOfCode(node.Statement);
 
                 if (lines > MaxLinesOfCode)
                 {
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             if (context.Node is CommonForEachStatementSyntax node)
             {
-                var lines = node.Statement.CountLines();
+                var lines = Counter.CountLinesOfCode(node.Statement);
 
                 if (lines > MaxLinesOfCode)
                 {
