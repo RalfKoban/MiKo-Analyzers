@@ -28,14 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ArgumentSyntax argument)
             {
-                if (argument.Expression is MemberAccessExpressionSyntax expression)
-                {
-                    var updatedExpression = expression.WithExpression(expression.Expression.WithoutTrailingTrivia())
-                                                      .WithOperatorToken(expression.OperatorToken.WithoutTrivia())
-                                                      .WithName(expression.Name.WithoutLeadingTrivia());
-
-                    return argument.WithExpression(updatedExpression);
-                }
+                return argument.PlacedOnSameLine();
             }
 
             return syntax;

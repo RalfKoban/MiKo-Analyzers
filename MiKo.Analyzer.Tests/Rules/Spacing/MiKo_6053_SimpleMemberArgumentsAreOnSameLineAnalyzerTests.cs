@@ -163,6 +163,59 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_as_argument_with_simple_member_train_wreck_as_argument()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public int E { get; }
+
+    public void DoSomething(int i)
+    {
+        var values = new List<int>();
+
+        values.AddRange(DoSomethingElse(A.B.C
+                                           .D.E));
+    }
+
+    private IEnumerable<int> DoSomethingElse(int i) => yield return i;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public int E { get; }
+
+    public void DoSomething(int i)
+    {
+        var values = new List<int>();
+
+        values.AddRange(DoSomethingElse(A.B.C.D.E));
+    }
+
+    private IEnumerable<int> DoSomethingElse(int i) => yield return i;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6053_SimpleMemberArgumentsAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6053_SimpleMemberArgumentsAreOnSameLineAnalyzer();
