@@ -42,6 +42,47 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_lambda_with_maximum_allowed_lines_and_empty_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = () =>
+                     {
+                          ;
+
+                          ;
+
+                          ;
+                     };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_lambda_with_maximum_allowed_lines_and_braces() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = () =>
+                     {
+                         {
+                              ;
+                         }
+                         {
+                              ;
+                         }
+                     };
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_long_expression_tree_lambda_in_query_predicate() => No_issue_is_reported_for(@"
 using System;
 using System.Linq;

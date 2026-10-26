@@ -3,6 +3,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Rules.Metrics;
+
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -26,15 +28,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is LambdaExpressionSyntax lambda)
             {
-                var lines = lambda.Body.CountLines();
+                if (lambda.IsExpressionTree(context.SemanticModel))
+                {
+                    return; // we cannot convert expression trees
+                }
+
+                var lines = Counter.CountLinesOfCode(lambda);
 
                 if (lines > MaxLinesOfCode)
                 {
-                    if (lambda.IsExpressionTree(context.SemanticModel))
-                    {
-                        return; // we cannot convert expression trees
-                    }
-
                     ReportDiagnostics(context, Issue(string.Empty, lambda.Body, lines, MaxLinesOfCode));
                 }
             }
