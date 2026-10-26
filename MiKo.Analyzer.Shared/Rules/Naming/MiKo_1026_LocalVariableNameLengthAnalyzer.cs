@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void AnalyzeTupleExpression(in SyntaxNodeAnalysisContext context, TupleExpressionSyntax node)
         {
-            if (node.Parent is ForEachVariableStatementSyntax)
+            if (node.FirstAncestorWithinMethod<ForEachVariableStatementSyntax>() is ForEachVariableStatementSyntax loop && loop.Variable.Span.Contains(node.Span))
             {
                 return; // covered by MiKo_1027
             }
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void AnalyzeVariableDesignation(in SyntaxNodeAnalysisContext context, VariableDesignationSyntax node)
         {
-            if (node.Parent is DeclarationExpressionSyntax declaration && declaration.Parent is ForEachVariableStatementSyntax)
+            if (node.FirstAncestorWithinMethod<ForEachVariableStatementSyntax>() is ForEachVariableStatementSyntax loop && loop.Variable.Span.Contains(node.Span))
             {
                 return; // covered by MiKo_1027
             }

@@ -184,6 +184,58 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_variable_in_nested_tuple_in_foreach_variable_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach ((int key, (int value, int " + name + @")) in data)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_in_nested_declaration_in_foreach_variable_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach (var (key, (value, " + name + @")) in data)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_in_nested_tuple_in_foreach_variable_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach ((int key, (int value, int " + name + @")) in data)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_in_nested_declaration_in_foreach_variable_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach (var (key, (value, " + name + @")) in data)
+        {
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest()

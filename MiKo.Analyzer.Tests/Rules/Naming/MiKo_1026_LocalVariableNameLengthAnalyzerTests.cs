@@ -197,6 +197,52 @@ public class TestMe
 }
 ");
 
+        [Test] // shall be covered by MiKo_1027
+        public void No_issue_is_reported_for_variable_in_nested_tuple_deconstruction_in_foreach_variable_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach ((int key, (int value, int " + name + @")) in data)
+        {
+        }
+    }
+}
+");
+
+        [Test] // shall be covered by MiKo_1027
+        public void No_issue_is_reported_for_variable_in_nested_variable_designation_in_foreach_variable_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach (var (key, (value, " + name + @")) in data)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_in_foreach_body_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{   
+    public void DoSomething((int, (int, int))[] data)
+    {
+        foreach (var (key, (value, other)) in data)
+        {
+            var (" + name + @", x) = (1, 2);
+        }
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_variable_1_in_tuple_deconstruction_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 using System.Collections.Generic;

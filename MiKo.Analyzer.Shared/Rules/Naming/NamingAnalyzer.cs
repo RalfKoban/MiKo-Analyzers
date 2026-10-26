@@ -648,15 +648,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var argument in node.Arguments)
             {
-                if (argument.Expression is DeclarationExpressionSyntax declaration)
+                switch (argument.Expression)
                 {
-                    var type = argument.GetTypeSymbol(semanticModel);
-
-                    if (ShallAnalyze(type, compilation))
+                    case DeclarationExpressionSyntax declaration:
                     {
-                        var issues = Analyze(declaration, semanticModel, compilation);
+                        var type = argument.GetTypeSymbol(semanticModel);
 
-                        ReportDiagnostics(context, issues);
+                        if (ShallAnalyze(type, compilation))
+                        {
+                            var issues = Analyze(declaration, semanticModel, compilation);
+
+                            ReportDiagnostics(context, issues);
+                        }
+
+                        break;
+                    }
+
+                    case TupleExpressionSyntax nested:
+                    {
+                        AnalyzeTupleExpression(context, nested);
+
+                        break;
                     }
                 }
             }
