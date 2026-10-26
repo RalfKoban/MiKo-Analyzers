@@ -99,6 +99,24 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             return lines.Count;
         }
 
+        internal static int CountLinesOfCode(LambdaExpressionSyntax lambda, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
+        {
+            var nodes = SyntaxNodeCollector.Collect<SyntaxNode>(lambda.Body, syntaxKindToIgnore);
+
+            if (nodes.Count is 0)
+            {
+                return 0;
+            }
+
+            var lines = new HashSet<int>();
+
+            CountLinesOfCode(nodes, lines);
+
+            //// var all = string.Join(Environment.NewLine, lines.OrderBy(_ => _));
+
+            return lines.Count;
+        }
+
         private static void CountLinesOfCode(IReadOnlyList<SyntaxNode> nodes, ISet<int> lines)
         {
             var count = nodes.Count;
