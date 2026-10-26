@@ -1647,9 +1647,13 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsExpressionTree(this SyntaxNode value, SemanticModel semanticModel)
         {
-            if (value is LambdaExpressionSyntax lambda && semanticModel.GetOperation(lambda) is IOperation o && o.Parent is IConversionOperation c && c.Type.IsExpressionTree())
+            // check lambda ancestors to be expression trees as well, to avoid nested lambdas being reported as not being part of an expression tree
+            for (var lambda = value.FirstAncestorOrSelfWithinMethod<LambdaExpressionSyntax>(); lambda != null; lambda = lambda.FirstAncestorWithinMethod<LambdaExpressionSyntax>())
             {
-                return true; // we know for sure that it is an expression tree
+                if (semanticModel.GetOperation(lambda) is IOperation o && o.Parent is IConversionOperation c && c.Type.IsExpressionTree())
+                {
+                    return true; // we know for sure that it is an expression tree
+                }
             }
 
             // we do not know if it is an expression tree, so we have to walk upwards to find one

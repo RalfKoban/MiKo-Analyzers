@@ -366,7 +366,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The specified syntax node if it is of the specified type; otherwise, the first ancestor of the specified type that is within the method, local function, property or event scope, or <see langword="null"/> if no such ancestor exists.
         /// </returns>
-        internal static T FirstAncestorOrSelfWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode => value is T t ? t : value.AncestorsWithinMethods<T>().FirstOrDefault();
+        internal static T FirstAncestorOrSelfWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode => value as T ?? value.FirstAncestorWithinMethod<T>();
 
         /// <summary>
         /// Gets the first child node of the specified syntax node.
