@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -690,14 +689,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (context.Node is VariableDesignationSyntax node)
             {
-                if (node.IsKind(SyntaxKind.SingleVariableDesignation))
+                switch (node.Parent)
                 {
-                    switch (node.Parent)
-                    {
-                        case ParenthesizedVariableDesignationSyntax _: // parenthesized variable gets analyzed itself
-                        case DeclarationExpressionSyntax d when d.Parent is ArgumentSyntax a && a.Parent is TupleExpressionSyntax: // Analyzed by tuple expression itself
-                            return;
-                    }
+                    case ParenthesizedVariableDesignationSyntax _: // parenthesized variable gets analyzed itself
+                    case DeclarationExpressionSyntax d when d.Parent is ArgumentSyntax a && a.Parent is TupleExpressionSyntax: // Analyzed by tuple expression itself
+                        return;
                 }
 
                 AnalyzeVariableDesignation(context, node);
