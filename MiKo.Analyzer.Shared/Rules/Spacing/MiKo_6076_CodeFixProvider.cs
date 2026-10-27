@@ -35,7 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is TypeArgumentListSyntax list)
             {
-                return list.PlacedOnSameLine();
+                return list.PlacedOnSameLine()
+                           .WithTrailingTriviaFrom(list);
             }
 
             return syntax;

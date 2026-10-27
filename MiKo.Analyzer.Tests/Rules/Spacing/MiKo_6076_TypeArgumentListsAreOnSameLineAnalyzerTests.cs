@@ -593,6 +593,41 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_without_breaking_directive_directly_after_type_argument_list()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private List<
+                 int>
+#if true
+    _field;
+#else
+    _other;
+#endif
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private List<int>
+#if true
+    _field;
+#else
+    _other;
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_is_not_changed_when_type_argument_list_contains_preprocessor_directives()
         {
             const string OriginalCode = @"
