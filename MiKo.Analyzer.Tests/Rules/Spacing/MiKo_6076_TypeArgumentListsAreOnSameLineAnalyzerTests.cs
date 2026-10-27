@@ -1,0 +1,348 @@
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+using NUnit.Framework;
+
+using TestHelper;
+
+//// ncrunch: rdi off
+namespace MiKoSolutions.Analyzers.Rules.Spacing
+{
+    [TestFixture]
+    public sealed class MiKo_6076_TypeArgumentListsAreOnSameLineAnalyzerTests : CodeFixVerifier
+    {
+        [Test]
+        public void No_issue_is_reported_when_type_argument_list_is_on_same_line() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_when_type_argument_list_and_nested_type_argument_list_are_on_same_line() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<IEnumerable<int>> GetItems() => new List<IEnumerable<int>>(42);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_opening_token_of_type_argument_list_of_creation_is_on_multiple_lines() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<
+                                            int>(42);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_closing_token_of_type_argument_list_of_creation_is_on_multiple_lines() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int
+                                               >(42);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_opening_token_and_closing_token_of_type_argument_list_of_creation_is_on_multiple_lines() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<
+                                            int
+                                               >(42);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_type_arguments_of_type_argument_list_of_creation_are_on_multiple_lines() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string> GetItems() => new Dictionary<
+                                                            int,
+                                                            string>(42);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_when_all_parts_of_type_argument_list_of_creation_are_on_multiple_lines() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string> GetItems() => new Dictionary
+                                                            <
+                                                                int
+                                                                   ,
+                                                                       string
+                                                                                >(42);
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_when_opening_token_of_type_argument_list_of_creation_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<
+                                            int>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_closing_token_of_type_argument_list_of_creation_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int
+                                               >(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_opening_token_and_closing_token_of_type_argument_list_of_creation_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<
+                                            int
+                                               >(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_type_arguments_of_type_argument_list_of_creation_are_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string> GetItems() => new Dictionary<
+                                                            int,
+                                                            string>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string> GetItems() => new Dictionary<int, string>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_all_parts_of_type_argument_list_of_creation_are_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string> GetItems() => new Dictionary
+                                                            <
+                                                                int
+                                                                   ,
+                                                                       string
+                                                                                >(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string> GetItems() => new Dictionary<int, string>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_part_of_type_argument_list_is_array_and_all_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string[]> GetItems() => new Dictionary
+                                                            <
+                                                                int
+                                                                   ,
+                                                                       string
+                                                                              [
+                                                                                ]
+                                                                                  >(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, string[]> GetItems() => new Dictionary<int, string[]>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_nested_type_argument_list_is_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, List<string>> GetItems() => new Dictionary<
+                                                                int,
+                                                                List<string>>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, List<string>> GetItems() => new Dictionary<int, List<string>>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_nested_type_argument_list_has_parts_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, List<string>> GetItems() => new Dictionary<int, List
+                                                                                <
+                                                                                    string
+                                                                                          >>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, List<string>> GetItems() => new Dictionary<int, List<string>>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_outer_and_nested_type_argument_lists_are_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, List<string>> GetItems() => new Dictionary
+                                                                <
+                                                                    int
+                                                                       ,
+                                                                           List
+                                                                               <
+                                                                                string
+                                                                                      >
+                                                                                       >(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public Dictionary<int, List<string>> GetItems() => new Dictionary<int, List<string>>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        protected override string GetDiagnosticId() => MiKo_6076_TypeArgumentListsAreOnSameLineAnalyzer.Id;
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6076_TypeArgumentListsAreOnSameLineAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6076_CodeFixProvider();
+    }
+}

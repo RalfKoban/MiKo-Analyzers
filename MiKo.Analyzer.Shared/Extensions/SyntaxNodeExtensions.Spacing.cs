@@ -256,6 +256,25 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new syntax list with all its items and separators placed on the same line.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="values">
+        /// The syntax list to modify.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax nodes that contains all items and separators placed on the same line.
+        /// </returns>
+        internal static SyntaxList<T> PlacedOnSameLine<T>(this in SyntaxList<T> values) where T : SyntaxNode
+        {
+            var updatedItems = values.Select(_ => _.PlacedOnSameLine());
+
+            return SyntaxFactory.List(updatedItems);
+        }
+
+        /// <summary>
         /// Creates a new syntax node with all its components placed on the same line.
         /// </summary>
         /// <typeparam name="T">
@@ -274,6 +293,8 @@ namespace MiKoSolutions.Analyzers
                 case null: return null;
                 case ArgumentListSyntax argumentList: return argumentList.PlacedOnSameLine() as T;
                 case ArgumentSyntax argument: return argument.PlacedOnSameLine() as T;
+                case ArrayRankSpecifierSyntax rank: return rank.PlacedOnSameLine() as T;
+                case ArrayTypeSyntax arrayType: return arrayType.PlacedOnSameLine() as T;
                 case BinaryExpressionSyntax binary: return binary.PlacedOnSameLine() as T;
                 case BracketedArgumentListSyntax argumentList: return argumentList.PlacedOnSameLine() as T;
                 case BracketedParameterListSyntax parameterList: return parameterList.PlacedOnSameLine() as T;
@@ -328,6 +349,33 @@ namespace MiKoSolutions.Analyzers
                                                                                                    .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
                                                                                                    .WithArguments(value.Arguments.PlacedOnSameLine())
                                                                                                    .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new array type with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The array type to modify.
+        /// </param>
+        /// <returns>
+        /// A new array type with all its components placed on the same line.
+        /// </returns>
+        internal static ArrayTypeSyntax PlacedOnSameLine(this ArrayTypeSyntax value) => value.WithoutTrivia()
+                                                                                             .WithElementType(value.ElementType.PlacedOnSameLine())
+                                                                                             .WithRankSpecifiers(value.RankSpecifiers.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new array rank specifier with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The array rank specifier to modify.
+        /// </param>
+        /// <returns>
+        /// A new array rank specifier with all its components placed on the same line.
+        /// </returns>
+        internal static ArrayRankSpecifierSyntax PlacedOnSameLine(this ArrayRankSpecifierSyntax value) => value.WithoutTrivia()
+                                                                                                               .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                               .WithSizes(value.Sizes.PlacedOnSameLine())
+                                                                                                               .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new binary expression with all its components placed on the same line.
