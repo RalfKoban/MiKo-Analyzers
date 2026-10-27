@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        public int MaxLinesOfCode { get; set; } = 5;
+        public int MaxLinesOfCode { get; set; } = 7;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
