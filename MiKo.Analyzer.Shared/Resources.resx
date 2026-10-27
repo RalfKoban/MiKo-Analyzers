@@ -6692,7 +6692,7 @@ This makes the code clearer and easier to follow.</value>
     <value>Align type parameter constraint indented below parameter list</value>
   </data>
   <data name="MiKo_6058_Title" xml:space="preserve">
-    <value>Indent type parameter constraint clauses below parameter list</value>
+    <value>Place type parameter constraint clauses indented below parameter list</value>
   </data>
   <data name="MiKo_6059_CodeFixTitle" xml:space="preserve">
     <value>Align condition outdented</value>
@@ -6704,7 +6704,7 @@ This makes the code clearer and easier to follow.</value>
     <value>Align condition outdented</value>
   </data>
   <data name="MiKo_6059_Title" xml:space="preserve">
-    <value>Position multi-line conditions outdented below associated calls</value>
+    <value>Place multi-line conditions outdented below associated calls</value>
   </data>
   <data name="MiKo_6060_CodeFixTitle" xml:space="preserve">
     <value>Place switch case label on single line</value>

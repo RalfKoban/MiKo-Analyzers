@@ -19271,7 +19271,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indent type parameter constraint clauses below parameter list.
+        ///   Looks up a localized string similar to Place type parameter constraint clauses indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_Title {
             get {
@@ -19307,7 +19307,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Position multi-line conditions outdented below associated calls.
+        ///   Looks up a localized string similar to Place multi-line conditions outdented below associated calls.
         /// </summary>
         internal static string MiKo_6059_Title {
             get {
