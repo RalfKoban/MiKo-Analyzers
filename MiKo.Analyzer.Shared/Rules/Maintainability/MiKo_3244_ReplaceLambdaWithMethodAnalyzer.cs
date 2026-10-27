@@ -24,15 +24,46 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeLambda, SyntaxKind.ParenthesizedLambdaExpression);
         }
 
+        private static bool ShallAnalyze(in SyntaxNodeAnalysisContext context, LambdaExpressionSyntax lambda)
+        {
+            switch (lambda.Body)
+            {
+                case ObjectCreationExpressionSyntax _:
+                case ImplicitObjectCreationExpressionSyntax _:
+                case AnonymousObjectCreationExpressionSyntax _:
+                    return false; // do not report object creations
+
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                    return false; // do not report direct returns
+            }
+
+            if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
+            {
+                if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax invocation)
+                {
+                    var identifierName = invocation.GetIdentifierName();
+
+                    switch (invocation.GetName())
+                    {
+                        case "Multiple" when identifierName is "Assert":
+                        case "MultipleAsync" when identifierName is "Assert":
+                            return false; // do not report assertions
+                    }
+                }
+            }
+
+            if (lambda.IsExpressionTree(context.SemanticModel))
+            {
+                return false; // we cannot convert expression trees
+            }
+
+            return true;
+        }
+
         private void AnalyzeLambda(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is LambdaExpressionSyntax lambda)
+            if (context.Node is LambdaExpressionSyntax lambda && ShallAnalyze(context, lambda))
             {
-                if (lambda.IsExpressionTree(context.SemanticModel))
-                {
-                    return; // we cannot convert expression trees
-                }
-
                 var lines = Counter.CountLinesOfCode(lambda);
 
                 if (lines > MaxLinesOfCode)
