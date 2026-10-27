@@ -275,9 +275,12 @@ namespace MiKoSolutions.Analyzers
                 case ArgumentListSyntax argumentList: return argumentList.PlacedOnSameLine() as T;
                 case ArgumentSyntax argument: return argument.PlacedOnSameLine() as T;
                 case BinaryExpressionSyntax binary: return binary.PlacedOnSameLine() as T;
+                case BracketedArgumentListSyntax argumentList: return argumentList.PlacedOnSameLine() as T;
+                case BracketedParameterListSyntax parameterList: return parameterList.PlacedOnSameLine() as T;
                 case CasePatternSwitchLabelSyntax patternLabel: return patternLabel.PlacedOnSameLine() as T;
                 case CaseSwitchLabelSyntax label: return label.PlacedOnSameLine() as T;
                 case ConditionalExpressionSyntax conditional: return conditional.PlacedOnSameLine() as T;
+                case ElementAccessExpressionSyntax access: return access.PlacedOnSameLine() as T;
                 case IfStatementSyntax ifStatement: return ifStatement.PlacedOnSameLine() as T;
                 case InvocationExpressionSyntax invocation: return invocation.PlacedOnSameLine() as T;
                 case IsPatternExpressionSyntax pattern: return pattern.PlacedOnSameLine() as T;
@@ -356,6 +359,34 @@ namespace MiKoSolutions.Analyzers
                                                                                                                        .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
         /// <summary>
+        /// Creates a new bracketed argument list with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The bracketed argument list to modify.
+        /// </param>
+        /// <returns>
+        /// A new bracketed argument list with all its components placed on the same line.
+        /// </returns>
+        internal static BracketedArgumentListSyntax PlacedOnSameLine(this BracketedArgumentListSyntax value) => value.WithoutTrivia()
+                                                                                                                     .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                                     .WithArguments(value.Arguments.PlacedOnSameLine())
+                                                                                                                     .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new bracketed parameter list with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The bracketed parameter list to modify.
+        /// </param>
+        /// <returns>
+        /// A new bracketed parameter list with all its components placed on the same line.
+        /// </returns>
+        internal static BracketedParameterListSyntax PlacedOnSameLine(this BracketedParameterListSyntax value) => value.WithoutTrivia()
+                                                                                                                       .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                                       .WithParameters(value.Parameters.PlacedOnSameLine())
+                                                                                                                       .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+
+        /// <summary>
         /// Creates a new case switch label with all its components placed on the same line.
         /// </summary>
         /// <param name="value">
@@ -409,6 +440,19 @@ namespace MiKoSolutions.Analyzers
         internal static DeclarationPatternSyntax PlacedOnSameLine(this DeclarationPatternSyntax value) => value.WithoutTrivia()
                                                                                                                .WithType(value.Type.WithTrailingSpace())
                                                                                                                .WithDesignation(value.Designation.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new element access with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The element access to modify.
+        /// </param>
+        /// <returns>
+        /// A new element access with all its components placed on the same line.
+        /// </returns>
+        internal static ElementAccessExpressionSyntax PlacedOnSameLine(this ElementAccessExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                                         .WithExpression(value.Expression.PlacedOnSameLine())
+                                                                                                                         .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new if statement with all its components placed on the same line.

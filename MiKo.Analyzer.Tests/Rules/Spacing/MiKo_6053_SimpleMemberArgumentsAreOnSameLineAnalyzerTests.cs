@@ -164,7 +164,39 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_as_argument_with_simple_member_train_wreck_as_argument()
+        public void Code_gets_fixed_for_method_with_simple_member_as_2nd_argument_when_name_and_operator_are_on_other_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(int i, int j)
+    {
+        DoSomething(
+                42,
+                int
+                   .
+                    MaxValue);
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(int i, int j)
+    {
+        DoSomething(
+                42,
+                int.MaxValue);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_simple_member_train_wreck_as_argument()
         {
             const string OriginalCode = @"
 using System;
@@ -178,7 +210,7 @@ public class TestMe
     public TestMe D { get; }
     public int E { get; }
 
-    public void DoSomething(int i)
+    public void DoSomething()
     {
         var values = new List<int>();
 
@@ -202,11 +234,55 @@ public class TestMe
     public TestMe D { get; }
     public int E { get; }
 
-    public void DoSomething(int i)
+    public void DoSomething()
     {
         var values = new List<int>();
 
         values.AddRange(DoSomethingElse(A.B.C.D.E));
+    }
+
+    private IEnumerable<int> DoSomethingElse(int i) => yield return i;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_element_access_as_argument()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> Items { get; }
+    public int Number { get; }
+
+    public void DoSomething(int i)
+    {
+        DoSomething(Items
+                       [Items.Count - 1]
+                           .Number);
+    }
+
+    private IEnumerable<int> DoSomethingElse(int i) => yield return i;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> Items { get; }
+    public int Number { get; }
+
+    public void DoSomething(int i)
+    {
+        DoSomething(Items[Items.Count - 1].Number);
     }
 
     private IEnumerable<int> DoSomethingElse(int i) => yield return i;
