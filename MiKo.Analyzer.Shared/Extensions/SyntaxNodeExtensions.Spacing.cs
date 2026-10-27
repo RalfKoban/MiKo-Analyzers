@@ -307,6 +307,7 @@ namespace MiKoSolutions.Analyzers
                 case IsPatternExpressionSyntax pattern: return pattern.PlacedOnSameLine() as T;
                 case MemberAccessExpressionSyntax maes: return maes.PlacedOnSameLine() as T;
                 case NameSyntax name: return name.PlacedOnSameLine() as T;
+                case NullableTypeSyntax nullable: return nullable.PlacedOnSameLine() as T;
                 case ObjectCreationExpressionSyntax creation: return creation.PlacedOnSameLine() as T;
                 case PatternSyntax pattern: return pattern.PlacedOnSameLine() as T;
                 case PropertyPatternClauseSyntax clause: return clause.PlacedOnSameLine() as T;
@@ -314,6 +315,9 @@ namespace MiKoSolutions.Analyzers
                 case SubpatternSyntax subpattern: return subpattern.PlacedOnSameLine() as T;
                 case SwitchExpressionArmSyntax arm: return arm.PlacedOnSameLine() as T;
                 case ThrowExpressionSyntax throwExpression: return throwExpression.PlacedOnSameLine() as T;
+                case TupleExpressionSyntax tuple: return tuple.PlacedOnSameLine() as T;
+                case TupleElementSyntax tuple: return tuple.PlacedOnSameLine() as T;
+                case TupleTypeSyntax tuple: return tuple.PlacedOnSameLine() as T;
                 case TypeArgumentListSyntax typeArgumentList: return typeArgumentList.PlacedOnSameLine() as T;
                 case WhenClauseSyntax clause: return clause.PlacedOnSameLine() as T;
                 default:
@@ -583,12 +587,33 @@ namespace MiKoSolutions.Analyzers
                     return simpleName.WithoutTrivia();
                 }
 
+                case QualifiedNameSyntax qualifiedName:
+                {
+                    return qualifiedName.WithoutTrivia()
+                                        .WithLeft(qualifiedName.Left.PlacedOnSameLine())
+                                        .WithDotToken(qualifiedName.DotToken.WithoutTrivia())
+                                        .WithRight(qualifiedName.Right.PlacedOnSameLine());
+                }
+
                 default:
                 {
                     return value.WithoutTrivia();
                 }
             }
         }
+
+        /// <summary>
+        /// Creates a new nullable type with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The nullable type to modify.
+        /// </param>
+        /// <returns>
+        /// A new nullable type with all its components placed on the same line.
+        /// </returns>
+        internal static NullableTypeSyntax PlacedOnSameLine(this NullableTypeSyntax value) => value.WithoutTrivia()
+                                                                                                   .WithElementType(value.ElementType.PlacedOnSameLine())
+                                                                                                   .WithQuestionToken(value.QuestionToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new object creation expression with all its components placed on the same line.
@@ -650,7 +675,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static RecursivePatternSyntax PlacedOnSameLine(this RecursivePatternSyntax value)
         {
-            var updatedType = value.Type?.PlacedOnSameLine();
+            var updatedType = value.Type.PlacedOnSameLine();
             var updatedPropertyPatternClause = value.PropertyPatternClause?.PlacedOnSameLine();
             var updatedDesignation = value.Designation?.PlacedOnSameLine();
 
@@ -753,6 +778,47 @@ namespace MiKoSolutions.Analyzers
                                                                                                          .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
+        /// Creates a new tuple expression with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The tuple expression to modify.
+        /// </param>
+        /// <returns>
+        /// A new tuple expression with all its components placed on the same line.
+        /// </returns>
+        internal static TupleExpressionSyntax PlacedOnSameLine(this TupleExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                         .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                                         .WithArguments(value.Arguments.PlacedOnSameLine())
+                                                                                                         .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new tuple element with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The tuple element to modify.
+        /// </param>
+        /// <returns>
+        /// A new tuple element with all its components placed on the same line.
+        /// </returns>
+        internal static TupleElementSyntax PlacedOnSameLine(this TupleElementSyntax value) => value.WithoutTrivia()
+                                                                                                   .WithType(value.Type.PlacedOnSameLine())
+                                                                                                   .WithIdentifier(value.Identifier.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new tuple type with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The tuple type to modify.
+        /// </param>
+        /// <returns>
+        /// A new tuple type with all its components placed on the same line.
+        /// </returns>
+        internal static TupleTypeSyntax PlacedOnSameLine(this TupleTypeSyntax value) => value.WithoutTrivia()
+                                                                                             .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                             .WithElements(value.Elements.PlacedOnSameLine())
+                                                                                             .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+
+        /// <summary>
         /// Creates a new type argument list with all its components placed on the same line.
         /// </summary>
         /// <param name="value">
@@ -761,10 +827,18 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new type argument list with all its components placed on the same line.
         /// </returns>
-        internal static TypeArgumentListSyntax PlacedOnSameLine(this TypeArgumentListSyntax value) => value.WithoutTrivia()
-                                                                                                           .WithArguments(value.Arguments.PlacedOnSameLine())
-                                                                                                           .WithGreaterThanToken(value.GreaterThanToken.WithoutTrivia())
-                                                                                                           .WithLessThanToken(value.LessThanToken.WithoutTrivia());
+        internal static TypeArgumentListSyntax PlacedOnSameLine(this TypeArgumentListSyntax value)
+        {
+            if (value.ContainsDirectives)
+            {
+                return value; // we can fix it only when it has no directives
+            }
+
+            return value.WithoutTrivia()
+                        .WithGreaterThanToken(value.GreaterThanToken.WithoutTrivia())
+                        .WithArguments(value.Arguments.PlacedOnSameLine())
+                        .WithLessThanToken(value.LessThanToken.WithoutTrivia());
+        }
 
         /// <summary>
         /// Creates a new unary pattern with all its components placed on the same line.

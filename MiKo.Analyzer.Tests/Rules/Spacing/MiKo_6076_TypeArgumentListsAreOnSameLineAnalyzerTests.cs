@@ -339,6 +339,178 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_when_qualified_name_type_argument_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<System.String> GetItems() => new List<System.
+                                                            String>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<System.String> GetItems() => new List<System.String>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_tuple_type_argument_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<(int, string)> GetItems() => new List<(int,
+                                                       string)>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<(int, string)> GetItems() => new List<(int, string)>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_nullable_type_argument_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int?> GetItems() => new List<int
+                                                ?>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int?> GetItems() => new List<int?>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test] // intended behavior to remove comments
+        public void Code_gets_fixed_with_losing_comment_inside_type_argument_list()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<
+                                            /* comment */ int>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test] // intended behavior to remove comments
+        public void Code_gets_fixed_with_losing_comment_when_type_argument_list_contains_single_line_comment_before_type()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<
+                                            // comment
+                                            int>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test] // intended behavior to remove comments
+        public void Code_gets_fixed_with_losing_comment_when_type_argument_list_contains_single_line_comment_after_type()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int // comment
+                                            >(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> GetItems() => new List<int>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_is_not_changed_when_type_argument_list_contains_preprocessor_directives()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object GetItems() => new Dictionary<
+#if NETSTANDARD
+                                                int,
+#else
+                                                long,
+#endif
+                                                string>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, OriginalCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6076_TypeArgumentListsAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6076_TypeArgumentListsAreOnSameLineAnalyzer();
