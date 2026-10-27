@@ -491,6 +491,108 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_when_named_tuple_type_argument_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<(int count, string text)> GetItems() => new List<(int count,
+                                                                  string text)>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<(int count, string text)> GetItems() => new List<(int count, string text)>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_named_tuple_element_type_and_name_are_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<(int count, string text)> GetItems() => new List<(int
+                                                                  count, string
+                                                                                text)>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<(int count, string text)> GetItems() => new List<(int count, string text)>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_alias_qualified_name_type_argument_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<global::System.String> GetItems() => new List<global::
+                                                                      System.String>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<global::System.String> GetItems() => new List<global::System.String>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_alias_qualified_name_parts_are_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<global::System.String> GetItems() => new List<global
+                                                                    ::
+                                                                      System.String>(42);
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<global::System.String> GetItems() => new List<global::System.String>(42);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_is_not_changed_when_type_argument_list_contains_preprocessor_directives()
         {
             const string OriginalCode = @"

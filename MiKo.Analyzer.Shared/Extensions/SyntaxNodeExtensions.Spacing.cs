@@ -595,6 +595,14 @@ namespace MiKoSolutions.Analyzers
                                         .WithRight(qualifiedName.Right.PlacedOnSameLine());
                 }
 
+                case AliasQualifiedNameSyntax alias:
+                {
+                    return alias.WithoutTrivia()
+                                .WithAlias(alias.Alias.PlacedOnSameLine())
+                                .WithColonColonToken(alias.ColonColonToken.WithoutTrivia())
+                                .WithName(alias.Name.PlacedOnSameLine());
+                }
+
                 default:
                 {
                     return value.WithoutTrivia();
@@ -802,7 +810,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TupleElementSyntax PlacedOnSameLine(this TupleElementSyntax value) => value.WithoutTrivia()
                                                                                                    .WithType(value.Type.PlacedOnSameLine())
-                                                                                                   .WithIdentifier(value.Identifier.WithoutTrivia());
+                                                                                                   .WithIdentifier(value.Identifier.WithoutTrivia().WithLeadingSpace());
 
         /// <summary>
         /// Creates a new tuple type with all its components placed on the same line.
