@@ -28,7 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ArgumentSyntax argument)
             {
-                return argument.PlacedOnSameLine();
+                var updatedArgument = argument.PlacedOnSameLine();
+
+                return updatedArgument.WithTriviaFrom(argument);
             }
 
             return syntax;
