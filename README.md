@@ -619,8 +619,8 @@ The following tables list all the 585 rules that are currently provided by the a
 |[MiKo_6055](/Documentation/MiKo_6055.md)|Surround assignment statements with blank lines|&#x2713;|&#x2713;|
 |[MiKo_6056](/Documentation/MiKo_6056.md)|Place brackets of collection expressions at the same position as collection initializer braces|&#x2713;|&#x2713;|
 |[MiKo_6057](/Documentation/MiKo_6057.md)|Align type parameter constraint clauses vertically|&#x2713;|&#x2713;|
-|[MiKo_6058](/Documentation/MiKo_6058.md)|Indent type parameter constraint clauses below parameter list|&#x2713;|&#x2713;|
-|[MiKo_6059](/Documentation/MiKo_6059.md)|Position multi-line conditions outdented below associated calls|&#x2713;|&#x2713;|
+|[MiKo_6058](/Documentation/MiKo_6058.md)|Place type parameter constraint clauses indented below parameter list|&#x2713;|&#x2713;|
+|[MiKo_6059](/Documentation/MiKo_6059.md)|Place multi-line conditions outdented below associated calls|&#x2713;|&#x2713;|
 |[MiKo_6060](/Documentation/MiKo_6060.md)|Place switch case labels on same line|&#x2713;|&#x2713;|
 |[MiKo_6061](/Documentation/MiKo_6061.md)|Place switch expression arms on same line|&#x2713;|&#x2713;|
 |[MiKo_6062](/Documentation/MiKo_6062.md)|Indent values in element initializers correctly|&#x2713;|&#x2713;|
