@@ -24,39 +24,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeLambda, SyntaxKind.ParenthesizedLambdaExpression);
         }
 
+        private static bool ShallAnalyze(in SyntaxNodeAnalysisContext context, LambdaExpressionSyntax lambda)
+        {
+            switch (lambda.Body)
+            {
+                case ObjectCreationExpressionSyntax _:
+                case ImplicitObjectCreationExpressionSyntax _:
+                    return false; // do not report object creations
+
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                    return false; // do not report direct returns
+            }
+
+            if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
+            {
+                var invocation = lambda.FirstAncestorWithinMethod<InvocationExpressionSyntax>();
+                var identifierName = invocation.GetIdentifierName();
+
+                switch (invocation.GetName())
+                {
+                    case "Multiple" when identifierName is "Assert":
+                    case "MultipleAsync" when identifierName is "Assert":
+                        return false; // do not report assertions
+                }
+            }
+
+            if (lambda.IsExpressionTree(context.SemanticModel))
+            {
+                return false; // we cannot convert expression trees
+            }
+
+            return true;
+        }
+
         private void AnalyzeLambda(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is LambdaExpressionSyntax lambda)
+            if (context.Node is LambdaExpressionSyntax lambda && ShallAnalyze(context, lambda))
             {
-                switch (lambda.Body)
-                {
-                    case ObjectCreationExpressionSyntax _:
-                    case ImplicitObjectCreationExpressionSyntax _:
-                        return; // do not report object creations
-
-                    case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
-                        return; // do not report direct returns
-                }
-
-                if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
-                {
-                    var invocation = lambda.FirstAncestorWithinMethod<InvocationExpressionSyntax>();
-                    var identifierName = invocation.GetIdentifierName();
-                    var methodName = invocation.GetName();
-
-                    switch (methodName)
-                    {
-                        case "Multiple" when identifierName is "Assert":
-                        case "MultipleAsync" when identifierName is "Assert":
-                            return; // do not report assertions
-                    }
-                }
-
-                if (lambda.IsExpressionTree(context.SemanticModel))
-                {
-                    return; // we cannot convert expression trees
-                }
-
                 var lines = Counter.CountLinesOfCode(lambda);
 
                 if (lines > MaxLinesOfCode)
