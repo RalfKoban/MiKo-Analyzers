@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case ObjectCreationExpressionSyntax _:
                 case ImplicitObjectCreationExpressionSyntax _:
+                case AnonymousObjectCreationExpressionSyntax _:
                     return false; // do not report object creations
 
                 case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
@@ -38,14 +39,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
             {
-                var invocation = lambda.FirstAncestorWithinMethod<InvocationExpressionSyntax>();
-                var identifierName = invocation.GetIdentifierName();
-
-                switch (invocation.GetName())
+                if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax invocation)
                 {
-                    case "Multiple" when identifierName is "Assert":
-                    case "MultipleAsync" when identifierName is "Assert":
-                        return false; // do not report assertions
+                    var identifierName = invocation.GetIdentifierName();
+
+                    switch (invocation.GetName())
+                    {
+                        case "Multiple" when identifierName is "Assert":
+                        case "MultipleAsync" when identifierName is "Assert":
+                            return false; // do not report assertions
+                    }
                 }
             }
 
