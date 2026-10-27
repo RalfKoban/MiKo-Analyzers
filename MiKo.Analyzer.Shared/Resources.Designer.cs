@@ -19893,5 +19893,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6075_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place type argument list on single line.
+        /// </summary>
+        internal static string MiKo_6076_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6076_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type argument lists that span multiple lines are more difficult to read. Keep type argument lists on a single line to make the code easier to read and follow..
+        /// </summary>
+        internal static string MiKo_6076_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6076_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place type argument list on single line.
+        /// </summary>
+        internal static string MiKo_6076_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6076_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place type argument lists on single line.
+        /// </summary>
+        internal static string MiKo_6076_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6076_Title", resourceCulture);
+            }
+        }
     }
 }
