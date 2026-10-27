@@ -28,6 +28,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is LambdaExpressionSyntax lambda)
             {
+                switch (lambda.Body)
+                {
+                    case ObjectCreationExpressionSyntax _:
+                    case ImplicitObjectCreationExpressionSyntax _:
+                        return; // do not report object creations
+
+                    case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                        return; // do not report direct returns
+                }
+
+                if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
+                {
+                    var invocation = lambda.FirstAncestorWithinMethod<InvocationExpressionSyntax>();
+                    var identifierName = invocation.GetIdentifierName();
+                    var methodName = invocation.GetName();
+
+                    switch (methodName)
+                    {
+                        case "Multiple" when identifierName is "Assert":
+                        case "MultipleAsync" when identifierName is "Assert":
+                            return; // do not report assertions
+                    }
+                }
+
                 if (lambda.IsExpressionTree(context.SemanticModel))
                 {
                     return; // we cannot convert expression trees

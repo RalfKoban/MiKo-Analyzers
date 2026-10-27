@@ -226,6 +226,143 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_long_lambda_returning_object_creation() => No_issue_is_reported_for(@"
+using System;
+
+public class Item
+{
+    public int A { get; set; }
+    public int B { get; set; }
+    public int C { get; set; }
+    public int D { get; set; }
+    public int E { get; set; }
+    public int F { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, Item> x = i => new Item
+                                     {
+                                         A = i,
+                                         B = i,
+                                         C = i,
+                                         D = i,
+                                         E = i,
+                                         F = i,
+                                     };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_long_lambda_with_block_returning_object_creation() => No_issue_is_reported_for(@"
+using System;
+
+public class Item
+{
+    public int A { get; set; }
+    public int B { get; set; }
+    public int C { get; set; }
+    public int D { get; set; }
+    public int E { get; set; }
+    public int F { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, Item> x = i =>
+                                {
+                                    return new Item
+                                               {
+                                                   A = i,
+                                                   B = i,
+                                                   C = i,
+                                                   D = i,
+                                                   E = i,
+                                                   F = i,
+                                               };
+                                };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_long_lambda_returning_target_typed_object_creation() => No_issue_is_reported_for(@"
+using System;
+
+public class Item
+{
+    public int A { get; set; }
+    public int B { get; set; }
+    public int C { get; set; }
+    public int D { get; set; }
+    public int E { get; set; }
+    public int F { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, Item> x = i => new()
+                                     {
+                                         A = i,
+                                         B = i,
+                                         C = i,
+                                         D = i,
+                                         E = i,
+                                         F = i,
+                                     };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_with_Assert_Multiple_lambda_above_maximum_allowed_lines() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        Assert.Multiple(() =>
+                             {
+                                  ;
+                                  ;
+                                  ;
+                                  ;
+                             });
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_with_Assert_MultipleAsync_lambda_above_maximum_allowed_lines() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public Task DoSomething() => Assert.MultipleAsync(() =>
+                                                           {
+                                                                ;
+                                                                ;
+                                                                ;
+                                                                ;
+                                                           });
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_lambda_above_maximum_allowed_lines() => An_issue_is_reported_for(@"
 using System;
 
