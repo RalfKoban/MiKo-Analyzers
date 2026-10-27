@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
+            // TODO RKN: Move this into SyntaxNodeExtensions as method 'PlacedOnSameLine' ?
             if (syntax is AssignmentExpressionSyntax assignment)
             {
                 return assignment.WithLeft(assignment.Left.WithoutTrailingTrivia())
@@ -45,6 +46,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                  .WithRight(assignment.Right.WithoutLeadingTrivia());
             }
 
+            return GetUpdatedSyntaxWithEqualsValueClause(syntax);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxWithEqualsValueClause(SyntaxNode syntax)
+        {
             var clause = GetEqualsValueClause(syntax);
 
             var updatedClause = clause.WithEqualsToken(clause.EqualsToken.WithoutTrivia())
@@ -55,12 +61,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             // move comment to the end if it is a leading one
             if (syntax is StatementSyntax || syntax is MemberDeclarationSyntax)
             {
-                var leadingComment = clause.FindSyntaxNodeWithLeadingComment()
+                var leadingComments = clause.FindSyntaxNodeWithLeadingComment()
                                            .GetLeadingComments();
 
-                if (leadingComment.Length > 0)
+                if (leadingComments.Length > 0)
                 {
-                    var comment = SyntaxFactory.Comment(Constants.Comments.CommentExterior + Constants.SingleSpace + leadingComment.ConcatenatedWith(Constants.SingleSpace));
+                    var comment = SyntaxFactory.Comment(Constants.Comments.CommentExterior + Constants.SingleSpace + leadingComments.ConcatenatedWith(Constants.SingleSpace));
 
                     updatedSyntax = updatedSyntax.WithTrailingTrivia(SyntaxFactory.Space, comment, SyntaxFactory.CarriageReturnLineFeed);
                 }
@@ -85,15 +91,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var expression = clause.Value;
 
-#if VS2022 || VS2026
-            // TODO RKN: Update for SyntaxKind.CollectionExpression after switching to Roslyn 4.7.0
-            if (expression is CollectionExpressionSyntax collectionExpression)
+            switch (expression)
             {
-                return collectionExpression.WithOpenBracketToken(collectionExpression.OpenBracketToken.WithoutLeadingTrivia().WithLeadingSpace());
-            }
-#endif
+                case BinaryExpressionSyntax binary:
+                    return binary.PlacedOnSameLine().WithLeadingSpace();
 
-            return expression.WithLeadingSpace();
+#if VS2022 || VS2026
+                case CollectionExpressionSyntax collectionExpression:
+                    return collectionExpression.WithOpenBracketToken(collectionExpression.OpenBracketToken.WithoutLeadingTrivia().WithLeadingSpace());
+#endif
+                case InvocationExpressionSyntax invocation:
+                    return invocation.WithLeadingSpace();
+
+                default:
+                    return expression.WithLeadingSpace();
+            }
         }
     }
 }

@@ -674,6 +674,182 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_as_type_is_on_different_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x =
+                o
+                  as
+                     TestMe;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o as TestMe;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_as_type_on_property_is_on_different_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x =
+                testMe.Value
+                             as
+                                TestMe;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x = testMe.Value as TestMe;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_call_chain_starting_on_same_line_as_assignment() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x = Enumerable.Empty<int>()
+                          .OrderBy(_ => _)
+                          .ThenBy(_ => _)
+                          .ToList();
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_call_chain_starting_on_line_after_assignment()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x =
+                Enumerable.Empty<int>()
+                          .OrderBy(_ => _)
+                          .ThenBy(_ => _)
+                          .ToList();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x = Enumerable.Empty<int>()
+                          .OrderBy(_ => _)
+                          .ThenBy(_ => _)
+                          .ToList();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_call_chain_with_assignment_on_other_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x
+              =
+                Enumerable.Empty<int>()
+                          .OrderBy(_ => _)
+                          .ThenBy(_ => _)
+                          .ToList();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object Value { get; set; }
+
+    public void DoSomething(TestMe testMe)
+    {
+        var x = Enumerable.Empty<int>()
+                          .OrderBy(_ => _)
+                          .ThenBy(_ => _)
+                          .ToList();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6041_AssignmentsAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6041_AssignmentsAreOnSameLineAnalyzer();
