@@ -39,14 +39,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(ExpressionSyntax expression)
         {
-            var identifierName = expression.GetStartingIdentifierName();
+            if (expression is AwaitExpressionSyntax awaitedExpression)
+            {
+                expression = awaitedExpression.Expression;
+            }
 
-            return Constants.Names.AssertionTypes.Contains(identifierName);
+            var identifierName = expression.GetIdentifierName();
+
+            if (Constants.Names.AssertionTypes.Contains(identifierName))
+            {
+                var name = expression.GetName();
+
+                return name.Contains("Multiple") is false;
+            }
+
+            return false;
         }
 
         private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is MethodDeclarationSyntax method && HasIssue(method) && method.IsTestMethod() is false)
+            if (context.Node is MethodDeclarationSyntax method && HasIssue(method) && method.IsTestRelatedMethod() is false)
             {
                 ReportDiagnostics(context, Issue(method));
             }

@@ -58,11 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var method = (MethodDeclarationSyntax)context.Node;
 
-            if (method.IsTestMethod()
-             || method.IsTestSetUpMethod()
-             || method.IsTestTearDownMethod()
-             || method.IsTestOneTimeSetUpMethod()
-             || method.IsTestOneTimeTearDownMethod())
+            if (method.IsTestRelatedMethod())
             {
                 // ignore tests
                 return;
