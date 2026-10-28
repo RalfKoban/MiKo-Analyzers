@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is AssignmentExpressionSyntax assignment)
             {
                 return assignment.WithLeft(assignment.Left.WithoutTrailingTrivia())
-                                 .WithOperatorToken(assignment.OperatorToken.WithLeadingAndTrailingSpace())
+                                 .WithOperatorToken(assignment.OperatorToken.WithSurroundingSpace())
                                  .WithRight(assignment.Right.WithoutLeadingTrivia());
             }
 

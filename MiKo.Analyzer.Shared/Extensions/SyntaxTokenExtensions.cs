@@ -825,18 +825,6 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
-        /// Creates a new syntax token with a space as both leading and trailing trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with a space as leading and trailing trivia.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingAndTrailingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
-
-        /// <summary>
         /// Creates a new syntax token with a leading empty line.
         /// </summary>
         /// <param name="value">
@@ -910,6 +898,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token with a space as leading trivia.
         /// </returns>
+        /// <seealso cref="WithSurroundingSpace"/>
+        /// <seealso cref="WithTrailingSpace"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingSpace(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
@@ -1066,6 +1056,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token with a space as leading and trailing trivia.
         /// </returns>
+        /// <seealso cref="WithLeadingSpace"/>
+        /// <seealso cref="WithTrailingSpace"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithSurroundingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
 
@@ -1132,6 +1124,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token with a trailing space.
         /// </returns>
+        /// <seealso cref="WithLeadingSpace"/>
+        /// <seealso cref="WithSurroundingSpace"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTrailingSpace(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 

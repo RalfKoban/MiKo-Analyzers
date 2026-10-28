@@ -522,7 +522,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static BinaryExpressionSyntax PlacedOnSameLine(this BinaryExpressionSyntax value) => value?.WithoutTrivia()
                                                                                                             .WithLeft(value.Left.PlacedOnSameLine())
-                                                                                                            .WithOperatorToken(value.OperatorToken.WithLeadingAndTrailingSpace())
+                                                                                                            .WithOperatorToken(value.OperatorToken.WithSurroundingSpace())
                                                                                                             .WithRight(value.Right.PlacedOnSameLine());
 
         /// <summary>
@@ -593,9 +593,9 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static ConditionalExpressionSyntax PlacedOnSameLine(this ConditionalExpressionSyntax value) => value?.WithoutTrivia()
                                                                                                                       .WithCondition(value.Condition.PlacedOnSameLine().WithoutTrivia())
-                                                                                                                      .WithQuestionToken(value.QuestionToken.WithLeadingAndTrailingSpace())
+                                                                                                                      .WithQuestionToken(value.QuestionToken.WithSurroundingSpace())
                                                                                                                       .WithWhenTrue(value.WhenTrue.PlacedOnSameLine().WithoutTrivia())
-                                                                                                                      .WithColonToken(value.ColonToken.WithLeadingAndTrailingSpace())
+                                                                                                                      .WithColonToken(value.ColonToken.WithSurroundingSpace())
                                                                                                                       .WithWhenFalse(value.WhenFalse.PlacedOnSameLine().WithoutTrivia());
 
         /// <summary>
@@ -646,7 +646,7 @@ namespace MiKoSolutions.Analyzers
         /// A new equals value clause with all its components placed on the same line.
         /// </returns>
         internal static EqualsValueClauseSyntax PlacedOnSameLine(this EqualsValueClauseSyntax value) => value?.WithoutTrivia()
-                                                                                                              .WithEqualsToken(value.EqualsToken.WithoutTrivia().WithLeadingSpace().WithTrailingSpace())
+                                                                                                              .WithEqualsToken(value.EqualsToken.WithoutTrivia().WithSurroundingSpace())
                                                                                                               .WithValue(value.Value.PlacedOnSameLine());
 
         /// <summary>
@@ -687,7 +687,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static IsPatternExpressionSyntax PlacedOnSameLine(this IsPatternExpressionSyntax value) => value?.WithoutTrivia()
                                                                                                                   .WithPattern(value.Pattern.PlacedOnSameLine())
-                                                                                                                  .WithIsKeyword(value.IsKeyword.WithLeadingAndTrailingSpace())
+                                                                                                                  .WithIsKeyword(value.IsKeyword.WithSurroundingSpace())
                                                                                                                   .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
@@ -993,7 +993,7 @@ namespace MiKoSolutions.Analyzers
         /// A new switch expression arm with all its components placed on the same line.
         /// </returns>
         internal static SwitchExpressionArmSyntax PlacedOnSameLine(this SwitchExpressionArmSyntax value) => value?.WithoutTrailingTrivia()
-                                                                                                                  .WithEqualsGreaterThanToken(value.EqualsGreaterThanToken.WithLeadingAndTrailingSpace())
+                                                                                                                  .WithEqualsGreaterThanToken(value.EqualsGreaterThanToken.WithSurroundingSpace())
                                                                                                                   .WithExpression(value.Expression.PlacedOnSameLine())
                                                                                                                   .WithWhenClause(value.WhenClause.PlacedOnSameLine())
                                                                                                                   .WithPattern(value.Pattern.PlacedOnSameLine());
@@ -1089,7 +1089,7 @@ namespace MiKoSolutions.Analyzers
         /// A new unary pattern with all its components placed on the same line.
         /// </returns>
         internal static UnaryPatternSyntax PlacedOnSameLine(this UnaryPatternSyntax value) => value?.WithoutTrivia()
-                                                                                                    .WithOperatorToken(value.OperatorToken.WithLeadingAndTrailingSpace())
+                                                                                                    .WithOperatorToken(value.OperatorToken.WithSurroundingSpace())
                                                                                                     .WithPattern(value.Pattern.PlacedOnSameLine());
 
         /// <summary>
@@ -1102,7 +1102,7 @@ namespace MiKoSolutions.Analyzers
         /// A new when clause with all its components placed on the same line.
         /// </returns>
         internal static WhenClauseSyntax PlacedOnSameLine(this WhenClauseSyntax value) => value?.WithoutTrivia()
-                                                                                                .WithWhenKeyword(value.WhenKeyword.WithLeadingAndTrailingSpace())
+                                                                                                .WithWhenKeyword(value.WhenKeyword.WithSurroundingSpace())
                                                                                                 .WithCondition(value.Condition.PlacedOnSameLine());
 
         /// <summary>

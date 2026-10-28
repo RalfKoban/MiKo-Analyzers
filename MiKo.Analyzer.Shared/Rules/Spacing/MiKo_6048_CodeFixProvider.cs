@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case BinaryExpressionSyntax binary:
                 {
                     var updated = binary.WithLeft(GetUpdatedSyntax(binary.Left))
-                                        .WithOperatorToken(binary.OperatorToken.WithLeadingAndTrailingSpace())
+                                        .WithOperatorToken(binary.OperatorToken.WithSurroundingSpace())
                                         .WithRight(GetUpdatedSyntax(binary.Right));
 
                     return updated as T;
