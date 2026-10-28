@@ -19904,7 +19904,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type argument lists that span multiple lines are more difficult to read. Keep type argument lists on a single line to make the code easier to read and follow..
+        ///   Looks up a localized string similar to Type argument lists that span multiple lines are more difficult to read. Keep them on a single line to make the code easier to read and follow..
         /// </summary>
         internal static string MiKo_6076_Description {
             get {
@@ -19927,6 +19927,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6076_Title {
             get {
                 return ResourceManager.GetString("MiKo_6076_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place parameter list on single line.
+        /// </summary>
+        internal static string MiKo_6077_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6077_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter lists that span multiple lines but contain zero or only one parameter are more difficult to read. Keep them on a single line to make the code easier to read and follow..
+        /// </summary>
+        internal static string MiKo_6077_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6077_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place parameter list on single line.
+        /// </summary>
+        internal static string MiKo_6077_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6077_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place short parameter lists on single line.
+        /// </summary>
+        internal static string MiKo_6077_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6077_Title", resourceCulture);
             }
         }
     }

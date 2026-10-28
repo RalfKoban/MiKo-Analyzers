@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
+    /// <inheritdoc/>
+    /// <seealso cref="MiKo_6077_SingleParameterListsAreOnSameLineAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_6032_MultilineParametersAreIndentedToRightAnalyzer : SpacingAnalyzer
     {

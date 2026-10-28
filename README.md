@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 586 rules that are currently provided by the analyzers.
+The following tables list all the 587 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -638,3 +638,4 @@ The following tables list all the 586 rules that are currently provided by the a
 |[MiKo_6074](/Documentation/MiKo_6074.md)|Align multi-line string concatenations vertically|&#x2713;|&#x2713;|
 |[MiKo_6075](/Documentation/MiKo_6075.md)|Place 'ConfigureAwait' on separate line|&#x2713;|&#x2713;|
 |[MiKo_6076](/Documentation/MiKo_6076.md)|Place type argument lists on single line|&#x2713;|&#x2713;|
+|[MiKo_6077](/Documentation/MiKo_6077.md)|Place short parameter lists on single line|&#x2713;|&#x2713;|

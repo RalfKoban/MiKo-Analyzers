@@ -6905,12 +6905,24 @@ Align the call with the start of the method chain to maintain consistent formatt
     <value>Place type argument list on single line</value>
   </data>
   <data name="MiKo_6076_Description" xml:space="preserve">
-    <value>Type argument lists that span multiple lines are more difficult to read. Keep type argument lists on a single line to make the code easier to read and follow.</value>
+    <value>Type argument lists that span multiple lines are more difficult to read. Keep them on a single line to make the code easier to read and follow.</value>
   </data>
   <data name="MiKo_6076_MessageFormat" xml:space="preserve">
     <value>Place type argument list on single line</value>
   </data>
   <data name="MiKo_6076_Title" xml:space="preserve">
     <value>Place type argument lists on single line</value>
+  </data>
+  <data name="MiKo_6077_CodeFixTitle" xml:space="preserve">
+    <value>Place parameter list on single line</value>
+  </data>
+  <data name="MiKo_6077_Description" xml:space="preserve">
+    <value>Parameter lists that span multiple lines but contain zero or only one parameter are more difficult to read. Keep them on a single line to make the code easier to read and follow.</value>
+  </data>
+  <data name="MiKo_6077_MessageFormat" xml:space="preserve">
+    <value>Place parameter list on single line</value>
+  </data>
+  <data name="MiKo_6077_Title" xml:space="preserve">
+    <value>Place short parameter lists on single line</value>
   </data>
 </root>
