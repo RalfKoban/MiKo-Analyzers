@@ -275,6 +275,31 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new syntax token list with all its tokens placed on the same line.
+        /// </summary>
+        /// <param name="values">
+        /// The syntax token list to modify.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax nodes that contains all items and separators placed on the same line.
+        /// </returns>
+        internal static SyntaxTokenList PlacedOnSameLine(this in SyntaxTokenList values)
+        {
+            switch (values.Count)
+            {
+                case 0:
+                    return values;
+
+                case 1:
+                    return SyntaxFactory.TokenList(values[0].WithoutTrivia());
+
+                default:
+                    return SyntaxFactory.TokenList(values.Skip(1).Select(_ => _.WithoutTrivia().WithLeadingSpace()))
+                                        .Insert(0, values[0].WithoutTrivia());
+            }
+        }
+
+        /// <summary>
         /// Creates a new syntax node with all its components placed on the same line.
         /// </summary>
         /// <typeparam name="T">
@@ -291,24 +316,34 @@ namespace MiKoSolutions.Analyzers
             switch (value)
             {
                 case null: return null;
-                case ArgumentListSyntax argumentList: return argumentList.PlacedOnSameLine() as T;
+                case ArgumentListSyntax list: return list.PlacedOnSameLine() as T;
                 case ArgumentSyntax argument: return argument.PlacedOnSameLine() as T;
                 case ArrayRankSpecifierSyntax rank: return rank.PlacedOnSameLine() as T;
                 case ArrayTypeSyntax arrayType: return arrayType.PlacedOnSameLine() as T;
+                case AttributeArgumentListSyntax list: return list.PlacedOnSameLine() as T;
+                case AttributeArgumentSyntax argument: return argument.PlacedOnSameLine() as T;
+                case AttributeListSyntax list: return list.PlacedOnSameLine() as T;
+                case AttributeSyntax attribute: return attribute.PlacedOnSameLine() as T;
+                case AttributeTargetSpecifierSyntax specifier: return specifier.PlacedOnSameLine() as T;
                 case BinaryExpressionSyntax binary: return binary.PlacedOnSameLine() as T;
-                case BracketedArgumentListSyntax argumentList: return argumentList.PlacedOnSameLine() as T;
-                case BracketedParameterListSyntax parameterList: return parameterList.PlacedOnSameLine() as T;
+                case BracketedArgumentListSyntax list: return list.PlacedOnSameLine() as T;
+                case BracketedParameterListSyntax list: return list.PlacedOnSameLine() as T;
                 case CasePatternSwitchLabelSyntax patternLabel: return patternLabel.PlacedOnSameLine() as T;
                 case CaseSwitchLabelSyntax label: return label.PlacedOnSameLine() as T;
                 case ConditionalExpressionSyntax conditional: return conditional.PlacedOnSameLine() as T;
                 case ElementAccessExpressionSyntax access: return access.PlacedOnSameLine() as T;
+                case EqualsValueClauseSyntax clause: return clause.PlacedOnSameLine() as T;
                 case IfStatementSyntax ifStatement: return ifStatement.PlacedOnSameLine() as T;
                 case InvocationExpressionSyntax invocation: return invocation.PlacedOnSameLine() as T;
                 case IsPatternExpressionSyntax pattern: return pattern.PlacedOnSameLine() as T;
                 case MemberAccessExpressionSyntax maes: return maes.PlacedOnSameLine() as T;
                 case NameSyntax name: return name.PlacedOnSameLine() as T;
+                case NameColonSyntax name: return name.PlacedOnSameLine() as T;
+                case NameEqualsSyntax name: return name.PlacedOnSameLine() as T;
                 case NullableTypeSyntax nullable: return nullable.PlacedOnSameLine() as T;
                 case ObjectCreationExpressionSyntax creation: return creation.PlacedOnSameLine() as T;
+                case ParameterListSyntax list: return list.PlacedOnSameLine() as T;
+                case ParameterSyntax parameter: return parameter.PlacedOnSameLine() as T;
                 case PatternSyntax pattern: return pattern.PlacedOnSameLine() as T;
                 case PropertyPatternClauseSyntax clause: return clause.PlacedOnSameLine() as T;
                 case SingleVariableDesignationSyntax singleVariable: return singleVariable.PlacedOnSameLine() as T;
@@ -318,7 +353,7 @@ namespace MiKoSolutions.Analyzers
                 case TupleExpressionSyntax tuple: return tuple.PlacedOnSameLine() as T;
                 case TupleElementSyntax tuple: return tuple.PlacedOnSameLine() as T;
                 case TupleTypeSyntax tuple: return tuple.PlacedOnSameLine() as T;
-                case TypeArgumentListSyntax typeArgumentList: return typeArgumentList.PlacedOnSameLine() as T;
+                case TypeArgumentListSyntax list: return list.PlacedOnSameLine() as T;
                 case WhenClauseSyntax clause: return clause.PlacedOnSameLine() as T;
                 default:
                     return value.WithoutTrivia();
@@ -334,11 +369,11 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new argument with all its components placed on the same line.
         /// </returns>
-        internal static ArgumentSyntax PlacedOnSameLine(this ArgumentSyntax value) => value.WithoutTrivia()
-                                                                                           .WithRefKindKeyword(value.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
-                                                                                           .WithRefOrOutKeyword(value.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
-                                                                                           .WithNameColon(value.NameColon.PlacedOnSameLine())
-                                                                                           .WithExpression(value.Expression.PlacedOnSameLine());
+        internal static ArgumentSyntax PlacedOnSameLine(this ArgumentSyntax value) => value?.WithoutTrivia()
+                                                                                            .WithRefKindKeyword(value.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                                                                            .WithRefOrOutKeyword(value.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                                                                            .WithNameColon(value.NameColon.PlacedOnSameLine())
+                                                                                            .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new argument list with all its components placed on the same line.
@@ -349,10 +384,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new argument list with all its components placed on the same line.
         /// </returns>
-        internal static ArgumentListSyntax PlacedOnSameLine(this ArgumentListSyntax value) => value.WithoutTrivia()
-                                                                                                   .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
-                                                                                                   .WithArguments(value.Arguments.PlacedOnSameLine())
-                                                                                                   .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+        internal static ArgumentListSyntax PlacedOnSameLine(this ArgumentListSyntax value) => value?.WithoutTrivia()
+                                                                                                    .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                                    .WithArguments(value.Arguments.PlacedOnSameLine())
+                                                                                                    .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new array type with all its components placed on the same line.
@@ -363,9 +398,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new array type with all its components placed on the same line.
         /// </returns>
-        internal static ArrayTypeSyntax PlacedOnSameLine(this ArrayTypeSyntax value) => value.WithoutTrivia()
-                                                                                             .WithElementType(value.ElementType.PlacedOnSameLine())
-                                                                                             .WithRankSpecifiers(value.RankSpecifiers.PlacedOnSameLine());
+        internal static ArrayTypeSyntax PlacedOnSameLine(this ArrayTypeSyntax value) => value?.WithoutTrivia()
+                                                                                              .WithElementType(value.ElementType.PlacedOnSameLine())
+                                                                                              .WithRankSpecifiers(value.RankSpecifiers.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new array rank specifier with all its components placed on the same line.
@@ -376,10 +411,105 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new array rank specifier with all its components placed on the same line.
         /// </returns>
-        internal static ArrayRankSpecifierSyntax PlacedOnSameLine(this ArrayRankSpecifierSyntax value) => value.WithoutTrivia()
-                                                                                                               .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
-                                                                                                               .WithSizes(value.Sizes.PlacedOnSameLine())
-                                                                                                               .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+        internal static ArrayRankSpecifierSyntax PlacedOnSameLine(this ArrayRankSpecifierSyntax value) => value?.WithoutTrivia()
+                                                                                                                .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                                .WithSizes(value.Sizes.PlacedOnSameLine())
+                                                                                                                .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new attribute argument list with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The attribute argument list to modify.
+        /// </param>
+        /// <returns>
+        /// A new attribute argument list with all its components placed on the same line.
+        /// </returns>
+        internal static AttributeArgumentListSyntax PlacedOnSameLine(this AttributeArgumentListSyntax value) => value?.WithoutTrivia()
+                                                                                                                      .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                                                      .WithArguments(value.Arguments.PlacedOnSameLine())
+                                                                                                                      .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new attribute argument with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The attribute argument to modify.
+        /// </param>
+        /// <returns>
+        /// A new attribute argument with all its components placed on the same line.
+        /// </returns>
+        internal static AttributeArgumentSyntax PlacedOnSameLine(this AttributeArgumentSyntax value) => value?.WithoutTrivia()
+                                                                                                              .WithExpression(value.Expression.PlacedOnSameLine())
+                                                                                                              .WithNameColon(value.NameColon.PlacedOnSameLine())
+                                                                                                              .WithNameEquals(value.NameEquals.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new name colon syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The name colon syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new name colon syntax with all its components placed on the same line.
+        /// </returns>
+        internal static NameColonSyntax PlacedOnSameLine(this NameColonSyntax value) => value?.WithoutTrivia()
+                                                                                              .WithName(value.Name.PlacedOnSameLine())
+                                                                                              .WithColonToken(value.ColonToken.WithoutTrivia().WithTrailingSpace());
+
+        /// <summary>
+        /// Creates a new name equals syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The name equals syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new name equals syntax with all its components placed on the same line.
+        /// </returns>
+        internal static NameEqualsSyntax PlacedOnSameLine(this NameEqualsSyntax value) => value?.WithoutTrivia()
+                                                                                                .WithName(value.Name.PlacedOnSameLine())
+                                                                                                .WithEqualsToken(value.EqualsToken.WithoutTrivia().WithTrailingSpace());
+
+        /// <summary>
+        /// Creates a new attribute list with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The attribute list to modify.
+        /// </param>
+        /// <returns>
+        /// A new attribute list with all its components placed on the same line.
+        /// </returns>
+        internal static AttributeListSyntax PlacedOnSameLine(this AttributeListSyntax value) => value?.WithoutTrivia()
+                                                                                                      .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                      .WithAttributes(value.Attributes.PlacedOnSameLine())
+                                                                                                      .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia())
+                                                                                                      .WithTarget(value.Target.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new attribute with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The attribute to modify.
+        /// </param>
+        /// <returns>
+        /// A new attribute with all its components placed on the same line.
+        /// </returns>
+        internal static AttributeSyntax PlacedOnSameLine(this AttributeSyntax value) => value?.WithoutTrivia()
+                                                                                              .WithName(value.Name.PlacedOnSameLine())
+                                                                                              .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new attribute target specifier with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The  attribute target specifier to modify.
+        /// </param>
+        /// <returns>
+        /// A new  attribute target specifier with all its components placed on the same line.
+        /// </returns>
+        internal static AttributeTargetSpecifierSyntax PlacedOnSameLine(this AttributeTargetSpecifierSyntax value) => value?.WithoutTrivia()
+                                                                                                                            .WithIdentifier(value.Identifier.WithoutTrivia())
+                                                                                                                            .WithColonToken(value.ColonToken.WithoutTrivia().WithTrailingSpace());
 
         /// <summary>
         /// Creates a new binary expression with all its components placed on the same line.
@@ -390,25 +520,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new binary expression with all its components placed on the same line.
         /// </returns>
-        internal static BinaryExpressionSyntax PlacedOnSameLine(this BinaryExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                           .WithLeft(value.Left.PlacedOnSameLine())
-                                                                                                           .WithOperatorToken(value.OperatorToken.WithLeadingAndTrailingSpace())
-                                                                                                           .WithRight(value.Right.PlacedOnSameLine());
-
-        /// <summary>
-        /// Creates a new case pattern switch label with all its components placed on the same line.
-        /// </summary>
-        /// <param name="value">
-        /// The case pattern switch label to modify.
-        /// </param>
-        /// <returns>
-        /// A new case pattern switch label with all its components placed on the same line.
-        /// </returns>
-        internal static CasePatternSwitchLabelSyntax PlacedOnSameLine(this CasePatternSwitchLabelSyntax value) => value.WithoutTrivia()
-                                                                                                                       .WithKeyword(value.Keyword.WithoutTrailingTrivia())
-                                                                                                                       .WithPattern(value.Pattern.PlacedOnSameLine().WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                                       .WithWhenClause(value.WhenClause.PlacedOnSameLine())
-                                                                                                                       .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
+        internal static BinaryExpressionSyntax PlacedOnSameLine(this BinaryExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                            .WithLeft(value.Left.PlacedOnSameLine())
+                                                                                                            .WithOperatorToken(value.OperatorToken.WithSurroundingSpace())
+                                                                                                            .WithRight(value.Right.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new bracketed argument list with all its components placed on the same line.
@@ -419,10 +534,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new bracketed argument list with all its components placed on the same line.
         /// </returns>
-        internal static BracketedArgumentListSyntax PlacedOnSameLine(this BracketedArgumentListSyntax value) => value.WithoutTrivia()
-                                                                                                                     .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
-                                                                                                                     .WithArguments(value.Arguments.PlacedOnSameLine())
-                                                                                                                     .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+        internal static BracketedArgumentListSyntax PlacedOnSameLine(this BracketedArgumentListSyntax value) => value?.WithoutTrivia()
+                                                                                                                      .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                                      .WithArguments(value.Arguments.PlacedOnSameLine())
+                                                                                                                      .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new bracketed parameter list with all its components placed on the same line.
@@ -433,10 +548,25 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new bracketed parameter list with all its components placed on the same line.
         /// </returns>
-        internal static BracketedParameterListSyntax PlacedOnSameLine(this BracketedParameterListSyntax value) => value.WithoutTrivia()
-                                                                                                                       .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
-                                                                                                                       .WithParameters(value.Parameters.PlacedOnSameLine())
-                                                                                                                       .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+        internal static BracketedParameterListSyntax PlacedOnSameLine(this BracketedParameterListSyntax value) => value?.WithoutTrivia()
+                                                                                                                        .WithOpenBracketToken(value.OpenBracketToken.WithoutTrivia())
+                                                                                                                        .WithParameters(value.Parameters.PlacedOnSameLine())
+                                                                                                                        .WithCloseBracketToken(value.CloseBracketToken.WithoutTrivia());
+
+        /// <summary>
+        /// Creates a new case pattern switch label with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The case pattern switch label to modify.
+        /// </param>
+        /// <returns>
+        /// A new case pattern switch label with all its components placed on the same line.
+        /// </returns>
+        internal static CasePatternSwitchLabelSyntax PlacedOnSameLine(this CasePatternSwitchLabelSyntax value) => value?.WithoutTrivia()
+                                                                                                                        .WithKeyword(value.Keyword.WithoutTrailingTrivia())
+                                                                                                                        .WithPattern(value.Pattern.PlacedOnSameLine().WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                        .WithWhenClause(value.WhenClause.PlacedOnSameLine())
+                                                                                                                        .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
         /// <summary>
         /// Creates a new case switch label with all its components placed on the same line.
@@ -447,10 +577,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new case switch label with all its components placed on the same line.
         /// </returns>
-        internal static CaseSwitchLabelSyntax PlacedOnSameLine(this CaseSwitchLabelSyntax value) => value.WithoutTrivia()
-                                                                                                         .WithKeyword(value.Keyword.WithoutTrailingTrivia())
-                                                                                                         .WithValue(value.Value.PlacedOnSameLine().WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                         .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
+        internal static CaseSwitchLabelSyntax PlacedOnSameLine(this CaseSwitchLabelSyntax value) => value?.WithoutTrivia()
+                                                                                                          .WithKeyword(value.Keyword.WithoutTrailingTrivia())
+                                                                                                          .WithValue(value.Value.PlacedOnSameLine().WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                          .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
         /// <summary>
         /// Creates a new conditional expression with all its components placed on the same line.
@@ -461,12 +591,12 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new conditional expression with all its components placed on the same line.
         /// </returns>
-        internal static ConditionalExpressionSyntax PlacedOnSameLine(this ConditionalExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                                     .WithCondition(value.Condition.PlacedOnSameLine().WithoutTrivia())
-                                                                                                                     .WithQuestionToken(value.QuestionToken.WithLeadingAndTrailingSpace())
-                                                                                                                     .WithWhenTrue(value.WhenTrue.PlacedOnSameLine().WithoutTrivia())
-                                                                                                                     .WithColonToken(value.ColonToken.WithLeadingAndTrailingSpace())
-                                                                                                                     .WithWhenFalse(value.WhenFalse.PlacedOnSameLine().WithoutTrivia());
+        internal static ConditionalExpressionSyntax PlacedOnSameLine(this ConditionalExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                                      .WithCondition(value.Condition.PlacedOnSameLine().WithoutTrivia())
+                                                                                                                      .WithQuestionToken(value.QuestionToken.WithSurroundingSpace())
+                                                                                                                      .WithWhenTrue(value.WhenTrue.PlacedOnSameLine().WithoutTrivia())
+                                                                                                                      .WithColonToken(value.ColonToken.WithSurroundingSpace())
+                                                                                                                      .WithWhenFalse(value.WhenFalse.PlacedOnSameLine().WithoutTrivia());
 
         /// <summary>
         /// Creates a new constant pattern with all its components placed on the same line.
@@ -477,8 +607,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new constant pattern with all its components placed on the same line.
         /// </returns>
-        internal static ConstantPatternSyntax PlacedOnSameLine(this ConstantPatternSyntax value) => value.WithoutTrivia()
-                                                                                                         .WithExpression(value.Expression.PlacedOnSameLine());
+        internal static ConstantPatternSyntax PlacedOnSameLine(this ConstantPatternSyntax value) => value?.WithoutTrivia()
+                                                                                                          .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new declaration pattern with all its components placed on the same line.
@@ -489,9 +619,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new declaration pattern with all its components placed on the same line.
         /// </returns>
-        internal static DeclarationPatternSyntax PlacedOnSameLine(this DeclarationPatternSyntax value) => value.WithoutTrivia()
-                                                                                                               .WithType(value.Type.WithTrailingSpace())
-                                                                                                               .WithDesignation(value.Designation.PlacedOnSameLine());
+        internal static DeclarationPatternSyntax PlacedOnSameLine(this DeclarationPatternSyntax value) => value?.WithoutTrivia()
+                                                                                                                .WithType(value.Type.WithTrailingSpace())
+                                                                                                                .WithDesignation(value.Designation.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new element access with all its components placed on the same line.
@@ -502,9 +632,22 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new element access with all its components placed on the same line.
         /// </returns>
-        internal static ElementAccessExpressionSyntax PlacedOnSameLine(this ElementAccessExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                                         .WithExpression(value.Expression.PlacedOnSameLine())
-                                                                                                                         .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
+        internal static ElementAccessExpressionSyntax PlacedOnSameLine(this ElementAccessExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                                          .WithExpression(value.Expression.PlacedOnSameLine())
+                                                                                                                          .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new equals value clause with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The equals value clause to modify.
+        /// </param>
+        /// <returns>
+        /// A new equals value clause with all its components placed on the same line.
+        /// </returns>
+        internal static EqualsValueClauseSyntax PlacedOnSameLine(this EqualsValueClauseSyntax value) => value?.WithoutTrivia()
+                                                                                                              .WithEqualsToken(value.EqualsToken.WithoutTrivia().WithSurroundingSpace())
+                                                                                                              .WithValue(value.Value.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new if statement with all its components placed on the same line.
@@ -515,10 +658,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new if statement with all its components placed on the same line.
         /// </returns>
-        internal static IfStatementSyntax PlacedOnSameLine(this IfStatementSyntax value) => value.WithIfKeyword(value.IfKeyword.WithTrailingSpace())
-                                                                                                 .WithOpenParenToken(value.OpenParenToken.WithoutTrailingTrivia())
-                                                                                                 .WithCondition(value.Condition.PlacedOnSameLine())
-                                                                                                 .WithCloseParenToken(value.CloseParenToken.WithoutLeadingTrivia());
+        internal static IfStatementSyntax PlacedOnSameLine(this IfStatementSyntax value) => value?.WithIfKeyword(value.IfKeyword.WithTrailingSpace())
+                                                                                                  .WithOpenParenToken(value.OpenParenToken.WithoutTrailingTrivia())
+                                                                                                  .WithCondition(value.Condition.PlacedOnSameLine())
+                                                                                                  .WithCloseParenToken(value.CloseParenToken.WithoutLeadingTrivia());
 
         /// <summary>
         /// Creates a new invocation expression with all its components placed on the same line.
@@ -529,9 +672,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new invocation expression with all its components placed on the same line.
         /// </returns>
-        internal static InvocationExpressionSyntax PlacedOnSameLine(this InvocationExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                                   .WithExpression(value.Expression.PlacedOnSameLine())
-                                                                                                                   .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
+        internal static InvocationExpressionSyntax PlacedOnSameLine(this InvocationExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                                    .WithExpression(value.Expression.PlacedOnSameLine())
+                                                                                                                    .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new is pattern expression with all its components placed on the same line.
@@ -542,10 +685,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new is pattern expression with all its components placed on the same line.
         /// </returns>
-        internal static IsPatternExpressionSyntax PlacedOnSameLine(this IsPatternExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                                 .WithPattern(value.Pattern.PlacedOnSameLine())
-                                                                                                                 .WithIsKeyword(value.IsKeyword.WithLeadingAndTrailingSpace())
-                                                                                                                 .WithExpression(value.Expression.PlacedOnSameLine());
+        internal static IsPatternExpressionSyntax PlacedOnSameLine(this IsPatternExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                                  .WithPattern(value.Pattern.PlacedOnSameLine())
+                                                                                                                  .WithIsKeyword(value.IsKeyword.WithSurroundingSpace())
+                                                                                                                  .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new member access expression with all its components placed on the same line.
@@ -556,10 +699,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new member access expression with all its components placed on the same line.
         /// </returns>
-        internal static MemberAccessExpressionSyntax PlacedOnSameLine(this MemberAccessExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                                       .WithName(value.Name.PlacedOnSameLine())
-                                                                                                                       .WithOperatorToken(value.OperatorToken.WithoutTrivia())
-                                                                                                                       .WithExpression(value.Expression.PlacedOnSameLine());
+        internal static MemberAccessExpressionSyntax PlacedOnSameLine(this MemberAccessExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                                        .WithName(value.Name.PlacedOnSameLine())
+                                                                                                                        .WithOperatorToken(value.OperatorToken.WithoutTrivia())
+                                                                                                                        .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new name with all its components placed on the same line.
@@ -619,9 +762,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new nullable type with all its components placed on the same line.
         /// </returns>
-        internal static NullableTypeSyntax PlacedOnSameLine(this NullableTypeSyntax value) => value.WithoutTrivia()
-                                                                                                   .WithElementType(value.ElementType.PlacedOnSameLine())
-                                                                                                   .WithQuestionToken(value.QuestionToken.WithoutTrivia());
+        internal static NullableTypeSyntax PlacedOnSameLine(this NullableTypeSyntax value) => value?.WithoutTrivia()
+                                                                                                    .WithElementType(value.ElementType.PlacedOnSameLine())
+                                                                                                    .WithQuestionToken(value.QuestionToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new object creation expression with all its components placed on the same line.
@@ -632,11 +775,11 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new object creation expression with all its components placed on the same line.
         /// </returns>
-        internal static ObjectCreationExpressionSyntax PlacedOnSameLine(this ObjectCreationExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                                           .WithNewKeyword(value.NewKeyword.WithoutTrivia())
-                                                                                                                           .WithType(value.Type.PlacedOnSameLine().WithLeadingSpace())
-                                                                                                                           .WithArgumentList(value.ArgumentList.PlacedOnSameLine())
-                                                                                                                           .WithInitializer(value.Initializer.PlacedOnSameLine());
+        internal static ObjectCreationExpressionSyntax PlacedOnSameLine(this ObjectCreationExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                                            .WithNewKeyword(value.NewKeyword.WithoutTrivia())
+                                                                                                                            .WithType(value.Type.PlacedOnSameLine().WithLeadingSpace())
+                                                                                                                            .WithArgumentList(value.ArgumentList.PlacedOnSameLine())
+                                                                                                                            .WithInitializer(value.Initializer.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new pattern with all its components placed on the same line.
@@ -651,6 +794,7 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case null: return null;
                 case ConstantPatternSyntax constantPattern: return constantPattern.PlacedOnSameLine();
                 case DeclarationPatternSyntax declaration: return declaration.PlacedOnSameLine();
                 case UnaryPatternSyntax unaryPattern: return unaryPattern.PlacedOnSameLine();
@@ -673,6 +817,78 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new parameter list with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter list to modify.
+        /// </param>
+        /// <returns>
+        /// A new parameter list with all its components placed on the same line.
+        /// </returns>
+        internal static ParameterListSyntax PlacedOnSameLine(this ParameterListSyntax value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (value.ContainsDirectives)
+            {
+                return value; // we can fix it only when it has no directives
+            }
+
+            return value.WithoutTrivia()
+                        .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                        .WithParameters(value.Parameters.PlacedOnSameLine())
+                        .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+        }
+
+        /// <summary>
+        /// Creates a new parameter with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter to modify.
+        /// </param>
+        /// <returns>
+        /// A new parameter with all its components placed on the same line.
+        /// </returns>
+        internal static ParameterSyntax PlacedOnSameLine(this ParameterSyntax value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var attributeLists = value.AttributeLists;
+            var hasAttributeLists = attributeLists.Count > 0;
+
+            var modifiers = value.Modifiers;
+            var hasModifiers = modifiers.Count > 0;
+
+            var updated = value.WithoutTrivia()
+                               .WithAttributeLists(attributeLists.PlacedOnSameLine());
+
+            var updatedModifiers = modifiers.PlacedOnSameLine();
+            var updatedType = value.Type.PlacedOnSameLine();
+
+            // add space(s) at correct position(s)
+            if (hasModifiers && hasAttributeLists)
+            {
+                updatedModifiers = updatedModifiers.Replace(updatedModifiers[0], updatedModifiers[0].WithLeadingSpace());
+            }
+
+            if (hasModifiers || hasAttributeLists)
+            {
+                updatedType = updatedType.WithLeadingSpace();
+            }
+
+            return updated.WithModifiers(updatedModifiers)
+                          .WithType(updatedType)
+                          .WithIdentifier(value.Identifier.WithoutTrivia().WithLeadingSpace())
+                          .WithDefault(value.Default.PlacedOnSameLine());
+        }
+
+        /// <summary>
         /// Creates a new recursive pattern with all its components placed on the same line.
         /// </summary>
         /// <param name="value">
@@ -683,9 +899,14 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static RecursivePatternSyntax PlacedOnSameLine(this RecursivePatternSyntax value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var updatedType = value.Type.PlacedOnSameLine();
-            var updatedPropertyPatternClause = value.PropertyPatternClause?.PlacedOnSameLine();
-            var updatedDesignation = value.Designation?.PlacedOnSameLine();
+            var updatedPropertyPatternClause = value.PropertyPatternClause.PlacedOnSameLine();
+            var updatedDesignation = value.Designation.PlacedOnSameLine();
 
             if (updatedType != null)
             {
@@ -701,7 +922,7 @@ namespace MiKoSolutions.Analyzers
                                      .WithType(updatedType)
                                      .WithPropertyPatternClause(updatedPropertyPatternClause)
                                      .WithDesignation(updatedDesignation)
-                                     .WithPositionalPatternClause(value.PositionalPatternClause?.PlacedOnSameLine());
+                                     .WithPositionalPatternClause(value.PositionalPatternClause.PlacedOnSameLine());
 
             return updatedSyntax;
         }
@@ -717,6 +938,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static PropertyPatternClauseSyntax PlacedOnSameLine(this PropertyPatternClauseSyntax value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var updatedSyntax = value.WithoutTrivia()
                                      .WithOpenBraceToken(value.OpenBraceToken.WithoutTrivia().WithTrailingSpace())
                                      .WithSubpatterns(value.Subpatterns.PlacedOnSameLine());
@@ -738,8 +964,8 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new single variable designation with all its components placed on the same line.
         /// </returns>
-        internal static SingleVariableDesignationSyntax PlacedOnSameLine(this SingleVariableDesignationSyntax value) => value.WithoutTrivia()
-                                                                                                                             .WithIdentifier(value.Identifier.WithoutTrivia());
+        internal static SingleVariableDesignationSyntax PlacedOnSameLine(this SingleVariableDesignationSyntax value) => value?.WithoutTrivia()
+                                                                                                                              .WithIdentifier(value.Identifier.WithoutTrivia());
 
         /// <summary>
         /// Creates a new subpattern with all its patterns placed on the same line.
@@ -750,12 +976,12 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new subpattern with all its patterns placed on the same line.
         /// </returns>
-        internal static SubpatternSyntax PlacedOnSameLine(this SubpatternSyntax value) => value.WithoutTrivia()
-                                                                                               .WithNameColon(value.NameColon?.WithoutTrivia().WithTrailingSpace())
+        internal static SubpatternSyntax PlacedOnSameLine(this SubpatternSyntax value) => value?.WithoutTrivia()
+                                                                                                .WithNameColon(value.NameColon?.WithoutTrivia().WithTrailingSpace())
 #if VS2022 || VS2026
-                                                                                               .WithExpressionColon(value.ExpressionColon?.WithoutTrivia().WithTrailingSpace())
+                                                                                                .WithExpressionColon(value.ExpressionColon?.WithoutTrivia().WithTrailingSpace())
 #endif
-                                                                                               .WithPattern(value.Pattern.PlacedOnSameLine());
+                                                                                                .WithPattern(value.Pattern.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new switch expression arm with all its components placed on the same line.
@@ -766,11 +992,11 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new switch expression arm with all its components placed on the same line.
         /// </returns>
-        internal static SwitchExpressionArmSyntax PlacedOnSameLine(this SwitchExpressionArmSyntax value) => value.WithoutTrailingTrivia()
-                                                                                                                 .WithEqualsGreaterThanToken(value.EqualsGreaterThanToken.WithLeadingAndTrailingSpace())
-                                                                                                                 .WithExpression(value.Expression.PlacedOnSameLine())
-                                                                                                                 .WithWhenClause(value.WhenClause.PlacedOnSameLine())
-                                                                                                                 .WithPattern(value.Pattern.PlacedOnSameLine());
+        internal static SwitchExpressionArmSyntax PlacedOnSameLine(this SwitchExpressionArmSyntax value) => value?.WithoutTrailingTrivia()
+                                                                                                                  .WithEqualsGreaterThanToken(value.EqualsGreaterThanToken.WithSurroundingSpace())
+                                                                                                                  .WithExpression(value.Expression.PlacedOnSameLine())
+                                                                                                                  .WithWhenClause(value.WhenClause.PlacedOnSameLine())
+                                                                                                                  .WithPattern(value.Pattern.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new throw expression with all its components placed on the same line.
@@ -781,9 +1007,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new throw expression with all its components placed on the same line.
         /// </returns>
-        internal static ThrowExpressionSyntax PlacedOnSameLine(this ThrowExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                         .WithThrowKeyword(value.ThrowKeyword.WithoutTrivia().WithTrailingSpace())
-                                                                                                         .WithExpression(value.Expression.PlacedOnSameLine());
+        internal static ThrowExpressionSyntax PlacedOnSameLine(this ThrowExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                          .WithThrowKeyword(value.ThrowKeyword.WithoutTrivia().WithTrailingSpace())
+                                                                                                          .WithExpression(value.Expression.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new tuple expression with all its components placed on the same line.
@@ -794,10 +1020,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new tuple expression with all its components placed on the same line.
         /// </returns>
-        internal static TupleExpressionSyntax PlacedOnSameLine(this TupleExpressionSyntax value) => value.WithoutTrivia()
-                                                                                                         .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
-                                                                                                         .WithArguments(value.Arguments.PlacedOnSameLine())
-                                                                                                         .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+        internal static TupleExpressionSyntax PlacedOnSameLine(this TupleExpressionSyntax value) => value?.WithoutTrivia()
+                                                                                                          .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                                          .WithArguments(value.Arguments.PlacedOnSameLine())
+                                                                                                          .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new tuple element with all its components placed on the same line.
@@ -808,9 +1034,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new tuple element with all its components placed on the same line.
         /// </returns>
-        internal static TupleElementSyntax PlacedOnSameLine(this TupleElementSyntax value) => value.WithoutTrivia()
-                                                                                                   .WithType(value.Type.PlacedOnSameLine())
-                                                                                                   .WithIdentifier(value.Identifier.WithoutTrivia().WithLeadingSpace());
+        internal static TupleElementSyntax PlacedOnSameLine(this TupleElementSyntax value) => value?.WithoutTrivia()
+                                                                                                    .WithType(value.Type.PlacedOnSameLine())
+                                                                                                    .WithIdentifier(value.Identifier.WithoutTrivia().WithLeadingSpace());
 
         /// <summary>
         /// Creates a new tuple type with all its components placed on the same line.
@@ -821,10 +1047,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new tuple type with all its components placed on the same line.
         /// </returns>
-        internal static TupleTypeSyntax PlacedOnSameLine(this TupleTypeSyntax value) => value.WithoutTrivia()
-                                                                                             .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
-                                                                                             .WithElements(value.Elements.PlacedOnSameLine())
-                                                                                             .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+        internal static TupleTypeSyntax PlacedOnSameLine(this TupleTypeSyntax value) => value?.WithoutTrivia()
+                                                                                              .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                              .WithElements(value.Elements.PlacedOnSameLine())
+                                                                                              .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
 
         /// <summary>
         /// Creates a new type argument list with all its components placed on the same line.
@@ -837,6 +1063,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TypeArgumentListSyntax PlacedOnSameLine(this TypeArgumentListSyntax value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             if (value.ContainsDirectives)
             {
                 return value; // we can fix it only when it has no directives
@@ -857,9 +1088,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new unary pattern with all its components placed on the same line.
         /// </returns>
-        internal static UnaryPatternSyntax PlacedOnSameLine(this UnaryPatternSyntax value) => value.WithoutTrivia()
-                                                                                                   .WithOperatorToken(value.OperatorToken.WithLeadingAndTrailingSpace())
-                                                                                                   .WithPattern(value.Pattern.PlacedOnSameLine());
+        internal static UnaryPatternSyntax PlacedOnSameLine(this UnaryPatternSyntax value) => value?.WithoutTrivia()
+                                                                                                    .WithOperatorToken(value.OperatorToken.WithSurroundingSpace())
+                                                                                                    .WithPattern(value.Pattern.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new when clause with all its components placed on the same line.
@@ -871,7 +1102,7 @@ namespace MiKoSolutions.Analyzers
         /// A new when clause with all its components placed on the same line.
         /// </returns>
         internal static WhenClauseSyntax PlacedOnSameLine(this WhenClauseSyntax value) => value?.WithoutTrivia()
-                                                                                                .WithWhenKeyword(value.WhenKeyword.WithLeadingAndTrailingSpace())
+                                                                                                .WithWhenKeyword(value.WhenKeyword.WithSurroundingSpace())
                                                                                                 .WithCondition(value.Condition.PlacedOnSameLine());
 
         /// <summary>
@@ -887,7 +1118,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with an additional leading empty line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+        internal static T WithAdditionalLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithAdditionalLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         /// <summary>
         /// Creates a new node from this node with additional leading spaces.
@@ -996,7 +1227,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the additional leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value?.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
         /// <summary>
         /// Creates a new node from this node with an additional leading trivia.
@@ -1014,7 +1245,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the additional leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value?.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
 
         /// <summary>
         /// Creates a new node from this node with additional leading trivia.
@@ -1032,7 +1263,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the additional leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value?.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
         /// <summary>
         /// Creates a new node from this node with additional leading trivia from another node.
@@ -1095,7 +1326,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with an additional trailing empty line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+        internal static T WithAdditionalTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithAdditionalTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         /// <summary>
         /// Creates a new node from this node with additional trailing trivia.
@@ -1113,7 +1344,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the additional trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value?.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         /// <summary>
         /// Creates a new node from this node with an additional trailing trivia.
@@ -1131,7 +1362,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the additional trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value?.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
 
         /// <summary>
         /// Creates a new node from this node with additional trailing trivia.
@@ -1149,7 +1380,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the additional trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value?.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         /// <summary>
         /// Creates a new node from this node with a trailing end-of-line.
@@ -1164,7 +1395,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a trailing end-of-line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
         /// Creates a new node from this node with a trivia added at the beginning of its leading trivia.
@@ -1247,7 +1478,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with indentation.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticMarker); // use elastic one to allow formatting to be done automatically
+        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value?.WithFirstLeadingTrivia(SyntaxFactory.ElasticMarker); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
         /// Creates a new node from this node with a leading empty line.
@@ -1262,7 +1493,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a leading empty line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
+        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         /// <summary>
         /// Creates a new node from this node with a leading end-of-line.
@@ -1277,7 +1508,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a leading end-of-line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value?.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
         /// Creates a new node from this node with a leading space.
@@ -1292,7 +1523,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a leading space.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
+        internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value?.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
         /// Creates a new node from this node with the specified number of leading spaces.
@@ -1553,7 +1784,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a trailing empty line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
+        internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
         /// <summary>
         /// Creates a new node from this node with a trailing new line.
@@ -1568,7 +1799,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a trailing new line.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use an elastic one to enforce the line break
+        internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use an elastic one to enforce the line break
 
         /// <summary>
         /// Creates a new node from this node with a trailing space.
@@ -1583,7 +1814,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a trailing space.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
+        internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
         /// Creates a new node from this node with trailing spaces.
@@ -1601,7 +1832,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with the specified number of trailing spaces.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.Space, spaces)); // use non-elastic one to prevent formatting to be done automatically
+        internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value?.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.Space, spaces)); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
         /// Creates a new node from this node with trailing trivia from another node.
@@ -1667,7 +1898,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with leading and trailing trivia from the specified node.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.WithLeadingTriviaFrom(node)
+        internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value?.WithLeadingTriviaFrom(node)
                                                                                                         .WithTrailingTriviaFrom(node);
 
         /// <summary>
@@ -1686,7 +1917,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with leading and trailing trivia from the specified token.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithTriviaFrom<T>(this T value, in SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
+        internal static T WithTriviaFrom<T>(this T value, in SyntaxToken token) where T : SyntaxNode => value?.WithLeadingTriviaFrom(token)
                                                                                                              .WithTrailingTriviaFrom(token);
 
         /// <summary>

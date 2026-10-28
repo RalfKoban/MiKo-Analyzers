@@ -32,6 +32,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_when_type_argument_list_contains_preprocessor_directives() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object GetItems() => new Dictionary<
+#if NETSTANDARD
+                                                int,
+#else
+                                                long,
+#endif
+                                                string>(42);
+}
+");
+
+        [Test]
         public void An_issue_is_reported_when_opening_token_of_type_argument_list_of_creation_is_on_multiple_lines() => An_issue_is_reported_for(@"
 using System.Collections.Generic;
 

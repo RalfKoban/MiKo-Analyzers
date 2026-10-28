@@ -136,8 +136,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_DependencyProperty_field_not_matching_any_property_when_class_has_no_properties_(
-                                                                                           [Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+        public void No_issue_is_reported_for_DependencyProperty_field_not_matching_any_property_when_class_has_no_properties_([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
             => No_issue_is_reported_for(@"
 using System.Windows;
 

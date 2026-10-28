@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax)
         {
             var updatedSyntax = syntax.WithParameterList(syntax.ParameterList.WithoutTrailingTrivia())
-                                      .WithArrowToken(syntax.ArrowToken.WithLeadingAndTrailingSpace())
+                                      .WithArrowToken(syntax.ArrowToken.WithSurroundingSpace())
                                       .WithBody(syntax.Body.WithoutLeadingTrivia());
 
             return UpdateExpressionBody(syntax, updatedSyntax);
@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax)
         {
             var updatedSyntax = syntax.WithParameter(syntax.Parameter.WithoutTrailingTrivia())
-                                      .WithArrowToken(syntax.ArrowToken.WithLeadingAndTrailingSpace())
+                                      .WithArrowToken(syntax.ArrowToken.WithSurroundingSpace())
                                       .WithBody(syntax.Body.WithoutLeadingTrivia());
 
             return UpdateExpressionBody(syntax, updatedSyntax);
