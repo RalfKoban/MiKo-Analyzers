@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var member in members)
             {
-                var type = member.GetReturnTypeSymbol();
+                var type = member.GetReturnType();
 
                 if (type?.TypeKind is TypeKind.Interface)
                 {
