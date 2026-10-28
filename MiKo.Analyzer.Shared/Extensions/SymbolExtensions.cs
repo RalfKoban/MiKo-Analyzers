@@ -2766,12 +2766,6 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            if (value.CanBeReferencedByName is false)
-            {
-                // cannot be an interface method as those have names
-                return false;
-            }
-
             switch (value)
             {
                 case IFieldSymbol _:
@@ -2784,6 +2778,12 @@ namespace MiKoSolutions.Analyzers
                 case IPropertySymbol p when p.ExplicitInterfaceImplementations.Any():
                 case IEventSymbol e when e.ExplicitInterfaceImplementations.Any():
                     return true;
+            }
+
+            if (value.CanBeReferencedByName is false)
+            {
+                // cannot be an interface as those have names
+                return false;
             }
 
             var typeSymbol = value.ContainingType;
