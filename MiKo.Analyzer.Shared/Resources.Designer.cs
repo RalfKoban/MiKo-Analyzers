@@ -5624,7 +5624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Append &apos;Callback&apos; to property name.
+        ///   Looks up a localized string similar to Add &apos;Callback&apos; as suffix.
         /// </summary>
         internal static string MiKo_1526_MessageFormat {
             get {
