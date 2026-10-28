@@ -16195,6 +16195,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delegate-returning properties blur the distinction between state and behavior. Instead, expose operations as methods. This makes APIs more intuitive for callers and the code easier to understand and maintain..
+        /// </summary>
+        internal static string MiKo_3245_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3245_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider replacing delegate-returning property &apos;{0}&apos; with a method.
+        /// </summary>
+        internal static string MiKo_3245_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3245_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties should not return delegates.
+        /// </summary>
+        internal static string MiKo_3245_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3245_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

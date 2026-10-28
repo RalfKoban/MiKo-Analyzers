@@ -1055,17 +1055,6 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<IPropertySymbol> GetPropertiesIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IPropertySymbol>();
 
         /// <summary>
-        /// Gets the return type of a property.
-        /// </summary>
-        /// <param name="value">
-        /// The property to inspect.
-        /// </param>
-        /// <returns>
-        /// The return type of the property.
-        /// </returns>
-        internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
-
-        /// <summary>
         /// Gets the return type symbol for a symbol.
         /// </summary>
         /// <param name="value">
@@ -1074,7 +1063,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The return type symbol for the specified symbol.
         /// </returns>
-        internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)
+        internal static ITypeSymbol GetReturnType(this ISymbol value)
         {
             switch (value)
             {
@@ -1303,7 +1292,7 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
-            return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).WhereNotNull().ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+            return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnType()).WhereNotNull().ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
         /// <summary>

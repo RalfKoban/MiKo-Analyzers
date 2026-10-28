@@ -5661,6 +5661,15 @@ Prefer 'while' or 'for' loops, where the condition is visible up front. This mak
   <data name="MiKo_3244_Title" xml:space="preserve">
     <value>Replace complex lambda expressions with named methods</value>
   </data>
+  <data name="MiKo_3245_Description" xml:space="preserve">
+    <value>Delegate-returning properties blur the distinction between state and behavior. Instead, expose operations as methods. This makes APIs more intuitive for callers and the code easier to understand and maintain.</value>
+  </data>
+  <data name="MiKo_3245_MessageFormat" xml:space="preserve">
+    <value>Consider replacing delegate-returning property '{0}' with a method</value>
+  </data>
+  <data name="MiKo_3245_Title" xml:space="preserve">
+    <value>Properties should not return delegates</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
