@@ -332,6 +332,7 @@ namespace MiKoSolutions.Analyzers
                 case CaseSwitchLabelSyntax label: return label.PlacedOnSameLine() as T;
                 case ConditionalExpressionSyntax conditional: return conditional.PlacedOnSameLine() as T;
                 case ElementAccessExpressionSyntax access: return access.PlacedOnSameLine() as T;
+                case EqualsValueClauseSyntax clause: return clause.PlacedOnSameLine() as T;
                 case IfStatementSyntax ifStatement: return ifStatement.PlacedOnSameLine() as T;
                 case InvocationExpressionSyntax invocation: return invocation.PlacedOnSameLine() as T;
                 case IsPatternExpressionSyntax pattern: return pattern.PlacedOnSameLine() as T;
@@ -634,6 +635,19 @@ namespace MiKoSolutions.Analyzers
         internal static ElementAccessExpressionSyntax PlacedOnSameLine(this ElementAccessExpressionSyntax value) => value?.WithoutTrivia()
                                                                                                                           .WithExpression(value.Expression.PlacedOnSameLine())
                                                                                                                           .WithArgumentList(value.ArgumentList.PlacedOnSameLine());
+
+        /// <summary>
+        /// Creates a new equals value clause with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The equals value clause to modify.
+        /// </param>
+        /// <returns>
+        /// A new equals value clause with all its components placed on the same line.
+        /// </returns>
+        internal static EqualsValueClauseSyntax PlacedOnSameLine(this EqualsValueClauseSyntax value) => value?.WithoutTrivia()
+                                                                                                              .WithEqualsToken(value.EqualsToken.WithoutTrivia().WithLeadingSpace().WithTrailingSpace())
+                                                                                                              .WithValue(value.Value.PlacedOnSameLine());
 
         /// <summary>
         /// Creates a new if statement with all its components placed on the same line.

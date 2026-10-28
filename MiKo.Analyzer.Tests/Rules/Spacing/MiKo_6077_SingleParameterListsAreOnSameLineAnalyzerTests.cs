@@ -981,6 +981,117 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_when_default_value_of_optional_parameter_is_on_next_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(int value =
+                                        42) { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(int value = 42) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_equals_token_of_optional_parameter_is_on_next_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(int value
+                                      = 42) { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(int value = 42) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_optional_parameter_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(
+                            int value
+                                      =
+                                        42
+                                          ) { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(int value = 42) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_default_expression_of_optional_parameter_is_on_multiple_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(int value =
+                                        40
+                                           +
+                                             2) { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(int value = 40 + 2) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_default_value_of_optional_parameter_with_modifier_is_on_next_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(
+                            in int value =
+                                           42) { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(in int value = 42) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_is_not_changed_when_parameter_list_contains_preprocessor_directives()
         {
             const string OriginalCode = @"
