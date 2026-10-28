@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ParameterListSyntax syntax && syntax.IsSpanningMultipleLines() && syntax.Parameters.Count <= 1)
+            if (context.Node is ParameterListSyntax list && list.ContainsDirectives is false && list.Parameters.Count <= 1 && list.IsSpanningMultipleLines())
             {
-                ReportDiagnostics(context, Issue(syntax));
+                ReportDiagnostics(context, Issue(list));
             }
         }
     }

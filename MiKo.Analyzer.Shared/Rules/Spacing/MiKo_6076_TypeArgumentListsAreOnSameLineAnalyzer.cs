@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is TypeArgumentListSyntax syntax && syntax.IsSpanningMultipleLines())
+            if (context.Node is TypeArgumentListSyntax list && list.ContainsDirectives is false && list.IsSpanningMultipleLines())
             {
-                ReportDiagnostics(context, Issue(syntax));
+                ReportDiagnostics(context, Issue(list));
             }
         }
     }

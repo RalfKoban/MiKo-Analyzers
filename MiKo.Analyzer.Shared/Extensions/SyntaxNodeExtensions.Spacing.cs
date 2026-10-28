@@ -811,10 +811,23 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new parameter list with all its components placed on the same line.
         /// </returns>
-        internal static ParameterListSyntax PlacedOnSameLine(this ParameterListSyntax value) => value?.WithoutTrivia()
-                                                                                                      .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
-                                                                                                      .WithParameters(value.Parameters.PlacedOnSameLine())
-                                                                                                      .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+        internal static ParameterListSyntax PlacedOnSameLine(this ParameterListSyntax value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (value.ContainsDirectives)
+            {
+                return value; // we can fix it only when it has no directives
+            }
+
+            return value.WithoutTrivia()
+                        .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                        .WithParameters(value.Parameters.PlacedOnSameLine())
+                        .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+        }
 
         /// <summary>
         /// Creates a new parameter with all its components placed on the same line.

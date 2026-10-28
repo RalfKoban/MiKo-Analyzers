@@ -124,6 +124,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_when_parameter_list_contains_preprocessor_directives() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object GetItems(
+#if NETSTANDARD
+                                                int
+#else
+                                                long
+#endif
+                                                i)
+    {
+        return null;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_when_empty_parameter_list_is_on_multiple_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -959,6 +978,30 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_is_not_changed_when_parameter_list_contains_preprocessor_directives()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object GetItems(
+#if NETSTANDARD
+                                                int
+#else
+                                                long
+#endif
+                                                i)
+    {
+        return null;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, OriginalCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_6077_SingleParameterListsAreOnSameLineAnalyzer.Id;
