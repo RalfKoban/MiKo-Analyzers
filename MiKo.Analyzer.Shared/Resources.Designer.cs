@@ -14964,6 +14964,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tests are easier to read when assertion members are referenced through their declaring type instead of being statically imported. Explicit qualification makes assertion calls immediately recognizable.
+        ///This improves readability and maintainability..
+        /// </summary>
+        internal static string MiKo_3134_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3134_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid statically importing assertion members.
+        /// </summary>
+        internal static string MiKo_3134_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3134_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not statically import assertion members.
+        /// </summary>
+        internal static string MiKo_3134_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3134_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

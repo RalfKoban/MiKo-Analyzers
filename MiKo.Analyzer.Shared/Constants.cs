@@ -1517,6 +1517,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>
                                                                        {
+                                                                           // TODO RKN: What about "Assume", ?
                                                                            "Assert",
                                                                            "CollectionAssert",
                                                                            "DirectoryAssert",

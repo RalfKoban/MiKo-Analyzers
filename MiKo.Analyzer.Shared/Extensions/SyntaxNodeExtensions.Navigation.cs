@@ -485,6 +485,11 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant node of the specified type, or <see langword="null"/> if no such descendant exists.
         /// </returns>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,Func{T,bool})"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstDescendant<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault();
 
@@ -503,6 +508,11 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant node of the specified type and syntax kind, or <see langword="null"/> if no such descendant exists.
         /// </returns>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,Func{T,bool})"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstDescendant<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).FirstOrDefault() as T;
 
@@ -521,6 +531,11 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first descendant node of the specified type that satisfies the predicate, or <see langword="null"/> if no such descendant exists.
         /// </returns>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,Func{T,bool})"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
@@ -776,6 +791,72 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
+        /// <summary>
+        /// Gets the last descendant node of the specified syntax node that is of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose last descendant to retrieve.
+        /// </param>
+        /// <returns>
+        /// The last descendant node of the specified type, or <see langword="null"/> if no such descendant exists.
+        /// </returns>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T LastDescendant<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes<T>().LastOrDefault();
+
+        /// <summary>
+        /// Gets the last descendant node of the specified syntax node that is of type <typeparamref name="T"/> and has the specified syntax kind.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose last descendant to retrieve.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the syntax kind to filter by.
+        /// </param>
+        /// <returns>
+        /// The last descendant node of the specified type and syntax kind, or <see langword="null"/> if no such descendant exists.
+        /// </returns>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T LastDescendant<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).LastOrDefault() as T;
+
+        /// <summary>
+        /// Gets the last descendant node of the specified syntax node that is of type <typeparamref name="T"/> and satisfies the specified predicate.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose last descendant to retrieve.
+        /// </param>
+        /// <param name="predicate">
+        /// The predicate to filter by.
+        /// </param>
+        /// <returns>
+        /// The last descendant node of the specified type that satisfies the predicate, or <see langword="null"/> if no such descendant exists.
+        /// </returns>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        /// <seealso cref="FirstDescendant{T}(SyntaxNode,Func{T,bool})"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode)"/>
+        /// <seealso cref="LastDescendant{T}(SyntaxNode,in SyntaxKind)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T LastDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().LastOrDefault(predicate);
 
         /// <summary>
         /// Gets the next sibling node of the specified syntax node.

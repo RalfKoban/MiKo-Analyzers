@@ -5240,6 +5240,16 @@ Using mocks in production code can hide design problems and make the code harder
   <data name="MiKo_3133_Title" xml:space="preserve">
     <value>Avoid trivial assertion helper methods</value>
   </data>
+  <data name="MiKo_3134_Description" xml:space="preserve">
+    <value>Tests are easier to read when assertion members are referenced through their declaring type instead of being statically imported. Explicit qualification makes assertion calls immediately recognizable.
+This improves readability and maintainability.</value>
+  </data>
+  <data name="MiKo_3134_MessageFormat" xml:space="preserve">
+    <value>Avoid statically importing assertion members</value>
+  </data>
+  <data name="MiKo_3134_Title" xml:space="preserve">
+    <value>Do not statically import assertion members</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>
