@@ -1899,7 +1899,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value?.WithLeadingTriviaFrom(node)
-                                                                                                        .WithTrailingTriviaFrom(node);
+                                                                                                         .WithTrailingTriviaFrom(node);
 
         /// <summary>
         /// Creates a new node from this node with leading and trailing trivia from a token.
@@ -1918,7 +1918,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTriviaFrom<T>(this T value, in SyntaxToken token) where T : SyntaxNode => value?.WithLeadingTriviaFrom(token)
-                                                                                                             .WithTrailingTriviaFrom(token);
+                                                                                                              .WithTrailingTriviaFrom(token);
 
         /// <summary>
         /// Calculates the appropriate whitespace trivia for lines containing comments.

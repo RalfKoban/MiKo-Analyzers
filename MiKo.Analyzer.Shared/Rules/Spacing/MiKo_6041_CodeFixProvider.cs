@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is StatementSyntax || syntax is MemberDeclarationSyntax)
             {
                 var leadingComments = clause.FindSyntaxNodeWithLeadingComment()
-                                           .GetLeadingComments();
+                                            .GetLeadingComments();
 
                 if (leadingComments.Length > 0)
                 {
