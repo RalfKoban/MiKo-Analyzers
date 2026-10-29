@@ -13,14 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] AssertionTypes = [.. Constants.Names.AssertionTypes];
 
         [Test]
-        public void No_issue_is_reported_for_normal_using() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_plain_using() => No_issue_is_reported_for(@"
 
+using System;
 using NUnit.Framework;
 
 public class TestMe
 {
-    [Test]
-    public void TestSomething() => Assert.That(true, Is.True);
 }
 ");
 
@@ -31,7 +30,6 @@ using static System.Math;
 
 public class TestMe
 {
-    public int Something() => Min(1, 2);
 }
 ");
 
@@ -44,8 +42,6 @@ using static NUnit.Framework." + assertType + @";
 
 public class TestMe
 {
-    [Test]
-    public void TestSomething() => That(true, Is.True);
 }
 ");
 

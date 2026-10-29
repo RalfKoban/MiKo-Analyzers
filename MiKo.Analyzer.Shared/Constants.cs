@@ -1519,6 +1519,7 @@ namespace MiKoSolutions.Analyzers
                                                                        {
                                                                            // TODO RKN: What about "Assume", ?
                                                                            "Assert",
+                                                                           "ClassicAssert", // NUnit 4 Legacy namespace
                                                                            "CollectionAssert",
                                                                            "DirectoryAssert",
                                                                            "FileAssert",
