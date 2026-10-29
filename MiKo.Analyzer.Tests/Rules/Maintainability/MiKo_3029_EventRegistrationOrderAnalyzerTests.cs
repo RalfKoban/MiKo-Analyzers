@@ -157,6 +157,18 @@ using NUnit.Framework;
 
 public class TestMe
 {
+    [AssemblyInitialize]
+    public void PrepareAssembly()
+    {
+        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    [AssemblyCleanup]
+    public void CleanupAssembly()
+    {
+        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
     [OneTimeSetUp]
     public void PrepareTestEnvironment()
     {

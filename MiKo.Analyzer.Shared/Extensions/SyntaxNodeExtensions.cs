@@ -2548,6 +2548,23 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestClassAttributeNames);
 
         /// <summary>
+        /// Determines whether a method declaration represents a test method or one of its set-up or tear-down methods.
+        /// </summary>
+        /// <param name="value">
+        /// The method declaration to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method declaration represents a test method or one of its set-up or tear-down methods; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsTestRelatedMethod(this MethodDeclarationSyntax value) => value.IsTestMethod()
+                                                                                     || value.IsTestSetUpMethod()
+                                                                                     || value.IsTestTearDownMethod()
+                                                                                     || value.IsTestOneTimeSetUpMethod()
+                                                                                     || value.IsTestOneTimeTearDownMethod()
+                                                                                     || value.IsTestAssemblyWideSetUpMethod()
+                                                                                     || value.IsTestAssemblyWideTearDownMethod();
+
+        /// <summary>
         /// Determines whether a method declaration represents a test method.
         /// </summary>
         /// <param name="value">

@@ -5231,6 +5231,15 @@ Using mocks in production code can hide design problems and make the code harder
   <data name="MiKo_3132_Title" xml:space="preserve">
     <value>Do not assert 'NullReferenceException' in unit tests</value>
   </data>
+  <data name="MiKo_3133_Description" xml:space="preserve">
+    <value>Helper methods that contain only a single 'Assert' call do not provide meaningful abstraction. Keeping the assertion in the test improves readability and reduces indirection.</value>
+  </data>
+  <data name="MiKo_3133_MessageFormat" xml:space="preserve">
+    <value>Consider inlining assertion helper</value>
+  </data>
+  <data name="MiKo_3133_Title" xml:space="preserve">
+    <value>Avoid trivial assertion helper methods</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

@@ -14937,6 +14937,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Helper methods that contain only a single &apos;Assert&apos; call do not provide meaningful abstraction. Keeping the assertion in the test improves readability and reduces indirection..
+        /// </summary>
+        internal static string MiKo_3133_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3133_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider inlining assertion helper.
+        /// </summary>
+        internal static string MiKo_3133_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3133_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid trivial assertion helper methods.
+        /// </summary>
+        internal static string MiKo_3133_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3133_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
