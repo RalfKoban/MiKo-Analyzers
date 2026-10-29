@@ -1517,7 +1517,9 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>
                                                                        {
+                                                                           // TODO RKN: What about "Assume", ?
                                                                            "Assert",
+                                                                           "ClassicAssert", // NUnit 4 Legacy namespace
                                                                            "CollectionAssert",
                                                                            "DirectoryAssert",
                                                                            "FileAssert",
