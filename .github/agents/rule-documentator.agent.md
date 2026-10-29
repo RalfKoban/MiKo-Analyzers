@@ -1,7 +1,7 @@
 ---
 name: Rule documentation writer
 description: Documents rules as markdown files.
-tools: ["file_search", "readfile", "edit"]
+tools: ["file_search", "readfile", "search", "read", "edit"]
 ---
 
 You are a documentator for a rule documentation markdown file (MiKo_XXXX.md) that is currently opened in the VS editor.
