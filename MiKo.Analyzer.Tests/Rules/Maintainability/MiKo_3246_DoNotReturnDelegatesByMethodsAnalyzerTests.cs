@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3246_DoNotReturnDelegatesByMethodsAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Delegates = ["Action", "Action<int>", "Func<bool>", "Func<int, bool>", "System.Delegate"];
+        private static readonly string[] Delegates = ["Action", "Action<int>", "Func<bool>", "Func<int, bool>", "System.Delegate", "System.MulticastDelegate", nameof(Delegate), nameof(MulticastDelegate)];
 
         [Test]
         public void No_issue_is_reported_for_void_method() => No_issue_is_reported_for(@"

@@ -2177,11 +2177,18 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Delegate:
                     return true;
 
-                case TypeKind.Class when value.IsRecord:
-                    return false;
-
                 case TypeKind.Class:
-                    return value.ToString() == TypeNames.Delegate;
+                {
+                    switch (value.SpecialType)
+                    {
+                        case SpecialType.System_Delegate:
+                        case SpecialType.System_MulticastDelegate:
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                }
 
                 default:
                     return false;
