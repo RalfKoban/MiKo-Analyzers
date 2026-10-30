@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (parameter.ContainingSymbol is IMethodSymbol method)
             {
-                var expectedIndex = method.IsExtensionMethod ? 1 : 0;
+                var expectedIndex = method.IsExtensionMethod() ? 1 : 0;
 
                 return method.Parameters.IndexOf(parameter) == expectedIndex;
             }

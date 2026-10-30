@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                                 continue;
                             }
 
-                            if (method.IsExtensionMethod && calledMethod.IsExtensionMethod)
+                            if (method.IsExtensionMethod() && calledMethod.IsExtensionMethod())
                             {
                                 if (method.ContainingType.Equals(calledMethod.ContainingType, SymbolEqualityComparer.IncludeNullability))
                                 {

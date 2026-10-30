@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var parameter in parameters)
             {
-                if (parameter.Ordinal is 0 && symbol.IsExtensionMethod)
+                if (parameter.Ordinal is 0 && symbol.IsExtensionMethod())
                 {
                     // this is a 'this' parameter
                     continue;

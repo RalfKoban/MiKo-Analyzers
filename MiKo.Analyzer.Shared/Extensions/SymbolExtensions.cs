@@ -458,7 +458,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of extension methods for the specified type.
         /// </returns>
-        internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
+        internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod());
 
         /// <summary>
         /// Gets all fields defined for the type.
@@ -2625,6 +2625,42 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a given method is an extension method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an extension method; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// In contrast to <see cref="IMethodSymbol.IsExtensionMethod"/> this method also inspects the type symbol, as described by the <c>&lt;remarks&gt;</c> section of <see cref="IMethodSymbol.IsExtensionMethod"/>:
+        /// <![CDATA[
+        /// Returns false for methods in <c>extension()</c> blocks.
+        /// To check if a method is a "new" extension method (a member of an <c>extension()</c> block),
+        /// check <see cref="INamedTypeSymbol.IsExtension"/> on the method's <see cref="ISymbol.ContainingType"/>.
+        /// ]]>
+        /// </remarks>
+        internal static bool IsExtensionMethod(this IMethodSymbol value)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            if (value.IsExtensionMethod)
+            {
+                return true;
+            }
+
+#if VS2022 || VS2026
+            return value.ContainingSymbol is INamedTypeSymbol type && type.IsExtension;
+#else
+            return false;
+#endif
+        }
+
+        /// <summary>
         /// Determines whether a type is a factory.
         /// </summary>
         /// <param name="value">
@@ -2983,7 +3019,7 @@ namespace MiKoSolutions.Analyzers
             if (value is IMethodSymbol method)
             {
                 // this is an extension method !
-                if (method.IsExtensionMethod)
+                if (method.IsExtensionMethod())
                 {
                     var ns = method.ContainingNamespace;
 
