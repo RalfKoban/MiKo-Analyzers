@@ -76,6 +76,21 @@ public class TestMe
 }");
 
         [Test]
+        public void An_issue_is_reported_for_action_parameter_trigger_via_Invoke_in_lock_statement_of_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(Action action)
+    {
+        lock (this)
+        {
+            action.Invoke();
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_action_parameter_trigger_via_conditional_access_operator_in_lock_statement_of_method() => An_issue_is_reported_for(@"
 using System;
 
@@ -154,6 +169,23 @@ public class TestMe
         lock (this)
         {
             _action();
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_method_that_calls_DynamicInvoke_on_Delegate_parameter_inside_lock() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private readonly object gate = new object();
+
+    public void DoSomething(Delegate callback)
+    {
+        lock (gate)
+        {
+            callback.DynamicInvoke();
         }
     }
 }");

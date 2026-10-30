@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -14,15 +16,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3093";
 
-        private static readonly SyntaxKind[] Invocations = { SyntaxKind.ConditionalAccessExpression, SyntaxKind.InvocationExpression };
-
         public MiKo_3093_StatementInsideLockTriggersActionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLockStatement, SyntaxKind.LockStatement);
 
-        private static bool IsInvocation(SyntaxNode identifier) => identifier.Parent?.IsAnyKind(Invocations) is true;
+        private static bool IsInvocation(SyntaxNode identifier)
+        {
+            switch (identifier.Parent)
+            {
+                case ConditionalAccessExpressionSyntax _:
+                case InvocationExpressionSyntax _:
+                    return true;
+
+                case MemberAccessExpressionSyntax member when member.Parent is InvocationExpressionSyntax:
+                {
+                    switch (member.GetName())
+                    {
+                        case nameof(Action.Invoke):
+                        case nameof(Delegate.DynamicInvoke):
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                }
+
+                default:
+                    return false;
+            }
+        }
 
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
@@ -41,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var type = identifier.GetTypeSymbol(semanticModel);
 
-                if (type?.TypeKind is TypeKind.Delegate)
+                if (type.IsDelegate())
                 {
                     if (token.GetSymbol(semanticModel) is IEventSymbol)
                     {

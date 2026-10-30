@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3246_DoNotReturnDelegatesByMethodsAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Delegates = ["Action", "Action<int>", "Func<bool>", "Func<int, bool>"];
+        private static readonly string[] Delegates = ["Action", "Action<int>", "Func<bool>", "Func<int, bool>", "System.Delegate"];
 
         [Test]
         public void No_issue_is_reported_for_void_method() => No_issue_is_reported_for(@"

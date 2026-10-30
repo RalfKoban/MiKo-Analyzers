@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                             && base.ShallAnalyze(symbol, compilation)
                                                                                             && symbol.IsInterfaceImplementation() is false;
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.ReturnType.TypeKind is TypeKind.Delegate
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.ReturnType.IsDelegate()
                                                                                                              ? new[] { Issue(symbol) }
                                                                                                              : Array.Empty<Diagnostic>();
     }
