@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
         {
-            if (symbol.GetReturnType()?.TypeKind is TypeKind.Delegate)
+            if (symbol.GetReturnType().IsDelegate())
             {
                 var location = GetLocation(symbol);
 

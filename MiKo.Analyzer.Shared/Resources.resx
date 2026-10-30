@@ -5689,6 +5689,16 @@ Prefer 'while' or 'for' loops, where the condition is visible up front. This mak
   <data name="MiKo_3245_Title" xml:space="preserve">
     <value>Properties should not return delegates</value>
   </data>
+  <data name="MiKo_3246_Description" xml:space="preserve">
+    <value>Delegate-returning methods introduce an additional level of indirection that makes code harder to understand and navigate. Expose operations directly instead of returning delegates that merely expose the same behavior.
+This makes APIs easier to use and the intent of the code clearer.</value>
+  </data>
+  <data name="MiKo_3246_MessageFormat" xml:space="preserve">
+    <value>Consider exposing the operation behind delegate-returning method '{0}' directly</value>
+  </data>
+  <data name="MiKo_3246_Title" xml:space="preserve">
+    <value>Methods should expose behavior directly</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

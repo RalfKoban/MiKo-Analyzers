@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var type = identifier.GetTypeSymbol(semanticModel);
 
-                        if (type?.TypeKind is TypeKind.Delegate)
+                        if (type.IsDelegate())
                         {
                             // found by rule MiKo 3092 or MiKo 3093
                             continue;

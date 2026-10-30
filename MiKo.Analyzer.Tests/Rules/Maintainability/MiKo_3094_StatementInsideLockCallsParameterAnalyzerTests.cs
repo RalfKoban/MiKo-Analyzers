@@ -125,6 +125,23 @@ public class TestMe
     }
 }");
 
+        [Test] // reported by MiKo_3093
+        public void No_issue_is_reported_for_method_that_calls_DynamicInvoke_on_Delegate_parameter_inside_lock() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private readonly object gate = new object();
+
+    public void DoSomething(Delegate callback)
+    {
+        lock (gate)
+        {
+            callback.DynamicInvoke();
+        }
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_3094_StatementInsideLockCallsParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3094_StatementInsideLockCallsParameterAnalyzer();

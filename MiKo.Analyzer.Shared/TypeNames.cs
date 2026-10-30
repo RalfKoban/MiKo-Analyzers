@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string CancellationToken = string.Intern(typeof(CancellationToken).FullName);
         internal static readonly string CancellationTokenSource = string.Intern(typeof(CancellationTokenSource).FullName);
 
-        internal static readonly string Delegate = string.Intern(typeof(Delegate).FullName);
-
         internal static readonly string ArgumentException = string.Intern(typeof(ArgumentException).FullName);
         internal static readonly string ArgumentNullException = string.Intern(typeof(ArgumentNullException).FullName);
         internal static readonly string ArgumentOutOfRangeException = string.Intern(typeof(ArgumentOutOfRangeException).FullName);
