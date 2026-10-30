@@ -100,6 +100,27 @@ public class TestMe : IFoo
 }
 ");
 
+        // 'static' interface members now allowed in C# 8, starting with C# 11 they can even be 'static abstract' or 'static virtual'
+        // (https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/interface-implementation/static-virtual-interface-members)
+        [Test]
+        public void No_issue_is_reported_for_implicit_static_interface_implementation_of_method_returning_delegate_([ValueSource(nameof(Delegates))] string delegateName) => No_issue_is_reported_for(@"
+using System;
+
+#pragma warning disable MiKo_3246
+
+public interface IFoo
+{
+    static abstract " + delegateName + @" DoSomething();
+}
+
+#pragma warning restore MiKo_3246
+
+public class TestMe : IFoo
+{
+    public static " + delegateName + @" DoSomething() => null;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3246_DoNotReturnDelegatesByMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3246_DoNotReturnDelegatesByMethodsAnalyzer();

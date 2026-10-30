@@ -2761,22 +2761,23 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol value) where TSymbol : class, ISymbol
         {
-            if (value.IsStatic)
-            {
-                return false;
-            }
-
+            // 'static' interface members now allowed in C# 8, starting with C# 11 they can even be 'static abstract' or 'static virtual'
+            // (https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/interface-implementation/static-virtual-interface-members)
+            // if (value.IsStatic)
+            // {
+            //     return false;
+            // }
             switch (value)
             {
                 case IFieldSymbol _:
                 case ITypeSymbol _:
                     return false;
 
-                case IMethodSymbol method:
-                    return method.IsInterfaceImplementation();
+                case IMethodSymbol m:
+                    return m.MethodKind is MethodKind.ExplicitInterfaceImplementation || m.IsInterfaceImplementation();
 
-                case IPropertySymbol p when p.ExplicitInterfaceImplementations.Any():
-                case IEventSymbol e when e.ExplicitInterfaceImplementations.Any():
+                case IPropertySymbol p when p.ExplicitInterfaceImplementations.Length > 0:
+                case IEventSymbol e when e.ExplicitInterfaceImplementations.Length > 0:
                     return true;
             }
 
@@ -2815,11 +2816,12 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsInterfaceImplementation(this IMethodSymbol value)
         {
-            if (value.IsStatic)
-            {
-                return false;
-            }
-
+            // 'static' interface members now allowed in C# 8, starting with C# 11 they can even be 'static abstract' or 'static virtual'
+            // (https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/interface-implementation/static-virtual-interface-members)
+            // if (value.IsStatic)
+            // {
+            //     return false;
+            // }
             switch (value.MethodKind)
             {
                 case MethodKind.AnonymousFunction:
@@ -2857,7 +2859,7 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
 
-            if (value.ExplicitInterfaceImplementations.Any())
+            if (value.ExplicitInterfaceImplementations.Length > 0)
             {
                 return true;
             }
@@ -2879,11 +2881,12 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)
         {
-            if (value.IsStatic)
-            {
-                return false;
-            }
-
+            // 'static' interface members now allowed in C# 8, starting with C# 11 they can even be 'static abstract' or 'static virtual'
+            // (https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/interface-implementation/static-virtual-interface-members)
+            // if (value.IsStatic)
+            // {
+            //     return false;
+            // }
             switch (value.MethodKind)
             {
                 case MethodKind.AnonymousFunction:
