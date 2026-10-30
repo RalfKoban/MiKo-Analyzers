@@ -16277,6 +16277,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delegate-returning methods introduce an additional level of indirection that makes code harder to understand and navigate. Expose operations directly instead of returning delegates that merely expose the same behavior.
+        ///This makes APIs easier to use and the intent of the code clearer..
+        /// </summary>
+        internal static string MiKo_3246_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3246_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider exposing the operation behind delegate-returning method &apos;{0}&apos; directly.
+        /// </summary>
+        internal static string MiKo_3246_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3246_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should expose behavior directly.
+        /// </summary>
+        internal static string MiKo_3246_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3246_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
