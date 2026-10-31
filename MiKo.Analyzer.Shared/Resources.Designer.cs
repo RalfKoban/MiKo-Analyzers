@@ -20075,5 +20075,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6077_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6078_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6078_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;foreach&apos; variable loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        /// </summary>
+        internal static string MiKo_6078_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6078_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;foreach&apos; variable loop with a blank line.
+        /// </summary>
+        internal static string MiKo_6078_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6078_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround foreach variable loops with blank lines.
+        /// </summary>
+        internal static string MiKo_6078_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6078_Title", resourceCulture);
+            }
+        }
     }
 }

@@ -682,6 +682,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6075_ContinueAwaitInvocationIsIndentedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6076_TypeArgumentListsAreOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6077_SingleParameterListsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6078_ForEachVariableStatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\StatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesAnalyzer.cs" />
