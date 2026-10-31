@@ -120,6 +120,87 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_exactly_matching_do_while_statement() => No_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            do
+            {
+                var x = 0;
+                var y = 1;
+            }
+            while (true);
+        }
+    }
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_exactly_matching_for_statement() => No_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                var x = 0;
+                var y = 1;
+            }
+        }
+    }
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_exactly_matching_foreach_statement() => No_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method(int[] values)
+        {
+            foreach (var i in values)
+            {
+                var x = i;
+                var y = i;
+            }
+        }
+    }
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_exactly_matching_foreach_variable_statement() => No_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method((int, int)[] values)
+        {
+            foreach (var (a, b) in values)
+            {
+                var x = a;
+                var y = b;
+            }
+        }
+    }
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_exactly_matching_while_statement() => No_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            while (true)
+            {
+                var x = 0;
+                var y = 1;
+            }
+        }
+    }
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_with_short_do_while_statement() => No_issue_is_reported_for(@"
 
     public class TypeWithMethod

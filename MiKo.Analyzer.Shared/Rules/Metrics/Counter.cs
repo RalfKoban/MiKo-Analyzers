@@ -235,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         continue;
                     }
 
-                    case ForEachStatementSyntax s:
+                    case CommonForEachStatementSyntax s:
                     {
                         node = s.Expression;
 
