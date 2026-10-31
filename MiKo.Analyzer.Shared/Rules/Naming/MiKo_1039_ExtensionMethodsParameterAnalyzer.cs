@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var parameter = symbol.Parameters[0];
+            var parameter = symbol.GetExtensionMethodParameter();
 
             if (IsConversionExtension(symbol))
             {

@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -42,6 +45,19 @@ public class TestMe
     " + visibility + @" static int ExtendMe(this int value) => value;
 }
 ");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_method_in_extension_block_of_correctly_named_class() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int value)
+    {
+        public int ExtendMe() => value;
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         protected override string GetDiagnosticId() => MiKo_3218_DoNotDefineExtensionMethodsInUnexpectedPlacesAnalyzer.Id;
 

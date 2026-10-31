@@ -450,6 +450,60 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<IEventSymbol> GetEventsIncludingInherited(this ITypeSymbol value) => value.GetMembersIncludingInherited<IEventSymbol>();
 
         /// <summary>
+        /// Gets the "this" parameter of the extension method; or - in case of "new" extension methods as members of extension blocks - the extension parameter.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter that describes the type being extended.
+        /// </param>
+        /// <returns>
+        /// The "this" parameter of the extension method; or - in case of "new" extension methods as members of extension blocks - the extension parameter.
+        /// Could be <see langword="null"/> in case of error types.
+        /// </returns>
+        /// <seealso cref="GetExtensionMethods"/>
+        /// <seealso cref="GetExtensionMethodType"/>
+        /// <seealso cref="IsExtensionMethod"/>
+        internal static IParameterSymbol GetExtensionMethodParameter(this IMethodSymbol value)
+        {
+            if (value.IsExtensionMethod)
+            {
+                return value.Parameters[0];
+            }
+
+#if VS2022 || VS2026
+            return value.ContainingType.ExtensionParameter;
+#else
+            return null;
+#endif
+        }
+
+        /// <summary>
+        /// Gets the type that contains the extension method.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter that describes the type being extended.
+        /// </param>
+        /// <returns>
+        /// The type that contains the extension method.
+        /// In case of "new" extension methods that is the type that contains the extension block itself, not the type of the extension method parameter.
+        /// </returns>
+        /// <seealso cref="GetExtensionMethods"/>
+        /// <seealso cref="GetExtensionMethodParameter"/>
+        /// <seealso cref="IsExtensionMethod"/>
+        internal static INamedTypeSymbol GetExtensionMethodType(this IMethodSymbol value)
+        {
+            if (value.IsExtensionMethod)
+            {
+                return value.ContainingType;
+            }
+
+#if VS2022 || VS2026
+            return value.ContainingType.ContainingType;
+#else
+            return null;
+#endif
+        }
+
+        /// <summary>
         /// Gets all extension methods defined for the type.
         /// </summary>
         /// <param name="value">
@@ -458,6 +512,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of extension methods for the specified type.
         /// </returns>
+        /// <seealso cref="GetExtensionMethodParameter"/>
+        /// <seealso cref="GetExtensionMethodType"/>
+        /// <seealso cref="IsExtensionMethod"/>
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod());
 
         /// <summary>
@@ -667,10 +724,27 @@ namespace MiKoSolutions.Analyzers
 
             for (var index = 0; index < length; index++)
             {
-                if (members[index] is TSymbol member && member.IsImplicitlyDeclared is false)
+                ISymbol symbol = members[index];
+
+#if VS2022 || VS2026
+                if (symbol is INamedTypeSymbol type && type.IsExtension)
+                {
+                    // seems we have an extension type, so add all it's members, too
+                    results.AddRange(type.GetMembers<TSymbol>());
+                }
+                else
+                {
+                    if (symbol is TSymbol member && member.IsImplicitlyDeclared is false)
+                    {
+                        results.Add(member);
+                    }
+                }
+#else
+                if (symbol is TSymbol member && member.IsImplicitlyDeclared is false)
                 {
                     results.Add(member);
                 }
+#endif
             }
 
             return results;
@@ -2634,13 +2708,16 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the method is an extension method; otherwise, <see langword="false"/>.
         /// </returns>
         /// <remarks>
-        /// In contrast to <see cref="IMethodSymbol.IsExtensionMethod"/> this method also inspects the type symbol, as described by the <c>&lt;remarks&gt;</c> section of <see cref="IMethodSymbol.IsExtensionMethod"/>:
+        /// In contrast to <see cref="IMethodSymbol.IsExtensionMethod"/> this method also inspects the type symbol, as described by the <c>&lt;remarks&gt;</c> section of <see cref="IMethodSymbol.IsExtensionMethod"/>.
         /// <![CDATA[
         /// Returns false for methods in <c>extension()</c> blocks.
         /// To check if a method is a "new" extension method (a member of an <c>extension()</c> block),
         /// check <see cref="INamedTypeSymbol.IsExtension"/> on the method's <see cref="ISymbol.ContainingType"/>.
         /// ]]>
         /// </remarks>
+        /// <seealso cref="GetExtensionMethodParameter"/>
+        /// <seealso cref="GetExtensionMethodType"/>
+        /// <seealso cref="GetExtensionMethods"/>
         internal static bool IsExtensionMethod(this IMethodSymbol value)
         {
             if (value is null)
