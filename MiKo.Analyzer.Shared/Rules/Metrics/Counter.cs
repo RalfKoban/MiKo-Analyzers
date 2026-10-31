@@ -235,9 +235,33 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         continue;
                     }
 
+                    case DoStatementSyntax s:
+                    {
+                        // 'do' is a starter keyword, so we have to count that separately
+                        CountLinesOfCode(s.GetStartingLine(), lines);
+
+                        node = s.Condition;
+
+                        continue;
+                    }
+
+                    case ForStatementSyntax s:
+                    {
+                        node = s.Condition;
+
+                        continue;
+                    }
+
                     case CommonForEachStatementSyntax s:
                     {
                         node = s.Expression;
+
+                        continue;
+                    }
+
+                    case WhileStatementSyntax s:
+                    {
+                        node = s.Condition;
 
                         continue;
                     }

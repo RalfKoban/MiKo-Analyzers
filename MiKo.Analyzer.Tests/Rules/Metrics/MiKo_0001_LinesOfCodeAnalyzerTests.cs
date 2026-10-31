@@ -129,7 +129,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
             do
             {
                 var x = 0;
-                var y = 1;
             }
             while (true);
         }
@@ -224,6 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             for (var i = 0; i < 10; i++)
             {
+                ;
             }
         }
     }
@@ -238,6 +238,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             foreach (var value in values)
             {
+                ;
             }
         }
     }
@@ -252,6 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             foreach (var (a, b) in values)
             {
+                ;
             }
         }
     }
@@ -266,6 +268,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             while (true)
             {
+                ;
             }
         }
     }
@@ -283,7 +286,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
             {
                 var x = 0;
                 var y = 1;
-                var z = x + y;
             }
         }
     }
@@ -301,7 +303,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
             {
                 var x = 0;
                 var y = 1;
-                var z = x + y;
             }
         }
     }
@@ -318,7 +319,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
             {
                 var x = 0;
                 var y = 1;
-                var z = x + y;
             }
             while (true);
         }
@@ -337,7 +337,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
             {
                 var x = 0;
                 var y = 1;
-                var z = x + y;
             }
         }
     }
@@ -459,7 +458,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
             {
                 var x = 0;
                 var y = 1;
-                var z = x + y;
             } finally { }
         }
     }
