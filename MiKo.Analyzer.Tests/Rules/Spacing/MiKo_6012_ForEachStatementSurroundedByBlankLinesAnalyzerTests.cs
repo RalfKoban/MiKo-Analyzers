@@ -28,7 +28,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_foreach_block_as_only_statement_in_method() => No_issue_is_reported_for(@"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -46,7 +46,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_foreach_block_as_statement_with_blank_line_after_variable_assignment_in_method() => No_issue_is_reported_for(@"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -66,7 +66,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_foreach_block_as_statement_with_blank_line_before_variable_assignment_in_method() => No_issue_is_reported_for(@"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -86,7 +86,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_foreach_blocks_as_statements_with_blank_line_between_both_blocks_in_method() => No_issue_is_reported_for(@"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -108,7 +108,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_foreach_block_as_statement_without_blank_line_after_variable_assignment_in_method() => An_issue_is_reported_for(@"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -127,7 +127,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_foreach_block_as_statement_without_blank_line_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -147,7 +147,7 @@ namespace Bla
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_foreach_blocks_as_statements_without_blank_line_between_both_blocks_in_method() => An_issue_is_reported_for(2, @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -170,7 +170,7 @@ namespace Bla
         public void Code_gets_fixed_for_foreach_block_as_statement_without_blank_line_after_variable_assignment_in_method()
         {
             const string OriginalCode = @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -187,7 +187,7 @@ namespace Bla
 }";
 
             const string FixedCode = @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -211,7 +211,7 @@ namespace Bla
         public void Code_gets_fixed_for_foreach_block_as_statement_without_blank_line_before_variable_assignment_in_method()
         {
             const string OriginalCode = @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -228,7 +228,7 @@ namespace Bla
 }";
 
             const string FixedCode = @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -252,7 +252,7 @@ namespace Bla
         public void Code_gets_fixed_for_foreach_blocks_as_statements_without_blank_line_between_both_blocks_in_method()
         {
             const string OriginalCode = @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -271,7 +271,7 @@ namespace Bla
 }";
 
             const string FixedCode = @"
-using System.Generic.Collections;
+using System.Collections.Generic;
 
 namespace Bla
 {
@@ -292,6 +292,29 @@ namespace Bla
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
+
+        [TestCase("var (a, b) in values")]
+        [TestCase("(int a, int b) in values")]
+        [TestCase("(a, b) in values")]
+        [TestCase("_ in values")]
+        public void No_issue_is_reported_for_foreach_variable_loop_without_blank_lines_(string loopHeader) => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(IEnumerable<(int, int)> values)
+        {
+            var data = 42;
+            foreach (" + loopHeader + @")
+            {
+            }
+            data = 17;
+        }
+    }
+}
+");
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6012_ForEachStatementSurroundedByBlankLinesAnalyzer();
 

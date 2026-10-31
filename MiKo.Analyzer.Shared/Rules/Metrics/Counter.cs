@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                      (int)SyntaxKind.WhileStatement,
                                                                      (int)SyntaxKind.ForStatement,
                                                                      (int)SyntaxKind.ForEachStatement,
+                                                                     (int)SyntaxKind.ForEachVariableStatement,
                                                                      (int)SyntaxKind.CaseSwitchLabel,
                                                                      (int)SyntaxKind.CasePatternSwitchLabel,
                                                                      (int)SyntaxKind.SwitchExpressionArm,
@@ -234,9 +235,33 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         continue;
                     }
 
-                    case ForEachStatementSyntax s:
+                    case DoStatementSyntax s:
+                    {
+                        // 'do' is a starter keyword, so we have to count that separately
+                        CountLinesOfCode(s.GetStartingLine(), lines);
+
+                        node = s.Condition;
+
+                        continue;
+                    }
+
+                    case ForStatementSyntax s:
+                    {
+                        node = s.Condition;
+
+                        continue;
+                    }
+
+                    case CommonForEachStatementSyntax s:
                     {
                         node = s.Expression;
+
+                        continue;
+                    }
+
+                    case WhileStatementSyntax s:
+                    {
+                        node = s.Condition;
 
                         continue;
                     }
