@@ -37,6 +37,7 @@ public class TestMe
         [TestCase("var x = null ?? new object();")]
         [TestCase("var x = ((object)(null))?.ToString();")]
         [TestCase("foreach (var x in y);")]
+        [TestCase("foreach (var (a, b) in values);")]
         [TestCase("for (var i = 0; i < 10; i++) ;")]
         [TestCase("while(true);")]
         [TestCase("do { i++; } while (true);")]

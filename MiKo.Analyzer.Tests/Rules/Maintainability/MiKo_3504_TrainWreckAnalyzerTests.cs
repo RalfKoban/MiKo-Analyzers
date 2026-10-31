@@ -926,6 +926,38 @@ public class TestMeC
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_4_properties_in_a_row_when_being_used_in_foreach_variable_loop() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        foreach (var (key, value) in A.B.C.D)
+        {
+        }
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public Dictionary<int, int> D { get; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_accessing_4_properties_in_a_row_when_being_used_in_if_condition() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -1594,6 +1626,43 @@ public class TestMeC
 public class TestMeD
 {
     public List<int> E { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_5_array_elements_in_a_row_when_being_used_in_foreach_variable_loop() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMeA[] A { get; }
+
+    public void DoSomething()
+    {
+        foreach (var (key, value) in A[0].B[1].C[2].D[3].E)
+        {
+        }
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB[] B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC[] C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD[] D { get; }
+}
+
+public class TestMeD
+{
+    public Dictionary<int, int> E { get; }
 }
 ");
 

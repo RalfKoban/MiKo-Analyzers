@@ -25,6 +25,117 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                      ];
 
         [Test]
+        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_do_while_loop() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        do
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+            Console.CancelKeyPress -= OnCancelKeyPress;
+        }
+        while (true);
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_for_loop() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+            Console.CancelKeyPress -= OnCancelKeyPress;
+        }
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_foreach_loop() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+            Console.CancelKeyPress -= OnCancelKeyPress;
+        }
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_foreach_variable_loop() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething((int, int)[] values)
+    {
+        foreach (var (a, b) in values)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+            Console.CancelKeyPress -= OnCancelKeyPress;
+        }
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_while_loop() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        while (true)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+            Console.CancelKeyPress -= OnCancelKeyPress;
+        }
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_add_and_subtract_of_numbers() => No_issue_is_reported_for(@"
 using System;
 
@@ -38,23 +149,6 @@ public class TestMe
 
         result += value1;
         result -= value2;
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_single_add_only_methods() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        Console.CancelKeyPress += OnCancelKeyPress;
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
     }
 }
 ");
@@ -79,23 +173,6 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_single_remove_only_methods() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        Console.CancelKeyPress -= OnCancelKeyPress;
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_multiple_remove_only_methods() => No_issue_is_reported_for(@"
 using System;
 
@@ -105,23 +182,6 @@ public class TestMe
     {
         Console.CancelKeyPress -= OnCancelKeyPress;
         Console.CancelKeyPress -= OnCancelKeyPress;
-        Console.CancelKeyPress -= OnCancelKeyPress;
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_single_remove_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    private void " + name + @"()
-    {
         Console.CancelKeyPress -= OnCancelKeyPress;
     }
 
@@ -206,19 +266,48 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_add_and_remove_when_both_are_in_a_loop() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_single_add_only_methods() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        foreach (var i in [1, 2, 3])
-        {
-            Console.CancelKeyPress += OnCancelKeyPress;
+        Console.CancelKeyPress += OnCancelKeyPress;
+    }
 
-            Console.CancelKeyPress -= OnCancelKeyPress;
-        }
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_single_remove_only_methods() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_single_remove_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private void " + name + @"()
+    {
+        Console.CancelKeyPress -= OnCancelKeyPress;
     }
 
     private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -269,18 +358,114 @@ public class TestMe
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_more_adds_than_removes_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(3, @"
+        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_do_while_loop() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
-        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
-        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+        do
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+        while (true);
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_for_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_foreach_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_foreach_variable_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething((int, int)[] values)
+    {
+        foreach (var (a, b) in values)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_while_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        while (true)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
     }
 
     private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -311,7 +496,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_same_add_and_remove_amount_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_more_adds_than_removes_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(3, @"
 using System;
 
 public class TestMe
@@ -319,123 +504,8 @@ public class TestMe
     public void DoSomething()
     {
         Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
-        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_single_add_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
         Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_single_remove_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
         Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_loop() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        foreach (var i in [1, 2, 3])
-        {
-            Console.CancelKeyPress += OnCancelKeyPress;
-        }
-
-        Console.CancelKeyPress -= OnCancelKeyPress;
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_loop_without_block() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        foreach (var i in [1, 2, 3])
-            Console.CancelKeyPress += OnCancelKeyPress;
-
-        Console.CancelKeyPress -= OnCancelKeyPress;
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_loop() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        foreach (var i in [1, 2, 3])
-        {
-            Console.CancelKeyPress += OnCancelKeyPress;
-        }
-
-        Console.CancelKeyPress -= OnCancelKeyPress;
-        Console.CancelKeyPress -= OnCancelKeyPress;
-    }
-
-    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
-    {
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_single_add_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void " + name + @"()
-    {
-        Console.CancelKeyPress += OnCancelKeyPress;
     }
 
     private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -499,6 +569,225 @@ public class TestMe
      }
  }
  ");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_same_add_and_remove_amount_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(2, @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
+        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_do_while_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        do
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+        while (true);
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_for_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_for_loop_without_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        for (var i = 0; i < 10; i++)
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_foreach_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_foreach_loop_without_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var i in [1, 2, 3])
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_while_loop() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        while (true)
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_similar_adds_and_removes_but_when_add_is_in_a_while_loop_without_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        while (true)
+            Console.CancelKeyPress += OnCancelKeyPress;
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_single_add_only_methods_named_([ValueSource(nameof(UnregistrationMethodNames))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void " + name + @"()
+    {
+        Console.CancelKeyPress += OnCancelKeyPress;
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_single_add_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_single_remove_using_parenthesized_lambda_expressions() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
 
         protected override string GetDiagnosticId() => MiKo_3029_EventRegistrationOrderAnalyzer.Id;
 

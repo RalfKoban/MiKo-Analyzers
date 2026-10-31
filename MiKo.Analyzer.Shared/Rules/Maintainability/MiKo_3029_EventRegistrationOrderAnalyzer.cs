@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (syntax)
                 {
                     case ForEachStatementSyntax _:
+                    case ForEachVariableStatementSyntax _:
                     case ForStatementSyntax _:
                     case WhileStatementSyntax _:
                     case DoStatementSyntax _:

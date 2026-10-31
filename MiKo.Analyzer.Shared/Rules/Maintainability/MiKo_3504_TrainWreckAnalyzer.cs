@@ -98,6 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeWhileStatement, SyntaxKind.WhileStatement);
             context.RegisterSyntaxNodeAction(AnalyzeDoStatement, SyntaxKind.DoStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeForEachVariableStatement, SyntaxKind.ForEachVariableStatement);
             context.RegisterSyntaxNodeAction(AnalyzeUsingStatement, SyntaxKind.UsingStatement);
 
             // assignments
@@ -459,6 +460,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is ForEachStatementSyntax f && IsTrainWreck(f.Expression, context.SemanticModel))
+            {
+                ReportDiagnostics(context, Issue(f.Expression));
+            }
+        }
+
+        private void AnalyzeForEachVariableStatement(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is ForEachVariableStatementSyntax f && IsTrainWreck(f.Expression, context.SemanticModel))
             {
                 ReportDiagnostics(context, Issue(f.Expression));
             }

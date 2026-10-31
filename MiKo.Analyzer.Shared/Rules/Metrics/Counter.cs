@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                      (int)SyntaxKind.WhileStatement,
                                                                      (int)SyntaxKind.ForStatement,
                                                                      (int)SyntaxKind.ForEachStatement,
+                                                                     (int)SyntaxKind.ForEachVariableStatement,
                                                                      (int)SyntaxKind.CaseSwitchLabel,
                                                                      (int)SyntaxKind.CasePatternSwitchLabel,
                                                                      (int)SyntaxKind.SwitchExpressionArm,
