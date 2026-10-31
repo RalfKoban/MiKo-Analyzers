@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (parameter.ContainingSymbol is IMethodSymbol method)
             {
+                // note that the extension parameter of "new" extension methods is defined at the extension type, not the method itself
                 var expectedIndex = method.IsExtensionMethod ? 1 : 0;
 
                 return method.Parameters.IndexOf(parameter) == expectedIndex;

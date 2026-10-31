@@ -23,11 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static bool IsStringFormatExtension(IParameterSymbol symbol) => symbol?.ContainingSymbol is IMethodSymbol method && IsStringFormatExtension(method);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol?.IsExtensionMethod is true;
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsExtensionMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var parameter = symbol.Parameters[0];
+            var parameter = symbol.GetExtensionMethodParameter();
 
             if (IsConversionExtension(symbol))
             {

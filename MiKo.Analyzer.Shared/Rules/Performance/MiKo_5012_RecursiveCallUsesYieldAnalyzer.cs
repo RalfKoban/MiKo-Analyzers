@@ -63,6 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                             if (method.IsExtensionMethod && calledMethod.IsExtensionMethod)
                             {
+                                // both are classic extension methods, so compare their types (for "new" extension methods we compare the methods themselves)
                                 if (method.ContainingType.Equals(calledMethod.ContainingType, SymbolEqualityComparer.IncludeNullability))
                                 {
                                     return true;

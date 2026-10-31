@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -296,6 +297,53 @@ namespace Bla
     }
 }
 ");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_yield_calling_other_overload_in_extension_block() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public static class TestMe
+{
+    extension(int value)
+    {
+        public IEnumerable<int> Walk()
+        {
+            foreach (var item in value.Walk(1))
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<int> Walk(int count)
+        {
+            yield return count;
+        }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_recursive_yield_in_extension_block() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public static class TestMe
+{
+    extension(int value)
+    {
+        public IEnumerable<int> Walk()
+        {
+            foreach (var item in value.Walk())
+            {
+                yield return item;
+            }
+        }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         protected override string GetDiagnosticId() => MiKo_5012_RecursiveCallUsesYieldAnalyzer.Id;
 

@@ -24,8 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var extensionMethod in symbol.GetExtensionMethods())
             {
-                // get namespace (qualified) of class and of extension method parameter (first one) and compare those
-                var namespaceSymbol = extensionMethod.Parameters[0].Type.ContainingNamespace;
+                // get namespace (qualified) of class and of extension method parameter and compare those
+                var namespaceSymbol = extensionMethod.GetExtensionMethodParameter()?.Type.ContainingNamespace;
 
                 if (namespaceSymbol is null || namespaceSymbol.IsGlobalNamespace)
                 {

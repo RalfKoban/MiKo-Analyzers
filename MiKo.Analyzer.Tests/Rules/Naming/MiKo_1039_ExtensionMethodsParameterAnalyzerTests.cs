@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -186,6 +189,32 @@ public static class TestMeExtensions
 
             VerifyCSharpFix(UncompilableCode, UncompilableCode);
         }
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_parameterless_method_in_extension_block() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int value)
+    {
+        public void DoSomething() { }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_first_argument_of_method_in_extension_block() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int value)
+    {
+        public void DoSomething(int o) { }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         protected override string GetDiagnosticId() => MiKo_1039_ExtensionMethodsParameterAnalyzer.Id;
 

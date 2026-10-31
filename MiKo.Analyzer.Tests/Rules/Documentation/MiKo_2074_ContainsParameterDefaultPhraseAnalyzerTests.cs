@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -358,6 +361,25 @@ public class TestMe
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_wrongly_documented_parameter_of_Contains_in_extension_block() => An_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int[] values)
+    {
+        /// <summary>
+        /// Does something.
+        /// </summary>
+        /// <param name=""item"">
+        /// The item.
+        /// </param>
+        public bool Contains(int item) => true;
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         protected override string GetDiagnosticId() => MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Id;
 

@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => base.ShallAnalyze(symbol, compilation)
-                                                                                            && symbol.IsExtensionMethod is false
+                                                                                            && symbol.IsExtensionMethod() is false
                                                                                             && symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
