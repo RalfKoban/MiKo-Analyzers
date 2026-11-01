@@ -828,6 +828,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of methods defined on the specified type.
         /// </returns>
+        /// <remarks>
+        /// This includes methods from extension blocks that may not directly belong to the given type.
+        /// </remarks>
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
 
         /// <summary>
@@ -842,6 +845,9 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of methods of the specified kind.
         /// </returns>
+        /// <remarks>
+        /// This includes methods from extension blocks that may not directly belong to the given type.
+        /// </remarks>
         internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
         {
             // note that methods with MethodKind.Constructor cannot be referenced by name
@@ -1069,6 +1075,7 @@ namespace MiKoSolutions.Analyzers
         /// A collection of methods (that can be referenced by name).
         /// </returns>
         /// <remarks>
+        /// This includes methods from extension blocks that may not directly belong to the given type.
         /// <note type="important">
         /// Methods with <see cref="MethodKind.Constructor"/> or <see cref="MethodKind.StaticConstructor"/> cannot be referenced by name and therefore are not part of the result.
         /// </note>

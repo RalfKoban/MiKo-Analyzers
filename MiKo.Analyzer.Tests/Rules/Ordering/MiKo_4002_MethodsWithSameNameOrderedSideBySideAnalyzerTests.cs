@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -484,6 +487,74 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_extension_block_with_methods_sharing_same_name_side_by_side() => No_issue_is_reported_for(@"
+public static class TestMe
+{
+    extension(int value)
+    {
+        public int A() => value;
+
+        public int A(int i) => value + i;
+
+        public int B() => value;
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_extension_block_with_methods_sharing_same_name_and_1_method_in_between() => An_issue_is_reported_for(@"
+public static class TestMe
+{
+    extension(int value)
+    {
+        public int A() => value;
+
+        public int B() => value;
+
+        public int A(int i) => value + i;
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [Test]
+        public void Code_gets_fixed_for_extension_block_with_methods_sharing_same_name_and_1_method_in_between()
+        {
+            const string OriginalCode = @"
+public static class TestMe
+{
+    extension(int value)
+    {
+        public int A() => value;
+
+        public int B() => value;
+
+        public int A(int i) => value + i;
+    }
+}
+";
+
+            const string FixedCode = @"
+public static class TestMe
+{
+    extension(int value)
+    {
+        public int A() => value;
+
+        public int A(int i) => value + i;
+
+        public int B() => value;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, languageVersion: LanguageVersion.CSharp14);
         }
 
         protected override string GetDiagnosticId() => MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.Id;
