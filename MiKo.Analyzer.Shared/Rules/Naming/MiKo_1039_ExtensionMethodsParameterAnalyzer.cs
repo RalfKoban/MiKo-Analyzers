@@ -23,7 +23,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static bool IsStringFormatExtension(IParameterSymbol symbol) => symbol?.ContainingSymbol is IMethodSymbol method && IsStringFormatExtension(method);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation) => symbol.IsExtensionMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol, Compilation compilation)
+        {
+#if VS2022 || VS2026
+            // report only once per extension type as all methods of that extension share the same parameter
+            if (symbol.ContainingSymbol is INamedTypeSymbol type && type.IsExtension)
+            {
+                // so use the first method to report on
+                var methodToReportOn = type.GetMethods(MethodKind.Ordinary).FirstOrDefault();
+
+                return symbol.Equals(methodToReportOn, SymbolEqualityComparer.Default);
+            }
+#endif
+
+            return symbol.IsExtensionMethod;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

@@ -127,6 +127,23 @@ public static class TestMeExtensions
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_conversion_and_formatting_methods_in_extension_block() => An_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int i)
+    {
+        public int FromSomething() => 42;
+
+        public int ToSomething() => 42;
+
+        public string FormatWith(object arg0) => string.Format(i, arg0);
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
         [Test]
         public void Code_gets_fixed_for_extension_method_([ValueSource(nameof(ConversionMethodPrefixes))] string prefix)
         {
