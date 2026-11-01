@@ -40,44 +40,41 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var methodName = method.Name;
 
-            foreach (var ancestor in node.Ancestors())
+            foreach (var ancestor in node.AncestorsWithinMethods())
             {
-                switch (ancestor)
+                if (ancestor is CommonForEachStatementSyntax loop)
                 {
-                    case BaseMethodDeclarationSyntax _:
-                    case BaseTypeDeclarationSyntax _:
+                    return IsRecursiveYield(loop, semanticModel, method, methodName);
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsRecursiveYield(CommonForEachStatementSyntax loop, SemanticModel semanticModel, IMethodSymbol method, string methodName)
+        {
+            foreach (var invocation in loop.DescendantNodes<InvocationExpressionSyntax>())
+            {
+                var calledMethod = DetectCalledMethod(semanticModel, invocation, methodName);
+
+                if (calledMethod is null)
+                {
+                    continue;
+                }
+
+                if (method.IsExtensionMethod && calledMethod.IsExtensionMethod)
+                {
+                    // both are classic extension methods, so compare their types (for "new" extension methods we compare the methods themselves)
+                    if (method.ContainingType.Equals(calledMethod.ContainingType, SymbolEqualityComparer.IncludeNullability))
                     {
-                        return false;
+                        return true;
                     }
-
-                    case ForEachStatementSyntax loop:
+                }
+                else
+                {
+                    if (method.Equals(calledMethod, SymbolEqualityComparer.IncludeNullability))
                     {
-                        foreach (var invocation in loop.DescendantNodes<InvocationExpressionSyntax>())
-                        {
-                            var calledMethod = DetectCalledMethod(semanticModel, invocation, methodName);
-
-                            if (calledMethod is null)
-                            {
-                                continue;
-                            }
-
-                            if (method.IsExtensionMethod && calledMethod.IsExtensionMethod)
-                            {
-                                if (method.ContainingType.Equals(calledMethod.ContainingType, SymbolEqualityComparer.IncludeNullability))
-                                {
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                if (method.Equals(calledMethod, SymbolEqualityComparer.IncludeNullability))
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-
-                        return false;
+                        return true;
                     }
                 }
             }

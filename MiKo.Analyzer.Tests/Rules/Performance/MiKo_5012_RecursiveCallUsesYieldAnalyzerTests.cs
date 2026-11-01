@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -59,7 +60,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_methods_with_normal_yield_returns() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_methods_with_normal_yield_return() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -76,7 +77,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_methods_with_normal_yield_in_foreach_returns() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_methods_with_normal_yield_return_in_foreach() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -96,7 +97,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_methods_with_normal_yield_in_nested_foreach_returns() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_methods_with_normal_yield_return_in_nested_foreach() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -119,7 +120,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield_return_in_foreach_and_nested_foreach() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -150,7 +151,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield_alternatively_sorted() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield_return_in_foreach_and_nested_foreach_alternatively_sorted() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -179,10 +180,72 @@ namespace Bla
     }
 }
 ");
+
+        [Test] // TODO: RKN this test is not working as expected - test should simulate 'MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer' source code but does not
+        public void No_issue_is_reported_for_non_recursive_yield_return_due_to_different_parameter_types_in_foreach() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public interface IBase
+    {
+    }
+
+    public interface IInherited : IBase
+    {
+        IEnumerable<IBase> Children { get; }
+    }
+
+    public class TestMe
+    {
+        public IEnumerable<IBase> Call(IInherited i)
+        {
+            foreach (var item in i.Children)
+            {
+                var b = Call(item);
+
+                if (b != null)
+                {
+                    yield return b;
+                }
+            }
+        }
+
+        private IBase Call(IBase i) => i;
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_yield_return_calling_other_overload_in_extension_block_in_foreach() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public static class TestMe
+{
+    extension(int value)
+    {
+        public IEnumerable<int> Walk()
+        {
+            foreach (var item in value.Walk(1))
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<int> Walk(int count)
+        {
+            yield return count;
+        }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_recursive_yield() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_recursive_yield_return_in_foreach() => An_issue_is_reported_for(2, @"
 using System;
 using System.Collections.Generic;
 
@@ -222,7 +285,7 @@ namespace Bla
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_recursive_yield_as_extension() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_recursive_yield_return_as_extension_in_foreach() => An_issue_is_reported_for(2, @"
 using System;
 using System.Collections.Generic;
 
@@ -260,42 +323,232 @@ namespace Bla
 }
 ");
 
-        // TODO: RKN this test is not working as expected - test should simulate 'MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer' source code but does not
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
         [Test]
-        public void No_issue_is_reported_for_non_recursive_yield_due_to_different_parameter_types() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_recursive_yield_return_as_extension_block_in_foreach() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public static class TestMe
+{
+    extension(int value)
+    {
+        public IEnumerable<int> Walk()
+        {
+            foreach (var item in value.Walk())
+            {
+                yield return item;
+            }
+        }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [Test]
+        public void No_issue_is_reported_for_methods_with_normal_yield_return_in_foreach_variable() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
 namespace Bla
 {
-    public interface IBase
-    {
-    }
-
-    public interface IInherited : IBase
-    {
-        IEnumerable<IBase> Children { get; }
-    }
-
     public class TestMe
     {
-        public IEnumerable<IBase> Call(IInherited i)
+        public IEnumerable<int> DoSomething(IEnumerable<(int, int)> items)
         {
-            foreach (var item in i.Children)
+            foreach (var (item, _) in items)
             {
-                var b = Call(item);
+                yield return item + 42;
+            }
+        }
+    }
+}
+");
 
-                if (b != null)
+        [Test]
+        public void No_issue_is_reported_for_methods_with_normal_yield_return_in_nested_foreach_variable() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<(IEnumerable<int>, int)> items)
+        {
+            foreach (var (item, _) in items)
+            {
+                foreach (var i in item)
                 {
-                    yield return b;
+                    yield return i + 42;
+                }
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield_return_in_foreach_and_nested_foreach_variable() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<(int, int)> items)
+        {
+            foreach (var (item, _) in items)
+            {
+                yield return item + 42;
+            }
+        }
+
+        public IEnumerable<int> DoSomething(IEnumerable<(IEnumerable<(int, int)>, int)> items)
+        {
+            foreach (var (item, _) in items)
+            {
+                foreach (var i in DoSomething(item))
+                {
+                    yield return i + 42;
+                }
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield_return_in_foreach_and_nested_foreach_variable_alternatively_sorted() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<(IEnumerable<(int, int)>, int)> items)
+        {
+            foreach (var (item, _) in items)
+            {
+                foreach (var i in DoSomething(item))
+                {
+                    yield return i + 42;
                 }
             }
         }
 
-        private IBase Call(IBase i) => i;
+        public IEnumerable<int> DoSomething(IEnumerable<(int, int)> items)
+        {
+            foreach (var (item, _) in items)
+            {
+                yield return item + 42;
+            }
+        }
     }
 }
 ");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_recursive_yield_return_in_foreach_variable() => An_issue_is_reported_for(2, @"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class Tree<T>
+    {
+        public T Value;
+        public Tree<T> Left;
+        public Tree<T> Right;
+    }
+
+    public class TestMe
+    {
+        public static IEnumerable<(T, int)> PreorderTraversal<T>(Tree<T> root)
+        {
+            if (root == null)
+            {
+                yield break;
+            }
+
+            yield return (root.Value, 0);
+
+            foreach (var (item, _) in PreorderTraversal(root.Left))
+            {
+                yield return (item, 0);
+            }
+
+            foreach (var (item, _) in PreorderTraversal(root.Right))
+            {
+                yield return (item, 0);
+            }
+        }
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_recursive_yield_return_as_extension_in_foreach_variable() => An_issue_is_reported_for(2, @"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class Tree<T>
+    {
+        public T Value;
+        public Tree<T> Left;
+        public Tree<T> Right;
+    }
+
+    public static class TestMe
+    {
+        public static IEnumerable<(T, int)> PreorderTraversal<T>(this Tree<T> root)
+        {
+            if (root == null)
+            {
+                yield break;
+            }
+
+            yield return (root.Value, 0);
+
+            foreach (var (item, _) in root.Left.PreorderTraversal())
+            {
+                yield return (item, 0);
+            }
+
+            foreach (var (item, _) in root.Right.PreorderTraversal())
+            {
+                yield return (item, 0);
+            }
+        }
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_recursive_yield_return_as_extension_block_in_foreach_variable() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public static class TestMe
+{
+    extension(int value)
+    {
+        public IEnumerable<(int, int)> Walk()
+        {
+            foreach (var (item, _) in value.Walk())
+            {
+                yield return (item, 0);
+            }
+        }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         protected override string GetDiagnosticId() => MiKo_5012_RecursiveCallUsesYieldAnalyzer.Id;
 

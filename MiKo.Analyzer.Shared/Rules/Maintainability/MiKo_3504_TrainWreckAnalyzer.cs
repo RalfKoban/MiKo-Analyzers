@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (syntax.GetSymbol(semanticModel) is IMethodSymbol method)
                 {
-                    if (method.IsExtensionMethod)
+                    if (method.IsExtensionMethod())
                     {
                         // ignore extension methods as they are allowed to be chained
                         return true;

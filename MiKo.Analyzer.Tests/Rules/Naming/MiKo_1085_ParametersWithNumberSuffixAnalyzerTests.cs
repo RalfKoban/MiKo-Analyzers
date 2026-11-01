@@ -56,6 +56,17 @@ public static class TestMeExtensions
 ");
 
         [Test]
+        public void No_issue_is_reported_for_specific_string_extension_method_in_extension_block() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(string value)
+    {
+        public static string FormatWith(object arg0) => string.Format(format, arg0);
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_open_generic_parameter_on_generic_method() => No_issue_is_reported_for(@"
 public class TestMe
 {

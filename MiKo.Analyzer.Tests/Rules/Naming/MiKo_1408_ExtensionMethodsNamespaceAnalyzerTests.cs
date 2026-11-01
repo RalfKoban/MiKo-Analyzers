@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -176,6 +179,22 @@ public static class TestMe
     public static void DoSomething(this int i) { }
 }
 ");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_extension_block_class_with_non_fitting_namespace() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public static class TestMe
+    {
+        extension(int value)
+        {
+            public void DoSomething() { }
+        }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
 
         protected override string GetDiagnosticId() => MiKo_1408_ExtensionMethodsNamespaceAnalyzer.Id;
 

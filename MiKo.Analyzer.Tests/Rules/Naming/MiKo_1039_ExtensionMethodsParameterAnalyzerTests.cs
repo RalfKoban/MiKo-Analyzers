@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -61,6 +64,49 @@ public static class TestMeExtensions
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_parameterless_method_in_extension_block() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int value)
+    {
+        public void DoSomething() { }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_first_argument_of_method_in_extension_block() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int value)
+    {
+        public void DoSomething(int o) { }
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void No_issue_is_reported_for_conversion_and_formatting_methods_in_extension_block() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int value)
+    {
+        public int FromSomething() => 42;
+
+        public int ToSomething() => 42;
+
+        public string FormatWith(object arg0) => string.Format(value, arg0);
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
         [Test]
         public void An_issue_is_reported_for_extension_method_with_parameter_named_([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
 public static class TestMeExtensions
@@ -81,6 +127,23 @@ public static class TestMeExtensions
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test]
+        public void An_issue_is_reported_for_conversion_and_formatting_methods_in_extension_block() => An_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    extension(int i)
+    {
+        public int FromSomething() => 42;
+
+        public int ToSomething() => 42;
+
+        public string FormatWith(object arg0) => string.Format(i, arg0);
+    }
+}
+", languageVersion: LanguageVersion.CSharp14);
+
         [Test]
         public void Code_gets_fixed_for_extension_method_([ValueSource(nameof(ConversionMethodPrefixes))] string prefix)
         {
@@ -91,10 +154,7 @@ public static class TestMeExtensions
 }
 ";
 
-            var originalCode = Template.Replace("#PREFIX#", prefix).Replace("#NAME#", "i");
-            var fixedCode = Template.Replace("#PREFIX#", prefix).Replace("#NAME#", "source");
-
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(Template.Replace("#PREFIX#", prefix).Replace("#NAME#", "i"), Template.Replace("#PREFIX#", prefix).Replace("#NAME#", "source"));
         }
 
         [Test]
@@ -107,10 +167,7 @@ public static class TestMeExtensions
 }
 ";
 
-            var originalCode = Template.Replace("#NAME#", "i");
-            var fixedCode = Template.Replace("#NAME#", "value");
-
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(Template.Replace("#NAME#", "i"), Template.Replace("#NAME#", "value"));
         }
 
         [Test]
@@ -125,10 +182,7 @@ public static class TestMeExtensions
 }
 ";
 
-            var originalCode = Template.Replace("#NAME#", "i");
-            var fixedCode = Template.Replace("#NAME#", "values");
-
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(Template.Replace("#NAME#", "i"), Template.Replace("#NAME#", "values"));
         }
 
         [Test]
@@ -145,10 +199,7 @@ public static class TestMeExtensions
 }
 ";
 
-            var originalCode = Template.Replace("#NAME#", "nodes");
-            var fixedCode = Template.Replace("#NAME#", "values");
-
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(Template.Replace("#NAME#", "nodes"), Template.Replace("#NAME#", "values"));
         }
 
         [Test]
@@ -163,10 +214,59 @@ public static class TestMeExtensions
 }
 ";
 
-            var originalCode = Template.Replace("#NAME#", "i");
-            var fixedCode = Template.Replace("#NAME#", "format");
+            VerifyCSharpFix(Template.Replace("#NAME#", "i"), Template.Replace("#NAME#", "format"));
+        }
 
-            VerifyCSharpFix(originalCode, fixedCode);
+        [Test]
+        public void Code_gets_fixed_for_conversion_method_in_extension_block_([ValueSource(nameof(ConversionMethodPrefixes))] string prefix)
+        {
+            const string Template = @"
+public static class TestMeExtensions
+{
+    extension(int #NAME#)
+    {
+        public int #PREFIX#Something() => 42;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#PREFIX#", prefix).Replace("#NAME#", "i"), Template.Replace("#PREFIX#", prefix).Replace("#NAME#", "value"), languageVersion: LanguageVersion.CSharp14);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_string_format_method_in_extension_block()
+        {
+            const string Template = @"
+public static class TestMeExtensions
+{
+    extension(string #NAME#)
+    {
+        public string FormatWith(object arg0) => string.Format(#NAME#, arg0);
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#NAME#", "i"), Template.Replace("#NAME#", "value"), languageVersion: LanguageVersion.CSharp14);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conversion_and_string_format_methods_in_extension_block()
+        {
+            const string Template = @"
+public static class TestMeExtensions
+{
+    extension(int #NAME#)
+    {
+        public int FromSomething() => 42;
+
+        public int ToSomething() => 42;
+
+        public string FormatWith(object arg0) => string.Format(#NAME#, arg0);
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#NAME#", "i"), Template.Replace("#NAME#", "value"), languageVersion: LanguageVersion.CSharp14);
         }
 
         [Test]
