@@ -353,7 +353,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable<int> DoSomething(IEnumerable<Tuple<int,int>> items)
+        public IEnumerable<int> DoSomething(IEnumerable<(int, int)> items)
         {
             foreach (var (item, _) in items)
             {
@@ -373,7 +373,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable<int> DoSomething(IEnumerable<IEnumerable<Tuple<int,int>>> items)
+        public IEnumerable<int> DoSomething(IEnumerable<(IEnumerable<int>, int)> items)
         {
             foreach (var (item, _) in items)
             {
@@ -396,7 +396,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable<int> DoSomething(IEnumerable<Tuple<int,int>> items)
+        public IEnumerable<int> DoSomething(IEnumerable<(int, int)> items)
         {
             foreach (var (item, _) in items)
             {
@@ -404,7 +404,7 @@ namespace Bla
             }
         }
 
-        public IEnumerable<int> DoSomething(IEnumerable<IEnumerable<Tuple<int,int>>> items)
+        public IEnumerable<int> DoSomething(IEnumerable<(IEnumerable<(int, int)>, int)> items)
         {
             foreach (var (item, _) in items)
             {
@@ -427,7 +427,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable<int> DoSomething(IEnumerable<IEnumerable<item1,>> items)
+        public IEnumerable<int> DoSomething(IEnumerable<(IEnumerable<(int, int)>, int)> items)
         {
             foreach (var (item, _) in items)
             {
@@ -438,7 +438,7 @@ namespace Bla
             }
         }
 
-        public IEnumerable<int> DoSomething(IEnumerable<item1,> items)
+        public IEnumerable<int> DoSomething(IEnumerable<(int, int)> items)
         {
             foreach (var (item, _) in items)
             {

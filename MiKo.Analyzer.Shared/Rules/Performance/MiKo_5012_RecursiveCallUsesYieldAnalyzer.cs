@@ -42,13 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             foreach (var ancestor in node.AncestorsWithinMethods())
             {
-                switch (ancestor)
+                if (ancestor is CommonForEachStatementSyntax loop)
                 {
-                    case ForEachStatementSyntax loop:
-                        return IsRecursiveYield(loop, semanticModel, method, methodName);
-
-                    case ForEachVariableStatementSyntax loop:
-                        return IsRecursiveYield(loop, semanticModel, method, methodName);
+                    return IsRecursiveYield(loop, semanticModel, method, methodName);
                 }
             }
 
