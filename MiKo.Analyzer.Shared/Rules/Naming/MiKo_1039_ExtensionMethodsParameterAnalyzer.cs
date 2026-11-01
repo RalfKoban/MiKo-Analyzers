@@ -29,17 +29,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameter = symbol.GetExtensionMethodParameter();
 
+            if (IsExtensionType(parameter))
+            {
+                return AnalyzeName(symbol, parameter, Value, Values);
+            }
+
             if (IsConversionExtension(symbol))
             {
-                return AnalyzeName(parameter, Source);
+                return AnalyzeName(symbol, parameter, Source);
             }
 
             if (IsStringFormatExtension(symbol))
             {
-                return AnalyzeName(parameter, Format);
+                return AnalyzeName(symbol, parameter, Format);
             }
 
-            return AnalyzeName(parameter, Value, Values, Source);
+            return AnalyzeName(symbol, parameter, Value, Values, Source);
+        }
+
+        private static bool IsExtensionType(IParameterSymbol symbol)
+        {
+#if VS2022 || VS2026
+            return symbol.ContainingSymbol is INamedTypeSymbol type && type.IsExtension;
+#else
+            return false;
+#endif
         }
 
         private static bool IsConversionExtension(IMethodSymbol method)
@@ -55,15 +69,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool IsConversionExtension(IMethodSymbol method, string prefix)
         {
             var methodName = method.Name;
+            var prefixLength = prefix.Length;
 
             if (methodName.StartsWith(prefix, StringComparison.Ordinal))
             {
-                if (methodName.Length == prefix.Length)
+                if (methodName.Length == prefixLength)
                 {
                     return true;
                 }
 
-                if (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCaseOrNumber())
+                if (methodName.Length > prefixLength && methodName[prefixLength].IsUpperCaseOrNumber())
                 {
                     return true;
                 }
@@ -74,22 +89,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType is SpecialType.System_String && method.Name.StartsWith(nameof(string.Format), StringComparison.Ordinal);
 
-        private static string FindBetterName(IParameterSymbol symbol)
+        private static string FindBetterName(IMethodSymbol method, IParameterSymbol symbol)
         {
-            if (symbol.ContainingSymbol is IMethodSymbol method && IsConversionExtension(method))
+            if (IsExtensionType(symbol) is false)
             {
-                return Source;
-            }
+                // adjust names only in case we have no dedicated "new" extension block, as in such case the parameter is valid for each of the members defined in the extension block
+                if (IsConversionExtension(method))
+                {
+                    return Source;
+                }
 
-            if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType is SpecialType.System_String)
-            {
-                return Format;
+                if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType is SpecialType.System_String)
+                {
+                    return Format;
+                }
             }
 
             return symbol.Type.IsEnumerable() ? Values : Value;
         }
 
-        private Diagnostic[] AnalyzeName(IParameterSymbol parameter, params string[] names)
+        private Diagnostic[] AnalyzeName(IMethodSymbol method, IParameterSymbol parameter, params string[] names)
         {
             var parameterName = parameter.Name;
 
@@ -98,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            var proposal = FindBetterName(parameter);
+            var proposal = FindBetterName(method, parameter);
 
             return new[] { Issue(parameter, names.HumanizedConcatenated(), CreateBetterNameProposal(proposal)) };
         }
