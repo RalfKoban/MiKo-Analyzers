@@ -2728,7 +2728,7 @@ Declaring a delegate type sets a contract specifying the method signatures it ca
     <value>Method parameters should be referenced using &lt;paramref name="..."/&gt; in the documentation, not &lt;param name="..."/&gt; or plain text. This allows the documentation to update automatically if the parameter is renamed or deleted.</value>
   </data>
   <data name="MiKo_2044_MessageFormat" xml:space="preserve">
-    <value>Fix incorrect parameter reference '{0}'</value>
+    <value>Fix incorrect parameter reference '{1}'</value>
   </data>
   <data name="MiKo_2044_Title" xml:space="preserve">
     <value>Reference method parameters correctly in documentation</value>
@@ -3109,7 +3109,7 @@ This ensures the documentation is precise and informative, helping developers un
     <value>To make example documentation more user-friendly, it should begin with a brief phrase that explains what the example demonstrates. This provides clarity and helps developers quickly understand the purpose of the example.</value>
   </data>
   <data name="MiKo_2100_MessageFormat" xml:space="preserve">
-    <value>Start &lt;example&gt; with: '{0}'</value>
+    <value>Start &lt;example&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2100_Title" xml:space="preserve">
     <value>Start &lt;example&gt; documentation with descriptive default phrase</value>
@@ -3351,10 +3351,10 @@ This ensures your list documentation is clear and accurately structured.</value>
     <value>&lt;term&gt; is not allowed to occur multiple times for this type of &lt;list&gt;</value>
   </data>
   <data name="MiKo_2217_MessageArgument_UnknownTypeSpecified" xml:space="preserve">
-    <value>The 'type' attribute contains the unknown type {0}</value>
+    <value>The 'type' attribute contains the unknown type '{0}'</value>
   </data>
   <data name="MiKo_2217_MessageFormat" xml:space="preserve">
-    <value>Use &lt;list&gt; properly: {0}</value>
+    <value>Use &lt;list&gt; properly: {1}</value>
   </data>
   <data name="MiKo_2217_Title" xml:space="preserve">
     <value>Format &lt;list&gt; documentation properly</value>
@@ -3402,7 +3402,7 @@ This ensures clarity and usability in your documentation, making it straightforw
     <value>An empty documentation is a code smell. It indicates that the developer created the XML documentation tag intentionally but failed to provide any actual content. This suggests a potential oversight or lack of attention to detail. Proper documentation is crucial for code clarity and maintenance.</value>
   </data>
   <data name="MiKo_2221_MessageFormat" xml:space="preserve">
-    <value>Provide a documentation for &lt;{0}/&gt;</value>
+    <value>Provide a documentation for &lt;{1}/&gt;</value>
   </data>
   <data name="MiKo_2221_Title" xml:space="preserve">
     <value>Do not use empty XML tags in documentation</value>
@@ -3626,7 +3626,7 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
     <value>Documentation for a response value should start with a default phrase that provides a detailed description of what the response is. This approach helps clarify the purpose and use of the response value for developers.</value>
   </data>
   <data name="MiKo_2240_MessageFormat" xml:space="preserve">
-    <value>Start &lt;response&gt; with: '{0}'</value>
+    <value>Start &lt;response&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2240_Title" xml:space="preserve">
     <value>Do not start &lt;response&gt; documentation with 'Returns'</value>
@@ -4638,7 +4638,7 @@ This approach ensures stability and clarity, keeping the Enum's behavior consist
     <value>Write HResults in hexadecimal, not as negative integers. It's much easier to recognize and search for '0x80070005' than '-2147024891'. Keeps the code clean and user-friendly.</value>
   </data>
   <data name="MiKo_3079_MessageFormat" xml:space="preserve">
-    <value>Use 'unchecked((int)0x{0})' instead for HResult</value>
+    <value>Use 'unchecked((int)0x{1})' instead for HResult</value>
   </data>
   <data name="MiKo_3079_Title" xml:space="preserve">
     <value>Write HResults in hexadecimal</value>
@@ -4698,7 +4698,7 @@ This makes the code easier to read and change later.</value>
 This makes the code look more intuitive and easier to understand.</value>
   </data>
   <data name="MiKo_3084_MessageFormat" xml:space="preserve">
-    <value>Place it on right side of '{0}'</value>
+    <value>Place it on right side of '{1}'</value>
   </data>
   <data name="MiKo_3084_Title" xml:space="preserve">
     <value>Place variables, not constants, on the left side of comparisons</value>
@@ -5356,7 +5356,7 @@ Instead, provide a method that returns an 'IDisposable'. This way, developers ca
     <value>To standardize delegates and adhere to .NET Framework Design Guidelines, use 'Func&lt;T, bool&gt;' for callbacks instead of 'Predicate&lt;T&gt;'. This approach ensures consistency and aligns with best practices.</value>
   </data>
   <data name="MiKo_3215_MessageFormat" xml:space="preserve">
-    <value>Use 'Func&lt;{0}, bool&gt;' instead of 'Predicate&lt;{0}&gt;'</value>
+    <value>Use 'Func&lt;{1}, bool&gt;' instead of 'Predicate&lt;{1}&gt;'</value>
   </data>
   <data name="MiKo_3215_Title" xml:space="preserve">
     <value>Use 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;T&gt;' for callbacks</value>
@@ -5580,7 +5580,7 @@ Instead, to avoid 'null', use a non-null pattern (such as "is { } something"), a
 Using 'IReadOnlyList&lt;T&gt;' as the parameter type instead makes the intent explicit.</value>
   </data>
   <data name="MiKo_3235_MessageFormat" xml:space="preserve">
-    <value>Change '{0}' type to 'IReadOnlyList'</value>
+    <value>Change '{0}' type to 'IReadOnlyList{1}'</value>
   </data>
   <data name="MiKo_3235_Title" xml:space="preserve">
     <value>Do not call 'ToList' or 'ToArray' on an 'IEnumerable' parameter</value>
