@@ -343,6 +343,23 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
+        public void An_issue_is_reported_for_method_with_long_for_statement_without_condition() => An_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            for (var i = 0; ; i++)
+            {
+                var x = 0;
+                var y = 1;
+                var z = x + y;
+            }
+        }
+    }
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_long_for_statement() => An_issue_is_reported_for(@"
 
     public class TypeWithMethod
