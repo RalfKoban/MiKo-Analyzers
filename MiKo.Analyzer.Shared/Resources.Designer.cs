@@ -7681,7 +7681,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix incorrect parameter reference &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Fix incorrect parameter reference &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2044_MessageFormat {
             get {
@@ -8800,7 +8800,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2100_MessageFormat {
             get {
@@ -9494,7 +9494,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;type&apos; attribute contains the unknown type {0}.
+        ///   Looks up a localized string similar to The &apos;type&apos; attribute contains the unknown type &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_2217_MessageArgument_UnknownTypeSpecified {
             get {
@@ -9503,7 +9503,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {0}.
+        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {1}.
         /// </summary>
         internal static string MiKo_2217_MessageFormat {
             get {
@@ -9635,7 +9635,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide a documentation for &lt;{0}/&gt;.
+        ///   Looks up a localized string similar to Provide a documentation for &lt;{1}/&gt;.
         /// </summary>
         internal static string MiKo_2221_MessageFormat {
             get {
@@ -10291,7 +10291,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;response&gt; with: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Start &lt;response&gt; with: &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2240_MessageFormat {
             get {
@@ -13209,7 +13209,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{0})&apos; instead for HResult.
+        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{1})&apos; instead for HResult.
         /// </summary>
         internal static string MiKo_3079_MessageFormat {
             get {
@@ -13383,7 +13383,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place it on right side of &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Place it on right side of &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_3084_MessageFormat {
             get {
@@ -15295,7 +15295,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Func&lt;{0}, bool&gt;&apos; instead of &apos;Predicate&lt;{0}&gt;&apos;.
+        ///   Looks up a localized string similar to Use &apos;Func&lt;{1}, bool&gt;&apos; instead of &apos;Predicate&lt;{1}&gt;&apos;.
         /// </summary>
         internal static string MiKo_3215_MessageFormat {
             get {
@@ -15957,7 +15957,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change &apos;{0}&apos; type to &apos;IReadOnlyList&apos;.
+        ///   Looks up a localized string similar to Change &apos;{0}&apos; type to &apos;IReadOnlyList{1}&apos;.
         /// </summary>
         internal static string MiKo_3235_MessageFormat {
             get {

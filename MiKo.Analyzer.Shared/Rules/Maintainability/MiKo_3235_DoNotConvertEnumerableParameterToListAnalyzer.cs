@@ -43,8 +43,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (parameterNames.TryGetValue(m.GetIdentifierName(), out var parameter))
                         {
                             var parameterSyntax = parameter.GetSyntax();
+                            var type = parameterSyntax.Type;
 
-                            return new[] { Issue(parameterSyntax.Type) };
+                            var genericTypeArguments = type is GenericNameSyntax generic ? generic.TypeArgumentList.ToString() : string.Empty;
+
+                            return new[] { Issue(type, genericTypeArguments) };
                         }
                     }
                 }

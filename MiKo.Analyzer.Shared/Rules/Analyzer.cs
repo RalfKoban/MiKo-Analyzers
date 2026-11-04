@@ -1383,7 +1383,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// <returns>
         /// A diagnostic issue for the syntax node.
         /// </returns>
-        protected Diagnostic Issue<T>(SyntaxNode node, T arg1, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, arg1.ToString());
+        protected Diagnostic Issue<T>(SyntaxNode node, T arg1, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, node.ToString(), arg1.ToString());
 
         /// <summary>
         /// Creates a diagnostic issue for a syntax token with a single argument and additional properties.
