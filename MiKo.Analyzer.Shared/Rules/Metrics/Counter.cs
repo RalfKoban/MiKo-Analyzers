@@ -163,6 +163,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             {
                 switch (node)
                 {
+                    case null:
+                    {
+                        break;
+                    }
+
                     case BlockSyntax _:
                     {
                         break;
@@ -221,7 +226,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case ReturnStatementSyntax s:
                     {
-                        CountLinesOfCode(s.GetStartingLine(), lines);
+                        CountLinesOfCode(s.ReturnKeyword.GetStartingLine(), lines);
 
                         var expression = s.Expression;
 
@@ -238,7 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                     case DoStatementSyntax s:
                     {
                         // 'do' is a starter keyword, so we have to count that separately
-                        CountLinesOfCode(s.GetStartingLine(), lines);
+                        CountLinesOfCode(s.DoKeyword.GetStartingLine(), lines);
 
                         node = s.Condition;
 
@@ -247,6 +252,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case ForStatementSyntax s:
                     {
+                        // 'for' is a starter keyword, so we have to count that separately
+                        CountLinesOfCode(s.ForKeyword.GetLocation(), lines);
+
                         node = s.Condition;
 
                         continue;
@@ -254,6 +262,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case CommonForEachStatementSyntax s:
                     {
+                        // 'foreach' is a starter keyword, so we have to count that separately
+                        CountLinesOfCode(s.ForEachKeyword.GetLocation(), lines);
+
                         node = s.Expression;
 
                         continue;
@@ -261,6 +272,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case WhileStatementSyntax s:
                     {
+                        // 'while' is a starter keyword, so we have to count that separately
+                        CountLinesOfCode(s.WhileKeyword.GetLocation(), lines);
+
                         node = s.Condition;
 
                         continue;
