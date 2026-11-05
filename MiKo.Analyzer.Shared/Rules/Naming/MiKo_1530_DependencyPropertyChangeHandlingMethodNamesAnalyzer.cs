@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (registeredPropertyName.Length > 0)
             {
-                return "On" + registeredPropertyName + "Changed";
+                return Constants.Names.On + registeredPropertyName + "Changed";
             }
 
             return methodName;

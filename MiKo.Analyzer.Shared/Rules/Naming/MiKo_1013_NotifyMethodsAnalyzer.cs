@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1013";
 
-        private const string CorrectStartingPhrase = "On";
+        private const string CorrectStartingPhrase = Constants.Names.On;
         private const string StartingPhrase = "Notify";
 
         private static readonly string[] StartingPhrases = { StartingPhrase, CorrectStartingPhrase + StartingPhrase };

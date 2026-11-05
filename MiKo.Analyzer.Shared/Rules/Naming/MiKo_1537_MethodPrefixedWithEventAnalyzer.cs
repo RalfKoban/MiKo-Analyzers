@@ -17,13 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            const string Prefix = "Event";
+            const string Prefix = Constants.Names.Event;
 
             var symbolName = symbol.Name;
 
             if (symbolName.Length > Prefix.Length && symbolName.StartsWith(Prefix, StringComparison.Ordinal))
             {
-                var betterName = "On".ConcatenatedWith(symbolName.AsSpan(Prefix.Length));
+                var betterName = Constants.Names.On.ConcatenatedWith(symbolName.AsSpan(Prefix.Length));
 
                 return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }

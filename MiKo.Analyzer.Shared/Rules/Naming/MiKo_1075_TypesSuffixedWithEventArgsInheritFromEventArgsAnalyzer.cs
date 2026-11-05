@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var betterName = symbol.Name.Without(EventArgSuffixes);
 
             return symbol.IsPrismEvent()
-                   ? betterName + "Event" // prism events should be suffixed with 'Event'
+                   ? betterName + Constants.Names.Event // prism events should be suffixed with 'Event'
                    : betterName;
         }
     }

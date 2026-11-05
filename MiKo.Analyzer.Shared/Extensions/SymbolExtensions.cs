@@ -731,20 +731,14 @@ namespace MiKoSolutions.Analyzers
                 {
                     // seems we have an extension type, so add all it's members, too
                     results.AddRange(type.GetMembers<TSymbol>());
+
+                    continue;
                 }
-                else
-                {
-                    if (symbol is TSymbol member && member.IsImplicitlyDeclared is false)
-                    {
-                        results.Add(member);
-                    }
-                }
-#else
+#endif
                 if (symbol is TSymbol member && member.IsImplicitlyDeclared is false)
                 {
                     results.Add(member);
                 }
-#endif
             }
 
             return results;
@@ -1718,6 +1712,13 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static IReadOnlyCollection<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
+            if (value.TypeKind is TypeKind.Interface)
+            {
+                return value is INamedTypeSymbol namedType
+                       ? value.AllInterfaces.Insert(0, namedType)
+                       : value.AllInterfaces;
+            }
+
             var symbol = value;
 
             var baseTypes = new Queue<ITypeSymbol>(symbol.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
