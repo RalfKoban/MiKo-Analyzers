@@ -37,6 +37,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private const string Has = "Has";
         private const string Have = Constants.Markers.Have;
 
+        private const string EventSuffix = Constants.Names.Event;
+        private const string OnPrefix = Constants.Names.On;
+        private const string BeforePrefix = "Before";
+        private const string AfterPrefix = "After";
+
         private static readonly string[] SpecialThrowPhrases =
                                                                {
                                                                    Throws,
@@ -56,6 +61,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                              };
 
         private static readonly string[] Splitters = { "Of", "With", "To", "In", "From", "For" };
+
+        private static readonly ConcurrentDictionary<string, string> EventNamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         private static readonly ConcurrentDictionary<string, string> TestNamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
@@ -484,6 +491,129 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <see langword="true"/> if the name ends with a structural design pattern suffix; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsNameForStructuralDesignPattern(string name) => name.EndsWithAny(Constants.Names.StructuralDesignPatternNames.Keys, StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Finds a better name for a given event's name.
+        /// </summary>
+        /// <param name="eventName">
+        /// The original name to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name for the given name.
+        /// </returns>
+        internal static string FindBetterEventName(string eventName)
+        {
+            return EventNamesCache.GetOrAdd(eventName, FindBetterEventNameLocal);
+
+            string FindBetterEventNameLocal(string symbolName)
+            {
+                var onPrefixLength = OnPrefix.Length;
+                var beforePrefixLength = BeforePrefix.Length;
+                var afterPrefixLength = AfterPrefix.Length;
+
+                var name = symbolName.EndsWith(EventSuffix, StringComparison.OrdinalIgnoreCase)
+                           ? symbolName.AsSpan(0, symbolName.Length - EventSuffix.Length)
+                           : symbolName.AsSpan();
+
+                // loop twice to get combinations such as 'OnBefore' or 'AfterOn'
+                for (var i = 0; i < 2; i++)
+                {
+                    if (name.Length > onPrefixLength && name.StartsWith(OnPrefix, StringComparison.OrdinalIgnoreCase) && name[onPrefixLength].IsUpperCase())
+                    {
+                        name = name.Slice(onPrefixLength);
+                    }
+
+                    if (name.Length > beforePrefixLength && name.StartsWith(BeforePrefix, StringComparison.OrdinalIgnoreCase) && name[beforePrefixLength].IsUpperCase())
+                    {
+                        name = FixBefore(name.Slice(beforePrefixLength));
+                    }
+
+                    if (name.Length > afterPrefixLength && name.StartsWith(AfterPrefix, StringComparison.OrdinalIgnoreCase) && name[afterPrefixLength].IsUpperCase())
+                    {
+                        name = FixAfter(name.Slice(afterPrefixLength));
+                    }
+                }
+
+                return FinalFix(name);
+            }
+
+            ReadOnlySpan<char> FixBefore(in ReadOnlySpan<char> name)
+            {
+                var verb = name.ToString();
+
+                if (Verbalizer.IsFirstWordGerundVerb(verb))
+                {
+                    // nothing to do as it is already gerund
+                }
+                else if (Verbalizer.IsFirstWordPastTenseVerb(verb))
+                {
+                    verb = Verbalizer.MakeFirstWordGerundVerb(verb, wordBoundary: WordBoundary.UpperCaseCharacters);
+                }
+                else if (Verbalizer.IsFirstWordInfiniteVerb(verb))
+                {
+                    verb = Verbalizer.MakeFirstWordGerundVerb(verb, wordBoundary: WordBoundary.UpperCaseCharacters);
+                }
+                else
+                {
+                    verb = Verbalizer.MakeGerundVerb(verb);
+                    verb = MoveVerbToFront(verb);
+                }
+
+                return verb.AsSpan();
+            }
+
+            ReadOnlySpan<char> FixAfter(in ReadOnlySpan<char> name)
+            {
+                var verb = name.ToString();
+
+                if (Verbalizer.IsFirstWordPastTenseVerb(verb))
+                {
+                    // nothing to do as it is already past tense
+                }
+                else if (Verbalizer.IsFirstWordGerundVerb(verb))
+                {
+                    verb = Verbalizer.MakeFirstWordPastTenseVerb(verb, wordBoundary: WordBoundary.UpperCaseCharacters);
+                }
+                else if (Verbalizer.IsFirstWordInfiniteVerb(verb))
+                {
+                    verb = Verbalizer.MakeFirstWordPastTenseVerb(verb, wordBoundary: WordBoundary.UpperCaseCharacters);
+                }
+                else
+                {
+                    verb = Verbalizer.MakePastTenseVerb(verb);
+                    verb = MoveVerbToFront(verb);
+                }
+
+                return verb.AsSpan();
+            }
+
+            string FinalFix(ReadOnlySpan<char> name)
+            {
+                // move verb to front
+                var betterName = name.ToUpperCaseAt(0);
+
+                if (Verbalizer.IsGerundVerb(betterName) || Verbalizer.IsPastTenseVerb(betterName) || Verbalizer.IsFirstWordInfiniteVerb(betterName.LastWord()))
+                {
+                    betterName = MoveVerbToFront(betterName);
+                }
+
+                return betterName;
+            }
+
+            string MoveVerbToFront(string text)
+            {
+                var lastWord = text.LastWord(WordBoundary.UpperCaseCharacters);
+
+                if (lastWord.Length == text.Length)
+                {
+                    return text;
+                }
+
+                var turnedText = lastWord.ConcatenatedWith(text.AsSpan(0, text.Length - lastWord.Length));
+
+                return turnedText;
+            }
+        }
 
         /// <summary>
         /// Determines an improved test name based on the specified symbol name.
