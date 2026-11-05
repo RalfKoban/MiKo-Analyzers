@@ -6181,6 +6181,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interfaces should not expose multiple events that represent the same lifecycle stage or action using different names. Similar event names make it unclear when each event is raised and what distinguishes them.
+        ///Using a single, consistent event name for each semantic concept makes the code easier to maintain and understand..
+        /// </summary>
+        internal static string MiKo_1542_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1542_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event &apos;{0}&apos; represents an already exposed event.
+        /// </summary>
+        internal static string MiKo_1542_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1542_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid multiple events with the same semantic meaning.
+        /// </summary>
+        internal static string MiKo_1542_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1542_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {

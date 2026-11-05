@@ -16,89 +16,181 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] ExceptionsToNonThirdPersonSingularEndingsWithS = { "factors", "monitors", "triggers", "passes" };
 
-        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved", "oked" };
+        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved", "oked", "ined", "ched", "loned", "poned" };
 
-        private static readonly string[] PastEndings = SpecialPastEndings.ConcatenatedWith("led", "eed", "ted", "ded").ToArray();
+        private static readonly string[] PastEndings = SpecialPastEndings.ConcatenatedWith("led", "eed", "ted", "ded", "ned", "hed").ToArray();
 
-        private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
+        private static readonly string[] PastEndingsWithoutConsonantDoubling = { "get", "ait", "dit", "sit", "fit", "xit", "imit", "ffer", "ain", "elop", "eat", "oot" };
 
-        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting", "rting", "enting" };
+        private static readonly string[] PastEndingsWithConsonantDoubling = { "lan", "fer", "ur", "ab", "pel", "trol" };
 
-        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "dling", "kling", "ging", "sing", "ting", "uing", "ving", "zing", "mining" };
+        private static readonly string[] FourCharacterGerundEndings = { "nning", "pping", "rring", "tting" };
 
-        private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
+        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting", "rting", "enting", "rmating", "ioning", "aining" };
+
+        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "dling", "kling", "ging", "sing", "ting", "uing", "ving", "zing", "mining", "reating", "oning", "ining", "ching" };
+
+        private static readonly string[] EndingsWithConsonantDoublingForGerund = { "et", "in", "it", "un" };
+
+        private static readonly string[] EndingsWithoutConsonantDoublingForGerund = { "ain", "oin", "ait", "dit", "sit", "fit", "xit", };
+
+        private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>(
+                                                                                                                        new[]
+                                                                                                                            {
+                                                                                                                                Paired("shutdown", "shuttingDown"),
+                                                                                                                                Paired("Shutdown", "ShuttingDown"),
+                                                                                                                                Paired("shutDown", "shuttingDown"),
+                                                                                                                                Paired("ShutDown", "ShuttingDown"),
+                                                                                                                            },
+                                                                                                                        StringComparer.Ordinal);
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>(
                                                                                                                           new[]
                                                                                                                               {
-                                                                                                                                  new KeyValuePair<string, string>("broken", "break"),
-                                                                                                                                  new KeyValuePair<string, string>("Broken", "Break"),
-                                                                                                                                  new KeyValuePair<string, string>("chosen", "choose"),
-                                                                                                                                  new KeyValuePair<string, string>("Chosen", "Choose"),
-                                                                                                                                  new KeyValuePair<string, string>("done", "do"),
-                                                                                                                                  new KeyValuePair<string, string>("Done", "Do"),
-                                                                                                                                  new KeyValuePair<string, string>("driven", "drive"),
-                                                                                                                                  new KeyValuePair<string, string>("Driven", "Drive"),
-                                                                                                                                  new KeyValuePair<string, string>("drove", "drive"),
-                                                                                                                                  new KeyValuePair<string, string>("Drove", "Drive"),
-                                                                                                                                  new KeyValuePair<string, string>("felt", "feel"),
-                                                                                                                                  new KeyValuePair<string, string>("Felt", "Feel"),
-                                                                                                                                  new KeyValuePair<string, string>("frozen", "freeze"),
-                                                                                                                                  new KeyValuePair<string, string>("Frozen", "Freeze"),
-                                                                                                                                  new KeyValuePair<string, string>("hid", "hide"),
-                                                                                                                                  new KeyValuePair<string, string>("Hid", "Hide"),
-                                                                                                                                  new KeyValuePair<string, string>("hidden", "hide"),
-                                                                                                                                  new KeyValuePair<string, string>("Hidden", "Hide"),
-                                                                                                                                  new KeyValuePair<string, string>("woke", "wake"),
-                                                                                                                                  new KeyValuePair<string, string>("Woke", "Wake"),
-                                                                                                                                  new KeyValuePair<string, string>("bent", "bend"),
-                                                                                                                                  new KeyValuePair<string, string>("Bent", "Bend"),
-                                                                                                                                  new KeyValuePair<string, string>("lent", "lend"),
-                                                                                                                                  new KeyValuePair<string, string>("Lent", "Lend"),
-                                                                                                                                  new KeyValuePair<string, string>("sent", "send"),
-                                                                                                                                  new KeyValuePair<string, string>("Sent", "Send"),
-                                                                                                                                  new KeyValuePair<string, string>("spent", "spend"),
-                                                                                                                                  new KeyValuePair<string, string>("Spent", "Spend"),
-                                                                                                                                  new KeyValuePair<string, string>("spoken", "speak"),
-                                                                                                                                  new KeyValuePair<string, string>("Spoken", "Speak"),
-                                                                                                                                  new KeyValuePair<string, string>("woken", "wake"),
-                                                                                                                                  new KeyValuePair<string, string>("Woken", "Wake"),
-                                                                                                                                  new KeyValuePair<string, string>("written", "write"),
-                                                                                                                                  new KeyValuePair<string, string>("Written", "Write"),
-                                                                                                                                  new KeyValuePair<string, string>("wrote", "write"),
-                                                                                                                                  new KeyValuePair<string, string>("Wrote", "Write"),
+                                                                                                                                  Paired("broken", "break"),
+                                                                                                                                  Paired("Broken", "Break"),
+                                                                                                                                  Paired("chosen", "choose"),
+                                                                                                                                  Paired("Chosen", "Choose"),
+                                                                                                                                  Paired("done", "do"),
+                                                                                                                                  Paired("Done", "Do"),
+                                                                                                                                  Paired("driven", "drive"),
+                                                                                                                                  Paired("Driven", "Drive"),
+                                                                                                                                  Paired("drove", "drive"),
+                                                                                                                                  Paired("Drove", "Drive"),
+                                                                                                                                  Paired("felt", "feel"),
+                                                                                                                                  Paired("Felt", "Feel"),
+                                                                                                                                  Paired("frozen", "freeze"),
+                                                                                                                                  Paired("Frozen", "Freeze"),
+                                                                                                                                  Paired("hid", "hide"),
+                                                                                                                                  Paired("Hid", "Hide"),
+                                                                                                                                  Paired("hidden", "hide"),
+                                                                                                                                  Paired("Hidden", "Hide"),
+                                                                                                                                  Paired("woke", "wake"),
+                                                                                                                                  Paired("Woke", "Wake"),
+                                                                                                                                  Paired("bent", "bend"),
+                                                                                                                                  Paired("Bent", "Bend"),
+                                                                                                                                  Paired("lent", "lend"),
+                                                                                                                                  Paired("Lent", "Lend"),
+                                                                                                                                  Paired("sent", "send"),
+                                                                                                                                  Paired("Sent", "Send"),
+                                                                                                                                  Paired("spent", "spend"),
+                                                                                                                                  Paired("Spent", "Spend"),
+                                                                                                                                  Paired("spoken", "speak"),
+                                                                                                                                  Paired("Spoken", "Speak"),
+                                                                                                                                  Paired("woken", "wake"),
+                                                                                                                                  Paired("Woken", "Wake"),
+                                                                                                                                  Paired("written", "write"),
+                                                                                                                                  Paired("Written", "Write"),
+                                                                                                                                  Paired("wrote", "write"),
+                                                                                                                                  Paired("Wrote", "Write"),
+                                                                                                                                  Paired("Began", "Begin"),
+                                                                                                                                  Paired("began", "begin"),
+                                                                                                                                  Paired("Ran", "Run"),
+                                                                                                                                  Paired("ran", "run"),
+                                                                                                                                  Paired("Flew", "Fly"),
+                                                                                                                                  Paired("flew", "fly"),
                                                                                                                               },
                                                                                                                           StringComparer.Ordinal);
+
+        private static readonly ConcurrentDictionary<string, string> PastVerbs = new ConcurrentDictionary<string, string>(
+                                                                                                                      new[]
+                                                                                                                          {
+                                                                                                                              Paired("are", "were"),
+                                                                                                                              Paired("Are", "Were"),
+                                                                                                                              Paired("ban", "banned"),
+                                                                                                                              Paired("Ban", "Banned"),
+                                                                                                                              Paired("begin", "began"),
+                                                                                                                              Paired("Begin", "Began"),
+                                                                                                                              Paired("cut", "cut"),
+                                                                                                                              Paired("Cut", "Cut"),
+                                                                                                                              Paired("fit", "fitted"),
+                                                                                                                              Paired("Fit", "Fitted"),
+                                                                                                                              Paired("flew", "flew"),
+                                                                                                                              Paired("Flew", "Flew"),
+                                                                                                                              Paired("fly", "flew"),
+                                                                                                                              Paired("Fly", "Flew"),
+                                                                                                                              Paired("flying", "flew"),
+                                                                                                                              Paired("Flying", "Flew"),
+                                                                                                                              Paired("forget", "forgot"),
+                                                                                                                              Paired("Forget", "Forgot"),
+                                                                                                                              Paired("freeze", "frozen"),
+                                                                                                                              Paired("Freeze", "Frozen"),
+                                                                                                                              Paired("freezes", "frozen"),
+                                                                                                                              Paired("Freezes", "Frozen"),
+                                                                                                                              Paired("freezing", "frozen"),
+                                                                                                                              Paired("Freezing", "Frozen"),
+                                                                                                                              Paired("get", "got"),
+                                                                                                                              Paired("Get", "Got"),
+                                                                                                                              Paired("had", "had"),
+                                                                                                                              Paired("Had", "Had"),
+                                                                                                                              Paired("has", "had"),
+                                                                                                                              Paired("Has", "Had"),
+                                                                                                                              Paired("have", "had"),
+                                                                                                                              Paired("Have", "Had"),
+                                                                                                                              Paired("hit", "hit"),
+                                                                                                                              Paired("Hit", "Hit"),
+                                                                                                                              Paired("input", "input"),
+                                                                                                                              Paired("Input", "Input"),
+                                                                                                                              Paired("is", "was"),
+                                                                                                                              Paired("Is", "Was"),
+                                                                                                                              Paired("let", "let"),
+                                                                                                                              Paired("Let", "Let"),
+                                                                                                                              Paired("offset", "offset"),
+                                                                                                                              Paired("Offset", "Offset"),
+                                                                                                                              Paired("output", "output"),
+                                                                                                                              Paired("Output", "Output"),
+                                                                                                                              Paired("pin", "pinned"),
+                                                                                                                              Paired("Pin", "Pinned"),
+                                                                                                                              Paired("put", "put"),
+                                                                                                                              Paired("Put", "Put"),
+                                                                                                                              Paired("quit", "quit"),
+                                                                                                                              Paired("Quit", "Quit"),
+                                                                                                                              Paired("reset", "reset"),
+                                                                                                                              Paired("Reset", "Reset"),
+                                                                                                                              Paired("run", "ran"),
+                                                                                                                              Paired("Run", "Ran"),
+                                                                                                                              Paired("set", "set"),
+                                                                                                                              Paired("Set", "Set"),
+                                                                                                                              Paired("upset", "upset"),
+                                                                                                                              Paired("Upset", "Upset"),
+                                                                                                                              Paired("write", "wrote"),
+                                                                                                                              Paired("Write", "Wrote"),
+                                                                                                                              Paired("wrote", "wrote"),
+                                                                                                                              Paired("Wrote", "Wrote"),
+                                                                                                                          },
+                                                                                                                      StringComparer.Ordinal);
+
+        private static readonly HashSet<string> PastVerbsOnly = PastVerbs.Values.ToHashSet();
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(
                                                                                                                                      new[]
                                                                                                                                          {
-                                                                                                                                             new KeyValuePair<string, string>("are", "is"),
-                                                                                                                                             new KeyValuePair<string, string>("Are", "Is"),
-                                                                                                                                             new KeyValuePair<string, string>("frozen", "freezes"),
-                                                                                                                                             new KeyValuePair<string, string>("Frozen", "Freezes"),
-                                                                                                                                             new KeyValuePair<string, string>("got", "gets"),
-                                                                                                                                             new KeyValuePair<string, string>("Got", "Gets"),
-                                                                                                                                             new KeyValuePair<string, string>("had", "has"),
-                                                                                                                                             new KeyValuePair<string, string>("Had", "Has"),
-                                                                                                                                             new KeyValuePair<string, string>("has", "has"),
-                                                                                                                                             new KeyValuePair<string, string>("Has", "Has"),
-                                                                                                                                             new KeyValuePair<string, string>("is", "is"),
-                                                                                                                                             new KeyValuePair<string, string>("Is", "Is"),
-                                                                                                                                             new KeyValuePair<string, string>("maintenance", "maintains"),
-                                                                                                                                             new KeyValuePair<string, string>("Maintenance", "Maintains"),
-                                                                                                                                             new KeyValuePair<string, string>("was", "is"),
-                                                                                                                                             new KeyValuePair<string, string>("Was", "Is"),
-                                                                                                                                             new KeyValuePair<string, string>("were", "is"),
-                                                                                                                                             new KeyValuePair<string, string>("Were", "Is"),
-                                                                                                                                             new KeyValuePair<string, string>("trigger", "triggers"),
-                                                                                                                                             new KeyValuePair<string, string>("triggered", "triggers"),
-                                                                                                                                             new KeyValuePair<string, string>("Trigger", "Triggers"),
-                                                                                                                                             new KeyValuePair<string, string>("Triggered", "Triggers"),
-                                                                                                                                             new KeyValuePair<string, string>("calc", "calculates"),
-                                                                                                                                             new KeyValuePair<string, string>("Calc", "Calculates"),
-                                                                                                                                             new KeyValuePair<string, string>("recalc", "recalculates"),
-                                                                                                                                             new KeyValuePair<string, string>("Recalc", "Recalculates"),
+                                                                                                                                             Paired("are", "is"),
+                                                                                                                                             Paired("Are", "Is"),
+                                                                                                                                             Paired("frozen", "freezes"),
+                                                                                                                                             Paired("Frozen", "Freezes"),
+                                                                                                                                             Paired("got", "gets"),
+                                                                                                                                             Paired("Got", "Gets"),
+                                                                                                                                             Paired("had", "has"),
+                                                                                                                                             Paired("Had", "Has"),
+                                                                                                                                             Paired("has", "has"),
+                                                                                                                                             Paired("Has", "Has"),
+                                                                                                                                             Paired("is", "is"),
+                                                                                                                                             Paired("Is", "Is"),
+                                                                                                                                             Paired("maintenance", "maintains"),
+                                                                                                                                             Paired("Maintenance", "Maintains"),
+                                                                                                                                             Paired("was", "is"),
+                                                                                                                                             Paired("Was", "Is"),
+                                                                                                                                             Paired("were", "is"),
+                                                                                                                                             Paired("Were", "Is"),
+                                                                                                                                             Paired("trigger", "triggers"),
+                                                                                                                                             Paired("triggered", "triggers"),
+                                                                                                                                             Paired("Trigger", "Triggers"),
+                                                                                                                                             Paired("Triggered", "Triggers"),
+                                                                                                                                             Paired("calc", "calculates"),
+                                                                                                                                             Paired("Calc", "Calculates"),
+                                                                                                                                             Paired("recalc", "recalculates"),
+                                                                                                                                             Paired("Recalc", "Recalculates"),
                                                                                                                                          },
                                                                                                                                      StringComparer.Ordinal);
 
@@ -123,6 +215,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                    "unauthorized", "Unauthorized",
                                                                                    "valid", "Valid",
                                                                                };
+
+        private static readonly string[] Nouns =
+                                                 {
+                                                     "File",
+                                                     "Name",
+                                                 };
 
         private static readonly string[] NounsWithGerundEnding =
                                                                  {
@@ -311,6 +409,197 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
         /// <summary>
+        /// Determines whether the first word of the specified text is a gerund form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the first word is a gerund form; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsFirstWordGerundVerb(string text)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var firstWord = text.AsSpan().TrimStart(Constants.SentenceMarkers).FirstWord();
+
+            return IsGerundVerb(firstWord);
+        }
+
+        /// <summary>
+        /// Determines whether the first word of the specified text is an infinite form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the first word is an infinite form; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsFirstWordInfiniteVerb(string text)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var trimmed = text.AsSpan().TrimStart(Constants.SentenceMarkers);
+            var firstWordSpan = trimmed.FirstWord();
+            var firstWord = firstWordSpan.Length == text.Length ? text : firstWordSpan.ToString();
+
+            if (StartingPhrases.Contains(firstWord, StringComparer.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (firstWord.EqualsAny(Nouns, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (NounsWithGerundEnding.Contains(firstWord, StringComparer.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (IsThirdPersonSingularVerb(firstWord))
+            {
+                return false;
+            }
+
+            if (firstWord.EndsWithAny("eh"))
+            {
+                return true;
+            }
+
+            if (firstWord.EndsWith("at", StringComparison.Ordinal) || firstWord.EndsWith("nd", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the first word of the specified text is a past form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the first word is a past form; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsFirstWordPastTenseVerb(string text)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var firstWord = text.AsSpan().TrimStart(Constants.SentenceMarkers).FirstWord();
+
+            return IsPastTenseVerb(firstWord);
+        }
+
+        /// <summary>
+        /// Determines whether the specified word is a gerund verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
+
+        /// <summary>
+        /// Determines whether the specified word is a gerund verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsGerundVerb(in ReadOnlySpan<char> value)
+        {
+            if (value.Length <= 4)
+            {
+                return false;
+            }
+
+            if (value.EndsWith("ing"))
+            {
+                if (value.EndsWith("ling", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                if (value.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                for (int index = 0, length = NounsWithGerundEnding.Length; index < length; index++)
+                {
+                    var noun = NounsWithGerundEnding[index];
+
+                    if (value.Equals(noun, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified word is in past tense.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsPastTenseVerb(string value)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            if (PastVerbsOnly.Contains(value))
+            {
+                return true;
+            }
+
+            return IsPastTenseVerb(value.AsSpan());
+        }
+
+        /// <summary>
+        /// Determines whether the specified word is in past tense.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsPastTenseVerb(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings) || value.EqualsAny(PastVerbsOnly);
+
+        /// <summary>
         /// Determines whether the specified word is a third-person singular verb.
         /// </summary>
         /// <param name="value">
@@ -387,80 +676,222 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
-        /// Determines whether the specified word is in past tense.
+        /// Converts the first word of the specified text to its gerund form.
         /// </summary>
-        /// <param name="value">
-        /// The word to check.
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// A <see cref="string"/> that contains the text with the first word converted to its gerund form; or the original text if it is <see langword="null"/> or consists only of whitespace characters.
         /// </returns>
-        public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
-
-        /// <summary>
-        /// Determines whether the specified word is in past tense.
-        /// </summary>
-        /// <param name="value">
-        /// The word to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
-        /// </returns>
-        public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings);
-
-        /// <summary>
-        /// Determines whether the specified word is a gerund verb.
-        /// </summary>
-        /// <param name="value">
-        /// The word to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
-        /// </returns>
-        public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
-
-        /// <summary>
-        /// Determines whether the specified word is a gerund verb.
-        /// </summary>
-        /// <param name="value">
-        /// The word to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
-        /// </returns>
-        public static bool IsGerundVerb(in ReadOnlySpan<char> value)
+        public static string MakeFirstWordGerundVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
         {
-            if (value.Length <= 4)
+            if (text.IsNullOrWhiteSpace())
             {
-                return false;
+                return text;
             }
 
-            if (value.EndsWith("ing"))
+            return MakeFirstWordGerundVerb(text.AsSpan(), adjustment, wordBoundary);
+        }
+
+        /// <summary>
+        /// Converts the first word of the specified text to its gerund form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its gerund form; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
+        public static string MakeFirstWordGerundVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
+        {
+            if (text.IsNullOrWhiteSpace())
             {
-                if (value.EndsWith("ling", StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-
-                if (value.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-
-                for (int index = 0, length = NounsWithGerundEnding.Length; index < length; index++)
-                {
-                    var noun = NounsWithGerundEnding[index];
-
-                    if (value.Equals(noun, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return string.Empty;
             }
 
-            return false;
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var valueText = text.TrimStart(Constants.SentenceMarkers);
+
+            if (valueText.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // first word
+            var firstWord = GetFirstWord(valueText, firstWordAdjustment);
+
+            var verb = MakeGerundVerb(firstWord);
+
+            if (firstWord != verb)
+            {
+                return verb.ConcatenatedWith(valueText.WithoutFirstWord(wordBoundary));
+            }
+
+            return text.ToString();
+        }
+
+        /// <summary>
+        /// Converts the first word of the specified text to its infinitive form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the original text if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
+        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            return MakeFirstWordInfiniteVerb(text.AsSpan(), adjustment, wordBoundary);
+        }
+
+        /// <summary>
+        /// Converts the first word of the specified text to its infinitive form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
+        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var valueText = text.TrimStart(Constants.SentenceMarkers);
+
+            if (valueText.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // first word
+            var firstWord = GetFirstWord(valueText, firstWordAdjustment);
+
+            var verb = MakeInfiniteVerb(firstWord);
+
+            if (firstWord != verb)
+            {
+                return verb.ConcatenatedWith(valueText.WithoutFirstWord(wordBoundary));
+            }
+
+            return text.ToString();
+        }
+
+        /// <summary>
+        /// Converts the first word of the specified text to its past form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its past form; or the original text if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
+        public static string MakeFirstWordPastTenseVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            return MakeFirstWordPastTenseVerb(text.AsSpan(), adjustment, wordBoundary);
+        }
+
+        /// <summary>
+        /// Converts the first word of the specified text to its past form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its past form; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
+        public static string MakeFirstWordPastTenseVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var valueText = text.TrimStart(Constants.SentenceMarkers);
+
+            if (valueText.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // first word
+            var firstWord = GetFirstWord(valueText, firstWordAdjustment);
+
+            var verb = MakePastTenseVerb(firstWord);
+
+            if (firstWord != verb)
+            {
+                return verb.ConcatenatedWith(valueText.WithoutFirstWord(wordBoundary));
+            }
+
+            return text.ToString();
         }
 
         /// <summary>
@@ -483,6 +914,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateGerundVerb(string word)
             {
+                if (IsPastTenseVerb(word))
+                {
+                    word = MakeInfiniteVerb(word);
+                }
+
                 if (word.EqualsAny(IsAre, StringComparison.OrdinalIgnoreCase))
                 {
                     return word;
@@ -491,11 +927,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.Equals("has", StringComparison.OrdinalIgnoreCase))
                 {
                     return word[0].IsUpperCaseLetter() ? "Having" : "having";
-                }
-
-                if (word.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
-                {
-                    return word[0].IsUpperCaseLetter() ? "Shutting down" : "shutting down";
                 }
 
                 if (word.EndsWith("ing", StringComparison.Ordinal))
@@ -516,6 +947,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word + "ing";
                 }
 
+                if (WantsDoubleConstants(word))
+                {
+                    // duplicate word's last consonant
+                    word += word[word.Length - 1];
+                }
+
                 var gerundVerb = word.AsCachedBuilder()
                                      .Append("ing")
                                      .ReplaceWithProbe("ping", "pping")
@@ -525,6 +962,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                      .ToStringAndRelease();
 
                 return gerundVerb;
+            }
+
+            bool WantsDoubleConstants(string word)
+            {
+                if (word.EndsWithAny(EndingsWithoutConsonantDoublingForGerund))
+                {
+                    return false;
+                }
+
+                return word.EndsWithAny(EndingsWithConsonantDoublingForGerund);
             }
         }
 
@@ -680,7 +1127,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word.Substring(0, word.Length - 3);
                 }
 
-                if (IsPastTense(word))
+                if (IsPastTenseVerb(word))
                 {
                     return CreateFromPast(word);
                 }
@@ -713,6 +1160,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateFromPast(string word)
             {
+                if (word.Equals("were", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                }
+
                 if (word.EndsWith("dded", StringComparison.Ordinal))
                 {
                     return word.Substring(0, word.Length - 2);
@@ -738,80 +1190,96 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
-        /// Converts the first word of the specified text to its infinitive form.
+        /// Converts the specified word to its past form.
         /// </summary>
-        /// <param name="text">
-        /// The text containing the word to convert.
-        /// </param>
-        /// <param name="adjustment">
-        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
-        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// <param name="value">
+        /// The word to convert.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the original text if it is <see langword="null"/> or consists only of whitespace characters.
+        /// A <see cref="string"/> that contains the past form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
         /// </returns>
-        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None)
+        public static string MakePastTenseVerb(string value)
         {
-            if (text.IsNullOrWhiteSpace())
+            if (value.IsNullOrWhiteSpace())
             {
-                return text;
+                return value;
             }
 
-            return MakeFirstWordInfiniteVerb(text.AsSpan(), adjustment);
-        }
+            return PastVerbs.GetOrAdd(value, CreatePastVerbWithAdd);
 
-        /// <summary>
-        /// Converts the first word of the specified text to its infinitive form.
-        /// </summary>
-        /// <param name="text">
-        /// The text containing the word to convert.
-        /// </param>
-        /// <param name="firstWordAdjustment">
-        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
-        /// The default is <see cref="FirstWordAdjustment.None"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
-        /// </returns>
-        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
-        {
-            if (text.IsNullOrWhiteSpace())
+            string CreatePastVerbWithAdd(string word)
             {
-                return string.Empty;
+                var pastVerb = CreatePastVerb(word);
+
+                PastVerbsOnly.Add(pastVerb);
+
+                return pastVerb;
             }
 
-            // it may happen that the text starts with a special character, such as an ':'
-            // so remove those special characters
-            var valueText = text.TrimStart(Constants.SentenceMarkers);
-
-            if (valueText.IsNullOrWhiteSpace())
+            string CreatePastVerb(string word)
             {
-                return string.Empty;
-            }
-
-            // first word
-            var firstWord = GetFirstWord(valueText, firstWordAdjustment);
-
-            var infiniteVerb = MakeInfiniteVerb(firstWord);
-
-            if (firstWord != infiniteVerb)
-            {
-                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord());
-            }
-
-            return text.ToString();
-
-            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordAdjustment adjustment)
-            {
-                var word = span.FirstWord();
-
-                switch (adjustment)
+                if (word.EndsWith("eed", StringComparison.Ordinal))
                 {
-                    case FirstWordAdjustment.StartLowerCase: return word.ToLowerCaseAt(0);
-                    case FirstWordAdjustment.StartUpperCase: return word.ToUpperCaseAt(0);
-                    default:
-                        return word.ToString();
+                    return word + "ed";
                 }
+
+                if (word.EndsWith("ed", StringComparison.Ordinal))
+                {
+                    return word;
+                }
+
+                if (IsGerundVerb(word) || IsThirdPersonSingularVerb(word))
+                {
+                    word = MakeInfiniteVerb(word);
+
+                    if (PastVerbs.TryGetValue(word, out var pastTense))
+                    {
+                        return pastTense;
+                    }
+                }
+
+                if (word.EndsWith('e'))
+                {
+                    return word + "d";
+                }
+
+                if (word.EndsWith('y'))
+                {
+                    if (word.EndsWith("ay", StringComparison.Ordinal) || word.EndsWith("ey", StringComparison.Ordinal))
+                    {
+                        return word.AsSpan().ConcatenatedWith("ed");
+                    }
+
+                    return word.AsSpan(0, word.Length - 1).ConcatenatedWith("ied");
+                }
+
+                if (word.EndsWith("ing", StringComparison.Ordinal))
+                {
+                    return word.AsSpan(0, word.Length - 3).ConcatenatedWith("ed");
+                }
+
+                if (WantsDoubleConstants(word))
+                {
+                    // duplicate word's last consonant
+                    return word.AsSpan().ConcatenatedWith(word[word.Length - 1], "ed");
+                }
+
+                return word + "ed";
+            }
+
+            bool WantsDoubleConstants(string word)
+            {
+                if (word.EndsWithAny(PastEndingsWithoutConsonantDoubling))
+                {
+                    return false;
+                }
+
+                if (word.EndsWithAny(PastEndingsWithConsonantDoubling))
+                {
+                    return true;
+                }
+
+                return word.EndsWithAny("gmpt") && word.Length > 1 && word[word.Length - 2].EqualsAny("aeiou");
             }
         }
 
@@ -1042,6 +1510,32 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
+        /// Gets the first word of the specified text and adjusts it based on the given adjustment.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to return.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the adjusted first word; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
+        private static string GetFirstWord(in ReadOnlySpan<char> text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None)
+        {
+            var word = text.FirstWord();
+
+            switch (adjustment)
+            {
+                case FirstWordAdjustment.StartLowerCase: return word.ToLowerCaseAt(0);
+                case FirstWordAdjustment.StartUpperCase: return word.ToUpperCaseAt(0);
+                default:
+                    return word.ToString();
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified word starts with an acceptable phrase.
         /// </summary>
         /// <param name="value">
@@ -1088,5 +1582,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <see langword="true"/> if the word ends with an acceptable phrase; otherwise, <see langword="false"/>.
         /// </returns>
         private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
+
+        /// <summary>
+        /// Creates a <see cref="KeyValuePair{TKey,TValue}"/> for the given key and value.
+        /// </summary>
+        /// <param name="key">
+        /// The word to use as <see cref="KeyValuePair{TKey,TValue}.Key"/>.
+        /// </param>
+        /// <param name="value">
+        /// The word to use as <see cref="KeyValuePair{TKey,TValue}.Value"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="KeyValuePair{TKey,TValue}"/> for the given key and value.
+        /// </returns>
+        private static KeyValuePair<string, string> Paired(string key, string value) => new KeyValuePair<string, string>(key, value);
     }
 }

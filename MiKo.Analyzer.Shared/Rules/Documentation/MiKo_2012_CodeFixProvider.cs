@@ -408,6 +408,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var thirdPersonVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
             var gerundVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
 
+            // special handling for 'shutdown'
+            gerundVerbs["shutdown"] = "shutting down";
+            gerundVerbs["Shutdown"] = "Shutting down";
+            gerundVerbs["shutDown"] = "shutting down";
+            gerundVerbs["ShutDown"] = "Shutting down";
+
             return CreateReplacementMap(verbs, thirdPersonVerbs, gerundVerbs);
         }
 

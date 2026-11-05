@@ -269,29 +269,46 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void LastWord_returns_only_last_word()
         {
-            Assert.Multiple(() =>
-                                 {
-                                     Assert.That(((string)null).LastWord(), Is.Null, "with null as text");
-                                     Assert.That(string.Empty.LastWord(), Is.Empty, "with empty text");
-                                     Assert.That("   ".LastWord(), Is.Empty, "with whitespace-only text");
-                                     Assert.That("bla".LastWord(), Is.EqualTo("bla"), "without whitespace");
-                                     Assert.That("bla blubb".LastWord(), Is.EqualTo("blubb"), "without whitespace at end");
-                                     Assert.That(" bla blubb ".LastWord(), Is.EqualTo("blubb"), "with single whitespace at end");
-                                     Assert.That(" bla blubb   ".LastWord(), Is.EqualTo("blubb"), "with multiple whitespace at end");
-                                     Assert.That(" bla          ".LastWord(), Is.EqualTo("bla"), "only word with multiple whitespaces at end");
-                                 });
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(((string)null).LastWord(), Is.Null, "with null as text");
+                Assert.That(string.Empty.LastWord(), Is.Empty, "with empty text");
+                Assert.That("   ".LastWord(), Is.Empty, "with whitespace-only text");
+                Assert.That("bla".LastWord(), Is.EqualTo("bla"), "without whitespace");
+                Assert.That("bla blubb".LastWord(), Is.EqualTo("blubb"), "without whitespace at end");
+                Assert.That(" bla blubb ".LastWord(), Is.EqualTo("blubb"), "with single whitespace at end");
+                Assert.That(" bla blubb   ".LastWord(), Is.EqualTo("blubb"), "with multiple whitespace at end");
+                Assert.That(" bla          ".LastWord(), Is.EqualTo("bla"), "only word with multiple whitespaces at end");
+            }
+        }
+
+        [Test]
+        public static void LastWord_returns_only_last_word_when_stopping_at_upper_case_characters()
+        {
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(((string)null).LastWord(WordBoundary.UpperCaseCharacters), Is.Null, "with null as text");
+                Assert.That(string.Empty.LastWord(WordBoundary.UpperCaseCharacters), Is.Empty, "with empty text");
+                Assert.That("   ".LastWord(WordBoundary.UpperCaseCharacters), Is.Empty, "with whitespace-only text");
+                Assert.That("bla".LastWord(WordBoundary.UpperCaseCharacters), Is.EqualTo("bla"), "without whitespace");
+                Assert.That("blaBlubb".LastWord(WordBoundary.UpperCaseCharacters), Is.EqualTo("Blubb"), "without whitespace at end");
+                Assert.That("BlaBlubb".LastWord(WordBoundary.UpperCaseCharacters), Is.EqualTo("Blubb"), "without whitespace at end");
+                Assert.That("blaBlaBlubb".LastWord(WordBoundary.UpperCaseCharacters), Is.EqualTo("Blubb"), "with 3 words and without whitespace at end");
+                Assert.That("BlaBlaBlubb".LastWord(WordBoundary.UpperCaseCharacters), Is.EqualTo("Blubb"), "with 3 words and without whitespace at end");
+                Assert.That(" blaBlaBlubb ".LastWord(WordBoundary.UpperCaseCharacters), Is.EqualTo("Blubb"), "with 3 words and single whitespace at end");
+            }
         }
 
         [Test]
         public static void SecondWord_returns_only_2nd_word()
         {
-            Assert.Multiple(() =>
-                                 {
-                                     Assert.That("bla blubb".SecondWord(), Is.EqualTo("blubb"), "without whitespaces");
-                                     Assert.That("bla blubb ".SecondWord(), Is.EqualTo("blubb"), "with single whitespace at end");
-                                     Assert.That("bla blubb    ".SecondWord(), Is.EqualTo("blubb"), "with multiple whitespaces at end");
-                                     Assert.That("bla blubb blubdiblub".SecondWord(), Is.EqualTo("blubb"), "with 3 words");
-                                 });
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That("bla blubb".SecondWord(), Is.EqualTo("blubb"), "without whitespaces");
+                Assert.That("bla blubb ".SecondWord(), Is.EqualTo("blubb"), "with single whitespace at end");
+                Assert.That("bla blubb    ".SecondWord(), Is.EqualTo("blubb"), "with multiple whitespaces at end");
+                Assert.That("bla blubb blubdiblub".SecondWord(), Is.EqualTo("blubb"), "with 3 words");
+            }
         }
 
         [Test]

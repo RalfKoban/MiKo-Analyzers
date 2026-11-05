@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                          || unsuffixed.EqualsAny(WordsThatPreventArticle, StringComparison.OrdinalIgnoreCase)
                          || Verbalizer.IsGerundVerb(unsuffixedSpan)
                          || AdjectiveFinder.IsAdjectiveOrAdverb(unsuffixedSpan)
-                         || Verbalizer.IsPastTense(unsuffixedSpan))
+                         || Verbalizer.IsPastTenseVerb(unsuffixedSpan))
                         {
                             // prevent articles for gerund and past tense words and make them lower case
                             article = string.Empty;

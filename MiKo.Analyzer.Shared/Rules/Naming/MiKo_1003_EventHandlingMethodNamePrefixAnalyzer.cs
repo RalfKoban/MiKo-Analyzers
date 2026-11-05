@@ -13,9 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1003";
 
-        private const string Prefix = "On";
-        private const string OnCanExecuteSuffix = "OnCanExecute";
-        private const string OnExecutedSuffix = "OnExecuted";
+        private const string CanExecute = "CanExecute";
+        private const string Executed = "Executed";
+        private const string Prefix = Constants.Names.On;
+        private const string OnCanExecuteSuffix = Constants.Names.On + CanExecute;
+        private const string OnExecutedSuffix = Constants.Names.On + Executed;
 
         public MiKo_1003_EventHandlingMethodNamePrefixAnalyzer() : base(Id)
         {
@@ -62,11 +64,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 #pragma warning disable IDE0045 // Convert to conditional expression
                 if (adjustedName.EndsWith(OnCanExecuteSuffix))
                 {
-                    name = "CanExecute".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnCanExecuteSuffix.Length));
+                    name = CanExecute.ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnCanExecuteSuffix.Length));
                 }
                 else if (adjustedName.EndsWith(OnExecutedSuffix))
                 {
-                    name = "Executed".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnExecutedSuffix.Length));
+                    name = Executed.ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnExecutedSuffix.Length));
                 }
                 else
                 {

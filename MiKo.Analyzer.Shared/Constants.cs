@@ -1316,6 +1316,9 @@ namespace MiKoSolutions.Analyzers
             internal const string IValueConverter = "IValueConverter";
             internal const string IValueConverterFullName = "System.Windows.Data.IValueConverter";
 
+            internal const string On = "On";
+            internal const string Event = "Event";
+
             internal const string FactAttribute = "Fact";
             internal const string FactAttributeFullName = "FactAttribute";
 
