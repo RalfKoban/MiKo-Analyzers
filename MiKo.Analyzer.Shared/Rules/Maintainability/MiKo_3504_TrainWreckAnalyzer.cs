@@ -294,17 +294,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeExpressionStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ExpressionStatementSyntax e && IsTrainWreck(e.Expression, context.SemanticModel))
+            if (context.Node is ExpressionStatementSyntax e)
             {
-                ReportDiagnostics(context, Issue(e.Expression));
+                ReportDiagnostics(context, e.Expression);
             }
         }
 
         private void AnalyzeArgument(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ArgumentSyntax a && IsTrainWreck(a.Expression, context.SemanticModel))
+            if (context.Node is ArgumentSyntax a)
             {
-                ReportDiagnostics(context, Issue(a.Expression));
+                ReportDiagnostics(context, a.Expression);
             }
         }
 
@@ -312,23 +312,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is AssignmentExpressionSyntax a)
             {
-                if (IsTrainWreck(a.Left, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(a.Left));
-                }
-
-                if (IsTrainWreck(a.Right, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(a.Right));
-                }
+                ReportDiagnostics(context, a.Left);
+                ReportDiagnostics(context, a.Right);
             }
         }
 
         private void AnalyzeEqualsValueClause(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is EqualsValueClauseSyntax e && IsTrainWreck(e.Value, context.SemanticModel))
+            if (context.Node is EqualsValueClauseSyntax e)
             {
-                ReportDiagnostics(context, Issue(e.Value));
+                ReportDiagnostics(context, e.Value);
             }
         }
 
@@ -336,87 +329,80 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is BinaryExpressionSyntax b)
             {
-                if (IsTrainWreck(b.Left, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(b.Left));
-                }
-
-                if (IsTrainWreck(b.Right, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(b.Right));
-                }
+                ReportDiagnostics(context, b.Left);
+                ReportDiagnostics(context, b.Right);
             }
         }
 
         private void AnalyzePrefixUnaryExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is PrefixUnaryExpressionSyntax p && IsTrainWreck(p.Operand, context.SemanticModel))
+            if (context.Node is PrefixUnaryExpressionSyntax p)
             {
-                ReportDiagnostics(context, Issue(p.Operand));
+                ReportDiagnostics(context, p.Operand);
             }
         }
 
         private void AnalyzePostfixUnaryExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is PostfixUnaryExpressionSyntax p && IsTrainWreck(p.Operand, context.SemanticModel))
+            if (context.Node is PostfixUnaryExpressionSyntax p)
             {
-                ReportDiagnostics(context, Issue(p.Operand));
+                ReportDiagnostics(context, p.Operand);
             }
         }
 
         private void AnalyzeIsPatternExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is IsPatternExpressionSyntax p && IsTrainWreck(p.Expression, context.SemanticModel))
+            if (context.Node is IsPatternExpressionSyntax p)
             {
-                ReportDiagnostics(context, Issue(p.Expression));
+                ReportDiagnostics(context, p.Expression);
             }
         }
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is SwitchStatementSyntax s && IsTrainWreck(s.Expression, context.SemanticModel))
+            if (context.Node is SwitchStatementSyntax s)
             {
-                ReportDiagnostics(context, Issue(s.Expression));
+                ReportDiagnostics(context, s.Expression);
             }
         }
 
         private void AnalyzeSwitchExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is SwitchExpressionSyntax s && IsTrainWreck(s.GoverningExpression, context.SemanticModel))
+            if (context.Node is SwitchExpressionSyntax s)
             {
-                ReportDiagnostics(context, Issue(s.GoverningExpression));
+                ReportDiagnostics(context, s.GoverningExpression);
             }
         }
 
         private void AnalyzePatternSwitchLabel(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is CasePatternSwitchLabelSyntax c && c.WhenClause is WhenClauseSyntax when && IsTrainWreck(when.Condition, context.SemanticModel))
+            if (context.Node is CasePatternSwitchLabelSyntax c && c.WhenClause is WhenClauseSyntax when)
             {
-                ReportDiagnostics(context, Issue(when.Condition));
+                ReportDiagnostics(context, when.Condition);
             }
         }
 
         private void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is IfStatementSyntax i && IsTrainWreck(i.Condition, context.SemanticModel))
+            if (context.Node is IfStatementSyntax i)
             {
-                ReportDiagnostics(context, Issue(i.Condition));
+                ReportDiagnostics(context, i.Condition);
             }
         }
 
         private void AnalyzeYieldReturnStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is YieldStatementSyntax y && IsTrainWreck(y.Expression, context.SemanticModel))
+            if (context.Node is YieldStatementSyntax y)
             {
-                ReportDiagnostics(context, Issue(y.Expression));
+                ReportDiagnostics(context, y.Expression);
             }
         }
 
         private void AnalyzeReturnStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ReturnStatementSyntax r && IsTrainWreck(r.Expression, context.SemanticModel))
+            if (context.Node is ReturnStatementSyntax r)
             {
-                ReportDiagnostics(context, Issue(r.Expression));
+                ReportDiagnostics(context, r.Expression);
             }
         }
 
@@ -424,60 +410,62 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is ConditionalExpressionSyntax c)
             {
-                if (IsTrainWreck(c.Condition, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(c.Condition));
-                }
-
-                if (IsTrainWreck(c.WhenTrue, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(c.WhenTrue));
-                }
-
-                if (IsTrainWreck(c.WhenFalse, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(c.WhenFalse));
-                }
+                ReportDiagnostics(context, c.Condition);
+                ReportDiagnostics(context, c.WhenTrue);
+                ReportDiagnostics(context, c.WhenFalse);
             }
         }
 
         private void AnalyzeWhileStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is WhileStatementSyntax w && IsTrainWreck(w.Condition, context.SemanticModel))
+            if (context.Node is WhileStatementSyntax w)
             {
-                ReportDiagnostics(context, Issue(w.Condition));
+                ReportDiagnostics(context, w.Condition);
             }
         }
 
         private void AnalyzeDoStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is DoStatementSyntax d && IsTrainWreck(d.Condition, context.SemanticModel))
+            if (context.Node is DoStatementSyntax d)
             {
-                ReportDiagnostics(context, Issue(d.Condition));
+                ReportDiagnostics(context, d.Condition);
             }
         }
 
         private void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ForEachStatementSyntax f && IsTrainWreck(f.Expression, context.SemanticModel))
+            if (context.Node is ForEachStatementSyntax f)
             {
-                ReportDiagnostics(context, Issue(f.Expression));
+                ReportDiagnostics(context, f.Expression);
             }
         }
 
         private void AnalyzeForEachVariableStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ForEachVariableStatementSyntax f && IsTrainWreck(f.Expression, context.SemanticModel))
+            if (context.Node is ForEachVariableStatementSyntax f)
             {
-                ReportDiagnostics(context, Issue(f.Expression));
+                ReportDiagnostics(context, f.Expression);
             }
         }
 
         private void AnalyzeUsingStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is UsingStatementSyntax u && IsTrainWreck(u.Expression, context.SemanticModel))
+            if (context.Node is UsingStatementSyntax u)
             {
-                ReportDiagnostics(context, Issue(u.Expression));
+                ReportDiagnostics(context, u.Expression);
+            }
+        }
+
+        private void ReportDiagnostics(in SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
+        {
+            if (IsTrainWreck(expression, context.SemanticModel))
+            {
+                while (expression is InvocationExpressionSyntax i)
+                {
+                    expression = i.Expression; // avoid the arguments being underlined
+                }
+
+                ReportDiagnostics(context, Issue(expression));
             }
         }
     }
