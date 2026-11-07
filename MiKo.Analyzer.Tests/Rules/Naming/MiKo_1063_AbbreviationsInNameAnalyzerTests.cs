@@ -27,7 +27,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "PropName",
                                                        ];
 
-        private static readonly string[] BadPostfixes = [.. BadMidTerms.Union([
+        private static readonly string[] BadPostfixes = [
+                                                         .. BadMidTerms.Union([
                                                                                   "Bl",
                                                                                   "BL",
                                                                                   "CLI",
@@ -45,7 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                   "Props",
                                                                                   "Vm",
                                                                                   "VM",
-                                                                              ]),];
+                                                                              ]),
+                                                        ];
 
         private static readonly string[] AllowedTerms =
                                                         [
