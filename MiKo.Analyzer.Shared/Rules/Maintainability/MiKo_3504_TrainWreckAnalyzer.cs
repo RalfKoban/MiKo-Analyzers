@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -129,6 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case IdentifierNameSyntax _:
                 case InvocationExpressionSyntax _:
                 case MemberAccessExpressionSyntax _:
+                case MemberBindingExpressionSyntax _:
                     return true;
 
                 default:
@@ -144,6 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ElementAccessExpressionSyntax access when IsTrainWreck(access, semanticModel):
                 case InvocationExpressionSyntax invocation when IsTrainWreck(invocation, semanticModel):
                 case MemberAccessExpressionSyntax member when IsTrainWreck(member, semanticModel):
+                case MemberBindingExpressionSyntax binding when IsTrainWreck(binding, semanticModel):
                     return true;
 
                 default:
@@ -157,11 +160,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTrainWreck(MemberAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
+        private static bool IsTrainWreck(MemberBindingExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
+
         private static bool IsTrainWreck(InvocationExpressionSyntax level0, SemanticModel semanticModel) => IsTrainWreck(level0, AllowedDepth, semanticModel);
 
         private static bool IsTrainWreck(ExpressionSyntax start, in int allowedDepth, SemanticModel semanticModel)
         {
             var expressions = GetExpressions(start);
+
+            // we get them in reverse order, so we have to reverse them to have the correct call order (from user's point of view)
+            expressions.Reverse();
 
             if (expressions.Count <= allowedDepth)
             {
@@ -221,12 +229,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static Stack<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
+        private static List<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
         {
-            var expressions = new Stack<ExpressionSyntax>();
-            expressions.Push(start);
+            var expressions = new List<ExpressionSyntax>();
 
-            var current = start;
+            var current = AddConditionalAccessAware(start, expressions);
 
             while (true)
             {
@@ -237,12 +244,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
                 }
 
-                expressions.Push(next);
-
-                current = next;
+                current = AddConditionalAccessAware(next, expressions);
             }
 
             return expressions;
+
+            ExpressionSyntax AddConditionalAccessAware(ExpressionSyntax node, List<ExpressionSyntax> nodes)
+            {
+                // if 'node' is conditional access, we have to file the 'node.Expression' items first as otherwise they would get lost
+                if (node is ConditionalAccessExpressionSyntax c)
+                {
+                    nodes.AddRange(GetExpressions(c.Expression));
+                }
+                else
+                {
+                    nodes.Add(node);
+                }
+
+                return node;
+            }
         }
 
         private static ExpressionSyntax GetExpression(ExpressionSyntax expression)
@@ -258,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     if (m.Expression is ElementAccessExpressionSyntax next)
                     {
-                        // jump over the access as we have something like 'A[42]' which we count as a single train car
+                        // jump over the access as we have something like 'A[42]' (that we count as a single train car)
                         return next.Expression;
                     }
 
@@ -267,6 +287,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ElementAccessExpressionSyntax e:
                 {
+                    if (e.Expression is IdentifierNameSyntax)
+                    {
+                        // jump over identifier such as 'A' in 'A[42]' (that we count as a single train car)
+                        return null;
+                    }
+
                     return e.Expression;
                 }
 
@@ -276,7 +302,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (next.Expression is ElementAccessExpressionSyntax nextNext)
                         {
-                            // jump over the access as we have something like 'A[42]' which we count as a single train car
+                            if (nextNext.Expression is ElementAccessExpressionSyntax)
+                            {
+                                // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
+                                return nextNext;
+                            }
+
+                            // jump over the access as we have something like 'A[42]' (that we count as a single train car)
                             return nextNext.Expression;
                         }
 
@@ -294,17 +326,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeExpressionStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ExpressionStatementSyntax e && IsTrainWreck(e.Expression, context.SemanticModel))
+            if (context.Node is ExpressionStatementSyntax e)
             {
-                ReportDiagnostics(context, Issue(e.Expression));
+                ReportDiagnostics(context, e.Expression);
             }
         }
 
         private void AnalyzeArgument(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ArgumentSyntax a && IsTrainWreck(a.Expression, context.SemanticModel))
+            if (context.Node is ArgumentSyntax a)
             {
-                ReportDiagnostics(context, Issue(a.Expression));
+                ReportDiagnostics(context, a.Expression);
             }
         }
 
@@ -312,23 +344,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is AssignmentExpressionSyntax a)
             {
-                if (IsTrainWreck(a.Left, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(a.Left));
-                }
-
-                if (IsTrainWreck(a.Right, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(a.Right));
-                }
+                ReportDiagnostics(context, a.Left);
+                ReportDiagnostics(context, a.Right);
             }
         }
 
         private void AnalyzeEqualsValueClause(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is EqualsValueClauseSyntax e && IsTrainWreck(e.Value, context.SemanticModel))
+            if (context.Node is EqualsValueClauseSyntax e)
             {
-                ReportDiagnostics(context, Issue(e.Value));
+                ReportDiagnostics(context, e.Value);
             }
         }
 
@@ -336,87 +361,80 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is BinaryExpressionSyntax b)
             {
-                if (IsTrainWreck(b.Left, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(b.Left));
-                }
-
-                if (IsTrainWreck(b.Right, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(b.Right));
-                }
+                ReportDiagnostics(context, b.Left);
+                ReportDiagnostics(context, b.Right);
             }
         }
 
         private void AnalyzePrefixUnaryExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is PrefixUnaryExpressionSyntax p && IsTrainWreck(p.Operand, context.SemanticModel))
+            if (context.Node is PrefixUnaryExpressionSyntax p)
             {
-                ReportDiagnostics(context, Issue(p.Operand));
+                ReportDiagnostics(context, p.Operand);
             }
         }
 
         private void AnalyzePostfixUnaryExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is PostfixUnaryExpressionSyntax p && IsTrainWreck(p.Operand, context.SemanticModel))
+            if (context.Node is PostfixUnaryExpressionSyntax p)
             {
-                ReportDiagnostics(context, Issue(p.Operand));
+                ReportDiagnostics(context, p.Operand);
             }
         }
 
         private void AnalyzeIsPatternExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is IsPatternExpressionSyntax p && IsTrainWreck(p.Expression, context.SemanticModel))
+            if (context.Node is IsPatternExpressionSyntax p)
             {
-                ReportDiagnostics(context, Issue(p.Expression));
+                ReportDiagnostics(context, p.Expression);
             }
         }
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is SwitchStatementSyntax s && IsTrainWreck(s.Expression, context.SemanticModel))
+            if (context.Node is SwitchStatementSyntax s)
             {
-                ReportDiagnostics(context, Issue(s.Expression));
+                ReportDiagnostics(context, s.Expression);
             }
         }
 
         private void AnalyzeSwitchExpression(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is SwitchExpressionSyntax s && IsTrainWreck(s.GoverningExpression, context.SemanticModel))
+            if (context.Node is SwitchExpressionSyntax s)
             {
-                ReportDiagnostics(context, Issue(s.GoverningExpression));
+                ReportDiagnostics(context, s.GoverningExpression);
             }
         }
 
         private void AnalyzePatternSwitchLabel(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is CasePatternSwitchLabelSyntax c && c.WhenClause is WhenClauseSyntax when && IsTrainWreck(when.Condition, context.SemanticModel))
+            if (context.Node is CasePatternSwitchLabelSyntax c && c.WhenClause is WhenClauseSyntax when)
             {
-                ReportDiagnostics(context, Issue(when.Condition));
+                ReportDiagnostics(context, when.Condition);
             }
         }
 
         private void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is IfStatementSyntax i && IsTrainWreck(i.Condition, context.SemanticModel))
+            if (context.Node is IfStatementSyntax i)
             {
-                ReportDiagnostics(context, Issue(i.Condition));
+                ReportDiagnostics(context, i.Condition);
             }
         }
 
         private void AnalyzeYieldReturnStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is YieldStatementSyntax y && IsTrainWreck(y.Expression, context.SemanticModel))
+            if (context.Node is YieldStatementSyntax y)
             {
-                ReportDiagnostics(context, Issue(y.Expression));
+                ReportDiagnostics(context, y.Expression);
             }
         }
 
         private void AnalyzeReturnStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ReturnStatementSyntax r && IsTrainWreck(r.Expression, context.SemanticModel))
+            if (context.Node is ReturnStatementSyntax r)
             {
-                ReportDiagnostics(context, Issue(r.Expression));
+                ReportDiagnostics(context, r.Expression);
             }
         }
 
@@ -424,60 +442,71 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is ConditionalExpressionSyntax c)
             {
-                if (IsTrainWreck(c.Condition, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(c.Condition));
-                }
-
-                if (IsTrainWreck(c.WhenTrue, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(c.WhenTrue));
-                }
-
-                if (IsTrainWreck(c.WhenFalse, context.SemanticModel))
-                {
-                    ReportDiagnostics(context, Issue(c.WhenFalse));
-                }
+                ReportDiagnostics(context, c.Condition);
+                ReportDiagnostics(context, c.WhenTrue);
+                ReportDiagnostics(context, c.WhenFalse);
             }
         }
 
         private void AnalyzeWhileStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is WhileStatementSyntax w && IsTrainWreck(w.Condition, context.SemanticModel))
+            if (context.Node is WhileStatementSyntax w)
             {
-                ReportDiagnostics(context, Issue(w.Condition));
+                ReportDiagnostics(context, w.Condition);
             }
         }
 
         private void AnalyzeDoStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is DoStatementSyntax d && IsTrainWreck(d.Condition, context.SemanticModel))
+            if (context.Node is DoStatementSyntax d)
             {
-                ReportDiagnostics(context, Issue(d.Condition));
+                ReportDiagnostics(context, d.Condition);
             }
         }
 
         private void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ForEachStatementSyntax f && IsTrainWreck(f.Expression, context.SemanticModel))
+            if (context.Node is ForEachStatementSyntax f)
             {
-                ReportDiagnostics(context, Issue(f.Expression));
+                ReportDiagnostics(context, f.Expression);
             }
         }
 
         private void AnalyzeForEachVariableStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ForEachVariableStatementSyntax f && IsTrainWreck(f.Expression, context.SemanticModel))
+            if (context.Node is ForEachVariableStatementSyntax f)
             {
-                ReportDiagnostics(context, Issue(f.Expression));
+                ReportDiagnostics(context, f.Expression);
             }
         }
 
         private void AnalyzeUsingStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is UsingStatementSyntax u && IsTrainWreck(u.Expression, context.SemanticModel))
+            if (context.Node is UsingStatementSyntax u)
             {
-                ReportDiagnostics(context, Issue(u.Expression));
+                ReportDiagnostics(context, u.Expression);
+            }
+        }
+
+        private void ReportDiagnostics(in SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
+        {
+            if (IsTrainWreck(expression, context.SemanticModel))
+            {
+                var location = GetLocationWithoutArgumentList(expression);
+
+                ReportDiagnostics(context, Issue(location));
+            }
+
+            Location GetLocationWithoutArgumentList(ExpressionSyntax e)
+            {
+                var argumentList = e.LastDescendant<ArgumentListSyntax>();
+
+                if (argumentList is null)
+                {
+                    return e.GetLocation();
+                }
+
+                return Location.Create(e.SyntaxTree, TextSpan.FromBounds(e.SpanStart, argumentList.Span.Start));
             }
         }
     }
