@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -129,6 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case IdentifierNameSyntax _:
                 case InvocationExpressionSyntax _:
                 case MemberAccessExpressionSyntax _:
+                case MemberBindingExpressionSyntax _:
                     return true;
 
                 default:
@@ -144,6 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ElementAccessExpressionSyntax access when IsTrainWreck(access, semanticModel):
                 case InvocationExpressionSyntax invocation when IsTrainWreck(invocation, semanticModel):
                 case MemberAccessExpressionSyntax member when IsTrainWreck(member, semanticModel):
+                case MemberBindingExpressionSyntax binding when IsTrainWreck(binding, semanticModel):
                     return true;
 
                 default:
@@ -157,11 +160,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTrainWreck(MemberAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
+        private static bool IsTrainWreck(MemberBindingExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
+
         private static bool IsTrainWreck(InvocationExpressionSyntax level0, SemanticModel semanticModel) => IsTrainWreck(level0, AllowedDepth, semanticModel);
 
         private static bool IsTrainWreck(ExpressionSyntax start, in int allowedDepth, SemanticModel semanticModel)
         {
             var expressions = GetExpressions(start);
+
+            // we get them in reverse order, so we have to reverse them to have the correct call order (from user's point of view)
+            expressions.Reverse();
 
             if (expressions.Count <= allowedDepth)
             {
@@ -221,12 +229,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static Stack<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
+        private static List<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
         {
-            var expressions = new Stack<ExpressionSyntax>();
-            expressions.Push(start);
+            var expressions = new List<ExpressionSyntax>();
 
-            var current = start;
+            var current = AddConditionalAccessAware(start, expressions);
 
             while (true)
             {
@@ -237,12 +244,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
                 }
 
-                expressions.Push(next);
-
-                current = next;
+                current = AddConditionalAccessAware(next, expressions);
             }
 
             return expressions;
+
+            ExpressionSyntax AddConditionalAccessAware(ExpressionSyntax node, List<ExpressionSyntax> nodes)
+            {
+                // if 'node' is conditional access, we have to file the 'node.Expression' items first as otherwise they would get lost
+                if (node is ConditionalAccessExpressionSyntax c)
+                {
+                    nodes.AddRange(GetExpressions(c.Expression));
+                }
+                else
+                {
+                    nodes.Add(node);
+                }
+
+                return node;
+            }
         }
 
         private static ExpressionSyntax GetExpression(ExpressionSyntax expression)
@@ -258,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     if (m.Expression is ElementAccessExpressionSyntax next)
                     {
-                        // jump over the access as we have something like 'A[42]' which we count as a single train car
+                        // jump over the access as we have something like 'A[42]' (that we count as a single train car)
                         return next.Expression;
                     }
 
@@ -267,6 +287,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ElementAccessExpressionSyntax e:
                 {
+                    if (e.Expression is IdentifierNameSyntax)
+                    {
+                        // jump over identifier such as 'A' in 'A[42]' (that we count as a single train car)
+                        return null;
+                    }
+
                     return e.Expression;
                 }
 
@@ -276,7 +302,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (next.Expression is ElementAccessExpressionSyntax nextNext)
                         {
-                            // jump over the access as we have something like 'A[42]' which we count as a single train car
+                            if (nextNext.Expression is ElementAccessExpressionSyntax)
+                            {
+                                // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
+                                return nextNext;
+                            }
+
+                            // jump over the access as we have something like 'A[42]' (that we count as a single train car)
                             return nextNext.Expression;
                         }
 
@@ -460,12 +492,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (IsTrainWreck(expression, context.SemanticModel))
             {
-                while (expression is InvocationExpressionSyntax i)
+                var location = GetLocationWithoutArgumentList(expression);
+
+                ReportDiagnostics(context, Issue(location));
+            }
+
+            Location GetLocationWithoutArgumentList(ExpressionSyntax e)
+            {
+                var argumentList = e.LastDescendant<ArgumentListSyntax>();
+
+                if (argumentList is null)
                 {
-                    expression = i.Expression; // avoid the arguments being underlined
+                    return e.GetLocation();
                 }
 
-                ReportDiagnostics(context, Issue(expression));
+                return Location.Create(e.SyntaxTree, TextSpan.FromBounds(e.SpanStart, argumentList.Span.Start));
             }
         }
     }

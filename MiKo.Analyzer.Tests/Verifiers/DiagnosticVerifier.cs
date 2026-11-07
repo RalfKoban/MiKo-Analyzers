@@ -209,7 +209,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion, string testProjectName) => GetDiagnostics([source], languageVersion, testProjectName);
+        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion = LanguageVersion.Default, string testProjectName = TestProjectName) => GetDiagnostics([source], languageVersion, testProjectName);
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,
