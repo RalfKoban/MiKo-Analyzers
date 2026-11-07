@@ -531,8 +531,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                        new("Warn", "Warning"),
                                                    ];
 
-        private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot" or "Seq"))
-                                                               .ConcatenatedWith(new Pair("Mod", "Modified"), new Pair("Prot", "Protected"),  new Pair("Seq", "Sequential")),];
+        private static readonly Pair[] MidTerms = [.. Postfixes.Where(_ => _.Key is not ("Mod" or "Prot" or "Seq")).ConcatenatedWith(new Pair("Mod", "Modified"), new Pair("Prot", "Protected"),  new Pair("Seq", "Sequential")),];
 
         private static readonly Pair[] SpecialUpperCasePrefixes =
                                                                   [
