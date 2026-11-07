@@ -40,6 +40,60 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method_conditionally() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        A.B.C?.Invocation();
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public void Invocation() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_namespace_and_type_followed_by_conditional_access_of_2_properties() => No_issue_is_reported_for(@"
+
+namespace N1.N2.N3
+{
+    public class Container
+    {
+        public static TestMeA Instance { get; }
+    }
+
+    public class TestMeA
+    {
+        public int Value { get; }
+    }
+}
+
+public class TestMe
+{
+    public int? DoSomething()
+    {
+        return N1.N2.N3.Container.Instance?.Value;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_a_number_assignment() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -1513,6 +1567,45 @@ public class TestMeD
 public class TestMeE
 {
     public int Invocation() => 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_4_indexers_in_a_row_followed_by_a_property() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        return A[1][2][3][4].B;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE this[int index] { get; }
+}
+
+public class TestMeE
+{
+    public int B { get; }
 }
 ");
 
@@ -3026,11 +3119,11 @@ public class TestMe
 }
 ");
 
-            Assert.That(issues, Has.Length.EqualTo(1));
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
 
             var issue = issues[0];
 
-            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E"));
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E"), "Squiggle is misplaced");
         }
 
         [Test]
@@ -3054,11 +3147,11 @@ public class TestMe
 }
 ");
 
-            Assert.That(issues, Has.Length.EqualTo(1));
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
 
             var issue = issues[0];
 
-            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E.DoSomething"));
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E.DoSomething"), "Squiggle is misplaced");
         }
 
         [Test]
@@ -3082,11 +3175,11 @@ public class TestMe
 }
 ");
 
-            Assert.That(issues, Has.Length.EqualTo(1));
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
 
             var issue = issues[0];
 
-            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D?.E"));
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D?.E"), "Squiggle is misplaced");
         }
 
         [Test]
@@ -3110,11 +3203,11 @@ public class TestMe
 }
 ");
 
-            Assert.That(issues, Has.Length.EqualTo(1));
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
 
             var issue = issues[0];
 
-            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E?.DoSomething"));
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E?.DoSomething"), "Squiggle is misplaced");
         }
 
         [Test]
@@ -3138,11 +3231,11 @@ public class TestMe
 }
 ");
 
-            Assert.That(issues, Has.Length.EqualTo(1));
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
 
             var issue = issues[0];
 
-            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B.C?.D.E.DoSomething"));
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B.C?.D.E.DoSomething"), "Squiggle is misplaced");
         }
 
         [Test]
@@ -3166,11 +3259,95 @@ public class TestMe
 }
 ");
 
-            Assert.That(issues, Has.Length.EqualTo(1));
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
 
             var issue = issues[0];
 
-            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B?.C?.D?.E.DoSomething"));
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B?.C?.D?.E.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_terminal_invocation_without_nested_invocation_arguments()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public int DoSomething(int value) => value;
+
+    public int GetValue() => 42;
+
+    public int Test()
+    {
+        return A.B.C.D.E.DoSomething(GetValue());
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_property_ending_chain_after_invocation_completely()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public TestMe B() => this;
+
+    public TestMe Test()
+    {
+        return A.B().C.D.E;
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B().C.D.E"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_property_ending_chain_after_invocation_completely_for_conditional_access_expression()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public TestMe B() => this;
+
+    public TestMe Test()
+    {
+        return A?.B().C.D.E;
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B().C.D.E"), "Squiggle is misplaced");
         }
 
         //// TODO RKN: Implement tests for method invocations

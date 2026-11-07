@@ -168,9 +168,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var expressions = GetExpressions(start);
 
-            // we get them in reverse order, so we have to reverse them to have the correct call order (from user's point of view)
-            expressions.Reverse();
-
             if (expressions.Count <= allowedDepth)
             {
                 return false;
@@ -235,6 +232,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var current = AddConditionalAccessAware(start, expressions);
 
+            var reverse = expressions.Count is 1;
+
             while (true)
             {
                 var next = GetExpression(current);
@@ -245,6 +244,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 current = AddConditionalAccessAware(next, expressions);
+            }
+
+            // we collected them in reverse order, so we have to reverse them to have the correct call order (from user's point of view)
+            if (reverse)
+            {
+                expressions.Reverse();
             }
 
             return expressions;
@@ -278,6 +283,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     if (m.Expression is ElementAccessExpressionSyntax next)
                     {
+                        if (next.Expression is ElementAccessExpressionSyntax)
+                        {
+                            // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
+                            return next;
+                        }
+
                         // jump over the access as we have something like 'A[42]' (that we count as a single train car)
                         return next.Expression;
                     }
@@ -298,25 +309,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case InvocationExpressionSyntax i:
                 {
-                    if (i.Expression is MemberAccessExpressionSyntax next)
+                    switch (i.Expression)
                     {
-                        if (next.Expression is ElementAccessExpressionSyntax nextNext)
+                        case MemberAccessExpressionSyntax next:
                         {
-                            if (nextNext.Expression is ElementAccessExpressionSyntax)
+                            if (next.Expression is ElementAccessExpressionSyntax nextNext)
                             {
-                                // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
-                                return nextNext;
+                                if (nextNext.Expression is ElementAccessExpressionSyntax)
+                                {
+                                    // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
+                                    return nextNext;
+                                }
+
+                                // jump over the access as we have something like 'A[42]' (that we count as a single train car)
+                                return nextNext.Expression;
                             }
 
-                            // jump over the access as we have something like 'A[42]' (that we count as a single train car)
-                            return nextNext.Expression;
+                            // jump over the member as that belongs to the invocation as well
+                            return next.Expression;
                         }
 
-                        // jump over the member as that belongs to the invocation as well
-                        return next.Expression;
-                    }
+                        case MemberBindingExpressionSyntax _:
+                            return null; // nothing more to report here
 
-                    return i.Expression;
+                        default:
+                            return i.Expression;
+                    }
                 }
 
                 default:
@@ -499,14 +517,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             Location GetLocationWithoutArgumentList(ExpressionSyntax e)
             {
-                var argumentList = e.LastDescendant<ArgumentListSyntax>();
+                ArgumentListSyntax argumentList = FindArgumentListSyntax(e);
 
-                if (argumentList is null)
+                if (argumentList != null)
                 {
-                    return e.GetLocation();
+                    return Location.Create(e.SyntaxTree, TextSpan.FromBounds(e.SpanStart, argumentList.Span.Start));
                 }
 
-                return Location.Create(e.SyntaxTree, TextSpan.FromBounds(e.SpanStart, argumentList.Span.Start));
+                return e.GetLocation();
+            }
+
+            ArgumentListSyntax FindArgumentListSyntax(ExpressionSyntax e)
+            {
+                switch (e)
+                {
+                    case InvocationExpressionSyntax i:
+                        return i.ArgumentList;
+
+                    case ConditionalAccessExpressionSyntax c when c.WhenNotNull is InvocationExpressionSyntax ci:
+                        return ci.ArgumentList;
+
+                    case ConditionalAccessExpressionSyntax c:
+                        return c.LastDescendant<ConditionalAccessExpressionSyntax>()?.WhenNotNull is InvocationExpressionSyntax ci2
+                               ? ci2.ArgumentList
+                               : null;
+
+                    default:
+                        return null;
+                }
             }
         }
     }
