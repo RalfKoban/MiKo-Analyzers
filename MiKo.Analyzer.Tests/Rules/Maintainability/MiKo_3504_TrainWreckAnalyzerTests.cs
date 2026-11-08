@@ -154,7 +154,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_terminal_conditional_indexer_after_3_properties() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_terminal_conditional_indexer_after_3_properties() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -3226,6 +3226,45 @@ public class TestMe
     {
         return A.B.C.D.E?.F;
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_indexer_after_conditional_element_binding_followed_by_2_properties() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int? DoSomething()
+    {
+        return A[0]?[1][2].B.C;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] => null;
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] => null;
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] => null;
+}
+
+public class TestMeD
+{
+    public TestMeE B { get; }
+}
+
+public class TestMeE
+{
+    public int C { get; }
 }
 ");
 

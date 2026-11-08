@@ -88,6 +88,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        private enum Predecessor
+        {
+            None = 0,
+
+            /// <summary>
+            /// A conditional element binding (such as <c>?[1]</c>) directly follows an indexer (such as <c>A[0]</c> in <c>A[0]?[1]</c>).
+            /// </summary>
+            Indexer,
+        }
+
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             // statements
@@ -145,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case ConditionalAccessExpressionSyntax conditional when IsTrainWreck(conditional, semanticModel):
                 case ElementAccessExpressionSyntax access when IsTrainWreck(access, semanticModel):
-                case ElementBindingExpressionSyntax elementbinding when IsTrainWreck(elementbinding, semanticModel):
+                case ElementBindingExpressionSyntax elementBinding when IsTrainWreck(elementBinding, semanticModel):
                 case InvocationExpressionSyntax invocation when IsTrainWreck(invocation, semanticModel):
                 case MemberAccessExpressionSyntax member when IsTrainWreck(member, semanticModel):
                 case MemberBindingExpressionSyntax memberBinding when IsTrainWreck(memberBinding, semanticModel):
@@ -235,22 +245,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         /// <summary>
         /// Collects the 'train cars' of the given node in source order (left to right).
         /// </summary>
-        private static void CollectExpressions(ExpressionSyntax node, List<ExpressionSyntax> cars)
+        /// <param name="node">
+        /// The node to collect the cars from.
+        /// </param>
+        /// <param name="cars">
+        /// The collected cars.
+        /// </param>
+        /// <param name="predecessor">
+        /// One of the enumeration members that specifies the kind of the element that directly precedes the leftmost part of <paramref name="node"/>.
+        /// The default is <see cref="Predecessor.None"/>.
+        /// </param>
+        private static void CollectExpressions(ExpressionSyntax node, List<ExpressionSyntax> cars, in Predecessor predecessor = Predecessor.None)
         {
             switch (node)
             {
                 case ConditionalAccessExpressionSyntax c:
                 {
+                    var expression = c.Expression;
+
                     // 'A?.B.C?[0]' is 'A' + '.B.C?[0]', so visit both sides in order
-                    CollectExpressions(c.Expression, cars);
-                    CollectExpressions(c.WhenNotNull, cars);
+                    CollectExpressions(expression, cars, predecessor);
+
+                    // a conditional element binding behaves like a normal indexer, so it has to follow the same merging rules
+                    var endsWithIndexer = expression is ElementAccessExpressionSyntax || expression is ElementBindingExpressionSyntax;
+
+                    CollectExpressions(c.WhenNotNull, cars, endsWithIndexer ? Predecessor.Indexer : Predecessor.None);
 
                     break;
                 }
 
                 case MemberAccessExpressionSyntax m:
                 {
-                    CollectExpressions(m.Expression, cars);
+                    CollectExpressions(m.Expression, cars, predecessor);
                     cars.Add(m);
 
                     break;
@@ -261,7 +287,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     switch (i.Expression)
                     {
                         case MemberAccessExpressionSyntax member:
-                            CollectExpressions(member.Expression, cars); // the member belongs to the invocation, so it is not a car on its own
+                            CollectExpressions(member.Expression, cars, predecessor);
 
                             break;
 
@@ -270,7 +296,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             break; // nothing more to collect
 
                         default:
-                            CollectExpressions(i.Expression, cars);
+                            CollectExpressions(i.Expression, cars, predecessor);
 
                             break;
                     }
@@ -285,8 +311,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     switch (e.Expression)
                     {
                         case ElementAccessExpressionSyntax _:
-                            // 'A[08][15]' counts as 2 cars ('A[08]' and '[15]')
-                            CollectExpressions(e.Expression, cars);
+                        case ElementBindingExpressionSyntax _:
+                            // 'A[08][15]' and 'A[08]?[15][16]' count as 2 cars ('A[08]' and '[15]'), so keep the current indexer as a car
+                            CollectExpressions(e.Expression, cars, predecessor);
                             cars.Add(e);
 
                             break;
@@ -299,7 +326,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         default:
                             // 'A.B[42]' counts as a single car, the one of 'A.B'
-                            CollectExpressions(e.Expression, cars);
+                            CollectExpressions(e.Expression, cars, predecessor);
 
                             break;
                     }
@@ -307,9 +334,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
                 }
 
+                case ElementBindingExpressionSyntax _:
+                {
+                    // '?[0]' directly after a member (such as 'A.B?[0]') is merged into that member, just like 'A.B[0]'
+                    // '?[1]' directly after an indexer (such as 'A[0]?[1]') is a car on its own, just like 'A[0][1]'
+                    if (predecessor is Predecessor.Indexer)
+                    {
+                        cars.Add(node);
+                    }
+
+                    break;
+                }
+
                 default:
                 {
-                    // identifiers, member bindings ('.B' in 'A?.B'), element bindings ('[0]' in 'A?[0]'), etc.
+                    // identifiers, member bindings ('.B' in 'A?.B'), etc.
                     cars.Add(node);
 
                     break;
