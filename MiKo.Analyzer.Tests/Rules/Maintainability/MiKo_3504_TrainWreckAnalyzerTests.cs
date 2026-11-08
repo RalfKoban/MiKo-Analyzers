@@ -1455,6 +1455,43 @@ public class TestMeC
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_builder_element_via_conditional_indexer_followed_by_4_properties() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public int DoSomething(SomeBuilder[] builders)
+    {
+        return builders[0].Options.A.B.C;
+    }
+
+    public int? DoSomethingConditionally(SomeBuilder[] builders)
+    {
+        return builders?[0].Options.A.B.C;
+    }
+}
+
+public class SomeBuilder
+{
+    public TestMeOptions Options { get; }
+}
+
+public class TestMeOptions
+{
+    public TestMeA A { get; }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public int C { get; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_event_registration_when_used_with_full_qualified_names() => No_issue_is_reported_for(@"
 using System;
 
@@ -3263,6 +3300,38 @@ public class TestMeD
 }
 
 public class TestMeE
+{
+    public int C { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_non_builder_element_via_conditional_indexer_followed_by_4_properties() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public int? DoSomething(TestMeItem[] items)
+    {
+        return items?[0].Options.A.B.C;
+    }
+}
+
+public class TestMeItem
+{
+    public TestMeOptions Options { get; }
+}
+
+public class TestMeOptions
+{
+    public TestMeA A { get; }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
 {
     public int C { get; }
 }

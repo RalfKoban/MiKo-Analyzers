@@ -342,6 +342,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         cars.Add(node);
                     }
+                    else if (cars.Count > 0 && cars[cars.Count - 1] is IdentifierNameSyntax)
+                    {
+                        // 'A?[0]' is merged into the bare identifier 'A', so keep the binding as it represents the element (just like 'A[0]'), which is needed for the semantic filtering
+                        cars[cars.Count - 1] = node;
+                    }
 
                     break;
                 }
