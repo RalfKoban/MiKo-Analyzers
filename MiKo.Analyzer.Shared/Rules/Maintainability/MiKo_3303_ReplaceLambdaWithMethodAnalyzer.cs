@@ -8,11 +8,11 @@ using MiKoSolutions.Analyzers.Rules.Metrics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3244_ReplaceLambdaWithMethodAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3303_ReplaceLambdaWithMethodAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3244";
+        public const string Id = "MiKo_3303";
 
-        public MiKo_3244_ReplaceLambdaWithMethodAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3303_ReplaceLambdaWithMethodAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -33,8 +33,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case AnonymousObjectCreationExpressionSyntax _:
                     return false; // do not report object creations
 
-                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
-                    return false; // do not report direct returns
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax statement:
+                {
+                    switch (statement.Expression)
+                    {
+                        case ObjectCreationExpressionSyntax _:
+                        case ImplicitObjectCreationExpressionSyntax _:
+                        case AnonymousObjectCreationExpressionSyntax _:
+                            return false; // do not report object creations
+
+                        default:
+                            return true;
+                    }
+                }
             }
 
             if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())

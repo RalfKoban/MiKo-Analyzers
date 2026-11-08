@@ -5672,13 +5672,13 @@ Prefer 'while' or 'for' loops, where the condition is visible up front. This mak
     <value>Avoid 'do/while' loops</value>
   </data>
   <data name="MiKo_3244_Description" xml:space="preserve">
-    <value>To make code easier to read and maintain, lambda expressions should be kept short. Long lambda bodies are difficult to understand and often deserve a meaningful name. Consider replacing the lambda expression with a named method.</value>
+    <value>To make code easier to read and maintain, anonymous methods should be kept short. Long anonymous method bodies are difficult to understand and often deserve a meaningful name. Consider replacing the anonymous method with a named method.</value>
   </data>
   <data name="MiKo_3244_MessageFormat" xml:space="preserve">
-    <value>Use a named method instead of a complex lambda expression</value>
+    <value>Use a named method instead of a complex anonymous method</value>
   </data>
   <data name="MiKo_3244_Title" xml:space="preserve">
-    <value>Replace complex lambda expressions with named methods</value>
+    <value>Replace complex anonymous methods with named methods</value>
   </data>
   <data name="MiKo_3245_Description" xml:space="preserve">
     <value>Delegate-returning properties blur the distinction between state and behavior. Instead, expose operations as methods. This makes APIs more intuitive for callers and the code easier to understand and maintain.</value>
@@ -5722,6 +5722,15 @@ This makes APIs easier to use and the intent of the code clearer.</value>
   </data>
   <data name="MiKo_3302_Title" xml:space="preserve">
     <value>Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters</value>
+  </data>
+  <data name="MiKo_3303_Description" xml:space="preserve">
+    <value>To make code easier to read and maintain, lambda expressions should be kept short. Long lambda bodies are difficult to understand and often deserve a meaningful name. Consider replacing the lambda expression with a named method.</value>
+  </data>
+  <data name="MiKo_3303_MessageFormat" xml:space="preserve">
+    <value>Use a named method instead of a complex lambda expression</value>
+  </data>
+  <data name="MiKo_3303_Title" xml:space="preserve">
+    <value>Replace complex lambda expressions with named methods</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Keep namespace hierarchies shallow. If a namespace hierarchy becomes too deep, it likely means the namespaces are too specific or specialized. Flatten such namespaces to keep your codebase understandable and manageable.</value>
@@ -6230,26 +6239,14 @@ This organization ensures clarity and makes the code easier to find, understand 
   <data name="MiKo_6012_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
-  <data name="MiKo_6078_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
   <data name="MiKo_6012_Description" xml:space="preserve">
     <value>Surround 'foreach' loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
-  </data>
-  <data name="MiKo_6078_Description" xml:space="preserve">
-    <value>Surround 'foreach' variable loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6012_MessageFormat" xml:space="preserve">
     <value>Surround 'foreach' loop with a blank line</value>
   </data>
-  <data name="MiKo_6078_MessageFormat" xml:space="preserve">
-    <value>Surround 'foreach' variable loop with a blank line</value>
-  </data>
   <data name="MiKo_6012_Title" xml:space="preserve">
     <value>Surround foreach loops with blank lines</value>
-  </data>
-  <data name="MiKo_6078_Title" xml:space="preserve">
-    <value>Surround foreach variable loops with blank lines</value>
   </data>
   <data name="MiKo_6013_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
@@ -6974,5 +6971,17 @@ Align the call with the start of the method chain to maintain consistent formatt
   </data>
   <data name="MiKo_6077_Title" xml:space="preserve">
     <value>Place short parameter lists on single line</value>
+  </data>
+  <data name="MiKo_6078_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6078_Description" xml:space="preserve">
+    <value>Surround 'foreach' variable loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
+  </data>
+  <data name="MiKo_6078_MessageFormat" xml:space="preserve">
+    <value>Surround 'foreach' variable loop with a blank line</value>
+  </data>
+  <data name="MiKo_6078_Title" xml:space="preserve">
+    <value>Surround foreach variable loops with blank lines</value>
   </data>
 </root>

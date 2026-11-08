@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3244_ReplaceLambdaWithMethodAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3303_ReplaceLambdaWithMethodAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_short_lambda() => No_issue_is_reported_for(@"
@@ -451,8 +451,32 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3244_ReplaceLambdaWithMethodAnalyzer.Id;
+        [Test]
+        public void An_issue_is_reported_for_long_non_expression_tree_lambda_in_method_returning_queryable_via_return() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3244_ReplaceLambdaWithMethodAnalyzer { MaxLinesOfCode = 3 };
+public class TestMe
+{
+    public IQueryable<int> DoSomething(IQueryable<int> source, List<int> items)
+    {
+        var results = items.Where(_ =>
+                                      {
+                                          return _ > 0
+                                              && _ < 10
+                                              && _ != 5
+                                              && _ != 6
+                                              && _ != 7
+                                       }).ToList();
+
+        return source;
+    }
+}
+");
+
+        protected override string GetDiagnosticId() => MiKo_3303_ReplaceLambdaWithMethodAnalyzer.Id;
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3303_ReplaceLambdaWithMethodAnalyzer { MaxLinesOfCode = 3 };
     }
 }
