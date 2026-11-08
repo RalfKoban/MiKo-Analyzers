@@ -40,6 +40,64 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_factory_invocation_followed_by_conditional_access_of_3_properties() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public int? DoSomething()
+    {
+        return GetA()?.B.C.D;
+    }
+
+    private TestMeA GetA() => null;
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public int D { get; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_generic_factory_invocation_followed_by_conditional_access_of_3_properties() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public int? DoSomething()
+    {
+        return GetA<int>()?.B.C.D;
+    }
+
+    private TestMeA GetA<T>() => null;
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public int D { get; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_a_number_assignment() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -92,6 +150,40 @@ public class TestMe
                                  .Append('G')
                                  .ToString();
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_terminal_conditional_indexer_after_3_properties() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int? DoSomething()
+    {
+        return A?.B.C.D?[0];
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public int this[int index] => 42;
 }
 ");
 
@@ -231,6 +323,35 @@ public class TestMeB
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_3_array_elements_in_a_row_when_invoking_a_method_in_return_statement() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA[] A { get; }
+
+    public int DoSomething()
+    {
+        return A[1].B[2].C[3].Invocation());
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB[] B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC[] C { get; }
+}
+
+public class TestMeC
+{
+    public int Invocation() => 42;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_accessing_3_array_elements_in_a_row_when_invoking_a_method_when_being_an_argument() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -316,6 +437,35 @@ public class TestMeB
 public class TestMeC
 {
     public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_accessing_3_properties_in_a_row_when_invoking_a_method_conditionally() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        A.B.C?.Invocation();
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public void Invocation() { }
 }
 ");
 
@@ -443,6 +593,44 @@ public class TestMeB
 public class TestMeC
 {
     public List<int> D { get; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_accessing_4_indexers_in_a_row_when_being_an_argument() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        DoSomething(A[1][2][3][4]);
+    }
+
+    private void DoSomething(int value)
+    {
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] { get; }
+}
+
+public class TestMeD
+{
+    public int this[int index] { get; }
 }
 ");
 
@@ -1267,6 +1455,43 @@ public class TestMeC
 ");
 
         [Test]
+        public void No_issue_is_reported_for_accessing_builder_element_via_conditional_indexer_followed_by_4_properties() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public int DoSomething(SomeBuilder[] builders)
+    {
+        return builders[0].Options.A.B.C;
+    }
+
+    public int? DoSomethingConditionally(SomeBuilder[] builders)
+    {
+        return builders?[0].Options.A.B.C;
+    }
+}
+
+public class SomeBuilder
+{
+    public TestMeOptions Options { get; }
+}
+
+public class TestMeOptions
+{
+    public TestMeA A { get; }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public int C { get; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_event_registration_when_used_with_full_qualified_names() => No_issue_is_reported_for(@"
 using System;
 
@@ -1315,6 +1540,31 @@ public static class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_namespace_and_type_followed_by_conditional_access_of_2_properties() => No_issue_is_reported_for(@"
+
+namespace N1.N2.N3
+{
+    public class Container
+    {
+        public static TestMeA Instance { get; }
+    }
+
+    public class TestMeA
+    {
+        public int Value { get; }
+    }
+}
+
+public class TestMe
+{
+    public int? DoSomething()
+    {
+        return N1.N2.N3.Container.Instance?.Value;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_NUnits_Assert_Constraint_model_calls() => No_issue_is_reported_for("""
 
                                                                                                                 using NUnit.Framework;
@@ -1328,6 +1578,45 @@ public static class TestMe
                                                                                                                 }
 
                                                                                                                 """);
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_2_indexers_in_a_row_followed_by_3_properties() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        return A[1][2].B.C.D;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD B { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE C { get; }
+}
+
+public class TestMeE
+{
+    public int D { get; }
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_accessing_4_array_elements_in_a_row_when_invoking_a_method_when_being_an_argument() => An_issue_is_reported_for(@"
@@ -1362,6 +1651,84 @@ public class TestMeC
 }
 
 public class TestMeD
+{
+    public int Invocation() => 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_4_indexers_in_a_row_followed_by_a_property() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        return A[1][2][3][4].B;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE this[int index] { get; }
+}
+
+public class TestMeE
+{
+    public int B { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_4_indexers_in_a_row_when_invoking_a_method() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int DoSomething()
+    {
+        return A[1][2][3][4].Invocation();
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE this[int index] { get; }
+}
+
+public class TestMeE
 {
     public int Invocation() => 42;
 }
@@ -1704,6 +2071,97 @@ public class TestMeD
 }
 
 public class TestMeE
+{
+    public int Invocation() => 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_5_indexers_in_a_row_when_being_an_argument() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        DoSomething(A[1][2][3][4][5]);
+    }
+
+    private void DoSomething(int value)
+    {
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE this[int index] { get; }
+}
+
+public class TestMeE
+{
+    public int this[int index] { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_5_indexers_in_a_row_when_invoking_a_method_when_being_an_argument() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public void DoSomething()
+    {
+        DoSomething(A[1][2][3][4][5].Invocation());
+    }
+
+    private void DoSomething(int value)
+    {
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE this[int index] { get; }
+}
+
+public class TestMeE
+{
+    public TestMeF this[int index] { get; }
+}
+
+public class TestMeF
 {
     public int Invocation() => 42;
 }
@@ -2787,6 +3245,452 @@ public class TestMeD
     public int E { get; }
 }
 ");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_6_properties_in_a_row_with_last_conditional_access() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+    public TestMe F { get; }
+
+    public TestMe DoSomething()
+    {
+        return A.B.C.D.E?.F;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_indexer_after_conditional_element_binding_followed_by_2_properties() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int? DoSomething()
+    {
+        return A[0]?[1][2].B.C;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB this[int index] => null;
+}
+
+public class TestMeB
+{
+    public TestMeC this[int index] => null;
+}
+
+public class TestMeC
+{
+    public TestMeD this[int index] => null;
+}
+
+public class TestMeD
+{
+    public TestMeE B { get; }
+}
+
+public class TestMeE
+{
+    public int C { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_accessing_non_builder_element_via_conditional_indexer_followed_by_4_properties() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public int? DoSomething(TestMeItem[] items)
+    {
+        return items?[0].Options.A.B.C;
+    }
+}
+
+public class TestMeItem
+{
+    public TestMeOptions Options { get; }
+}
+
+public class TestMeOptions
+{
+    public TestMeA A { get; }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public int C { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_conditional_access_of_4_properties_in_a_row() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int? DoSomething()
+    {
+        return A?.B.C.D.E;
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public int E { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_conditional_access_of_4_properties_in_a_row_when_invoking_a_method() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public TestMeA A { get; }
+
+    public int? DoSomething()
+    {
+        return A.B?.C.D.E.F();
+    }
+}
+
+public class TestMeA
+{
+    public TestMeB B { get; }
+}
+
+public class TestMeB
+{
+    public TestMeC C { get; }
+}
+
+public class TestMeC
+{
+    public TestMeD D { get; }
+}
+
+public class TestMeD
+{
+    public TestMeE E { get; }
+}
+
+public class TestMeE
+{
+    public int F() => 42;
+}
+");
+
+        [Test]
+        public void Issue_squiggles_conditional_binding_access_without_arguments()
+        {
+            var issues = GetDiagnostics(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public TestMe DoSomething()
+    {
+        return A.B.C.D?.E;
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D?.E"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_conditional_binding_invocation_without_arguments()
+        {
+            var issues = GetDiagnostics(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public IEnumerable<int> DoSomething()
+    {
+        return A.B.C.D.E?.DoSomething();
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E?.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_conditional_invocation_without_arguments()
+        {
+            var issues = GetDiagnostics(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public IEnumerable<int> DoSomething()
+    {
+        return A?.B?.C?.D?.E.DoSomething();
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B?.C?.D?.E.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_invocation_without_arguments()
+        {
+            var issues = GetDiagnostics(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public IEnumerable<int> DoSomething()
+    {
+        return A.B.C.D.E.DoSomething();
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_member_access_without_arguments()
+        {
+            var issues = GetDiagnostics(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public TestMe DoSomething()
+    {
+        return A.B.C.D.E;
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_partly_conditional_invocation_without_arguments()
+        {
+            var issues = GetDiagnostics(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public IEnumerable<int> DoSomething()
+    {
+        return A?.B.C?.D.E.DoSomething();
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B.C?.D.E.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_property_ending_chain_after_invocation_completely()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public TestMe B() => this;
+
+    public TestMe Test()
+    {
+        return A.B().C.D.E;
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B().C.D.E"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_property_ending_chain_after_invocation_completely_for_conditional_access_expression()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public TestMe B() => this;
+
+    public TestMe Test()
+    {
+        return A?.B().C.D.E;
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B().C.D.E"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_terminal_invocation_without_conditional_invocation_in_arguments()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public int DoSomething(int? value) => 42;
+
+    public int GetValue() => 42;
+
+    public int Test(TestMe value)
+    {
+        return A?.B?.C.D.E.DoSomething(value?.GetValue());
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A?.B?.C.D.E.DoSomething"), "Squiggle is misplaced");
+        }
+
+        [Test]
+        public void Issue_squiggles_terminal_invocation_without_nested_invocation_arguments()
+        {
+            var issues = GetDiagnostics(@"
+public class TestMe
+{
+    public TestMe A { get; }
+    public TestMe B { get; }
+    public TestMe C { get; }
+    public TestMe D { get; }
+    public TestMe E { get; }
+
+    public int DoSomething(int value) => value;
+
+    public int GetValue() => 42;
+
+    public int Test()
+    {
+        return A.B.C.D.E.DoSomething(GetValue());
+    }
+}
+");
+
+            Assert.That(issues, Has.Length.EqualTo(1), "Issue should be detected and reported");
+
+            var issue = issues[0];
+
+            Assert.That(issue.Location.GetText(), Is.EqualTo("A.B.C.D.E.DoSomething"), "Squiggle is misplaced");
+        }
 
         //// TODO RKN: Implement tests for method invocations
 
