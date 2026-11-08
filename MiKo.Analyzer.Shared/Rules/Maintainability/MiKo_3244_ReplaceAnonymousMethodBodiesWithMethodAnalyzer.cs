@@ -28,20 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ImplicitObjectCreationExpressionSyntax _:
                 case AnonymousObjectCreationExpressionSyntax _:
                     return false; // do not report object creations
-
-                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax statement:
-                {
-                    switch (statement.Expression)
-                    {
-                        case ObjectCreationExpressionSyntax _:
-                        case ImplicitObjectCreationExpressionSyntax _:
-                        case AnonymousObjectCreationExpressionSyntax _:
-                            return false; // do not report object creations
-
-                        default:
-                            return true;
-                    }
-                }
             }
 
             if (context.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
@@ -56,6 +42,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case "MultipleAsync" when identifierName is "Assert":
                             return false; // do not report assertions
                     }
+                }
+            }
+
+            if (anonymous.Body is BlockSyntax block && block.Statements.FirstOrDefault() is ReturnStatementSyntax statement)
+            {
+                switch (statement.Expression)
+                {
+                    case ObjectCreationExpressionSyntax _:
+                    case ImplicitObjectCreationExpressionSyntax _:
+                    case AnonymousObjectCreationExpressionSyntax _:
+                        return false; // do not report object creations
                 }
             }
 

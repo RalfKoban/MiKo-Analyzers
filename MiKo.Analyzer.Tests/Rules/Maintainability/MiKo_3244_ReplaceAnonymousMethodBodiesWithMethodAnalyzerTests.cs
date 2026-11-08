@@ -247,6 +247,27 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_with_Assert_MultipleAsync_anonymous_method_returning_non_object_creation_above_maximum_allowed_lines() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public Task DoSomething() => Assert.MultipleAsync(delegate
+                                                          {
+                                                              return Task.WhenAll(
+                                                                              Task.CompletedTask,
+                                                                              Task.CompletedTask,
+                                                                              Task.CompletedTask,
+                                                                              Task.CompletedTask);
+                                                          });
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_long_anonymous_method_inside_Assert_Multiple() => An_issue_is_reported_for(@"
 using System;
 
