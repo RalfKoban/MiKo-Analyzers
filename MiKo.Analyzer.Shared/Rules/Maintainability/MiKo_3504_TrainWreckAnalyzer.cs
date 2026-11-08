@@ -127,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case ConditionalAccessExpressionSyntax _:
                 case ElementAccessExpressionSyntax _:
+                case ElementBindingExpressionSyntax _:
                 case IdentifierNameSyntax _:
                 case InvocationExpressionSyntax _:
                 case MemberAccessExpressionSyntax _:
@@ -144,9 +145,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case ConditionalAccessExpressionSyntax conditional when IsTrainWreck(conditional, semanticModel):
                 case ElementAccessExpressionSyntax access when IsTrainWreck(access, semanticModel):
+                case ElementBindingExpressionSyntax elementbinding when IsTrainWreck(elementbinding, semanticModel):
                 case InvocationExpressionSyntax invocation when IsTrainWreck(invocation, semanticModel):
                 case MemberAccessExpressionSyntax member when IsTrainWreck(member, semanticModel):
-                case MemberBindingExpressionSyntax binding when IsTrainWreck(binding, semanticModel):
+                case MemberBindingExpressionSyntax memberBinding when IsTrainWreck(memberBinding, semanticModel):
                     return true;
 
                 default:
@@ -158,6 +160,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTrainWreck(ElementAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
+        private static bool IsTrainWreck(ElementBindingExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
+
         private static bool IsTrainWreck(MemberAccessExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
 
         private static bool IsTrainWreck(MemberBindingExpressionSyntax level1, SemanticModel semanticModel) => IsTrainWreck(level1, AllowedDepth, semanticModel);
@@ -166,7 +170,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsTrainWreck(ExpressionSyntax start, in int allowedDepth, SemanticModel semanticModel)
         {
-            var expressions = GetExpressions(start);
+            var expressions = new List<ExpressionSyntax>();
+
+            CollectExpressions(start, expressions);
 
             if (expressions.Count <= allowedDepth)
             {
@@ -226,119 +232,88 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static List<ExpressionSyntax> GetExpressions(ExpressionSyntax start)
+        /// <summary>
+        /// Collects the 'train cars' of the given node in source order (left to right).
+        /// </summary>
+        private static void CollectExpressions(ExpressionSyntax node, List<ExpressionSyntax> cars)
         {
-            var expressions = new List<ExpressionSyntax>();
-
-            var current = AddConditionalAccessAware(start, expressions);
-
-            var reverse = expressions.Count is 1;
-
-            while (true)
-            {
-                var next = GetExpression(current);
-
-                if (next is null)
-                {
-                    break;
-                }
-
-                current = AddConditionalAccessAware(next, expressions);
-            }
-
-            // we collected them in reverse order, so we have to reverse them to have the correct call order (from user's point of view)
-            if (reverse)
-            {
-                expressions.Reverse();
-            }
-
-            return expressions;
-
-            ExpressionSyntax AddConditionalAccessAware(ExpressionSyntax node, List<ExpressionSyntax> nodes)
-            {
-                // if 'node' is conditional access, we have to file the 'node.Expression' items first as otherwise they would get lost
-                if (node is ConditionalAccessExpressionSyntax c)
-                {
-                    nodes.AddRange(GetExpressions(c.Expression));
-                }
-                else
-                {
-                    nodes.Add(node);
-                }
-
-                return node;
-            }
-        }
-
-        private static ExpressionSyntax GetExpression(ExpressionSyntax expression)
-        {
-            switch (expression)
+            switch (node)
             {
                 case ConditionalAccessExpressionSyntax c:
                 {
-                    return c.WhenNotNull;
+                    // 'A?.B.C?[0]' is 'A' + '.B.C?[0]', so visit both sides in order
+                    CollectExpressions(c.Expression, cars);
+                    CollectExpressions(c.WhenNotNull, cars);
+
+                    break;
                 }
 
                 case MemberAccessExpressionSyntax m:
                 {
-                    if (m.Expression is ElementAccessExpressionSyntax next)
-                    {
-                        if (next.Expression is ElementAccessExpressionSyntax)
-                        {
-                            // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
-                            return next;
-                        }
+                    CollectExpressions(m.Expression, cars);
+                    cars.Add(m);
 
-                        // jump over the access as we have something like 'A[42]' (that we count as a single train car)
-                        return next.Expression;
-                    }
-
-                    return m.Expression;
-                }
-
-                case ElementAccessExpressionSyntax e:
-                {
-                    if (e.Expression is IdentifierNameSyntax)
-                    {
-                        // jump over identifier such as 'A' in 'A[42]' (that we count as a single train car)
-                        return null;
-                    }
-
-                    return e.Expression;
+                    break;
                 }
 
                 case InvocationExpressionSyntax i:
                 {
                     switch (i.Expression)
                     {
-                        case MemberAccessExpressionSyntax next:
-                        {
-                            if (next.Expression is ElementAccessExpressionSyntax nextNext)
-                            {
-                                if (nextNext.Expression is ElementAccessExpressionSyntax)
-                                {
-                                    // report the access as we have something like 'A[08][15]' (that we count as 2 train cars, 'A[08]' and '[15]')
-                                    return nextNext;
-                                }
+                        case MemberAccessExpressionSyntax member:
+                            CollectExpressions(member.Expression, cars); // the member belongs to the invocation, so it is not a car on its own
 
-                                // jump over the access as we have something like 'A[42]' (that we count as a single train car)
-                                return nextNext.Expression;
-                            }
-
-                            // jump over the member as that belongs to the invocation as well
-                            return next.Expression;
-                        }
+                            break;
 
                         case MemberBindingExpressionSyntax _:
-                            return null; // nothing more to report here
+                        case SimpleNameSyntax _:
+                            break; // nothing more to collect
 
                         default:
-                            return i.Expression;
+                            CollectExpressions(i.Expression, cars);
+
+                            break;
                     }
+
+                    cars.Add(i);
+
+                    break;
+                }
+
+                case ElementAccessExpressionSyntax e:
+                {
+                    switch (e.Expression)
+                    {
+                        case ElementAccessExpressionSyntax _:
+                            // 'A[08][15]' counts as 2 cars ('A[08]' and '[15]')
+                            CollectExpressions(e.Expression, cars);
+                            cars.Add(e);
+
+                            break;
+
+                        case IdentifierNameSyntax _:
+                            // 'A[42]' counts as a single car
+                            cars.Add(e);
+
+                            break;
+
+                        default:
+                            // 'A.B[42]' counts as a single car, the one of 'A.B'
+                            CollectExpressions(e.Expression, cars);
+
+                            break;
+                    }
+
+                    break;
                 }
 
                 default:
-                    return null;
+                {
+                    // identifiers, member bindings ('.B' in 'A?.B'), element bindings ('[0]' in 'A?[0]'), etc.
+                    cars.Add(node);
+
+                    break;
+                }
             }
         }
 
@@ -529,21 +504,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             ArgumentListSyntax FindArgumentListSyntax(ExpressionSyntax e)
             {
-                switch (e)
+                while (true)
                 {
-                    case InvocationExpressionSyntax i:
-                        return i.ArgumentList;
+                    switch (e)
+                    {
+                        case InvocationExpressionSyntax i:
+                            return i.ArgumentList;
 
-                    case ConditionalAccessExpressionSyntax c when c.WhenNotNull is InvocationExpressionSyntax ci:
-                        return ci.ArgumentList;
+                        case ConditionalAccessExpressionSyntax c when c.WhenNotNull is InvocationExpressionSyntax ci:
+                            return ci.ArgumentList;
 
-                    case ConditionalAccessExpressionSyntax c:
-                        return c.LastDescendant<ConditionalAccessExpressionSyntax>()?.WhenNotNull is InvocationExpressionSyntax ci2
-                               ? ci2.ArgumentList
-                               : null;
+                        case ConditionalAccessExpressionSyntax c:
+                            e = c.WhenNotNull;
 
-                    default:
-                        return null;
+                            continue;
+
+                        default:
+                            return null;
+                    }
                 }
             }
         }
