@@ -917,44 +917,55 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxToken WithLeadingSpaces(this in SyntaxToken value, in int count)
         {
-            if (value.HasLeadingComment())
+            if (value.ContainsDirectives is false && value.HasLeadingComment() is false)
             {
-                // we have to add the spaces after the comment, so we have to determine the additional spaces to add
-                var additionalSpaces = count - value.GetPositionWithinStartLine();
+                return value.WithLeadingTrivia(WhiteSpaces(count));
+            }
 
-                var leadingTrivia = value.LeadingTrivia.ToList();
+            var additionalSpaces = count - value.GetPositionWithinStartLine();
 
-                // first collect all indices of the comments, for later reference
-                var commentIndices = new List<int>(1);
+            if (additionalSpaces is 0)
+            {
+                return value;
+            }
 
-                for (int index = 0, triviaCount = leadingTrivia.Count; index < triviaCount; index++)
+            var leadingTrivia = value.LeadingTrivia.ToList();
+            var triviaCount = leadingTrivia.Count;
+
+            if (additionalSpaces > 0)
+            {
+                // we have to add the spaces but also indent the comments
+                for (var index = 0; index < triviaCount; index++)
                 {
                     var trivia = leadingTrivia[index];
 
-                    if (trivia.IsComment())
+                    // so we adjust all whitespace trivia
+                    if (trivia.IsWhiteSpace() && trivia.Span.Length < count)
                     {
-                        commentIndices.Add(index);
+                        leadingTrivia[index] = WhiteSpaces(count);
                     }
                 }
+            }
+            else
+            {
+                // we have to remove some whitespace leading trivia as we have "negative" additional spaces
+                var spacesToRemove = Math.Abs(additionalSpaces);
 
-                // ensure proper size to avoid multiple resizes
-                leadingTrivia.Capacity += commentIndices.Count;
-
-                // now update the comments, but adjust the offset to remember the already added spaces (trivia indices change due to that)
-                var offset = 0;
-
-                foreach (var index in commentIndices)
+                for (var index = triviaCount - 1; index >= 0; index--)
                 {
-                    leadingTrivia.Insert(index + offset, WhiteSpaces(additionalSpaces));
+                    var trivia = leadingTrivia[index];
 
-                    offset += 1;
+                    // we have to shorten last whitespace trivia only
+                    if (trivia.IsWhiteSpace() && trivia.Span.Length > spacesToRemove)
+                    {
+                        leadingTrivia[index] = WhiteSpaces(count);
+
+                        break;
+                    }
                 }
-
-                return value.WithLeadingTrivia(leadingTrivia)
-                            .WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
             }
 
-            return value.WithLeadingTrivia(WhiteSpaces(count));
+            return value.WithLeadingTrivia(leadingTrivia);
         }
 
         /// <summary>

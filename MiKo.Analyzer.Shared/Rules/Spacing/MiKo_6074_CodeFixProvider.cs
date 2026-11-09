@@ -11,17 +11,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6074";
 
-        protected override BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax node, in int spaces)
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode syntax, in int leadingSpaces)
         {
-            var operatorToken = node.OperatorToken;
-            var rightOperand = node.Right;
-
-            if (operatorToken.IsOnSameLineAs(rightOperand))
+            if (syntax is BinaryExpressionSyntax node)
             {
-                return node.WithOperatorToken(operatorToken.WithLeadingSpaces(spaces));
+                var operatorToken = node.OperatorToken;
+                var rightOperand = node.Right;
+
+                if (operatorToken.IsOnSameLineAs(rightOperand))
+                {
+                    return node.WithOperatorToken(operatorToken.WithLeadingSpaces(leadingSpaces)) as TSyntaxNode;
+                }
+
+                return node.WithRight(rightOperand.WithLeadingSpaces(leadingSpaces)) as TSyntaxNode;
             }
 
-            return node.WithRight(rightOperand.WithLeadingSpaces(spaces));
+            return syntax;
         }
     }
 }

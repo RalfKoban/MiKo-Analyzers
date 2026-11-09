@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return Task.FromResult(updatedSyntax);
         }
 
-        protected virtual T GetUpdatedSyntax(T node, in int spaces) => node.WithLeadingSpaces(spaces);
-
         private SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             if (syntax is T node)
