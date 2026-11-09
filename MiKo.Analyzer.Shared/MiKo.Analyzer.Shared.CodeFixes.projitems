@@ -428,7 +428,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5017_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5019_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\PerformanceCodeFixProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\IndendedSpacingCodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\IndentedSpacingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6001_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6002_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6003_CodeFixProvider.cs" />
@@ -502,6 +502,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6076_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6077_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6078_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6080_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringBuilderCache.cs" />

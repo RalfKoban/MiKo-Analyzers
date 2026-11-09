@@ -7,21 +7,26 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6074_CodeFixProvider)), Shared]
-    public sealed class MiKo_6074_CodeFixProvider : IndendedSpacingCodeFixProvider<BinaryExpressionSyntax>
+    public sealed class MiKo_6074_CodeFixProvider : IndentedSpacingCodeFixProvider<BinaryExpressionSyntax>
     {
         public override string FixableDiagnosticId => "MiKo_6074";
 
-        protected override BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax node, in int spaces)
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode syntax, in int leadingSpaces)
         {
-            var operatorToken = node.OperatorToken;
-            var rightOperand = node.Right;
-
-            if (operatorToken.IsOnSameLineAs(rightOperand))
+            if (syntax is BinaryExpressionSyntax node)
             {
-                return node.WithOperatorToken(operatorToken.WithLeadingSpaces(spaces));
+                var operatorToken = node.OperatorToken;
+                var rightOperand = node.Right;
+
+                if (operatorToken.IsOnSameLineAs(rightOperand))
+                {
+                    return node.WithOperatorToken(operatorToken.WithLeadingSpaces(leadingSpaces)) as TSyntaxNode;
+                }
+
+                return node.WithRight(rightOperand.WithLeadingSpaces(leadingSpaces)) as TSyntaxNode;
             }
 
-            return node.WithRight(rightOperand.WithLeadingSpaces(spaces));
+            return syntax;
         }
     }
 }

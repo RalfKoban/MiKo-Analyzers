@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
-    public abstract class IndendedSpacingCodeFixProvider<T> : SpacingCodeFixProvider where T : SyntaxNode
+    public abstract class IndentedSpacingCodeFixProvider<T> : SpacingCodeFixProvider where T : SyntaxNode
     {
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<T>().First();
 
@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return Task.FromResult(updatedSyntax);
         }
-
-        protected virtual T GetUpdatedSyntax(T node, in int spaces) => node.WithLeadingSpaces(spaces);
 
         private SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {

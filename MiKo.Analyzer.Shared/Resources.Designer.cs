@@ -20138,5 +20138,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6078_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align the opening and closing braces.
+        /// </summary>
+        internal static string MiKo_6080_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6080_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when the opening and closing braces of a block are vertically aligned. This makes the structure of the code easier to recognize and easier to follow..
+        /// </summary>
+        internal static string MiKo_6080_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6080_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align the opening and closing braces.
+        /// </summary>
+        internal static string MiKo_6080_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6080_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align block braces vertically.
+        /// </summary>
+        internal static string MiKo_6080_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6080_Title", resourceCulture);
+            }
+        }
     }
 }
