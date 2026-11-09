@@ -14,27 +14,60 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeBlock, SyntaxKind.Block);
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
+        {
+            context.RegisterSyntaxNodeAction(AnalyzeBlock, SyntaxKind.Block);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.ClassDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.EnumDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.RecordDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.RecordStructDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.StructDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.InterfaceDeclaration);
+
+#if VS2026
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.ExtensionBlockDeclaration);
+#endif
+
+            context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.NamespaceDeclaration);
+        }
 
         private void AnalyzeBlock(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is BlockSyntax block)
+            if (context.Node is BlockSyntax node)
             {
-                var openBrace = block.OpenBraceToken;
-                var closeBrace = block.CloseBraceToken;
+                AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
+            }
+        }
 
-                if (openBrace.IsOnSameLineAs(closeBrace))
-                {
-                    return;
-                }
+        private void AnalyzeDeclaration(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is BaseTypeDeclarationSyntax node)
+            {
+                AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
+            }
+        }
 
-                var openBracePosition = openBrace.GetPositionWithinStartLine();
-                var closeBracePosition = closeBrace.GetPositionWithinStartLine();
+        private void AnalyzeNamespaceDeclaration(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is NamespaceDeclarationSyntax node)
+            {
+                AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
+            }
+        }
 
-                if (openBracePosition != closeBracePosition)
-                {
-                    ReportDiagnostics(context, Issue(closeBrace, CreateProposalForSpaces(openBracePosition, openBracePosition - closeBracePosition)));
-                }
+        private void AnalyzeBraces(in SyntaxNodeAnalysisContext context, in SyntaxToken openBrace, in SyntaxToken closeBrace)
+        {
+            if (openBrace.IsOnSameLineAs(closeBrace))
+            {
+                return;
+            }
+
+            var openBracePosition = openBrace.GetPositionWithinStartLine();
+            var closeBracePosition = closeBrace.GetPositionWithinStartLine();
+
+            if (openBracePosition != closeBracePosition)
+            {
+                ReportDiagnostics(context, Issue(closeBrace, CreateProposalForSpaces(openBracePosition, openBracePosition - closeBracePosition)));
             }
         }
     }

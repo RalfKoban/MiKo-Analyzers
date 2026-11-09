@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         SyntaxKind.ClassDeclaration,
                                                                         SyntaxKind.StructDeclaration,
                                                                         SyntaxKind.RecordDeclaration,
+                                                                        SyntaxKind.RecordStructDeclaration,
                                                                         SyntaxKind.InterfaceDeclaration,
                                                                         SyntaxKind.MethodDeclaration,
                                                                         SyntaxKind.PropertyDeclaration,

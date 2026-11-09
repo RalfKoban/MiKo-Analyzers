@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     // base types
                     case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.RecordStructDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.StructDeclaration:
