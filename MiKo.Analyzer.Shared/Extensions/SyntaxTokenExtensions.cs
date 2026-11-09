@@ -929,13 +929,13 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var leadingTrivia = value.LeadingTrivia.ToList();
-            var triviaCount = leadingTrivia.Count;
+            var leadingTrivia = value.LeadingTrivia.ToArray();
+            var triviaLength = leadingTrivia.Length;
 
             if (additionalSpaces > 0)
             {
                 // we have to add the spaces but also indent the comments
-                for (var index = 0; index < triviaCount; index++)
+                for (var index = 0; index < triviaLength; index++)
                 {
                     var trivia = leadingTrivia[index];
 
@@ -949,14 +949,12 @@ namespace MiKoSolutions.Analyzers
             else
             {
                 // we have to remove some whitespace leading trivia as we have "negative" additional spaces
-                var spacesToRemove = Math.Abs(additionalSpaces);
-
-                for (var index = triviaCount - 1; index >= 0; index--)
+                for (var index = triviaLength - 1; index >= 0; index--)
                 {
                     var trivia = leadingTrivia[index];
 
                     // we have to shorten last whitespace trivia only
-                    if (trivia.IsWhiteSpace() && trivia.Span.Length > spacesToRemove)
+                    if (trivia.IsWhiteSpace() && trivia.Span.Length > count)
                     {
                         leadingTrivia[index] = WhiteSpaces(count);
 
