@@ -1383,6 +1383,18 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value?.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         /// <summary>
+        /// Creates a new syntax node with an end-of-line added as additional trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax node with an end-of-line added as additional trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T WithAdditionalEndOfLine<T>(this T value) where T : SyntaxNode => value?.WithAdditionalTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        /// <summary>
         /// Creates a new node from this node with a trailing end-of-line.
         /// </summary>
         /// <typeparam name="T">

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private static readonly SyntaxKind[] OperatorDeclarations = { SyntaxKind.OperatorDeclaration, SyntaxKind.ConversionOperatorDeclaration };
 
-        private static readonly SyntaxKind[] TypeDeclarations = { SyntaxKind.ClassDeclaration, SyntaxKind.RecordDeclaration, SyntaxKind.StructDeclaration };
+        private static readonly SyntaxKind[] TypeDeclarations = { SyntaxKind.ClassDeclaration, SyntaxKind.RecordDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.RecordStructDeclaration };
 
         public MiKo_4007_OperatorsOrderedBeforeMethodsAnalyzer() : base(Id, (SymbolKind)(-1))
         {

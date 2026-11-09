@@ -78,6 +78,44 @@ public record TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_record_with_close_brace_on_same_line_as_last_member()
+        {
+            const string OriginalCode = @"
+public record TestMe
+{
+    private int _field; }
+";
+
+            const string FixedCode = @"
+public record TestMe
+{
+    private int _field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_record_with_close_brace_on_same_line_as_last_member_with_block_comment()
+        {
+            const string OriginalCode = @"
+public record TestMe
+{
+    private int _field; /* some comment */ }
+";
+
+            const string FixedCode = @"
+public record TestMe
+{
+    private int _field; /* some comment */
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_record_with_comment_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"

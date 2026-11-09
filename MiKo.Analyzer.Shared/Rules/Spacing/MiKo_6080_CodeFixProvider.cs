@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (node.Statements.LastOrDefault() is StatementSyntax statement && closeBrace.IsOnSameLineAsEndOf(statement))
             {
-                return node.ReplaceNode(statement, statement.WithEndOfLine())
+                return node.ReplaceNode(statement, statement.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
@@ -57,10 +57,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var spaces = GetProposedAdditionalSpaces(issue);
 
             var closeBrace = node.CloseBraceToken;
+            var lastToken = closeBrace.GetPreviousToken();
 
-            if (node.Members.LastOrDefault() is MemberDeclarationSyntax member && closeBrace.IsOnSameLineAsEndOf(member))
+            if (closeBrace.IsOnSameLineAsEndOf(lastToken))
             {
-                return node.ReplaceNode(member, member.WithEndOfLine())
+                return node.ReplaceToken(lastToken, lastToken.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
@@ -72,10 +73,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var spaces = GetProposedAdditionalSpaces(issue);
 
             var closeBrace = node.CloseBraceToken;
+            var lastToken = closeBrace.GetPreviousToken();
 
-            if (node.Members.LastOrDefault() is MemberDeclarationSyntax member && closeBrace.IsOnSameLineAsEndOf(member))
+            if (closeBrace.IsOnSameLineAsEndOf(lastToken))
             {
-                return node.ReplaceNode(member, member.WithEndOfLine())
+                return node.ReplaceToken(lastToken, lastToken.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
@@ -87,10 +89,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var spaces = GetProposedAdditionalSpaces(issue);
 
             var closeBrace = node.CloseBraceToken;
+            var lastToken = closeBrace.GetPreviousToken();
 
-            if (node.Members.LastOrDefault() is MemberDeclarationSyntax member && closeBrace.IsOnSameLineAsEndOf(member))
+            if (closeBrace.IsOnSameLineAsEndOf(lastToken))
             {
-                return node.ReplaceNode(member, member.WithEndOfLine())
+                return node.ReplaceToken(lastToken, lastToken.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 

@@ -1769,6 +1769,7 @@ namespace MiKoSolutions.Analyzers
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.StructDeclaration:
                     case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.RecordStructDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                         return false;
                 }

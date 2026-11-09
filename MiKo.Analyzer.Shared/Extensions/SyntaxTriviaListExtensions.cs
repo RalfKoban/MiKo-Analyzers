@@ -140,13 +140,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the trivia list contains any end of line trivia.
+        /// Determines whether the trivia list contains any end-of-line trivia.
         /// </summary>
         /// <param name="value">
         /// The trivia list to examine.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the list contains any end of line trivia; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the list contains any end-of-line trivia; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool HasEndOfLine(this in SyntaxTriviaList value)
         {

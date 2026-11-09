@@ -357,13 +357,13 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasTrailingComment(this in SyntaxToken value) => value.TrailingTrivia.HasComment();
 
         /// <summary>
-        /// Determines whether the syntax token has a trailing end of line.
+        /// Determines whether the syntax token has a trailing end-of-line.
         /// </summary>
         /// <param name="value">
         /// The syntax token to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the token has a trailing end of line; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the token has a trailing end-of-line; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingEndOfLine(this in SyntaxToken value) => value.TrailingTrivia.HasEndOfLine();
@@ -813,13 +813,25 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithAdditionalTrailingTrivia(this in SyntaxToken value, IEnumerable<SyntaxTrivia> trivia) => value.WithTrailingTrivia(value.TrailingTrivia.AddRange(trivia));
 
         /// <summary>
-        /// Creates a new syntax token with an end of line added as trailing trivia.
+        /// Creates a new syntax token with an end-of-line added as additional trailing trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
         /// <returns>
-        /// A new syntax token with an end of line added as trailing trivia.
+        /// A new syntax token with an end-of-line added as additional trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithAdditionalEndOfLine(this in SyntaxToken value) => value.WithAdditionalTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        /// <summary>
+        /// Creates a new syntax token with an end-of-line added as trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with an end-of-line added as trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
@@ -878,13 +890,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new syntax token with an end of line added as leading trivia.
+        /// Creates a new syntax token with an end-of-line added as leading trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
         /// <returns>
-        /// A new syntax token with an end of line added as leading trivia.
+        /// A new syntax token with an end-of-line added as leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingEndOfLine(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again

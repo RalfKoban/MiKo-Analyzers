@@ -243,13 +243,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the trivia is an end of line trivia.
+        /// Determines whether the trivia is an end-of-line trivia.
         /// </summary>
         /// <param name="value">
         /// The trivia to examine.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the trivia is an end of line trivia; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the trivia is an end-of-line trivia; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);

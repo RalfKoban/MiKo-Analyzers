@@ -78,6 +78,44 @@ namespace TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_namespace_with_close_brace_on_same_line_as_last_member()
+        {
+            const string OriginalCode = @"
+namespace TestMe
+{
+    public class Inner { } }
+";
+
+            const string FixedCode = @"
+namespace TestMe
+{
+    public class Inner { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_namespace_with_close_brace_on_same_line_as_last_member_with_block_comment()
+        {
+            const string OriginalCode = @"
+namespace TestMe
+{
+    public class Inner { } /* some comment */ }
+";
+
+            const string FixedCode = @"
+namespace TestMe
+{
+    public class Inner { } /* some comment */
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_namespace_with_comment_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"

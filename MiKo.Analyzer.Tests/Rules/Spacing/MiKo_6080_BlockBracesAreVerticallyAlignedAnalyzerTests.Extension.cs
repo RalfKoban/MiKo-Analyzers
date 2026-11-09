@@ -93,6 +93,56 @@ public static class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_extension_with_close_brace_on_same_line_as_last_member()
+        {
+            const string OriginalCode = @"
+public static class TestMe
+{
+    extension(string value)
+    {
+        public bool IsEmpty => value.Length == 0; }
+}
+";
+
+            const string FixedCode = @"
+public static class TestMe
+{
+    extension(string value)
+    {
+        public bool IsEmpty => value.Length == 0;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_extension_with_close_brace_on_same_line_as_last_member_with_block_comment()
+        {
+            const string OriginalCode = @"
+public static class TestMe
+{
+    extension(string value)
+    {
+        public bool IsEmpty => value.Length == 0; /* some comment */ }
+}
+";
+
+            const string FixedCode = @"
+public static class TestMe
+{
+    extension(string value)
+    {
+        public bool IsEmpty => value.Length == 0; /* some comment */
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_extension_with_comment_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"

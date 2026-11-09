@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     if (operatorToken.IsOnSameLineAsEndOf(left))
                     {
-                        // operator is at end of line
+                        // operator is at end-of-line
                         var position = left.GetStartPosition();
 
                         if (NotVerticallyAligned(right.GetStartPosition(), position))

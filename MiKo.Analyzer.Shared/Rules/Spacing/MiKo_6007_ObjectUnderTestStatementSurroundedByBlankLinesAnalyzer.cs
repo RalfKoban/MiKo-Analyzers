@@ -82,6 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.StructDeclaration:
+                    case SyntaxKind.RecordStructDeclaration:
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }

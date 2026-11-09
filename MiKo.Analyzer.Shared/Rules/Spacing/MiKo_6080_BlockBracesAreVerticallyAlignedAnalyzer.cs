@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.ClassDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.EnumDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.RecordDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.RecordStructDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.StructDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.InterfaceDeclaration);
 

@@ -1,9 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.Diagnostics;
-
-using NUnit.Framework;
-
-using TestHelper;
+﻿using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
@@ -76,6 +71,44 @@ public struct TestMe
             const string FixedCode = @"
 public struct TestMe
 {
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_struct_with_close_brace_on_same_line_as_last_member()
+        {
+            const string OriginalCode = @"
+public struct TestMe
+{
+    private int _field; }
+";
+
+            const string FixedCode = @"
+public struct TestMe
+{
+    private int _field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_struct_with_close_brace_on_same_line_as_last_member_with_block_comment()
+        {
+            const string OriginalCode = @"
+public struct TestMe
+{
+    private int _field; /* some comment */ }
+";
+
+            const string FixedCode = @"
+public struct TestMe
+{
+    private int _field; /* some comment */
 }
 ";
 

@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 SyntaxKind.InterfaceDeclaration,
                                                                 SyntaxKind.StructDeclaration,
                                                                 SyntaxKind.RecordDeclaration,
+                                                                SyntaxKind.RecordStructDeclaration,
                                                                 SyntaxKind.EnumDeclaration,
                                                                 SyntaxKind.DelegateDeclaration,
 
