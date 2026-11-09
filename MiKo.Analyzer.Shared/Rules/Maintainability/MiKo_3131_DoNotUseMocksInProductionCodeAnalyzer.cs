@@ -37,6 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             context.RegisterSyntaxNodeAction(AnalyzeUsingDirective, SyntaxKind.UsingDirective);
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.RecordDeclaration, SyntaxKind.RecordStructDeclaration);
+#if VS2026
+            context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.ExtensionBlockDeclaration);
+#endif
         }
 
         private static bool HasIssue(InvocationExpressionSyntax invocation)
@@ -117,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ClassDeclarationSyntax declaration)
+            if (context.Node is BaseTypeDeclarationSyntax declaration)
             {
                 var issues = AnalyzeDeclaration(declaration);
 
@@ -128,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic[] AnalyzeDeclaration(ClassDeclarationSyntax declaration)
+        private Diagnostic[] AnalyzeDeclaration(BaseTypeDeclarationSyntax declaration)
         {
             List<Diagnostic> issues = null;
 
