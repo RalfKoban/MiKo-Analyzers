@@ -1385,6 +1385,9 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Creates a new syntax node with an end-of-line added as additional trailing trivia.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node.
+        /// </typeparam>
         /// <param name="value">
         /// The syntax node to modify.
         /// </param>
