@@ -53,9 +53,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (next.IsKind(SyntaxKind.CloseBraceToken))
             {
-                var previous = current.GetPreviousToken();
+                var previousToken = current.GetPreviousToken();
 
-                if (previous.IsKind(SyntaxKind.OpenBraceToken))
+                if (previousToken.IsKind(SyntaxKind.OpenBraceToken))
                 {
                     // comment is the only comment between opening and closing brace
                     return false;

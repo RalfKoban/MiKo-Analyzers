@@ -271,6 +271,106 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_with_inline_opening_brace_by_only_moving_closing_brace()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething() {
+        DoSomething();
+        }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+                              {
+                                  DoSomething();
+                              }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_delegate_parameters_with_opening_brace_on_closing_parameter_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, int, int> x = delegate (int i,
+                                          int value) {
+                                    return i;
+                                };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, int, int> x = delegate (int i,
+                                          int value)
+                                                     {
+                                                         return i;
+                                                     };
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_block_preserving_outer_braces_and_region_directives()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        {
+            #region Test
+            {
+                DoSomething();
+            }
+            #endregion
+       }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        {
+            #region Test
+            {
+                DoSomething();
+            }
+            #endregion
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6080_BlockBracesAreVerticallyAlignedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6080_BlockBracesAreVerticallyAlignedAnalyzer();

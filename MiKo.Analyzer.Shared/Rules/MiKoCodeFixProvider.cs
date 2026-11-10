@@ -761,7 +761,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var indentation = spaces + Constants.Indentation;
 
-            if (block.Statements.Count is 1 && block.Statements[0] is BlockSyntax nested)
+            if (block.Statements.Count is 1 && block.Statements[0] is BlockSyntax nested && block.ContainsDirectives is false)
             {
                 // return the nested block instead of the original one
                 block = nested;

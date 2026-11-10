@@ -837,6 +837,18 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
+        /// Creates a new syntax token with an end-of-line added as trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with an end-of-line added as trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithForcedEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
+
+        /// <summary>
         /// Creates a new syntax token with a leading empty line.
         /// </summary>
         /// <param name="value">
@@ -952,9 +964,19 @@ namespace MiKoSolutions.Analyzers
                     var trivia = leadingTrivia[index];
 
                     // so we adjust all whitespace trivia
-                    if (trivia.IsWhiteSpace() && trivia.Span.Length < count)
+                    if (trivia.IsWhiteSpace())
                     {
-                        leadingTrivia[index] = WhiteSpaces(count);
+                        if (index < triviaLength - 1 && leadingTrivia[index + 1].IsDirective)
+                        {
+                            leadingTrivia[index] = SyntaxFactory.ElasticSpace;
+                        }
+                        else
+                        {
+                            if (trivia.Span.Length < count)
+                            {
+                                leadingTrivia[index] = WhiteSpaces(count);
+                            }
+                        }
                     }
                 }
             }
