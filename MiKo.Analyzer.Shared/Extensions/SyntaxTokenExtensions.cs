@@ -846,7 +846,14 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token with an end-of-line added as trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithForcedEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
+        internal static SyntaxToken WithForcedEndOfLine(this in SyntaxToken value)
+        {
+            var trivia = SyntaxFactory.CarriageReturnLineFeed; // do not use elastic one to prevent formatting it away again
+
+            return value.HasTrailingComment()
+                   ? value.WithAdditionalTrailingTrivia(trivia)
+                   : value.WithTrailingTrivia(trivia);
+        }
 
         /// <summary>
         /// Creates a new syntax token with a leading empty line.

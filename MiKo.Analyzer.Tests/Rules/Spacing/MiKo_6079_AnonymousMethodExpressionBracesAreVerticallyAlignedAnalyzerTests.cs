@@ -235,6 +235,43 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_multiline_delegate_parameters_with_opening_brace_on_closing_parameter_line_and_trailing_comment_before_opening_brace()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, int, int> x = delegate (int i,
+                                          int value) /* keep */ {
+                                    return i;
+                                };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, int, int> x = delegate (int i,
+                                          int value) /* keep */ 
+                                {
+                                    return i;
+                                };
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_nested_block_preserving_outer_braces_and_region_directives()
         {
             const string OriginalCode = @"
