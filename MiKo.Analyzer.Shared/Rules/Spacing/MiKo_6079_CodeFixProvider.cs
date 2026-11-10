@@ -20,7 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is BlockSyntax node)
             {
                 var openBrace = node.OpenBraceToken;
-
                 var previousToken = openBrace.GetPreviousToken();
 
                 if (openBrace.IsOnSameLineAsEndOf(previousToken))

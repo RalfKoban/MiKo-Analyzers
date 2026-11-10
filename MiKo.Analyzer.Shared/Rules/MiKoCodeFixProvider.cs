@@ -767,6 +767,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 block = nested;
             }
 
+            var openBrace = block.OpenBraceToken;
             var closeBrace = block.CloseBraceToken;
             var statements = block.Statements;
 
@@ -775,9 +776,19 @@ namespace MiKoSolutions.Analyzers.Rules
                 statements = statements.Replace(statement, statement.WithAdditionalEndOfLine());
             }
 
-            return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
-                        .WithStatements(statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
-                        .WithCloseBraceToken(closeBrace.WithLeadingSpaces(spaces));
+            var updatedOpenBrace = openBrace.HasLeadingComment()
+                                   ? openBrace.WithLeadingSpaces(spaces) // indent but preserve the comment
+                                              .WithAdditionalLeadingEndOfLine() // add the line break
+                                              .WithAdditionalLeadingSpacesAtEnd(spaces) // indent the brace
+                                   : openBrace.WithLeadingSpaces(spaces);
+
+            var updatedCloseBrace = closeBrace.WithLeadingSpaces(spaces);
+
+            var updatedBlock = block.WithOpenBraceToken(updatedOpenBrace)
+                                    .WithStatements(statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
+                                    .WithCloseBraceToken(updatedCloseBrace);
+
+            return updatedBlock;
         }
 
         /// <summary>

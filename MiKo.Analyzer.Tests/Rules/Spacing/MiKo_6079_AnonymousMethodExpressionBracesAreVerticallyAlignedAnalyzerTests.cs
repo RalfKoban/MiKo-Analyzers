@@ -315,6 +315,44 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_opening_brace_on_line_below_delegate_keyword_with_leading_comment_before_opening_brace()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, int> x = delegate (int i)
+                           /* keep */ {
+                               return i;
+                           };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Func<int, int> x = delegate (int i)
+        /* keep */
+                           {
+                               return i;
+                           };
+    }
+}
+";
+
+            // note: for whatever reason the comment gets re-formatted although the adjusted document (provided by the code fix) would have the comment at the correct place
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6079_AnonymousMethodExpressionBracesAreVerticallyAlignedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6079_AnonymousMethodExpressionBracesAreVerticallyAlignedAnalyzer();
