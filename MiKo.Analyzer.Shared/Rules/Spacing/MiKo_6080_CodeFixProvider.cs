@@ -37,22 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntax(BlockSyntax node, Diagnostic issue)
+        private static BlockSyntax GetUpdatedSyntax(BlockSyntax node, Diagnostic issue)
         {
-            var spaces = GetProposedAdditionalSpaces(issue);
+            var spaces = GetProposedSpaces(issue);
 
-            var closeBrace = node.CloseBraceToken;
-
-            if (node.Statements.LastOrDefault() is StatementSyntax statement && closeBrace.IsOnSameLineAsEndOf(statement))
-            {
-                return node.ReplaceNode(statement, statement.WithAdditionalEndOfLine())
-                           .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
-            }
-
-            return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
+            return GetUpdatedBlock(node, spaces);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(EnumDeclarationSyntax node, Diagnostic issue)
+        private static EnumDeclarationSyntax GetUpdatedSyntax(EnumDeclarationSyntax node, Diagnostic issue)
         {
             var spaces = GetProposedAdditionalSpaces(issue);
 
@@ -68,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
         }
 
-        private static SyntaxNode GetUpdatedSyntax(TypeDeclarationSyntax node, Diagnostic issue)
+        private static TypeDeclarationSyntax GetUpdatedSyntax(TypeDeclarationSyntax node, Diagnostic issue)
         {
             var spaces = GetProposedAdditionalSpaces(issue);
 
@@ -84,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
         }
 
-        private static SyntaxNode GetUpdatedSyntax(NamespaceDeclarationSyntax node, Diagnostic issue)
+        private static NamespaceDeclarationSyntax GetUpdatedSyntax(NamespaceDeclarationSyntax node, Diagnostic issue)
         {
             var spaces = GetProposedAdditionalSpaces(issue);
 

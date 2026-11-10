@@ -759,17 +759,25 @@ namespace MiKoSolutions.Analyzers.Rules
                 return null;
             }
 
+            var indentation = spaces + Constants.Indentation;
+
             if (block.Statements.Count is 1 && block.Statements[0] is BlockSyntax nested)
             {
                 // return the nested block instead of the original one
                 block = nested;
             }
 
-            var indentation = spaces + Constants.Indentation;
+            var closeBrace = block.CloseBraceToken;
+            var statements = block.Statements;
+
+            if (statements.LastOrDefault() is StatementSyntax statement && closeBrace.IsOnSameLineAsEndOf(statement))
+            {
+                statements = statements.Replace(statement, statement.WithAdditionalEndOfLine());
+            }
 
             return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
-                        .WithStatements(block.Statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
-                        .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
+                        .WithStatements(statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
+                        .WithCloseBraceToken(closeBrace.WithLeadingSpaces(spaces));
         }
 
         /// <summary>

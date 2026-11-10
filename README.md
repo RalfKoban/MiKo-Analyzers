@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 594 rules that are currently provided by the analyzers.
+The following tables list all the 595 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -645,4 +645,5 @@ The following tables list all the 594 rules that are currently provided by the a
 |[MiKo_6076](/Documentation/MiKo_6076.md)|Place type argument lists on single line|&#x2713;|&#x2713;|
 |[MiKo_6077](/Documentation/MiKo_6077.md)|Place short parameter lists on single line|&#x2713;|&#x2713;|
 |[MiKo_6078](/Documentation/MiKo_6078.md)|Surround foreach variable loops with blank lines|&#x2713;|&#x2713;|
+|[MiKo_6079](/Documentation/MiKo_6079.md)|Align anonymous method blocks vertically with the delegate keyword|&#x2713;|&#x2713;|
 |[MiKo_6080](/Documentation/MiKo_6080.md)|Align block braces vertically|&#x2713;|&#x2713;|

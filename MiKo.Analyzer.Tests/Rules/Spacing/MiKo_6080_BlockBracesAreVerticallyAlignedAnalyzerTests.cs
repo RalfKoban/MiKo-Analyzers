@@ -271,10 +271,10 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6080_CodeFixProvider();
-
         protected override string GetDiagnosticId() => MiKo_6080_BlockBracesAreVerticallyAlignedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6080_BlockBracesAreVerticallyAlignedAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6080_CodeFixProvider();
     }
 }

@@ -20140,6 +20140,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align anonymous method block with &apos;delegate&apos;.
+        /// </summary>
+        internal static string MiKo_6079_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6079_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when the block of an anonymous method expression starts at the same indentation level as the delegate keyword. Misaligned braces make the anonymous method harder to recognize and disrupt the visual structure of the code.
+        ///Vertically aligning the block with the beginning of the delegate keyword makes the anonymous method easier to read and understand..
+        /// </summary>
+        internal static string MiKo_6079_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6079_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align anonymous method block with &apos;delegate&apos;.
+        /// </summary>
+        internal static string MiKo_6079_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6079_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align anonymous method blocks vertically with the delegate keyword.
+        /// </summary>
+        internal static string MiKo_6079_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Align the opening and closing braces.
         /// </summary>
         internal static string MiKo_6080_CodeFixTitle {
