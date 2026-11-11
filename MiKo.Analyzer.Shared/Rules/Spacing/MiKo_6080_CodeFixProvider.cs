@@ -24,6 +24,25 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return Task.FromResult(updatedSyntax);
         }
 
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            if (syntax is BlockSyntax node)
+            {
+                var openBrace = node.OpenBraceToken;
+
+                var previousToken = openBrace.GetPreviousToken();
+
+                if (openBrace.IsOnSameLineAsEndOf(previousToken))
+                {
+                    var updatedRoot = root.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine());
+
+                    return base.GetUpdatedSyntaxRootAsync(document, updatedRoot, syntax, annotationOfSyntax, issue, cancellationToken);
+                }
+            }
+
+            return base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken);
+        }
+
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             switch (syntax)
@@ -37,63 +56,55 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntax(BlockSyntax node, Diagnostic issue)
+        private static BlockSyntax GetUpdatedSyntax(BlockSyntax node, Diagnostic issue)
+        {
+            var spaces = GetProposedSpaces(issue);
+
+            return GetUpdatedBlock(node, spaces);
+        }
+
+        private static EnumDeclarationSyntax GetUpdatedSyntax(EnumDeclarationSyntax node, Diagnostic issue)
         {
             var spaces = GetProposedAdditionalSpaces(issue);
 
             var closeBrace = node.CloseBraceToken;
+            var previousToken = closeBrace.GetPreviousToken();
 
-            if (node.Statements.LastOrDefault() is StatementSyntax statement && closeBrace.IsOnSameLineAsEndOf(statement))
+            if (closeBrace.IsOnSameLineAsEndOf(previousToken))
             {
-                return node.ReplaceNode(statement, statement.WithAdditionalEndOfLine())
+                return node.ReplaceToken(previousToken, previousToken.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
             return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
         }
 
-        private static SyntaxNode GetUpdatedSyntax(EnumDeclarationSyntax node, Diagnostic issue)
+        private static TypeDeclarationSyntax GetUpdatedSyntax(TypeDeclarationSyntax node, Diagnostic issue)
         {
             var spaces = GetProposedAdditionalSpaces(issue);
 
             var closeBrace = node.CloseBraceToken;
-            var lastToken = closeBrace.GetPreviousToken();
+            var previousToken = closeBrace.GetPreviousToken();
 
-            if (closeBrace.IsOnSameLineAsEndOf(lastToken))
+            if (closeBrace.IsOnSameLineAsEndOf(previousToken))
             {
-                return node.ReplaceToken(lastToken, lastToken.WithAdditionalEndOfLine())
+                return node.ReplaceToken(previousToken, previousToken.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
             return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
         }
 
-        private static SyntaxNode GetUpdatedSyntax(TypeDeclarationSyntax node, Diagnostic issue)
+        private static NamespaceDeclarationSyntax GetUpdatedSyntax(NamespaceDeclarationSyntax node, Diagnostic issue)
         {
             var spaces = GetProposedAdditionalSpaces(issue);
 
             var closeBrace = node.CloseBraceToken;
-            var lastToken = closeBrace.GetPreviousToken();
+            var previousToken = closeBrace.GetPreviousToken();
 
-            if (closeBrace.IsOnSameLineAsEndOf(lastToken))
+            if (closeBrace.IsOnSameLineAsEndOf(previousToken))
             {
-                return node.ReplaceToken(lastToken, lastToken.WithAdditionalEndOfLine())
-                           .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
-            }
-
-            return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
-        }
-
-        private static SyntaxNode GetUpdatedSyntax(NamespaceDeclarationSyntax node, Diagnostic issue)
-        {
-            var spaces = GetProposedAdditionalSpaces(issue);
-
-            var closeBrace = node.CloseBraceToken;
-            var lastToken = closeBrace.GetPreviousToken();
-
-            if (closeBrace.IsOnSameLineAsEndOf(lastToken))
-            {
-                return node.ReplaceToken(lastToken, lastToken.WithAdditionalEndOfLine())
+                return node.ReplaceToken(previousToken, previousToken.WithAdditionalEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 

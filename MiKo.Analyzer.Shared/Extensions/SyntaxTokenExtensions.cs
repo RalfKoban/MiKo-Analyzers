@@ -615,6 +615,30 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxKind> source) => source.Select(_ => _.AsToken()).ToTokenList();
 
         /// <summary>
+        /// Creates a new syntax token with an end-of-line added as additional trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with an end-of-line added as additional trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithAdditionalEndOfLine(this in SyntaxToken value) => value.WithAdditionalTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        /// <summary>
+        /// Creates a new syntax token with an end-of-line added as additional leading trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with an end-of-line added as additional leading trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithAdditionalLeadingEndOfLine(this in SyntaxToken value) => value.WithAdditionalLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        /// <summary>
         /// Creates a new syntax token with additional spaces as leading trivia.
         /// </summary>
         /// <param name="value">
@@ -813,16 +837,16 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithAdditionalTrailingTrivia(this in SyntaxToken value, IEnumerable<SyntaxTrivia> trivia) => value.WithTrailingTrivia(value.TrailingTrivia.AddRange(trivia));
 
         /// <summary>
-        /// Creates a new syntax token with an end-of-line added as additional trailing trivia.
+        /// Creates a new syntax token with an end-of-line added as trailing trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
         /// <returns>
-        /// A new syntax token with an end-of-line added as additional trailing trivia.
+        /// A new syntax token with an end-of-line added as trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithAdditionalEndOfLine(this in SyntaxToken value) => value.WithAdditionalTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
         /// Creates a new syntax token with an end-of-line added as trailing trivia.
@@ -834,7 +858,14 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token with an end-of-line added as trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithForcedEndOfLine(this in SyntaxToken value)
+        {
+            var trivia = SyntaxFactory.CarriageReturnLineFeed; // do not use elastic one to prevent formatting it away again
+
+            return value.HasTrailingComment()
+                   ? value.WithAdditionalTrailingTrivia(trivia)
+                   : value.WithTrailingTrivia(trivia);
+        }
 
         /// <summary>
         /// Creates a new syntax token with a leading empty line.
@@ -929,6 +960,19 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxToken WithLeadingSpaces(this in SyntaxToken value, in int count)
         {
+            if (count is 0)
+            {
+                var triviaList = value.LeadingTrivia;
+
+                // remove last whitespace(s) before line break
+                while (triviaList.Any() && triviaList.Last().IsWhiteSpace())
+                {
+                    triviaList = triviaList.RemoveAt(triviaList.Count - 1);
+                }
+
+                return value.WithLeadingTrivia(triviaList);
+            }
+
             if (value.ContainsDirectives is false && value.HasLeadingComment() is false)
             {
                 return value.WithLeadingTrivia(WhiteSpaces(count));
@@ -936,15 +980,11 @@ namespace MiKoSolutions.Analyzers
 
             var additionalSpaces = count - value.GetPositionWithinStartLine();
 
-            if (additionalSpaces is 0)
-            {
-                return value;
-            }
-
             var leadingTrivia = value.LeadingTrivia.ToArray();
             var triviaLength = leadingTrivia.Length;
+            var lastTriviaIndex = triviaLength - 1;
 
-            if (additionalSpaces > 0)
+            if (additionalSpaces >= 0)
             {
                 // we have to add the spaces but also indent the comments
                 for (var index = 0; index < triviaLength; index++)
@@ -952,25 +992,46 @@ namespace MiKoSolutions.Analyzers
                     var trivia = leadingTrivia[index];
 
                     // so we adjust all whitespace trivia
-                    if (trivia.IsWhiteSpace() && trivia.Span.Length < count)
+                    if (trivia.IsWhiteSpace())
                     {
-                        leadingTrivia[index] = WhiteSpaces(count);
+                        if (index < lastTriviaIndex && leadingTrivia[index + 1].IsDirective)
+                        {
+                            // next is a directive, so we only add elastic spaces to let the formatter do the adjustment
+                            leadingTrivia[index] = SyntaxFactory.ElasticSpace;
+                        }
+                        else
+                        {
+                            if (trivia.Span.Length < count)
+                            {
+                                leadingTrivia[index] = WhiteSpaces(count);
+                            }
+                        }
                     }
                 }
             }
             else
             {
                 // we have to remove some whitespace leading trivia as we have "negative" additional spaces
-                for (var index = triviaLength - 1; index >= 0; index--)
+                for (var index = lastTriviaIndex; index >= 0; index--)
                 {
                     var trivia = leadingTrivia[index];
 
                     // we have to shorten last whitespace trivia only
-                    if (trivia.IsWhiteSpace() && trivia.Span.Length > count)
+                    if (trivia.IsWhiteSpace())
                     {
-                        leadingTrivia[index] = WhiteSpaces(count);
-
-                        break;
+                        if (index == lastTriviaIndex)
+                        {
+                            // last whitespace
+                            if (trivia.Span.Length > count)
+                            {
+                                leadingTrivia[index] = WhiteSpaces(count);
+                            }
+                        }
+                        else
+                        {
+                            // somewhere before
+                            leadingTrivia[index] = SyntaxFactory.ElasticSpace;
+                        }
                     }
                 }
             }
