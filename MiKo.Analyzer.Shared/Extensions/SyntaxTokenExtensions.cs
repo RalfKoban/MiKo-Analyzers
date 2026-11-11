@@ -960,6 +960,19 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxToken WithLeadingSpaces(this in SyntaxToken value, in int count)
         {
+            if (count is 0)
+            {
+                var triviaList = value.LeadingTrivia;
+
+                // remove last whitespace(s) before line break
+                while (triviaList.Any() && triviaList.Last().IsWhiteSpace())
+                {
+                    triviaList = triviaList.RemoveAt(triviaList.Count - 1);
+                }
+
+                return value.WithLeadingTrivia(triviaList);
+            }
+
             if (value.ContainsDirectives is false && value.HasLeadingComment() is false)
             {
                 return value.WithLeadingTrivia(WhiteSpaces(count));
@@ -1006,7 +1019,7 @@ namespace MiKoSolutions.Analyzers
                     // we have to shorten last whitespace trivia only
                     if (trivia.IsWhiteSpace())
                     {
-                        if (index == lastTriviaIndex - 1)
+                        if (index == lastTriviaIndex)
                         {
                             // last whitespace
                             if (trivia.Span.Length > count)
@@ -1014,15 +1027,10 @@ namespace MiKoSolutions.Analyzers
                                 leadingTrivia[index] = WhiteSpaces(count);
                             }
                         }
-                        else if (index > 0)
-                        {
-                            // somewhere before
-                            leadingTrivia[index] = SyntaxFactory.ElasticSpace;
-                        }
                         else
                         {
                             // somewhere before
-                            leadingTrivia[index] = WhiteSpaces(count);
+                            leadingTrivia[index] = SyntaxFactory.ElasticSpace;
                         }
                     }
                 }
