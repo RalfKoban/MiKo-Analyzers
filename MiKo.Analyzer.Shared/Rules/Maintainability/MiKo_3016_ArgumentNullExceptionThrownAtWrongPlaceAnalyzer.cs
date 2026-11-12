@@ -30,6 +30,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
+        {
+            base.InitializeCore(context);
+
+            context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
+        }
+
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => Mappings.Contains(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
@@ -76,6 +83,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
+        }
+
+        private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is InvocationExpressionSyntax node)
+            {
+                var arguments = node.ArgumentList.Arguments;
+
+                if (arguments.Count > 0 && node.GetName().AsSpan().StartsWith("Throw") && node.GetIdentifierName() is nameof(ArgumentNullException))
+                {
+                    if (arguments[0].Expression is IdentifierNameSyntax identifier)
+                    {
+                        var identifierName = identifier.GetName();
+
+                        if (context.ContainingSymbol is IMethodSymbol method && method.Parameters.Any(_ => _.Name == identifierName))
+                        {
+                            // no issue
+                            return;
+                        }
+                    }
+
+                    ReportDiagnostics(context, Issue(node.Expression));
+                }
+            }
         }
     }
 }

@@ -288,6 +288,9 @@ namespace MiKoSolutions.Analyzers
                 case MemberAccessExpressionSyntax maes:
                     return maes.Expression;
 
+                case ConditionalAccessExpressionSyntax conditional:
+                    return conditional.Expression;
+
                 default:
                     return null;
             }

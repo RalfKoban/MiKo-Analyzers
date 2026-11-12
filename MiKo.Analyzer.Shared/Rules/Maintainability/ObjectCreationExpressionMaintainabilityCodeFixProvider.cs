@@ -13,9 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         protected static ArgumentSyntax ToDo() => Argument(StringLiteral(Constants.TODO));
 
-        protected static ArgumentSyntax ParamName(ParameterSyntax parameter) => Argument(NameOf(parameter.GetName()));
+        protected static ArgumentSyntax ParamName(ParameterSyntax parameter) => ParamName(parameter.GetName());
 
-        protected static ArgumentSyntax ParamName(IdentifierNameSyntax identifier) => Argument(NameOf(identifier.GetName()));
+        protected static ArgumentSyntax ParamName(IdentifierNameSyntax identifier) => ParamName(identifier.GetName());
+
+        protected static ArgumentSyntax ParamName(string identifier) => Argument(NameOf(identifier));
 
         protected static ArgumentSyntax GetUpdatedErrorMessage(ArgumentListSyntax argumentList) => GetUpdatedErrorMessage(argumentList.Arguments);
 
@@ -39,9 +41,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return ToDo();
         }
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
+        protected static IfStatementSyntax IfThrow(ExpressionSyntax condition, string exceptionName, params ArgumentSyntax[] arguments)
+        {
+            var constructorCall = SyntaxFactory.ObjectCreationExpression(exceptionName.AsTypeSyntax(), ArgumentList(arguments), null);
+            var throwStatement = SyntaxFactory.ThrowStatement(constructorCall);
 
-        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+            var block = SyntaxFactory.Block(throwStatement);
+
+            return SyntaxFactory.IfStatement(condition, block);
+        }
+
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
+
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var result = GetUpdatedSyntax((ObjectCreationExpressionSyntax)syntax);
 
