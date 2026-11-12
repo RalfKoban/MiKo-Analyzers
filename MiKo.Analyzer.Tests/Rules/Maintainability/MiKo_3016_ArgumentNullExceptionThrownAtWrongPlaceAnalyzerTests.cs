@@ -11,13 +11,26 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
+    public sealed partial class MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ExceptionNames =
                                                           [
                                                               nameof(ArgumentNullException),
                                                               typeof(ArgumentNullException).FullName,
                                                           ];
+
+        [Test]
+        public void No_issue_is_reported_for_binary_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o == null) throw new " + exceptionName + @"();
+    }
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_coalescence_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
@@ -51,32 +64,6 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_pattern_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething(object o)
-    {
-        if (o is null) throw new " + exceptionName + @"();
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_binary_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething(object o)
-    {
-        if (o == null) throw new " + exceptionName + @"();
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_Equals_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
 using System;
 
@@ -85,6 +72,19 @@ public class TestMe
     public void DoSomething(object o)
     {
         if (Equals(o, null)) throw new " + exceptionName + @"();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_pattern_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is null) throw new " + exceptionName + @"();
     }
 }
 ");
@@ -103,19 +103,16 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_on_pattern_based_parameter_property_comparison_for_thrown_([Values(nameof(ArgumentException), nameof(InvalidOperationException))] string exceptionName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_on_binary_based_local_property_comparison_for_thrown_InvalidOperationException() => No_issue_is_reported_for(@"
 using System;
-
-public class SomeObject
-{
-    public object SomeData { get; set; }
-}
 
 public class TestMe
 {
-    public void DoSomething(SomeObject o)
+    public object SomeData { get; set; }
+
+    public void DoSomething()
     {
-        if (o.SomeData is null) throw new " + exceptionName + @"();
+        if (SomeData == null) throw new InvalidOperationException();
     }
 }
 ");
@@ -139,6 +136,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_on_pattern_based_parameter_property_comparison_for_thrown_([Values(nameof(ArgumentException), nameof(InvalidOperationException))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+
+public class SomeObject
+{
+    public object SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o)
+    {
+        if (o.SomeData is null) throw new " + exceptionName + @"();
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_on_pattern_local_property_comparison_for_thrown_InvalidOperationException() => No_issue_is_reported_for(@"
 using System;
 
@@ -149,21 +164,6 @@ public class TestMe
     public void DoSomething()
     {
         if (SomeData is null) throw new InvalidOperationException();
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_on_binary_based_local_property_comparison_for_thrown_InvalidOperationException() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public object SomeData { get; set; }
-
-    public void DoSomething()
-    {
-        if (SomeData == null) throw new InvalidOperationException();
     }
 }
 ");
@@ -185,19 +185,29 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_on_pattern_based_parameter_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_string_IsNullOrWhiteSpace_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
 using System;
-
-public class SomeObject
-{
-    public object SomeData { get; set; }
-}
 
 public class TestMe
 {
-    public void DoSomething(SomeObject o)
+    public void DoSomething(string s)
     {
-        if (o.SomeData is null) throw new " + exceptionName + @"();
+        if (string.IsNullOrEmpty(s)) throw new " + exceptionName + @"();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_on_binary_based_local_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public object SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        if (SomeData == null) throw new " + exceptionName + @"();
     }
 }
 ");
@@ -221,29 +231,14 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_on_pattern_based_local_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_on_method_with_some_arguments_but_binary_based_local_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public object SomeData { get; set; }
 
-    public void DoSomething()
-    {
-        if (SomeData is null) throw new " + exceptionName + @"();
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_on_binary_based_local_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public object SomeData { get; set; }
-
-    public void DoSomething()
+    public void DoSomething(object o)
     {
         if (SomeData == null) throw new " + exceptionName + @"();
     }
@@ -266,42 +261,22 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_on_method_with_some_arguments_but_binary_based_local_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_on_pattern_based_local_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public object SomeData { get; set; }
 
-    public void DoSomething(object o)
+    public void DoSomething()
     {
-        if (SomeData == null) throw new " + exceptionName + @"();
+        if (SomeData is null) throw new " + exceptionName + @"();
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_string_IsNullOrWhiteSpace_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public void DoSomething(string s)
-    {
-        if (string.IsNullOrEmpty(s)) throw new " + exceptionName + @"();
-    }
-}
-");
-
-        [TestCase("==", "ArgumentNullException()", @"ArgumentException(""TODO"", nameof(o))")]
-        [TestCase("==", @"ArgumentNullException(""o"")", @"ArgumentException(""TODO"", nameof(o))")]
-        [TestCase("==", @"ArgumentNullException(nameof(o), ""some message"")", @"ArgumentException(""some message"", nameof(o))")]
-        [TestCase("is", "ArgumentNullException()", @"ArgumentException(""TODO"", nameof(o))")]
-        [TestCase("is", "ArgumentNullException(nameof(o))", @"ArgumentException(""TODO"", nameof(o))")]
-        [TestCase("is", @"ArgumentNullException(""o"", ""some message"")", @"ArgumentException(""some message"", nameof(o))")]
-        public void Code_gets_fixed_for_parameter_property_comparison_for_thrown_ArgumentNullException_(string comparison, string originalCode, string fixedCode)
-        {
-            const string Template = @"
+        public void An_issue_is_reported_on_pattern_based_parameter_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
 using System;
 
 public class SomeObject
@@ -313,13 +288,10 @@ public class TestMe
 {
     public void DoSomething(SomeObject o)
     {
-        if (o.SomeData #1# null) throw new #2#;
+        if (o.SomeData is null) throw new " + exceptionName + @"();
     }
 }
-";
-
-            VerifyCSharpFix(Template.Replace("#1#", comparison).Replace("#2#", originalCode), Template.Replace("#1#", comparison).Replace("#2#", fixedCode));
-        }
+");
 
         [TestCase("==", "ArgumentNullException()", @"InvalidOperationException(""TODO"")")]
         [TestCase("is", @"ArgumentNullException(""SomeData"")", @"InvalidOperationException(""TODO"")")]
@@ -364,6 +336,34 @@ public class TestMe
     public void DoSomething(object o)
     {
         if (SomeData #1# null) throw new #2#;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", comparison).Replace("#2#", originalCode), Template.Replace("#1#", comparison).Replace("#2#", fixedCode));
+        }
+
+        [TestCase("==", "ArgumentNullException()", @"ArgumentException(""TODO"", nameof(o))")]
+        [TestCase("==", @"ArgumentNullException(""o"")", @"ArgumentException(""TODO"", nameof(o))")]
+        [TestCase("==", @"ArgumentNullException(nameof(o), ""some message"")", @"ArgumentException(""some message"", nameof(o))")]
+        [TestCase("is", "ArgumentNullException()", @"ArgumentException(""TODO"", nameof(o))")]
+        [TestCase("is", "ArgumentNullException(nameof(o))", @"ArgumentException(""TODO"", nameof(o))")]
+        [TestCase("is", @"ArgumentNullException(""o"", ""some message"")", @"ArgumentException(""some message"", nameof(o))")]
+        public void Code_gets_fixed_for_parameter_property_comparison_for_thrown_ArgumentNullException_(string comparison, string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+public class SomeObject
+{
+    public object SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o)
+    {
+        if (o.SomeData #1# null) throw new #2#;
     }
 }
 ";
