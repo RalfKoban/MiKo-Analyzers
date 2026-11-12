@@ -359,6 +359,100 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_ThrowIfNull_on_field_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething()
+    {
+        ArgumentNullException.ThrowIfNull(_state.SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething()
+    {
+        if (_state.SomeData is null)
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ThrowIfNull_on_field_property_in_method_with_some_arguments()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething(object o)
+    {
+        ArgumentNullException.ThrowIfNull(_state.SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething(object o)
+    {
+        if (_state.SomeData is null)
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ThrowIfNull_on_local_property()
         {
             const string OriginalCode = @"
@@ -439,6 +533,100 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_ThrowIfNullOrEmpty_on_field_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething()
+    {
+        ArgumentNullException.ThrowIfNullOrEmpty(_state.SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething()
+    {
+        if (string.IsNullOrEmpty(_state.SomeData))
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ThrowIfNullOrEmpty_on_field_property_in_method_with_some_arguments()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething(object o)
+    {
+        ArgumentNullException.ThrowIfNullOrEmpty(_state.SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething(object o)
+    {
+        if (string.IsNullOrEmpty(_state.SomeData))
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ThrowIfNullOrEmpty_on_local_property()
         {
             const string OriginalCode = @"
@@ -510,6 +698,100 @@ public class TestMe
         if (string.IsNullOrEmpty(o.SomeData))
         {
             throw new ArgumentException(""TODO"", nameof(o));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ThrowIfNullOrWhiteSpace_on_field_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething()
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(_state.SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething()
+    {
+        if (string.IsNullOrWhiteSpace(_state.SomeData))
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ThrowIfNullOrWhiteSpace_on_field_property_in_method_with_some_arguments()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething(object o)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(_state.SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    private readonly SomeObject _state = new SomeObject();
+
+    public void DoSomething(object o)
+    {
+        if (string.IsNullOrWhiteSpace(_state.SomeData))
+        {
+            throw new InvalidOperationException(""TODO"");
         }
     }
 }

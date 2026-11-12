@@ -296,6 +296,125 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_ThrowIfEqual_in_method_without_parameters_but_switche_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        ArgumentOutOfRangeException.ThrowIfEqual(42, SomeValue);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        if (SomeValue is 42)
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_ThrowIfEqual_with_field_as_comparison_value_in_method_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private readonly int _otherValue = 42;
+
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        ArgumentOutOfRangeException.ThrowIfEqual(SomeValue, _otherValue);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private readonly int _otherValue = 42;
+
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        if (SomeValue == _otherValue)
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_ThrowIfEqual_with_local_variable_as_comparison_value_in_method_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        var otherValue = 42;
+
+        ArgumentOutOfRangeException.ThrowIfEqual(SomeValue, otherValue);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        var otherValue = 42;
+
+        if (SomeValue == otherValue)
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ArgumentOutOfRangeException_ThrowIfGreaterThan_in_method_without_parameters()
         {
             const string OriginalCode = @"

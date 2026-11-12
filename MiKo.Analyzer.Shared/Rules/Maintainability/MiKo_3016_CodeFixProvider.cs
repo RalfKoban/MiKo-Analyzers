@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,22 +32,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             switch (syntax)
             {
                 case ObjectCreationExpressionSyntax _:
-                    return base.GetUpdatedSyntaxAsync(syntax, issue, document, cancellationToken);
+                    return await base.GetUpdatedSyntaxAsync(syntax, issue, document, cancellationToken);
 
                 case ExpressionStatementSyntax statement: // this seems to be a '.Throw' statement
                 {
-                    var updatedStatement = GetUpdatedSyntax(statement);
+                    var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
-                    return Task.FromResult<SyntaxNode>(updatedStatement);
+                    var updatedStatement = GetUpdatedSyntax(statement, semanticModel).WithTriviaFrom(statement);
+
+                    return updatedStatement;
                 }
 
                 default:
-                    return Task.FromResult<SyntaxNode>(null);
+                    return null;
             }
         }
 
@@ -70,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                    : ArgumentList(errorMessage);
         }
 
-        private static StatementSyntax GetUpdatedSyntax(ExpressionStatementSyntax syntax)
+        private static StatementSyntax GetUpdatedSyntax(ExpressionStatementSyntax syntax, SemanticModel semanticModel)
         {
             if (syntax.Expression is InvocationExpressionSyntax invocation)
             {
@@ -80,34 +83,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (invocation.GetName())
                 {
                     case "ThrowIfNull":
-                        return IfNullThrow(expression);
+                        return IfNullThrow(expression, semanticModel);
 
                     case "ThrowIfNullOrEmpty":
-                        return IfMemberThrow(nameof(string.IsNullOrEmpty), expression);
+                        return IfMemberThrow(nameof(string.IsNullOrEmpty), expression, semanticModel);
 
                     case "ThrowIfNullOrWhiteSpace":
-                        return IfMemberThrow(nameof(string.IsNullOrWhiteSpace), expression);
+                        return IfMemberThrow(nameof(string.IsNullOrWhiteSpace), expression, semanticModel);
                 }
             }
 
             return syntax;
         }
 
-        private static IfStatementSyntax IfMemberThrow(string methodName, ExpressionSyntax expression)
+        private static IfStatementSyntax IfMemberThrow(string methodName, ExpressionSyntax expression, SemanticModel semanticModel)
         {
             if (expression is IdentifierNameSyntax)
             {
                 return IfMemberThrow(methodName, expression, nameof(InvalidOperationException), ToDo());
             }
 
-            var identifier = expression.GetStartingIdentifierName();
-
-            if (identifier.IsNullOrEmpty())
+            if (expression.GetEnclosingMethod(semanticModel) is IMethodSymbol method)
             {
-                return IfMemberThrow(methodName, expression, nameof(InvalidOperationException), ToDo());
+                var identifier = expression.GetStartingIdentifierName();
+
+                if (method.Parameters.Any(_ => _.Name == identifier))
+                {
+                    return IfMemberThrow(methodName, expression, nameof(ArgumentException), ToDo(), ParamName(identifier));
+                }
             }
 
-            return IfMemberThrow(methodName, expression, nameof(ArgumentException), ToDo(), ParamName(identifier));
+            return IfMemberThrow(methodName, expression, nameof(InvalidOperationException), ToDo());
         }
 
         private static IfStatementSyntax IfMemberThrow(string methodName, ExpressionSyntax expression, string exceptionName, params ArgumentSyntax[] arguments)
@@ -117,21 +123,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return IfThrow(invocation, exceptionName, arguments);
         }
 
-        private static IfStatementSyntax IfNullThrow(ExpressionSyntax expression)
+        private static IfStatementSyntax IfNullThrow(ExpressionSyntax expression, SemanticModel semanticModel)
         {
             if (expression is IdentifierNameSyntax)
             {
                 return IfNullThrow(expression, nameof(InvalidOperationException), ToDo());
             }
 
-            var identifier = expression.GetStartingIdentifierName();
-
-            if (identifier.IsNullOrEmpty())
+            if (expression.GetEnclosingMethod(semanticModel) is IMethodSymbol method)
             {
-                return IfNullThrow(expression, nameof(InvalidOperationException), ToDo());
+                var identifier = expression.GetStartingIdentifierName();
+
+                if (method.Parameters.Any(_ => _.Name == identifier))
+                {
+                    return IfNullThrow(expression, nameof(ArgumentException), ToDo(), ParamName(identifier));
+                }
             }
 
-            return IfNullThrow(expression, nameof(ArgumentException), ToDo(), ParamName(identifier));
+            return IfNullThrow(expression, nameof(InvalidOperationException), ToDo());
         }
 
         private static IfStatementSyntax IfNullThrow(ExpressionSyntax expression, string exceptionName, params ArgumentSyntax[] arguments)

@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ExpressionStatementSyntax statement: // this seems to be a '.Throw' statement
                 {
-                    var updatedStatement = GetUpdatedSyntax(statement);
+                    var updatedStatement = GetUpdatedSyntax(statement).WithTriviaFrom(statement);
 
                     return Task.FromResult<SyntaxNode>(updatedStatement);
                 }
@@ -95,25 +95,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 switch (invocation.GetName())
                 {
-                    case "ThrowIfEqual": return IfThrow(SyntaxKind.IsExpression, arguments);
-                    case "ThrowIfNotEqual": return IfThrow(SyntaxKind.NotEqualsExpression, arguments);
-                    case "ThrowIfGreaterThan": return IfThrow(SyntaxKind.GreaterThanExpression, arguments);
-                    case "ThrowIfGreaterThanOrEqual": return IfThrow(SyntaxKind.GreaterThanOrEqualExpression, arguments);
-                    case "ThrowIfLessThan": return IfThrow(SyntaxKind.LessThanExpression, arguments);
-                    case "ThrowIfLessThanOrEqual": return IfThrow(SyntaxKind.LessThanOrEqualExpression, arguments);
-                    case "ThrowIfNegative": return IfZeroThrow(SyntaxKind.LessThanExpression, arguments);
-                    case "ThrowIfNegativeOrZero": return IfZeroThrow(SyntaxKind.LessThanOrEqualExpression, arguments);
-                    case "ThrowIfZero": return IfZeroThrow(SyntaxKind.IsExpression, arguments);
+                    case "ThrowIfEqual": return IfThrow(arguments, SyntaxKind.EqualsExpression, SyntaxKind.IsExpression);
+                    case "ThrowIfNotEqual": return IfThrow(arguments, SyntaxKind.NotEqualsExpression);
+                    case "ThrowIfGreaterThan": return IfThrow(arguments, SyntaxKind.GreaterThanExpression);
+                    case "ThrowIfGreaterThanOrEqual": return IfThrow(arguments, SyntaxKind.GreaterThanOrEqualExpression);
+                    case "ThrowIfLessThan": return IfThrow(arguments, SyntaxKind.LessThanExpression);
+                    case "ThrowIfLessThanOrEqual": return IfThrow(arguments, SyntaxKind.LessThanOrEqualExpression);
+                    case "ThrowIfNegative": return IfZeroThrow(arguments, SyntaxKind.LessThanExpression);
+                    case "ThrowIfNegativeOrZero": return IfZeroThrow(arguments, SyntaxKind.LessThanOrEqualExpression);
+                    case "ThrowIfZero": return IfZeroThrow(arguments, SyntaxKind.IsExpression);
                     case "ThrowIfNull": return IfNullThrow(arguments);
-                    case "ThrowIfNullOrEmpty": return IfMemberThrow(nameof(string.IsNullOrEmpty), arguments);
-                    case "ThrowIfNullOrWhiteSpace": return IfMemberThrow(nameof(string.IsNullOrWhiteSpace), arguments);
+                    case "ThrowIfNullOrEmpty": return IfMemberThrow(arguments, nameof(string.IsNullOrEmpty));
+                    case "ThrowIfNullOrWhiteSpace": return IfMemberThrow(arguments, nameof(string.IsNullOrWhiteSpace));
                 }
             }
 
             return syntax;
         }
 
-        private static IfStatementSyntax IfMemberThrow(string methodName, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static IfStatementSyntax IfMemberThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, string methodName)
         {
             var invocation = Invocation(Member(PredefinedType(SyntaxKind.StringKeyword), methodName), Argument(arguments[0].Expression));
 
@@ -130,7 +130,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return IfThrow(condition, nameof(InvalidOperationException), ToDo());
         }
 
-        private static IfStatementSyntax IfThrow(in SyntaxKind operation, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static IfStatementSyntax IfThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxKind operation, in SyntaxKind alternativeOperationOnLiteral)
+        {
+            var left = arguments[0].Expression;
+            var right = arguments[1].Expression;
+
+            if (right is LiteralExpressionSyntax)
+            {
+                return IfThrow(alternativeOperationOnLiteral, left, right);
+            }
+
+            if (left is LiteralExpressionSyntax)
+            {
+                return IfThrow(alternativeOperationOnLiteral, right, left);
+            }
+
+            return IfThrow(operation, left, right);
+        }
+
+        private static IfStatementSyntax IfThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxKind operation)
         {
             return IfThrow(operation, arguments[0].Expression, arguments[1].Expression);
         }
@@ -140,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return IfThrow(SyntaxFactory.BinaryExpression(operation, left, right));
         }
 
-        private static IfStatementSyntax IfZeroThrow(in SyntaxKind operation, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static IfStatementSyntax IfZeroThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxKind operation)
         {
             return IfThrow(operation, arguments[0].Expression, Literal(0));
         }
