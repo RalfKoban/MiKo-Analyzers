@@ -7,7 +7,143 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed partial class MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzerTests
     {
         [Test]
-        public void Code_gets_fixed_for_InvalidEnumArgumentException_without_parameters()
+        public void No_issue_is_reported_for_InvalidEnumArgumentException_ThrowIfNullOrEmpty_on_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething(string s)
+    {
+        InvalidEnumArgumentException.ThrowIfNullOrEmpty(s);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_InvalidEnumArgumentException_ThrowIfNullOrWhiteSpace_on_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething(string s)
+    {
+        InvalidEnumArgumentException.ThrowIfNullOrWhiteSpace(s);
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_InvalidEnumArgumentException_ThrowIfNullOrEmpty_in_method_without_parameters() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        InvalidEnumArgumentException.ThrowIfNullOrEmpty(SomeData);
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_InvalidEnumArgumentException_ThrowIfNullOrWhiteSpace_in_method_without_parameters() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        InvalidEnumArgumentException.ThrowIfNullOrWhiteSpace(SomeData);
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_ThrowIfNullOrEmpty_in_method_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        InvalidEnumArgumentException.ThrowIfNullOrEmpty(SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        if (string.IsNullOrEmpty(SomeData))
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_ThrowIfNullOrWhiteSpace_in_method_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        InvalidEnumArgumentException.ThrowIfNullOrWhiteSpace(SomeData);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        if (string.IsNullOrWhiteSpace(SomeData))
+        {
+            throw new InvalidOperationException(""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_message_value_and_type()
         {
             const string OriginalCode = @"
 using System;
@@ -17,7 +153,81 @@ public class TestMe
 {
     public void DoSomething()
     {
-        throw new InvalidEnumArgumentException();
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.OrdinalIgnoreCase)
+            throw new InvalidEnumArgumentException(""some message"", x, typeof(StringComparison));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.OrdinalIgnoreCase)
+            throw new InvalidOperationException(""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_nameof_variable_as_message_value_and_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.OrdinalIgnoreCase)
+            throw new InvalidEnumArgumentException(nameof(x), x, typeof(StringComparison));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.OrdinalIgnoreCase)
+            throw new InvalidOperationException(""TODO"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_parameter_as_nameof()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        throw new InvalidEnumArgumentException(nameof(TestMe));
     }
 }
 ";
@@ -69,74 +279,6 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_parameter_as_nameof()
-        {
-            const string OriginalCode = @"
-using System;
-using System.ComponentModel;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        throw new InvalidEnumArgumentException(nameof(TestMe));
-    }
-}
-";
-
-            const string FixedCode = @"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        throw new InvalidOperationException(""TODO"");
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_message_value_and_type()
-        {
-            const string OriginalCode = @"
-using System;
-using System.ComponentModel;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        var x = StringComparison.Ordinal;
-
-        if (x != StringComparison.OrdinalIgnoreCase)
-            throw new InvalidEnumArgumentException(""some message"", x, typeof(StringComparison));
-    }
-}
-";
-
-            const string FixedCode = @"
-using System;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        var x = StringComparison.Ordinal;
-
-        if (x != StringComparison.OrdinalIgnoreCase)
-            throw new InvalidOperationException(""some message"");
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
         public void Code_gets_fixed_for_InvalidEnumArgumentException_with_string_variable_as_message_value_and_type()
         {
             const string OriginalCode = @"
@@ -174,7 +316,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_nameof_variable_as_message_value_and_type()
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_without_parameters()
         {
             const string OriginalCode = @"
 using System;
@@ -184,10 +326,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        var x = StringComparison.Ordinal;
-
-        if (x != StringComparison.OrdinalIgnoreCase)
-            throw new InvalidEnumArgumentException(nameof(x), x, typeof(StringComparison));
+        throw new InvalidEnumArgumentException();
     }
 }
 ";
@@ -199,10 +338,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        var x = StringComparison.Ordinal;
-
-        if (x != StringComparison.OrdinalIgnoreCase)
-            throw new InvalidOperationException(""TODO"");
+        throw new InvalidOperationException(""TODO"");
     }
 }
 ";
