@@ -46,9 +46,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ExpressionStatementSyntax statement: // this seems to be a '.Throw' statement
                 {
-                    var updatedStatement = GetUpdatedSyntax(statement).WithTriviaFrom(statement);
+                    var updatedStatement = GetUpdatedSyntax(statement);
 
-                    return Task.FromResult<SyntaxNode>(updatedStatement);
+                    if (statement.Parent is IfStatementSyntax ifStatement && ifStatement.Statement == statement)
+                    {
+                        // we have to place the statement into a block to avoid dangling else become misplaced
+                        updatedStatement = SyntaxFactory.Block(updatedStatement);
+                    }
+
+                    return Task.FromResult<SyntaxNode>(updatedStatement.WithTriviaFrom(statement));
                 }
 
                 default:

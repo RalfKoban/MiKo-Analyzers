@@ -333,6 +333,63 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_ThrowIfEqual_in_unbraced_if_branch_with_else()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        var ready = true;
+
+        if (ready)
+            ArgumentOutOfRangeException.ThrowIfEqual(SomeValue, 42);
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int SomeValue { get; set; }
+
+    public void DoSomething()
+    {
+        var ready = true;
+
+        if (ready)
+        {
+            if (SomeValue is 42)
+            {
+                throw new InvalidOperationException(""TODO"");
+            }
+        }
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ArgumentOutOfRangeException_ThrowIfEqual_with_field_as_comparison_value_in_method_without_parameters()
         {
             const string OriginalCode = @"

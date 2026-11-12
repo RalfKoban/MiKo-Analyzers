@@ -128,6 +128,71 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_ThrowIfNull_in_unbraced_if_branch_with_else()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething(bool ready)
+    {
+    }
+
+    public void DoSomething()
+    {
+        var ready = true;
+
+        if (ready)
+            ArgumentNullException.ThrowIfNull(SomeData);
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething(bool ready)
+    {
+    }
+
+    public void DoSomething()
+    {
+        var ready = true;
+
+        if (ready)
+        {
+            if (SomeData is null)
+            {
+                throw new InvalidOperationException(""TODO"");
+            }
+        }
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ArgumentNullException_ThrowIfNullOrEmpty_in_method_without_parameters()
         {
             const string OriginalCode = @"
@@ -157,6 +222,63 @@ public class TestMe
         {
             throw new InvalidOperationException(""TODO"");
         }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_ThrowIfNullOrEmpty_in_unbraced_if_branch_with_else()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        var ready = true;
+
+        if (ready)
+            ArgumentNullException.ThrowIfNullOrEmpty(SomeData);
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeData { get; set; }
+
+    public void DoSomething()
+    {
+        var ready = true;
+
+        if (ready)
+        {
+            if (string.IsNullOrEmpty(SomeData))
+            {
+                throw new InvalidOperationException(""TODO"");
+            }
+        }
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
     }
 }
 ";

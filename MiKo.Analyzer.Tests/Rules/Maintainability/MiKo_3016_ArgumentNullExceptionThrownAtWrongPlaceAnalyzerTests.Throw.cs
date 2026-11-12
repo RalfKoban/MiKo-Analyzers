@@ -316,6 +316,65 @@ public class TestMe
 ");
 
         [Test]
+        public void Code_gets_fixed_for_ThrowIfNull_in_unbraced_if_branch_with_else()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o, bool ready)
+    {
+        if (ready)
+            ArgumentNullException.ThrowIfNull(o.SomeData);
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o, bool ready)
+    {
+        if (ready)
+        {
+            if (o.SomeData is null)
+            {
+                throw new ArgumentException(""TODO"", nameof(o));
+            }
+        }
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ThrowIfNull_on_conditional_access_of_parameter_property()
         {
             const string OriginalCode = @"
@@ -533,6 +592,65 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_ThrowIfNullOrEmpty_in_unbraced_if_branch_with_else()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o, bool ready)
+    {
+        if (ready)
+            ArgumentNullException.ThrowIfNullOrEmpty(o.SomeData);
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o, bool ready)
+    {
+        if (ready)
+        {
+            if (string.IsNullOrEmpty(o.SomeData))
+            {
+                throw new ArgumentException(""TODO"", nameof(o));
+            }
+        }
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ThrowIfNullOrEmpty_on_field_property()
         {
             const string OriginalCode = @"
@@ -699,6 +817,65 @@ public class TestMe
         {
             throw new ArgumentException(""TODO"", nameof(o));
         }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ThrowIfNullOrWhiteSpace_in_unbraced_if_branch_with_else()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o, bool ready)
+    {
+        if (ready)
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(o.SomeData);
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class SomeObject
+{
+    public string SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject o, bool ready)
+    {
+        if (ready)
+        {
+            if (string.IsNullOrWhiteSpace(o.SomeData))
+            {
+                throw new ArgumentException(""TODO"", nameof(o));
+            }
+        }
+        else
+            Recover();
+    }
+
+    private void Recover()
+    {
     }
 }
 ";

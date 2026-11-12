@@ -45,7 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     var updatedStatement = GetUpdatedSyntax(statement, semanticModel).WithTriviaFrom(statement);
 
-                    return updatedStatement;
+                    if (statement.Parent is IfStatementSyntax ifStatement && ifStatement.Statement == statement)
+                    {
+                        // we have to place the statement into a block to avoid dangling else become misplaced
+                        updatedStatement = SyntaxFactory.Block(updatedStatement);
+                    }
+
+                    return updatedStatement.WithTriviaFrom(statement);
                 }
 
                 default:
