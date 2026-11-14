@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (syntax)
             {
                 case ObjectCreationExpressionSyntax _:
-                    return await base.GetUpdatedSyntaxAsync(syntax, issue, document, cancellationToken);
+                    return await base.GetUpdatedSyntaxAsync(syntax, issue, document, cancellationToken).ConfigureAwait(false);
 
                 case ExpressionStatementSyntax statement: // this seems to be a '.Throw' statement
                 {
