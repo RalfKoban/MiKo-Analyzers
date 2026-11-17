@@ -115,9 +115,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     new Pair("#2#", "uper-set"), // restore 'super-set' as the 'set' would get replaced
                                                     new Pair("#3#", "ubset"), // restore 'subset' as the 'set' would get replaced
                                                     new Pair("#4#", "ub-set"), // restore 'sub-set' as the 'set' would get replaced
-                                                    new Pair(" a the ", " the "),
-                                                    new Pair(" an the ", " the "),
-                                                    new Pair(" the the ", " the "),
                                                     new Pair("The a ", "The "),
                                                     new Pair("The an ", "The "),
                                                     new Pair("The the ", "The "),
@@ -125,6 +122,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     new Pair(" whether if ", " whether "),
                                                     new Pair(" whether when ", " whether "),
                                                     new Pair(" whether whether ", " whether "),
+                                                    new Pair(" the contains ", " the "),
+                                                    new Pair(" the contain ", " the "),
+                                                    new Pair(" the hold ", " the "),
+                                                    new Pair("Contains the store ", "Contains the "),
+                                                    new Pair(" the remember ", " the "),
+                                                    new Pair(" the all the ", " the "),
+                                                    new Pair(" the all ", " the "),
+                                                    new Pair(" a the ", " the "),
+                                                    new Pair(" an the ", " the "),
+                                                    new Pair(" the the ", " the "),
                                                 },
                                             _ => _.ToArray(__ => __.Key));
             }

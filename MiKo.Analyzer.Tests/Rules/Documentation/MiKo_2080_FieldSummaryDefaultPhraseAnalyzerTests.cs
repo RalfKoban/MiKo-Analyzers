@@ -17,6 +17,134 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] WrongBooleanPhrases = [.. CreateWrongBooleanPhrases().Take(TestLimit)];
 
+        private static readonly string[] WrongCollectionPhrases =
+                                                                  [
+                                                                      "A cache for",
+                                                                      "A Cache for",
+                                                                      "A collection containing",
+                                                                      "A collection for",
+                                                                      "A collection holding",
+                                                                      "A collection of",
+                                                                      "A collection storing",
+                                                                      "A collection that contains",
+                                                                      "A collection that holds",
+                                                                      "A collection that is containing",
+                                                                      "A collection that is holding",
+                                                                      "A collection that is storing",
+                                                                      "A collection that stores",
+                                                                      "A collection that's containing",
+                                                                      "A collection that's holding",
+                                                                      "A collection that's storing",
+                                                                      "A collection which contains",
+                                                                      "A collection which holds",
+                                                                      "A collection which is containing",
+                                                                      "A collection which is holding",
+                                                                      "A collection which is storing",
+                                                                      "A collection which stores",
+                                                                      "A container for the array of",
+                                                                      "A Container for the array of",
+                                                                      "A container for the collection of",
+                                                                      "A Container for the collection of",
+                                                                      "A container for the dictionary of",
+                                                                      "A Container for the dictionary of",
+                                                                      "A container for the list of",
+                                                                      "A Container for the list of",
+                                                                      "A container for the queue of",
+                                                                      "A Container for the queue of",
+                                                                      "A container for the set of",
+                                                                      "A Container for the set of",
+                                                                      "A container for the stack of",
+                                                                      "A Container for the stack of",
+                                                                      "A dictionary for",
+                                                                      "A dictionary of",
+                                                                      "A list for",
+                                                                      "A list of",
+                                                                      "A queue that contains",
+                                                                      "A Queue that contains",
+                                                                      "A stack that contains",
+                                                                      "A Stack that contains",
+                                                                      "An array for",
+                                                                      "An array of",
+                                                                      "An array that holds",
+                                                                      "An array which holds",
+                                                                      "An enumerable containing",
+                                                                      "An Enumerable containing",
+                                                                      "Array for",
+                                                                      "Array holding",
+                                                                      "Array of",
+                                                                      "Array that holds",
+                                                                      "Array which holds",
+                                                                      "Cache for",
+                                                                      "Collection for",
+                                                                      "Collection holding",
+                                                                      "Collection of",
+                                                                      "Collection remembering",
+                                                                      "Collection that holds",
+                                                                      "Collection that is holding",
+                                                                      "Collection that is remembering",
+                                                                      "Collection that remembers",
+                                                                      "Collection which holds",
+                                                                      "Collection which is holding",
+                                                                      "Collection which is remembering",
+                                                                      "Collection which remembers",
+                                                                      "Contain",
+                                                                      "Container for the array of",
+                                                                      "Container for the collection of",
+                                                                      "Container for the dictionary of",
+                                                                      "Container for the list of",
+                                                                      "Container for the queue of",
+                                                                      "Container for the set of",
+                                                                      "Container for the stack of",
+                                                                      "Containing",
+                                                                      "Dictionary for",
+                                                                      "Dictionary of",
+                                                                      "Enumerable for",
+                                                                      "Hold",
+                                                                      "Holding",
+                                                                      "Holds",
+                                                                      "List for",
+                                                                      "List of",
+                                                                      "Queue for",
+                                                                      "Remember",
+                                                                      "Remembering",
+                                                                      "Remembers",
+                                                                      "Stack for",
+                                                                      "Store",
+                                                                      "Stores",
+                                                                      "Storing",
+                                                                      "The collection that holds",
+                                                                      "The collection which holds",
+                                                                      "The container for the array of",
+                                                                      "The Container for the array of",
+                                                                      "The container for the collection of",
+                                                                      "The Container for the collection of",
+                                                                      "The container for the dictionary of",
+                                                                      "The Container for the dictionary of",
+                                                                      "The container for the list of",
+                                                                      "The Container for the list of",
+                                                                      "The container for the queue of",
+                                                                      "The Container for the queue of",
+                                                                      "The container for the set of",
+                                                                      "The Container for the set of",
+                                                                      "The container for the stack of",
+                                                                      "The Container for the stack of",
+                                                                      "This cache holds",
+                                                                      "This collection holds",
+                                                                      "This dictionary holds",
+                                                                      "This is a array for",
+                                                                      "This is a array of",
+                                                                      "This is a cache for",
+                                                                      "This is a cache of",
+                                                                      "This is a dictionary for",
+                                                                      "This is a dictionary of",
+                                                                      "This is a list for",
+                                                                      "This is a list of",
+                                                                      "This list holds",
+                                                                      "This member variable contains",
+                                                                      "This member variable holds",
+                                                                      "This member variable remembers",
+                                                                  ];
+
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2080_CodeFixProvider.LoadData();
 
@@ -410,130 +538,14 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", "Some comment"), Template.Replace("###", "Contains the some comment"));
         }
 
-        [TestCase("A cache for")]
-        [TestCase("A Cache for")]
-        [TestCase("A collection containing")]
-        [TestCase("A collection for")]
-        [TestCase("A collection holding")]
-        [TestCase("A collection of")]
-        [TestCase("A collection storing")]
-        [TestCase("A collection that contains")]
-        [TestCase("A collection that holds")]
-        [TestCase("A collection that is containing")]
-        [TestCase("A collection that is holding")]
-        [TestCase("A collection that is storing")]
-        [TestCase("A collection that's containing")]
-        [TestCase("A collection that's holding")]
-        [TestCase("A collection that's storing")]
-        [TestCase("A collection that stores")]
-        [TestCase("A collection which contains")]
-        [TestCase("A collection which holds")]
-        [TestCase("A collection which is containing")]
-        [TestCase("A collection which is holding")]
-        [TestCase("A collection which is storing")]
-        [TestCase("A collection which stores")]
-        [TestCase("A container for the array of")]
-        [TestCase("A Container for the array of")]
-        [TestCase("A container for the collection of")]
-        [TestCase("A Container for the collection of")]
-        [TestCase("A container for the dictionary of")]
-        [TestCase("A Container for the dictionary of")]
-        [TestCase("A container for the list of")]
-        [TestCase("A Container for the list of")]
-        [TestCase("A container for the queue of")]
-        [TestCase("A Container for the queue of")]
-        [TestCase("A container for the set of")]
-        [TestCase("A Container for the set of")]
-        [TestCase("A container for the stack of")]
-        [TestCase("A Container for the stack of")]
-        [TestCase("A dictionary for")]
-        [TestCase("A dictionary of")]
-        [TestCase("A list for")]
-        [TestCase("A list of")]
-        [TestCase("A queue that contains")]
-        [TestCase("A Queue that contains")]
-        [TestCase("A stack that contains")]
-        [TestCase("A Stack that contains")]
-        [TestCase("An array for")]
-        [TestCase("An array of")]
-        [TestCase("An array that holds")]
-        [TestCase("An array which holds")]
-        [TestCase("An enumerable containing")]
-        [TestCase("An Enumerable containing")]
-        [TestCase("Array for")]
-        [TestCase("Array holding")]
-        [TestCase("Array of")]
-        [TestCase("Array that holds")]
-        [TestCase("Array which holds")]
-        [TestCase("Cache for")]
-        [TestCase("Collection for")]
-        [TestCase("Collection holding")]
-        [TestCase("Collection of")]
-        [TestCase("Collection remembering")]
-        [TestCase("Collection that holds")]
-        [TestCase("Collection that is holding")]
-        [TestCase("Collection that is remembering")]
-        [TestCase("Collection that remembers")]
-        [TestCase("Collection which holds")]
-        [TestCase("Collection which is holding")]
-        [TestCase("Collection which is remembering")]
-        [TestCase("Collection which remembers")]
-        [TestCase("Container for the array of")]
-        [TestCase("Container for the collection of")]
-        [TestCase("Container for the dictionary of")]
-        [TestCase("Container for the list of")]
-        [TestCase("Container for the queue of")]
-        [TestCase("Container for the set of")]
-        [TestCase("Container for the stack of")]
-        [TestCase("Containing")]
-        [TestCase("Dictionary for")]
-        [TestCase("Dictionary of")]
-        [TestCase("Enumerable for")]
-        [TestCase("Holding")]
-        [TestCase("Holds")]
-        [TestCase("List for")]
-        [TestCase("List of")]
-        [TestCase("Queue for")]
-        [TestCase("Remembers")]
-        [TestCase("Remembering")]
-        [TestCase("Stack for")]
-        [TestCase("Stores")]
-        [TestCase("Storing")]
-        [TestCase("The collection that holds")]
-        [TestCase("The collection which holds")]
-        [TestCase("The container for the array of")]
-        [TestCase("The Container for the array of")]
-        [TestCase("The container for the collection of")]
-        [TestCase("The Container for the collection of")]
-        [TestCase("The container for the dictionary of")]
-        [TestCase("The Container for the dictionary of")]
-        [TestCase("The container for the list of")]
-        [TestCase("The Container for the list of")]
-        [TestCase("The container for the queue of")]
-        [TestCase("The Container for the queue of")]
-        [TestCase("The container for the set of")]
-        [TestCase("The Container for the set of")]
-        [TestCase("The container for the stack of")]
-        [TestCase("The Container for the stack of")]
-        [TestCase("This cache holds")]
-        [TestCase("This collection holds")]
-        [TestCase("This dictionary holds")]
-        [TestCase("This is a array for")]
-        [TestCase("This is a array of")]
-        [TestCase("This is a cache for")]
-        [TestCase("This is a cache of")]
-        [TestCase("This is a dictionary for")]
-        [TestCase("This is a dictionary of")]
-        [TestCase("This is a list for")]
-        [TestCase("This is a list of")]
-        [TestCase("This list holds")]
-        [TestCase("This member variable contains the")]
-        [TestCase("This member variable contains")]
-        [TestCase("This member variable holds the")]
-        [TestCase("This member variable holds")]
-        [TestCase("This member variable remembers the")]
-        [TestCase("This member variable remembers")]
-        public void Code_gets_fixed_for_collection_field_with_various_phrases_(string originalComment)
+        [TestCase("contain all the")]
+        [TestCase("contain all")]
+        [TestCase("contain the")]
+        [TestCase("contains all the")]
+        [TestCase("Contains all the")]
+        [TestCase("contains all")]
+        [TestCase("Contains all")]
+        public void Code_gets_fixed_for_collection_field_with_various_phrases_(string startingPhrase)
         {
             const string Template = @"
 using System;
@@ -548,7 +560,28 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Contains the"));
+            VerifyCSharpFix(Template.Replace("###", startingPhrase), Template.Replace("###", "Contains the"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_collection_field_with_various_phrases_(
+                                                                           [ValueSource(nameof(WrongCollectionPhrases))] string startingPhrase,
+                                                                           [Values("", " all", " all the")] string adjective)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ### some comment.
+    /// </summary>
+    private List<string> m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", startingPhrase + adjective), Template.Replace("###", "Contains the"));
         }
 
         [TestCase("List for all subsets", "Contains the subsets")]
@@ -713,6 +746,25 @@ public class TestMe
     /// ### A to B.
     /// </summary>
     private Dictionary<string, int> m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("List of orders waiting in the store queue", "Contains the orders waiting in the store queue")]
+        public void Code_gets_fixed_for_list_field_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ###.
+    /// </summary>
+    private List<string> m_field;
 }
 ";
 
