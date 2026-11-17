@@ -212,7 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return text;
         }
 
-        private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax, MemberDeclarationSyntax member, ReadOnlySpan<char> text)
+        private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax, MemberDeclarationSyntax member, in ReadOnlySpan<char> text)
         {
             var name = member.GetName();
 
@@ -266,16 +266,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 case PropertyDeclarationSyntax property:
                 {
-                    text = GetUpdatedSyntax(ref comment, textSyntax, text);
+                    var updatedText = GetUpdatedSyntax(ref comment, textSyntax, text);
 
-                    return GetUpdatedProperty(comment, property, text);
+                    return GetUpdatedProperty(comment, property, updatedText);
                 }
 
                 case BaseTypeDeclarationSyntax _:
                 {
-                    text = GetUpdatedSyntax(ref comment, textSyntax, text);
+                    var updatedText = GetUpdatedSyntax(ref comment, textSyntax, text);
 
-                    if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces))
+                    if (updatedText.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces))
                     {
                         comment = CommentStartingWith(comment, "Represents ");
                     }
@@ -408,6 +408,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var thirdPersonVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
             var gerundVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
+
+            // special handling for 'shutdown'
+            gerundVerbs["shutdown"] = "shutting down";
+            gerundVerbs["Shutdown"] = "Shutting down";
+            gerundVerbs["shutDown"] = "shutting down";
+            gerundVerbs["ShutDown"] = "Shutting down";
 
             return CreateReplacementMap(verbs, thirdPersonVerbs, gerundVerbs);
         }

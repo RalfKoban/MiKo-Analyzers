@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                    new Pair(" command for ", Constants.SingleSpace),
                                                                                    new Pair(" can in ", " can be used in "),
                                                                                    new Pair(" can with ", " can be used with "),
-                                                                                   new Pair(" can wrapper for ", " can wrap "),
+                                                                                   new Pair(" can wrap for ", " can wrap "),
                                                                                    new Pair(" can be needed for ", " can support "),
                                                                                    new Pair(" can need for ", " can support "),
                                                                                    new Pair(" can a ", " can "),

@@ -1651,6 +1651,21 @@ namespace MiKoSolutions.Analyzers
         public static bool EndsWithAny(this string value, in ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
         /// <summary>
+        /// Determines whether the <see cref="string"/> ends with any of the specified characters.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to check.
+        /// </param>
+        /// <param name="suffixCharacters">
+        /// The characters to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="string"/> ends with any of the characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool EndsWithAny(this string value, string suffixCharacters) => value.EndsWithAny(suffixCharacters.AsSpan());
+
+        /// <summary>
         /// Determines whether the span of characters ends with any of the specified characters.
         /// </summary>
         /// <param name="value">
@@ -1679,6 +1694,21 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether the span of characters ends with any of the specified characters.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to check.
+        /// </param>
+        /// <param name="suffixCharacters">
+        /// The characters to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the span ends with any of the characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool EndsWithAny(this in ReadOnlySpan<char> value, string suffixCharacters) => value.EndsWithAny(suffixCharacters.AsSpan());
 
         /// <summary>
         /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
@@ -1965,6 +1995,46 @@ namespace MiKoSolutions.Analyzers
         public static bool Equals(this in ReadOnlySpan<char> value, string other, in StringComparison comparison = StringComparison.Ordinal) => other != null && value.Equals(other.AsSpan(), comparison);
 
         /// <summary>
+        /// Determines whether the <see cref="char"/> equals any of the specified characters.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="char"/> to compare.
+        /// </param>
+        /// <param name="characters">
+        /// The characters to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="char"/> equals any of the characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool EqualsAny(this char value, in ReadOnlySpan<char> characters)
+        {
+            foreach (var character in characters)
+            {
+                if (value == character)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the <see cref="char"/> equals any of the specified characters.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="char"/> to compare.
+        /// </param>
+        /// <param name="characters">
+        /// The characters to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="char"/> equals any of the characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool EqualsAny(this char value, string characters) => value.EqualsAny(characters.AsSpan());
+
+        /// <summary>
         /// Determines whether the <see cref="string"/> equals any of the specified phrases.
         /// </summary>
         /// <param name="value">
@@ -2059,6 +2129,38 @@ namespace MiKoSolutions.Analyzers
                 {
                     var phrase = phrases[index];
 
+                    if (value.Equals(phrase, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the span of characters equals any of the specified phrases.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to compare.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to compare with.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the span equals any of the phrases; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool EqualsAny(this in ReadOnlySpan<char> value, IEnumerable<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (value.Length > 0)
+            {
+                foreach (var phrase in phrases)
+                {
                     if (value.Equals(phrase, comparison))
                     {
                         return true;
@@ -3220,10 +3322,14 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The <see cref="string"/> to process.
         /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the last word from the <see cref="string"/>.
         /// </returns>
-        public static string LastWord(this string value)
+        public static string LastWord(this string value, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
         {
             if (value.IsNullOrEmpty())
             {
@@ -3231,7 +3337,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var span = value.AsSpan();
-            var word = LastWord(span);
+            var word = LastWord(span, wordBoundary);
 
             return word != span
                    ? word.ToString()
@@ -3244,21 +3350,51 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The span of characters to process.
         /// </param>
+        /// <param name="wordBoundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.WhiteSpaces"/>.
+        /// </param>
         /// <returns>
         /// The last word from the span.
         /// </returns>
-        public static ReadOnlySpan<char> LastWord(this in ReadOnlySpan<char> value)
+        public static ReadOnlySpan<char> LastWord(this in ReadOnlySpan<char> value, in WordBoundary wordBoundary = WordBoundary.WhiteSpaces)
         {
             var text = value.TrimEnd();
 
-            var lastSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters) + 1;
-
-            if (lastSpace <= 0)
+            switch (wordBoundary)
             {
-                return text;
-            }
+                case WordBoundary.WhiteSpaces:
+                {
+                    var lastSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters) + 1;
 
-            return text.Slice(lastSpace);
+                    if (lastSpace <= 0)
+                    {
+                        return text;
+                    }
+
+                    return text.Slice(lastSpace);
+                }
+
+                case WordBoundary.UpperCaseCharacters:
+                {
+                    // go reverse to identify where the upper case word starts (also stop at '_' underscores as they separate words)
+                    for (var index = text.Length - 1; index > -1; index--)
+                    {
+                        var c = text[index];
+
+                        if (c.IsUpperCase() || (c is Constants.Underscore && index > 2))
+                        {
+                            return text.Slice(index);
+                        }
+                    }
+
+                    // we did not find any, so we return the complete text
+                    return text.TrimStart();
+                }
+
+                default:
+                    return text.TrimStart();
+            }
         }
 
         /// <summary>

@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, string.Concat).ToArray();
 
-        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors", "tures", "ties", "dges", "rges", "sages" };
+        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors", "tures", "ties", "dges", "rges", "sages", "ors" };
         private static readonly string[] NonPluralEndings = { "ges", "nues", "curs", "opts", "nforms", "ses" };
         private static readonly string[] SpecialPluralWords = { "ages", "loot", "classes" };
         private static readonly string[] SpecialNonPluralWords = { "does", "lets" };
