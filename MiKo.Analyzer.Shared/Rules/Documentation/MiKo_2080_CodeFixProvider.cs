@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     new Pair(" the contains ", " the "),
                                                     new Pair(" the contain ", " the "),
                                                     new Pair(" the hold ", " the "),
-                                                    new Pair(" the store ", " the "),
+                                                    new Pair("Contains the store ", "Contains the "),
                                                     new Pair(" the remember ", " the "),
                                                     new Pair(" the all the ", " the "),
                                                     new Pair(" the all ", " the "),

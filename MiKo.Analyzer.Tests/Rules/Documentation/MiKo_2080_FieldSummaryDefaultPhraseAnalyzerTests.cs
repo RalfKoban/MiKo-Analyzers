@@ -752,6 +752,25 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
+        [TestCase("List of orders waiting in the store queue", "Contains the orders waiting in the store queue")]
+        public void Code_gets_fixed_for_list_field_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ###.
+    /// </summary>
+    private List<string> m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2080_FieldSummaryDefaultPhraseAnalyzer();
