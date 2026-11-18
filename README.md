@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 597 rules that are currently provided by the analyzers.
+The following tables list all the 598 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -375,6 +375,7 @@ The following tables list all the 597 rules that are currently provided by the a
 |[MiKo_3016](/Documentation/MiKo_3016.md)|Do not throw ArgumentNullException for property return values|&#x2713;|&#x2713;|
 |[MiKo_3017](/Documentation/MiKo_3017.md)|Include original exception when throwing new exceptions|&#x2713;|&#x2713;|
 |[MiKo_3018](/Documentation/MiKo_3018.md)|Throw ObjectDisposedExceptions on public methods of disposable types|&#x2713;|\-|
+|[MiKo_3019](/Documentation/MiKo_3019.md)|Do not throw from dispose-related members|&#x2713;|\-|
 |[MiKo_3020](/Documentation/MiKo_3020.md)|Use 'Task.CompletedTask' instead of 'Task.FromResult'|&#x2713;|&#x2713;|
 |[MiKo_3021](/Documentation/MiKo_3021.md)|Do not use 'Task.Run' in implementation|&#x2713;|\-|
 |[MiKo_3022](/Documentation/MiKo_3022.md)|Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;|&#x2713;|\-|

@@ -4078,6 +4078,16 @@ This approach ensures that the exception thrown accurately reflects the nature o
   <data name="MiKo_3018_Title" xml:space="preserve">
     <value>Throw ObjectDisposedExceptions on public methods of disposable types</value>
   </data>
+  <data name="MiKo_3019_Description" xml:space="preserve">
+    <value>Methods named 'Dispose', 'DisposeCore', or 'DisposeAsync' should complete cleanup operations without directly throwing exceptions. Exceptions from disposal paths can make error handling unreliable and may hide the original failure. The same applies to properties named 'IsDisposed', which should report the disposal state without throwing exceptions.
+Keeping these members exception-free makes resource cleanup and state checks more predictable and robust.</value>
+  </data>
+  <data name="MiKo_3019_MessageFormat" xml:space="preserve">
+    <value>Do not throw from dispose-related member</value>
+  </data>
+  <data name="MiKo_3019_Title" xml:space="preserve">
+    <value>Do not throw from dispose-related members</value>
+  </data>
   <data name="MiKo_3020_CodeFixTitle" xml:space="preserve">
     <value>Use 'Task.CompletedTask'</value>
   </data>
