@@ -157,6 +157,106 @@ public class TestMe : IAsyncDisposable
 ");
 
         [Test]
+        public void No_issue_is_reported_for_disposable_type_with_explicit_interface_implementation_of_IDisposable_Dispose_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    void IDisposable.Dispose()
+    {
+        _isDisposed = true;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_disposable_type_with_explicit_interface_implementation_of_IDisposable_Dispose_method_with_expression_body() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    void IDisposable.Dispose() => _isDisposed = true;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_disposable_type_with_fully_qualified_explicit_interface_implementation_of_IDisposable_Dispose_method() => No_issue_is_reported_for(@"
+public class TestMe : System.IDisposable
+{
+    private bool _isDisposed;
+
+    void System.IDisposable.Dispose() => _isDisposed = true;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_async_disposable_type_with_explicit_interface_implementation_of_IAsyncDisposable_DisposeAsync_method() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe : IAsyncDisposable
+{
+    private bool _isDisposed;
+
+    ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        _isDisposed = true;
+        return default;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_async_disposable_type_with_explicit_interface_implementation_of_IAsyncDisposable_DisposeAsync_method_with_expression_body() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe : IAsyncDisposable
+{
+    private bool _isDisposed;
+
+    ValueTask IAsyncDisposable.DisposeAsync() => default;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_async_disposable_type_with_fully_qualified_explicit_interface_implementation_of_IAsyncDisposable_DisposeAsync_method() => No_issue_is_reported_for(@"
+public class TestMe : System.IAsyncDisposable
+{
+    private bool _isDisposed;
+
+    System.Threading.Tasks.ValueTask System.IAsyncDisposable.DisposeAsync()
+    {
+        _isDisposed = true;
+        return default;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_type_with_explicit_interface_implementations_of_IDisposable_and_IAsyncDisposable() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe : IDisposable, IAsyncDisposable
+{
+    private bool _isDisposed;
+
+    void IDisposable.Dispose() => _isDisposed = true;
+
+    ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        _isDisposed = true;
+        return default;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_expression_body_private_property() => No_issue_is_reported_for(@"
 using System;
 
@@ -1211,6 +1311,43 @@ public class TestMe : IDisposable
 public class TestMeEnhanced : TestMe
 {
     " + visibility + @" void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_disposable_type_with_explicit_interface_implementation_of_IDisposable_Dispose_method_and_public_method_that_does_not_throw_ObjectDisposedException() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    void IDisposable.Dispose() => _isDisposed = true;
+
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_async_disposable_type_with_explicit_interface_implementation_of_IAsyncDisposable_DisposeAsync_method_and_public_method_that_does_not_throw_ObjectDisposedException() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe : IAsyncDisposable
+{
+    private bool _isDisposed;
+
+    ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        _isDisposed = true;
+        return default;
+    }
+
+    public void DoSomething()
     {
     }
 }
