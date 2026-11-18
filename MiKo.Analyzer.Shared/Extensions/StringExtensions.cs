@@ -2006,7 +2006,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the <see cref="char"/> equals any of the characters; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool EqualsAny(this char value, in ReadOnlySpan<char> characters)
+        public static bool EqualsAny(this in char value, in ReadOnlySpan<char> characters)
         {
             foreach (var character in characters)
             {
@@ -2032,7 +2032,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the <see cref="char"/> equals any of the characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsAny(this char value, string characters) => value.EqualsAny(characters.AsSpan());
+        public static bool EqualsAny(this in char value, string characters) => value.EqualsAny(characters.AsSpan());
 
         /// <summary>
         /// Determines whether the <see cref="string"/> equals any of the specified phrases.
