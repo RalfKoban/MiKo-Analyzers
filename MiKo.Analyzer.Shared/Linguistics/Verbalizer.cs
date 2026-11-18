@@ -1331,19 +1331,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
+                var builder = word.AsCachedBuilder();
+
                 if (WantsDoubleConstants(word))
                 {
                     // duplicate word's last consonant
-                    word += word[word.Length - 1];
+                    builder.Append(word.Length - 1);
                 }
 
-                var gerundVerb = word.AsCachedBuilder()
-                                     .Append("ing")
-                                     .ReplaceWithProbe("ping", "pping")
-                                     .ReplaceWithProbe("eing", "ing")
-                                     .ReplaceWithProbe("uring", "urring")
-                                     .ReplaceWithProbe("uting", "utting")
-                                     .ToStringAndRelease();
+                builder.Append("ing")
+                       .ReplaceWithProbe("ping", "pping")
+                       .ReplaceWithProbe("eing", "ing")
+                       .ReplaceWithProbe("uring", "urring")
+                       .ReplaceWithProbe("uting", "utting");
+
+                var gerundVerb = builder.ToStringAndRelease();
 
                 return gerundVerb;
             }
