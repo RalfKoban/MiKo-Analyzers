@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1076";
 
-        private const string CorrectSuffix = "Event";
+        private const string CorrectSuffix = Constants.Names.Event;
 
         private const string Arg = nameof(Arg);
         private const string Args = nameof(Args);

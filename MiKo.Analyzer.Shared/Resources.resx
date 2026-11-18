@@ -2223,6 +2223,16 @@ Renaming the prefix from 'have' to 'has' makes the code grammatically correct an
   <data name="MiKo_1541_Title" xml:space="preserve">
     <value>Do not prefix parameters with 'actual'</value>
   </data>
+  <data name="MiKo_1542_Description" xml:space="preserve">
+    <value>Interfaces should not expose multiple events that represent the same lifecycle stage or action using different names. Similar event names make it unclear when each event is raised and what distinguishes them.
+Using a single, consistent event name for each semantic concept makes the code easier to maintain and understand.</value>
+  </data>
+  <data name="MiKo_1542_MessageFormat" xml:space="preserve">
+    <value>Event '{0}' represents an already exposed event</value>
+  </data>
+  <data name="MiKo_1542_Title" xml:space="preserve">
+    <value>Avoid multiple events with the same semantic meaning</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
