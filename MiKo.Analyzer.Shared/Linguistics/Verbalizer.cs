@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
@@ -456,6 +457,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                       StringComparer.Ordinal);
 
         private static readonly HashSet<string> PastVerbsOnly = PastVerbs.Values.ToHashSet();
+
+        private static readonly ReaderWriterLockSlim PastVerbsOnlyLock = new ReaderWriterLockSlim();
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(
                                                                                                                                      new[]
@@ -955,9 +958,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            if (PastVerbsOnly.Contains(value))
+            using (PastVerbsOnlyLock.InReadMode())
             {
-                return true;
+                if (PastVerbsOnly.Contains(value))
+                {
+                    return true;
+                }
             }
 
             return IsPastTenseVerb(value.AsSpan());
@@ -972,7 +978,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <returns>
         /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool IsPastTenseVerb(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings) || value.EqualsAny(PastVerbsOnly);
+        public static bool IsPastTenseVerb(in ReadOnlySpan<char> value)
+        {
+            if (value.EndsWithAny(PastEndings))
+            {
+                return true;
+            }
+
+            using (PastVerbsOnlyLock.InReadMode())
+            {
+                return value.EqualsAny(PastVerbsOnly);
+            }
+        }
 
         /// <summary>
         /// Determines whether the specified word is a third-person singular verb.
@@ -1364,86 +1381,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateInfiniteVerb(string word)
             {
-                var wordSpan = word.AsSpan();
+                var span = word.AsSpan();
 
-                if (TryGetVerbForPrefixedVerb(wordSpan, MakeInfiniteVerb, out string verb))
+                if (TryGetVerbForPrefixedVerb(span, MakeInfiniteVerb, out string verb))
                 {
                     return verb;
                 }
 
-                if (wordSpan.EndsWith('g'))
+                var lastChar = span[span.Length - 1];
+
+                switch (lastChar)
                 {
-                    if (wordSpan.EndsWith("ing"))
-                    {
-                        return FromIng(wordSpan, word);
-                    }
-                }
-                else if (wordSpan.EndsWith('r'))
-                {
-                    if (wordSpan.EndsWith("gister"))
-                    {
+                    case 'g' when span.EndsWith("ing"): return FromIng(word, span);
+                    case 'r' when span.EndsWith("gister"):
+                    case 'r' when span.EndsWith("liver"):
+                    case 'r' when span.EndsWith("gger"):
                         return word;
-                    }
 
-                    if (wordSpan.EndsWith("liver"))
-                    {
-                        return word;
-                    }
-
-                    if (wordSpan.EndsWith("gger"))
-                    {
-                        return word;
-                    }
-
-                    if (wordSpan.EndsWith("bber") || wordSpan.EndsWith("pper"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 3);
-                    }
-
-                    if (wordSpan.EndsWith("ter"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 2);
-                    }
-
-                    if (wordSpan.EndsWith("ptor"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith("be");
-                    }
-
-                    if (wordSpan.EndsWith("nger"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 2);
-                    }
-
-                    if (wordSpan.EndsWith("iver") || wordSpan.EndsWith("zer") || wordSpan.EndsWith("ger") || wordSpan.EndsWith("ber") || wordSpan.EndsWith("encer"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 1);
-                    }
-
-                    if (wordSpan.EndsWith("uccessor"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith("ed");
-                    }
-                }
-                else if (wordSpan.EndsWith('s'))
-                {
-                    return FromS(wordSpan, word);
-                }
-                else if (wordSpan.EndsWith('t'))
-                {
-                    return FromT(wordSpan, word);
-                }
-                else if (wordSpan.EndsWith('y'))
-                {
-                    if (wordSpan.EndsWith("ery"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 1);
-                    }
-
-                    if (wordSpan.EndsWith("iry"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('e');
-                    }
+                    case 'r' when span.EndsWith("bber") || span.EndsWith("pper"): return word.Substring(0, span.Length - 3);
+                    case 'r' when span.EndsWith("ter"): return word.Substring(0, span.Length - 2);
+                    case 'r' when span.EndsWith("ptor"): return span.Slice(0, span.Length - 4).ConcatenatedWith("be");
+                    case 'r' when span.EndsWith("nger"): return word.Substring(0, span.Length - 2);
+                    case 'r' when span.EndsWith("iver") || span.EndsWith("zer") || span.EndsWith("ger") || span.EndsWith("ber") || span.EndsWith("encer"): return word.Substring(0, span.Length - 1);
+                    case 'r' when span.EndsWith("uccessor"): return span.Slice(0, span.Length - 4).ConcatenatedWith("ed");
+                    case 's': return FromS(word, span);
+                    case 't': return FromT(word, span);
+                    case 'y' when span.EndsWith("ery"): return word.Substring(0, span.Length - 1);
+                    case 'y' when span.EndsWith("iry"): return span.Slice(0, span.Length - 1).ConcatenatedWith('e');
                 }
 
                 if (IsPastTenseVerb(word))
@@ -1451,54 +1415,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return FromPast(word);
                 }
 
-                if (wordSpan.EndsWith('n'))
+                switch (lastChar)
                 {
-                    if (wordSpan.EndsWith("ison"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('e');
-                    }
-
-                    if (wordSpan.EndsWith("ion"))
-                    {
-                        return FromIon(word, wordSpan);
-                    }
-                }
-                else if (wordSpan.EndsWith('e'))
-                {
-                    if (wordSpan.EndsWith("ete"))
-                    {
-                        return word;
-                    }
-
-                    if (wordSpan.EndsWith("osure"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('e');
-                    }
-
-                    if (wordSpan.EndsWith("rrence"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 5);
-                    }
-
-                    if (wordSpan.EndsWith("luence"))
-                    {
-                        return word;
-                    }
-
-                    if (wordSpan.EndsWith("ence"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 4);
-                    }
-
-                    if (wordSpan.EndsWith("enance"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 6).ConcatenatedWith("ain");
-                    }
-
-                    if (wordSpan.EndsWith("nance"))
-                    {
-                        return word.Substring(0, wordSpan.Length - 4);
-                    }
+                    case 'n': return FromN(word, span);
+                    case 'e': return FromE(word, span);
                 }
 
                 return word;
@@ -1506,45 +1426,45 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string FromPast(string word)
             {
-                var wordSpan = word.AsSpan();
+                var span = word.AsSpan();
 
-                if (wordSpan.EndsWith("pleted") || wordSpan.EndsWith("lenged") || wordSpan.EndsWith("hanged") || wordSpan.EndsWith("luenced"))
+                if (span.EndsWith("pleted") || span.EndsWith("lenged") || span.EndsWith("hanged") || span.EndsWith("luenced"))
                 {
-                    return word.Substring(0, wordSpan.Length - 1);
+                    return word.Substring(0, span.Length - 1);
                 }
 
-                if (wordSpan.EndsWithAny(ThreeCharacterPastEndings))
+                if (span.EndsWithAny(ThreeCharacterPastEndings))
                 {
                     return word.Substring(0, word.Length - 3);
                 }
 
-                if (wordSpan.EndsWith("ctored")
-                 || wordSpan.EndsWith("dded")
-                 || wordSpan.EndsWith("ered")
-                 || wordSpan.EndsWith("itored")
-                 || wordSpan.EndsWith("ivered")
-                 || wordSpan.EndsWith("ixed")
-                 || wordSpan.EndsWith("ltered")
-                 || wordSpan.EndsWith("nged")
-                 || wordSpan.EndsWith("ntered")
-                 || wordSpan.EndsWith("peated")
-                 || wordSpan.EndsWith("rked")
-                 || wordSpan.EndsWith("shed")
-                 || wordSpan.EndsWith("ssed")
-                 || wordSpan.EndsWith("tched")
-                 || wordSpan.EndsWith("zzed"))
+                if (span.EndsWith("ctored")
+                 || span.EndsWith("dded")
+                 || span.EndsWith("ered")
+                 || span.EndsWith("itored")
+                 || span.EndsWith("ivered")
+                 || span.EndsWith("ixed")
+                 || span.EndsWith("ltered")
+                 || span.EndsWith("nged")
+                 || span.EndsWith("ntered")
+                 || span.EndsWith("peated")
+                 || span.EndsWith("rked")
+                 || span.EndsWith("shed")
+                 || span.EndsWith("ssed")
+                 || span.EndsWith("tched")
+                 || span.EndsWith("zzed"))
                 {
                     return word.Substring(0, word.Length - 2);
                 }
 
-                if (wordSpan.EndsWith("eed"))
+                if (span.EndsWith("eed"))
                 {
                     return word;
                 }
 
-                if (wordSpan.EndsWith("ied"))
+                if (span.EndsWith("ied"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('y');
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith('y');
                 }
 
                 if (word.EndsWithAny(SpecialPastEndings))
@@ -1555,297 +1475,352 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return word.Substring(0, word.Length - 2);
             }
 
-            string FromIon(string word, in ReadOnlySpan<char> wordSpan)
+            string FromIon(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("ation"))
+                if (span.EndsWith("ation"))
                 {
-                    if (wordSpan.EndsWith("cination") || wordSpan.EndsWith("peration") || wordSpan.EndsWith("reation"))
+                    if (span.EndsWith("cination") || span.EndsWith("peration") || span.EndsWith("reation"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('e');
+                        return span.Slice(0, span.Length - 3).ConcatenatedWith('e');
                     }
 
-                    if (wordSpan.EndsWith("eration") || wordSpan.EndsWith("rmation"))
+                    if (span.EndsWith("eration") || span.EndsWith("rmation"))
                     {
-                        return word.Substring(0, wordSpan.Length - 5);
+                        return word.Substring(0, span.Length - 5);
                     }
 
-                    if (wordSpan.EndsWith("uation") || wordSpan.EndsWith("uration") || wordSpan.EndsWith("ination") || wordSpan.EndsWith("iration") || wordSpan.EndsWith("isation") || wordSpan.EndsWith("itation") || wordSpan.EndsWith("ization"))
+                    if (span.EndsWith("uation") || span.EndsWith("uration") || span.EndsWith("ination") || span.EndsWith("iration") || span.EndsWith("isation") || span.EndsWith("itation") || span.EndsWith("ization"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith('e');
+                        return span.Slice(0, span.Length - 5).ConcatenatedWith('e');
                     }
 
-                    if (wordSpan.EndsWith("istration"))
+                    if (span.EndsWith("istration"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 6).ConcatenatedWith("er");
+                        return span.Slice(0, span.Length - 6).ConcatenatedWith("er");
                     }
 
-                    if (wordSpan.EndsWithAny(ThreeCharacterInfiniteEndingsWithE))
+                    if (span.EndsWithAny(ThreeCharacterInfiniteEndingsWithE))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('e');
+                        return span.Slice(0, span.Length - 3).ConcatenatedWith('e');
                     }
 
-                    if (wordSpan.EndsWith("ellation"))
+                    if (span.EndsWith("ellation"))
                     {
-                        return word.Substring(0, wordSpan.Length - 6);
+                        return word.Substring(0, span.Length - 6);
                     }
 
-                    if (wordSpan.EndsWith("ndation") || wordSpan.EndsWith("lation") || wordSpan.EndsWith("tation"))
+                    if (span.EndsWith("ndation") || span.EndsWith("lation") || span.EndsWith("tation"))
                     {
-                        return word.Substring(0, wordSpan.Length - 5);
+                        return word.Substring(0, span.Length - 5);
                     }
 
-                    if (wordSpan.EndsWith("fication") || wordSpan.EndsWith("plication"))
+                    if (span.EndsWith("fication") || span.EndsWith("plication"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 7).ConcatenatedWith('y');
+                        return span.Slice(0, span.Length - 7).ConcatenatedWith('y');
                     }
 
-                    if (wordSpan.EndsWith("cupation"))
+                    if (span.EndsWith("cupation"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith('y');
+                        return span.Slice(0, span.Length - 5).ConcatenatedWith('y');
                     }
 
-                    if (wordSpan.EndsWith("ocation"))
+                    if (span.EndsWith("ocation"))
                     {
-                        if (wordSpan.EndsWith("location", StringComparison.OrdinalIgnoreCase))
+                        if (span.EndsWith("location", StringComparison.OrdinalIgnoreCase))
                         {
-                            return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('e');
+                            return span.Slice(0, span.Length - 3).ConcatenatedWith('e');
                         }
 
-                        return wordSpan.Slice(0, wordSpan.Length - 6).ConcatenatedWith("ke");
+                        return span.Slice(0, span.Length - 6).ConcatenatedWith("ke");
                     }
                 }
-                else if (wordSpan.EndsWith("tion"))
+                else if (span.EndsWith("tion"))
                 {
-                    if (wordSpan.EndsWith("etion"))
+                    if (span.EndsWith("etion"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('e');
+                        return span.Slice(0, span.Length - 3).ConcatenatedWith('e');
                     }
 
-                    if (wordSpan.EndsWith("duction"))
+                    if (span.EndsWith("duction"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('e');
+                        return span.Slice(0, span.Length - 4).ConcatenatedWith('e');
                     }
 
-                    if (wordSpan.EndsWith("dition"))
+                    if (span.EndsWith("dition"))
                     {
-                        return word.Substring(0, wordSpan.Length - 5);
+                        return word.Substring(0, span.Length - 5);
                     }
 
-                    if (wordSpan.EndsWith("quisition"))
+                    if (span.EndsWith("quisition"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 6).ConcatenatedWith("re");
+                        return span.Slice(0, span.Length - 6).ConcatenatedWith("re");
                     }
 
-                    if (wordSpan.EndsWith("sition") || wordSpan.EndsWith("nition"))
+                    if (span.EndsWith("sition") || span.EndsWith("nition"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith('e');
+                        return span.Slice(0, span.Length - 5).ConcatenatedWith('e');
                     }
 
-                    if (wordSpan.EndsWith("iption"))
+                    if (span.EndsWith("iption"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith("be");
+                        return span.Slice(0, span.Length - 5).ConcatenatedWith("be");
                     }
 
-                    if (wordSpan.EndsWith("etition"))
+                    if (span.EndsWith("etition"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 6).ConcatenatedWith("at");
+                        return span.Slice(0, span.Length - 6).ConcatenatedWith("at");
                     }
                 }
-                else if (wordSpan.EndsWith("sion"))
+                else if (span.EndsWith("sion"))
                 {
-                    if (wordSpan.EndsWith("nsion"))
+                    if (span.EndsWith("nsion"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('d');
+                        return span.Slice(0, span.Length - 4).ConcatenatedWith('d');
                     }
 
-                    if (wordSpan.EndsWith("pulsion"))
+                    if (span.EndsWith("pulsion"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 6).ConcatenatedWith("el");
+                        return span.Slice(0, span.Length - 6).ConcatenatedWith("el");
                     }
 
-                    if (wordSpan.EndsWith("nversion"))
+                    if (span.EndsWith("nversion"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('t');
+                        return span.Slice(0, span.Length - 4).ConcatenatedWith('t');
                     }
 
-                    if (wordSpan.EndsWith("rsion"))
+                    if (span.EndsWith("rsion"))
                     {
                         return word;
                     }
 
-                    if (wordSpan.EndsWith("ession"))
+                    if (span.EndsWith("ession"))
                     {
-                        return word.Substring(0, wordSpan.Length - 3);
+                        return word.Substring(0, span.Length - 3);
                     }
 
-                    if (wordSpan.EndsWith("ission"))
+                    if (span.EndsWith("ission"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith('t');
+                        return span.Slice(0, span.Length - 5).ConcatenatedWith('t');
                     }
                 }
 
-                return word.Substring(0, wordSpan.Length - 3);
+                return word.Substring(0, span.Length - 3);
             }
 
-            string FromIng(in ReadOnlySpan<char> wordSpan, string word)
+            string FromIng(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.Length is 4)
+                if (span.Length is 4)
                 {
                     // ignore short word such as "ping" or "thing"
                     return word;
                 }
 
-                if (wordSpan.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
+                if (span.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
                 {
                     return word;
                 }
 
-                if (wordSpan.EndsWithAny(FourCharacterGerundEndings))
+                if (span.EndsWithAny(FourCharacterGerundEndings))
                 {
-                    return word.Substring(0, wordSpan.Length - 4);
+                    return word.Substring(0, span.Length - 4);
                 }
 
-                if (wordSpan.EndsWithAny(ThreeCharacterGerundEndings))
+                if (span.EndsWithAny(ThreeCharacterGerundEndings))
                 {
-                    return word.Substring(0, wordSpan.Length - 3);
+                    return word.Substring(0, span.Length - 3);
                 }
 
-                if (wordSpan.EndsWithAny(ThreeCharacterGerundEndingsWithE))
+                if (span.EndsWithAny(ThreeCharacterGerundEndingsWithE))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('e');
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith('e');
                 }
 
-                return word.Substring(0, wordSpan.Length - 3);
+                return word.Substring(0, span.Length - 3);
             }
 
-            string FromS(in ReadOnlySpan<char> wordSpan, string word)
+            string FromE(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("uccess"))
-                {
-                    return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("ed");
-                }
-
-                if (wordSpan.EndsWith("uccessors"))
-                {
-                    return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith("ed");
-                }
-
-                if (wordSpan.EndsWith("ss"))
+                if (span.EndsWith("ete"))
                 {
                     return word;
                 }
 
-                if (wordSpan.EndsWith("ies"))
+                if (span.EndsWith("osure"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('y');
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith('e');
                 }
 
-                if (wordSpan.EndsWith("sis"))
+                if (span.EndsWith("rrence"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("ze");
+                    return word.Substring(0, span.Length - 5);
                 }
 
-                if (wordSpan.EndsWith("ptors"))
+                if (span.EndsWith("luence"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith("be");
+                    return word;
                 }
 
-                if (wordSpan.EndsWith("bbers") || wordSpan.EndsWith("ppers"))
+                if (span.EndsWith("ence"))
                 {
-                    return word.Substring(0, wordSpan.Length - 4);
+                    return word.Substring(0, span.Length - 4);
                 }
 
-                if (wordSpan.EndsWith("oes") || wordSpan.EndsWith("zers") || wordSpan.EndsWith("shes") || wordSpan.EndsWith("sses") || wordSpan.EndsWith("tches") || wordSpan.EndsWith("zzes") || wordSpan.EndsWith("xes"))
+                if (span.EndsWith("enance"))
                 {
-                    return word.Substring(0, wordSpan.Length - 2);
+                    return span.Slice(0, span.Length - 6).ConcatenatedWith("ain");
                 }
 
-                if (wordSpan.EndsWith("ions") || wordSpan.EndsWith("isons") || wordSpan.EndsWith("ments") || wordSpan.EndsWith("ers"))
+                if (span.EndsWith("nance"))
                 {
-                    return MakeInfiniteVerb(word.Substring(0, wordSpan.Length - 1));
+                    return word.Substring(0, span.Length - 4);
                 }
 
-                return word.Substring(0, wordSpan.Length - 1);
+                return word;
             }
 
-            string FromT(in ReadOnlySpan<char> wordSpan, string word)
+            string FromN(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("et"))
+                if (span.EndsWith("ison"))
+                {
+                    return span.Slice(0, span.Length - 4).ConcatenatedWith('e');
+                }
+
+                if (span.EndsWith("ion"))
+                {
+                    return FromIon(word, span);
+                }
+
+                return word;
+            }
+
+            string FromS(string word, in ReadOnlySpan<char> span)
+            {
+                if (span.EndsWith("uccess"))
+                {
+                    return span.Slice(0, span.Length - 2).ConcatenatedWith("ed");
+                }
+
+                if (span.EndsWith("uccessors"))
+                {
+                    return span.Slice(0, span.Length - 5).ConcatenatedWith("ed");
+                }
+
+                if (span.EndsWith("ss"))
                 {
                     return word;
                 }
 
-                if (wordSpan.EndsWith("nquest"))
+                if (span.EndsWith("ies"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith('r');
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith('y');
                 }
 
-                if (wordSpan.EndsWith("nt"))
+                if (span.EndsWith("sis"))
                 {
-                    if (wordSpan.EndsWith("ant") || wordSpan.EndsWith("rnt"))
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith("ze");
+                }
+
+                if (span.EndsWith("ptors"))
+                {
+                    return span.Slice(0, span.Length - 5).ConcatenatedWith("be");
+                }
+
+                if (span.EndsWith("bbers") || span.EndsWith("ppers"))
+                {
+                    return word.Substring(0, span.Length - 4);
+                }
+
+                if (span.EndsWith("oes") || span.EndsWith("zers") || span.EndsWith("shes") || span.EndsWith("sses") || span.EndsWith("tches") || span.EndsWith("zzes") || span.EndsWith("xes"))
+                {
+                    return word.Substring(0, span.Length - 2);
+                }
+
+                if (span.EndsWith("ions") || span.EndsWith("isons") || span.EndsWith("ments") || span.EndsWith("ers"))
+                {
+                    return MakeInfiniteVerb(word.Substring(0, span.Length - 1));
+                }
+
+                return word.Substring(0, span.Length - 1);
+            }
+
+            string FromT(string word, in ReadOnlySpan<char> span)
+            {
+                if (span.EndsWith("et"))
+                {
+                    return word;
+                }
+
+                if (span.EndsWith("nquest"))
+                {
+                    return span.Slice(0, span.Length - 2).ConcatenatedWith('r');
+                }
+
+                if (span.EndsWith("nt"))
+                {
+                    if (span.EndsWith("ant") || span.EndsWith("rnt"))
                     {
-                        return word.Substring(0, wordSpan.Length - 1);
+                        return word.Substring(0, span.Length - 1);
                     }
 
-                    if (wordSpan.EndsWith("ment"))
+                    if (span.EndsWith("ment"))
                     {
-                        if (wordSpan.EndsWith("ocument") || wordSpan.EndsWith("plement") || wordSpan.EndsWith("rgument"))
+                        if (span.EndsWith("ocument") || span.EndsWith("plement") || span.EndsWith("rgument"))
                         {
                             return word;
                         }
 
-                        return word.Substring(0, wordSpan.Length - 4);
+                        return word.Substring(0, span.Length - 4);
                     }
 
                     return word;
                 }
 
-                if (wordSpan.EndsWith("pt"))
+                if (span.EndsWith("pt"))
                 {
-                    if (wordSpan.EndsWith("eapt"))
+                    if (span.EndsWith("eapt"))
                     {
-                        return word.Substring(0, wordSpan.Length - 1);
+                        return word.Substring(0, span.Length - 1);
                     }
 
-                    if (wordSpan.EndsWith("ept"))
+                    if (span.EndsWith("ept"))
                     {
-                        if (wordSpan.EndsWith("cept"))
+                        if (span.EndsWith("cept"))
                         {
                             return word;
                         }
 
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("ep");
+                        return span.Slice(0, span.Length - 2).ConcatenatedWith("ep");
                     }
 
-                    if (wordSpan.EndsWith("ript"))
+                    if (span.EndsWith("ript"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("be");
+                        return span.Slice(0, span.Length - 2).ConcatenatedWith("be");
                     }
 
                     return word;
                 }
 
-                if (wordSpan.EndsWith("lt"))
+                if (span.EndsWith("lt"))
                 {
-                    if (wordSpan.EndsWith("elt"))
+                    if (span.EndsWith("elt"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('l');
+                        return span.Slice(0, span.Length - 1).ConcatenatedWith('l');
                     }
 
-                    if (wordSpan.EndsWith("alt"))
+                    if (span.EndsWith("alt"))
                     {
-                        return word.Substring(0, wordSpan.Length - 1);
+                        return word.Substring(0, span.Length - 1);
                     }
 
-                    if (wordSpan.EndsWith("ilt"))
+                    if (span.EndsWith("ilt"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('d');
+                        return span.Slice(0, span.Length - 1).ConcatenatedWith('d');
                     }
                 }
 
-                if (wordSpan.EndsWith("amt"))
+                if (span.EndsWith("amt"))
                 {
-                    return word.Substring(0, wordSpan.Length - 1);
+                    return word.Substring(0, span.Length - 1);
                 }
 
                 return word;
@@ -1874,23 +1849,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var pastVerb = CreatePastVerb(word);
 
-                PastVerbsOnly.Add(pastVerb);
+                using (PastVerbsOnlyLock.InWriteMode())
+                {
+                    PastVerbsOnly.Add(pastVerb);
+                }
 
                 return pastVerb;
             }
 
             string CreatePastVerb(string word)
             {
-                var wordSpan = word.AsSpan();
+                var span = word.AsSpan();
 
-                if (TryGetVerbForPrefixedVerb(wordSpan, MakePastTenseVerb, out string verb))
+                if (TryGetVerbForPrefixedVerb(span, MakePastTenseVerb, out string verb))
                 {
                     return verb;
                 }
 
-                if (wordSpan.EndsWith("ed"))
+                if (span.EndsWith("ed"))
                 {
-                    if (wordSpan.EndsWith("eed"))
+                    if (span.EndsWith("eed"))
                     {
                         return word + "ed";
                     }
@@ -1898,31 +1876,31 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word;
                 }
 
-                if (wordSpan.EndsWith("eep"))
+                if (span.EndsWith("eep"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("pt");
+                    return span.Slice(0, span.Length - 2).ConcatenatedWith("pt");
                 }
 
-                if (wordSpan.EndsWith("sis"))
+                if (span.EndsWith("sis"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("zed");
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith("zed");
                 }
 
-                if (IsGerundVerb(wordSpan)
-                 || IsThirdPersonSingularVerb(wordSpan)
-                 || wordSpan.EndsWith("on")
-                 || wordSpan.EndsWith("er")
-                 || wordSpan.EndsWith("ers")
-                 || wordSpan.EndsWith("tor")
-                 || wordSpan.EndsWith("tors")
-                 || wordSpan.EndsWith("uest")
-                 || wordSpan.EndsWith("uests")
-                 || wordSpan.EndsWith("cript")
-                 || wordSpan.EndsWith("ment")
-                 || wordSpan.EndsWith("ence")
-                 || wordSpan.EndsWith("nance")
-                 || wordSpan.EndsWith("ure")
-                 || wordSpan.EndsWith("pt"))
+                if (IsGerundVerb(span)
+                 || IsThirdPersonSingularVerb(span)
+                 || span.EndsWith("on")
+                 || span.EndsWith("er")
+                 || span.EndsWith("ers")
+                 || span.EndsWith("tor")
+                 || span.EndsWith("tors")
+                 || span.EndsWith("uest")
+                 || span.EndsWith("uests")
+                 || span.EndsWith("cript")
+                 || span.EndsWith("ment")
+                 || span.EndsWith("ence")
+                 || span.EndsWith("nance")
+                 || span.EndsWith("ure")
+                 || span.EndsWith("pt"))
                 {
                     word = MakeInfiniteVerb(word);
 
@@ -1931,118 +1909,58 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return pastTense;
                     }
 
-                    wordSpan = word.AsSpan();
-                }
+                    span = word.AsSpan();
 
-                if (wordSpan.EndsWith('d'))
-                {
-                    if (wordSpan.EndsWith("ld"))
+                    if (span.IsEmpty)
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('t');
+                        return string.Empty;
                     }
                 }
-                else if (wordSpan.EndsWith('e'))
+
+                var lastChar = span[span.Length - 1];
+
+                switch (lastChar)
                 {
-                    if (wordSpan.EndsWith("ake"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("oke");
-                    }
-
-                    if (wordSpan.EndsWith("ive"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("ove");
-                    }
-
-                    if (wordSpan.EndsWith("voke"))
-                    {
-                        return wordSpan.ConcatenatedWith('d');
-                    }
-
-                    if (wordSpan.EndsWith("oke"))
-                    {
-                        return word;
-                    }
-
-                    return wordSpan.ConcatenatedWith('d');
-                }
-                else if (wordSpan.EndsWith('g'))
-                {
-                    if (wordSpan.EndsWith("ing"))
+                    case 'd' when span.EndsWith("ld"): return span.Slice(0, span.Length - 1).ConcatenatedWith('t');
+                    case 'e' when span.EndsWith("ake"): return span.Slice(0, span.Length - 3).ConcatenatedWith("oke");
+                    case 'e' when span.EndsWith("ive"): return span.Slice(0, span.Length - 3).ConcatenatedWith("ove");
+                    case 'e' when span.EndsWith("voke"): return span.ConcatenatedWith('d');
+                    case 'e' when span.EndsWith("oke"): return word;
+                    case 'e': return span.ConcatenatedWith('d');
+                    case 'g' when span.EndsWith("ing"):
                     {
                         // could be a noun ending with 'ing'
-                        if (wordSpan.EndsWith("lding"))
+                        if (span.EndsWith("lding"))
                         {
-                            return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('t');
+                            return span.Slice(0, span.Length - 4).ConcatenatedWith('t');
                         }
 
                         // could be a noun ending with 'ing'
-                        if (wordSpan.EndsWith("melling"))
+                        if (span.EndsWith("melling"))
                         {
-                            return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('t');
+                            return span.Slice(0, span.Length - 4).ConcatenatedWith('t');
                         }
 
                         // could be a noun ending with 'ing'
-                        if (wordSpan.EndsWith("tting"))
+                        if (span.EndsWith("tting"))
                         {
-                            return MakePastTenseVerb(word.Substring(0, wordSpan.Length - 4));
+                            return MakePastTenseVerb(word.Substring(0, span.Length - 4));
                         }
 
-                        return MakePastTenseVerb(word.Substring(0, wordSpan.Length - 3));
-                    }
-                }
-                else if (wordSpan.EndsWith('n'))
-                {
-                    if (wordSpan.EndsWith("ean"))
-                    {
-                        return wordSpan.ConcatenatedWith('t');
+                        return MakePastTenseVerb(word.Substring(0, span.Length - 3));
                     }
 
-                    if (wordSpan.EndsWith("earn"))
+                    case 'n' when span.EndsWith("ean"):
+                    case 'n' when span.EndsWith("earn"): return span.ConcatenatedWith('t');
+                    case 'p' when span.EndsWith("eap"): return word + "t";
+                    case 'r' when span.EndsWith("lor"): return word + "ized";
+                    case 'r' when span.EndsWith("uccessor"): return span.Slice(0, span.Length - 4).ConcatenatedWith("eded");
+                    case 's' when span.EndsWith("uccess"): return span.Slice(0, span.Length - 2).ConcatenatedWith("eded");
+                    case 's' when span.EndsWith("uccessors"): return span.Slice(0, span.Length - 5).ConcatenatedWith("eded");
+                    case 't' when span.EndsWith("lt"): return word;
+                    case 't' when span.EndsWith("ept"):
                     {
-                        return wordSpan.ConcatenatedWith('t');
-                    }
-                }
-                else if (wordSpan.EndsWith('p'))
-                {
-                    if (wordSpan.EndsWith("eap"))
-                    {
-                        return word + "t";
-                    }
-                }
-                else if (wordSpan.EndsWith('r'))
-                {
-                    if (wordSpan.EndsWith("lor"))
-                    {
-                        return word + "ized";
-                    }
-
-                    if (wordSpan.EndsWith("uccessor"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith("eded");
-                    }
-                }
-                else if (wordSpan.EndsWith('s'))
-                {
-                    if (wordSpan.EndsWith("uccess"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("eded");
-                    }
-
-                    if (wordSpan.EndsWith("uccessors"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith("eded");
-                    }
-                }
-                else if (wordSpan.EndsWith('t'))
-                {
-                    if (wordSpan.EndsWith("lt"))
-                    {
-                        return word;
-                    }
-
-                    if (wordSpan.EndsWith("ept"))
-                    {
-                        if (wordSpan.EndsWith("cept"))
+                        if (span.EndsWith("cept"))
                         {
                             return word + "ed";
                         }
@@ -2050,35 +1968,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word;
                     }
 
-                    if (wordSpan.EndsWith("eant"))
-                    {
-                        return word;
-                    }
-
-                    if (wordSpan.EndsWith("earnt"))
-                    {
-                        return word;
-                    }
-                }
-                else if (wordSpan.EndsWith('y'))
-                {
-                    if (wordSpan.EndsWith("ay") || wordSpan.EndsWith("ey"))
-                    {
-                        return word + "ed";
-                    }
-
-                    if (wordSpan.EndsWith("ery") || wordSpan.EndsWith("iry"))
-                    {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith("ed");
-                    }
-
-                    return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith("ied");
+                    case 't' when span.EndsWith("eant"):
+                    case 't' when span.EndsWith("earnt"): return word;
+                    case 'y' when span.EndsWith("ay") || span.EndsWith("ey"): return word + "ed";
+                    case 'y' when span.EndsWith("ery") || span.EndsWith("iry"): return span.Slice(0, span.Length - 1).ConcatenatedWith("ed");
+                    case 'y': return span.Slice(0, span.Length - 1).ConcatenatedWith("ied");
                 }
 
-                if (WantsDoubleConstants(wordSpan))
+                if (WantsDoubleConstants(span))
                 {
                     // duplicate word's last consonant
-                    return wordSpan.ConcatenatedWith(wordSpan[wordSpan.Length - 1], "ed");
+                    return span.ConcatenatedWith(lastChar, "ed");
                 }
 
                 return word + "ed";
@@ -2137,170 +2037,140 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateThirdPersonSingularVerb(string word)
             {
-                var wordSpan = word.AsSpan();
+                var span = word.AsSpan();
 
-                if (TryGetVerbForPrefixedVerb(wordSpan, MakeThirdPersonSingularVerb, out string verb))
+                if (span.Length is 0)
+                {
+                    return string.Empty;
+                }
+
+                if (TryGetVerbForPrefixedVerb(span, MakeThirdPersonSingularVerb, out string verb))
                 {
                     return verb;
                 }
 
-                if (wordSpan.Length > 0)
+                const char Apostrophe = '\'';
+                const char DoubleQuote = '\"';
+
+                var firstChar = span[0];
+                var lastChar = span[span.Length - 1];
+
+                switch (firstChar)
                 {
-                    const char Apostrophe = '\'';
-                    const char DoubleQuote = '\"';
+                    case Apostrophe when lastChar == Apostrophe:
+                        return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
 
-                    var firstChar = wordSpan[0];
-                    var lastChar = wordSpan[wordSpan.Length - 1];
-
-                    switch (firstChar)
-                    {
-                        case Apostrophe when lastChar == Apostrophe:
-                            return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
-
-                        case DoubleQuote when lastChar == DoubleQuote:
-                            return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
-                    }
+                    case DoubleQuote when lastChar == DoubleQuote:
+                        return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
                 }
 
-                if (wordSpan.EndsWith('d'))
+                switch (lastChar)
                 {
-                    return FromD(wordSpan);
+                    case 'd': return FromD(span);
+                    case 'e': return FromE(span);
+                    case 'g': return FromG(word, span);
+                    case 'l': return FromL(span);
+                    case 'n': return FromN(word, span);
+                    case 'r': return FromR(word, span);
+                    case 's': return FromS(word, span);
+                    case 't': return FromT(word, span);
+                    case 'y': return FromY(span);
+                    default:
+                        return AppendEndingS(span);
                 }
-
-                if (wordSpan.EndsWith('e'))
-                {
-                    return FromE(wordSpan);
-                }
-
-                if (wordSpan.EndsWith('g'))
-                {
-                    return FromG(wordSpan, word);
-                }
-
-                if (wordSpan.EndsWith('l'))
-                {
-                    return FromL(wordSpan);
-                }
-
-                if (wordSpan.EndsWith('n'))
-                {
-                    return FromN(wordSpan, word);
-                }
-
-                if (wordSpan.EndsWith('r'))
-                {
-                    return FromR(wordSpan, word);
-                }
-
-                if (wordSpan.EndsWith('s'))
-                {
-                    return FromS(wordSpan, word);
-                }
-
-                if (wordSpan.EndsWith('t'))
-                {
-                    return FromT(wordSpan, word);
-                }
-
-                if (wordSpan.EndsWith('y'))
-                {
-                    return FromY(wordSpan);
-                }
-
-                return AppendEndingS(wordSpan);
             }
 
-            string FromPast(in ReadOnlySpan<char> wordSpan)
+            string FromPast(in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("eed"))
+                if (span.EndsWith("eed"))
                 {
-                    return wordSpan.ConcatenatedWith('s');
+                    return span.ConcatenatedWith('s');
                 }
 
                 var difference = 2;
 
-                if (wordSpan.EndsWithAny(ThreeCharacterPastEndings))
+                if (span.EndsWithAny(ThreeCharacterPastEndings))
                 {
                     difference = 3;
                 }
-                else if (wordSpan.EndsWithAny(TwoCharacterPastEndings))
+                else if (span.EndsWithAny(TwoCharacterPastEndings))
                 {
                     difference = 2;
                 }
-                else if (wordSpan.EndsWithAny(SpecialPastEndings))
+                else if (span.EndsWithAny(SpecialPastEndings))
                 {
                     difference = 1;
                 }
 
-                return wordSpan.Slice(0, wordSpan.Length - difference).ConcatenatedWith('s');
+                return span.Slice(0, span.Length - difference).ConcatenatedWith('s');
             }
 
-            string FromIng(in ReadOnlySpan<char> wordSpan, string word)
+            string FromIng(string word, in ReadOnlySpan<char> span)
             {
                 var infiniteVerb = MakeInfiniteVerb(word);
 
                 if (infiniteVerb == word)
                 {
                     // did not work, so just use this to avoid infinite recursion
-                    return AppendEndingS(wordSpan);
+                    return AppendEndingS(span);
                 }
 
                 return MakeThirdPersonSingularVerb(infiniteVerb);
             }
 
-            string FromD(in ReadOnlySpan<char> wordSpan)
+            string FromD(in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("ed"))
+                if (span.EndsWith("ed"))
                 {
-                    return FromPast(wordSpan);
+                    return FromPast(span);
                 }
 
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromE(in ReadOnlySpan<char> wordSpan)
+            string FromE(in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("rrence"))
+                if (span.EndsWith("rrence"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 5).ConcatenatedWith('s');
+                    return span.Slice(0, span.Length - 5).ConcatenatedWith('s');
                 }
 
-                if (wordSpan.EndsWith("rence"))
+                if (span.EndsWith("rence"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('s');
+                    return span.Slice(0, span.Length - 4).ConcatenatedWith('s');
                 }
 
-                if (wordSpan.EndsWith("osure"))
+                if (span.EndsWith("osure"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("es");
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith("es");
                 }
 
-                if (wordSpan.EndsWith("oice"))
+                if (span.EndsWith("oice"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("oses");
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith("oses");
                 }
 
-                return wordSpan.ConcatenatedWith('s');
+                return span.ConcatenatedWith('s');
             }
 
-            string FromG(in ReadOnlySpan<char> wordSpan, string word)
+            string FromG(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("ing"))
+                if (span.EndsWith("ing"))
                 {
-                    return FromIng(wordSpan, word);
+                    return FromIng(word, span);
                 }
 
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromL(in ReadOnlySpan<char> wordSpan)
+            string FromL(in ReadOnlySpan<char> span)
             {
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromN(in ReadOnlySpan<char> wordSpan, string word)
+            string FromN(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("ion") || wordSpan.EndsWith("ison") || wordSpan.EndsWith("roken") || wordSpan.EndsWith("gan") || wordSpan.EndsWith("osen"))
+                if (span.EndsWith("ion") || span.EndsWith("ison") || span.EndsWith("roken") || span.EndsWith("gan") || span.EndsWith("osen"))
                 {
                     var infinite = MakeInfiniteVerb(word);
 
@@ -2310,60 +2180,60 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromR(in ReadOnlySpan<char> wordSpan, string word)
+            string FromR(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("er"))
+                if (span.EndsWith("er"))
                 {
-                    if (wordSpan.EndsWith("gister"))
+                    if (span.EndsWith("gister"))
                     {
-                        return wordSpan.ConcatenatedWith('s');
+                        return span.ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("liver"))
+                    if (span.EndsWith("liver"))
                     {
-                        return wordSpan.ConcatenatedWith('s');
+                        return span.ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("iver"))
+                    if (span.EndsWith("iver"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 1).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("lter"))
+                    if (span.EndsWith("lter"))
                     {
-                        return wordSpan.ConcatenatedWith('s');
+                        return span.ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("ter"))
+                    if (span.EndsWith("ter"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 2).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("gger"))
+                    if (span.EndsWith("gger"))
                     {
-                        return wordSpan.ConcatenatedWith('s');
+                        return span.ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("bber") || wordSpan.EndsWith("pper"))
+                    if (span.EndsWith("bber") || span.EndsWith("pper"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 3).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("nger"))
+                    if (span.EndsWith("nger"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 2).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("ger") || wordSpan.EndsWith("ber") || wordSpan.EndsWith("zer") || wordSpan.EndsWith("encer"))
+                    if (span.EndsWith("ger") || span.EndsWith("ber") || span.EndsWith("zer") || span.EndsWith("encer"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 1).ConcatenatedWith('s');
                     }
                 }
 
-                if (wordSpan.EndsWith("or"))
+                if (span.EndsWith("or"))
                 {
                     var infinite = MakeInfiniteVerb(word);
 
@@ -2373,70 +2243,70 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromS(in ReadOnlySpan<char> wordSpan, string word)
+            string FromS(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("ss"))
+                if (span.EndsWith("ss"))
                 {
-                    if (wordSpan.EndsWith("uccess"))
+                    if (span.EndsWith("uccess"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("eds");
+                        return span.Slice(0, span.Length - 2).ConcatenatedWith("eds");
                     }
 
                     return word + "es";
                 }
 
-                if (wordSpan.EndsWith("sis"))
+                if (span.EndsWith("sis"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith("zes");
+                    return span.Slice(0, span.Length - 3).ConcatenatedWith("zes");
                 }
 
-                if (wordSpan.EndsWith("oes") || wordSpan.EndsWith("shes"))
+                if (span.EndsWith("oes") || span.EndsWith("shes"))
                 {
                     return word;
                 }
 
-                if (wordSpan.EndsWith("ers"))
+                if (span.EndsWith("ers"))
                 {
-                    if (wordSpan.EndsWith("ggers"))
+                    if (span.EndsWith("ggers"))
                     {
                         return word;
                     }
 
-                    if (wordSpan.EndsWith("bbers") || wordSpan.EndsWith("ppers"))
+                    if (span.EndsWith("bbers") || span.EndsWith("ppers"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 4).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 4).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("ngers"))
+                    if (span.EndsWith("ngers"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 3).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("gers") || wordSpan.EndsWith("bers") || wordSpan.EndsWith("zers"))
+                    if (span.EndsWith("gers") || span.EndsWith("bers") || span.EndsWith("zers"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 2).ConcatenatedWith('s');
                     }
 
-                    if (wordSpan.EndsWith("gisters"))
+                    if (span.EndsWith("gisters"))
                     {
                         return word;
                     }
 
-                    if (wordSpan.EndsWith("lters"))
+                    if (span.EndsWith("lters"))
                     {
                         return word;
                     }
 
-                    if (wordSpan.EndsWith("ters"))
+                    if (span.EndsWith("ters"))
                     {
-                        return wordSpan.Slice(0, wordSpan.Length - 3).ConcatenatedWith('s');
+                        return span.Slice(0, span.Length - 3).ConcatenatedWith('s');
                     }
                 }
 
-                if (wordSpan.EndsWith("ions") || wordSpan.EndsWith("ments") || wordSpan.EndsWith("ers") || wordSpan.EndsWith("ors"))
+                if (span.EndsWith("ions") || span.EndsWith("ments") || span.EndsWith("ers") || span.EndsWith("ors"))
                 {
                     var infinite = MakeInfiniteVerb(word);
 
@@ -2446,37 +2316,37 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
-                if (IsThirdPersonSingularVerb(wordSpan))
+                if (IsThirdPersonSingularVerb(span))
                 {
                     return word;
                 }
 
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromT(in ReadOnlySpan<char> wordSpan, string word)
+            string FromT(string word, in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("et") || wordSpan.EndsWith("it") || wordSpan.EndsWith("cept") || wordSpan.EndsWith("dapt") || wordSpan.EndsWith("opt") || wordSpan.EndsWith("ort"))
+                if (span.EndsWith("et") || span.EndsWith("it") || span.EndsWith("cept") || span.EndsWith("dapt") || span.EndsWith("opt") || span.EndsWith("ort"))
                 {
-                    return wordSpan.ConcatenatedWith('s');
+                    return span.ConcatenatedWith('s');
                 }
 
-                if (wordSpan.EndsWith("ept"))
+                if (span.EndsWith("ept"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("eps");
+                    return span.Slice(0, span.Length - 2).ConcatenatedWith("eps");
                 }
 
-                if (wordSpan.EndsWith("eapt"))
+                if (span.EndsWith("eapt"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('s');
+                    return span.Slice(0, span.Length - 1).ConcatenatedWith('s');
                 }
 
-                if (wordSpan.EndsWith("ipt"))
+                if (span.EndsWith("ipt"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 2).ConcatenatedWith("bes");
+                    return span.Slice(0, span.Length - 2).ConcatenatedWith("bes");
                 }
 
-                if (wordSpan.EndsWith("lt") || wordSpan.EndsWith("mt") || wordSpan.EndsWith("nt") || wordSpan.EndsWith("aught") || wordSpan.EndsWith("uest"))
+                if (span.EndsWith("lt") || span.EndsWith("mt") || span.EndsWith("nt") || span.EndsWith("aught") || span.EndsWith("uest"))
                 {
                     var infinite = MakeInfiniteVerb(word);
 
@@ -2486,36 +2356,36 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
-                return AppendEndingS(wordSpan);
+                return AppendEndingS(span);
             }
 
-            string FromY(in ReadOnlySpan<char> wordSpan)
+            string FromY(in ReadOnlySpan<char> span)
             {
-                if (wordSpan.EndsWith("ay") || wordSpan.EndsWith("ey"))
+                if (span.EndsWith("ay") || span.EndsWith("ey"))
                 {
-                    return wordSpan.ConcatenatedWith('s');
+                    return span.ConcatenatedWith('s');
                 }
 
-                if (wordSpan.EndsWith("iry"))
+                if (span.EndsWith("iry"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith("es");
+                    return span.Slice(0, span.Length - 1).ConcatenatedWith("es");
                 }
 
-                if (wordSpan.EndsWith("ivery"))
+                if (span.EndsWith("ivery"))
                 {
-                    return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith('s');
+                    return span.Slice(0, span.Length - 1).ConcatenatedWith('s');
                 }
 
-                return wordSpan.Slice(0, wordSpan.Length - 1).ConcatenatedWith("ies");
+                return span.Slice(0, span.Length - 1).ConcatenatedWith("ies");
             }
 
-            string AppendEndingS(in ReadOnlySpan<char> wordSpan)
+            string AppendEndingS(in ReadOnlySpan<char> span)
             {
-                var result = wordSpan.ConcatenatedWith('s');
+                var result = span.ConcatenatedWith('s');
 
                 if (IsTwoCharacterEndingsWithS(result))
                 {
-                    return wordSpan.ConcatenatedWith("es");
+                    return span.ConcatenatedWith("es");
                 }
 
                 return result;
