@@ -11608,6 +11608,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods named &apos;Dispose&apos;, &apos;DisposeCore&apos;, or &apos;DisposeAsync&apos; should complete cleanup operations without directly throwing exceptions. Exceptions from disposal paths can make error handling unreliable and may hide the original failure. The same applies to properties named &apos;IsDisposed&apos;, which should report the disposal state without throwing exceptions.
+        ///Keeping these members exception-free makes resource cleanup and state checks more predictable and robust..
+        /// </summary>
+        internal static string MiKo_3019_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3019_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not throw from dispose-related member.
+        /// </summary>
+        internal static string MiKo_3019_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3019_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not throw from dispose-related members.
+        /// </summary>
+        internal static string MiKo_3019_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3019_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos;.
         /// </summary>
         internal static string MiKo_3020_CodeFixTitle {
