@@ -16602,6 +16602,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty statements can cause misleading control flow and introduce logic errors.
+        ///Developers often expect the following statement or block to be executed conditionally or repeatedly, but the empty statement becomes the actual body instead..
+        /// </summary>
+        internal static string MiKo_3506_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3506_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty statement.
+        /// </summary>
+        internal static string MiKo_3506_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3506_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty statements are misleading.
+        /// </summary>
+        internal static string MiKo_3506_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3506_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place and order method side-by-side with overloads.
         /// </summary>
         internal static string MiKo_4001_CodeFixTitle {
