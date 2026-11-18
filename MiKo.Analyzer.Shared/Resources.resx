@@ -5798,6 +5798,16 @@ This makes APIs easier to use and the intent of the code clearer.</value>
   <data name="MiKo_3505_Title" xml:space="preserve">
     <value>Do not return values directly after try-catch blocks</value>
   </data>
+  <data name="MiKo_3506_Description" xml:space="preserve">
+    <value>Empty statements can cause misleading control flow and introduce logic errors.
+Developers often expect the following statement or block to be executed conditionally or repeatedly, but the empty statement becomes the actual body instead.</value>
+  </data>
+  <data name="MiKo_3506_MessageFormat" xml:space="preserve">
+    <value>Remove empty statement</value>
+  </data>
+  <data name="MiKo_3506_Title" xml:space="preserve">
+    <value>Empty statements are misleading</value>
+  </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>
   </data>

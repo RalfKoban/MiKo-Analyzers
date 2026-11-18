@@ -29,7 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is TryStatementSyntax node)
             {
-                ReportDiagnostics(context, Analyze(node, context.SemanticModel));
+                var issue = Analyze(node, context.SemanticModel);
+
+                if (issue != null)
+                {
+                    ReportDiagnostics(context, issue);
+                }
             }
         }
 

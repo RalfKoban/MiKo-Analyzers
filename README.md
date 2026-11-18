@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 595 rules that are currently provided by the analyzers.
+The following tables list all the 596 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -531,6 +531,7 @@ The following tables list all the 595 rules that are currently provided by the a
 |[MiKo_3503](/Documentation/MiKo_3503.md)|Do not assign variables in try-catch blocks that are returned directly outside|&#x2713;|&#x2713;|
 |[MiKo_3504](/Documentation/MiKo_3504.md)|Do not use train wrecks|&#x2713;|\-|
 |[MiKo_3505](/Documentation/MiKo_3505.md)|Do not return values directly after try-catch blocks|&#x2713;|&#x2713;|
+|[MiKo_3506](/Documentation/MiKo_3506.md)|Empty statements are misleading|&#x2713;|\-|
 
 ### Ordering
 
