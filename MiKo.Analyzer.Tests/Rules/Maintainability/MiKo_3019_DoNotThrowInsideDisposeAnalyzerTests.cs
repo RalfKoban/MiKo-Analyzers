@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -130,22 +128,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_IsDisposed_required() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    private bool IsDisposed
-    {
-        required
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
-");
-
-        [Test]
         public void An_issue_is_reported_for_IsDisposed_init() => An_issue_is_reported_for(@"
 using System;
 
@@ -187,6 +169,95 @@ public class TestMe
     {
         get => throw new NotImplementedException();
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_IsDisposed_expression_property_explicit_interface_implementation() => An_issue_is_reported_for(@"
+using System;
+
+public interface IState
+{
+    bool IsDisposed { get; }
+}
+
+public class TestMe : IState
+{
+    bool IState.IsDisposed => throw new NotImplementedException();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_IsDisposed_getter_explicit_interface_implementation() => An_issue_is_reported_for(@"
+using System;
+
+public interface IState
+{
+    bool IsDisposed { get; }
+}
+
+public class TestMe : IState
+{
+    bool IState.IsDisposed
+    {
+        get
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_IsDisposed_expression_getter_explicit_interface_implementation() => An_issue_is_reported_for(@"
+using System;
+
+public interface IState
+{
+    bool IsDisposed { get; }
+}
+
+public class TestMe : IState
+{
+    bool IState.IsDisposed
+    {
+        get => throw new NotImplementedException();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_IsDisposed_setter_explicit_interface_implementation() => An_issue_is_reported_for(@"
+using System;
+
+public interface IState
+{
+    bool IsDisposed { get; set; }
+}
+
+public class TestMe : IState
+{
+    bool IState.IsDisposed
+    {
+        get => false;
+        set
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_IsDisposed_explicit_interface_implementation_that_does_not_throw() => No_issue_is_reported_for(@"
+public interface IState
+{
+    bool IsDisposed { get; }
+}
+
+public class TestMe : IState
+{
+    bool IState.IsDisposed => false;
 }
 ");
 
