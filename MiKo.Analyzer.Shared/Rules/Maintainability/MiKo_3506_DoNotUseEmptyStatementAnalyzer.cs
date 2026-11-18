@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (statement.Parent)
             {
                 case IfStatementSyntax i when i.Statement == statement:
+                case ElseClauseSyntax e when e.Statement == statement:
                 case DoStatementSyntax d when d.Statement == statement:
                 case WhileStatementSyntax w when w.Statement == statement:
                 case CommonForEachStatementSyntax c when c.Statement == statement:

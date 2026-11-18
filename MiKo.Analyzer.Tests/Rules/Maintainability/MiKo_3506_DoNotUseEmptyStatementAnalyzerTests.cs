@@ -49,6 +49,52 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_else_statement_with_block_as_body() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            DoSomething(true);
+        }
+        else
+        {
+            DoSomething(false);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_else_statement_with_statement_as_body() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+            DoSomething(true);
+        else
+            DoSomething(false);
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_else_statement_with_empty_statement_as_body() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+            DoSomething(true);
+        else;
+            DoSomething(false);
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_foreach_statement_with_block_as_body() => No_issue_is_reported_for(@"
 public class TestMe
 {
