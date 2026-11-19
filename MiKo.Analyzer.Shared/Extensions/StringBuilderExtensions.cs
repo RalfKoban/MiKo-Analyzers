@@ -355,6 +355,7 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         /// <param name="matcher">
         /// The (optional) matcher to invoke to see if the text contains a specific text pattern.
+        /// The default is <see langword="null"/>.
         /// </param>
         /// <returns>
         /// A <see cref="StringBuilder"/> where all occurrences of the specified keys are replaced with their corresponding values.

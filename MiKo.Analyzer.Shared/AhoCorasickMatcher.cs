@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers
     /// <summary>
     /// Provides a reusable multi-pattern matcher based on the Aho-Corasick algorithm that determines whether any of a fixed set of patterns is contained within it.
     /// This is done in a single pass over the searched text.
+    /// This class cannot be inherited.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -37,38 +38,38 @@ namespace MiKoSolutions.Analyzers
     public sealed class AhoCorasickMatcher
     {
         /// <summary>
-        /// The sorted list of every character that occurs in any pattern.
-        /// Used to map a char to a dense alphabet index via binary search.
+        /// Contains the sorted list of every character that occurs in any pattern.
+        /// Maps a <see langword="char"/> to a dense alphabet index via binary search.
         /// </summary>
         private readonly char[] m_alphabet;
 
         /// <summary>
-        /// For each state, the "default" target used by most alphabet characters.
+        /// Contains the "default" target of each state, used by most alphabet characters.
         /// Characters that behave differently are stored separately as exceptions (see <see cref="m_exceptionChars"/> and <see cref="m_exceptionTargets"/>).
         /// This keeps memory usage low.
         /// </summary>
         private readonly int[] m_defaultTransition;
 
         /// <summary>
-        /// For each state, the start index into <see cref="m_exceptionChars"/> / <see cref="m_exceptionTargets"/>.
+        /// Contains the start index of each state into <see cref="m_exceptionChars"/> / <see cref="m_exceptionTargets"/>.
         /// A state's exceptions span from <see cref="m_exceptionOffsets"/><c>[state]</c> to <see cref="m_exceptionOffsets"/><c>[state + 1]</c> (exclusive).
         /// </summary>
         private readonly int[] m_exceptionOffsets;
 
         /// <summary>
-        /// The characters that do not use <see cref="m_defaultTransition"/> for their state.
+        /// Contains the characters that do not use <see cref="m_defaultTransition"/> for their state.
         /// Sorted per state (see <see cref="m_exceptionOffsets"/>) so they can be binary-searched.
         /// </summary>
         private readonly char[] m_exceptionChars;
 
         /// <summary>
-        /// The transition target for the corresponding entry in <see cref="m_exceptionChars"/>.
+        /// Contains the transition target for the corresponding entry in <see cref="m_exceptionChars"/>.
         /// </summary>
         private readonly int[] m_exceptionTargets;
 
         /// <summary>
-        /// <c>m_isTerminal[state]</c> indicates whether reaching that state means a pattern was matched.
-        /// Stored as a <see cref="BitArray"/> (1 bit per state) instead of <c>bool[]</c> (1 byte per state) to reduce memory usage.
+        /// Contains the flags that indicate for each state whether reaching it means a pattern was matched (<c>m_isTerminal[state]</c>).
+        /// Stored as a <see cref="BitArray"/> (1 bit per state) instead of <c>bool[]</c> (1 <see langword="byte"/> per state) to reduce memory usage.
         /// </summary>
         private readonly BitArray m_isTerminal;
 
@@ -109,12 +110,11 @@ namespace MiKoSolutions.Analyzers
                 node.IsTerminal = true;
             }
 
-            // resolve the whole transition table once, up-front, based on the mutable 'Node' graph
+            // resolve whole transition table up-front, based on mutable 'Node' graph
             BuildDeterministicTransitions(root, alphabet);
 
-            // compile the resolved 'Node' graph into flat arrays so that 'IsMatch' operates on cheap array indexing only.
-            // No dictionary lookups, no pointer chasing.
-            // The result never mutates any state afterward, so instances are safe to share and to query concurrently from multiple threads.
+            // compile resolved 'Node' graph into flat arrays, so 'IsMatch' needs array indexing only (no dictionary lookups, no pointer chasing)
+            // immutable afterwards, so thread-safe to share and query concurrently
             m_alphabet = alphabet.ToArray();
 
             Array.Sort(m_alphabet);
@@ -146,13 +146,13 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public bool IsMatch(in ReadOnlySpan<char> text)
         {
-            var state = 0; // root
+            var state = 0; // root state
 
             for (int index = 0, length = text.Length; index < length; index++)
             {
                 var c = text[index];
 
-                // unknown character (not part of any pattern): simply stay at / return to the root
+                // unknown character (in no pattern) stays at or returns to root
                 state = Array.BinarySearch(m_alphabet, c) < 0 ? 0 : NextState(state, c);
 
                 if (m_isTerminal[state])
@@ -174,14 +174,14 @@ namespace MiKoSolutions.Analyzers
         /// </remarks>
         private static void BuildDeterministicTransitions(Node root, HashSet<char> alphabet)
         {
-            // snapshot the root's genuine trie edges before extending them with fallback shortcuts
+            // snapshot of root's real trie edges, taken before adding fallback shortcuts
             var rootRealChildren = new List<Node>(root.Children.Values);
 
             foreach (var c in alphabet)
             {
                 if (root.Children.ContainsKey(c) is false)
                 {
-                    root.Children[c] = root; // unknown characters seen while at the root simply stay at the root
+                    root.Children[c] = root; // unknown characters at root stay at root
                 }
             }
 
@@ -196,14 +196,14 @@ namespace MiKoSolutions.Analyzers
             {
                 var current = queue.Dequeue();
 
-                // snapshot the node's genuine trie edges before extending them with fallback shortcuts
+                // snapshot of node's real trie edges, taken before adding fallback shortcuts
                 var realChildren = new Dictionary<char, Node>(current.Children);
 
                 foreach (var c in alphabet)
                 {
                     if (realChildren.TryGetValue(c, out var child))
                     {
-                        // 'current.Fail' was processed earlier (shallower BFS level) or is the root. Its transition table is already complete.
+                        // 'current.Fail' is root or on shallower BFS level, so its transitions are already complete
                         child.Fail = current.Fail.Children[c];
 
                         if (child.Fail.IsTerminal)
@@ -215,7 +215,7 @@ namespace MiKoSolutions.Analyzers
                     }
                     else
                     {
-                        // fallback shortcut, resolved from the already-complete parent transition (no real trie edge for this character)
+                        // fallback shortcut for 'c' (no real trie edge), taken from already-complete 'Fail' transitions
                         current.Children[c] = current.Fail.Children[c];
                     }
                 }
@@ -228,8 +228,8 @@ namespace MiKoSolutions.Analyzers
         /// </summary>
         private static void CompileToArrays(Node root, in ReadOnlySpan<char> alphabet, out int[] defaultTransition, out int[] exceptionOffsets, out char[] exceptionChars, out int[] exceptionTargets, out BitArray isTerminal)
         {
-            // assign a stable, dense integer id to every reachable node (root is always state 0).
-            // it is stored directly on the node. This makes resolving a child's state later on a cheap field read instead of a dictionary lookup.
+            // assign dense integer id to every reachable node (root is always state 0)
+            // id stored on node, as cheap field read instead of dictionary lookup
             var order = new List<Node>();
 
             var queue = new Queue<Node>();
@@ -276,19 +276,16 @@ namespace MiKoSolutions.Analyzers
 
                 for (var alphabetIndex = 0; alphabetIndex < alphabetLength; alphabetIndex++)
                 {
-                    // after 'BuildDeterministicTransitions', every node has an edge for every alphabet character.
-                    // 'Id' was assigned during the BFS above. This is a cheap field read instead of a dictionary lookup.
+                    // after 'BuildDeterministicTransitions' every node has an edge for every alphabet character
+                    // 'Id' assigned by BFS above
                     var target = node.Children[alphabet[alphabetIndex]].Id;
 
                     rowTargets[alphabetIndex] = target;
                 }
 
-                // find the target that this state jumps to most often across the whole alphabet.
-                // That target becomes the "default". Only the (comparatively few) deviating characters need to be stored explicitly as exceptions.
-                // This is done by sorting a scratch copy of the row, so that identical values end up next to each other.
-                // Then scan for the longest run of equal values.
-                // This is considerably cheaper than tallying occurrences via a dictionary. It matters since this runs once per state.
-                var defaultTarget = 0; // no alphabet characters at all (e.g. no patterns were provided): fall back to root
+                // default is most frequent target of this state across alphabet, only deviating characters become exceptions
+                // found via sorted scratch copy of row and longest run of equal values (cheaper than dictionary tally, runs once per state)
+                var defaultTarget = 0; // root, if alphabet is empty (no patterns)
 
                 if (alphabetLength > 0)
                 {
@@ -333,8 +330,7 @@ namespace MiKoSolutions.Analyzers
 
                     if (target != defaultTarget)
                     {
-                        // 'alphabet' is sorted. Appending in increasing 'alphabetIndex' order keeps each state's exception range sorted as well.
-                        // That sorted order is required for the binary search in 'NextState'.
+                        // 'alphabet' is sorted, so ascending 'alphabetIndex' keeps each state's exceptions sorted (needed for binary search in 'NextState')
                         allExceptionChars.Add(alphabet[alphabetIndex]);
                         allExceptionTargets.Add(target);
                     }
@@ -385,8 +381,11 @@ namespace MiKoSolutions.Analyzers
         {
             /// <summary>
             /// The outgoing edges of this node.
-            /// Initially only real trie edges; after <see cref="BuildDeterministicTransitions"/>, computed fallback edges are added too.
+            /// This field is read-only.
             /// </summary>
+            /// <remarks>
+            /// Initially only real trie edges; after <see cref="BuildDeterministicTransitions"/>, computed fallback edges are added too.
+            /// </remarks>
             public readonly Dictionary<char, Node> Children = new Dictionary<char, Node>();
 
             /// <summary>
