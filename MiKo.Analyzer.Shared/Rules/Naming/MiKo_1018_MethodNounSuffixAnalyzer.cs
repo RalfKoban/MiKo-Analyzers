@@ -25,6 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
+            if (symbol.ContainingType.Name.StartsWith("Throw", StringComparison.Ordinal))
+            {
+                return Array.Empty<Diagnostic>(); // do not report on 'Throw' helpers
+            }
+
             var symbolName = symbol.Name;
 
             if (symbolName.StartsWith("Throw", StringComparison.Ordinal) is false && Verbalizer.TryMakeVerb(symbolName, out var betterName))
