@@ -42,6 +42,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 #endif
         }
 
+        private static bool HasIssue(SyntaxNode node)
+        {
+            switch (node)
+            {
+                case InvocationExpressionSyntax invocation: return HasIssue(invocation);
+                case ObjectCreationExpressionSyntax creation: return HasIssue(creation);
+                default:
+                    return false;
+            }
+        }
+
         private static bool HasIssue(InvocationExpressionSyntax invocation)
         {
             switch (invocation.GetIdentifierName())
@@ -137,20 +148,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var node in declaration.DescendantNodes())
             {
-                switch (node)
+                if (HasIssue(node))
                 {
-                    case InvocationExpressionSyntax invocation when HasIssue(invocation):
-                    case ObjectCreationExpressionSyntax creation when HasIssue(creation):
+                    if (issues is null)
                     {
-                        if (issues is null)
-                        {
-                            issues = new List<Diagnostic>();
-                        }
-
-                        issues.Add(Issue(node));
-
-                        break;
+                        issues = new List<Diagnostic>();
                     }
+
+                    issues.Add(Issue(node));
                 }
             }
 
