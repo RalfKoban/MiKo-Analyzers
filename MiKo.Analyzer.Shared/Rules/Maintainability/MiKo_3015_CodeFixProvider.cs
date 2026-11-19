@@ -70,8 +70,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = argumentList.Arguments;
 
             var errorMessage = arguments.Count is 3
-                                   ? GetUpdatedErrorMessage(arguments.RemoveAt(1)) // actual argument seems to be part of the exception, so we have to ignore it when trying to find the error message
-                                   : GetUpdatedErrorMessage(argumentList);
+                               ? GetUpdatedErrorMessage(arguments.RemoveAt(1)) // actual argument seems to be part of the exception, so we have to ignore it when trying to find the error message
+                               : GetUpdatedErrorMessage(argumentList);
 
             return ArgumentList(errorMessage);
         }
@@ -136,6 +136,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return IfThrow(condition, nameof(InvalidOperationException), ToDo());
         }
 
+        private static IfStatementSyntax IfThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxKind operation)
+        {
+            return IfThrow(operation, arguments[0].Expression, arguments[1].Expression);
+        }
+
         private static IfStatementSyntax IfThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxKind operation, in SyntaxKind alternativeOperationOnLiteral)
         {
             var left = arguments[0].Expression;
@@ -152,11 +157,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return IfThrow(operation, left, right);
-        }
-
-        private static IfStatementSyntax IfThrow(in SeparatedSyntaxList<ArgumentSyntax> arguments, in SyntaxKind operation)
-        {
-            return IfThrow(operation, arguments[0].Expression, arguments[1].Expression);
         }
 
         private static IfStatementSyntax IfThrow(in SyntaxKind operation, ExpressionSyntax left, ExpressionSyntax right)
