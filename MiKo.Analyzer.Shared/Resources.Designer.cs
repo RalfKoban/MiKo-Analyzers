@@ -20295,5 +20295,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6080_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align open brace with the start of its code construct.
+        /// </summary>
+        internal static string MiKo_6081_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6081_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when the opening brace of a namespace, type, member, or statement is vertically aligned with the start of the code construct it belongs to. This makes the structure clearer and easier to scan..
+        /// </summary>
+        internal static string MiKo_6081_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6081_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align open brace with the start of its code construct.
+        /// </summary>
+        internal static string MiKo_6081_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6081_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align open brace vertically with the start of its code construct.
+        /// </summary>
+        internal static string MiKo_6081_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6081_Title", resourceCulture);
+            }
+        }
     }
 }

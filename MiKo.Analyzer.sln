@@ -715,6 +715,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6. Spacing", "6. Spacing", 
 		Documentation\MiKo_6078.md = Documentation\MiKo_6078.md
 		Documentation\MiKo_6079.md = Documentation\MiKo_6079.md
 		Documentation\MiKo_6080.md = Documentation\MiKo_6080.md
+		Documentation\MiKo_6081.md = Documentation\MiKo_6081.md
 	EndProjectSection
 EndProject
 Global
