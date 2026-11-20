@@ -165,11 +165,13 @@ public struct TestMe
         public void Code_gets_fixed_for_struct_with_directive_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
+#define FLAG
+
 namespace Bla
 {
     public struct TestMe
     {
-#if DEBUG
+#if FLAG
         private int _field;
 #endif
   }
@@ -177,11 +179,13 @@ namespace Bla
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 namespace Bla
 {
     public struct TestMe
     {
-#if DEBUG
+#if FLAG
         private int _field;
 #endif
     }
@@ -195,18 +199,22 @@ namespace Bla
         public void Code_gets_fixed_for_struct_with_directive_and_close_brace_indented_more_to_right()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public struct TestMe
 {
-#if DEBUG
+#if FLAG
     private int _field;
 #endif
  }
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public struct TestMe
 {
-#if DEBUG
+#if FLAG
     private int _field;
 #endif
 }

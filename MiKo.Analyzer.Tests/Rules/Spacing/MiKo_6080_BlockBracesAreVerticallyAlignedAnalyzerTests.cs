@@ -84,6 +84,31 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_block_with_close_brace_at_same_line_as_last_statement_with_block_comment()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        ; /* some comment */ }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        ; /* some comment */
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_block_with_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
@@ -143,13 +168,15 @@ public class TestMe
         public void Code_gets_fixed_for_block_with_directive_before_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public class TestMe
 {
     public void DoSomething()
     {
         {
             DoSomething();
-#if DEBUG
+#if FLAG
             DoSomething();
 #endif
        }
@@ -158,13 +185,15 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public class TestMe
 {
     public void DoSomething()
     {
         {
             DoSomething();
-#if DEBUG
+#if FLAG
             DoSomething();
 #endif
         }
@@ -179,13 +208,15 @@ public class TestMe
         public void Code_gets_fixed_for_block_with_directive_before_close_brace_indented_more_to_right()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public class TestMe
 {
     public void DoSomething()
     {
         {
             DoSomething();
-#if DEBUG
+#if FLAG
             DoSomething();
 #endif
          }
@@ -194,13 +225,15 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public class TestMe
 {
     public void DoSomething()
     {
         {
             DoSomething();
-#if DEBUG
+#if FLAG
             DoSomething();
 #endif
         }
@@ -359,7 +392,7 @@ public class TestMe
     public void DoSomething()
     {
         Func<int, int, int> x = delegate (int i,
-                                          int value) /* keep */ 
+                                          int value) /* keep */
                                                                 {
                                                                     return i;
                                                                 };

@@ -42,6 +42,172 @@ public class TestMe {
 ");
 
         [Test]
+        public void Code_gets_fixed_for_class_with_open_brace_on_same_line_as_declaration_with_block_comment()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe /* some comment */ {
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe /* some comment */
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_comment_and_open_brace_indented_more_to_left()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe // some comment
+   {
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe // some comment
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_comment_and_open_brace_indented_more_to_right()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe // some comment
+     {
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe // some comment
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_directive_and_open_brace_on_same_line_as_declaration()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+namespace Bla
+{
+#if FLAG
+    public class TestMe {
+    }
+#endif
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+namespace Bla
+{
+#if FLAG
+    public class TestMe
+    {
+    }
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_directive_and_open_brace_indented_more_to_left()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+namespace Bla
+{
+#if FLAG
+    public class TestMe
+   {
+    }
+#endif
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+namespace Bla
+{
+#if FLAG
+    public class TestMe
+    {
+    }
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_directive_and_open_brace_indented_more_to_right()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+namespace Bla
+{
+#if FLAG
+    public class TestMe
+     {
+    }
+#endif
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+namespace Bla
+{
+#if FLAG
+    public class TestMe
+    {
+    }
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_class_with_open_brace_on_same_line_as_declaration()
         {
             const string OriginalCode = @"

@@ -165,11 +165,13 @@ public interface ITestMe
         public void Code_gets_fixed_for_interface_with_directive_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
+#define FLAG
+
 namespace Bla
 {
     public interface ITestMe
     {
-#if DEBUG
+#if FLAG
         void DoSomething();
 #endif
   }
@@ -177,11 +179,13 @@ namespace Bla
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 namespace Bla
 {
     public interface ITestMe
     {
-#if DEBUG
+#if FLAG
         void DoSomething();
 #endif
     }
@@ -195,18 +199,22 @@ namespace Bla
         public void Code_gets_fixed_for_interface_with_directive_and_close_brace_indented_more_to_right()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public interface ITestMe
 {
-#if DEBUG
+#if FLAG
     void DoSomething();
 #endif
  }
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public interface ITestMe
 {
-#if DEBUG
+#if FLAG
     void DoSomething();
 #endif
 }

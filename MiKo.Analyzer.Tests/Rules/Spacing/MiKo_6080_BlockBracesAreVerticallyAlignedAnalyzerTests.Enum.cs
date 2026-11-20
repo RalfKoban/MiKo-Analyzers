@@ -203,11 +203,13 @@ public enum TestMe
         public void Code_gets_fixed_for_enum_with_directive_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
+#define FLAG
+
 namespace Bla
 {
     public enum TestMe
     {
-#if DEBUG
+#if FLAG
         None,
 #endif
   }
@@ -215,11 +217,13 @@ namespace Bla
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 namespace Bla
 {
     public enum TestMe
     {
-#if DEBUG
+#if FLAG
         None,
 #endif
     }
@@ -233,18 +237,22 @@ namespace Bla
         public void Code_gets_fixed_for_enum_with_directive_and_close_brace_indented_more_to_right()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public enum TestMe
 {
-#if DEBUG
+#if FLAG
     None,
 #endif
  }
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public enum TestMe
 {
-#if DEBUG
+#if FLAG
     None,
 #endif
 }

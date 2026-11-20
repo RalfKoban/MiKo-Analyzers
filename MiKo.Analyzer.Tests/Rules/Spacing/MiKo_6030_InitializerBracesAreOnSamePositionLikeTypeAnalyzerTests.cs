@@ -990,6 +990,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_implicit_array_initializer_when_placed_on_position_after_position_of_type_and_directive_at_end()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -998,7 +1000,7 @@ public class TestMe
                                  {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3,
 #endif
                                 };
@@ -1006,6 +1008,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1014,7 +1018,7 @@ public class TestMe
                                 {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3,
 #endif
                                 };
@@ -1028,6 +1032,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_implicit_array_initializer_when_placed_on_position_after_position_of_type_and_directive_at_end_without_trailing_comma()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1036,7 +1042,7 @@ public class TestMe
                                  {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3
 #endif
                                 };
@@ -1044,6 +1050,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1052,7 +1060,7 @@ public class TestMe
                                 {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3
 #endif
                                 };
@@ -1099,6 +1107,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_implicit_array_initializer_when_placed_on_position_before_position_of_type_and_directive_at_end()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1107,7 +1117,7 @@ public class TestMe
                                {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3
 #endif
                                 };
@@ -1115,6 +1125,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1123,7 +1135,7 @@ public class TestMe
                                 {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3
 #endif
                                 };
@@ -1137,6 +1149,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_implicit_array_initializer_when_placed_on_position_before_position_of_type_and_directive_at_end_and_trailing_comma()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1145,7 +1159,7 @@ public class TestMe
                                {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3,
 #endif
                                 };
@@ -1153,6 +1167,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1161,7 +1177,7 @@ public class TestMe
                                 {
                                     1,
                                     2,
-#if DEBUG
+#if FLAG
                                     3,
 #endif
                                 };
@@ -1209,6 +1225,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_reduced_array_initializer_when_placed_on_position_after_position_of_type_and_directive_at_end()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1217,7 +1235,7 @@ public class TestMe
                              {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3
 #endif
                             };
@@ -1225,6 +1243,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1233,7 +1253,7 @@ public class TestMe
                             {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3
 #endif
                             };
@@ -1247,6 +1267,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_reduced_array_initializer_when_placed_on_position_after_position_of_type_and_directive_at_end_and_trailing_comma()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1255,7 +1277,7 @@ public class TestMe
                              {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3,
 #endif
                             };
@@ -1263,6 +1285,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1271,7 +1295,7 @@ public class TestMe
                             {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3,
 #endif
                             };
@@ -1319,6 +1343,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_reduced_array_initializer_when_placed_on_position_before_position_of_type_and_directive_at_end()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1327,7 +1353,7 @@ public class TestMe
                           {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3
 #endif
                             };
@@ -1335,6 +1361,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1343,7 +1371,7 @@ public class TestMe
                             {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3
 #endif
                             };
@@ -1357,6 +1385,8 @@ public class TestMe
         public void Code_gets_fixed_for_field_with_reduced_array_initializer_when_placed_on_position_before_position_of_type_and_directive_at_end_and_trailing_comma()
         {
             const string OriginalCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1365,7 +1395,7 @@ public class TestMe
                           {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3,
 #endif
                             };
@@ -1373,6 +1403,8 @@ public class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 using System;
 
 public class TestMe
@@ -1381,7 +1413,7 @@ public class TestMe
                             {
                                 1,
                                 2,
-#if DEBUG
+#if FLAG
                                 3,
 #endif
                             };

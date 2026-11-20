@@ -58,12 +58,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (syntax)
             {
+                case AccessorListSyntax a: return GetUpdatedSyntax(a, issue);
                 case BlockSyntax block: return GetUpdatedSyntax(block, issue);
                 case EnumDeclarationSyntax e: return GetUpdatedSyntax(e, issue);
-                case TypeDeclarationSyntax type: return GetUpdatedSyntax(type, issue);
                 case NamespaceDeclarationSyntax ns: return GetUpdatedSyntax(ns, issue);
                 case SwitchStatementSyntax s: return GetUpdatedSyntax(s, issue);
-                case AccessorListSyntax a: return GetUpdatedSyntax(a, issue);
+                case TypeDeclarationSyntax type: return GetUpdatedSyntax(type, issue);
                 default:
                     return syntax;
             }

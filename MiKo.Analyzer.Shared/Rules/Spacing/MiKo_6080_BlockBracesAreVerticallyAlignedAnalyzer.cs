@@ -17,6 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeBlock, SyntaxKind.Block);
+            context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeSwitchExpression, SyntaxKind.SwitchExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeAccessorList, SyntaxKind.AccessorList);
 
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.ClassDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclaration, SyntaxKind.EnumDeclaration);
@@ -35,6 +38,30 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private void AnalyzeBlock(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is BlockSyntax node)
+            {
+                AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
+            }
+        }
+
+        private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is SwitchStatementSyntax node)
+            {
+                AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
+            }
+        }
+
+        private void AnalyzeSwitchExpression(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is SwitchExpressionSyntax node)
+            {
+                AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
+            }
+        }
+
+        private void AnalyzeAccessorList(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is AccessorListSyntax node)
             {
                 AnalyzeBraces(context, node.OpenBraceToken, node.CloseBraceToken);
             }

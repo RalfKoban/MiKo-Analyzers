@@ -165,11 +165,13 @@ namespace TestMe
         public void Code_gets_fixed_for_namespace_with_directive_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
+#define FLAG
+
 namespace Outer
 {
     namespace TestMe
     {
-#if DEBUG
+#if FLAG
         public class Inner { }
 #endif
   }
@@ -177,11 +179,13 @@ namespace Outer
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 namespace Outer
 {
     namespace TestMe
     {
-#if DEBUG
+#if FLAG
         public class Inner { }
 #endif
     }
@@ -195,18 +199,22 @@ namespace Outer
         public void Code_gets_fixed_for_namespace_with_directive_and_close_brace_indented_more_to_right()
         {
             const string OriginalCode = @"
+#define FLAG
+
 namespace TestMe
 {
-#if DEBUG
+#if FLAG
     public class Inner { }
 #endif
  }
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 namespace TestMe
 {
-#if DEBUG
+#if FLAG
     public class Inner { }
 #endif
 }
