@@ -7039,4 +7039,17 @@ Vertically aligning the block with the beginning of the delegate keyword makes t
   <data name="MiKo_6080_Title" xml:space="preserve">
     <value>Align block braces vertically</value>
   </data>
+  <data name="MiKo_6081_CodeFixTitle" xml:space="preserve">
+    <value>Align open brace with the start of its code construct</value>
+  </data>
+  <data name="MiKo_6081_Description" xml:space="preserve">
+    <value>Code readability improves when the opening brace of a namespace, type, member, or statement is vertically aligned with the start of the code construct it belongs to.
+This makes the structure clearer and easier to scan.</value>
+  </data>
+  <data name="MiKo_6081_MessageFormat" xml:space="preserve">
+    <value>Align open brace with the start of its code construct</value>
+  </data>
+  <data name="MiKo_6081_Title" xml:space="preserve">
+    <value>Align open brace vertically with the start of its code construct</value>
+  </data>
 </root>
