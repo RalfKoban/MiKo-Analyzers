@@ -47,13 +47,32 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (syntax)
             {
+                case AccessorListSyntax a: return GetUpdatedSyntax(a, issue);
                 case BlockSyntax block: return GetUpdatedSyntax(block, issue);
                 case EnumDeclarationSyntax e: return GetUpdatedSyntax(e, issue);
-                case TypeDeclarationSyntax type: return GetUpdatedSyntax(type, issue);
                 case NamespaceDeclarationSyntax ns: return GetUpdatedSyntax(ns, issue);
+                case SwitchExpressionSyntax s: return GetUpdatedSyntax(s, issue);
+                case SwitchStatementSyntax s: return GetUpdatedSyntax(s, issue);
+                case TypeDeclarationSyntax type: return GetUpdatedSyntax(type, issue);
                 default:
                     return syntax;
             }
+        }
+
+        private static AccessorListSyntax GetUpdatedSyntax(AccessorListSyntax node, Diagnostic issue)
+        {
+            var spaces = GetProposedAdditionalSpaces(issue);
+
+            var closeBrace = node.CloseBraceToken;
+            var previousToken = closeBrace.GetPreviousToken();
+
+            if (closeBrace.IsOnSameLineAsEndOf(previousToken))
+            {
+                return node.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine())
+                           .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
+            }
+
+            return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
         }
 
         private static BlockSyntax GetUpdatedSyntax(BlockSyntax node, Diagnostic issue)
@@ -72,7 +91,39 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (closeBrace.IsOnSameLineAsEndOf(previousToken))
             {
-                return node.ReplaceToken(previousToken, previousToken.WithAdditionalEndOfLine())
+                return node.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine())
+                           .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
+            }
+
+            return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
+        }
+
+        private static SwitchExpressionSyntax GetUpdatedSyntax(SwitchExpressionSyntax node, Diagnostic issue)
+        {
+            var spaces = GetProposedAdditionalSpaces(issue);
+
+            var closeBrace = node.CloseBraceToken;
+            var previousToken = closeBrace.GetPreviousToken();
+
+            if (closeBrace.IsOnSameLineAsEndOf(previousToken))
+            {
+                return node.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine())
+                           .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
+            }
+
+            return node.WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
+        }
+
+        private static SwitchStatementSyntax GetUpdatedSyntax(SwitchStatementSyntax node, Diagnostic issue)
+        {
+            var spaces = GetProposedAdditionalSpaces(issue);
+
+            var closeBrace = node.CloseBraceToken;
+            var previousToken = closeBrace.GetPreviousToken();
+
+            if (closeBrace.IsOnSameLineAsEndOf(previousToken))
+            {
+                return node.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
@@ -88,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (closeBrace.IsOnSameLineAsEndOf(previousToken))
             {
-                return node.ReplaceToken(previousToken, previousToken.WithAdditionalEndOfLine())
+                return node.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 
@@ -104,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (closeBrace.IsOnSameLineAsEndOf(previousToken))
             {
-                return node.ReplaceToken(previousToken, previousToken.WithAdditionalEndOfLine())
+                return node.ReplaceToken(previousToken, previousToken.WithForcedEndOfLine())
                            .WithCloseBraceToken(closeBrace.WithAdditionalLeadingSpaces(spaces));
             }
 

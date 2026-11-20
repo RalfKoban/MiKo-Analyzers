@@ -131,6 +131,264 @@ public class TestMe
 ");
 
         [Test]
+        public void Code_gets_fixed_for_property_with_attribute_on_same_line_and_open_brace_indented_more_to_right()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete] public int Value
+      {
+        get;
+        set;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete] public int Value
+    {
+        get;
+        set;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_attribute_and_open_brace_on_same_line_as_declaration_with_block_comment()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete]
+    public int Value /* some comment */ {
+        get;
+        set;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete]
+    public int Value /* some comment */
+    {
+        get;
+        set;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_attribute_and_comment_and_open_brace_indented_more_to_left()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete]
+    public int Value // some comment
+   {
+        get;
+        set;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete]
+    public int Value // some comment
+    {
+        get;
+        set;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_attribute_and_comment_and_open_brace_indented_more_to_right()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete]
+    public int Value // some comment
+     {
+        get;
+        set;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    [Obsolete]
+    public int Value // some comment
+    {
+        get;
+        set;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_attribute_and_directive_and_open_brace_on_same_line_as_declaration()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+#if FLAG
+    [Obsolete]
+    public int Value {
+        get;
+        set;
+    }
+#endif
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+#if FLAG
+    [Obsolete]
+    public int Value
+    {
+        get;
+        set;
+    }
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_attribute_and_directive_and_open_brace_indented_more_to_left()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+#if FLAG
+    [Obsolete]
+    public int Value
+   {
+        get;
+        set;
+    }
+#endif
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+#if FLAG
+    [Obsolete]
+    public int Value
+    {
+        get;
+        set;
+    }
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_attribute_and_directive_and_open_brace_indented_more_to_right()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+#if FLAG
+    [Obsolete]
+    public int Value
+     {
+        get;
+        set;
+    }
+#endif
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+#if FLAG
+    [Obsolete]
+    public int Value
+    {
+        get;
+        set;
+    }
+#endif
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_property_with_attribute_and_open_brace_on_same_line_as_declaration()
         {
             const string OriginalCode = @"

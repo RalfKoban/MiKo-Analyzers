@@ -198,11 +198,13 @@ public static class TestMe
         public void Code_gets_fixed_for_extension_with_directive_and_close_brace_indented_more_to_left()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public static class TestMe
 {
     extension(string value)
     {
-#if DEBUG
+#if FLAG
         public bool IsEmpty => value.Length == 0;
 #endif
   }
@@ -210,11 +212,13 @@ public static class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public static class TestMe
 {
     extension(string value)
     {
-#if DEBUG
+#if FLAG
         public bool IsEmpty => value.Length == 0;
 #endif
     }
@@ -228,11 +232,13 @@ public static class TestMe
         public void Code_gets_fixed_for_extension_with_directive_and_close_brace_indented_more_to_right()
         {
             const string OriginalCode = @"
+#define FLAG
+
 public static class TestMe
 {
     extension(string value)
     {
-#if DEBUG
+#if FLAG
         public bool IsEmpty => value.Length == 0;
 #endif
      }
@@ -240,11 +246,13 @@ public static class TestMe
 ";
 
             const string FixedCode = @"
+#define FLAG
+
 public static class TestMe
 {
     extension(string value)
     {
-#if DEBUG
+#if FLAG
         public bool IsEmpty => value.Length == 0;
 #endif
     }

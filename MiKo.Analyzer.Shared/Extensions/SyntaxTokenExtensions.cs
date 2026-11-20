@@ -862,9 +862,20 @@ namespace MiKoSolutions.Analyzers
         {
             var trivia = SyntaxFactory.CarriageReturnLineFeed; // do not use elastic one to prevent formatting it away again
 
-            return value.HasTrailingComment()
-                   ? value.WithAdditionalTrailingTrivia(trivia)
-                   : value.WithTrailingTrivia(trivia);
+            if (value.HasTrailingComment())
+            {
+                var trailingTrivia = value.TrailingTrivia;
+
+                // we have to remove the left-over whitespaces at the end
+                var trailingTriviaWithoutWhitespacesAtEnd = trailingTrivia.Reverse()
+                                                                          .SkipWhile(_ => _.IsWhiteSpace())
+                                                                          .Reverse();
+
+                return value.WithTrailingTrivia(trailingTriviaWithoutWhitespacesAtEnd)
+                            .WithAdditionalTrailingTrivia(trivia);
+            }
+
+            return value.WithTrailingTrivia(trivia);
         }
 
         /// <summary>
@@ -1029,8 +1040,15 @@ namespace MiKoSolutions.Analyzers
                         }
                         else
                         {
-                            // somewhere before
-                            leadingTrivia[index] = SyntaxFactory.ElasticSpace;
+                            if (value.IsKind(SyntaxKind.CloseBraceToken))
+                            {
+                                // seems we have a comment before a close brace, so indent it a bit in relation to the close brace
+                                leadingTrivia[index] = WhiteSpaces(count + Constants.Indentation);
+                            }
+                            else
+                            {
+                                leadingTrivia[index] = SyntaxFactory.ElasticSpace;
+                            }
                         }
                     }
                 }

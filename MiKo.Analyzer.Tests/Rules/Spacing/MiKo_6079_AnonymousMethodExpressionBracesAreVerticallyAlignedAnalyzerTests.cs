@@ -260,7 +260,7 @@ public class TestMe
     public void DoSomething()
     {
         Func<int, int, int> x = delegate (int i,
-                                          int value) /* keep */ 
+                                          int value) /* keep */
                                 {
                                     return i;
                                 };
