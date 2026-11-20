@@ -156,6 +156,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                               ];
 
         [Test]
+        public void No_issue_is_reported_for_method_of_Throw_helper_type() => No_issue_is_reported_for(@"
+public class Throw
+{
+    public void InvalidOperation()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_with_name_([ValueSource(nameof(ValidMethodNames))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
