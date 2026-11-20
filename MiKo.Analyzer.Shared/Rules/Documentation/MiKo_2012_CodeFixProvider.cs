@@ -1230,6 +1230,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        };
         }
 
-    //// ncrunch: rdi default
-}
+//// ncrunch: rdi default
+    }
 }
