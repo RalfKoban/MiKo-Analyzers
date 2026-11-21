@@ -10,13 +10,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6062";
 
-        private static readonly SyntaxKind[] Expressions = { SyntaxKind.ComplexElementInitializerExpression };
-
         public MiKo_6062_ComplexInitializerElementExpressionsAreIndentedBesideOpenBraceAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Expressions);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ComplexElementInitializerExpression);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -35,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var expressions = initializer.Expressions;
 
-            if (expressions.Any())
+            if (expressions.Count > 0)
             {
                 var expression = expressions[0];
                 var expressionPosition = expression.GetStartPosition();
