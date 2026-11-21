@@ -16361,6 +16361,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code readability and API usability improve when collection parameters are always represented by a valid collection instance. Assigning &apos;null&apos; to a collection, array, or &apos;IEnumerable&apos; parameter introduces an additional state that consumers and subsequent code must handle.
+        ///Use an empty collection, array, or enumerable instead to make the intent explicit and simplify null handling..
+        /// </summary>
+        internal static string MiKo_3247_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3247_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use an empty collection instead of assigning &apos;null&apos;.
+        /// </summary>
+        internal static string MiKo_3247_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3247_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assign &apos;null&apos; to collection parameters.
+        /// </summary>
+        internal static string MiKo_3247_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3247_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
