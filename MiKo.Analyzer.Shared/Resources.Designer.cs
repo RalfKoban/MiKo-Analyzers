@@ -20306,7 +20306,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code readability improves when the opening brace of a namespace, type, member, or statement is vertically aligned with the start of the code construct it belongs to. This makes the structure clearer and easier to scan..
+        ///   Looks up a localized string similar to Code readability improves when the opening brace of a namespace, type, member, or statement is vertically aligned with the start of the code construct it belongs to.
+        ///This makes the structure clearer and easier to scan..
         /// </summary>
         internal static string MiKo_6081_Description {
             get {
@@ -20329,6 +20330,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6081_Title {
             get {
                 return ResourceManager.GetString("MiKo_6081_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6082_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6082_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local functions with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        /// </summary>
+        internal static string MiKo_6082_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6082_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local function with a with blank line.
+        /// </summary>
+        internal static string MiKo_6082_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6082_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local functions with blank lines.
+        /// </summary>
+        internal static string MiKo_6082_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6082_Title", resourceCulture);
             }
         }
     }

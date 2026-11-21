@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6011";
 
-        public MiKo_6011_LockStatementSurroundedByBlankLinesAnalyzer() : base(SyntaxKind.LockStatement, Id)
+        public MiKo_6011_LockStatementSurroundedByBlankLinesAnalyzer() : base(Id, SyntaxKind.LockStatement)
         {
         }
 

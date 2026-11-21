@@ -103,6 +103,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.StructDeclaration:
                     case SyntaxKind.RecordStructDeclaration:
+#if VS2026
+                    case SyntaxKind.ExtensionBlockDeclaration:
+#endif
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }
