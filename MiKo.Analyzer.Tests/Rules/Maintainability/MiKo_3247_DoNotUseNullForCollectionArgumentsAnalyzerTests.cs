@@ -34,6 +34,45 @@ public class TestMe
 }
 ");
 
+        [TestCase(""" "x", null """)]
+        [TestCase(""" null, "x" """)]
+        [TestCase(""" "x", null, "y" """)]
+        [TestCase(""" "x", null, "y", null """)]
+        public void No_issue_is_reported_for_null_in_expanded_params_arguments_(string arguments) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething() => DoSomethingCore(" + arguments + @");
+
+    private void DoSomethingCore(params object[] items) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_reordered_named_argument_with_null_as_non_collection() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething() => DoSomethingCore(o: null, items: new int[0]);
+
+    private void DoSomethingCore(int[] items, object o) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_reordered_named_argument_with_null_as_non_collection_when_other_parameter_is_collection() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething() => DoSomethingCore(o: null, items: new int[0]);
+
+    private void DoSomethingCore(object o, int[] items) { }
+}
+");
+
         [TestCase("int[] array")]
         [TestCase("params int[] array")]
         [TestCase("IEnumerable i")]
@@ -50,6 +89,30 @@ public class TestMe
     public void DoSomething() => DoSomethingCore(null);
 
     private void DoSomethingCore(" + parameter + @") => { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_reordered_named_argument_with_null_as_collection() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething() => DoSomethingCore(items: null, count: 1);
+
+    private void DoSomethingCore(int count, int[] items) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_named_argument_with_null_as_collection_after_omitted_optional_argument() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething() => DoSomethingCore(items: null);
+
+    private void DoSomethingCore(int count = 0, int[] items = null) { }
 }
 ");
 
