@@ -1058,6 +1058,30 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new syntax token with the specified number of spaces as leading trivia and - if it contains a leading comment - the comment placed on another line.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="count">
+        /// The number of spaces to add.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with the specified number of spaces as leading trivia.
+        /// </returns>
+        internal static SyntaxToken WithLeadingSpacesAndCommentAbove(this in SyntaxToken value, in int count)
+        {
+            if (value.HasLeadingComment())
+            {
+                return value.WithLeadingSpaces(count) // indent but preserve the comment
+                            .WithAdditionalLeadingEndOfLine() // add the line break
+                            .WithAdditionalLeadingSpacesAtEnd(count); // indent the brace
+            }
+
+            return value.WithLeadingSpaces(count);
+        }
+
+        /// <summary>
         /// Creates a new syntax token with leading trivia from a syntax node.
         /// </summary>
         /// <param name="value">
