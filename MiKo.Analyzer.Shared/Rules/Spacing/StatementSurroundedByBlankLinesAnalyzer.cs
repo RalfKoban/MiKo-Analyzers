@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         private readonly SyntaxKind[] m_syntaxKinds;
 
-        protected StatementSurroundedByBlankLinesAnalyzer(in SyntaxKind syntaxKind, string id) : base(id) => m_syntaxKinds = new[] { syntaxKind };
+        protected StatementSurroundedByBlankLinesAnalyzer(string id, in SyntaxKind syntaxKind) : base(id) => m_syntaxKinds = new[] { syntaxKind };
 
         protected abstract SyntaxToken GetKeyword(T node);
 
@@ -91,6 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.StructDeclaration:
                     case SyntaxKind.RecordStructDeclaration:
+#if VS2026
+                    case SyntaxKind.ExtensionBlockDeclaration:
+#endif
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }

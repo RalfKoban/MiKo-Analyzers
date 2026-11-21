@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6014";
 
-        public MiKo_6014_WhileStatementSurroundedByBlankLinesAnalyzer() : base(SyntaxKind.WhileStatement, Id)
+        public MiKo_6014_WhileStatementSurroundedByBlankLinesAnalyzer() : base(Id, SyntaxKind.WhileStatement)
         {
         }
 

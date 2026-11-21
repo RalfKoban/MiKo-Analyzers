@@ -7052,4 +7052,16 @@ This makes the structure clearer and easier to scan.</value>
   <data name="MiKo_6081_Title" xml:space="preserve">
     <value>Align open brace vertically with the start of its code construct</value>
   </data>
+  <data name="MiKo_6082_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6082_Description" xml:space="preserve">
+    <value>Surround local functions with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
+  </data>
+  <data name="MiKo_6082_MessageFormat" xml:space="preserve">
+    <value>Surround local function with a with blank line</value>
+  </data>
+  <data name="MiKo_6082_Title" xml:space="preserve">
+    <value>Surround local functions with blank lines</value>
+  </data>
 </root>

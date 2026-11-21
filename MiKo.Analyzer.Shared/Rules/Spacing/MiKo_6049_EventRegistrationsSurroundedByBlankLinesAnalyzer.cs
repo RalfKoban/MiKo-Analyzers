@@ -37,16 +37,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 if (assignment.Parent?.Parent is BlockSyntax block)
                 {
+                    var statements = block.Statements;
+
                     // we found an event
                     var callLineSpan = assignment.GetLineSpan();
 
-                    var noBlankLinesBefore = block.Statements
-                                                  .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                                  .Any(_ => _.IsEventRegistration(semanticModel) is false);
+                    var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                                       .Any(_ => _.IsEventRegistration(semanticModel) is false);
 
-                    var noBlankLinesAfter = block.Statements
-                                                 .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
-                                                 .Any(_ => _.IsEventRegistration(semanticModel) is false);
+                    var noBlankLinesAfter = statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
+                                                      .Any(_ => _.IsEventRegistration(semanticModel) is false);
 
                     if (noBlankLinesBefore || noBlankLinesAfter)
                     {
