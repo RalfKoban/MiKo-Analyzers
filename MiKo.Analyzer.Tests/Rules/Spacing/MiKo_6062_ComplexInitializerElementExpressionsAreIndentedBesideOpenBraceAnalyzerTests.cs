@@ -172,6 +172,44 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_complex_initializer_element_expression_when_its_2_parts_are_on_other_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private Dictionary<int, int> Values = new Dictionary<int, int>
+                                              {
+                                                {
+                                                    42,
+                                                    11
+                                                },
+                                              };
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private Dictionary<int, int> Values = new Dictionary<int, int>
+                                              {
+                                                {
+                                                  42,
+                                                  11
+                                                },
+                                              };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6062_ComplexInitializerElementExpressionsAreIndentedBesideOpenBraceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6062_ComplexInitializerElementExpressionsAreIndentedBesideOpenBraceAnalyzer();
