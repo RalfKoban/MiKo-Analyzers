@@ -761,32 +761,26 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var indentation = spaces + Constants.Indentation;
 
-            if (block.Statements.Count is 1 && block.Statements[0] is BlockSyntax nested && block.ContainsDirectives is false)
+            var statements = block.Statements;
+
+            if (statements.Count is 1 && statements[0] is BlockSyntax nested && block.ContainsDirectives is false)
             {
                 // return the nested block instead of the original one
                 block = nested;
+                statements = nested.Statements;
             }
 
             var openBrace = block.OpenBraceToken;
             var closeBrace = block.CloseBraceToken;
-            var statements = block.Statements;
 
             if (statements.LastOrDefault() is StatementSyntax statement && closeBrace.IsOnSameLineAsEndOf(statement))
             {
                 statements = statements.Replace(statement, statement.WithAdditionalEndOfLine());
             }
 
-            var updatedOpenBrace = openBrace.HasLeadingComment()
-                                   ? openBrace.WithLeadingSpaces(spaces) // indent but preserve the comment
-                                              .WithAdditionalLeadingEndOfLine() // add the line break
-                                              .WithAdditionalLeadingSpacesAtEnd(spaces) // indent the brace
-                                   : openBrace.WithLeadingSpaces(spaces);
-
-            var updatedCloseBrace = closeBrace.WithLeadingSpaces(spaces);
-
-            var updatedBlock = block.WithOpenBraceToken(updatedOpenBrace)
+            var updatedBlock = block.WithOpenBraceToken(openBrace.WithLeadingSpacesAndCommentAbove(spaces))
                                     .WithStatements(statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
-                                    .WithCloseBraceToken(updatedCloseBrace);
+                                    .WithCloseBraceToken(closeBrace.WithLeadingSpacesAndCommentAbove(spaces));
 
             return updatedBlock;
         }

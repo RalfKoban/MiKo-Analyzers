@@ -479,6 +479,37 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_block_with_close_brace_preceded_by_inline_block_comment_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        {
+            DoSomething();
+   /* note */ }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        {
+            DoSomething();
+            /* note */
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6080_BlockBracesAreVerticallyAlignedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6080_BlockBracesAreVerticallyAlignedAnalyzer();
