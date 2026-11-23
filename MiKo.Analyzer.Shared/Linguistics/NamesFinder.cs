@@ -595,7 +595,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (name.EndsWith("andling") // be aware of special case 'Handling'
                  || Verbalizer.IsGerundVerb(betterName)
                  || Verbalizer.IsPastTenseVerb(betterName)
-                 || Verbalizer.IsFirstWordInfiniteVerb(betterName.LastWord()))
+                 || Verbalizer.IsFirstWordInfiniteVerb(betterName.LastWord(WordBoundary.UpperCaseCharacters)))
                 {
                     betterName = MoveVerbToFront(betterName);
                 }
