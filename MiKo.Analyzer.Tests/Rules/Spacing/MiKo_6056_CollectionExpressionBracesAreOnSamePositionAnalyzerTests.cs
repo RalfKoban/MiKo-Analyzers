@@ -293,19 +293,6 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_return_value_with_collection_expression_that_contains_a_spread_element() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    private static string[] GetSomething() => [.. new HashSet<string>([
-                                                                          ""value1"",
-                                                                          ""value2"",
-                                                                      ]).OrderBy(_ => _)];
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_instance_with_nested_instances() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -339,6 +326,53 @@ public class TestMe
                                                ]
                          };
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_close_bracket_token_placed_at_start_of_item() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    string[] something = [
+                            ""some"", ""text"", ""here"",
+    ];
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_close_bracket_token_placed_at_start_of_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    string[] something = [
+                            ""some"", ""text"", ""here"",
+];
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_close_bracket_token_placed_at_start_of_field() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly string[] Stuff =
+                                             [
+                                                 ""Some"",
+                                                 ""Text"",
+                                             ];
+
+    private static readonly string[] OtherStuff = [
+                                                   .. Stuff.Union([
+                                                                       ""Some more"",
+                                                                       ""Text"",
+                                                                       ""Here"",
+                                                                  ]),
+    ];
 }
 ");
 
@@ -541,6 +575,34 @@ public class TestMe
                             3
                         ]);
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_value_in_arrow_expression_clause_with_collection_expression_that_contains_a_spread_element() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private static string[] GetSomething() => [.. new HashSet<string>([
+                                                                          ""value1"",
+                                                                          ""value2"",
+                                                                      ]).OrderBy(_ => _)];
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_value_with_collection_expression_that_contains_a_spread_element() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private static string[] GetSomething()
+    {
+        return [.. new HashSet<string>([
+                                           ""value1"",
+                                           ""value2"",
+                                       ]).OrderBy(_ => _)];
 }
 ");
 
@@ -1265,6 +1327,178 @@ public class TestMe
                                                   ]
                             };
     }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_return_value_in_arrow_expression_clause_with_collection_expression_that_contains_a_spread_element()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private static string[] GetSomething() => [.. new HashSet<string>([
+                                                                          ""value1"",
+                                                                          ""value2"",
+                                                                      ]).OrderBy(_ => _)];
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private static string[] GetSomething() => [.. new HashSet<string>([
+                                                                          ""value1"",
+                                                                          ""value2"",
+                                                                      ]).OrderBy(_ => _)
+                                              ];
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_return_value_with_collection_expression_that_contains_a_spread_element()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private static string[] GetSomething()
+    {
+        return [.. new HashSet<string>([
+                                           ""value1"",
+                                           ""value2"",
+                                       ]).OrderBy(_ => _)];
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private static string[] GetSomething()
+    {
+        return [.. new HashSet<string>([
+                                           ""value1"",
+                                           ""value2"",
+                                       ]).OrderBy(_ => _)
+               ];
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_close_bracket_token_placed_at_start_of_item()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    string[] something = [
+                            ""some"", ""text"", ""here"",
+    ];
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    string[] something = [
+                            ""some"", ""text"", ""here"",
+                         ];
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_close_bracket_token_placed_at_start_of_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    string[] something = [
+                            ""some"", ""text"", ""here"",
+];
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    string[] something = [
+                            ""some"", ""text"", ""here"",
+                         ];
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_close_bracket_token_placed_at_start_of_field_and_collection_expression_contains_spread_element()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly string[] Stuff =
+                                             [
+                                                 ""Some"",
+                                                 ""Text"",
+                                             ];
+
+    private static readonly string[] OtherStuff = [
+                                                   .. Stuff.Union([
+                                                                       ""Some more"",
+                                                                       ""Text"",
+                                                                       ""Here"",
+                                                                  ]),
+    ];
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly string[] Stuff =
+                                             [
+                                                 ""Some"",
+                                                 ""Text"",
+                                             ];
+
+    private static readonly string[] OtherStuff = [
+                                                   .. Stuff.Union([
+                                                                       ""Some more"",
+                                                                       ""Text"",
+                                                                       ""Here"",
+                                                                  ]),
+                                                  ];
 }
 ";
 

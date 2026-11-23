@@ -41,8 +41,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case AssignmentExpressionSyntax assignment:
                     return assignment.OperatorToken.GetPositionAfterEnd();
 
+                case ArrowExpressionClauseSyntax clause:
+                    return clause.ArrowToken.GetPositionAfterEnd();
+
+                case ReturnStatementSyntax statement:
+                    return statement.ReturnKeyword.GetPositionAfterEnd();
+
                 default:
-                    return syntax.CloseBracketToken.GetStartPosition();
+                    return syntax.OpenBracketToken.GetStartPosition();
             }
         }
 
@@ -61,28 +67,25 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeNode(CollectionExpressionSyntax syntax)
         {
-            if (syntax.Elements.None(SyntaxKind.SpreadElement))
+            var openBracket = syntax.OpenBracketToken;
+            var closeBracket = syntax.CloseBracketToken;
+
+            if (openBracket.IsOnSameLineAs(closeBracket))
             {
-                var openBracketToken = syntax.OpenBracketToken;
-                var closeBracketToken = syntax.CloseBracketToken;
+                return null;
+            }
 
-                if (openBracketToken.IsOnSameLineAs(closeBracketToken))
-                {
-                    return null;
-                }
+            var startPosition = GetStartPosition(syntax);
+            var openBracketPosition = openBracket.GetStartPosition();
 
-                var startPosition = GetStartPosition(syntax);
-                var openBracketPosition = openBracketToken.GetStartPosition();
+            if (NotVerticallyAligned(startPosition, openBracketPosition))
+            {
+                return Issue(openBracket, CreateProposalForSpaces(startPosition.Character));
+            }
 
-                if (NotVerticallyAligned(startPosition, openBracketPosition))
-                {
-                    return Issue(openBracketToken, CreateProposalForSpaces(startPosition.Character));
-                }
-
-                if (NotVerticallyAligned(closeBracketToken, openBracketPosition))
-                {
-                    return Issue(closeBracketToken, CreateProposalForSpaces(openBracketPosition.Character));
-                }
+            if (NotVerticallyAligned(closeBracket, openBracketPosition))
+            {
+                return Issue(closeBracket, CreateProposalForSpaces(openBracketPosition.Character));
             }
 
             return null;
