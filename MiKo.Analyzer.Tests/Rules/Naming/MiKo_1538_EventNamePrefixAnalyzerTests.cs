@@ -41,6 +41,8 @@ public " + type + @" TestMe
 
         [TestCase("class", "OnStuff", "Stuff")]
         [TestCase("interface", "OnStuff", "Stuff")]
+        [TestCase("class", "OnUpdateStuff", "UpdateStuff")]
+        [TestCase("class", "OnUpdateCalculations", "UpdateCalculations")]
         public void Code_gets_fixed_(string type, string originalEventName, string fixedEventName)
         {
             const string Template = @"
