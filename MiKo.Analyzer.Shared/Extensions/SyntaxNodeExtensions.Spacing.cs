@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+using static MiKoSolutions.Analyzers.SyntaxTriviaExtensions;
+
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
@@ -1583,6 +1585,10 @@ namespace MiKoSolutions.Analyzers
                 {
                     finalTrivia[index] = WhiteSpaces(count);
                 }
+                else if (trivia.IsDisabledText())
+                {
+                    finalTrivia[index] = trivia.AsDisabledText(count);
+                }
 
                 if (trivia.IsComment())
                 {
@@ -1985,17 +1991,5 @@ namespace MiKoSolutions.Analyzers
 
             return finalTrivia;
         }
-
-        /// <summary>
-        /// Creates a syntax trivia for the specified number of spaces.
-        /// </summary>
-        /// <param name="count">
-        /// The number of spaces.
-        /// </param>
-        /// <returns>
-        /// A syntax trivia consisting of the specified number of spaces.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(Constants.Space, count));
     }
 }

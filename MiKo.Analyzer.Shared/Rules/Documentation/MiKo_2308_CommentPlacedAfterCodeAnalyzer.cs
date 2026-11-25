@@ -51,11 +51,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var next = current.GetNextToken();
 
-            if (next.IsKind(SyntaxKind.CloseBraceToken))
+            if (next.IsCloseBrace())
             {
                 var previousToken = current.GetPreviousToken();
 
-                if (previousToken.IsKind(SyntaxKind.OpenBraceToken))
+                if (previousToken.IsOpenBrace())
                 {
                     // comment is the only comment between opening and closing brace
                     return false;
