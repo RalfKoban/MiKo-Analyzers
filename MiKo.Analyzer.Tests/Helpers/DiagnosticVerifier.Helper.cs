@@ -39,7 +39,11 @@ namespace TestHelper
     /// </content>
     public abstract partial class DiagnosticVerifier
     {
+#if NCRUNCH
+        private const int TestLimitToRunGarbageCollection = 0_300;
+#else
         private const int TestLimitToRunGarbageCollection = 5_000;
+#endif
 
         private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
         private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
