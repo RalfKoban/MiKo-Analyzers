@@ -5729,6 +5729,15 @@ Use an empty collection, array, or enumerable instead to make the intent explici
   <data name="MiKo_3247_Title" xml:space="preserve">
     <value>Do not assign 'null' to collection parameters</value>
   </data>
+  <data name="MiKo_3248_Description" xml:space="preserve">
+    <value>Arguments passed to exception helper methods and similar APIs should be simple expressions. Using null-coalescing (??), conditional access (?.), LINQ queries, or other complex expressions obscures the validation logic and makes the code harder to read, understand, and maintain.</value>
+  </data>
+  <data name="MiKo_3248_MessageFormat" xml:space="preserve">
+    <value>Do not use complex expression in exception helper argument</value>
+  </data>
+  <data name="MiKo_3248_Title" xml:space="preserve">
+    <value>Avoid complex expressions in exception helper arguments</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 601 rules that are currently provided by the analyzers.
+The following tables list all the 602 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -525,6 +525,7 @@ The following tables list all the 601 rules that are currently provided by the a
 |[MiKo_3245](/Documentation/MiKo_3245.md)|Properties should not return delegates|&#x2713;|\-|
 |[MiKo_3246](/Documentation/MiKo_3246.md)|Methods should expose behavior directly|&#x2713;|\-|
 |[MiKo_3247](/Documentation/MiKo_3247.md)|Do not assign 'null' to collection parameters|&#x2713;|\-|
+|[MiKo_3248](/Documentation/MiKo_3248.md)|Avoid complex expressions in exception helper arguments|&#x2713;|\-|
 |[MiKo_3301](/Documentation/MiKo_3301.md)|Use lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |[MiKo_3302](/Documentation/MiKo_3302.md)|Use simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |[MiKo_3303](/Documentation/MiKo_3303.md)|Replace complex lambda expressions with named methods|&#x2713;|\-|

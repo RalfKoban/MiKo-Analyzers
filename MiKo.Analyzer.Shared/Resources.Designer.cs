@@ -16389,6 +16389,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Arguments passed to exception helper methods and similar APIs should be simple expressions. Using null-coalescing (??), conditional access (?.), LINQ queries, or other complex expressions obscures the validation logic and makes the code harder to read, understand, and maintain..
+        /// </summary>
+        internal static string MiKo_3248_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3248_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use complex expression in exception helper argument.
+        /// </summary>
+        internal static string MiKo_3248_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3248_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid complex expressions in exception helper arguments.
+        /// </summary>
+        internal static string MiKo_3248_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3248_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
