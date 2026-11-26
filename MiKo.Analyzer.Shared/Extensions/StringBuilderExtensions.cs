@@ -296,6 +296,41 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Inserts the textual representation of a specified Unicode character into the given builder at the specified character position.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="StringBuilder"/> to use.
+        /// </param>
+        /// <param name="character">
+        /// The value to insert.
+        /// </param>
+        /// <param name="position">
+        /// The position within <paramref name="value"/> to insert multiple <paramref name="character"/> into.
+        /// </param>
+        /// <param name="count">
+        /// The amount of times the <paramref name="character"/> shall be inserted into <paramref name="value"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StringBuilder"/> containing the inserted values.
+        /// </returns>
+        public static StringBuilder InsertMultiple(this StringBuilder value, in char character, in int position, int count)
+        {
+            if (count < 0)
+            {
+                Throw.ArgumentOutOfRange(nameof(count), count, "Negative values are not allowed.");
+            }
+
+            while (count > 0)
+            {
+                value.Insert(position, character);
+
+                count--;
+            }
+
+            return value;
+        }
+
+        /// <summary>
         /// Determines whether the text is <see langword="null"/> or empty.
         /// </summary>
         /// <param name="value">

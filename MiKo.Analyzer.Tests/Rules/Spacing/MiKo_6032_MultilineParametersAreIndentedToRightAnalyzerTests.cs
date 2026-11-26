@@ -731,6 +731,54 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_type_is_inside_conditional_directive_and_not_aligned_and_directive_is_true_and_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+#if FLAG
+
+                        long
+
+#else
+                        int
+#endif
+                                     y)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+#if FLAG
+
+                            long
+
+#else
+                            int
+#endif
+                            y)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_method_with_parameter_where_type_is_inside_conditional_directive_and_not_aligned_and_directive_is_false()
         {
             const string OriginalCode = @"

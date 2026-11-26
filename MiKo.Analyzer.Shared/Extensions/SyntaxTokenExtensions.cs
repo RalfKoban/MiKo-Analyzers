@@ -45,20 +45,24 @@ namespace MiKoSolutions.Analyzers
         /// The number of white space characters to lead with.
         /// </param>
         /// <returns>
-        /// A syntax trivia representing the disabled text and indented by teh specified number of white spaces.
+        /// A syntax trivia representing the disabled text and indented by the specified number of white spaces.
         /// </returns>
         internal static SyntaxTrivia AsDisabledText(this in SyntaxTrivia value, in int leadingSpaces)
         {
-            var sb = value.ToString()
-                          .AsCachedBuilder()
-                          .TrimmedStart();
+            var originalText = value.ToString();
+            var startPosition = 0;
 
-            for (int x = 0; x < leadingSpaces; x++)
+            var builder = StringBuilderCache.Acquire();
+
+            foreach (ReadOnlySpan<char> text in originalText.AsSpan().SplitBy(Constants.EnvironmentNewLine.AsSpan(), StringSplitOptions.RemoveEmptyEntries))
             {
-                sb.Insert(x, ' ');
+                builder.InsertMultiple(' ', startPosition, leadingSpaces);
+                builder.AppendLine(text.TrimStart().ToString()); // ensure that there is no starting empty space
+
+                startPosition = builder.Length - 1;
             }
 
-            var disabledText = sb.ToStringAndRelease();
+            var disabledText = builder.ToStringAndRelease();
 
             return SyntaxFactory.DisabledText(disabledText);
         }
