@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified syntax node has a leading empty line.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has a leading empty line; otherwise, <see langword="false"/>.
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified syntax node has a trailing end-of-line.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has a trailing end-of-line; otherwise, <see langword="false"/>.
@@ -138,7 +138,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified syntax node is on the same line as another syntax node.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="other">
         /// The other syntax node to compare with.
@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified syntax node is on the same line as a syntax token.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="other">
         /// The syntax token to compare with.
@@ -168,7 +168,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified syntax node is on the same line as a syntax node or token.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node or token to compare with.
@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the end of the specified syntax node.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node to compare with.
@@ -198,7 +198,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the end of the specified syntax node or token.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node or token to compare with.
@@ -213,7 +213,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the end of another syntax token.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="other">
         /// The other syntax token to compare with.

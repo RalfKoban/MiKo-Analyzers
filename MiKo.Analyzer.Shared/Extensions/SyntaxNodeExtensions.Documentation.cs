@@ -993,7 +993,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node has comment trivia in either leading or trailing trivia.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the comment trivia.
+        /// The syntax node to examine for the comment trivia.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has comment trivia in leading or trailing trivia; otherwise, <see langword="false"/>.
@@ -1005,7 +1005,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node has documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the documentation comment trivia.
+        /// The syntax node to examine for the documentation comment trivia.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has documentation comment trivia syntax; otherwise, <see langword="false"/>.
@@ -1021,19 +1021,19 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node has leading comment trivia.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the leading comment trivia.
+        /// The syntax node to examine for the leading comment trivia.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has leading comment trivia; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().HasComment();
+        internal static bool HasLeadingComment(this SyntaxNode value) => value != null && value.GetLeadingTrivia().HasComment();
 
         /// <summary>
         /// Determines whether a syntax node has trailing comment trivia.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the trailing comment trivia.
+        /// The syntax node to examine for the trailing comment trivia.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has trailing comment trivia; otherwise, <see langword="false"/>.
@@ -1042,10 +1042,82 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasComment();
 
         /// <summary>
+        /// Determines whether a syntax node has any leading single-line comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to examine for the leading single-line comment trivia.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has any leading single-line comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingSingleLineComment(this SyntaxNode value) => value != null && value.GetLeadingTrivia().HasSingleLineComment();
+
+        /// <summary>
+        /// Determines whether a syntax node has any trailing single-line comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to examine for the trailing single-line comment trivia.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has any trailing single-line comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingSingleLineComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasSingleLineComment();
+
+        /// <summary>
+        /// Determines whether a syntax node has any leading multi-line comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to examine for the leading multi-line comment trivia.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has any leading multi-line comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingMultiLineComment(this SyntaxNode value) => value != null && value.GetLeadingTrivia().HasMultiLineComment();
+
+        /// <summary>
+        /// Determines whether a syntax node has any trailing multi-line comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to examine for the trailing multi-line comment trivia.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has any trailing multi-line comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingMultiLineComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasMultiLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax node contains any leading preprocessor directive.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node contains any leading preprocessor directive; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingDirective(this SyntaxNode value) => value != null && value.GetLeadingTrivia().HasDirective();
+
+        /// <summary>
+        /// Determines whether the syntax node contains any trailing preprocessor directive.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node contains any trailing preprocessor directive; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingDirective(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasDirective();
+
+        /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;b&gt;true&lt;/b&gt;</c> or <c>&lt;b&gt;false&lt;/b&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;b&gt;true&lt;/b&gt;</c> or <c>&lt;b&gt;false&lt;/b&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;b&gt;true&lt;/b&gt;</c> or <c>&lt;b&gt;false&lt;/b&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;b&gt;true&lt;/b&gt;</c> or <c>&lt;b&gt;false&lt;/b&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1057,7 +1129,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;b&gt;null&lt;/b&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;b&gt;null&lt;/b&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;b&gt;null&lt;/b&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;b&gt;null&lt;/b&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1069,7 +1141,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a boolean tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the boolean tag.
+        /// The syntax node to examine for the boolean tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a boolean tag; otherwise, <see langword="false"/>.
@@ -1081,7 +1153,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1093,7 +1165,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1105,7 +1177,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1117,7 +1189,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1129,7 +1201,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1140,7 +1212,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML element syntax represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
+        /// The XML element syntax to examine for <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1152,7 +1224,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1164,7 +1236,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1176,7 +1248,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML element syntax represents an <c>&lt;exception… /&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;exception… /&gt;</c> tag.
+        /// The XML element syntax to examine for <c>&lt;exception… /&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents an <c>&lt;exception… /&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1188,7 +1260,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML element syntax represents an exception comment for the specified exception type.
         /// </summary>
         /// <param name="value">
-        /// The XML element syntax to check for exception comment.
+        /// The XML element syntax to examine for exception comment.
         /// </param>
         /// <param name="exceptionType">
         /// The exception type to check for.
@@ -1217,7 +1289,7 @@ namespace MiKoSolutions.Analyzers
         /// The exception type to check for.
         /// </typeparam>
         /// <param name="value">
-        /// The XML element syntax to check for exception comment.
+        /// The XML element syntax to examine for exception comment.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the XML element syntax represents an exception comment for the specified exception type; otherwise, <see langword="false"/>.
@@ -1228,7 +1300,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1240,7 +1312,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1252,7 +1324,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;para/&gt;</c> XML tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the paragraph tag.
+        /// The syntax node to examine for the paragraph tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;para/&gt;</c> XML tag ; otherwise, <see langword="false"/>.
@@ -1264,7 +1336,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML empty element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names.
         /// </summary>
         /// <param name="value">
-        /// The XML empty element syntax to check for <c>&lt;see… /&gt;</c> tag.
+        /// The XML empty element syntax to examine for <c>&lt;see… /&gt;</c> tag.
         /// </param>
         /// <param name="attributeNames">
         /// The set of attribute names to match.
@@ -1279,7 +1351,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names.
         /// </summary>
         /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;see… /&gt;</c> tag.
+        /// The XML element syntax to examine for <c>&lt;see… /&gt;</c> tag.
         /// </param>
         /// <param name="attributeNames">
         /// The set of attribute names to match.
@@ -1294,7 +1366,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML empty element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names.
         /// </summary>
         /// <param name="value">
-        /// The XML empty element syntax to check for <c>&lt;seealso… /&gt;</c> tag.
+        /// The XML empty element syntax to examine for <c>&lt;seealso… /&gt;</c> tag.
         /// </param>
         /// <param name="attributeNames">
         /// The set of attribute names to match.
@@ -1309,7 +1381,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names.
         /// </summary>
         /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;seealso… /&gt;</c> tag.
+        /// The XML element syntax to examine for <c>&lt;seealso… /&gt;</c> tag.
         /// </param>
         /// <param name="attributeNames">
         /// The set of attribute names to match.
@@ -1324,7 +1396,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;see langword… /&gt;</c> or an (invalid) <c>&lt;see langref… /&gt;</c> XML tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;see langword… /&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;see langword… /&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;see langword… /&gt;</c> or an (invalid) <c>&lt;see langref… /&gt;</c> XML tag; otherwise, <see langword="false"/>.
@@ -1352,7 +1424,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;see langword… /&gt;</c> XML tag with a boolean value.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;see langword… /&gt;</c> boolean tag.
+        /// The syntax node to examine for the <c>&lt;see langword… /&gt;</c> boolean tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;see langword… /&gt;</c> XML tag with a boolean value; otherwise, <see langword="false"/>.
@@ -1395,7 +1467,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;value&gt;true&lt;/value&gt;</c> or <c>&lt;value&gt;false&lt;/value&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the value boolean tag.
+        /// The syntax node to examine for the value boolean tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;value&gt;true&lt;/value&gt;</c> or <c>&lt;value&gt;false&lt;/value&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1407,7 +1479,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a <c>&lt;value&gt;null&lt;/value&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;value&gt;null&lt;/value&gt;</c> tag.
+        /// The syntax node to examine for the <c>&lt;value&gt;null&lt;/value&gt;</c> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;value&gt;null&lt;/value&gt;</c> tag; otherwise, <see langword="false"/>.
@@ -1419,7 +1491,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents XML text that contains only whitespace characters.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the whitespace-only XML text.
+        /// The syntax node to examine for the whitespace-only XML text.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents XML text that contains only whitespace characters; otherwise, <see langword="false"/>.
@@ -1431,7 +1503,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an XML text syntax contains only whitespace characters.
         /// </summary>
         /// <param name="value">
-        /// The XML text syntax to check for whitespace-only content.
+        /// The XML text syntax to examine for whitespace-only content.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the XML text syntax contains only whitespace characters; otherwise, <see langword="false"/>.
@@ -1454,7 +1526,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a wrong boolean tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the wrong boolean tag.
+        /// The syntax node to examine for the wrong boolean tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a wrong boolean tag; otherwise, <see langword="false"/>.
@@ -1470,7 +1542,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a wrong <see langword="null"/> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the wrong <see langword="null"/> tag.
+        /// The syntax node to examine for the wrong <see langword="null"/> tag.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a wrong <see langword="null"/> tag; otherwise, <see langword="false"/>.
@@ -1482,7 +1554,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents an XML element or empty element.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for XML representation.
+        /// The syntax node to examine for XML representation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node represents an XML element or empty element; otherwise, <see langword="false"/>.
@@ -1504,7 +1576,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents an XML element or empty element with the specified tag name.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the XML tag.
+        /// The syntax node to examine for the XML tag.
         /// </param>
         /// <param name="tagName">
         /// The name of the XML tag to match.
@@ -1925,7 +1997,7 @@ namespace MiKoSolutions.Analyzers
         /// The XML element syntax to remove starting texts from.
         /// </param>
         /// <param name="startTexts">
-        /// The collection of texts to check for and remove from the beginning of the XML element's content.
+        /// The collection of texts to examine for and remove from the beginning of the XML element's content.
         /// </param>
         /// <returns>
         /// A collection of <see cref="XmlNodeSyntax"/> with the first matching starting text removed, or the original syntax list if none of the texts were found at the beginning.
@@ -1940,7 +2012,7 @@ namespace MiKoSolutions.Analyzers
         /// The XML text syntax to remove starting texts from.
         /// </param>
         /// <param name="startTexts">
-        /// The collection of texts to check for and remove from the beginning of the XML text syntax.
+        /// The collection of texts to examine for and remove from the beginning of the XML text syntax.
         /// </param>
         /// <returns>
         /// A new <see cref="XmlTextSyntax"/> with the first matching starting text removed (after trimming leading whitespace), or the original syntax if none of the texts were found at the beginning.
@@ -2041,7 +2113,7 @@ namespace MiKoSolutions.Analyzers
         /// The XML text syntax to remove trailing text from.
         /// </param>
         /// <param name="texts">
-        /// The collection of texts to check for and remove from the end of the XML text syntax.
+        /// The collection of texts to examine for and remove from the end of the XML text syntax.
         /// </param>
         /// <returns>
         /// A new <see cref="XmlTextSyntax"/> with the first matching trailing text removed (case-insensitive), or the original syntax if none of the texts were found at the end.
@@ -2488,7 +2560,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents an XML element with the specified tag name and content values.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="tagName">
         /// The name of the XML tag to match.
@@ -2515,7 +2587,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents an empty XML element with the specified tag name and attribute names.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="tagName">
         /// The name of the XML tag to match.
@@ -2542,7 +2614,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a non-empty XML element with the specified tag name and attribute names.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="tagName">
         /// The name of the XML tag to match.

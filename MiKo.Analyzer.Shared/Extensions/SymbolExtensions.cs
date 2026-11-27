@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="callback">
-        /// The condition to check for each base type.
+        /// The condition to examine for each base type.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if any base type satisfies the condition; otherwise, <see langword="false"/>.
@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type directly implements an interface with the specified name and not indirectly via its base type.
         /// </summary>
         /// <typeparam name="T">
-        /// The interface type to check for implementation.
+        /// The interface type to examine for implementation.
         /// </typeparam>
         /// <param name="value">
         /// The type to inspect.
@@ -201,7 +201,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="interfaceTypeName">
-        /// The name of the interface to check for implementation.
+        /// The name of the interface to examine for implementation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type directly implements the interface with the specified name; otherwise, <see langword="false"/>.
@@ -218,10 +218,10 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="interfaceTypeName">
-        /// The first name of the interface to check for implementation.
+        /// The first name of the interface to examine for implementation.
         /// </param>
         /// <param name="interfaceTypeFullQualifiedName">
-        /// The second, fully qualified name of the interface to check for implementation.
+        /// The second, fully qualified name of the interface to examine for implementation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type directly implements an interface with either of the specified names; otherwise, <see langword="false"/>.
@@ -1288,7 +1288,7 @@ namespace MiKoSolutions.Analyzers
                                 span = span.Slice(remainingPathLength);
                             }
 
-                            // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
+                            // Perf: quick catch find another dot, as we do not need to examine for additional extensions in case we do not have any other dot here
                             if (span.LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
                             {
                                 if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions))
@@ -1434,7 +1434,7 @@ namespace MiKoSolutions.Analyzers
         /// The symbol to inspect.
         /// </param>
         /// <param name="attributeName">
-        /// The name of the attribute to check for inheritance.
+        /// The name of the attribute to examine for inheritance.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol has an attribute applied that inherits from the specified attribute name; otherwise, <see langword="false"/>.
@@ -1537,7 +1537,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type implements a specific interface.
         /// </summary>
         /// <typeparam name="T">
-        /// The interface type to check for implementation.
+        /// The interface type to examine for implementation.
         /// </typeparam>
         /// <param name="value">
         /// The type to inspect.
@@ -1557,7 +1557,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="interfaceTypeName">
-        /// The name of the interface to check for implementation.
+        /// The name of the interface to examine for implementation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type implements the interface with the specified name; otherwise, <see langword="false"/>.
@@ -1574,10 +1574,10 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="interfaceTypeName">
-        /// The first name of the interface to check for implementation.
+        /// The first name of the interface to examine for implementation.
         /// </param>
         /// <param name="interfaceTypeFullQualifiedName">
-        /// The second, fully qualified name of the interface to check for implementation.
+        /// The second, fully qualified name of the interface to examine for implementation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type implements an interface with either of the specified names; otherwise, <see langword="false"/>.
@@ -1594,7 +1594,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="interfaceType">
-        /// The interface type to check for implementation.
+        /// The interface type to examine for implementation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type implements the potential generic interface; otherwise, <see langword="false"/>.
@@ -1608,7 +1608,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="interfaceType">
-        /// The name of the potential generic interface to check for implementation.
+        /// The name of the potential generic interface to examine for implementation.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type implements the potential generic interface with the specified name; otherwise, <see langword="false"/>.
@@ -1773,7 +1773,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type inherits from a specific base class.
         /// </summary>
         /// <typeparam name="T">
-        /// The base class type to check for inheritance.
+        /// The base class type to examine for inheritance.
         /// </typeparam>
         /// <param name="value">
         /// The type to inspect.
@@ -1791,7 +1791,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="baseClassName">
-        /// The name of the base class to check for inheritance.
+        /// The name of the base class to examine for inheritance.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type inherits from a base class with the specified name; otherwise, <see langword="false"/>.
@@ -1856,7 +1856,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="baseClass">
-        /// The type of the base class to check for inheritance.
+        /// The type of the base class to examine for inheritance.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type inherits from a base class with the specified type; otherwise, <see langword="false"/>.
@@ -1921,10 +1921,10 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="baseClassName">
-        /// The first name of the base class to check for inheritance.
+        /// The first name of the base class to examine for inheritance.
         /// </param>
         /// <param name="baseClassFullQualifiedName">
-        /// The second, fully qualified name of the base class to check for inheritance.
+        /// The second, fully qualified name of the base class to examine for inheritance.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type inherits from a base class with either of the specified names; otherwise, <see langword="false"/>.
@@ -2691,7 +2691,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type is part of an expression tree.
         /// </summary>
         /// <param name="value">
-        /// The type to check.
+        /// The type to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type is part of an expression tree; otherwise, <see langword="false"/>.
@@ -2710,7 +2710,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a given method is an extension method.
         /// </summary>
         /// <param name="value">
-        /// The method to check.
+        /// The method to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method is an extension method; otherwise, <see langword="false"/>.
@@ -2879,7 +2879,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a symbol is an interface implementation.
         /// </summary>
         /// <typeparam name="TSymbol">
-        /// The symbol type to check.
+        /// The symbol type to examine.
         /// </typeparam>
         /// <param name="value">
         /// The symbol to inspect.
@@ -2999,7 +2999,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method is an implementation of a specific interface.
         /// </summary>
         /// <typeparam name="T">
-        /// The interface type to check for implementation.
+        /// The interface type to examine for implementation.
         /// </typeparam>
         /// <param name="value">
         /// The method to inspect.
@@ -3325,7 +3325,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <param name="type">
-        /// The type to check for relationship.
+        /// The type to examine for relationship.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type is related to the specified type; otherwise, <see langword="false"/>.

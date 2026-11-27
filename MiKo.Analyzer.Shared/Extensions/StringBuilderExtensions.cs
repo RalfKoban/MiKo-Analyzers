@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the text ends with the specified ending.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <param name="ending">
         /// The ending to check for.
@@ -268,7 +268,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the text contains any whitespace characters.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <param name="start">
         /// The zero-based starting position to begin checking.
@@ -334,7 +334,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the text is <see langword="null"/> or empty.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the text is <see langword="null"/> or empty; otherwise, <see langword="false"/>.
@@ -346,7 +346,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the text is <see langword="null"/>, empty, or consists only of whitespace characters.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the text is <see langword="null"/>, empty, or consists only of whitespace characters; otherwise, <see langword="false"/>.
@@ -357,7 +357,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the text consists of a single word without any whitespace characters.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the text consists of a single word without any whitespace characters; otherwise, <see langword="false"/>.
@@ -1158,7 +1158,7 @@ namespace MiKoSolutions.Analyzers
         /// Counts the number of leading whitespace characters in the text.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <param name="start">
         /// The zero-based starting position to begin counting.
@@ -1190,7 +1190,7 @@ namespace MiKoSolutions.Analyzers
         /// Counts the number of trailing whitespace characters in the text.
         /// </summary>
         /// <param name="value">
-        /// The text to check.
+        /// The text to examine.
         /// </param>
         /// <param name="start">
         /// The zero-based position up to which trailing whitespaces are counted (counts backwards from the end).

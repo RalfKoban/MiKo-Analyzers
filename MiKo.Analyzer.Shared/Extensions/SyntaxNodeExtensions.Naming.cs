@@ -1081,7 +1081,7 @@ namespace MiKoSolutions.Analyzers
         /// The member declaration syntax.
         /// </param>
         /// <param name="names">
-        /// The collection of attribute names to check.
+        /// The collection of attribute names to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if an attribute with a matching name exists; otherwise, <see langword="false"/>.
@@ -1113,7 +1113,7 @@ namespace MiKoSolutions.Analyzers
         /// The member access expression syntax.
         /// </param>
         /// <param name="name">
-        /// The name to check.
+        /// The name to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the member has the given name; otherwise, <see langword="false"/>.
@@ -1127,10 +1127,10 @@ namespace MiKoSolutions.Analyzers
         /// The member access expression syntax.
         /// </param>
         /// <param name="identifierName">
-        /// The name of the identifier to check.
+        /// The name of the identifier to examine.
         /// </param>
         /// <param name="name">
-        /// The name to check.
+        /// The name to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.
@@ -1157,10 +1157,10 @@ namespace MiKoSolutions.Analyzers
         /// The member access expression syntax.
         /// </param>
         /// <param name="identifierName">
-        /// The name of the identifier to check.
+        /// The name of the identifier to examine.
         /// </param>
         /// <param name="name">
-        /// The name to check.
+        /// The name to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.
@@ -1174,10 +1174,10 @@ namespace MiKoSolutions.Analyzers
         /// The member access expression syntax.
         /// </param>
         /// <param name="identifierName">
-        /// The name of the identifier to check.
+        /// The name of the identifier to examine.
         /// </param>
         /// <param name="name">
-        /// The name to check.
+        /// The name to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.

@@ -140,6 +140,62 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the trivia list contains any multi-line comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia list to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains any multi-line comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasMultiLineComment(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var count = value.Count;
+
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    if (value[index].IsMultiLineComment())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the trivia list contains any single-line comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia list to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains any single-line comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasSingleLineComment(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var count = value.Count;
+
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    if (value[index].IsSingleLineComment())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether the trivia list contains any preprocessor directive.
         /// </summary>
         /// <param name="value">

@@ -896,7 +896,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node has a LINQ extension method.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -910,7 +910,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax tree has a minimum C# language version.
         /// </summary>
         /// <param name="value">
-        /// The syntax tree to check.
+        /// The syntax tree to examine.
         /// </param>
         /// <param name="expectedVersion">
         /// One of the enumeration members that specifies the minimum expected C# language version.
@@ -932,7 +932,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a class declaration has a primary constructor.
         /// </summary>
         /// <param name="value">
-        /// The class declaration to check.
+        /// The class declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the class declaration has a primary constructor; otherwise, <see langword="false"/>.
@@ -943,7 +943,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a struct declaration has a primary constructor.
         /// </summary>
         /// <param name="value">
-        /// The struct declaration to check.
+        /// The struct declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the struct declaration has a primary constructor; otherwise, <see langword="false"/>.
@@ -956,7 +956,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a record declaration has a primary constructor.
         /// </summary>
         /// <param name="value">
-        /// The record declaration to check.
+        /// The record declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the record declaration has a primary constructor; otherwise, <see langword="false"/>.
@@ -967,7 +967,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node has a region directive.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node has a region directive; otherwise, <see langword="false"/>.
@@ -978,7 +978,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an arrow expression clause is part of a method that returns a value.
         /// </summary>
         /// <param name="value">
-        /// The arrow expression clause to check.
+        /// The arrow expression clause to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the arrow expression clause is part of a method that returns a value; otherwise, <see langword="false"/>.
@@ -989,7 +989,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration returns a value.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method returns a value; otherwise, <see langword="false"/>.
@@ -1060,7 +1060,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration has the abstract modifier.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration has the abstract modifier; otherwise, <see langword="false"/>.
@@ -1071,7 +1071,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax accesses an object under test.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the expression accesses an object under test; otherwise, <see langword="false"/>.
@@ -1097,7 +1097,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is of the specified syntax kinds.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="kinds">
         /// A set of syntax kinds to check for.
@@ -1111,7 +1111,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is of the specified syntax kinds.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="kinds">
         /// A span of syntax kinds to check for.
@@ -1148,7 +1148,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a statement is an assignment of the specified identifier.
         /// </summary>
         /// <param name="value">
-        /// The statement to check.
+        /// The statement to examine.
         /// </param>
         /// <param name="identifierName">
         /// The name of the identifier to check for.
@@ -1166,7 +1166,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a base property declaration has the async modifier.
         /// </summary>
         /// <param name="value">
-        /// The base property declaration to check.
+        /// The base property declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the property declaration has the async modifier; otherwise, <see langword="false"/>.
@@ -1177,7 +1177,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration has the async modifier.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration has the async modifier; otherwise, <see langword="false"/>.
@@ -1188,7 +1188,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a boolean type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a boolean type; otherwise, <see langword="false"/>.
@@ -1215,7 +1215,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a <see cref="byte"/> type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a <see cref="byte"/> type; otherwise, <see langword="false"/>.
@@ -1242,7 +1242,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an if statement contains a call to the specified method.
         /// </summary>
         /// <param name="value">
-        /// The if statement to check.
+        /// The if statement to examine.
         /// </param>
         /// <param name="methodName">
         /// The name of the method to check for.
@@ -1273,7 +1273,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax is a call to the specified method.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <param name="methodName">
         /// The name of the method to check for.
@@ -1287,7 +1287,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a command type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1316,7 +1316,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a field declaration has the const modifier.
         /// </summary>
         /// <param name="value">
-        /// The field declaration to check.
+        /// The field declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the field declaration has the const modifier; otherwise, <see langword="false"/>.
@@ -1327,7 +1327,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node represents a constant value.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="context">
         /// The syntax node analysis context.
@@ -1351,7 +1351,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an identifier name represents a constant field of the specified type.
         /// </summary>
         /// <param name="value">
-        /// The identifier name to check.
+        /// The identifier name to examine.
         /// </param>
         /// <param name="type">
         /// The type to seek the constant.
@@ -1370,7 +1370,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an identifier name represents a constant field in the containing type.
         /// </summary>
         /// <param name="value">
-        /// The identifier name to check.
+        /// The identifier name to examine.
         /// </param>
         /// <param name="context">
         /// The syntax node analysis context.
@@ -1384,7 +1384,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a member access expression represents a constant field.
         /// </summary>
         /// <param name="value">
-        /// The member access expression to check.
+        /// The member access expression to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1424,7 +1424,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an is pattern expression represents an enum check.
         /// </summary>
         /// <param name="value">
-        /// The is pattern expression to check.
+        /// The is pattern expression to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1438,7 +1438,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax represents an enum value.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1462,7 +1462,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a member access expression represents an enum check.
         /// </summary>
         /// <param name="value">
-        /// The member access expression to check.
+        /// The member access expression to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1476,7 +1476,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a member access expression represents an enum check.
         /// </summary>
         /// <param name="value">
-        /// The member access expression to check.
+        /// The member access expression to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1493,7 +1493,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a statement represents an event registration.
         /// </summary>
         /// <param name="value">
-        /// The statement to check.
+        /// The statement to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1515,7 +1515,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an assignment expression represents an event registration.
         /// </summary>
         /// <param name="value">
-        /// The assignment expression to check.
+        /// The assignment expression to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1555,7 +1555,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents an exception type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents an exception type; otherwise, <see langword="false"/>.
@@ -1569,7 +1569,7 @@ namespace MiKoSolutions.Analyzers
         /// The exception type to check for.
         /// </typeparam>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents the specified exception type; otherwise, <see langword="false"/>.
@@ -1580,7 +1580,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a specific exception type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <param name="exceptionType">
         /// The exception type to check for.
@@ -1640,7 +1640,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is part of an expression tree.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -1679,7 +1679,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is a field variable declaration with any of the specified identifier names.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="identifierNames">
         /// The set of identifier names to check for.
@@ -1693,7 +1693,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is a field variable declaration with the specified identifier name.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="identifierName">
         /// The identifier name to check for.
@@ -1707,7 +1707,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type declaration is generated.
         /// </summary>
         /// <param name="value">
-        /// The type declaration to check.
+        /// The type declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type declaration is generated; otherwise, <see langword="false"/>.
@@ -1718,7 +1718,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a <see cref="Guid"/> type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a <see cref="Guid"/> type; otherwise, <see langword="false"/>.
@@ -1742,7 +1742,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is inside any of the specified syntax kinds.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="kinds">
         /// A set of syntax kinds to check for.
@@ -1785,7 +1785,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is inside an if statement with a call to the specified method.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="methodName">
         /// The name of the method to check for.
@@ -1838,7 +1838,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a member access expression is inside a Moq call.
         /// </summary>
         /// <param name="value">
-        /// The member access expression to check.
+        /// The member access expression to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the expression is inside a Moq call; otherwise, <see langword="false"/>.
@@ -1857,7 +1857,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is inside a test class.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the node is inside a test class; otherwise, <see langword="false"/>.
@@ -1868,7 +1868,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression statement is an invocation on an object under test.
         /// </summary>
         /// <param name="value">
-        /// The expression statement to check.
+        /// The expression statement to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the expression is an invocation on an object under test; otherwise, <see langword="false"/>.
@@ -1890,7 +1890,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an invocation expression is on an object under test.
         /// </summary>
         /// <param name="value">
-        /// The invocation expression to check.
+        /// The invocation expression to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the invocation is on an object under test; otherwise, <see langword="false"/>.
@@ -1901,7 +1901,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is of the specified syntax kind.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="kind">
         /// One of the enumeration members that specifies the syntax kind to check for.
@@ -1916,7 +1916,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is a local variable declaration with any of the specified identifier names.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="identifierNames">
         /// The set of identifier names to check for.
@@ -1930,7 +1930,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is a local variable declaration with the specified identifier name.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="identifierName">
         /// The identifier name to check for.
@@ -1944,7 +1944,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a lambda expression is a Moq call.
         /// </summary>
         /// <param name="value">
-        /// The lambda expression to check.
+        /// The lambda expression to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the lambda expression is a Moq call; otherwise, <see langword="false"/>.
@@ -1977,7 +1977,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an invocation expression is a Moq <c>It.Is</c> condition matcher.
         /// </summary>
         /// <param name="value">
-        /// The invocation expression to check.
+        /// The invocation expression to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the expression is a Moq <c>It.Is</c> condition matcher; otherwise, <see langword="false"/>.
@@ -1990,7 +1990,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax represents a nameof expression.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the expression represents a nameof expression; otherwise, <see langword="false"/>.
@@ -2014,7 +2014,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an identifier name syntax represents a nameof keyword.
         /// </summary>
         /// <param name="value">
-        /// The identifier name syntax to check.
+        /// The identifier name syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the identifier represents a nameof keyword; otherwise, <see langword="false"/>.
@@ -2025,7 +2025,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an invocation expression syntax represents a nameof expression.
         /// </summary>
         /// <param name="value">
-        /// The invocation expression syntax to check.
+        /// The invocation expression syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the invocation represents a nameof expression; otherwise, <see langword="false"/>.
@@ -2103,7 +2103,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents an object type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents an object type; otherwise, <see langword="false"/>.
@@ -2130,7 +2130,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node is the only node inside a region.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the node is the only one inside a region; otherwise, <see langword="false"/>.
@@ -2170,7 +2170,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an identifier name syntax represents a parameter in its enclosing method.
         /// </summary>
         /// <param name="value">
-        /// The identifier name syntax to check.
+        /// The identifier name syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -2184,7 +2184,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an is pattern expression is checking for a specific kind.
         /// </summary>
         /// <param name="value">
-        /// The is pattern expression to check.
+        /// The is pattern expression to examine.
         /// </param>
         /// <param name="kind">
         /// One of the enumeration members that specifies the syntax kind to check for.
@@ -2198,7 +2198,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a pattern syntax is checking for a specific kind.
         /// </summary>
         /// <param name="value">
-        /// The pattern syntax to check.
+        /// The pattern syntax to examine.
         /// </param>
         /// <param name="kind">
         /// One of the enumeration members that specifies the syntax kind to check for.
@@ -2230,7 +2230,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a field declaration has the <see langword="readonly"/> modifier.
         /// </summary>
         /// <param name="value">
-        /// The field declaration to check.
+        /// The field declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the field declaration has the <see langword="readonly"/> modifier; otherwise, <see langword="false"/>.
@@ -2241,7 +2241,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a <see cref="SerializationInfo"/> type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a <see cref="SerializationInfo"/> type; otherwise, <see langword="false"/>.
@@ -2262,7 +2262,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a syntax node spans multiple lines.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node spans multiple lines; otherwise, <see langword="false"/>.
@@ -2282,7 +2282,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a field declaration has the <see langword="static"/> modifier.
         /// </summary>
         /// <param name="value">
-        /// The field declaration to check.
+        /// The field declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the field declaration has the <see langword="static"/> modifier; otherwise, <see langword="false"/>.
@@ -2293,7 +2293,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a <see cref="StreamingContext"/> type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a <see cref="StreamingContext"/> type; otherwise, <see langword="false"/>.
@@ -2314,7 +2314,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a <see cref="string"/> type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a <see cref="string"/> type; otherwise, <see langword="false"/>.
@@ -2351,7 +2351,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an argument syntax represents a <see cref="string"/> value.
         /// </summary>
         /// <param name="value">
-        /// The argument syntax to check.
+        /// The argument syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -2373,7 +2373,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax represents a <see cref="string"/> value.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -2395,7 +2395,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax represents a <see cref="string"/> concatenation.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis, or <see langword="null"/> if not available.
@@ -2436,7 +2436,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an invocation expression represents a <see cref="string"/> format call.
         /// </summary>
         /// <param name="value">
-        /// The invocation expression to check.
+        /// The invocation expression to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the invocation represents a <see cref="string"/> format call; otherwise, <see langword="false"/>.
@@ -2451,7 +2451,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an argument syntax represents a <see cref="string"/> literal.
         /// </summary>
         /// <param name="value">
-        /// The argument syntax to check.
+        /// The argument syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the argument represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
@@ -2462,7 +2462,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax represents a <see cref="string"/> literal.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the expression represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
@@ -2484,7 +2484,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an expression syntax represents a struct or enum value.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.
@@ -2511,7 +2511,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method is an assembly-wide test setup method.
         /// </summary>
         /// <param name="value">
-        /// The method to check.
+        /// The method to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method is an assembly-wide test setup method; otherwise, <see langword="false"/>.
@@ -2522,7 +2522,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method is an assembly-wide test tear down method.
         /// </summary>
         /// <param name="value">
-        /// The method to check.
+        /// The method to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method is an assembly-wide test tear down method; otherwise, <see langword="false"/>.
@@ -2533,7 +2533,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a base type declaration represents a test class.
         /// </summary>
         /// <param name="value">
-        /// The base type declaration to check.
+        /// The base type declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type declaration represents a test class; otherwise, <see langword="false"/>.
@@ -2544,7 +2544,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a class declaration represents a test class.
         /// </summary>
         /// <param name="value">
-        /// The class declaration to check.
+        /// The class declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the class declaration represents a test class; otherwise, <see langword="false"/>.
@@ -2555,7 +2555,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a test method or one of its set-up or tear-down methods.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a test method or one of its set-up or tear-down methods; otherwise, <see langword="false"/>.
@@ -2572,7 +2572,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a test method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a test method; otherwise, <see langword="false"/>.
@@ -2583,7 +2583,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a test one-time setup method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a test one-time setup method; otherwise, <see langword="false"/>.
@@ -2594,7 +2594,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a test one-time tear down method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a test one-time tear down method; otherwise, <see langword="false"/>.
@@ -2605,7 +2605,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a test setup method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a test setup method; otherwise, <see langword="false"/>.
@@ -2616,7 +2616,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a test tear down method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a test tear down method; otherwise, <see langword="false"/>.
@@ -2627,7 +2627,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a method declaration represents a type under test creation method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method declaration to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the method declaration represents a type under test creation method; otherwise, <see langword="false"/>.
@@ -2638,7 +2638,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a variable declarator represents a type under test variable.
         /// </summary>
         /// <param name="value">
-        /// The variable declarator to check.
+        /// The variable declarator to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the variable declarator represents a type under test variable; otherwise, <see langword="false"/>.
@@ -2649,7 +2649,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a type syntax represents a void type.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The type syntax to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the type syntax represents a void type; otherwise, <see langword="false"/>.
@@ -2786,7 +2786,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a return statement returns a completed task.
         /// </summary>
         /// <param name="value">
-        /// The return statement to check.
+        /// The return statement to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the return statement returns a completed task; otherwise, <see langword="false"/>.
@@ -2797,7 +2797,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an if statement returns immediately.
         /// </summary>
         /// <param name="value">
-        /// The if statement to check.
+        /// The if statement to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the if statement returns immediately; otherwise, <see langword="false"/>.
@@ -2819,7 +2819,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an else clause returns immediately.
         /// </summary>
         /// <param name="value">
-        /// The else clause to check.
+        /// The else clause to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the else clause returns immediately; otherwise, <see langword="false"/>.
@@ -2844,7 +2844,7 @@ namespace MiKoSolutions.Analyzers
         /// The exception type to check for.
         /// </typeparam>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the syntax node throws the specified exception type; otherwise, <see langword="false"/>.
@@ -3405,7 +3405,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a binary expression contains a call to the specified method.
         /// </summary>
         /// <param name="value">
-        /// The binary expression to check.
+        /// The binary expression to examine.
         /// </param>
         /// <param name="methodName">
         /// The name of the method to check for.
@@ -3447,7 +3447,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether an invocation expression represents a LINQ extension method.
         /// </summary>
         /// <param name="node">
-        /// The invocation expression to check.
+        /// The invocation expression to examine.
         /// </param>
         /// <param name="semanticModel">
         /// The semantic model to use for analysis.

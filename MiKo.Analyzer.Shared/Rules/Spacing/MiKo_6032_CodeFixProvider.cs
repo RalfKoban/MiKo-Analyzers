@@ -15,62 +15,72 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ParameterSyntax parameter)
             {
-                var updatedParameter = parameter;
-
-                // move attributes that are placed on different lines
-                var attributeLists = updatedParameter.AttributeLists;
-                var attributesCount = attributeLists.Count;
-
-                if (attributesCount > 0)
-                {
-                    var updatedAttributeLists = attributeLists.ToArray();
-
-                    for (var i = 0; i < attributesCount; i++)
-                    {
-                        updatedAttributeLists[i] = GetUpdatedSyntaxNode(attributeLists[i], leadingSpaces);
-                    }
-
-                    updatedParameter = updatedParameter.WithAttributeLists(updatedAttributeLists.ToSyntaxList());
-                }
-
-                var modifiers = updatedParameter.Modifiers;
-                var modifiersCount = modifiers.Count;
-
-                if (modifiersCount > 0)
-                {
-                    var updatedModifiers = modifiers.ToArray();
-
-                    for (var i = 0; i < modifiersCount; i++)
-                    {
-                        updatedModifiers[i] = GetUpdatedSyntaxToken(modifiers[i], leadingSpaces);
-                    }
-
-                    updatedParameter = updatedParameter.WithModifiers(updatedModifiers.ToTokenList());
-                }
-
-                updatedParameter = updatedParameter.WithType(GetUpdatedSyntaxNode(updatedParameter.Type, leadingSpaces))
-                                                   .WithIdentifier(GetUpdatedSyntaxToken(updatedParameter.Identifier, leadingSpaces))
-                                                   .WithDefault(GetUpdatedSyntaxNode(updatedParameter.Default, leadingSpaces))
-                                                   .WithLeadingSpaces(leadingSpaces);
-
-                return updatedParameter as TSyntaxNode;
+                return GetUpdatedParameter(parameter, leadingSpaces) as TSyntaxNode;
             }
 
             return base.GetUpdatedSyntax(syntax, leadingSpaces);
+        }
+
+        private static ParameterSyntax GetUpdatedParameter(ParameterSyntax parameter, in int leadingSpaces)
+        {
+            var updatedParameter = parameter.WithAttributeLists(GetUpdatedAttributes(parameter.AttributeLists, leadingSpaces))
+                                            .WithModifiers(GetUpdatedModifiers(parameter.Modifiers, leadingSpaces))
+                                            .WithType(GetUpdatedSyntaxNode(parameter.Type, leadingSpaces))
+                                            .WithIdentifier(GetUpdatedSyntaxToken(parameter.Identifier, leadingSpaces))
+                                            .WithDefault(GetUpdatedSyntaxNode(parameter.Default, leadingSpaces))
+                                            .WithLeadingSpaces(leadingSpaces);
+
+            return updatedParameter;
+        }
+
+        private static SyntaxList<AttributeListSyntax> GetUpdatedAttributes(in SyntaxList<AttributeListSyntax> attributeLists, in int leadingSpaces)
+        {
+            var attributesCount = attributeLists.Count;
+
+            if (attributesCount is 0)
+            {
+                return attributeLists;
+            }
+
+            var updatedAttributeLists = attributeLists.ToArray();
+
+            for (var i = 0; i < attributesCount; i++)
+            {
+                // move attributes that are placed on different lines
+                updatedAttributeLists[i] = GetUpdatedSyntaxNode(attributeLists[i], leadingSpaces);
+            }
+
+            return updatedAttributeLists.ToSyntaxList();
+        }
+
+        private static SyntaxTokenList GetUpdatedModifiers(in SyntaxTokenList modifiers, in int leadingSpaces)
+        {
+            var modifiersCount = modifiers.Count;
+
+            if (modifiersCount is 0)
+            {
+                return modifiers;
+            }
+
+            var updatedModifiers = modifiers.ToArray();
+
+            for (var i = 0; i < modifiersCount; i++)
+            {
+                updatedModifiers[i] = GetUpdatedSyntaxToken(modifiers[i], leadingSpaces);
+            }
+
+            return updatedModifiers.ToTokenList();
         }
 
         private static SyntaxToken GetUpdatedSyntaxToken(in SyntaxToken token, in int leadingSpaces)
         {
             if (token.ContainsDirectives)
             {
-                var updatedToken = token;
+                var updatedToken = token.HasLeadingDirective()
+                                   ? token.WithLeadingSpaces(leadingSpaces)
+                                   : token;
 
-                if (updatedToken.LeadingTrivia.HasDirective())
-                {
-                    updatedToken = updatedToken.WithLeadingSpaces(leadingSpaces);
-                }
-
-                if (updatedToken.TrailingTrivia.HasEndOfLine())
+                if (updatedToken.HasTrailingEndOfLine())
                 {
                     return updatedToken.WithEndOfLine();
                 }
@@ -78,34 +88,32 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return updatedToken.WithoutTrailingTrivia();
             }
 
-            var trailingTrivia = token.TrailingTrivia;
-
-            if (trailingTrivia.HasComment())
+            if (token.HasTrailingComment())
             {
-                if (trailingTrivia.Any(_ => _.IsMultiLineComment()))
+                if (token.HasTrailingMultiLineComment())
                 {
-                    if (trailingTrivia.HasEndOfLine())
+                    if (token.HasTrailingEndOfLine())
                     {
-                        return token.WithoutTrailingEndOfLine().WithLeadingSpaces(leadingSpaces);
+                        return token.WithoutTrailingEndOfLine()
+                                    .WithLeadingSpaces(leadingSpaces);
                     }
 
                     return token.WithLeadingSpaces(1);
                 }
 
-                if (trailingTrivia.Any(_ => _.IsSingleLineComment()))
+                if (token.HasTrailingSingleLineComment())
                 {
                     return token.WithLeadingSpaces(leadingSpaces);
                 }
             }
 
-            var previousToken = token.GetPreviousToken();
-
-            if (previousToken.TrailingTrivia.Any(_ => _.IsSingleLineComment()))
+            if (token.GetPreviousToken().HasTrailingSingleLineComment())
             {
                 return token.WithLeadingSpaces(leadingSpaces);
             }
 
-            return token.WithoutTrailingTrivia().WithLeadingSpaces(1);
+            return token.WithoutTrailingTrivia()
+                        .WithLeadingSpaces(1);
         }
 
         private static TSyntaxNode GetUpdatedSyntaxNode<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces) where TSyntaxNode : SyntaxNode
@@ -117,42 +125,40 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (node.ContainsDirectives)
             {
-                var updatedNode = node;
-
-                if (updatedNode.GetLeadingTrivia().HasDirective())
-                {
-                    updatedNode = updatedNode.WithLeadingSpaces(leadingSpaces);
-                }
+                var updatedNode = node.HasLeadingDirective()
+                                  ? node.WithLeadingSpaces(leadingSpaces)
+                                  : node;
 
                 return updatedNode.WithEndOfLine();
             }
 
-            var trailingTrivia = node.GetTrailingTrivia();
-
-            if (trailingTrivia.HasComment())
+            if (node.HasTrailingComment())
             {
-                if (trailingTrivia.Any(_ => _.IsMultiLineComment()))
+                if (node.HasTrailingMultiLineComment())
                 {
-                    if (trailingTrivia.HasEndOfLine())
+                    if (node.HasTrailingEndOfLine())
                     {
-                        return node.WithoutTrailingEndOfLine().WithLeadingSpaces(leadingSpaces);
+                        return node.WithoutTrailingEndOfLine()
+                                   .WithLeadingSpaces(leadingSpaces);
                     }
 
                     return node.WithLeadingSpaces(1);
                 }
 
-                if (trailingTrivia.Any(_ => _.IsSingleLineComment()))
+                if (node.HasTrailingSingleLineComment())
                 {
                     return node.WithLeadingSpaces(leadingSpaces);
                 }
             }
 
-            if (node.PreviousSiblingNodeOrToken() is SyntaxNodeOrToken sibling && sibling.GetTrailingTrivia().Any(_ => _.IsSingleLineComment()))
+            if (node.PreviousSiblingNodeOrToken().HasTrailingSingleLineComment())
             {
-                return node.WithoutTrailingTrivia().WithLeadingSpaces(leadingSpaces);
+                return node.WithoutTrailingTrivia()
+                           .WithLeadingSpaces(leadingSpaces);
             }
 
-            return node.WithoutTrailingTrivia().WithLeadingSpaces(1);
+            return node.WithoutTrailingTrivia()
+                       .WithLeadingSpaces(1);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified value is an adjective or adverb.
         /// </summary>
         /// <param name="value">
-        /// The value to check.
+        /// The value to examine.
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the comparison type to use when comparing the value.

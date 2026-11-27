@@ -1171,7 +1171,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified key represents the complete text.
         /// </summary>
         /// <param name="key">
-        /// The abbreviation key to check.
+        /// The abbreviation key to examine.
         /// </param>
         /// <param name="value">
         /// The text to compare against.
@@ -1186,7 +1186,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified key represents an abbreviation at the beginning of the text.
         /// </summary>
         /// <param name="key">
-        /// The abbreviation key to check.
+        /// The abbreviation key to examine.
         /// </param>
         /// <param name="value">
         /// The text to inspect.
@@ -1214,7 +1214,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified key represents an abbreviation at the end of the text.
         /// </summary>
         /// <param name="key">
-        /// The abbreviation key to check.
+        /// The abbreviation key to examine.
         /// </param>
         /// <param name="value">
         /// The text to inspect.
@@ -1229,7 +1229,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified key represents an abbreviation in the middle of the text.
         /// </summary>
         /// <param name="key">
-        /// The abbreviation key to check.
+        /// The abbreviation key to examine.
         /// </param>
         /// <param name="value">
         /// The text to inspect.

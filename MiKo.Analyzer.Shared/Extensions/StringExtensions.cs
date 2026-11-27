@@ -222,7 +222,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether all characters in the span are uppercase.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if all characters in the span are uppercase; otherwise, <see langword="false"/>.
@@ -313,7 +313,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether any of the characters in the span is uppercase.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if any character in the span is uppercase; otherwise, <see langword="false"/>.
@@ -1505,7 +1505,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> contains XML markup.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> contains XML markup; otherwise, <see langword="false"/>.
@@ -1516,7 +1516,7 @@ namespace MiKoSolutions.Analyzers
         /// Counts the number of leading whitespace characters in the span.
         /// </summary>
         /// <param name="value">
-        /// The span to check.
+        /// The span to examine.
         /// </param>
         /// <param name="start">
         /// The starting index to begin counting from.
@@ -1536,7 +1536,7 @@ namespace MiKoSolutions.Analyzers
         /// Counts the number of leading whitespace characters in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="start">
         /// The starting index to begin counting from.
@@ -1551,7 +1551,7 @@ namespace MiKoSolutions.Analyzers
         /// Counts the number of trailing whitespace characters in the span.
         /// </summary>
         /// <param name="value">
-        /// The span to check.
+        /// The span to examine.
         /// </param>
         /// <param name="start">
         /// The starting index to begin counting from.
@@ -1571,7 +1571,7 @@ namespace MiKoSolutions.Analyzers
         /// Counts the number of trailing whitespace characters in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="start">
         /// The starting index to begin counting from.
@@ -1586,7 +1586,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with the specified character.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="character">
         /// The character to seek.
@@ -1601,7 +1601,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with the specified character.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="character">
         /// The character to seek.
@@ -1616,7 +1616,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="characters">
         /// The <see cref="string"/> to seek.
@@ -1639,7 +1639,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="suffixCharacters">
         /// The characters to check for.
@@ -1654,7 +1654,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="suffixCharacters">
         /// The characters to check for.
@@ -1669,7 +1669,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="suffixCharacters">
         /// The characters to check for.
@@ -1699,7 +1699,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="suffixCharacters">
         /// The characters to check for.
@@ -1714,7 +1714,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="suffixes">
         /// The suffixes to check for.
@@ -1755,7 +1755,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="suffixes">
         /// The suffixes to check for.
@@ -1794,7 +1794,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="suffixes">
         /// The suffixes to check for.
@@ -1833,7 +1833,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="suffixes">
         /// The list of suffixes to check for.
@@ -1874,7 +1874,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="suffixes">
         /// The suffixes to check for.
@@ -1916,7 +1916,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with a common number (excluding bit numbers).
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> ends with a common number; otherwise, <see langword="false"/>.
@@ -1927,7 +1927,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with a common number (excluding bit numbers).
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the span ends with a common number; otherwise, <see langword="false"/>.
@@ -1938,7 +1938,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> ends with a number.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> ends with a number; otherwise, <see langword="false"/>.
@@ -1949,7 +1949,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters ends with a number.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the span ends with a number; otherwise, <see langword="false"/>.
@@ -2513,7 +2513,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> has characters (is not <see langword="null"/> or empty).
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> has characters; otherwise, <see langword="false"/>.
@@ -2529,7 +2529,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> has a collection marker suffix.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> has a collection marker suffix; otherwise, <see langword="false"/>.
@@ -2541,7 +2541,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> has an entity marker.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> has an entity marker; otherwise, <see langword="false"/>.
@@ -2570,7 +2570,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> has more uppercase letters than the specified limit.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="limit">
         /// The limit to compare against.
@@ -2584,7 +2584,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters has more uppercase letters than the specified limit.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="limit">
         /// The limit to compare against.
@@ -2846,7 +2846,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> is an acronym (contains only uppercase letters).
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> is an acronym; otherwise, <see langword="false"/>.
@@ -2858,7 +2858,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether all characters in the <see cref="string"/> are uppercase.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if all characters in the <see cref="string"/> are uppercase; otherwise, <see langword="false"/>.
@@ -2870,7 +2870,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether all characters in the span are uppercase.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if all characters in the span are uppercase; otherwise, <see langword="false"/>.
@@ -2900,7 +2900,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> is a hyperlink.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> is a hyperlink; otherwise, <see langword="false"/>.
@@ -2926,7 +2926,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is a letter.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is a letter; otherwise, <see langword="false"/>.
@@ -2938,7 +2938,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is lowercase.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is lowercase; otherwise, <see langword="false"/>.
@@ -2950,7 +2950,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is a lowercase letter.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is a lowercase letter; otherwise, <see langword="false"/>.
@@ -2962,7 +2962,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> is <see langword="null"/> or empty.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> is <see langword="null"/> or empty; otherwise, <see langword="false"/>.
@@ -2974,7 +2974,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters is empty.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the span is empty; otherwise, <see langword="false"/>.
@@ -2986,7 +2986,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> is <see langword="null"/>, empty, or consists only of white-space characters.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> is <see langword="null"/>, empty, or consists only of white-space characters; otherwise, <see langword="false"/>.
@@ -2998,7 +2998,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters is empty or consists only of white-space characters.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the span is empty or consists only of white-space characters; otherwise, <see langword="false"/>.
@@ -3025,7 +3025,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is a number.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is a number; otherwise, <see langword="false"/>.
@@ -3037,7 +3037,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span is a number.
         /// </summary>
         /// <param name="value">
-        /// The span to check.
+        /// The span to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the span is a number; otherwise, <see langword="false"/>.
@@ -3091,7 +3091,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> is a number.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> is a number; otherwise, <see langword="false"/>.
@@ -3124,7 +3124,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> is in <c>PascalCasing</c> format.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> is in <c>PascalCasing</c> format; otherwise, <see langword="false"/>.
@@ -3147,7 +3147,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is a sentence ending punctuation mark (period, question mark, or exclamation mark).
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is a sentence ending punctuation mark; otherwise, <see langword="false"/>.
@@ -3171,7 +3171,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> consists of a single word (no whitespace).
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> consists of a single word; otherwise, <see langword="false"/>.
@@ -3183,7 +3183,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters consists of a single word (no whitespace).
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the span consists of a single word; otherwise, <see langword="false"/>.
@@ -3195,7 +3195,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is uppercase.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is uppercase; otherwise, <see langword="false"/>.
@@ -3225,7 +3225,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is an uppercase letter.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is an uppercase letter; otherwise, <see langword="false"/>.
@@ -3237,7 +3237,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is in uppercase or a number.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is in uppercase or a number; otherwise, <see langword="false"/>.
@@ -3249,7 +3249,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the character is a white-space character.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is a white-space character; otherwise, <see langword="false"/>.
@@ -3594,7 +3594,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> starts with the specified character.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="character">
         /// The character to seek.
@@ -3609,7 +3609,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> starts with the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
@@ -3624,7 +3624,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters starts with the specified character.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="character">
         /// The character to seek.
@@ -3639,7 +3639,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters starts with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="characters">
         /// The <see cref="string"/> to seek.
@@ -3654,7 +3654,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> starts with the specified characters using the specified comparison.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
@@ -3676,7 +3676,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters starts with the specified <see cref="string"/> using the specified comparison.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="characters">
         /// The <see cref="string"/> to seek.
@@ -3700,7 +3700,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> starts with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
@@ -3715,7 +3715,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters starts with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
@@ -3730,7 +3730,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> starts with any of the specified prefixes.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <param name="prefixes">
         /// The prefixes to seek.
@@ -3769,7 +3769,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters starts with any of the specified prefixes.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="prefixes">
         /// The prefixes to seek.
@@ -3801,7 +3801,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters starts with any of the specified prefixes.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="prefixes">
         /// The prefixes to seek.
@@ -3833,7 +3833,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the <see cref="string"/> starts with a number.
         /// </summary>
         /// <param name="value">
-        /// The <see cref="string"/> to check.
+        /// The <see cref="string"/> to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="string"/> starts with a number; otherwise, <see langword="false"/>.
@@ -4621,7 +4621,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the span of characters contains any whitespace characters.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="start">
         /// The index to start checking from.
@@ -4647,7 +4647,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a character is a lowercase ASCII letter.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is a lowercase ASCII letter; otherwise, <see langword="false"/>.
@@ -4659,7 +4659,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a character code represents a lowercase ASCII letter.
         /// </summary>
         /// <param name="value">
-        /// The character code to check.
+        /// The character code to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character code represents a lowercase ASCII letter; otherwise, <see langword="false"/>.
@@ -4671,7 +4671,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a character is an uppercase ASCII letter.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is an uppercase ASCII letter; otherwise, <see langword="false"/>.
@@ -4683,7 +4683,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a character code represents an uppercase ASCII letter.
         /// </summary>
         /// <param name="value">
-        /// The character code to check.
+        /// The character code to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character code represents an uppercase ASCII letter; otherwise, <see langword="false"/>.
@@ -4695,7 +4695,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether a character is uppercase using a custom switch-based approach.
         /// </summary>
         /// <param name="value">
-        /// The character to check.
+        /// The character to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the character is uppercase; otherwise, <see langword="false"/>.
@@ -4843,10 +4843,10 @@ namespace MiKoSolutions.Analyzers
         /// Performs a quick check to determine if one span might start with the other span.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="other">
-        /// The span of characters to check for at the start.
+        /// The span of characters to examine for at the start.
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
@@ -4881,10 +4881,10 @@ namespace MiKoSolutions.Analyzers
         /// Performs a quick ordinal comparison of spans to determine if one starts with the other.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="other">
-        /// The span of characters to check for at the start.
+        /// The span of characters to examine for at the start.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the first and last characters match; otherwise, <see langword="false"/>.
@@ -4908,10 +4908,10 @@ namespace MiKoSolutions.Analyzers
         /// Performs a quick case-insensitive comparison of spans to determine if one might start with the other.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to check.
+        /// The span of characters to examine.
         /// </param>
         /// <param name="other">
-        /// The span of characters to check for at the start.
+        /// The span of characters to examine for at the start.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if a more detailed check should be performed; otherwise, <see langword="false"/>.

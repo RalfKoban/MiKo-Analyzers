@@ -325,7 +325,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token has any comments.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token has any comments; otherwise, <see langword="false"/>.
@@ -336,7 +336,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token has a documentation comment trivia.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token has a documentation comment trivia; otherwise, <see langword="false"/>.
@@ -370,10 +370,10 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token has any leading comments.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the token has leading comments; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the token has any leading comments; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasLeadingComment(this in SyntaxToken value) => value.LeadingTrivia.HasComment();
@@ -382,19 +382,91 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token has any trailing comments.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the token has trailing comments; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the token has any trailing comments; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingComment(this in SyntaxToken value) => value.TrailingTrivia.HasComment();
 
         /// <summary>
+        /// Determines whether the syntax token has any leading single-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any leading single-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingSingleLineComment(this in SyntaxToken value) => value.LeadingTrivia.HasSingleLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax token has any trailing single-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any trailing single-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingSingleLineComment(this in SyntaxToken value) => value.TrailingTrivia.HasSingleLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax token has any leading multi-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any leading multi-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingMultiLineComment(this in SyntaxToken value) => value.LeadingTrivia.HasMultiLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax token has any trailing multi-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any trailing multi-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingMultiLineComment(this in SyntaxToken value) => value.TrailingTrivia.HasMultiLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax token contains any leading preprocessor directive.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax token contains any leading preprocessor directive; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingDirective(this in SyntaxToken value) => value.LeadingTrivia.HasDirective();
+
+        /// <summary>
+        /// Determines whether the syntax token contains any trailing preprocessor directive.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax token contains any trailing preprocessor directive; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingDirective(this in SyntaxToken value) => value.TrailingTrivia.HasDirective();
+
+        /// <summary>
         /// Determines whether the syntax token has a trailing end-of-line.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token has a trailing end-of-line; otherwise, <see langword="false"/>.
@@ -406,7 +478,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is any of the specified kinds.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="kinds">
         /// The set of syntax kinds to check against.
@@ -421,7 +493,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is any of the specified kinds.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="kinds">
         /// The span of syntax kinds to check against.
@@ -448,7 +520,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is the close brace token <c>}</c>.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token is the close brace token <c>}</c>; otherwise, <see langword="false"/>.
@@ -461,7 +533,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is the default value.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token is the default value; otherwise, <see langword="false"/>.
@@ -473,7 +545,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the token is of the specified kind.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="kind">
         /// One of the enumeration members that specifies the syntax kind to compare with.
@@ -488,7 +560,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is located at the specified location.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="location">
         /// The location to compare with.
@@ -503,7 +575,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the specified syntax node.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node to compare with.
@@ -518,7 +590,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the specified syntax node or token.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node or token to compare with.
@@ -533,7 +605,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as another syntax token.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="other">
         /// The other syntax token to compare with.
@@ -548,7 +620,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the end of the specified syntax node.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node to compare with.
@@ -563,7 +635,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the end of the specified syntax node or token.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="other">
         /// The syntax node or token to compare with.
@@ -578,7 +650,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is on the same line as the end of another syntax token.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <param name="other">
         /// The other syntax token to compare with.
@@ -593,7 +665,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token is the open brace token <c>{</c>.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token is the open brace token <c>{</c>; otherwise, <see langword="false"/>.
@@ -606,7 +678,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the syntax token spans multiple lines.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to check.
+        /// The syntax token to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the token spans multiple lines; otherwise, <see langword="false"/>.
