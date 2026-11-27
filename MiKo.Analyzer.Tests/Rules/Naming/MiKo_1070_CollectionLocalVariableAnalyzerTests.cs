@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "list",
                                                             "map",
                                                             "mapping",
+                                                            "previousTokenTrailingTrivia",
                                                             "queue",
                                                             "result",
                                                             "results",

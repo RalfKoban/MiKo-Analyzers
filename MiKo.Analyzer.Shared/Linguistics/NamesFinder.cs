@@ -809,7 +809,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (originalNameSpan.EndsWith("Map", StringComparison.OrdinalIgnoreCase)
              || originalNameSpan.EndsWith("Batch", StringComparison.OrdinalIgnoreCase)
-             || originalNameSpan.EndsWith("Cache", StringComparison.OrdinalIgnoreCase))
+             || originalNameSpan.EndsWith("Cache", StringComparison.OrdinalIgnoreCase)
+             || originalNameSpan.EndsWith("Trivia", StringComparison.OrdinalIgnoreCase))
             {
                 singularName = originalName;
 
