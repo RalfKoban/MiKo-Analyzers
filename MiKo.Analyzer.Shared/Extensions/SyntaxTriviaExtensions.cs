@@ -243,6 +243,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the trivia is a text that is currently disabled because it is part of a directive that currently does not match.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a disabled text; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsDisabledText(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.DisabledTextTrivia);
+
+        /// <summary>
         /// Determines whether the trivia is an end-of-line trivia.
         /// </summary>
         /// <param name="value">
@@ -433,6 +445,26 @@ namespace MiKoSolutions.Analyzers
             }
 
             return source.ToString();
+        }
+
+        /// <summary>
+        /// Creates a new syntax trivia with the specified number of white spaces.
+        /// </summary>
+        /// <param name="count">
+        /// The number of white space characters to include.
+        /// </param>
+        /// <returns>
+        /// A syntax trivia representing the specified number of white spaces.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxTrivia WhiteSpaces(in int count)
+        {
+            if (count is 1)
+            {
+                return SyntaxFactory.Space; // use non-elastic one to prevent formatting to be done automatically
+            }
+
+            return SyntaxFactory.Whitespace(new string(Constants.Space, count));
         }
 
         /// <summary>

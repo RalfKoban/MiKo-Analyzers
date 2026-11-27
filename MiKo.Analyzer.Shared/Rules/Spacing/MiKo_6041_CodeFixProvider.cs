@@ -94,17 +94,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             switch (expression)
             {
                 case BinaryExpressionSyntax binary:
-                    return binary.PlacedOnSameLine().WithLeadingSpace();
+                    return binary.PlacedOnSameLine().WithForcedSingleLeadingSpace();
 
 #if VS2022 || VS2026
                 case CollectionExpressionSyntax collectionExpression:
                     return collectionExpression.WithOpenBracketToken(collectionExpression.OpenBracketToken.WithoutLeadingTrivia().WithLeadingSpace());
 #endif
                 case InvocationExpressionSyntax invocation:
-                    return invocation.WithLeadingSpace();
+                    return invocation.WithForcedSingleLeadingSpace();
 
                 default:
-                    return expression.WithLeadingSpace();
+                    return expression.WithForcedSingleLeadingSpace();
             }
         }
     }

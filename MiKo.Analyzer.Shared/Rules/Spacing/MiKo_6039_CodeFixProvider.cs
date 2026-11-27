@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is ReturnStatementSyntax statement)
             {
                 return statement.WithReturnKeyword(statement.ReturnKeyword.WithoutTrailingTrivia())
-                                .WithExpression(statement.Expression.WithLeadingSpace());
+                                .WithExpression(statement.Expression.WithForcedSingleLeadingSpace());
             }
 
             return syntax;

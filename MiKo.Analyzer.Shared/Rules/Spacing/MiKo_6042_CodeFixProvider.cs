@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is ObjectCreationExpressionSyntax creation)
             {
                 return creation.WithNewKeyword(creation.NewKeyword.WithoutTrivia())
-                               .WithType(creation.Type.WithLeadingSpace());
+                               .WithType(creation.Type.WithForcedSingleLeadingSpace());
             }
 
             return syntax;

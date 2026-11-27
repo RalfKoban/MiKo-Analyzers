@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+using static MiKoSolutions.Analyzers.SyntaxTriviaExtensions;
+
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
@@ -32,6 +34,38 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IEnumerable<T> Ancestors<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
+
+        /// <summary>
+        /// Creates a new "disabled text" syntax trivia with the specified number of white spaces as leading spaces.
+        /// </summary>
+        /// <param name="value">
+        /// The original syntax trivia.
+        /// </param>
+        /// <param name="leadingSpaces">
+        /// The number of white space characters to lead with.
+        /// </param>
+        /// <returns>
+        /// A syntax trivia representing the disabled text and indented by the specified number of white spaces.
+        /// </returns>
+        internal static SyntaxTrivia AsDisabledText(this in SyntaxTrivia value, in int leadingSpaces)
+        {
+            var originalText = value.ToString();
+            var startPosition = 0;
+
+            var builder = StringBuilderCache.Acquire();
+
+            foreach (ReadOnlySpan<char> text in originalText.AsSpan().SplitBy(Constants.EnvironmentNewLine.AsSpan(), StringSplitOptions.RemoveEmptyEntries))
+            {
+                builder.InsertMultiple(' ', startPosition, leadingSpaces);
+                builder.AppendLine(text.TrimStart().ToString()); // ensure that there is no starting empty space
+
+                startPosition = builder.Length - 1;
+            }
+
+            var disabledText = builder.ToStringAndRelease();
+
+            return SyntaxFactory.DisabledText(disabledText);
+        }
 
         /// <summary>
         /// Creates a syntax token from the specified syntax kind.
@@ -411,6 +445,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the syntax token is the close brace token <c>}</c>.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is the close brace token <c>}</c>; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="IsOpenBrace"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsCloseBrace(this in SyntaxToken value) => value.IsKind(SyntaxKind.CloseBraceToken);
+
+        /// <summary>
         /// Determines whether the syntax token is the default value.
         /// </summary>
         /// <param name="value">
@@ -541,6 +588,19 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetEndingLine();
+
+        /// <summary>
+        /// Determines whether the syntax token is the open brace token <c>{</c>.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is the open brace token <c>{</c>; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="IsCloseBrace"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsOpenBrace(this in SyntaxToken value) => value.IsKind(SyntaxKind.OpenBraceToken);
 
         /// <summary>
         /// Determines whether the syntax token spans multiple lines.
@@ -1012,7 +1072,14 @@ namespace MiKoSolutions.Analyzers
                         }
                         else
                         {
-                            if (trivia.Span.Length < count)
+                            if (value.IsCloseBrace())
+                            {
+                                if (trivia.Span.Length < count)
+                                {
+                                    leadingTrivia[index] = WhiteSpaces(count);
+                                }
+                            }
+                            else
                             {
                                 leadingTrivia[index] = WhiteSpaces(count);
                             }
@@ -1040,7 +1107,7 @@ namespace MiKoSolutions.Analyzers
                         }
                         else
                         {
-                            if (value.IsKind(SyntaxKind.CloseBraceToken))
+                            if (value.IsCloseBrace())
                             {
                                 // seems we have a comment before a close brace, so indent it a bit in relation to the close brace
                                 leadingTrivia[index] = WhiteSpaces(count + Constants.Indentation);
@@ -1050,6 +1117,10 @@ namespace MiKoSolutions.Analyzers
                                 leadingTrivia[index] = SyntaxFactory.ElasticSpace;
                             }
                         }
+                    }
+                    else if (trivia.IsDisabledText())
+                    {
+                        leadingTrivia[index] = trivia.AsDisabledText(count);
                     }
                 }
             }
@@ -1170,6 +1241,33 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithoutTrailingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
+
+        /// <summary>
+        /// Creates a new syntax token without a trailing end-of-line.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to remove the trailing end-of-line from.
+        /// </param>
+        /// <returns>
+        /// A new syntax token without a trailing end-of-line.
+        /// </returns>
+        internal static SyntaxToken WithoutTrailingEndOfLine(this in SyntaxToken value)
+        {
+            var trivia = value.TrailingTrivia;
+            var count = trivia.Count;
+
+            if (count > 0)
+            {
+                var index = count - 1;
+
+                if (trivia[index].IsEndOfLine())
+                {
+                    return value.WithTrailingTrivia(trivia.RemoveAt(index));
+                }
+            }
+
+            return value;
+        }
 
         /// <summary>
         /// Creates a new syntax token with a space both before and after.
@@ -1336,17 +1434,5 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, in SyntaxToken token) => value.WithLeadingTriviaFrom(token)
                                                                                                             .WithTrailingTriviaFrom(token);
-
-        /// <summary>
-        /// Creates a new syntax token with the specified number of white spaces.
-        /// </summary>
-        /// <param name="count">
-        /// The number of white space characters to include.
-        /// </param>
-        /// <returns>
-        /// A syntax trivia representing the specified number of white spaces.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(Constants.Space, count));
     }
 }
