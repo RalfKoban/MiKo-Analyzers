@@ -3116,7 +3116,7 @@ namespace MiKoSolutions.Analyzers
             newModifiers = newModifiers.Replace(modifier, modifier.WithLeadingTriviaFrom(type));
 
             return value.WithModifiers(newModifiers)
-                        .WithDeclaration(declaration.WithType(type.WithLeadingSpace()));
+                        .WithDeclaration(declaration.WithType(type.WithForcedSingleLeadingSpace()));
         }
 
         /// <summary>

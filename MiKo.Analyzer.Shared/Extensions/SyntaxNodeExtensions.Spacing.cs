@@ -566,7 +566,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static CasePatternSwitchLabelSyntax PlacedOnSameLine(this CasePatternSwitchLabelSyntax value) => value?.WithoutTrivia()
                                                                                                                         .WithKeyword(value.Keyword.WithoutTrailingTrivia())
-                                                                                                                        .WithPattern(value.Pattern.PlacedOnSameLine().WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                        .WithPattern(value.Pattern.PlacedOnSameLine().WithForcedSingleLeadingSpace().WithoutTrailingTrivia())
                                                                                                                         .WithWhenClause(value.WhenClause.PlacedOnSameLine())
                                                                                                                         .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
@@ -581,7 +581,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static CaseSwitchLabelSyntax PlacedOnSameLine(this CaseSwitchLabelSyntax value) => value?.WithoutTrivia()
                                                                                                           .WithKeyword(value.Keyword.WithoutTrailingTrivia())
-                                                                                                          .WithValue(value.Value.PlacedOnSameLine().WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                          .WithValue(value.Value.PlacedOnSameLine().WithForcedSingleLeadingSpace().WithoutTrailingTrivia())
                                                                                                           .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
         /// <summary>
@@ -779,7 +779,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static ObjectCreationExpressionSyntax PlacedOnSameLine(this ObjectCreationExpressionSyntax value) => value?.WithoutTrivia()
                                                                                                                             .WithNewKeyword(value.NewKeyword.WithoutTrivia())
-                                                                                                                            .WithType(value.Type.PlacedOnSameLine().WithLeadingSpace())
+                                                                                                                            .WithType(value.Type.PlacedOnSameLine().WithForcedSingleLeadingSpace())
                                                                                                                             .WithArgumentList(value.ArgumentList.PlacedOnSameLine())
                                                                                                                             .WithInitializer(value.Initializer.PlacedOnSameLine());
 
@@ -881,7 +881,7 @@ namespace MiKoSolutions.Analyzers
 
             if (hasModifiers || hasAttributeLists)
             {
-                updatedType = updatedType.WithLeadingSpace();
+                updatedType = updatedType.WithForcedSingleLeadingSpace();
             }
 
             return updated.WithModifiers(updatedModifiers)
@@ -912,12 +912,12 @@ namespace MiKoSolutions.Analyzers
 
             if (updatedType != null)
             {
-                updatedPropertyPatternClause = updatedPropertyPatternClause?.WithLeadingSpace();
+                updatedPropertyPatternClause = updatedPropertyPatternClause?.WithForcedSingleLeadingSpace();
             }
 
             if (updatedPropertyPatternClause != null)
             {
-                updatedDesignation = updatedDesignation?.WithLeadingSpace();
+                updatedDesignation = updatedDesignation?.WithForcedSingleLeadingSpace();
             }
 
             var updatedSyntax = value.WithoutTrivia()
@@ -1108,7 +1108,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                 .WithCondition(value.Condition.PlacedOnSameLine());
 
         /// <summary>
-        /// Creates a new node from this node with an additional leading empty line.
+        /// Creates a new syntax node from this syntax node with an additional leading empty line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1123,7 +1123,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithAdditionalLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         /// <summary>
-        /// Creates a new node from this node with additional leading spaces.
+        /// Creates a new syntax node from this syntax node with additional leading spaces.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1150,7 +1150,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with additional leading spaces at the end of its leading trivia.
+        /// Creates a new syntax node from this syntax node with additional leading spaces at the end of its leading trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1175,7 +1175,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with additional leading spaces on its descendants.
+        /// Creates a new syntax node from this syntax node with additional leading spaces on its descendants.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1214,7 +1214,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with additional leading trivia.
+        /// Creates a new syntax node from this syntax node with additional leading trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1232,7 +1232,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value?.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
         /// <summary>
-        /// Creates a new node from this node with an additional leading trivia.
+        /// Creates a new syntax node from this syntax node with an additional leading trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1250,7 +1250,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value?.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
 
         /// <summary>
-        /// Creates a new node from this node with additional leading trivia.
+        /// Creates a new syntax node from this syntax node with additional leading trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1268,7 +1268,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value?.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
         /// <summary>
-        /// Creates a new node from this node with additional leading trivia from another node.
+        /// Creates a new syntax node from this syntax node with additional leading trivia from another node.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1292,7 +1292,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with additional leading trivia from a token.
+        /// Creates a new syntax node from this syntax node with additional leading trivia from a token.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1316,7 +1316,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with an additional trailing empty line.
+        /// Creates a new syntax node from this syntax node with an additional trailing empty line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1331,7 +1331,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithAdditionalTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         /// <summary>
-        /// Creates a new node from this node with additional trailing trivia.
+        /// Creates a new syntax node from this syntax node with additional trailing trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1349,7 +1349,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value?.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         /// <summary>
-        /// Creates a new node from this node with an additional trailing trivia.
+        /// Creates a new syntax node from this syntax node with an additional trailing trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1367,7 +1367,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value?.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
 
         /// <summary>
-        /// Creates a new node from this node with additional trailing trivia.
+        /// Creates a new syntax node from this syntax node with additional trailing trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1400,7 +1400,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalEndOfLine<T>(this T value) where T : SyntaxNode => value?.WithAdditionalTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with a trailing end-of-line.
+        /// Creates a new syntax node from this syntax node with a trailing end-of-line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1415,7 +1415,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with a trivia added at the beginning of its leading trivia.
+        /// Creates a new syntax node from this syntax node with a trivia added at the beginning of its leading trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1449,7 +1449,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with trivia added at the beginning of its leading trivia.
+        /// Creates a new syntax node from this syntax node with trivia added at the beginning of its leading trivia.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1483,7 +1483,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with indentation.
+        /// Creates a new syntax node from this syntax node with indentation.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1498,7 +1498,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value?.WithFirstLeadingTrivia(SyntaxFactory.ElasticMarker); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with a leading empty line.
+        /// Creates a new syntax node from this syntax node with a leading empty line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1513,7 +1513,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         /// <summary>
-        /// Creates a new node from this node with a leading end-of-line.
+        /// Creates a new syntax node from this syntax node with a leading end-of-line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1528,7 +1528,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value?.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with a leading space.
+        /// Creates a new syntax node from this syntax node with a leading space.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1540,10 +1540,10 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with a leading space.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value?.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
+        internal static T WithForcedSingleLeadingSpace<T>(this T value) where T : SyntaxNode => value?.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with the specified number of leading spaces.
+        /// Creates a new syntax node from this syntax node with the specified number of leading spaces.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1608,7 +1608,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with leading trivia from another node.
+        /// Creates a new syntax node from this syntax node with leading trivia from another node.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1632,7 +1632,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with leading trivia from a token.
+        /// Creates a new syntax node from this syntax node with leading trivia from a token.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1656,7 +1656,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node without a leading end-of-line.
+        /// Creates a new syntax node from this syntax node without a leading end-of-line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1680,7 +1680,37 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node without trailing spaces.
+        /// Creates a new syntax node from this syntax node without a trailing end-of-line.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node to remove the trailing end-of-line from.
+        /// </param>
+        /// <returns>
+        /// A new syntax node without a trailing end-of-line.
+        /// </returns>
+        internal static T WithoutTrailingEndOfLine<T>(this T value) where T : SyntaxNode
+        {
+            var trivia = value.GetTrailingTrivia();
+            var count = trivia.Count;
+
+            if (count > 0)
+            {
+                var index = count - 1;
+
+                if (trivia[index].IsEndOfLine())
+                {
+                    return value.WithTrailingTrivia(trivia.RemoveAt(index));
+                }
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Creates a new syntax node from this syntax node without trailing spaces.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1793,7 +1823,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with a trailing empty line.
+        /// Creates a new syntax node from this syntax node with a trailing empty line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1808,7 +1838,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
         /// <summary>
-        /// Creates a new node from this node with a trailing new line.
+        /// Creates a new syntax node from this syntax node with a trailing new line.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1823,7 +1853,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use an elastic one to enforce the line break
 
         /// <summary>
-        /// Creates a new node from this node with a trailing space.
+        /// Creates a new syntax node from this syntax node with a trailing space.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1838,7 +1868,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value?.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with trailing spaces.
+        /// Creates a new syntax node from this syntax node with trailing spaces.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1856,7 +1886,7 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value?.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.Space, spaces)); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
-        /// Creates a new node from this node with trailing trivia from another node.
+        /// Creates a new syntax node from this syntax node with trailing trivia from another node.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1880,7 +1910,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with trailing trivia from a token.
+        /// Creates a new syntax node from this syntax node with trailing trivia from a token.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1904,7 +1934,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new node from this node with leading and trailing trivia from another node.
+        /// Creates a new syntax node from this syntax node with leading and trailing trivia from another node.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1923,7 +1953,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                          .WithTrailingTriviaFrom(node);
 
         /// <summary>
-        /// Creates a new node from this node with leading and trailing trivia from a token.
+        /// Creates a new syntax node from this syntax node with leading and trailing trivia from a token.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.

@@ -46,6 +46,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                        .WithAttributes(element.Attributes.Select(GetUpdatedSyntax).ToSyntaxList())
                                                                                                        .WithSlashGreaterThanToken(element.SlashGreaterThanToken.WithoutTrivia());
 
-        private static XmlAttributeSyntax GetUpdatedSyntax(XmlAttributeSyntax attribute) => attribute.Without(attribute.DescendantTrivia()).WithLeadingSpace();
+        private static XmlAttributeSyntax GetUpdatedSyntax(XmlAttributeSyntax attribute) => attribute.Without(attribute.DescendantTrivia()).WithForcedSingleLeadingSpace();
     }
 }

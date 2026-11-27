@@ -819,6 +819,367 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_identifier_is_inside_conditional_directive_and_type_is_not_aligned_and_directive_is_true()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                        int
+#if FLAG
+                                     y
+#else
+                            z
+#endif
+                            )
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            int
+#if FLAG
+                            y
+#else
+                            z
+#endif
+                            )
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_identifier_is_inside_conditional_directive_and_type_is_not_aligned_and_directive_is_false()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                        int
+#if FLAG
+                            y
+#else
+                                     z
+#endif
+                            )
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            int
+#if FLAG
+                            y
+#else
+                            z
+#endif
+                            )
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_identifier_is_inside_conditional_directive_without_alternative_and_type_is_not_aligned()
+        {
+            const string OriginalCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                        int
+#if FLAG
+                                     y
+#endif
+                            )
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+#define FLAG
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            int
+#if FLAG
+                            y
+#endif
+                            )
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_block_comment_follows_attribute_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                              [In] /* marshaling rationale */
+                                     int
+                          y)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            [In] /* marshaling rationale */ int y)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_block_comment_precedes_type_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                              [In]
+                       /* marshaling rationale */ int
+                          y)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            [In] /* marshaling rationale */ int y)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_block_comment_follows_modifier_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                       params /* array of values */
+                                     int[]
+                          values)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            params /* array of values */ int[] values)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_block_comment_precedes_identifier_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                       int
+                          /* the value */ y)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            int /* the value */ y)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_line_comment_follows_attribute_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                              [In] // marshaling rationale
+                                     int
+                          y)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            [In] // marshaling rationale
+                            int y)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_line_comment_follows_type_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                       int // the type
+                                     y)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            int // the type
+                            y)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter_where_line_comment_follows_modifier_and_is_preserved()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                       params // array of values
+                                     int[]
+                          values)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x,
+                            params // array of values
+                            int[] values)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_method_with_parameter_with_default_value_where_modifier_type_identifier_and_default_value_are_each_on_different_line()
         {
             const string OriginalCode = @"

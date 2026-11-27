@@ -1072,7 +1072,14 @@ namespace MiKoSolutions.Analyzers
                         }
                         else
                         {
-                            if (trivia.Span.Length < count)
+                            if (value.IsCloseBrace())
+                            {
+                                if (trivia.Span.Length < count)
+                                {
+                                    leadingTrivia[index] = WhiteSpaces(count);
+                                }
+                            }
+                            else
                             {
                                 leadingTrivia[index] = WhiteSpaces(count);
                             }
@@ -1234,6 +1241,33 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithoutTrailingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
+
+        /// <summary>
+        /// Creates a new syntax token without a trailing end-of-line.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to remove the trailing end-of-line from.
+        /// </param>
+        /// <returns>
+        /// A new syntax token without a trailing end-of-line.
+        /// </returns>
+        internal static SyntaxToken WithoutTrailingEndOfLine(this in SyntaxToken value)
+        {
+            var trivia = value.TrailingTrivia;
+            var count = trivia.Count;
+
+            if (count > 0)
+            {
+                var index = count - 1;
+
+                if (trivia[index].IsEndOfLine())
+                {
+                    return value.WithTrailingTrivia(trivia.RemoveAt(index));
+                }
+            }
+
+            return value;
+        }
 
         /// <summary>
         /// Creates a new syntax token with a space both before and after.

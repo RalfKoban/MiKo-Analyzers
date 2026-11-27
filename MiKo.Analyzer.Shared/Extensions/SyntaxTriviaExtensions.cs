@@ -457,7 +457,15 @@ namespace MiKoSolutions.Analyzers
         /// A syntax trivia representing the specified number of white spaces.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(Constants.Space, count));
+        internal static SyntaxTrivia WhiteSpaces(in int count)
+        {
+            if (count is 1)
+            {
+                return SyntaxFactory.Space; // use non-elastic one to prevent formatting to be done automatically
+            }
+
+            return SyntaxFactory.Whitespace(new string(Constants.Space, count));
+        }
 
         /// <summary>
         /// Collects XML text tokens from an XML text.

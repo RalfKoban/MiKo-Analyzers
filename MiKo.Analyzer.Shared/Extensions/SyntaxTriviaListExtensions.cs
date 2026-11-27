@@ -140,6 +140,34 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the trivia list contains any preprocessor directive.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia list to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains any preprocessor directive; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasDirective(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var count = value.Count;
+
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    if (value[index].IsDirective)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether the trivia list contains any end-of-line trivia.
         /// </summary>
         /// <param name="value">

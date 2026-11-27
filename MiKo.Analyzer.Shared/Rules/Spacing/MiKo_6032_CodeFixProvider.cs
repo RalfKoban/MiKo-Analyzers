@@ -65,12 +65,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var updatedToken = token;
 
-                if (updatedToken.LeadingTrivia.Any(_ => _.IsDirective))
+                if (updatedToken.LeadingTrivia.HasDirective())
                 {
                     updatedToken = updatedToken.WithLeadingSpaces(leadingSpaces);
                 }
 
-                if (updatedToken.TrailingTrivia.Any(_ => _.IsEndOfLine()))
+                if (updatedToken.TrailingTrivia.HasEndOfLine())
                 {
                     return updatedToken.WithEndOfLine();
                 }
@@ -78,7 +78,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return updatedToken.WithoutTrailingTrivia();
             }
 
-            return token.WithoutTrailingTrivia().WithLeadingSpace();
+            var trailingTrivia = token.TrailingTrivia;
+
+            if (trailingTrivia.HasComment())
+            {
+                if (trailingTrivia.Any(_ => _.IsMultiLineComment()))
+                {
+                    if (trailingTrivia.HasEndOfLine())
+                    {
+                        return token.WithoutTrailingEndOfLine().WithLeadingSpaces(leadingSpaces);
+                    }
+
+                    return token.WithLeadingSpaces(1);
+                }
+
+                if (trailingTrivia.Any(_ => _.IsSingleLineComment()))
+                {
+                    return token.WithLeadingSpaces(leadingSpaces);
+                }
+            }
+
+            var previousToken = token.GetPreviousToken();
+
+            if (previousToken.TrailingTrivia.Any(_ => _.IsSingleLineComment()))
+            {
+                return token.WithLeadingSpaces(leadingSpaces);
+            }
+
+            return token.WithoutTrailingTrivia().WithLeadingSpaces(1);
         }
 
         private static TSyntaxNode GetUpdatedSyntaxNode<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces) where TSyntaxNode : SyntaxNode
@@ -92,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var updatedNode = node;
 
-                if (updatedNode.GetLeadingTrivia().Any(_ => _.IsDirective))
+                if (updatedNode.GetLeadingTrivia().HasDirective())
                 {
                     updatedNode = updatedNode.WithLeadingSpaces(leadingSpaces);
                 }
@@ -100,7 +127,32 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return updatedNode.WithEndOfLine();
             }
 
-            return node.WithoutTrailingTrivia().WithLeadingSpace();
+            var trailingTrivia = node.GetTrailingTrivia();
+
+            if (trailingTrivia.HasComment())
+            {
+                if (trailingTrivia.Any(_ => _.IsMultiLineComment()))
+                {
+                    if (trailingTrivia.HasEndOfLine())
+                    {
+                        return node.WithoutTrailingEndOfLine().WithLeadingSpaces(leadingSpaces);
+                    }
+
+                    return node.WithLeadingSpaces(1);
+                }
+
+                if (trailingTrivia.Any(_ => _.IsSingleLineComment()))
+                {
+                    return node.WithLeadingSpaces(leadingSpaces);
+                }
+            }
+
+            if (node.PreviousSiblingNodeOrToken() is SyntaxNodeOrToken sibling && sibling.GetTrailingTrivia().Any(_ => _.IsSingleLineComment()))
+            {
+                return node.WithoutTrailingTrivia().WithLeadingSpaces(leadingSpaces);
+            }
+
+            return node.WithoutTrailingTrivia().WithLeadingSpaces(1);
         }
     }
 }

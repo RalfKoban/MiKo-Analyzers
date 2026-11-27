@@ -202,14 +202,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = new List<ArgumentSyntax>
                                 {
                                     Argument(ParenthesizedLambda(Block(statements.Except(tryAssertFails), spaces))),
-                                    Throws(catchClauses, tryAssertFails).WithLeadingSpace(),
+                                    Throws(catchClauses, tryAssertFails).WithForcedSingleLeadingSpace(),
                                 };
 
             if (tryAssertFails.Count > 0)
             {
                 if (tryAssertFails[0].Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
                 {
-                    arguments.AddRange(args.Select(_ => _.WithLeadingSpace()));
+                    arguments.AddRange(args.Select(_ => _.WithForcedSingleLeadingSpace()));
                 }
             }
             else
@@ -219,7 +219,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (catchAssertFail?.Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
                 {
-                    arguments.AddRange(args.Select(_ => _.WithLeadingSpace()));
+                    arguments.AddRange(args.Select(_ => _.WithForcedSingleLeadingSpace()));
                 }
             }
 
