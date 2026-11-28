@@ -16,7 +16,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 602 rules that are currently provided by the analyzers.
+The following tables list all the 603 rules that are currently provided by the analyzers.
 
 ### Metrics
 
@@ -210,6 +210,7 @@ The following tables list all the 602 rules that are currently provided by the a
 |[MiKo_1540](/Documentation/MiKo_1540.md)|Do not prefix local variables with 'actual'|&#x2713;|&#x2713;|
 |[MiKo_1541](/Documentation/MiKo_1541.md)|Do not prefix parameters with 'actual'|&#x2713;|&#x2713;|
 |[MiKo_1542](/Documentation/MiKo_1542.md)|Avoid multiple events with the same semantic meaning|&#x2713;|\-|
+|[MiKo_1543](/Documentation/MiKo_1543.md)|Type names should match their creation pattern|&#x2713;|\-|
 
 ### Documentation
 

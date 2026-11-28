@@ -2233,6 +2233,16 @@ Using a single, consistent event name for each semantic concept makes the code e
   <data name="MiKo_1542_Title" xml:space="preserve">
     <value>Avoid multiple events with the same semantic meaning</value>
   </data>
+  <data name="MiKo_1543_Description" xml:space="preserve">
+    <value>Types named as factories or builders should provide the operation associated with their pattern. Factories should expose a 'Create' method, and builders should expose a 'Build' method.
+Types that do not provide the expected operation should be renamed to reflect their actual responsibility, such as using a 'Provider' suffix when they only expose dependencies.</value>
+  </data>
+  <data name="MiKo_1543_MessageFormat" xml:space="preserve">
+    <value>Consider renaming '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1543_Title" xml:space="preserve">
+    <value>Type names should match their creation pattern</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
