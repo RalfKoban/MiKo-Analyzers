@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers
         /// The expression syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the identifier name; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         internal static string GetStartingIdentifierName(this ExpressionSyntax value)
         {
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers
         /// The argument syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the identifier name; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetIdentifierName(this ArgumentSyntax value) => value.Expression.GetIdentifierName();
@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers
         /// The expression syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the identifier name; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers
 
             return expression is IdentifierNameSyntax identifier
                    ? identifier.GetName()
-                   : string.Empty;
+                   : null;
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers
         /// The parameter syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the name of the enclosing method; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the name of the enclosing method; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         internal static string GetMethodName(this ParameterSyntax value)
         {

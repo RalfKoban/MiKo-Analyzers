@@ -148,12 +148,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = syntax.GetIdentifierNameFromPropertyExpression();
 
-            if (name != null)
+            if (name is null)
             {
-                return symbol.ContainingType.GetFields().FirstOrDefault(_ => _.Name == name);
+                return null;
             }
 
-            return null;
+            return symbol.ContainingType.GetFields().FirstOrDefault(_ => _.Name == name);
         }
     }
 }
