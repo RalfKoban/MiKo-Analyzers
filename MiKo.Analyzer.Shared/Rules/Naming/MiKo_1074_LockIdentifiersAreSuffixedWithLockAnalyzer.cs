@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeFields(ITypeSymbol type, HashSet<string> lockIdentifiers)
         {
-            var fields = new Dictionary<string, IFieldSymbol>();
+            var fields = new Dictionary<string, IFieldSymbol>(StringComparer.Ordinal);
 
             // it seems that some fields are duplicated, so avoid AD0001 due to thrown exception
             foreach (var field in type.GetFields())

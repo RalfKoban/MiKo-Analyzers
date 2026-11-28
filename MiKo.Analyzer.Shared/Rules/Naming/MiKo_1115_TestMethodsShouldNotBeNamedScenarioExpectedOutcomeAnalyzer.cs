@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                        "When",
                                                                    };
 
-        private static readonly ConcurrentDictionary<string, (bool HasIssue, string BetterName)> BetterNamesCache = new ConcurrentDictionary<string, (bool, string)>();
+        private static readonly ConcurrentDictionary<string, (bool HasIssue, string BetterName)> BetterNamesCache = new ConcurrentDictionary<string, (bool, string)>(StringComparer.Ordinal);
 
         public MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {

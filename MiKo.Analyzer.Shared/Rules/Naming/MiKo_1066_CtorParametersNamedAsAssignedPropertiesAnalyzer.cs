@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield break;
             }
 
-            Dictionary<string, IParameterSymbol> parameterNames = new Dictionary<string, IParameterSymbol>();
+            Dictionary<string, IParameterSymbol> parameterNames = new Dictionary<string, IParameterSymbol>(StringComparer.Ordinal);
 
             foreach (var parameter in symbol.Parameters)
             {

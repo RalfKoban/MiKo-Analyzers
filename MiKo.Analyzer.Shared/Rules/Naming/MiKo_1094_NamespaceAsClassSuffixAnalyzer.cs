@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1094";
 
-        private static readonly Dictionary<string, string> Suffixes = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> Suffixes = new Dictionary<string, string>(StringComparer.Ordinal)
                                                                           {
                                                                               { "Management", "Manager" },
                                                                               { "Handling", "Handler" },

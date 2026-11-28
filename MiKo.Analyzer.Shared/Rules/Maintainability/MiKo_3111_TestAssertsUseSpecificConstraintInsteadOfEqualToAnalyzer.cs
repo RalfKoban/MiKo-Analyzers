@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private const string Negative = "Negative";
         private const string Positive = "Positive";
 
-        private static readonly ConcurrentDictionary<string, string> ConstraintMap = new ConcurrentDictionary<string, string>(new Dictionary<string, string>
+        private static readonly ConcurrentDictionary<string, string> ConstraintMap = new ConcurrentDictionary<string, string>(new Dictionary<string, string>(StringComparer.Ordinal)
                                                                                                                                   {
                                                                                                                                       { "0", "Zero" },
                                                                                                                                       { "null", "Null" },

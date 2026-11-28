@@ -423,7 +423,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var entries = CreateReplacementMapEntries(verbs, thirdPersonVerbs, gerundVerbs).ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
             var entriesLength = entries.Length;
 
-            var result = new Dictionary<string, string>(entriesLength);
+            var result = new Dictionary<string, string>(entriesLength, StringComparer.Ordinal);
 
             for (var index = 0; index < entriesLength; index++)
             {

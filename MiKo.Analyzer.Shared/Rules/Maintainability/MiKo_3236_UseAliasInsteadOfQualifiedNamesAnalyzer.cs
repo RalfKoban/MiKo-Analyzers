@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -13,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3236";
 
-        private static readonly ConcurrentDictionary<string, TypeKind> Cache = new ConcurrentDictionary<string, TypeKind>();
+        private static readonly ConcurrentDictionary<string, TypeKind> Cache = new ConcurrentDictionary<string, TypeKind>(StringComparer.Ordinal);
 
         public MiKo_3236_UseAliasInsteadOfQualifiedNamesAnalyzer() : base(Id, (SymbolKind)(-1))
         {

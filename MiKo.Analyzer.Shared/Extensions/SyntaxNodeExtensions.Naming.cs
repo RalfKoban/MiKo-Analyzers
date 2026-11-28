@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers
         /// The expression syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the identifier name; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         internal static string GetStartingIdentifierName(this ExpressionSyntax value)
         {
@@ -99,8 +99,9 @@ namespace MiKoSolutions.Analyzers
         /// The argument syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the identifier name; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetIdentifierName(this ArgumentSyntax value) => value.Expression.GetIdentifierName();
 
         /// <summary>
@@ -110,8 +111,9 @@ namespace MiKoSolutions.Analyzers
         /// The expression syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the identifier name; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
         /// <summary>
@@ -123,6 +125,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetIdentifierName(this InvocationExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
         /// <summary>
@@ -150,7 +153,7 @@ namespace MiKoSolutions.Analyzers
         /// The parameter syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the name of the enclosing method; or <see langword="null"/> if no name is found.
+        /// A <see cref="string"/> that contains the name of the enclosing method; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         internal static string GetMethodName(this ParameterSyntax value)
         {
@@ -164,7 +167,7 @@ namespace MiKoSolutions.Analyzers
                 case DestructorDeclarationSyntax d: return d.GetName();
                 case OperatorDeclarationSyntax o: return o.GetName();
                 default:
-                    return null;
+                    return string.Empty;
             }
         }
 
@@ -961,7 +964,7 @@ namespace MiKoSolutions.Analyzers
 
             return list.Count > 0
                    ? list[0].Identifier.GetName()
-                   : null;
+                   : string.Empty;
         }
 
         /// <summary>
@@ -990,7 +993,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return null;
+            return string.Empty;
         }
 
         /// <summary>
@@ -1089,8 +1092,14 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasAttributeName(this MemberDeclarationSyntax value, IEnumerable<string> names)
         {
             var attributeLists = value.AttributeLists;
+            var count = attributeLists.Count;
 
-            for (int i = 0, count = attributeLists.Count; i < count; i++)
+            if (count is 0)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < count; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
@@ -1118,6 +1127,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the member has the given name; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool Is(this MemberAccessExpressionSyntax value, string name) => value.GetName() == name;
 
         /// <summary>
@@ -1165,6 +1175,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the member has the given identifier name and name; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool Is(this InvocationExpressionSyntax value, string identifierName, string name) => value?.Expression.Is(identifierName, name) is true;
 
         /// <summary>
