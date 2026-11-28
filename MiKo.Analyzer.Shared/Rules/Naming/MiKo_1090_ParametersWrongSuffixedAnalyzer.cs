@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "xml",
                                                             };
 
-        private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>(StringComparer.Ordinal)
                                                                                {
                                                                                    { "Comparer", "comparer" },
                                                                                    { "Editor", "editor" },

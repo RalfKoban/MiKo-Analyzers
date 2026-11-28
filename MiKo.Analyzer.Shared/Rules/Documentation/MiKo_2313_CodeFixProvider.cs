@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2313_CodeFixProvider)), Shared]
     public sealed class MiKo_2313_CodeFixProvider : DocumentationCodeFixProvider
     {
-        private static readonly Dictionary<string, string> CommentTagToXmlTagMapping = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> CommentTagToXmlTagMapping = new Dictionary<string, string>(StringComparer.Ordinal)
                                                                                            {
                                                                                                { "Summary:", Constants.XmlTag.Summary },
                                                                                                { "Remark:", Constants.XmlTag.Remarks },
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                { "Value:", Constants.XmlTag.Value },
                                                                                            };
 
-        private static readonly Dictionary<string, string> CommentTagToMultipleXmlTagMapping = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> CommentTagToMultipleXmlTagMapping = new Dictionary<string, string>(StringComparer.Ordinal)
                                                                                                    {
                                                                                                        { "Exception:", Constants.XmlTag.Exception },
                                                                                                        { "Exceptions:", Constants.XmlTag.Exception },

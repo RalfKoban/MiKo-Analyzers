@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -25,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateReplacementMap()
         {
-            var dictionary = new Dictionary<string, string>();
+            var dictionary = new Dictionary<string, string>(StringComparer.Ordinal);
 
             foreach (var phrase in Constants.Comments.InstanceOfPhrases)
             {

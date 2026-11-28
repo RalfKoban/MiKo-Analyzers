@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -26,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var exceptionComments = syntax.GetExceptionXmls();
 
-            var newNodes = new Dictionary<string, XmlElementSyntax>();
+            var newNodes = new Dictionary<string, XmlElementSyntax>(StringComparer.Ordinal);
             var obsoleteNodes = new List<SyntaxNode>();
 
             // 1. find duplicate exception types

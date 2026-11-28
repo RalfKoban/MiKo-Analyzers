@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -53,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield break;
             }
 
-            var mapping = new Dictionary<string, int>();
+            var mapping = new Dictionary<string, int>(StringComparer.Ordinal);
 
             for (var i = 0; i < argumentsCount; i++)
             {

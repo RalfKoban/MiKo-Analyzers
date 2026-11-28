@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3011";
 
-        private static readonly Dictionary<string, MappingType> Mappings = new Dictionary<string, MappingType>
+        private static readonly Dictionary<string, MappingType> Mappings = new Dictionary<string, MappingType>(StringComparer.Ordinal)
                                                                                {
                                                                                    // ArgumentException
                                                                                    { nameof(ArgumentException), InspectArgumentException },
