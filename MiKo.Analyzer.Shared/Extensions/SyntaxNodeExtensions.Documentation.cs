@@ -738,19 +738,27 @@ namespace MiKoSolutions.Analyzers
                 return builder;
             }
 
-            var content = value.Content;
+            GetTextWithoutTriviaLocal(value, builder);
 
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var contentCount = content.Count;
+            return builder.WithoutXmlCommentExterior();
 
-            if (contentCount > 0)
+            void GetTextWithoutTriviaLocal(XmlElementSyntax element, StringBuilder sb)
             {
+                var content = element.Content;
+
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var contentCount = content.Count;
+
+                if (contentCount is 0)
+                {
+                    return;
+                }
+
                 for (var index = 0; index < contentCount; index++)
                 {
                     var node = content[index];
-                    var tagName = node.GetXmlTagName();
 
-                    switch (tagName)
+                    switch (node.GetXmlTagName())
                     {
                         case "i":
                         case "b":
@@ -761,24 +769,22 @@ namespace MiKoSolutions.Analyzers
                     switch (node)
                     {
                         case XmlTextSyntax text:
-                            GetTextWithoutTrivia(text, builder);
+                            text.GetTextWithoutTrivia(sb);
 
                             break;
 
                         case XmlEmptyElementSyntax empty:
-                            builder.Append(empty.WithoutTrivia());
+                            sb.Append(empty); // perf: 'ToString' here does not include the leading or trailing trivia, so we do not need to call 'WithoutTrivia' by ourselves
 
                             break;
 
                         case XmlElementSyntax e:
-                            GetTextWithoutTrivia(e, builder);
+                            GetTextWithoutTriviaLocal(e, sb);
 
                             break;
                     }
                 }
             }
-
-            return builder.WithoutXmlCommentExterior();
         }
 
         /// <summary>
@@ -805,19 +811,21 @@ namespace MiKoSolutions.Analyzers
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
 
-            if (textTokensCount > 0)
+            if (textTokensCount is 0)
             {
-                for (var index = 0; index < textTokensCount; index++)
+                yield break;
+            }
+
+            for (var index = 0; index < textTokensCount; index++)
+            {
+                var token = textTokens[index];
+
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
-                    var token = textTokens[index];
-
-                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                    {
-                        continue;
-                    }
-
-                    yield return token.ValueText;
+                    continue;
                 }
+
+                yield return token.ValueText;
             }
         }
 

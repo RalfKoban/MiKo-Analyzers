@@ -1300,7 +1300,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token without leading trivia but preserving trailing trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithoutLeadingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithTrailingTrivia(value.TrailingTrivia);
+        internal static SyntaxToken WithoutLeadingTrivia(this in SyntaxToken value) => value.WithLeadingTrivia(default(SyntaxTriviaList));
 
         /// <summary>
         /// Creates a new syntax token without trailing trivia.
@@ -1312,7 +1312,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token without trailing trivia but preserving leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithoutTrailingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
+        internal static SyntaxToken WithoutTrailingTrivia(this in SyntaxToken value) => value.WithTrailingTrivia(default(SyntaxTriviaList));
 
         /// <summary>
         /// Creates a new syntax token without a trailing end-of-line.
@@ -1489,6 +1489,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token with leading and trailing trivia from the specified node.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
                                                                                                        .WithTrailingTriviaFrom(node);
 
@@ -1504,6 +1505,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A new syntax token with leading and trailing trivia from the specified token.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, in SyntaxToken token) => value.WithLeadingTriviaFrom(token)
                                                                                                             .WithTrailingTriviaFrom(token);
     }

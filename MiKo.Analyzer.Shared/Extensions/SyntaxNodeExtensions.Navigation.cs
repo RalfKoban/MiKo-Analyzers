@@ -301,6 +301,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first ancestor of the specified type, or <see langword="null"/> if no such ancestor exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstAncestor<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault();
 
         /// <summary>
@@ -318,6 +319,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first ancestor of the specified type that satisfies the predicate, or <see langword="null"/> if no such ancestor exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
 
         /// <summary>
@@ -349,6 +351,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first ancestor of the specified type that is within the method, local function, property or event scope, or <see langword="null"/> if no such ancestor exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstAncestorWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsWithinMethods<T>().FirstOrDefault();
 
         /// <summary>
@@ -366,6 +369,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The specified syntax node if it is of the specified type; otherwise, the first ancestor of the specified type that is within the method, local function, property or event scope, or <see langword="null"/> if no such ancestor exists.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T FirstAncestorOrSelfWithinMethod<T>(this SyntaxNode value) where T : SyntaxNode => value as T ?? value.FirstAncestorWithinMethod<T>();
 
         /// <summary>
