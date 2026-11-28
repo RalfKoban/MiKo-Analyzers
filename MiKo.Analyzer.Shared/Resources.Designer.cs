@@ -6209,6 +6209,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Types named as factories or builders should provide the operation associated with their pattern. Factories should expose a &apos;Create&apos; method, and builders should expose a &apos;Build&apos; method.
+        ///Types that do not provide the expected operation should be renamed to reflect their actual responsibility, such as using a &apos;Provider&apos; suffix when they only expose dependencies..
+        /// </summary>
+        internal static string MiKo_1543_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1543_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider renaming &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1543_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1543_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type names should match their creation pattern.
+        /// </summary>
+        internal static string MiKo_1543_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1543_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
