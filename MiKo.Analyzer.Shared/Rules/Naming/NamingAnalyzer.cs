@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified namespace shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The namespace symbol to check.
+        /// The namespace symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -206,7 +206,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified type shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The type symbol to check.
+        /// The type symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -229,7 +229,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified method shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The method symbol to check.
+        /// The method symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -272,7 +272,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified property shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The property symbol to check.
+        /// The property symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -295,7 +295,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified event shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The event symbol to check.
+        /// The event symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -318,7 +318,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified field shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The field symbol to check.
+        /// The field symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -341,7 +341,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified parameter shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The parameter symbol to check.
+        /// The parameter symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -390,7 +390,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the local functions of the specified method shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The method symbol to check.
+        /// The method symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.
@@ -404,7 +404,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// Determines whether the specified local function shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The local function symbol to check.
+        /// The local function symbol to examine.
         /// </param>
         /// <param name="compilation">
         /// The compilation that provides access to the semantic model.

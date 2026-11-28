@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified bit is set in the given value.
         /// </summary>
         /// <param name="value">
-        /// A bitwise combination of the enumeration members that specifies the value to check.
+        /// A bitwise combination of the enumeration members that specifies the value to examine.
         /// </param>
         /// <param name="flag">
         /// A bitwise combination of the enumeration members that specifies the value to check for.

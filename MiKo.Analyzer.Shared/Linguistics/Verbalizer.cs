@@ -891,7 +891,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word is a gerund verb.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
@@ -902,7 +902,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word is a gerund verb.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
@@ -946,7 +946,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word is in past tense.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
@@ -973,7 +973,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word is in past tense.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
@@ -995,7 +995,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word is a third-person singular verb.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word is a third-person singular verb; otherwise, <see langword="false"/>.
@@ -1039,7 +1039,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word is a third-person singular verb.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word is a third-person singular verb; otherwise, <see langword="false"/>.
@@ -1050,7 +1050,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word ends with a two-character ending followed by 's'.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word ends with a two-character ending followed by 's'; otherwise, <see langword="false"/>.
@@ -2508,7 +2508,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word starts with an acceptable phrase.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word starts with an acceptable phrase; otherwise, <see langword="false"/>.
@@ -2534,7 +2534,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word contains an acceptable phrase.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word contains an acceptable phrase; otherwise, <see langword="false"/>.
@@ -2545,7 +2545,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified word ends with an acceptable phrase.
         /// </summary>
         /// <param name="value">
-        /// The word to check.
+        /// The word to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the word ends with an acceptable phrase; otherwise, <see langword="false"/>.

@@ -72,5 +72,77 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartPosition();
+
+        /// <summary>
+        /// Determines whether the syntax node or token has any leading comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any leading comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingComment(this in SyntaxNodeOrToken value) => value.GetLeadingTrivia().HasComment();
+
+        /// <summary>
+        /// Determines whether the syntax node or token has any leading multi-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any leading multi-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingMultiLineComment(this in SyntaxNodeOrToken value) => value.GetLeadingTrivia().HasMultiLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax node or token has any leading single-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any leading single-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasLeadingSingleLineComment(this in SyntaxNodeOrToken value) => value.GetLeadingTrivia().HasSingleLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax node or token has any trailing comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any trailing comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingComment(this in SyntaxNodeOrToken value) => value.GetTrailingTrivia().HasComment();
+
+        /// <summary>
+        /// Determines whether the syntax node or token has any trailing multi-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any trailing multi-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingMultiLineComment(this in SyntaxNodeOrToken value) => value.GetTrailingTrivia().HasMultiLineComment();
+
+        /// <summary>
+        /// Determines whether the syntax node or token has any trailing single-line comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any trailing single-line comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasTrailingSingleLineComment(this in SyntaxNodeOrToken value) => value.GetTrailingTrivia().HasSingleLineComment();
     }
 }

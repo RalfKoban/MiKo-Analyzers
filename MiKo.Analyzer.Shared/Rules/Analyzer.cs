@@ -460,7 +460,7 @@ namespace MiKoSolutions.Analyzers.Rules
         /// Determines whether the analyzer is applicable to the specified compilation.
         /// </summary>
         /// <param name="compilation">
-        /// The compilation to check.
+        /// The compilation to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the analyzer is applicable; otherwise, <see langword="false"/>.

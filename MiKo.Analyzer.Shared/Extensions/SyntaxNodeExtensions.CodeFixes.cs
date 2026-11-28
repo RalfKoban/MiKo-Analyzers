@@ -343,7 +343,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="Document"/> has at least the given C# language version.
         /// </summary>
         /// <param name="value">
-        /// The document to check.
+        /// The document to examine.
         /// </param>
         /// <param name="wantedVersion">
         /// One of the enumeration members that specifies the minimum required C# language version.
@@ -357,7 +357,7 @@ namespace MiKoSolutions.Analyzers
         /// Asynchronously determines whether the specified <see cref="ArgumentSyntax"/> represents a constant value in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
-        /// The argument syntax to check.
+        /// The argument syntax to examine.
         /// </param>
         /// <param name="document">
         /// The document that contains the argument syntax.
@@ -412,7 +412,7 @@ namespace MiKoSolutions.Analyzers
         /// Asynchronously determines whether the specified <see cref="ExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
+        /// The expression syntax to examine.
         /// </param>
         /// <param name="document">
         /// The document that contains the expression syntax.
@@ -429,7 +429,7 @@ namespace MiKoSolutions.Analyzers
         /// Asynchronously determines whether the specified <see cref="IsPatternExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
-        /// The pattern expression syntax to check.
+        /// The pattern expression syntax to examine.
         /// </param>
         /// <param name="document">
         /// The document that contains the pattern expression syntax.
@@ -446,7 +446,7 @@ namespace MiKoSolutions.Analyzers
         /// Asynchronously determines whether the specified <see cref="ArgumentSyntax"/> represents an enum value in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
-        /// The argument syntax to check.
+        /// The argument syntax to examine.
         /// </param>
         /// <param name="document">
         /// The document that contains the argument syntax.
@@ -475,7 +475,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element; otherwise, <see langword="false"/>.
@@ -507,7 +507,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given cref value.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="type">
         /// The cref value to match.
@@ -521,7 +521,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/>.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="type">
         /// The type syntax to match.
@@ -573,7 +573,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/> and member name.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="type">
         /// The type syntax to match.
@@ -590,7 +590,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/> and member name.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <param name="type">
         /// The type syntax to match.
@@ -642,7 +642,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task{TResult}.Result"/&gt;</c> XML element.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the node is a <c>&lt;see cref="Task{TResult}.Result"/&gt;</c> element; otherwise, <see langword="false"/>.
@@ -653,7 +653,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task"/&gt;</c>, a <c>&lt;see cref="Task{T}"/&gt;</c> or a <c>&lt;see cref="Task{TResult}"/&gt;</c> XML element.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the node is a <c>&lt;see cref="Task"/&gt;</c>, <c>&lt;see cref="Task{T}"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> element; otherwise, <see langword="false"/>.
@@ -664,7 +664,7 @@ namespace MiKoSolutions.Analyzers
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <see cref="string"/> creation expression.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The syntax node to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the node is a <see cref="string"/> creation expression; otherwise, <see langword="false"/>.

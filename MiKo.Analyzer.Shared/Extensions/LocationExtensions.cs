@@ -726,7 +726,7 @@ namespace MiKoSolutions.Analyzers
         /// The location to check from.
         /// </param>
         /// <param name="other">
-        /// The location to check for intersection.
+        /// The location to examine for intersection.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the specified location intersects with the other location; otherwise, <see langword="false"/>.

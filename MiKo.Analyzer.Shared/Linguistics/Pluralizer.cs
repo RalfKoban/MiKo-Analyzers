@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified value represents a word that can be both singular and plural.
         /// </summary>
         /// <param name="value">
-        /// The value to check.
+        /// The value to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the value is both singular and plural; otherwise, <see langword="false"/>.
@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified value represents a plural word.
         /// </summary>
         /// <param name="value">
-        /// The value to check.
+        /// The value to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the value is plural; otherwise, <see langword="false"/>.
@@ -242,7 +242,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Determines whether the specified symbol name is an allowed list name.
         /// </summary>
         /// <param name="symbolName">
-        /// The symbol name to check.
+        /// The symbol name to examine.
         /// </param>
         /// <param name="comparison">
         /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.

@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// Determines whether the specified symbol shall be analyzed.
         /// </summary>
         /// <param name="symbol">
-        /// The symbol to check.
+        /// The symbol to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the symbol shall be analyzed; otherwise, <see langword="false"/>.
@@ -149,7 +149,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// Determines whether the text start of the documentation shall be analyzed for issues.
         /// </summary>
         /// <param name="symbol">
-        /// The symbol to check.
+        /// The symbol to examine.
         /// </param>
         /// <param name="valueText">
         /// The value text to analyze.
@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// Determines whether empty text shall be considered as an issue.
         /// </summary>
         /// <param name="symbol">
-        /// The symbol to check.
+        /// The symbol to examine.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if empty text shall be considered as an issue; otherwise, <see langword="false"/>.
